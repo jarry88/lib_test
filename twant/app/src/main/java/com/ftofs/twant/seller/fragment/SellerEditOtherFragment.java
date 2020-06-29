@@ -1,11 +1,17 @@
 package com.ftofs.twant.seller.fragment;
 
+import android.app.ActionBar;
+import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +19,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -25,6 +35,8 @@ import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.TwDate;
+import com.ftofs.twant.seller.widget.CalendarPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -37,6 +49,9 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -51,6 +66,15 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
     private int goodsState;
     private ScaledButton sbInstancePublish;
     private ScaledButton sbAddHub;
+    private TextView tvBeginDate;
+    private TextView tvEndDate;
+    private TwDate beginDate;
+    private TwDate endDate;
+    private TimePickerView pvTime;
+    private boolean isBiginDate;
+    private String limitBuyStartTime;
+    private String limitBuyEndTime;
+    private int limitBuy;
 
     public static SellerEditOtherFragment newInstance(SellerGoodsDetailFragment parent) {
         SellerEditOtherFragment fragment= new SellerEditOtherFragment();
@@ -70,6 +94,72 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+        initTimePicker();
+    }
+    private String getTime(Date date) {//可根据需要自行截取数据显示
+        Log.d("getTime()", "choice date millis: " + date.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(date);
+    }
+    private void initTimePicker() {
+        pvTime = new TimePickerBuilder(_mActivity, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                if (isBiginDate) {
+                    limitBuyStartTime = getTime(date);
+                            tvBeginDate.setText(limitBuyStartTime);
+                } else {
+                    limitBuyEndTime = getTime(date);
+                    tvEndDate.setText(limitBuyEndTime);
+                }
+
+                Log.i("pvTime", "onTimeSelect");
+
+            }
+        })
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+                        Log.i("pvTime", "onTimeSelectChanged");
+                    }
+                })
+                .setTitleText("选择时间")
+                .setCancelText("取消")//取消按钮文字
+                .setSubmitText("确认")//确认按钮文字
+//                .setContentSize(18)//滚轮文字大小
+                .setTitleSize(20)//标题文字大小
+                .setTitleText("Title")//标题文字
+                .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
+                .isCyclic(true)//是否循环滚动
+                .setTitleColor(Color.BLACK)//标题文字颜色
+                .setSubmitColor(Color.BLUE)//确定按钮文字颜色
+                .setCancelColor(Color.BLUE)//取消按钮文字颜色
+                .setTitleBgColor(getResources().getColor(R.color.tw_dark_white))//标题背景颜色 Night mode
+                .setBgColor(getResources().getColor(R.color.tw_white))//滚轮背景颜色 Night mode
+//                .setRange(calendar.get(Calendar.YEAR) - 20, calendar.get(Calendar.YEAR) + 20)//默认是1900-2100年
+                .setDate(Calendar.getInstance())// 如果不设置的话，默认是系统时间*/
+                .setType(new boolean[]{true, true, true, true, true, true})
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .build();
+
+        Dialog mDialog = pvTime.getDialog();
+        if (mDialog != null) {
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            pvTime.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
     }
 
     private void initView() {
@@ -80,6 +170,21 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
 
+        tvBeginDate = view.findViewById(R.id.tv_begin_date);
+        tvEndDate = view.findViewById(R.id.tv_end_date);
+        tvBeginDate.setOnClickListener((view1)->{
+            if (pvTime != null) {
+                isBiginDate = true;
+                pvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
+            }
+        });
+        tvEndDate.setOnClickListener((view1)->{
+            if (pvTime != null) {
+                isBiginDate = false;
+
+                pvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
+            }
+        });
         Util.setOnClickListener(view, R.id.btn_ok, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
 
@@ -121,8 +226,10 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
 
     private void explainData() {
         try{
-
             joinBigSale = parent.joinBigSale;
+            limitBuy = parent.goodsVo.getInt("limitBuy");
+            limitBuyStartTime = parent.goodsVo.getSafeString("limitBuyStartTime");
+            limitBuyEndTime = parent.goodsVo.getSafeString("limitBuyEndTime");
             updateView();
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -131,6 +238,10 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
 
     private void updateView() {
         sbJoinActivity.setChecked(joinBigSale==1);
+        EditText etLimitNum = getView().findViewById(R.id.et_limit_num);
+        etLimitNum.setText(String.valueOf(limitBuy));
+        tvBeginDate.setText(limitBuyStartTime);
+        tvEndDate.setText(limitBuyEndTime);
     }
     private void updateOtherView(EasyJSONObject data) throws Exception{
 
@@ -194,6 +305,9 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
             publishGoodsInfo.set("goodsState", goodsState);
             publishGoodsInfo.set("commonId", parent.commonId);
             publishGoodsInfo.set("editType", 6);
+            publishGoodsInfo.set("limitBuyStartTime", limitBuyStartTime);
+            publishGoodsInfo.set("limitBuyEndTime", limitBuyEndTime);
+            publishGoodsInfo.set("limitBuy",limitBuy);
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }

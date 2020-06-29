@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:text="商品發佈："
                     android:textColor="@color/tw_black"
-                    android:layout_marginEnd="@dimen/margin12"/>
+                    android:layout_marginEnd="24dp"/>
                 <LinearLayout
                     android:id="@+id/ll_instance_publish"
                     android:layout_width="match_parent"
@@ -83,6 +83,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 >
 
                 <TextView
@@ -91,8 +92,9 @@
                     android:text="參加促銷活動"
                     android:textColor="@color/tw_black"
 
-                    android:layout_marginEnd="@dimen/margin12"/>
+                    android:layout_marginEnd="18dp"/>
                 <com.kyleduo.switchbutton.SwitchButton
+                    android:layout_marginStart="@dimen/dp_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:shadowColor="@color/tw_green"
@@ -100,6 +102,112 @@
                     app:kswBackColor="@color/switch_button_background_color"
                     app:kswThumbColor="@color/tw_white"/>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="限购数量:"
+                    android:textColor="@color/tw_black"
+
+                    android:layout_marginEnd="38dp"/>
+                <EditText
+                    android:layout_marginStart="7dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:paddingStart="@dimen/dp_4"
+                    android:background="@drawable/seller_edit_text_bg"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/et_limit_num"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="限购起止时间:"
+                    android:textColor="@color/tw_black"
+
+                    android:layout_marginEnd="@dimen/margin12"/>
+                <LinearLayout
+                    android:id="@+id/btn_select_begin_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingEnd="12dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/seller_order_filter_item_bg">
+                        <TextView
+                            android:id="@+id/tv_begin_date"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="2020-05-01">
+                        </TextView>
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_calendar">
+
+                        </ImageView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:id="@+id/btn_select_end_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingEnd="12dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/seller_order_filter_item_bg">
+                        <TextView
+                            android:id="@+id/tv_end_date"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="2020-05-01">
+                        </TextView>
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_calendar">
+
+                        </ImageView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_marginTop="@dimen/margin12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="至"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

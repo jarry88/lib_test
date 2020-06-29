@@ -1,12 +1,17 @@
 package com.ftofs.twant.seller.fragment;
 
 
+import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,8 +20,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SimpleViewPagerAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -39,6 +49,8 @@ import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
+import com.ftofs.twant.seller.entity.TwDate;
+import com.ftofs.twant.seller.widget.CalendarPopup;
 import com.ftofs.twant.seller.widget.NoScrollViewPager;
 import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
@@ -57,7 +69,10 @@ import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,6 +162,15 @@ public class AddGoodsFragment extends BaseFragment
     TextView etGoodsVideoUrl;
     private List<Category> selectCategoryList;
     private EasyJSONArray storeLabelIdList;
+    private int limitBuy;
+    private String limitBuyStartTime;
+    private String limitBuyEndTime;
+    private TwDate beginDate;
+    private TwDate endDate;
+    private TextView tvBeginDate;
+    private TextView tvEndDate;
+    private TimePickerView pvTime;
+    private boolean isBiginDate;
 
     public static AddGoodsFragment newInstance() {
 
@@ -352,6 +376,21 @@ public class AddGoodsFragment extends BaseFragment
 
         LinearLayout llAddHub =view.findViewById(R.id.ll_add_hub);
         LinearLayout llInstancePublish =view.findViewById(R.id.ll_instance_publish);
+        tvBeginDate = view.findViewById(R.id.tv_begin_date);
+        tvEndDate = view.findViewById(R.id.tv_end_date);
+        tvBeginDate.setOnClickListener((view1)->{
+            isBiginDate = true;
+            if (pvTime != null) {
+                pvTime.show();
+            }
+        });
+        tvEndDate.setOnClickListener((view1)->{
+            isBiginDate = false;
+            if (pvTime != null) {
+                pvTime.show();
+            }
+        });
+
         sbInstancePublish.setButtonCheckedBlue();
         sbAddHub.setButtonCheckedBlue();
 //        sbInstancePublish.setText("立即發佈");
@@ -376,7 +415,71 @@ public class AddGoodsFragment extends BaseFragment
         sbJoinActivity = view.findViewById(R.id.sb_join_activity);
         return view;
     }
+    private String getTime(Date date) {//可根据需要自行截取数据显示
+        Log.d("getTime()", "choice date millis: " + date.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(date);
+    }
+    private void initTimePicker() {
+        pvTime = new TimePickerBuilder(_mActivity, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                if (isBiginDate) {
+                    limitBuyStartTime = getTime(date);
+                    tvBeginDate.setText(limitBuyStartTime);
+                } else {
+                    limitBuyEndTime = getTime(date);
+                    tvEndDate.setText(limitBuyEndTime);
+                }
 
+                Log.i("pvTime", "onTimeSelect");
+
+            }
+        })
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+                        Log.i("pvTime", "onTimeSelectChanged");
+                    }
+                })
+                .setTitleText("选择时间")
+                .setCancelText("取消")//取消按钮文字
+                .setSubmitText("确认")//确认按钮文字
+//                .setContentSize(18)//滚轮文字大小
+                .setTitleSize(20)//标题文字大小
+                .setTitleText("Title")//标题文字
+                .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
+                .isCyclic(true)//是否循环滚动
+                .setTitleColor(Color.BLACK)//标题文字颜色
+                .setSubmitColor(Color.BLUE)//确定按钮文字颜色
+                .setCancelColor(Color.BLUE)//取消按钮文字颜色
+                .setTitleBgColor(getResources().getColor(R.color.tw_dark_white))//标题背景颜色 Night mode
+                .setBgColor(getResources().getColor(R.color.tw_white))//滚轮背景颜色 Night mode
+//                .setRange(calendar.get(Calendar.YEAR) - 20, calendar.get(Calendar.YEAR) + 20)//默认是1900-2100年
+                .setDate(Calendar.getInstance())// 如果不设置的话，默认是系统时间*/
+                .setType(new boolean[]{true, true, true, true, true, true})
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .build();
+
+        Dialog mDialog = pvTime.getDialog();
+        if (mDialog != null) {
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            pvTime.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
+    }
     private View freightView() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_freight_widget, vpAddGood, false);
         Util.setOnClickListener(view, R.id.btn_freight_prev, this);
@@ -1156,6 +1259,9 @@ public class AddGoodsFragment extends BaseFragment
         try{
             publishGoodsInfo.set("joinBigSale", joinBigSale);
             publishGoodsInfo.set("goodsState", goodsState);
+            publishGoodsInfo.set("limitBuy", limitBuy);
+            publishGoodsInfo.set("limitBuyStartTime", limitBuyStartTime);
+            publishGoodsInfo.set("limitBuyEndTime", limitBuyEndTime);
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -1339,6 +1445,13 @@ public class AddGoodsFragment extends BaseFragment
     public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("type[%s], id[%d], extra[%s]", type, id, extra);
         try {
+            if (type == PopupType.SELECT_BEGIN_DATE) {
+                beginDate = (TwDate) extra;
+                tvBeginDate.setText(beginDate.toString());
+            } else if (type == PopupType.SELECT_END_DATE) {
+                endDate = (TwDate) extra;
+                tvEndDate.setText(endDate.toString());
+            }
             if (type == PopupType.SELLER_SELECT_SPEC) {
                 EasyJSONObject dataObj = (EasyJSONObject) extra;
                 int specId = dataObj.getInt("specId");

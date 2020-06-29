@@ -1,6 +1,7 @@
 package com.ftofs.twant.seller.fragment
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ftofs.twant.R
@@ -32,6 +33,7 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
         binding.vm = vm
         binding.executePendingBindings()
         binding.refreshLayout.autoRefresh()
+        initView()
         initRecyclerView()
         vm.back.observe(this, Observer {
             if (it) {
@@ -39,6 +41,12 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
             }
         })
     }
+
+    private fun initView() {
+        binding.iconAddGoods.visibility= View.GONE
+        binding.btnMenu.visibility= View.GONE
+    }
+
     private fun initRecyclerView() {
         binding.rvFeaturesGoodsList.also {
             it.adapter = adapter
