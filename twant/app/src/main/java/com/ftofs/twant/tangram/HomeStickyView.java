@@ -34,6 +34,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.ViewMoreGroupPopup;
 import com.lxj.xpopup.XPopup;
@@ -173,7 +174,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                         @Override
                         public void onDismiss() {
                         }
-                    }).asCustom(new ViewMoreGroupPopup(context)).show();
+                    }).asCustom(new SharePopup(context, null, null, null, null, null, true)).show();
         }
     }
 

@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.ftofs.twant.R;
@@ -70,9 +72,17 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     String coverUrl; // 分享的封面圖片的URL
 
     Object data; // 當shareType為SHARE_TYPE_STORE或SHARE_TYPE_GOODS才使用此數據
+    boolean showWordIcon;
 
+    View btnCopyLink;
+    View btnShareToTakewantCircle;
+    View btnShareToWord;
 
     public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data) {
+        this(context, shareUrl, title, description, coverUrl, data, false);
+    }
+
+    public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data, boolean showWordIcon) {
         super(context);
 
         this.context = context;
@@ -81,6 +91,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         this.description = description;
         this.coverUrl = StringUtil.normalizeImageUrl(coverUrl);
         this.data = data;
+        this.showWordIcon = showWordIcon;
     }
 
 
@@ -98,11 +109,21 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         findViewById(R.id.btn_share_to_friend).setOnClickListener(this);
         findViewById(R.id.btn_share_to_timeline).setOnClickListener(this);
         findViewById(R.id.btn_share_to_facebook).setOnClickListener(this);
-        findViewById(R.id.btn_copy_link).setOnClickListener(this);
+        btnCopyLink = findViewById(R.id.btn_copy_link);
+        btnCopyLink.setOnClickListener(this);
+
+        btnShareToTakewantCircle = findViewById(R.id.btn_share_to_takewant_circle);
         if (data != null) {
-            findViewById(R.id.btn_share_to_takewant_circle).setOnClickListener(this);
+            btnShareToTakewantCircle.setOnClickListener(this);
         } else {
-            findViewById(R.id.btn_share_to_takewant_circle).setVisibility(GONE);
+            btnShareToTakewantCircle.setVisibility(GONE);
+        }
+
+        btnShareToWord = findViewById(R.id.btn_share_to_word);
+        if (showWordIcon) {
+            btnShareToWord.setOnClickListener(this);
+        } else {
+            btnShareToWord.setVisibility(GONE);
         }
     }
 
@@ -110,6 +131,12 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     @Override
     protected void onShow() {
         super.onShow();
+
+        int btnCopyLinkWidth = btnCopyLink.getWidth();
+        SLog.info("btnCopyLinkWidth[%d]", btnCopyLinkWidth);
+        ViewGroup.LayoutParams layoutParams = btnShareToTakewantCircle.getLayoutParams();
+        layoutParams.width = btnCopyLinkWidth;
+
     }
 
     //完全消失执行
@@ -215,6 +242,21 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             EasyJSONObject dataObj = (EasyJSONObject) data;
             ApiUtil.addPost(getContext(),false,dataObj);
 //            Util.startFragment(AddPostFragment.newInstance(dataObj, false));
+            dismiss();
+        } else if (id == R.id.btn_share_to_word) { // 分享口令碼
+            new XPopup.Builder(context)
+//                         .dismissOnTouchOutside(false)
+                    // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                    .setPopupCallback(new XPopupCallback() {
+                        @Override
+                        public void onShow() {
+                        }
+                        @Override
+                        public void onDismiss() {
+                        }
+                    }).asCustom(new WordSharePopup(context, "该纪录片是大连广播电视台对外传播交流中心主任李汝建及其团队，继《京剧·八达仓》之后的又一力作。")).show();
+
             dismiss();
         }
     }

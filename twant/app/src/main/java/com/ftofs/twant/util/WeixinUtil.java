@@ -8,6 +8,7 @@ import com.ftofs.twant.TwantApplication;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXVideoObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 
@@ -24,6 +25,7 @@ public class WeixinUtil {
     public static final int SHARE_MEDIA_PHOTO = 1;  // 图片
     public static final int SHARE_MEDIA_VIDEO = 2;  // 视频
     public static final int SHARE_MEDIA_HTML = 3; // html页面
+    public static final int SHARE_MEDIA_TEXT = 4; // 文本
 
     public static final int THUMB_SIZE = 150;
 
@@ -51,6 +53,9 @@ public class WeixinUtil {
         public String htmlTitle = "";
         public String htmlDescription = "";
         public Bitmap htmlCover = null;
+
+        // 文本分享
+        public String text;  // 文本內容
     }
 
     /**
@@ -59,10 +64,11 @@ public class WeixinUtil {
      * WX_SCENE_SESSION -- 分享到聊天界面
      * WX_SCENE_TIMELINE -- 分享到朋友圈
      *
-     * 目前只支持3种分享媒体
+     * 目前只支持4种分享媒体
      * SHARE_MEDIA_PHOTO
      * SHARE_MEDIA_VIDEO
      * SHARE_MEDIA_HTML
+     * SHARE_MEDIA_TEXT
      */
     public static void share(Context context, int scene, int shareMediaType, WeixinShareInfo shareInfo) {
         if (!TwantApplication.wxApi.isWXAppInstalled()) {
@@ -75,7 +81,7 @@ public class WeixinUtil {
         }
 
         if (shareMediaType != SHARE_MEDIA_PHOTO && shareMediaType != SHARE_MEDIA_VIDEO
-                && shareMediaType != SHARE_MEDIA_HTML) {
+                && shareMediaType != SHARE_MEDIA_HTML && shareMediaType != SHARE_MEDIA_TEXT) {
             return;
         }
 
@@ -125,6 +131,15 @@ public class WeixinUtil {
             mediaMessage.title = shareInfo.htmlTitle;
             mediaMessage.description = shareInfo.htmlDescription;
             mediaMessage.thumbData = BitmapUtil.Bitmap2ByteArray(shareInfo.htmlCover);
+        } else if (shareMediaType == SHARE_MEDIA_TEXT) {
+            // 初始化一个 WXTextObject 对象，填写分享的文本内容
+            WXTextObject textObj = new WXTextObject();
+            textObj.text = shareInfo.text;
+
+            // 用 WXTextObject 对象初始化一个 WXMediaMessage 对象
+            mediaMessage = new WXMediaMessage(textObj);
+            mediaMessage.mediaObject = textObj;
+            mediaMessage.description = shareInfo.text;
         }
 
         if (mediaMessage.thumbData != null && mediaMessage.thumbData.length > 32 * 1024) {  // 缩略图数据不能超过32KB
