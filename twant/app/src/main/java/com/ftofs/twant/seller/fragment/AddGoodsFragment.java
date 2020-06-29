@@ -413,6 +413,7 @@ public class AddGoodsFragment extends BaseFragment
 //        goodsState
 //                joinBigSale
         sbJoinActivity = view.findViewById(R.id.sb_join_activity);
+        initTimePicker();
         return view;
     }
     private String getTime(Date date) {//可根据需要自行截取数据显示
