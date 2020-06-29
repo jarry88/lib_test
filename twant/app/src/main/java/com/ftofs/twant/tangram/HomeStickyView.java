@@ -35,6 +35,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.TwConfirmPopup;
+import com.ftofs.twant.widget.ViewMoreGroupPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tmall.wireless.tangram.structure.BaseCell;
@@ -172,17 +173,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                         @Override
                         public void onDismiss() {
                         }
-                    }).asCustom(new TwConfirmPopup(context, "圖片過大是否壓縮后上傳",null   , "確認", "取消",new OnConfirmCallback() {
-                @Override
-                public void onYes() {
-                    SLog.info("onYes");
-                }
-
-                @Override
-                public void onNo() {
-                    SLog.info("onNo");
-                }
-            })).show();
+                    }).asCustom(new ViewMoreGroupPopup(context)).show();
         }
     }
 
