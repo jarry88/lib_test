@@ -1,6 +1,6 @@
 package com.ftofs.twant.kotlin.vo
 
-data class SellerGoodsVO(
+data class SellerGoodsVO (
         var commonId: Int ,
         var goodsName: String ,
         var imageName: String,

@@ -32,7 +32,44 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:orientation="vertical">
-                <TextView
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="horizontal">
+                    <!--                        android:visibility="@{vo.isVirtual==1?0:2}"-->
+
+                    <TextView
+                        android:id="@+id/tv_virtual_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:text="零售"
+                        android:textColor="#5AA1D8"
+                        android:textSize="12sp"
+                        android:background="@drawable/seller_goods_type_indicator_bg">
+                    </TextView>
+                    <!--                            android:visibility="@{vo.isCommend==1?0:2}"-->
+
+                    <TextView
+                        android:id="@+id/tv_cross_border_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                    android:text="跨城購"
+                    android:textColor="#5AA1D8"
+                    android:textSize="12sp"
+                    android:background="@drawable/seller_goods_type_indicator_bg">
+                </TextView>
+                    <TextView
                     android:id="@+id/tv_goods_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -43,10 +80,13 @@
                     android:text="@{vo.goodsName}">
 
                 </TextView>
+                </LinearLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp">
+
                     <TextView
                         android:id="@+id/tv_spu_id"
                         android:layout_width="wrap_content"
@@ -56,44 +96,6 @@
                         android:textColor="@color/tw_text_dark"
                         android:textSize="13sp">
                     </TextView>
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentEnd="true"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:id="@+id/tv_virtual_indicator"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            android:text="零售"
-                            android:visibility="@{vo.isVirtual==1?0:2}"
-                            android:textColor="#5AA1D8"
-                            android:textSize="12sp"
-                            android:background="@drawable/seller_goods_type_indicator_bg">
-                        </TextView>
-                        <TextView
-                            android:id="@+id/tv_cross_border_indicator"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            android:visibility="@{vo.isCommend==1?0:2}"
-                            android:text="跨城購"
-                            android:textColor="#5AA1D8"
-                            android:textSize="12sp"
-                            android:background="@drawable/seller_goods_type_indicator_bg">
-                        </TextView>
-                    </LinearLayout>
                 </RelativeLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -140,6 +142,7 @@
                         android:textSize="13sp"
                         android:textColor="#2776D3"
                         />
+                    <!--                        android:src="@{vo.isCommend!=2?@drawable/icon_add_blue:@drawable/ic_minus}"-->
 
                     <ImageView
                         android:id="@+id/btn_more"
@@ -151,7 +154,6 @@
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
                         android:scaleType="centerInside"
-                        android:src="@{vo.isCommend!=2?@drawable/icon_add_blue:@drawable/ic_minus}"
                         android:textColor="@color/tw_text_dark"
                         android:textSize="13sp">
 

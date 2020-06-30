@@ -66,17 +66,15 @@
 
         </com.ftofs.twant.widget.ScaledButton>
     </RelativeLayout>
-    <!--  END OF 工具欄 -->
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        app:onRefreshListener="@{()->vm.refresh()}"
-        app:refreshing="@{vm.refreshing}"
-        app:moreLoading="@{vm.moreLoading}"
-        app:hasMore="@{vm.hasMore}"
-        app:onLoadMoreListener="@{()->vm.loadMore()}"
         android:id="@+id/refreshLayout">
+        <!--        app:onRefreshListener="@{()->vm.refresh()}"-->
+        <!--        app:refreshing="@{vm.refreshing}"-->
+        <!--        app:moreLoading="@{vm.moreLoading}"-->
+        <!--        app:hasMore="@{vm.hasMore}"-->
+        <!--        app:onLoadMoreListener="@{()->vm.loadMore()}"-->
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -87,5 +85,6 @@
             android:background="@color/colorLightGray"
             />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <!--  END OF 工具欄 -->
 </LinearLayout>
 </layout>

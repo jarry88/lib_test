@@ -103,6 +103,7 @@ android {
 }
 
 dependencies {
+    api project(':mvvmsmart')     //MVVMSmart
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
@@ -280,6 +281,7 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'io.github.iamyours:router-api:1.0.1'
+
 
 }
 repositories {
