@@ -864,33 +864,42 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     tvStoreName.setText(storeName);
                     tvOrderStatus.setText(ordersStateName);
                     tvOrdersStateName.setText(ordersStateName);
+                    //运费
                     tvFreightAmount.setText(StringUtil.formatPrice(_mActivity, freightAmount, 1,2));
 
+                    //产品总额
                     tvGoodsAmount.setText(StringUtil.formatPrice(_mActivity, itemAmount, 1,2));
+                    //商店优惠
                     tvStoreWelfare.setText("-"+StringUtil.formatPrice(_mActivity, storeDiscountAmount, 1,2));
+                    //平台优惠
                     tvPlatformWelfare.setText("-"+StringUtil.formatPrice(_mActivity, counponAmount, 1,2));
+                    //应付金额
                     tvOrdersAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1,2));
                     tvShipDate.setText(shipTime);
                     tvOrdersSn.setText(String.valueOf(ordersSn));
                     if (StringUtil.isEmpty(createTime)) {
+                        //下单时间
                         llOrderCreateTimeContainer.setVisibility(View.GONE);
                     } else {
                         tvCreateTime.setText(createTime);
                     }
 
                     if (StringUtil.isEmpty(paymentTime)) {
+                        //支付时间
                         llOrderPaymentTimeContainer.setVisibility(View.GONE);
                     } else {
                         tvPaymentTime.setText(paymentTime);
                     }
 
                     if (StringUtil.isEmpty(paySnStr)) {
+                        //支付单号
                         llOrderPaySnContainer.setVisibility(View.GONE);
                     } else {
                         tvPaySn.setText(paySnStr);
                     }
 
                     if (StringUtil.isEmpty(sendTime)) {
+                        //发货时间
                         rlSendContainer.setVisibility(View.GONE);
                     } else {
                         tvShipTime.setText(sendTime);

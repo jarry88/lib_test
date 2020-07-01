@@ -373,7 +373,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:text="@string/text_shipping_time"
                             android:textColor="@color/tw_black"
                             android:textSize="14sp" />

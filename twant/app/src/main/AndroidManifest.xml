@@ -50,6 +50,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:requestLegacyExternalStorage ="true">
+        <!-- 测试/正式环境 -->
+        <meta-data
+            android:name="ENVIRONMENT"
+            android:value="${ENVIRONMENT}" />
+        <!-- 是否支持在包内切換環境 -->
+        <meta-data
+            android:name="CHANGEENVIRONMENTENABLE"
+            android:value="true" />
         <activity android:name=".activity.YoutubeActivity"/>
         <activity android:name=".activity.TwantCaptureActivity"/>
         <activity android:name=".activity.AppGuideActivity" />

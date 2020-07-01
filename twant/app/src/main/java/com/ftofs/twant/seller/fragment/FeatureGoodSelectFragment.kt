@@ -9,7 +9,6 @@ import com.ftofs.twant.databinding.SellerEditFeaturesLayoutBinding
 import com.ftofs.twant.kotlin.BaseKotlinFragment
 import com.ftofs.twant.kotlin.HomeVM
 import com.ftofs.twant.kotlin.adapter.FeatureGoodAdapter
-import com.ftofs.twant.kotlin.extension.viewModel
 import com.ftofs.twant.log.SLog
 
 //在Fragment中使用，引入资源文件，直接使用id访问视图有一点特别注意：
@@ -17,7 +16,7 @@ import com.ftofs.twant.log.SLog
 class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBinding>() {
     override val layoutId: Int
         get() = R.layout.seller_edit_features_layout
-    val vm by viewModel<HomeVM>()
+//    val vm by viewModel<HomeVM>()
     private val adapter = FeatureGoodAdapter()
 
     companion object{
@@ -30,16 +29,16 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.vm = vm
+//        binding.vm = vm
         binding.executePendingBindings()
         binding.refreshLayout.autoRefresh()
         initView()
         initRecyclerView()
-        vm.back.observe(this, Observer {
-            if (it) {
-                hideSoftInputPop()
-            }
-        })
+//        vm.back.observe(this, Observer {
+//            if (it) {
+//                hideSoftInputPop()
+//            }
+//        })
     }
 
     private fun initView() {
@@ -53,12 +52,12 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
             it.layoutManager = LinearLayoutManager(activity)
         }
 
-        vm.goodsItems.observe(this, Observer {
-            if (it != null) {
-                SLog.info("${it.goodsList[0]}")
-                adapter.addAll(it.goodsList, it.pageEntity.curPage == 1)
-            }
-        })
+//        vm.goodsItems.observe(this, Observer {
+//            if (it != null) {
+//                SLog.info("${it.goodsList[0]}")
+//                adapter.addAll(it.goodsList, it.pageEntity.curPage == 1)
+//            }
+//        })
     }
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        super.onViewCreated(view, savedInstanceState)

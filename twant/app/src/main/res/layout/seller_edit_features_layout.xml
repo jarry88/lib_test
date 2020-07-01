@@ -4,10 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="layoutManager"
+            type="androidx.recyclerview.widget.RecyclerView.LayoutManager" />
 
         <variable
-            name="vm"
-            type="com.ftofs.twant.kotlin.HomeVM" />
+            name="viewModel"
+            type="com.ftofs.twant.kotlin.FeatureGoodViewModel" />
+
+        <variable
+            name="adapter"
+            type="com.ftofs.twant.kotlin.SellerGoodsListAdapter" />
 
     </data>
 <LinearLayout

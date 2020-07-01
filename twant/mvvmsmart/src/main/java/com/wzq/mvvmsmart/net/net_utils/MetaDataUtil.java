@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
+import com.wzq.mvvmsmart.BuildConfig;
 import com.wzq.mvvmsmart.utils.KLog;
 import java.lang.reflect.InvocationTargetException;
 
@@ -62,16 +64,24 @@ public class MetaDataUtil {
         String baseUrl = "";
         int serviceEnvironment = getEnvironment();
         switch (serviceEnvironment) {
-            case 0://测试环境
-                baseUrl = "http://api.expoon.com/"; //  dev环境
+            case 0: case 3://生產环境
+                baseUrl = "https://www.twant.com/api"; //  生產环境
                 break;
 
-            case 1://qa环境
+            case 1://测试环境
+                //baseUrl = "https://www.oschina.net/"; //  28环境
+                baseUrl = "http://192.168.5.28/api"; //  28环境
+                break;
+            case 2://qa环境
+                //baseUrl = "https://www.oschina.net/"; //  29环境
+                baseUrl = "https://192.168.5.29/api"; //  29环境
+                break;
+            case 4://f1环境
                 //baseUrl = "https://www.oschina.net/"; //  qa环境
-                baseUrl = "http://api.expoon.com/"; //  qa环境
+                baseUrl = "https://f1.twant.com/api"; //  f1环境
                 break;
             default:
-                baseUrl = "http://api.expoon.com/"; //  线上环境
+                baseUrl = "https://www.twant.com/api"; //  线上环境
                 break;
         }
         KLog.INSTANCE.e("baseUrl:" + baseUrl);
@@ -90,13 +100,22 @@ public class MetaDataUtil {
         try {
             ApplicationInfo appInfo = getApp().getPackageManager().
                     getApplicationInfo(getApp().getPackageName(), PackageManager.GET_META_DATA);
+//            int environment = appInfo.metaData.getInt("ENVIRONMENT");
+            boolean changeEnvironmentEnable = appInfo.metaData.getBoolean("CHANGEENVIRONMENTENABLE");
             int environment = appInfo.metaData.getInt("ENVIRONMENT");
+            if (changeEnvironmentEnable) {
+                environment = MmkvUtils.getIntValue("env");
+            }
             if (environment == 0) {
-                KLog.INSTANCE.e("environment:" + environment + "--dev环境");
-            } else if (environment == 1) {
-                KLog.INSTANCE.e("environment:" + environment + "--qa环境");
-            } else if (environment == 2) {
                 KLog.INSTANCE.e("environment:" + environment + "--生产环境");
+            } else if (environment == 1) {
+                KLog.INSTANCE.e("environment:" + environment + "--28环境");
+            } else if (environment == 2) {
+                KLog.INSTANCE.e("environment:" + environment + "--29环境");
+            } else if (environment == 3) {
+                KLog.INSTANCE.e("environment:" + environment + "--生产环境");
+            } else if (environment == 4) {
+                KLog.INSTANCE.e("environment:" + environment + "--f1环境");
             }
             return environment;
         } catch (Exception e) {
