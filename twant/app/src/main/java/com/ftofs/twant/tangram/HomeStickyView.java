@@ -174,7 +174,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                         @Override
                         public void onDismiss() {
                         }
-                    }).asCustom(new SharePopup(context, null, null, null, null, null, true)).show();
+                    }).asCustom(new SharePopup(context, null, null, null, null, null)).show();
         }
     }
 

@@ -3,16 +3,19 @@ package com.ftofs.twant.adapter;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.SparseArray;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.GroupListItem;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.widget.CountDownTimerViewHolder;
 
@@ -38,6 +41,15 @@ public class GroupListAdapter extends BaseQuickAdapter<GroupListItem, CountDownT
 
     @Override
     protected void convert(CountDownTimerViewHolder helper, GroupListItem item) {
+        helper.addOnClickListener(R.id.btn_join_group);
+
+        ImageView imgMemberAvatar = helper.getView(R.id.img_member_avatar);
+        Glide.with(context).load(StringUtil.normalizeImageUrl(item.memberAvatar)).centerCrop().into(imgMemberAvatar);
+
+        // 尚需成团人数倒数
+        int countDownMemberCount = item.requireNum - item.joinedNum;
+        helper.setText(R.id.tv_count_down_member, countDownMemberCount + "人");
+
         //将前一个缓存清除
         if (helper.countDownTimer != null) {
             helper.countDownTimer.cancel();

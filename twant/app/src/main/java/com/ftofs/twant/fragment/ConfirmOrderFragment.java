@@ -94,6 +94,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
     int isFromCart;
     int isGroup;
+    int goId; // 開團Id
 
     List<PayWayItem> payWayItemList = new ArrayList<>();
     List<ListPopupItem> shippingItemList = new ArrayList<>();
@@ -165,7 +166,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * @param isGroup 是否為團購  1 -- 是   0 -- 否
      * @return
      */
-    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup) {
+    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup, int goId) {
         Bundle args = new Bundle();
 
         args.putInt("isFromCart", isFromCart);
@@ -174,14 +175,15 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         ConfirmOrderFragment fragment = new ConfirmOrderFragment();
         fragment.setArguments(args);
         fragment.isGroup = isGroup;
-        SLog.info("isGroup[%d]", isGroup);
+        fragment.goId = goId;
+        SLog.info("isGroup[%d], goId[%d]", isGroup, goId);
 
         return fragment;
     }
 
 
     public static ConfirmOrderFragment newInstance(int isFromCart, String buyData) {
-        return newInstance(isFromCart, buyData, Constant.FALSE_INT);
+        return newInstance(isFromCart, buyData, Constant.FALSE_INT, Constant.INVALID_GO_ID);
     }
 
 
@@ -810,9 +812,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         };
 
         observable.subscribe(observer);
-
-
-
     }
 
     /**

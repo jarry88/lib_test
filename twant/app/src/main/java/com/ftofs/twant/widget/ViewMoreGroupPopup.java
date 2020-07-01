@@ -1,6 +1,7 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -8,16 +9,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.AppGuideActivity;
+import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.activity.SplashActivity;
 import com.ftofs.twant.adapter.GroupListAdapter;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.GroupListItem;
+import com.ftofs.twant.fragment.ConfirmOrderFragment;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
+import com.orhanobut.hawk.Hawk;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 查看更多拼團信息彈窗
@@ -25,15 +43,17 @@ import java.util.List;
  */
 public class ViewMoreGroupPopup extends CenterPopupView implements View.OnClickListener {
     Context context;
+    int commonId;
 
     RecyclerView rvList;
     GroupListAdapter adapter;
     List<GroupListItem> groupList = new ArrayList<>();
 
-    public ViewMoreGroupPopup(@NonNull Context context) {
+    public ViewMoreGroupPopup(@NonNull Context context, int commonId) {
         super(context);
 
         this.context = context;
+        this.commonId = commonId;
     }
 
     @Override
@@ -47,9 +67,6 @@ public class ViewMoreGroupPopup extends CenterPopupView implements View.OnClickL
 
         findViewById(R.id.btn_close).setOnClickListener(this);
 
-        groupList.add(new GroupListItem(Jarbon.create(2020, 6, 29, 15, 7, 11, 30).getTimestampMillis()));
-
-
         rvList = findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(context));
         adapter = new GroupListAdapter(context, R.layout.group_list_item, groupList);
@@ -58,11 +75,53 @@ public class ViewMoreGroupPopup extends CenterPopupView implements View.OnClickL
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
                 if (id == R.id.btn_join_group) {
-
+                    int goId = groupList.get(position).goId;
+                    // Util.startFragment(ConfirmOrderFragment.newInstance());
                 }
             }
         });
         rvList.setAdapter(adapter);
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "commonId", commonId
+        );
+        SLog.info("url[%s], params[%s]", Api.PATH_GROUP_LIST, params);
+        Api.getUI(Api.PATH_GROUP_LIST, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(context, responseObj)) {
+                        return;
+                    }
+
+                    EasyJSONArray groupLogOpenVoList = responseObj.getSafeArray("datas.groupLogOpenVoList");
+                    for (Object object : groupLogOpenVoList) {
+                        EasyJSONObject groupLogOpenVo = (EasyJSONObject) object;
+
+                        GroupListItem groupListItem = new GroupListItem(
+                                groupLogOpenVo.getInt("goId"),
+                                groupLogOpenVo.getLong("endTime"),
+                                groupLogOpenVo.getSafeString("memberAvatar"),
+                                groupLogOpenVo.getInt("requireNum"),
+                                groupLogOpenVo.getInt("joinedNum")
+                        );
+
+                        groupList.add(groupListItem);
+                    }
+
+                    adapter.setNewData(groupList);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     //完全可见执行
@@ -92,3 +151,5 @@ public class ViewMoreGroupPopup extends CenterPopupView implements View.OnClickL
         }
     }
 }
+
+

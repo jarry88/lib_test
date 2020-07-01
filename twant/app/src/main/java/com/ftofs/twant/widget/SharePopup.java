@@ -15,8 +15,9 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
-import com.ftofs.twant.fragment.AddPostFragment;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -38,8 +39,12 @@ import com.lxj.xpopup.util.XPopupUtils;
 import org.urllib.Urls;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 
 /**
@@ -72,17 +77,22 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     String coverUrl; // 分享的封面圖片的URL
 
     Object data; // 當shareType為SHARE_TYPE_STORE或SHARE_TYPE_GOODS才使用此數據
-    boolean showWordIcon;
+    // boolean showWordIcon;
 
     View btnCopyLink;
     View btnShareToTakewantCircle;
     View btnShareToWord;
 
+    String goodsWord;  // 商品分享口令
+
+    /*
     public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data) {
         this(context, shareUrl, title, description, coverUrl, data, false);
     }
 
-    public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data, boolean showWordIcon) {
+     */
+
+    public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data) {
         super(context);
 
         this.context = context;
@@ -91,7 +101,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         this.description = description;
         this.coverUrl = StringUtil.normalizeImageUrl(coverUrl);
         this.data = data;
-        this.showWordIcon = showWordIcon;
+        // this.showWordIcon = showWordIcon;
     }
 
 
@@ -120,11 +130,59 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         }
 
         btnShareToWord = findViewById(R.id.btn_share_to_word);
-        if (showWordIcon) {
-            btnShareToWord.setOnClickListener(this);
-        } else {
-            btnShareToWord.setVisibility(GONE);
+
+        // 判斷是否為商品分享，如果是，就生成分享口令
+        try {
+            if (data != null && data instanceof EasyJSONObject) {
+                EasyJSONObject shareData = (EasyJSONObject) data;
+                if (shareData.exists("shareType")) {
+                    int shareType = shareData.getInt("shareType");
+                    int commonId = shareData.getInt("commonId");
+                    if (shareType == SHARE_TYPE_GOODS) {
+                        getGoodsWord(commonId);
+
+                        btnShareToWord.setOnClickListener(this);
+                        btnShareToWord.setVisibility(VISIBLE);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+
+    /**
+     * 獲取商品口令碼
+     * @param commonId
+     */
+    private void getGoodsWord(int commonId) {
+        EasyJSONObject params = EasyJSONObject.generate(
+                "commonId", commonId
+        );
+
+        SLog.info("url[%s], params[%s]", Api.PATH_GOODS_CREATE_WORD, params);
+        Api.getUI(Api.PATH_GOODS_CREATE_WORD, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(context, responseObj)) {
+                    return;
+                }
+
+                try {
+                    goodsWord = responseObj.getSafeString("datas.command");
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     //完全可见执行
@@ -239,11 +297,18 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             }))
                     .show();
         } else if (id == R.id.btn_share_to_takewant_circle) { // 分享到想要圈
+            if (data == null || !(data instanceof EasyJSONObject)) {
+                return;
+            }
             EasyJSONObject dataObj = (EasyJSONObject) data;
             ApiUtil.addPost(getContext(),false,dataObj);
 //            Util.startFragment(AddPostFragment.newInstance(dataObj, false));
             dismiss();
         } else if (id == R.id.btn_share_to_word) { // 分享口令碼
+            if (StringUtil.isEmpty(goodsWord)) {
+                ToastUtil.error(context, "口令為空，請稍後再試");
+                return;
+            }
             new XPopup.Builder(context)
 //                         .dismissOnTouchOutside(false)
                     // 设置弹窗显示和隐藏的回调监听
@@ -255,7 +320,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                         @Override
                         public void onDismiss() {
                         }
-                    }).asCustom(new WordSharePopup(context, "该纪录片是大连广播电视台对外传播交流中心主任李汝建及其团队，继《京剧·八达仓》之后的又一力作。")).show();
+                    }).asCustom(new WordSharePopup(context, goodsWord)).show();
 
             dismiss();
         }

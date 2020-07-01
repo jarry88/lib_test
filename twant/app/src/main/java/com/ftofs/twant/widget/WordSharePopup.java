@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.util.ClipboardUtils;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.WeixinUtil;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
@@ -49,6 +51,11 @@ public class WordSharePopup extends CenterPopupView implements View.OnClickListe
             btnShare.setText("去微信粘貼給好友");
         } else {
             btnShare.setText("粘貼給好友");
+        }
+
+        // 將口令複製到剪貼析
+        if (!StringUtil.isEmpty(word)) {
+            ClipboardUtils.copyText(context, word);
         }
     }
 

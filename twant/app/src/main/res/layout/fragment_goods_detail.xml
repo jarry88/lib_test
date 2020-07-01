@@ -320,76 +320,6 @@
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/ll_group_state_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:background="@drawable/white_r4dp_bg"
-                            android:orientation="horizontal"
-                            android:gravity="bottom">
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:id="@+id/tv_join_group_slogan"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:text="快來參與拼團吧"
-                                    android:textSize="13sp"
-                                    android:textColor="@color/tw_yellow">
-                                </TextView>
-                                <LinearLayout
-                                    android:id="@+id/ll_group_member_list"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-                                    <!--
-                                    <de.hdodenhof.circleimageview.CircleImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/avatar_female"
-                                        app:civ_border_color="@color/tw_light_grey"
-                                        app:civ_border_width="1dp">
-                                    </de.hdodenhof.circleimageview.CircleImageView>
-                                    <de.hdodenhof.circleimageview.CircleImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:translationX="-4dp"
-                                        android:src="@drawable/avatar_male"
-                                        app:civ_border_color="@color/tw_light_grey"
-                                        app:civ_border_width="1dp">
-                                    </de.hdodenhof.circleimageview.CircleImageView>
-                                    -->
-                                    <TextView
-                                        android:id="@+id/tv_has_more_members_indicator"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="bottom"
-                                        android:text="..."
-                                        android:textSize="15sp"
-                                        android:textColor="@color/tw_yellow">
-
-                                    </TextView>
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/btn_join_group"
-                                android:layout_width="80dp"
-                                android:layout_height="24dp"
-                                android:background="@drawable/smaller_red_button"
-                                android:gravity="center"
-                                android:text="想拼團"
-                                android:textSize="13sp"
-                                android:textColor="@android:color/white">
-
-                            </TextView>
-                        </LinearLayout>
                     </LinearLayout>
                     <!-- END OF 拼团活动 -->
 
@@ -636,6 +566,241 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
+                <!-- 拼團列表 -->
+                <LinearLayout
+                    android:id="@+id/ll_group_list_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/ll_goods_name_container"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:paddingLeft="@dimen/toolbar_margin_left"
+                    android:paddingRight="@dimen/toolbar_margin_right"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp">
+                        <TextView
+                            android:id="@+id/tv_group_member_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="0人正在拼團，可直接參與"
+                            android:textColor="@color/tw_black">
+                        </TextView>
+                        <LinearLayout
+                            android:id="@+id/btn_view_more_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="查看更多"
+                                android:textColor="@color/tw_medium_grey"
+                                android:textSize="12sp">
+                            </TextView>
+                            <ImageView
+                                android:layout_width="6dp"
+                                android:layout_height="10dp"
+                                android:layout_marginLeft="5dp"
+                                android:src="@drawable/expand_button_grey">
+
+                            </ImageView>
+                        </LinearLayout>
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/border_type_d">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/img_group_member_avatar_1"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:civ_border_width="1dp"
+                                app:civ_border_color="@color/tw_light_grey">
+                            </de.hdodenhof.circleimageview.CircleImageView>
+
+                            <TextView
+                                android:id="@+id/tv_group_member_nickname_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:text=""
+                                android:textSize="13sp"
+                                android:textColor="@color/tw_black">
+
+                            </TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="還差"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                    <TextView
+                                        android:id="@+id/tv_count_down_member_1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0人"
+                                        android:textColor="@color/tw_red"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="拼成"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                </LinearLayout>
+                                <TextView
+                                    android:id="@+id/tv_count_down_time_1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="00:00:00.0"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/tw_medium_grey">
+
+                                </TextView>
+                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/btn_quick_join_group_1"
+                                android:layout_width="80dp"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="8dp"
+                                android:background="@drawable/narrow_red_button"
+                                android:gravity="center"
+                                android:text="快速成團"
+                                android:textColor="@android:color/white"
+                                android:textSize="13sp">
+
+                            </TextView>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/border_type_d">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/img_group_member_avatar_2"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:civ_border_width="1dp"
+                                app:civ_border_color="@color/tw_light_grey">
+                            </de.hdodenhof.circleimageview.CircleImageView>
+
+                            <TextView
+                                android:id="@+id/tv_group_member_nickname_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:text=""
+                                android:textSize="13sp"
+                                android:textColor="@color/tw_black">
+
+                            </TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="還差"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                    <TextView
+                                        android:id="@+id/tv_count_down_member_2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0人"
+                                        android:textColor="@color/tw_red"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="拼成"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                </LinearLayout>
+                                <TextView
+                                    android:id="@+id/tv_count_down_time_2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="00:00:00.0"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/tw_medium_grey">
+
+                                </TextView>
+                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/btn_quick_join_group_2"
+                                android:layout_width="80dp"
+                                android:layout_height="25dp"
+                                android:layout_marginLeft="8dp"
+                                android:background="@drawable/narrow_red_button"
+                                android:gravity="center"
+                                android:text="快速成團"
+                                android:textColor="@android:color/white"
+                                android:textSize="13sp">
+
+                            </TextView>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
                 <!-- 優惠券列表 -->
                 <LinearLayout
                     android:id="@+id/ll_coupon_list"
@@ -643,7 +808,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/toolbar_margin_left"
                     android:layout_marginEnd="@dimen/toolbar_margin_right"
-                    app:layout_constraintTop_toBottomOf="@id/ll_goods_name_container"
+                    app:layout_constraintTop_toBottomOf="@id/ll_group_list_container"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:orientation="vertical"
@@ -691,53 +856,6 @@
                             </LinearLayout>
                         </HorizontalScrollView>
                     </RelativeLayout>
-
-
-                    <!-- 贈品 -->
-                    <!--
-                    <RelativeLayout
-                        android:id="@+id/btn_show_gift"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="9dp"
-                        android:layout_marginBottom="9dp"
-                        android:visibility="gone">
-                        <TextView
-                            android:id="@+id/text_gift"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:padding="3dp"
-                            android:text="@string/text_gift"
-                            android:textColor="@android:color/white"
-                            android:textSize="11sp"
-                            android:background="@color/tw_yellow"
-                            />
-                        <ImageView
-                            android:id="@+id/icon_expand_gift"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/expand_button_red"
-                            />
-                        <TextView
-                            android:id="@+id/tv_gift_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_toRightOf="@id/text_gift"
-                            android:layout_toLeftOf="@id/icon_expand_gift"
-                            android:layout_centerVertical="true"
-                            android:text=""
-                            android:textSize="14sp"
-                            android:textColor="@color/tw_red"
-                            android:singleLine="true"
-                            android:ellipsize="end"
-                            />
-                    </RelativeLayout>
-                    -->
 
                     <!-- 促銷 -->
                     <RelativeLayout

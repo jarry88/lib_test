@@ -57,29 +57,45 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center">
                         <ImageView
+                            android:id="@+id/icon_order_status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/icon_order_status"/>
+                            />
                         <TextView
+                            android:id="@+id/tv_order_status"
                             android:layout_marginStart="@dimen/dp_10"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/tw_white"
                             android:textSize="21sp"
-                            android:id="@+id/tv_order_status"/>
+                            android:text="拼團中"
+                            />
                     </LinearLayout>
+
                     <TextView
+                        android:id="@+id/tv_group_count_down"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="25dp"
+                        android:layout_marginTop="4dp"
+                        android:text="23:54:57:5"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white">
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/tv_order_status_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
                         android:textSize="@dimen/sp_14"
                         android:textColor="@color/tw_white"
-                        android:id="@+id/tv_order_status_desc"
-                        android:gravity="center"/>
+                        android:text="您的訂單正在努力成團中，快來邀請好友一起參與吧"
+                        />
                     <TextView
                         android:id="@+id/btn_buy_again"
                         android:layout_width="115dp"
                         android:layout_height="32dp"
+                        android:layout_marginTop="12dp"
                         android:textColor="@color/tw_white"
                         android:textSize="16sp"
                         android:gravity="center"
@@ -91,6 +107,7 @@
                         android:visibility="gone"
                         android:layout_width="115dp"
                         android:layout_height="32dp"
+                        android:layout_marginTop="12dp"
                         android:textColor="@color/tw_white"
                         android:textSize="16sp"
                         android:gravity="center"
@@ -100,6 +117,58 @@
 
                 </LinearLayout>
                 <!-- END OF order head -->
+
+                <!-- 拼團狀態欄 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/tw_yellow">
+                    <TextView
+                        android:id="@+id/tv_group_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_centerVertical="true"
+                        android:text="拼團成功"
+                        android:textSize="15sp"
+                        android:textColor="@android:color/white">
+                    </TextView>
+                    <LinearLayout
+                        android:id="@+id/ll_group_member_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="7dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/avatar_female"
+                            app:civ_border_color="@android:color/white"
+                            app:civ_border_width="1dp">
+                        </de.hdodenhof.circleimageview.CircleImageView>
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/avatar_male"
+                            app:civ_border_color="@android:color/white"
+                            app:civ_border_width="1dp">
+                        </de.hdodenhof.circleimageview.CircleImageView>
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/cs_avatar_160"
+                            app:civ_border_color="@android:color/white"
+                            app:civ_border_width="1dp">
+                        </de.hdodenhof.circleimageview.CircleImageView>
+                    </LinearLayout>
+                </RelativeLayout>
 
                 <!-- block2 -->
                 <LinearLayout

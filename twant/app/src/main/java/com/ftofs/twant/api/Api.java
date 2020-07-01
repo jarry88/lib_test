@@ -1450,6 +1450,17 @@ public class Api {
     public static final String PATH_CHANNEL_UPDATE = "/app/android/channel";
 
 
+    /**
+     * 商品分享口令生成
+     */
+    public static final String PATH_GOODS_CREATE_WORD = "/app/command/create";
+
+
+    /**
+     * 商品開團列表
+     */
+    public static final String PATH_GROUP_LIST = "/app/goods/group/list";
+
 
     /**
      * 發送Http請求

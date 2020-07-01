@@ -119,8 +119,8 @@ public class Time {
      * @return
      */
     public static TimeInfo groupTimeDiff(long currTime, long endTime) {
-        if (currTime > endTime) {  // 如果當前時間大於結束時間，返回全為零的時間信息
-            return new TimeInfo();
+        if (currTime > endTime) {  // 如果當前時間大於結束時間，返回null
+            return null;
         }
 
         long d = endTime - currTime;
