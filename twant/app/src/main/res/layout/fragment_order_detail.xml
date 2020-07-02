@@ -77,9 +77,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="23:54:57:5"
+                        android:text="00:00:00:0"
                         android:textSize="16sp"
-                        android:textColor="@android:color/white">
+                        android:textColor="@android:color/white"
+                        android:visibility="invisible">
                     </TextView>
 
                     <TextView
@@ -89,7 +90,7 @@
                         android:layout_marginTop="25dp"
                         android:textSize="@dimen/sp_14"
                         android:textColor="@color/tw_white"
-                        android:text="您的訂單正在努力成團中，快來邀請好友一起參與吧"
+                        android:text=""
                         />
                     <TextView
                         android:id="@+id/btn_buy_again"

@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,6 +29,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.GroupBuyStatus;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
@@ -35,11 +37,13 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EvaluationGoodsItem;
 import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.entity.Receipt;
+import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -71,6 +75,8 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 
+import static android.view.View.GONE;
+
 /**
  * 訂單詳情
  *
@@ -87,6 +93,10 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     int isGroup = Constant.FALSE_INT;
     int goId;
+    long groupEndTime;
+
+    // 倒計時
+    CountDownTimer countDownTimer;
 
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
@@ -121,6 +131,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     @BindView(R.id.tv_tax_amount)
     TextView tvTaxAmount;
     String storePhone;
+
+    TextView tvGroupCountDown;
 
     boolean needReloadData;
 
@@ -322,6 +334,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_dial_store_phone, this);
         Util.setOnClickListener(view, R.id.btn_advisory_service, this);
 
+        tvGroupCountDown = view.findViewById(R.id.tv_group_count_down);
 
         LinearLayout llOrderDetailGoodsList = view.findViewById(R.id.ll_order_detail_goods_list);
         adapter = new OrderDetailGoodsAdapter(_mActivity, llOrderDetailGoodsList, R.layout.order_detail_goods_item);
@@ -371,6 +384,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             unbinder.unbind();
         }
         EventBus.getDefault().unregister(this);
+
+        stopCountDown();
     }
 
 
@@ -906,11 +921,24 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         /*
                          0拼團中 1拼團成功 2拼團失敗
                          */
+                        if (Config.DEVELOPER_MODE) {
+                            // goState = 0;
+                        }
                         if (goState == 0) {
                             tvGroupStatus.setText("拼團中");
+                            tvGroupCountDown.setVisibility(View.VISIBLE);
+                            groupEndTime = ordersVo.getLong("groupEndTime");
+                            if (Config.DEVELOPER_MODE) {
+                                // groupEndTime = 1593920850000L;
+                            }
+                            tvOrderStatus.setText("拼團中");
+                            tvOrderStatusDesc.setText("您的訂單正在努力成團中，快來邀請好友一起參與吧");
+                            startCountDown(groupEndTime);
                         } else if (goState == 1) {
                             tvGroupStatus.setText("拼團成功");
                         } else if (goState == 2) {
+                            tvOrderStatus.setText("拼團失敗");
+                            tvOrderStatusDesc.setText("該訂單已自動進行退款，敬請關注其他活動信息");
                             tvGroupStatus.setText("拼團失敗");
                         }
 
@@ -997,6 +1025,51 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 }
             }
         });
+    }
+
+    /**
+     * 啟動倒數計算
+     * @param endTime 結束時間戳
+     */
+    private void startCountDown(long endTime) {
+        long remainTime = endTime - System.currentTimeMillis(); // 離結束還剩下多少毫秒
+        SLog.info("endTime[%s], remainTime[%s]", endTime, remainTime);
+
+        stopCountDown();  // 先停止上一次倒數
+
+        if (remainTime <= 0) {
+            tvGroupCountDown.setText("結束");
+            return;
+        }
+
+        countDownTimer = new CountDownTimer(remainTime, 100) {
+            public void onTick(long millisUntilFinished) {
+                // SLog.info("threadId[%s]", Thread.currentThread().getId());
+
+                long now = System.currentTimeMillis();
+                TimeInfo timeInfoGroup = Time.groupTimeDiff(now, endTime);
+
+                if (timeInfoGroup == null) {
+                    tvGroupCountDown.setText("結束");
+                } else {
+                    tvGroupCountDown.setText(String.format("%d:%02d:%02d.%d",
+                            timeInfoGroup.hour, timeInfoGroup.minute, timeInfoGroup.second, timeInfoGroup.milliSecond / 100));
+                }
+            }
+            public void onFinish() {
+                tvGroupCountDown.setText("結束");
+            }
+        }.start();
+    }
+
+    private void stopCountDown() {
+        SLog.info("stopCountDown()");
+
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        countDownTimer = null;
     }
 
     @Override
