@@ -2,6 +2,7 @@ package com.ftofs.twant.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -23,6 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -1398,6 +1400,23 @@ public class Util {
             return result.toString();
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            return null;
+        }
+    }
+
+
+    /**
+     * 根據context查找Activity
+     * @param context
+     * @return
+     */
+    @Nullable
+    public static Activity findActivity(@NonNull Context context) {
+        if (context instanceof Activity) {
+            return (Activity) context;
+        } else if (context instanceof ContextWrapper) {
+            return findActivity(((ContextWrapper) context).getBaseContext());
+        } else {
             return null;
         }
     }
