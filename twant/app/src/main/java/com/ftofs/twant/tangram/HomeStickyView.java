@@ -40,6 +40,7 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
+import com.wzq.sample.ui.testnet.TestNetFragment;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -146,7 +147,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         int id = v.getId();
         if (Config.DEVELOPER_MODE) {
             if (id == R.id.icon_takewant) {
-                Util.startFragment(SellerFeaturesFragment.newInstance());
+//                Util.startFragment(SellerFeaturesFragment.newInstance());
+                Util.startFragment(new TestNetFragment());
             }
         }
         if (id == R.id.btn_goto_activity) {

@@ -28,14 +28,13 @@
         android:layout_height="@dimen/toolbar_height"
         android:background="@drawable/border_type_d"
         >
-
+<!--onclick-->
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
             android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
-            android:onClick="@{()->vm.backAction()}"
             app:icon_src="@drawable/icon_back"
             />
 
@@ -58,7 +57,6 @@
             android:layout_toStartOf="@+id/btn_menu"
 
             android:id="@+id/icon_add_goods"
-            android:onClick="@{()->vm.test()}"
             app:icon_src="@drawable/icon_circle_add"
             android:layout_centerVertical="true"/>
         <com.ftofs.twant.widget.ScaledButton
@@ -90,6 +88,8 @@
             android:layout_height="match_parent"
             tools:listitem="@layout/seller_goods_item_unswipe"
             android:background="@color/colorLightGray"
+            app:adapter="@{adapter}"
+            app:layoutManager="@{layoutManager}"
             />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     <!--  END OF 工具欄 -->

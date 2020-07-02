@@ -50,10 +50,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:requestLegacyExternalStorage ="true">
-        <!-- 测试/正式环境 -->
+        <!-- 暫時默認寫死為正式環境，smart框架請求數據時會用這個判斷環境 -->
         <meta-data
             android:name="ENVIRONMENT"
-            android:value="${ENVIRONMENT}" />
+            android:value="3" />
         <!-- 是否支持在包内切換環境 -->
         <meta-data
             android:name="CHANGEENVIRONMENTENABLE"

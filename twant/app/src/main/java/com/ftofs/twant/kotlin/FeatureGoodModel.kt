@@ -16,26 +16,28 @@ class FeatureGoodModel : BaseModelMVVM() {
     /**
      * 数据来自内存
      */
-    fun doGetServerNews1(pageNum: Int): Observable<BaseResponse<ArrayList<SellerGoodsItem>>> {
-        return MRequest.getInstance().doGetServerNews(pageNum)
-    }
-
-    /**
-     * 数据来自DB
-     */
-    fun doGetServerNews2(pageNum: Int): Observable<BaseResponse<ArrayList<SellerGoodsItem>>> {
-        return MRequest.getInstance().doGetServerNews(pageNum)
-    }
+//    fun doGetServerNews1(pageNum: Int): Observable<BaseResponse<ArrayList<SellerGoodsItem>>> {
+//        return MRequest.getInstance().doGetServerNews(pageNum)
+//    }
+//
+//    /**
+//     * 数据来自DB
+//     */
+//    fun doGetServerNews2(pageNum: Int): Observable<BaseResponse<ArrayList<SellerGoodsItem>>> {
+//        return MRequest.getInstance().doGetServerNews(pageNum)
+//    }
 
     /**
      * 数据来自网络
      */
-    fun doGetServerNews(pageNum: Int): Observable<BaseResponse<ArrayList<SellerGoodsItem>>> {
-        return MRequest.getInstance().doGetServerNews(pageNum)
-    }/**
+//    fun doGetServerNews(pageNum: Int): Observable<BaseResponse<ArrayList<SellerGoodsItem>>> {
+//        return MRequest.getInstance().doGetServerNews(pageNum)
+//    }
+    /**
      * 数据来自网络
      */
     fun doSellerGoodsList(params:Map<String ,Any>): Observable<BaseResponse<ArrayList<SellerGoodsItem>>> {
+
         return MRequest.getInstance().doSellerGoodsList(params)
     }
 
