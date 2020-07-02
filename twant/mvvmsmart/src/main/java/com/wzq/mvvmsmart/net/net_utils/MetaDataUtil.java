@@ -66,23 +66,23 @@ public class MetaDataUtil {
         serviceEnvironment = 1;
         switch (serviceEnvironment) {
             case 0: case 3://生產环境
-                baseUrl = "https://www.twant.com/api"; //  生產环境
+                baseUrl = "https://www.twant.com/api/"; //  生產环境
                 break;
 
             case 1://测试环境
                 //baseUrl = "https://www.oschina.net/"; //  28环境
-                baseUrl = "http://192.168.5.28/api"; //  28环境
+                baseUrl = "http://192.168.5.28/api/"; //  28环境
                 break;
             case 2://qa环境
                 //baseUrl = "https://www.oschina.net/"; //  29环境
-                baseUrl = "https://192.168.5.29/api"; //  29环境
+                baseUrl = "https://192.168.5.29/api/"; //  29环境
                 break;
             case 4://f1环境
                 //baseUrl = "https://www.oschina.net/"; //  qa环境
-                baseUrl = "https://f1.twant.com/api"; //  f1环境
+                baseUrl = "https://f1.twant.com/api/"; //  f1环境
                 break;
             default:
-                baseUrl = "https://www.twant.com/api"; //  线上环境
+                baseUrl = "https://www.twant.com/api/"; //  线上环境
                 break;
         }
         KLog.INSTANCE.e("baseUrl:" + baseUrl);

@@ -5,7 +5,7 @@
 
     <variable
       name="viewMole"
-      type="com.wzq.sample.ui.testnet.TestNetViewModel" />
+      type="com.ftofs.twant.kotlin.testnet.TestNetViewModel" />
   </data>
 
   <LinearLayout

@@ -33,7 +33,6 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MessageFragment;
-import com.ftofs.twant.kotlin.base.BaseApplicationMVVM;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.Emoji;
@@ -120,7 +119,7 @@ import static com.orhanobut.hawk.Hawk.init;
  * TwantApplication
  * @author zwm
  */
-public class TwantApplication extends BaseApplicationMVVM {
+public class TwantApplication extends Application {
     // 線程等待隊列大小
     private static final int THREAD_QUEUE_SIZE = 1024;
     // 線程池大小
@@ -159,13 +158,17 @@ public class TwantApplication extends BaseApplicationMVVM {
         instance = this;
 
         //Bugly异常处理
-        CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
+        //双重保险，开发模式时不上传
+        if (!Config.DEVELOPER_MODE) {
+            CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
+        }
 
         // 添加全局異常處理
         // CrashHandler crashHandler = CrashHandler.getInstance();
         // crashHandler.init(getApplicationContext());
 
         //初始化mvvm操作
+        initMVVM();
         // 在開發過程中，啟用 StrictMode
         if (Config.DEVELOPER_MODE) {
             StrictMode.setThreadPolicy(
@@ -275,6 +278,85 @@ public class TwantApplication extends BaseApplicationMVVM {
         // 將應用注冊到微信
         regToWx();
         //創建通知等級
+    }
+
+    private void initMVVM() {
+        Tasks.init();
+        Utils.init(this);
+        //是否开启打印日志
+//        KLog.init(BuildConfig.DEBUG);
+        KLog.INSTANCE.init(BuildConfig.DEBUG);
+        //初始化全局异常崩溃
+        initCrash();
+        MMKV.initialize(this);   // 替换sp
+        LiveEventBus  // 事件儿总线通信
+                .config().supportBroadcast(this) // 配置支持跨进程、跨APP通信，传入Context，需要在application onCreate中配置
+                .lifecycleObserverAlwaysActive(true); //    整个生命周期（从onCreate到onDestroy）都可以实时收到消息
+        setActivityLifecycle(this);
+    }
+
+    /**
+     * app 崩溃重启的配置
+     */
+     private void initCrash() {
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT) //背景模式,开启沉浸式
+                .enabled(true) //是否启动全局异常捕获
+                .showErrorDetails(true) //是否显示错误详细信息
+                .showRestartButton(true) //是否显示重启按钮
+                .trackActivities(true) //是否跟踪Activity
+                .minTimeBetweenCrashesMs(2000) //崩溃的间隔时间(毫秒)
+                .errorDrawable(R.mipmap.ic_launcher) //错误图标
+                .restartActivity(MainActivity.class) //重新启动后的activity
+                //                                .errorActivity(YourCustomErrorActivity.class) //崩溃后的错误activity
+                //                                .eventListener(new YourCustomEventListener()) //崩溃后的错误监听
+                .apply();
+    }
+    /**
+     * 当主工程没有继承BaseApplication时，可以使用setApplication方法初始化BaseApplication
+     *
+     * @param application
+     */
+    @Synchronized
+    void setActivityLifecycle( Application application) {
+        //注册监听每个activity的生命周期,便于堆栈式管理
+        application.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+                AppManagerMVVM.Companion.get().addActivity(activity);
+            }
+
+            @Override
+            public void onActivityStarted(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {
+                AppManagerMVVM.Companion.get().removeActivity(activity);
+
+            }
+
+        });
     }
     private void initNotification() {
         //创建自定义通知渠道，和全局通知管理器

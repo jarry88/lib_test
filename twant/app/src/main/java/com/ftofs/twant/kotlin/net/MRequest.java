@@ -6,7 +6,6 @@ import com.ftofs.twant.entity.SellerGoodsItem;
 import com.ftofs.twant.kotlin.bean.NewsData;
 import com.wzq.mvvmsmart.net.base.BaseRequest;
 import com.wzq.mvvmsmart.net.base.BaseResponse;
-import com.wzq.sample.net.DemoApiService;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -57,8 +56,9 @@ public class MRequest extends BaseRequest {
         return observable;
     }
     // get 商品列表请求
-    public Observable<BaseResponse<ArrayList<SellerGoodsItem>>> doSellerGoodsList(Map<String ,Object> map) {
-        Observable<BaseResponse<ArrayList<SellerGoodsItem>>> observable = service.doSellerGoodsList(map);
+    public Observable<BaseResponse<ArrayList<SellerGoodsItem>>> doSellerGoodsList(Map<String,Object> params) {
+
+        Observable<BaseResponse<ArrayList<SellerGoodsItem>>> observable = service.doSellerGoodsList(params);
         return observable;
     }
 

@@ -1,4 +1,4 @@
-package com.wzq.sample.net
+package com.ftofs.twant.kotlin.net
 
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.bean.NewsData
@@ -6,7 +6,6 @@ import com.wzq.mvvmsmart.net.base.BaseResponse
 import io.reactivex.Observable
 import okhttp3.RequestBody
 import retrofit2.http.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -26,5 +25,6 @@ interface DemoApiService {
 
     //  获取网络数据
     @GET("member/seller/goods/list")
-    fun doSellerGoodsList(@QueryMap map:Map<String ,Any> ): Observable<BaseResponse<ArrayList<SellerGoodsItem>>>
+    fun doSellerGoodsList(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ): Observable<BaseResponse<ArrayList<SellerGoodsItem>>>
+
 }

@@ -5,6 +5,7 @@ import com.ftofs.twant.kotlin.bean.NewsData
 import com.ftofs.twant.kotlin.net.MRequest
 import com.wzq.mvvmsmart.base.BaseModelMVVM
 import com.wzq.mvvmsmart.net.base.BaseResponse
+import com.wzq.mvvmsmart.net.net_utils.GsonUtil
 import io.reactivex.Observable
 
 /**
@@ -36,7 +37,7 @@ class FeatureGoodModel : BaseModelMVVM() {
     /**
      * 数据来自网络
      */
-    fun doSellerGoodsList(params:Map<String ,Any>): Observable<BaseResponse<ArrayList<SellerGoodsItem>>> {
+    fun doSellerGoodsList(params:@JvmSuppressWildcards Map<String ,Any>): Observable<BaseResponse<ArrayList<SellerGoodsItem>>> {
 
         return MRequest.getInstance().doSellerGoodsList(params)
     }

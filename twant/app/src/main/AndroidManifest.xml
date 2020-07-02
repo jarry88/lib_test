@@ -61,6 +61,9 @@
         <activity android:name=".activity.YoutubeActivity"/>
         <activity android:name=".activity.TwantCaptureActivity"/>
         <activity android:name=".activity.AppGuideActivity" />
+        <activity android:name=".activity.TestActivity" >
+
+        </activity>
         <activity
             android:name=".activity.SplashActivity"
             android:windowSoftInputMode="adjustResize">
@@ -69,7 +72,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <!-- 需要添加下面的intent-filter配置 -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

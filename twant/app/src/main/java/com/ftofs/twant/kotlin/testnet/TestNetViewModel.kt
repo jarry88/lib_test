@@ -1,4 +1,4 @@
-package com.wzq.sample.ui.testnet
+package com.ftofs.twant.kotlin.testnet
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData

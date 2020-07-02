@@ -1,4 +1,4 @@
-package com.wzq.sample.ui.testnet
+package com.ftofs.twant.kotlin.testnet
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,5 +35,10 @@ class TestNetFragment : BaseTwantFragmentMVVM<FragmentTestNetBinding, TestNetVie
                 binding.tvJson.text = it[0].news_summary
             }
         })
+    }
+
+    override fun onBackPressedSupport(): Boolean {
+        hideSoftInputPop()
+        return true
     }
 }

@@ -54,8 +54,6 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.kotlin.BR;
-import com.ftofs.twant.kotlin.BaseActivity;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.CarouselView;
 import com.ftofs.twant.tangram.HomeStickyView;
@@ -1236,15 +1234,5 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 couponWordDialog.setData(word, extraData);
             }
         }, 500);
-    }
-
-    @Override
-    public int initContentView(@org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return R.layout.activity_main;
-    }
-
-    @Override
-    public int initVariableId() {
-        return BR.viewModel;
     }
 }

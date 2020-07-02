@@ -11,9 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ftofs.twant.R
+import com.ftofs.twant.BR
 import com.ftofs.twant.databinding.SellerEditFeaturesLayoutBinding
 import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.kotlin.BR
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.FeatureGoodViewModel
 import com.ftofs.twant.kotlin.SellerGoodsListAdapter

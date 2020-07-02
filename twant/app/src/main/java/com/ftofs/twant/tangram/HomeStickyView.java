@@ -31,7 +31,6 @@ import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.seller.fragment.SellerFeaturesFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -40,7 +39,7 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
-import com.wzq.sample.ui.testnet.TestNetFragment;
+import com.ftofs.twant.kotlin.testnet.TestNetFragment;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
