@@ -18,9 +18,12 @@ import com.ftofs.twant.adapter.GroupListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.GroupListItem;
 import com.ftofs.twant.fragment.ConfirmOrderFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.ToastUtil;
@@ -44,16 +47,18 @@ import okhttp3.Call;
 public class ViewMoreGroupPopup extends CenterPopupView implements View.OnClickListener {
     Context context;
     int commonId;
+    SimpleCallback simpleCallback;
 
     RecyclerView rvList;
     GroupListAdapter adapter;
     List<GroupListItem> groupList = new ArrayList<>();
 
-    public ViewMoreGroupPopup(@NonNull Context context, int commonId) {
+    public ViewMoreGroupPopup(@NonNull Context context, int commonId, SimpleCallback simpleCallback) {
         super(context);
 
         this.context = context;
         this.commonId = commonId;
+        this.simpleCallback = simpleCallback;
     }
 
     @Override
@@ -76,7 +81,17 @@ public class ViewMoreGroupPopup extends CenterPopupView implements View.OnClickL
                 int id = view.getId();
                 if (id == R.id.btn_join_group) {
                     int goId = groupList.get(position).goId;
-                    // Util.startFragment(ConfirmOrderFragment.newInstance());
+
+                    if (simpleCallback != null) {
+                        CustomActionData customActionData = new CustomActionData();
+                        customActionData.action = CustomAction.CUSTOM_ACTION_SELECT_JOIN_GROUP;
+                        customActionData.data = EasyJSONObject.generate(
+                                "goId", goId
+                        );
+                        simpleCallback.onSimpleCall(customActionData);
+                    }
+
+                    dismiss();
                 }
             }
         });

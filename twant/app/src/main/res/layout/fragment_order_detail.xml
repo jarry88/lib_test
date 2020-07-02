@@ -120,16 +120,18 @@
 
                 <!-- 拼團狀態欄 -->
                 <RelativeLayout
+                    android:id="@+id/rl_group_status_container"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@color/tw_yellow">
+                    android:background="@color/tw_yellow"
+                    android:visibility="gone">
                     <TextView
                         android:id="@+id/tv_group_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:layout_centerVertical="true"
-                        android:text="拼團成功"
+                        android:text=""
                         android:textSize="15sp"
                         android:textColor="@android:color/white">
                     </TextView>
@@ -141,32 +143,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:orientation="horizontal">
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginRight="8dp"
-                            android:src="@drawable/avatar_female"
-                            app:civ_border_color="@android:color/white"
-                            app:civ_border_width="1dp">
-                        </de.hdodenhof.circleimageview.CircleImageView>
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginRight="8dp"
-                            android:src="@drawable/avatar_male"
-                            app:civ_border_color="@android:color/white"
-                            app:civ_border_width="1dp">
-                        </de.hdodenhof.circleimageview.CircleImageView>
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginRight="8dp"
-                            android:src="@drawable/cs_avatar_160"
-                            app:civ_border_color="@android:color/white"
-                            app:civ_border_width="1dp">
-                        </de.hdodenhof.circleimageview.CircleImageView>
                     </LinearLayout>
                 </RelativeLayout>
 

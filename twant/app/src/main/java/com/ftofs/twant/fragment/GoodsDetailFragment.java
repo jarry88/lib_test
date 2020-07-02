@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,12 +39,14 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.GroupBuyStatus;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.AddrItem;
+import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GiftVo;
@@ -60,7 +61,9 @@ import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
@@ -119,7 +122,7 @@ import static android.view.View.VISIBLE;
  *
  * @author zwm
  */
-public class GoodsDetailFragment extends BaseFragment implements View.OnClickListener {
+public class GoodsDetailFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
     private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 80;
     int discountState;//0沒有折扣信息、1未開始、2已開始、3已結束
     private static final int NO_DISCOUNT = 0;
@@ -322,6 +325,28 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     TextView tvCountDownTime1;
     TextView tvCountDownTime2;
+    View btnQuickJoinGroup1; // 快速成團1
+    int goId1 = Constant.INVALID_GO_ID;
+    View btnQuickJoinGroup2; // 快速成團2
+    int goId2 = Constant.INVALID_GO_ID;
+
+    @Override
+    public void onSimpleCall(Object data) {
+        try {
+            if (data instanceof CustomActionData) {
+                CustomActionData customActionData = (CustomActionData) data;
+                // 編輯彈窗保存時調用
+                if (CustomAction.CUSTOM_ACTION_SELECT_JOIN_GROUP.equals(customActionData.action)) {
+                    EasyJSONObject dataObj = (EasyJSONObject) customActionData.data;
+
+                    int goId = dataObj.getInt("goId");
+                    showSpecSelectPopup(Constant.ACTION_BUY, goId);
+                }
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
 
     static class scrollStateHandler extends Handler {
         ScrollView scrollViewContainer;
@@ -577,8 +602,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.tv_goods_name, this);
 
         Util.setOnClickListener(view, R.id.btn_view_more_group, this); // 查看更加的拼團
-        Util.setOnClickListener(view, R.id.btn_quick_join_group_1, this);  // 快速成團1
-        Util.setOnClickListener(view, R.id.btn_quick_join_group_2, this);  // 快速成團2
+        btnQuickJoinGroup1 = view.findViewById(R.id.btn_quick_join_group_1);
+        btnQuickJoinGroup1.setOnClickListener(this);
+        btnQuickJoinGroup2 = view.findViewById(R.id.btn_quick_join_group_2);
+        btnQuickJoinGroup2.setOnClickListener(this);
 
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
@@ -832,7 +859,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 @Override
                                 public void onYes() {
                                     SLog.info("onYes");
-                                    showSpecSelectPopup(Constant.ACTION_BUY, true);
+                                    showSpecSelectPopup(Constant.ACTION_BUY, 0);
                                 }
 
                                 @Override
@@ -850,7 +877,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 }
                 break;
             case R.id.btn_join_group:
-                showSpecSelectPopup(Constant.ACTION_BUY, true);
+                showSpecSelectPopup(Constant.ACTION_BUY, 0);
                 break;
             case R.id.btn_select_spec:
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
@@ -925,11 +952,21 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new ViewMoreGroupPopup(_mActivity, commonId))
+                        .asCustom(new ViewMoreGroupPopup(_mActivity, commonId, this))
                         .show();
                 break;
             case R.id.btn_quick_join_group_1:
             case R.id.btn_quick_join_group_2:
+                if (!User.isLogin()) {
+                    Util.showLoginFragment();
+                    return;
+                }
+                SLog.info("goId1[%d], goId2[%d]", goId1, goId2);
+                if (id == R.id.btn_quick_join_group_1 && goId1 != Constant.INVALID_GO_ID) {
+                    showSpecSelectPopup(Constant.ACTION_BUY, goId1);
+                } else if (id == R.id.btn_quick_join_group_2 && goId2 != Constant.INVALID_GO_ID) {
+                    showSpecSelectPopup(Constant.ACTION_BUY, goId2);
+                }
                 break;
             default:
                 break;
@@ -1092,14 +1129,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void showSpecSelectPopup(int action) {
-        showSpecSelectPopup(action, false);
+        showSpecSelectPopup(action, Constant.INVALID_GO_ID);
     }
 
-    private void showSpecSelectPopup(int action, boolean groupBuyMode) {
+    /**
+     * 顯示規格選擇彈框
+     * @param action 動作： 添加購物車；購買；選擇規格
+     * @param goId 開團Id: 如果為0，表示自己新開團;  如果大於0，表示加入指定的團
+     */
+    private void showSpecSelectPopup(int action, int goId) {
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList,limitBuy,discountState,skuGalleryItemList,groupBuyMode))
+                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList,limitBuy,discountState,skuGalleryItemList, true, goId))
                 .show();
     }
 
@@ -1529,6 +1571,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 tvCountDownMember1.setText(requireNum + "人");
 
                                 group1EndTime = groupLogOpenVo.getLong("endTime"); // 獲取第1團的結束時間
+                                goId1 = groupLogOpenVo.getInt("goId");
 
                                 if (groupLogOpenVoList.length() > 1) { // 有2條記錄或以上
                                     ImageView imgGroupMemberAvatar2 = contentView.findViewById(R.id.img_group_member_avatar_2);
@@ -1544,6 +1587,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                     tvCountDownMember2.setText(requireNum + "人");
 
                                     group2EndTime = groupLogOpenVo.getLong("endTime"); // 獲取第2團的結束時間
+                                    goId2 = groupLogOpenVo.getInt("goId");
                                 }
                             }
 
@@ -1992,7 +2036,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     if (group1EndTime > 0) { // 倒數1
                         timeInfoGroup = Time.groupTimeDiff(now, group1EndTime);
                         if (timeInfoGroup == null) {
-                            tvCountDownTime1.setText("結束");
+                            updateStopGroup(1);
                         } else {
                             tvCountDownTime1.setText(String.format("%d:%02d:%02d.%d",
                                     timeInfoGroup.hour, timeInfoGroup.minute, timeInfoGroup.second, timeInfoGroup.milliSecond / 100));
@@ -2000,7 +2044,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         if (group2EndTime > 0) { // 倒數2
                             timeInfoGroup = Time.groupTimeDiff(now, group2EndTime);
                             if (timeInfoGroup == null) {
-                                tvCountDownTime2.setText("結束");
+                                updateStopGroup(2);
                             } else {
                                 tvCountDownTime2.setText(String.format("%d:%02d:%02d.%d",
                                         timeInfoGroup.hour, timeInfoGroup.minute, timeInfoGroup.second, timeInfoGroup.milliSecond / 100));
@@ -2010,9 +2054,23 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 }
             }
             public void onFinish() {
-
+                llGroupListContainer.setVisibility(GONE);
             }
         }.start();
+    }
+
+    /**
+     * 團購倒計時結束時更新團購列表View
+     * @param group 目前商品詳情頁只顯示前2個團，表示是第1個團或是第2個團
+     */
+    private void updateStopGroup(int group) {
+        if (group == 1) {
+            tvCountDownTime1.setText("結束");
+            btnQuickJoinGroup1.setVisibility(View.INVISIBLE);
+        } else if (group == 2) {
+            tvCountDownTime2.setText("結束");
+            btnQuickJoinGroup2.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void stopCountDown() {

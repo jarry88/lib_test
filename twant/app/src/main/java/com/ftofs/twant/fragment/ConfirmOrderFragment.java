@@ -401,6 +401,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 commitBuyData.set("isGroup", 1);
             }
 
+            if (goId != Constant.INVALID_GO_ID) {
+                commitBuyData.set("goId", goId);
+            }
+
             if (platformCouponIndex != -1) { // 如果有選擇平台券
                 StoreVoucherVo platformCoupon = platformCouponList.get(platformCouponIndex);
                 EasyJSONArray couponIdList = EasyJSONArray.generate(String.valueOf(platformCoupon.voucherId));
@@ -746,7 +750,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             mAddrItem = addrItem;
             checkPayWay();
 //            loadOrderData();
-//            updateTotalOrderData();
+            updateTotalOrderData();
             updateFreightTotalAmount();
         } else if (ReceiptInfoFragment.class.getName().equals(from)) {
             int position = data.getInt("position");
@@ -833,7 +837,15 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             if (multiItemEntity.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
                 ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) multiItemEntity;
                 for (ConfirmOrderSkuItem skuItem : storeItem.confirmOrderSkuItemList) {
-                    currBuyData.append(EasyJSONObject.generate("buyNum", skuItem.buyNum, "goodsId", skuItem.goodsId,""));
+                    EasyJSONObject buyItem = EasyJSONObject.generate("buyNum", skuItem.buyNum, "goodsId", skuItem.goodsId);
+                    if (goId != Constant.INVALID_GO_ID) {
+                        try {
+                            buyItem.set("goId", goId);
+                        } catch (Exception e) {
+                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                        }
+                    }
+                    currBuyData.append(buyItem);
                 }
             }
         }
@@ -1317,8 +1329,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         voucherMap.put(storeId, storeVoucherVoList);
                         int conformId = -1;
                         // 获取满减优惠
+                        SLog.info("buyStoreVo[%s]", buyStoreVo);
                         if (buyStoreVo.exists("conform.conformId")) {
-                             conformId = buyStoreVo.getInt("conform.conformId");
+                            conformId = buyStoreVo.getInt("conform.conformId");
                             storeConformIdMap.put(storeId, conformId);
                         }
 

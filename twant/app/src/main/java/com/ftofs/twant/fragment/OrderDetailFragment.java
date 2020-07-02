@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
@@ -67,6 +68,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 
 /**
@@ -84,6 +86,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     double ordersAmount = -1;
 
     int isGroup = Constant.FALSE_INT;
+    int goId;
 
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
@@ -318,6 +321,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_goto_store, this);
         Util.setOnClickListener(view, R.id.btn_dial_store_phone, this);
         Util.setOnClickListener(view, R.id.btn_advisory_service, this);
+
 
         LinearLayout llOrderDetailGoodsList = view.findViewById(R.id.ll_order_detail_goods_list);
         adapter = new OrderDetailGoodsAdapter(_mActivity, llOrderDetailGoodsList, R.layout.order_detail_goods_item);
@@ -660,6 +664,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
+                    View contentView = getView();
+                    if (contentView == null) {
+                        return;
+                    }
+
                     isGroup = responseObj.getInt("datas.isGroup");
                     if (isGroup == Constant.TRUE_INT) {
                         btnBuyAgain.setText("邀請好友");
@@ -881,6 +890,74 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         }
 
                     }, 50);
+
+                    View rlGroupStatusContainer = contentView.findViewById(R.id.rl_group_status_container);
+
+
+                    goId = ordersVo.getInt("goId");
+                    if (goId > 0) {
+                        rlGroupStatusContainer.setVisibility(View.VISIBLE);
+
+                        LinearLayout llGroupMemberList = contentView.findViewById(R.id.ll_group_member_list);
+                        TextView tvGroupStatus = contentView.findViewById(R.id.tv_group_status);
+
+
+                        int goState = ordersVo.getInt("goState");
+                        /*
+                         0拼團中 1拼團成功 2拼團失敗
+                         */
+                        if (goState == 0) {
+                            tvGroupStatus.setText("拼團中");
+                        } else if (goState == 1) {
+                            tvGroupStatus.setText("拼團成功");
+                        } else if (goState == 2) {
+                            tvGroupStatus.setText("拼團失敗");
+                        }
+
+                        List<String> groupMemberAvatarList = new ArrayList<>(); // 團購成員列表
+                        int groupRemainNum = ordersVo.getInt("groupRemainNum");  // 還差多少個人成團
+                        EasyJSONArray groupLogOpenVoList = ordersVo.getSafeArray("groupLogOpenVoList");
+                        for (Object object : groupLogOpenVoList) {
+                            EasyJSONObject groupLogOpenVo = (EasyJSONObject) object;
+                            String memberAvatar = groupLogOpenVo.getSafeString("memberAvatar");
+                            groupMemberAvatarList.add(memberAvatar);
+                        }
+
+                        for (int i = 0; i < groupRemainNum; i++) {
+                            groupMemberAvatarList.add(""); // 待加入的團員頭像地址用空字符串表示
+                        }
+
+
+                        for (String memberAvatarUrl : groupMemberAvatarList) {
+                            /*
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/cs_avatar_160"
+                            app:civ_border_color="@android:color/white"
+                            app:civ_border_width="1dp">
+                             */
+                            CircleImageView imgAvatar = new CircleImageView(_mActivity);
+                            imgAvatar.setBorderColor(Color.WHITE);
+                            imgAvatar.setBorderWidth(Util.dip2px(_mActivity, 1));
+
+                            if (StringUtil.isEmpty(memberAvatarUrl)) { // 待加入的團員頭像
+                                Glide.with(_mActivity).load(R.drawable.icon_question_mark).centerCrop().into(imgAvatar);
+                            } else {
+                                Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(memberAvatarUrl)).centerCrop().into(imgAvatar);
+                            }
+
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    Util.dip2px(_mActivity, 32),
+                                    Util.dip2px(_mActivity, 32)
+                            );
+                            layoutParams.rightMargin = Util.dip2px(_mActivity, 8);
+
+                            llGroupMemberList.addView(imgAvatar, layoutParams);
+                        }
+                    } else {
+                        rlGroupStatusContainer.setVisibility(View.GONE);
+                    }
 
 
                     int showMemberComplain = ordersVo.getInt("showMemberComplain");
