@@ -185,6 +185,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     int containerViewHeight;
     private scrollStateHandler mHandler;
     private ImageView btnShopUp;
+    private boolean bannerAuto;
 
     static class scrollStateHandler extends Handler {
         NestedScrollView scrollViewContainer;
@@ -289,11 +290,16 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             ShopHomeFragment shopHomeFragment = weakReference.get();
             shopHomeFragment.slideToNext();
 
+
         }
     }
 
 
     private void slideToNext() {
+        if (!bannerStart) {
+            //暂停状态时跳过执行
+            return;
+        }
         if (currGalleryImageList == null) {
             return;
         }
@@ -301,14 +307,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         if (size <=1) {
             return;
-
         }
+        bannerAuto = true;
+//        SLog.info("执行自动滚");
         currGalleryPosition++;
-        if (currGalleryImageList.size() == currGalleryPosition) {
+        if (currGalleryPosition>100) {
             currGalleryPosition = 0;
         }
 //            currGalleryPosition = (position+1) % currGalleryImageList.size();
-        pageIndicatorView.setSelection(currGalleryPosition);
 //            rvGalleryImageList.smoothScrollToPosition(currGalleryPosition+1);
         rvGalleryImageList.smoothScrollToPosition(currGalleryPosition);
     }
@@ -1286,14 +1292,24 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         goodsGalleryAdapter = new GoodsGalleryAdapter(_mActivity, currGalleryImageList);
 
         rvGalleryImageList.setAdapter(goodsGalleryAdapter);
+
         rvGalleryImageList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 try{
-
+                    int positon = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                    if (!bannerAuto) {
+                        bannerStart = false;
+                        SLog.info("position [%d]", positon);
+                    }
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        pageIndicatorView.setSelection(currGalleryPosition);
+                        bannerStart = true;
+                        bannerAuto = false;
+                        if (positon >= 0) {
+                            pageIndicatorView.setSelection(positon%currGalleryImageList.size());
+                        }
+//                        pageIndicatorView.setSelection(positon);
                     }
                 }catch (Exception e) {
                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1397,13 +1413,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         if (timer == null) {
             timer = newSingleThreadScheduledExecutor();
         }
-
-        if (bannerStart) {
-            return;
-        }
+        bannerStart = true;
         // 定时服务
         timer.scheduleAtFixedRate(() -> {
-                SLog.info("threadId[%s]", Thread.currentThread().getId());
+//                SLog.info("threadId[%s]", Thread.currentThread().getId());
 
                 Message message = new Message();
                 if (countDownHandler != null) {
