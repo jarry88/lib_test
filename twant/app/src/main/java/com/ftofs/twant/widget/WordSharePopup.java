@@ -8,11 +8,13 @@ import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.WeixinUtil;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
+import com.orhanobut.hawk.Hawk;
 
 /**
  * 口令碼分享彈窗
@@ -55,6 +57,7 @@ public class WordSharePopup extends CenterPopupView implements View.OnClickListe
 
         // 將口令複製到剪貼析
         if (!StringUtil.isEmpty(word)) {
+            Hawk.put(SPField.FIELD_IN_APP_COPY_TIMESTAMP, System.currentTimeMillis());
             ClipboardUtils.copyText(context, word);
         }
     }

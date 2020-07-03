@@ -27,9 +27,6 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
@@ -63,7 +60,6 @@ import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
@@ -76,7 +72,6 @@ import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.DataImageView;
 import com.ftofs.twant.widget.InStorePersonPopup;
-import com.ftofs.twant.widget.RealNameInstructionPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.SpecSelectPopup;
@@ -89,7 +84,6 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.rd.PageIndicatorView;
-import com.tencent.mapsdk.raster.model.Circle;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -97,21 +91,16 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
-import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 
 import static android.view.View.GONE;
@@ -329,6 +318,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int goId1 = Constant.INVALID_GO_ID;
     View btnQuickJoinGroup2; // 快速成團2
     int goId2 = Constant.INVALID_GO_ID;
+
+    TextView btnBuy;
 
     @Override
     public void onSimpleCall(Object data) {
@@ -591,7 +582,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_menu, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
-        Util.setOnClickListener(view, R.id.btn_buy, this);
         Util.setOnClickListener(view, R.id.btn_select_spec, this);
         Util.setOnClickListener(view, R.id.btn_select_addr, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_follow, this);
@@ -600,6 +590,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_bottom_bar_customer_service, this);
         Util.setOnClickListener(view, R.id.btn_comment, this);
         Util.setOnClickListener(view, R.id.tv_goods_name, this);
+        btnBuy = view.findViewById(R.id.btn_buy);
+        btnBuy.setOnClickListener(this);
 
         Util.setOnClickListener(view, R.id.btn_view_more_group, this); // 查看更加的拼團
         btnQuickJoinGroup1 = view.findViewById(R.id.btn_quick_join_group_1);
@@ -810,9 +802,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     if (currSKUGroupBuy) {
-                        if (currGroupBuyStatus == GroupBuyStatus.NOT_STARTED) {
+                        if (COUNT_DOWN_TYPE_BEGIN.equals(promotionCountDownTimeType)) { // 團購活動未開始
                             int from = (int) (System.currentTimeMillis() / 1000);
-                            int to = (int) (promotionEndTime / 1000);
+                            int to = (int) (promotionStartTime / 1000);
 
                             TimeInfo timeInfo = Time.diff(from, to);
                             if (timeInfo != null) {
@@ -828,7 +820,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                             @Override
                                             public void onDismiss() {
                                             }
-                                        }).asCustom(new TwConfirmPopup(_mActivity, title,null   , "是的", "等等團購",new OnConfirmCallback() {
+                                        }).asCustom(new TwConfirmPopup(_mActivity, title,null   , "立即購買", "等等團購",new OnConfirmCallback() {
                                     @Override
                                     public void onYes() {
                                         SLog.info("onYes");
@@ -843,7 +835,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                                 return;
                             }
-                        } else if (currGroupBuyStatus == GroupBuyStatus.ONGOING) {
+                        } else if (COUNT_DOWN_TYPE_END.equals(promotionCountDownTimeType)) { // 團購活動已開始
                             new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
                                     // 设置弹窗显示和隐藏的回调监听
@@ -1337,7 +1329,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     goodsPrice = Util.getSpuPrice(goodsDetail);
-                    tvGoodsPrice.setText(StringUtil.formatFloat(goodsPrice));
+                    tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
                     UiUtil.toPriceUI(tvGoodsPrice,0);
 
                     // 是否点赞
@@ -1543,6 +1535,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             if (COUNT_DOWN_TYPE_END.equals(promotionCountDownTimeType)) { // 拼团活动已经开始
                                 SLog.info("___here");
                                 currGroupBuyStatus = GroupBuyStatus.ONGOING;
+                                btnBuy.setText("想要拼團");
                             } else { // 拼团活动未开始
                                 currGroupBuyStatus = GroupBuyStatus.NOT_STARTED;
                             }
@@ -1568,7 +1561,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 String memberNickname = groupLogOpenVo.getSafeString("nickName");
                                 tvGroupMemberNickname1.setText(memberNickname);
                                 int requireNum = groupLogOpenVo.getInt("requireNum");
-                                tvCountDownMember1.setText(requireNum + "人");
+                                int joinedNum = groupLogOpenVo.getInt("joinedNum");
+                                tvCountDownMember1.setText((requireNum - joinedNum) + "人");
 
                                 group1EndTime = groupLogOpenVo.getLong("endTime"); // 獲取第1團的結束時間
                                 goId1 = groupLogOpenVo.getInt("goId");
@@ -1584,16 +1578,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                     memberNickname = groupLogOpenVo.getSafeString("nickName");
                                     tvGroupMemberNickname2.setText(memberNickname);
                                     requireNum = groupLogOpenVo.getInt("requireNum");
-                                    tvCountDownMember2.setText(requireNum + "人");
+                                    joinedNum = groupLogOpenVo.getInt("joinedNum");
+                                    tvCountDownMember2.setText((requireNum - joinedNum) + "人");
 
                                     group2EndTime = groupLogOpenVo.getLong("endTime"); // 獲取第2團的結束時間
                                     goId2 = groupLogOpenVo.getInt("goId");
                                 }
                             }
 
-                            startCountDown(promotionEndTime);
+                            startCountDown();
                         } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) { // 限時折扣
-                            startCountDown(promotionEndTime);
+                            startCountDown();
                         }
                     }
 
@@ -1847,7 +1842,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         goodsStatus = status;
         if (goodsStatus == 0) {
             getView().findViewById(R.id.ll_goods_take_off).setVisibility(VISIBLE);
-            getView().findViewById(R.id.btn_buy).setBackgroundResource(R.drawable.icon_take_off_buy);
+            btnBuy.setBackgroundResource(R.drawable.icon_take_off_buy);
             getView().findViewById(R.id.btn_add_to_cart).setBackgroundResource(R.drawable.icon_take_off_cart);
         }
     }
@@ -1990,9 +1985,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     /**
      * 啟動倒數計算
-     * @param endTime 結束時間戳
      */
-    private void startCountDown(long endTime) {
+    private void startCountDown() {
+        long endTime;
+        if (COUNT_DOWN_TYPE_BEGIN.equals(promotionCountDownTimeType)) { // 活动未开始，与开始时间对比
+            endTime = promotionStartTime;
+        } else { // 活动已开始，与结束时间对比
+            endTime = promotionEndTime;
+        }
         long remainTime = endTime - System.currentTimeMillis(); // 離結束還剩下多少毫秒
         SLog.info("endTime[%s], remainTime[%s]", endTime, remainTime);
 
@@ -2026,11 +2026,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         tvGroupBuyCountDownTitle.setText("距離活動開始");
                     }
 
-                    tvGroupRemainDay.setText(String.format("%d天", timeInfo.day));
-                    tvGroupRemainHour.setText(String.format("%02d", timeInfo.hour));
-                    tvGroupRemainMinute.setText(String.format("%02d", timeInfo.minute));
-                    tvGroupRemainSecond.setText(String.format("%02d", timeInfo.second));
-
+                    if (timeInfo != null) {
+                        tvGroupRemainDay.setText(String.format("%d天", timeInfo.day));
+                        tvGroupRemainHour.setText(String.format("%02d", timeInfo.hour));
+                        tvGroupRemainMinute.setText(String.format("%02d", timeInfo.minute));
+                        tvGroupRemainSecond.setText(String.format("%02d", timeInfo.second));
+                    }
 
                     TimeInfo timeInfoGroup;
                     if (group1EndTime > 0) { // 倒數1
@@ -2182,26 +2183,28 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      *
      */
     private void showPriceTag(GoodsInfo goodsInfo) {
-        if (promotionType != Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
-            return;
-        }
+        if (promotionType == Constant.PROMOTION_TYPE_NONE) {
+            rlPriceTag.setVisibility(VISIBLE);
+        } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
+            updateDiscount(goodsInfo);
+            boolean showDiscountInfo = discountState==BEFORE_DISCOUNT||discountState==IN_DISCOUNT;
+            rlPriceTag.setVisibility(showDiscountInfo?GONE:VISIBLE);
+            rlDiscountInfoContainer.setVisibility(showDiscountInfo?VISIBLE:GONE);
+            if (showDiscountInfo) {
+                tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
+                UiUtil.toPriceUI(tvGoodsPrice,1);
+                tvGoodsPriceOriginal.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
 
+                startCountDown();
+            } else {
+                tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+                SLog.info("__result[%s]", StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+                UiUtil.toPriceUI(tvGoodsPrice,13);
 
-        updateDiscount(goodsInfo);
-        boolean showDiscountInfo = discountState==BEFORE_DISCOUNT||discountState==IN_DISCOUNT;
-        rlPriceTag.setVisibility(showDiscountInfo?GONE:VISIBLE);
-        rlDiscountInfoContainer.setVisibility(showDiscountInfo?VISIBLE:GONE);
-        if (showDiscountInfo) {
-            tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
-            UiUtil.toPriceUI(tvGoodsPrice,1);
-            tvGoodsPriceOriginal.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
-
-            startCountDown(promotionEndTime);
-        } else {
-            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
-            UiUtil.toPriceUI(tvGoodsPrice,13);
-
-            stopCountDown();
+                stopCountDown();
+            }
+        } else if (promotionType == Constant.PROMOTION_TYPE_GROUP) {
+            rlPriceTag.setVisibility(GONE);
         }
     }
 

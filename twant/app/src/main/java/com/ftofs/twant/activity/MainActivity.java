@@ -1193,6 +1193,14 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                         return;
                     }
                     SLog.info("复制、剪切的内容为[%s]", content);
+
+                    long now = System.currentTimeMillis();
+                    long inAppCopyTimestamp = Hawk.get(SPField.FIELD_IN_APP_COPY_TIMESTAMP, 0L);
+                    SLog.info("now[%s], inAppCopyTimestamp[%s]", now, inAppCopyTimestamp);
+                    if (now - inAppCopyTimestamp < 5000) { // 如果是最近應用內複製的，則忽略
+                        return;
+                    }
+
                     String word = StringUtil.getCouponWord(content.toString());
 
                     if (word != null && isResumed) { // 在前端顯示才處理剪貼板的內容
@@ -1230,6 +1238,34 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
+                        return;
+                    }
+
+                    /*
+                    根據commandType判斷彈框顯示的數據
+
+                    商品commandType： 這種類型跳轉到商品詳情頁
+                    goods 普通商品口令
+                    discount 折扣口令
+                    group 拼團口令
+                    seckill 秒殺口令
+                    bargain 砍價口令
+
+                    優惠券commandType： 這種類型顯示優惠券彈窗
+                    coupon 平台券口令
+                    voucher 店鋪券口令
+                     */
+                    String commandType = responseObj.getSafeString("datas.commandType");
+                    SLog.info("commandType[%s]", commandType);
+                    if ("goods".equals(commandType) || "discount".equals(commandType) || "group".equals(commandType)
+                            || "seckill".equals(commandType) || "bargain".equals(commandType)) { // 跳轉到商品詳情頁
+                        int commonId = responseObj.getInt("datas.goodsCommon.commonId");
+                        SLog.info("commonId[%d]", commonId);
+
+                        // 跳轉到商品詳情頁後，清空剪貼板
+                        ClipboardUtils.copyText(MainActivity.this, "");
+
+                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                         return;
                     }
 

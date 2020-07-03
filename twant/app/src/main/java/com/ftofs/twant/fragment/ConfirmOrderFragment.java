@@ -1283,6 +1283,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             "buyData", buyData,
                             "clientType", Constant.CLIENT_TYPE_ANDROID,
                             "isCart", isFromCart);
+                    if (isGroup == Constant.TRUE_INT) {
+                        params.set("isGroup", isGroup);
+                    }
                     SLog.info("params[%s]", params.toString());
                     String responseStr = Api.syncPost(Api.PATH_DISPLAY_BILL_DATA, params);
 

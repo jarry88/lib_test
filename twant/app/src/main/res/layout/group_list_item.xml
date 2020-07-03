@@ -18,8 +18,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             app:civ_border_width="1dp"
-            app:civ_border_color="@color/tw_light_grey"
-            android:src="@drawable/avatar_female">
+            app:civ_border_color="@color/tw_light_grey">
         </de.hdodenhof.circleimageview.CircleImageView>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -41,7 +40,7 @@
                     android:id="@+id/tv_count_down_member"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1人"
+                    android:text="0人"
                     android:textColor="@color/tw_red"
                     android:textSize="11sp">
                 </TextView>
@@ -57,7 +56,7 @@
                 android:id="@+id/tv_count_down_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23:54:57.5"
+                android:text="00:00:00.0"
                 android:textSize="11sp"
                 android:textColor="@color/tw_medium_grey">
 
@@ -71,7 +70,7 @@
         android:layout_height="25dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:text="去拼團"
+        android:text="快速成團"
         android:textColor="@android:color/white"
         android:textSize="12sp"
         android:gravity="center"

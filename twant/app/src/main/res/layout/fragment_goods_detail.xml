@@ -576,7 +576,8 @@
                     app:layout_constraintRight_toRightOf="parent"
                     android:paddingLeft="@dimen/toolbar_margin_left"
                     android:paddingRight="@dimen/toolbar_margin_right"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -1481,7 +1481,7 @@ public class Api {
         } else {
             url = API_BASE_URL + path;
         }
-        SLog.info("url[%s]", url);
+        SLog.info("%s url[%s]", method == METHOD_GET ? "GET" : "POST", url);
         Request request = null;
 
         if (method == METHOD_GET) {
