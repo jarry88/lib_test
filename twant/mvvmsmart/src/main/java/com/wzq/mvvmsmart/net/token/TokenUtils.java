@@ -73,12 +73,12 @@ public class TokenUtils {
                     Type type = new TypeToken<BaseResponse<TokenBean>>() {
                     }.getType();
                     BaseResponse<TokenBean> tokenBeanBaseResponse = GsonUtil.getGson().fromJson(result, type);
-                    KLog.INSTANCE.e("TokenBean----------" + tokenBeanBaseResponse.getData());
+                    KLog.INSTANCE.e("TokenBean----------" + tokenBeanBaseResponse.getDatas());
                     if (tokenBeanBaseResponse != null && tokenBeanBaseResponse.getCode() == 0) {
-                        newToken[0] = tokenBeanBaseResponse.getData().getAccessToken();
-                        MmkvUtils.putStringValue("accessToken", tokenBeanBaseResponse.getData().getAccessToken());
-                        MmkvUtils.putStringValue("refreshToken", tokenBeanBaseResponse.getData().getRefreshToken());
-                        MmkvUtils.putIntValue("expirationTime", tokenBeanBaseResponse.getData().getExpirationTime());
+                        newToken[0] = tokenBeanBaseResponse.getDatas().getAccessToken();
+                        MmkvUtils.putStringValue("accessToken", tokenBeanBaseResponse.getDatas().getAccessToken());
+                        MmkvUtils.putStringValue("refreshToken", tokenBeanBaseResponse.getDatas().getRefreshToken());
+                        MmkvUtils.putIntValue("expirationTime", tokenBeanBaseResponse.getDatas().getExpirationTime());
                     } else {
                         newToken[0] = MmkvUtils.getStringValue("accessToken");
                     }

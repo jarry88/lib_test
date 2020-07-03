@@ -2,6 +2,7 @@ package com.ftofs.twant.kotlin.net
 
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.bean.NewsData
+import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.wzq.mvvmsmart.net.base.BaseResponse
 import io.reactivex.Observable
 import okhttp3.RequestBody
@@ -25,6 +26,6 @@ interface DemoApiService {
 
     //  获取网络数据
     @GET("member/seller/goods/list")
-    fun doSellerGoodsList(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ): Observable<BaseResponse<ArrayList<SellerGoodsItem>>>
+    fun doSellerGoodsList(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ): Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>>
 
 }

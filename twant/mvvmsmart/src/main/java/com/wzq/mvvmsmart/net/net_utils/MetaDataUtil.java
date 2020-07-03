@@ -63,7 +63,6 @@ public class MetaDataUtil {
     public static String getBaseUrl() {
         String baseUrl = "";
         int serviceEnvironment = getEnvironment();
-        serviceEnvironment = 1;
         switch (serviceEnvironment) {
             case 0: case 3://生產环境
                 baseUrl = "https://www.twant.com/api/"; //  生產环境

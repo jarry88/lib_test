@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 
 import com.ftofs.twant.entity.SellerGoodsItem;
 import com.ftofs.twant.kotlin.bean.NewsData;
+import com.ftofs.twant.kotlin.vo.PageVO;
+import com.ftofs.twant.kotlin.vo.SellerGoodsVO;
+import com.ftofs.twant.kotlin.vo.SellerPageVO;
 import com.wzq.mvvmsmart.net.base.BaseRequest;
 import com.wzq.mvvmsmart.net.base.BaseResponse;
 
@@ -56,9 +59,9 @@ public class MRequest extends BaseRequest {
         return observable;
     }
     // get 商品列表请求
-    public Observable<BaseResponse<ArrayList<SellerGoodsItem>>> doSellerGoodsList(Map<String,Object> params) {
+    public Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>> doSellerGoodsList(Map<String,Object> params) {
 
-        Observable<BaseResponse<ArrayList<SellerGoodsItem>>> observable = service.doSellerGoodsList(params);
+        Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>> observable = service.doSellerGoodsList(params);
         return observable;
     }
 

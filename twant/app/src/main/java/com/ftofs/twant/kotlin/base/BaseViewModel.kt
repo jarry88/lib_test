@@ -24,5 +24,8 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
     fun getStateLiveData(): MutableLiveData<Any> {
         return stateLiveData
     }
+    fun back() {
+
+    }
 
 }

@@ -10,8 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.ftofs.twant.R
 import com.ftofs.twant.BR
+import com.ftofs.twant.R
 import com.ftofs.twant.databinding.SellerEditFeaturesLayoutBinding
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
@@ -23,7 +23,7 @@ import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.LoadingUtil
 import com.wzq.mvvmsmart.utils.ToastUtils
-import java.util.ArrayList
+import java.util.*
 
 /**
  * 详情界面
@@ -172,6 +172,20 @@ class TestFeatureFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayoutBindin
         super.onContentReload()
         KLog.e("点击空白页")
         viewModel.doGetServerNews() //请求网络数据
+        hideSoftInputPop()
+    }
+    // TODO tip 2：此处通过 DataBinding 来规避 在 setOnClickListener 时存在的 视图调用的一致性问题，
+    // 也即，有绑定就有绑定，没绑定也没什么大不了的，总之 不会因一致性问题造成 视图调用的空指针。
+    // 如果这么说还不理解的话，详见 https://xiaozhuanlan.com/topic/9816742350
+    inner class ClickProxy {
+        fun back() {
+            hideSoftInputPop()
+        }
+
+//        fun login() {
+//            nav().navigate(R.id.action_mainFragment_to_loginFragment)
+//        }
+
     }
 
 

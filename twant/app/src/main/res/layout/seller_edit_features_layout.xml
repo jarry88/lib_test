@@ -15,6 +15,9 @@
         <variable
             name="adapter"
             type="com.ftofs.twant.kotlin.SellerGoodsListAdapter" />
+        <variable
+            name="click"
+            type="com.ftofs.twant.seller.fragment.TestFeatureFragment.ClickProxy" />
 
     </data>
 <LinearLayout
@@ -31,6 +34,7 @@
 <!--onclick-->
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
+            android:onClick="@{()->click.back()}"
             android:layout_width="31dp"
             android:layout_height="31dp"
             android:layout_marginStart="7dp"

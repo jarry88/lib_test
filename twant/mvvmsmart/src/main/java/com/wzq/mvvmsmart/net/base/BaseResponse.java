@@ -6,11 +6,11 @@ package com.wzq.mvvmsmart.net.base;
  */
 public class BaseResponse<T> {
 
-    private int status; // 服务器返回的状态码
     private int code;   // 服务器返回的状态码
+    private T datas; // 服务器返回的数据封装
+    private int status; // 服务器返回的状态码
     private String message; // 服务器返回的状态信息
     private String info;  // 服务器返回的状态信息
-    private T data; // 服务器返回的数据封装
     private int currentTime; // 用来判断token是否过期,TokenUtils中使用
 
     /*
@@ -50,12 +50,12 @@ public class BaseResponse<T> {
         this.message = message;
     }
 
-    public T getData() {
-        return data;
+    public T getDatas() {
+        return datas;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setDatas(T datas) {
+        this.datas = datas;
     }
 
     public int getCode() {

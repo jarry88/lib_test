@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.base.BaseViewModel
+import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.ftofs.twant.util.User
 import com.wzq.mvvmsmart.net.base.BaseResponse
 import com.wzq.mvvmsmart.net.net_utils.RxUtil
@@ -34,24 +35,24 @@ class FeatureGoodViewModel(application: Application) : BaseViewModel(application
                     stateLiveData.postLoading()
                 }
                 .doFinally { stateLiveData.postIdle() }
-                .subscribe(object : DefaultObserver<ArrayList<SellerGoodsItem>>() {
+                .subscribe(object : DefaultObserver<SellerPageVO<SellerGoodsItem>>() {
                     override fun onSubscribe(d: Disposable) {
                         super.onSubscribe(d)
                     }
 
-                    override fun onNext(baseResponse: BaseResponse<ArrayList<SellerGoodsItem>>) {
+                    override fun onNext(baseResponse: BaseResponse<SellerPageVO<SellerGoodsItem>>) {
                         super.onNext(baseResponse)
-                        //自定义处理
-                        KLog.e(baseResponse.data)
                         // 请求成功
                         if (baseResponse.code == 200) {  // 接口返回code=200 代表成功
-                            val newsDataList = baseResponse.data
-                            if (newsDataList != null) {
-                                if (newsDataList.size > 0) {
-                                    liveData.postValue(newsDataList)
+                            val goodsList = baseResponse.datas.goodsList
+
+                            //自定义处理
+                            if (goodsList != null) {
+                                if (goodsList.size > 0) {
+                                    liveData.postValue(goodsList)
                                 } else {
                                     //    showShortToast("没有更多数据了")
-                                    KLog.e("请求到数据students.size" + newsDataList.size)
+                                    KLog.e("请求到数据students.size" + goodsList.size)
                                 }
                             } else {
                                 KLog.e("数据返回null")

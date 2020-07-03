@@ -48,7 +48,7 @@ class TestNetViewModel(application: Application) : BaseViewModel(application) {
                         KLog.e("进入onNext")
                         // 请求成功
                         if (baseResponse.status == 1) {  // 接口返回code=1 代表成功
-                            val news = baseResponse.data
+                            val news = baseResponse.datas
                             if (news != null) {
                                 if (news.isNotEmpty()) {
                                     liveData.postValue(news)

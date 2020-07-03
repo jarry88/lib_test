@@ -7,8 +7,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,9 +28,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.fragment.MainFragment;
-import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.Emoji;
@@ -40,22 +36,15 @@ import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.orm.UserStatus;
-import com.ftofs.twant.task.TaskObservable;
-import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.HawkUtil;
-import com.ftofs.twant.util.MsgNotifyReceiver;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Time;
-import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
-import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.member.MemberVo;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
-import com.huawei.hms.aaid.HmsInstanceId;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -65,13 +54,18 @@ import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMOptions;
-import com.hyphenate.chat.EMPushConfigs;
-import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.push.EMPushConfig;
 import com.jeremyliao.liveeventbus.LiveEventBus;
 import com.macau.pay.sdk.MPaySdk;
 import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshInitializer;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -90,19 +84,12 @@ import com.wzq.mvvmsmart.net.net_utils.Utils;
 import com.wzq.mvvmsmart.utils.KLog;
 import com.wzq.mvvmsmart.utils.Tasks;
 
-import org.json.JSONException;
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -112,6 +99,7 @@ import cat.ereza.customactivityoncrash.config.CaocConfig;
 import cn.snailpad.easyjson.EasyJSONObject;
 import kotlin.jvm.Synchronized;
 import me.yokeyword.fragmentation.Fragmentation;
+
 import static android.app.PendingIntent.getActivity;
 import static com.orhanobut.hawk.Hawk.init;
 
@@ -145,6 +133,14 @@ public class TwantApplication extends Application {
     PushAgent mPushAgent;
     //保存當前會員身份信息，目前主要用於取得role，來判斷用戶身份
     private MemberVo currMemberInfo=null;
+    static {//使用static代码段可以防止内存泄漏
+        ClassicsFooter.REFRESH_FOOTER_LOADING = "加载中...";
+        //设置全局默认配置（优先级最低，会被其他设置覆盖）
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator((context, layout) -> new ClassicsHeader(context));
+
+        //全局设置默认的 Header
+        SmartRefreshLayout.setDefaultRefreshFooterCreator(((context, layout) -> new ClassicsFooter(context).setDrawableSize(20)));
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -169,6 +165,7 @@ public class TwantApplication extends Application {
 
         //初始化mvvm操作
         initMVVM();
+
         // 在開發過程中，啟用 StrictMode
         if (Config.DEVELOPER_MODE) {
             StrictMode.setThreadPolicy(

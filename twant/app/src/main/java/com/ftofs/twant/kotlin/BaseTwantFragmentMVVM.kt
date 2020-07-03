@@ -1,8 +1,5 @@
 package com.ftofs.twant.kotlin
 
-import com.wzq.mvvmsmart.base.BaseViewModelMVVM
-import com.wzq.mvvmsmart.base.IBaseViewMVVM
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ftofs.twant.fragment.BaseFragment
+import com.ftofs.twant.log.SLog
+import com.wzq.mvvmsmart.base.BaseViewModelMVVM
+import com.wzq.mvvmsmart.base.IBaseViewMVVM
 import com.wzq.mvvmsmart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
 
@@ -181,4 +181,9 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
         emptyViewHelper?.loadPlaceLayout(target, text, imgId, reload)
     }
 
+    override fun onBackPressedSupport(): Boolean {
+        SLog.info("onBackPressedSupport")
+        hideSoftInputPop()
+        return true
+    }
 }

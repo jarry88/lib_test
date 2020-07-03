@@ -5,7 +5,7 @@
         <import type="com.ftofs.twant.kotlin.util.ConverterUtil"/>
         <variable
             name="vo"
-            type="com.ftofs.twant.kotlin.vo.SellerGoodsVO"/>
+            type="com.ftofs.twant.entity.SellerGoodsItem"/>
     </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,10 +38,10 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:orientation="horizontal">
-                    <!--                        android:visibility="@{vo.isVirtual==1?0:2}"-->
 
                     <TextView
                         android:id="@+id/tv_virtual_indicator"
+                        android:visibility="@{vo.isVirtual==1?0:2}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="8dp"
