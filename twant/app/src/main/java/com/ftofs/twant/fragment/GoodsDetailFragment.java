@@ -1130,10 +1130,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      * @param goId 開團Id: 如果為0，表示自己新開團;  如果大於0，表示加入指定的團
      */
     private void showSpecSelectPopup(int action, int goId) {
+        boolean groupBuyMode = (goId != Constant.INVALID_GO_ID);
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList,limitBuy,discountState,skuGalleryItemList, true, goId))
+                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList,limitBuy,discountState,skuGalleryItemList, groupBuyMode, goId))
                 .show();
     }
 
