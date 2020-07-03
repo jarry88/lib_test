@@ -212,7 +212,7 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
             @Override
             public void run() {
                 long threadId = Thread.currentThread().getId();
-                // SLog.info("threadId[%d]", threadId);
+                 SLog.info("threadId[%d]", threadId);
                 Message message = new Message();
 
                 if (timerHandler != null) {
