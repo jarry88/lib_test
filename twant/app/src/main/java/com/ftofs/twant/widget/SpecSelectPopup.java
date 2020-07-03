@@ -569,7 +569,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             SLog.info("goodsId[%d]", goodsId);
             return 0;
         }
-        SLog.info("Error!根據規格Id[%s]找不到goodsId", specValueIds);
         return goodsId;
     }
 

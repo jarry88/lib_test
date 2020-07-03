@@ -1584,7 +1584,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                                     group2EndTime = groupLogOpenVo.getLong("endTime"); // 獲取第2團的結束時間
                                     goId2 = groupLogOpenVo.getInt("goId");
+                                } else { // 如果只有1个团，则隐藏第2个团UI
+                                    contentView.findViewById(R.id.ll_group2_container).setVisibility(GONE);
                                 }
+                            } else {
+                                llGroupListContainer.setVisibility(GONE); // 没有记录条数，则隐藏
                             }
 
                             startCountDown();
