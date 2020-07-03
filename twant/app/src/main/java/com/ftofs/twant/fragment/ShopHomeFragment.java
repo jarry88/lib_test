@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AdaptiveIconDrawable;
@@ -11,6 +12,7 @@ import android.os.Message;
 import android.text.Html;
 import android.text.Layout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -78,10 +80,14 @@ import com.rd.PageIndicatorView;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,6 +101,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
 
 import static android.view.View.VISIBLE;
+import static java.util.concurrent.Executors.*;
 
 
 /**
@@ -263,7 +270,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private Unbinder unbinder;
     private GoodsGalleryAdapter goodsGalleryAdapter;
     private List<String> currGalleryImageList=new ArrayList<>();
-    private Timer timer;
+    private ScheduledExecutorService timer;
     private boolean bannerStart;
     private CountDownHandler countDownHandler;
     private String storeBusInfo;
@@ -271,24 +278,39 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
 
     static class CountDownHandler extends Handler {
-
-        private PageIndicatorView pageIndicatorView;
-        private RecyclerView rvGalleryImageList;
-
-        public CountDownHandler(PageIndicatorView indicatorView,RecyclerView rvGalleryImageList) {
-            this.rvGalleryImageList = rvGalleryImageList;
-            this.pageIndicatorView = indicatorView;
+        WeakReference<ShopHomeFragment> weakReference;
+        public CountDownHandler(ShopHomeFragment shopHomeFragment) {
+            weakReference = new WeakReference<>(shopHomeFragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            int currGalleryPosition = msg.arg1;
-            int position = msg.arg2;
-            SLog.info("currGalleryPosition[%s]",currGalleryPosition);
-            pageIndicatorView.setSelection(currGalleryPosition);
-            rvGalleryImageList.scrollToPosition(currGalleryPosition+1);
+            ShopHomeFragment shopHomeFragment = weakReference.get();
+            shopHomeFragment.slideToNext();
+
         }
+    }
+
+
+    private void slideToNext() {
+        if (currGalleryImageList == null) {
+            return;
+        }
+        int size = currGalleryImageList.size();
+
+        if (size <=1) {
+            return;
+
+        }
+        currGalleryPosition++;
+        if (currGalleryImageList.size() == currGalleryPosition) {
+            currGalleryPosition = 0;
+        }
+//            currGalleryPosition = (position+1) % currGalleryImageList.size();
+        pageIndicatorView.setSelection(currGalleryPosition);
+//            rvGalleryImageList.smoothScrollToPosition(currGalleryPosition+1);
+        rvGalleryImageList.smoothScrollToPosition(currGalleryPosition);
     }
 
     public static ShopHomeFragment newInstance() {
@@ -549,6 +571,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     continue;
                                 }
                                 currGalleryImageList.add(object2.toString());
+                                SLog.info("加一");
                             }
 //                                                        ToastUtil.error(_mActivity, String.valueOf(currGalleryImageList.size()));
 
@@ -730,26 +753,27 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         }
         goodsGalleryAdapter.setNewData(currGalleryImageList);
         if (currGalleryImageList.size() > 1) {
-            rvGalleryImageList.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (rvGalleryImageList == null) {
-                        return;
-                    }
-                    
-                    // 先去到大概中間的位置
-                    int targetPosition = Integer.MAX_VALUE / 2;
-                    // 然后去到倍數開始的位置
-                    targetPosition -= (targetPosition % currGalleryImageList.size());
-
-                    currGalleryPosition = targetPosition;
-                    rvGalleryImageList.scrollToPosition(currGalleryPosition);
-                    SLog.info("currGalleryPosition[%d]", currGalleryPosition);
-
-                    pageIndicatorView.setCount(currGalleryImageList.size());
-                    pageIndicatorView.setSelection(0);
-                }
-            }, 50);
+//            rvGalleryImageList.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (rvGalleryImageList == null) {
+//                        return;
+//                    }
+//
+//                    // 先去到大概中間的位置
+//                    int targetPosition = Integer.MAX_VALUE / 2;
+//                    // 然后去到倍數開始的位置
+//                    targetPosition -= (targetPosition % currGalleryImageList.size());
+//
+//                    currGalleryPosition = targetPosition;
+//                    rvGalleryImageList.scrollToPosition(currGalleryPosition);
+//                    SLog.info("currGalleryPosition[%d]", currGalleryPosition);
+//
+//                    pageIndicatorView.setCount(currGalleryImageList.size());
+//                    pageIndicatorView.setSelection(0);
+//                }
+//            }, 50);
+            pageIndicatorView.setCount(currGalleryImageList.size());
             pageIndicatorView.setVisibility(View.VISIBLE);
         } else {
             pageIndicatorView.setCount(1);
@@ -1256,7 +1280,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private void setImageBanner() {
         // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
         // https://www.jianshu.com/p/e54db232df62
-        countDownHandler = new CountDownHandler(pageIndicatorView, rvGalleryImageList);
+        countDownHandler = new CountDownHandler(this);
         rvGalleryImageList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
         (new PagerSnapHelper()).attachToRecyclerView(rvGalleryImageList);
         goodsGalleryAdapter = new GoodsGalleryAdapter(_mActivity, currGalleryImageList);
@@ -1269,11 +1293,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 try{
 
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                        SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
-                        int position = currGalleryPosition % currGalleryImageList.size();
-//                        pageIndicatorView.setSelection(position);
-                        rvGalleryImageList.smoothScrollToPosition(position+1);
+                        pageIndicatorView.setSelection(currGalleryPosition);
                     }
                 }catch (Exception e) {
                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1375,38 +1395,40 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     }
     private void startCountDown() {
         if (timer == null) {
-            timer = new Timer();
+            timer = newSingleThreadScheduledExecutor();
         }
 
         if (bannerStart) {
             return;
         }
         // 定时服务
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-//                SLog.info("threadId[%s]", Thread.currentThread().getId());
+        timer.scheduleAtFixedRate(() -> {
+                SLog.info("threadId[%s]", Thread.currentThread().getId());
 
                 Message message = new Message();
-                int position = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-//                SLog.info("position [%d],sum[%d]",position,currGalleryImageList.size());
-                int size = currGalleryImageList.size();
-                if (size > 1) {
-                    currGalleryPosition = (position+1) % currGalleryImageList.size();
-                    message.arg1 = currGalleryPosition;
-                    message.arg2 = position;
-                    if (countDownHandler != null) {
-                        countDownHandler.sendMessage(message);
-                    }
-                }
-            }
-        }, 500, 3000);  // 0.5秒后启动，每隔3秒运行一次
+                if (countDownHandler != null) {
+                    countDownHandler.sendMessage(message);
+                   }
+                },1000 , 3000, TimeUnit.MILLISECONDS);
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                long threadId = Thread.currentThread().getId();
+//                SLog.info("threadId[%s]", Thread.currentThread().getId());
+//
+//                Message message = new Message();
+//
+//                    if (countDownHandler != null) {
+//                        countDownHandler.sendMessage(message);
+//                    }
+//            }
+//        }, 500, 3000);  // 0.5秒后启动，每隔3秒运行一次
     }
 
     private void stopCountDown() {
         bannerStart = false;
         if (timer != null) {
-            timer.cancel();
+            timer.shutdown();
             timer = null;
         }
     }
