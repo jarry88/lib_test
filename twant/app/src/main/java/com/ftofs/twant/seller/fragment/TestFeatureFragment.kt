@@ -64,51 +64,52 @@ class TestFeatureFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayoutBindin
         initRecyclerView()
     }
     private fun initRecyclerView() {
-        sellerGoodsListAdapter = SellerGoodsListAdapter(R.layout.seller_goods_item_unswipe, goodsList)
+        sellerGoodsListAdapter = SellerGoodsListAdapter()
         binding.layoutManager = LinearLayoutManager(activity)
         binding.adapter = sellerGoodsListAdapter
-        sellerGoodsListAdapter.setOnItemClickListener { adapter, view, position -> ToastUtils.showShort("点击了条目--" + position) }
-        sellerGoodsListAdapter.onItemLongClickListener = BaseQuickAdapter.OnItemLongClickListener { adapter, view, position ->
-            ToastUtils.showShort("长按了条目--" + position)
-            true
-        }
-
-        sellerGoodsListAdapter.setOnItemChildClickListener { adapter, view, position ->
-            if (view.id == R.id.goods_image) {
-                KLog.e("点击了button")
-                val goodsData = goodsList[position]
-                //删除选择对话框
-                val builder = AlertDialog.Builder(activity as Context)
-                builder.setTitle("尊敬的用户")
-                builder.setMessage("你真的要卸载我吗？")
-                builder.setPositiveButton("残忍卸载") { dialog, which ->
-                    viewModel.deleteItem(goodsData)
-                    //                            sellerGoodsListAdapter.remove(position);
-                    sellerGoodsListAdapter.notifyItemRemoved(position)
-                    builder.setNegativeButton("我再想想") { dialog, which ->
-                    }
-                    val alert = builder.create()
-                    alert.show()
-                }
-            }
-        }
+//        sellerGoodsListAdapter.setOnItemClickListener { adapter, view, position -> ToastUtils.showShort("点击了条目--" + position) }
+//        sellerGoodsListAdapter.onItemLongClickListener = BaseQuickAdapter.OnItemLongClickListener { adapter, view, position ->
+//            ToastUtils.showShort("长按了条目--" + position)
+//            true
+//        }
+//
+//        sellerGoodsListAdapter.setOnItemChildClickListener { adapter, view, position ->
+//            if (view.id == R.id.goods_image) {
+//                KLog.e("点击了button")
+//                val goodsData = goodsList[position]
+//                //删除选择对话框
+//                val builder = AlertDialog.Builder(activity as Context)
+//                builder.setTitle("尊敬的用户")
+//                builder.setMessage("你真的要卸载我吗？")
+//                builder.setPositiveButton("残忍卸载") { dialog, which ->
+//                    viewModel.deleteItem(goodsData)
+//                    //                            sellerGoodsListAdapter.remove(position);
+//                    sellerGoodsListAdapter.notifyItemRemoved(position)
+//                    builder.setNegativeButton("我再想想") { dialog, which ->
+//                    }
+//                    val alert = builder.create()
+//                    alert.show()
+//                }
+//            }
+//        }
     }
     override fun initViewObservable() {
         super.initViewObservable()
-        viewModel.liveData.observe(this, Observer { goodsList: List<SellerGoodsItem?> ->
+        viewModel.liveData.observe(this, Observer { goodsList: List<SellerGoodsItem> ->
             if (goodsList.isNotEmpty()) {
                 KLog.e("mLiveData的listBeans.size():" + goodsList.size)
                 SLog.info("mLiveData的listBeans.size():" + goodsList.size)
 //                setBeautifulGirlImg(goodsList);  // 图片链接经常失效,设置美女图片,但每次上下拉头像会变;
             }
             if (viewModel.pageNum == 1) {
-                sellerGoodsListAdapter.data.clear() // 请求多页数据后再请求第1页,先删除之前数据
+                sellerGoodsListAdapter.clear()
+//                sellerGoodsListAdapter.data.clear() // 请求多页数据后再请求第1页,先删除之前数据
                 if (goodsList.isEmpty()) {
                     //  第一页无数据,就显示默认页
                     showEmptyLayout(binding.refreshLayout, this@TestFeatureFragment.resources.getString(R.string.tip_a_page_no_data), R.mipmap.ic_launcher_mvvmsmart, false)
                 } else {
                     showNormalLayout(binding.refreshLayout)
-                    sellerGoodsListAdapter.addData(goodsList)
+                    sellerGoodsListAdapter.addAll(goodsList,true)
                 }
             } else { // 不是第一页
                 if (goodsList.isEmpty()) {
@@ -116,7 +117,7 @@ class TestFeatureFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayoutBindin
                     binding.refreshLayout.finishLoadMoreWithNoMoreData()
                     binding.refreshLayout.setNoMoreData(true)
                 } else {
-                    sellerGoodsListAdapter.addData(goodsList)
+                    sellerGoodsListAdapter.addAll(goodsList,false)
                 }
             }
         })
