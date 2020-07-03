@@ -288,7 +288,7 @@ public class ResetPasswordFragment extends BaseFragment implements
     }
 
     private boolean checkInfo(boolean toastEnable) {
-        if (mobileZoneList.size() <= selectedMobileZoneIndex) {
+        if (mobileZoneList == null || mobileZoneList.size() <= selectedMobileZoneIndex) {
             return false;
         }
         // 獲取區號
