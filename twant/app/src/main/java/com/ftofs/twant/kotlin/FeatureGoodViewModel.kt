@@ -41,9 +41,10 @@ class FeatureGoodViewModel(application: Application) : BaseViewModel(application
 
                     override fun onNext(baseResponse: BaseResponse<ArrayList<SellerGoodsItem>>) {
                         super.onNext(baseResponse)
-                        KLog.e(baseResponse)
+                        //自定义处理
+                        KLog.e(baseResponse.data)
                         // 请求成功
-                        if (baseResponse.status == 1) {  // 接口返回code=1 代表成功
+                        if (baseResponse.code == 200) {  // 接口返回code=200 代表成功
                             val newsDataList = baseResponse.data
                             if (newsDataList != null) {
                                 if (newsDataList.size > 0) {
