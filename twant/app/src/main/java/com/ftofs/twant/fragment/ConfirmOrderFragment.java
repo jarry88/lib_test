@@ -96,6 +96,17 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     int isGroup;
     int goId; // 開團Id
 
+    // 是否不需要再支付（比如，买1元的商品，用1元的代金抵扣）
+    int isPayed = Constant.FALSE_INT;
+
+    /*
+        /buy/step2
+            或
+        /buy/take/save
+        接口返回的payId
+     */
+    int finalPayId = 0;
+
     List<PayWayItem> payWayItemList = new ArrayList<>();
     List<ListPopupItem> shippingItemList = new ArrayList<>();
 
@@ -621,9 +632,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 }
 
                 String path;
-                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) {
+                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) { // 门店自提
                     path = Api.PATH_SELF_TAKE;
-                } else {
+                } else { // 直接购买
                     path = Api.PATH_COMMIT_BILL_DATA;
                 }
                 SLog.info("url[%s],params[%s]",path,params.toString());
@@ -660,23 +671,33 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                             .show();
                                     return;
                                 } else {
-                                    pop();
+                                    hideSoftInputPop();
                                 }
-                                int payId = responseObj.getInt("datas.payId");
-                                start(PayVendorFragment.newInstance(payId, totalPrice, 0));
+                                finalPayId = responseObj.getInt("datas.payId");
+                                isPayed = responseObj.getInt("datas.isPayed");
+
+                                SLog.info("isPayed[%d], finalPayId[%d]", isPayed, finalPayId);
+                                if (isPayed == Constant.TRUE_INT && finalPayId > 0) { // 不需要再支付，直接显示支付成功页面
+                                    SLog.info("不需要再支付，直接显示支付成功页面");
+                                    hideSoftInputPop();
+                                    Util.startFragment(PaySuccessFragment.newInstance(finalPayId));
+
+                                    return;
+                                }
+
+                                start(PayVendorFragment.newInstance(finalPayId, totalPrice, 0));
                             } catch (Exception e) {
                                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                             }
-                        } else {
-                            int payId = 0;
+                        } else { // 货到付款
                             try {
-                                payId = responseObj.getInt("datas.payId");
+                                finalPayId = responseObj.getInt("datas.payId");
                             } catch (Exception e) {
                                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                             }
-                            SLog.info("payId[%d]", payId);
+                            SLog.info("finalPayId[%d]", finalPayId);
                             pop();
-                            Util.startFragment(PaySuccessFragment.newInstance(payId, true));
+                            Util.startFragment(PaySuccessFragment.newInstance(finalPayId, true));
 
                             ToastUtil.success(_mActivity, "訂單提交成功");
 
@@ -1237,6 +1258,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void loadOrderData() {
+        SLog.info("xxyy");
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
         TaskObserver taskObserver = new TaskObserver() {
             @Override
@@ -1273,7 +1295,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     if (StringUtil.isEmpty(token)) {
                         return "用戶未登錄";
                     }
-
+                    SLog.info("xxyy");
                     // 整個訂單的總件數
                     totalItemCount = 0;
 
@@ -1297,7 +1319,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         }
                         return null;
                     }
-
+                    SLog.info("xxyy");
                     // 獲取配送時間列表
                     shippingItemList.clear();
 //                    tariffEnable = responseObj.getInt("datas.tariffEnable");
@@ -1312,7 +1334,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                     // 獲取商店券
                     confirmOrderItemList.clear();
-
+                    SLog.info("xxyy");
                     EasyJSONArray buyStoreVoList = responseObj.getSafeArray("datas.buyStoreVoList");
                     SLog.info("HERE storeSize[%d]",buyStoreVoList.length());
                     for (Object object : buyStoreVoList) {  // 遍歷每家商店
@@ -1429,7 +1451,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     // 添加上汇总项目
                     ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
                     confirmOrderItemList.add(confirmOrderSummaryItem);
-
+                    SLog.info("xxyy");
                     // 第2步：計算運費
                     // 收集地址信息
                     EasyJSONObject address = responseObj.getObject("datas.address");
@@ -1444,13 +1466,13 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             }
                         }
                     }
-
+                    SLog.info("xxyy");
                     // 第3步(請求參數與第2步相同) 計算最終結果
                     calcAmount();
 
                     // 請求平台券列表(請求參數與第2步相同)
                     getPlatformCoupon();
-
+                    SLog.info("xxyy");
                     confirmOrderSummaryItem.platformCouponCount = platformCouponList.size();
                     confirmOrderSummaryItem.platformCouponStatus = Util.getAvailableCouponCountDesc(confirmOrderSummaryItem.platformCouponCount);
                     SLog.info("confirmOrderSummaryItem.platformCouponCount[%d]", confirmOrderSummaryItem.platformCouponCount);
