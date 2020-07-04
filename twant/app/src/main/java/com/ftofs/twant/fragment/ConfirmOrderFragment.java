@@ -132,6 +132,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     ConfirmOrderStoreAdapter adapter;
     List<MultiItemEntity> confirmOrderItemList = new ArrayList<>();
 
+    // 当前选中的支付方式代码
+    String currPaymentTypeCode = Constant.PAYMENT_TYPE_CODE_ONLINE;
     String currencyTypeSign;
     int totalItemCount; // 整個訂單的總件數： 如果sku1有2件，sku2有3件，那么總件數就是5
     String textConfirmOrderTotalItemCount;
@@ -1075,7 +1077,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * 更新地址信息的顯示
      */
     private void updateAddrView() {
-        if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(getSummaryItem().paymentTypeCode)) {
+        SLog.info("currPaymentTypeCode[%s]", currPaymentTypeCode);
+        if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(currPaymentTypeCode)) {
             btnChangeShippingAddress.setVisibility(View.GONE);
             btnChangeShippingAddress.setVisibility(View.GONE);
             llSelfFetchInfoContainer.setVisibility(View.VISIBLE);
@@ -1506,10 +1509,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             template=getResources().getString(R.string.text_confirm_order_total_with_tax_item_count);
         }
         tvItemCount.setText(String.format(template, totalItemCount));
-        double totalPrice = summaryItem.calcTotalPrice();
-        tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,totalPrice,0,2));
-        Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, totalPrice);
-
+        if (summaryItem != null) {
+            double totalPrice = summaryItem.calcTotalPrice();
+            tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,totalPrice,0,2));
+            Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, totalPrice);
+        }
 
         // 更新每家商店的優惠額
         updateStoreAmount();
@@ -1727,6 +1731,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
 
             summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
+            currPaymentTypeCode = summaryItem.paymentTypeCode;
+            SLog.info("currPaymentTypeCode[%s]", currPaymentTypeCode);
             summaryItem.payWayIndex = payWay;
             SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
             adapter.notifyItemChanged(confirmOrderItemList.size() - 1);
@@ -1833,9 +1839,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      */
     private ConfirmOrderSummaryItem getSummaryItem() {
         int size = confirmOrderItemList.size();
+        SLog.info("__size[%d]", size);
         if (size < 1) {
             return null;
         }
+        SLog.info("__size[%d]", size);
         return (ConfirmOrderSummaryItem) confirmOrderItemList.get(size - 1);
     }
 
