@@ -25,6 +25,7 @@ import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
+import com.ftofs.twant.fragment.RegisterConfirmFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
@@ -163,18 +164,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-            new XPopup.Builder(context)
-//                         .dismissOnTouchOutside(false)
-                    // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new SharePopup(context, null, null, null, null, null)).show();
+
+            Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13425038570", 10));
         }
     }
 

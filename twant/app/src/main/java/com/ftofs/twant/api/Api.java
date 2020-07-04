@@ -1463,6 +1463,12 @@ public class Api {
 
 
     /**
+     * 店鋪首頁渠道推廣統計
+     */
+    public static final String PATH_STORE_PROMOTION_STATS = "/store/home/record";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

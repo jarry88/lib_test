@@ -123,6 +123,11 @@ public class SPField {
     public static final String FIELD_IN_APP_COPY_TIMESTAMP = "in_app_copy_timestamp";
 
     /**
+     * 設備UUID
+     */
+    public static final String FIELD_DEVICE_UUID = "device_uuid";
+
+    /**
      * 網頁拉起APP的參數
      */
     public static final String FIELD_LAUNCH_APP_PARAMS = "launch_app_params";

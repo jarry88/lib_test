@@ -121,6 +121,18 @@ public class SplashActivity extends BaseActivity {
                                     "host", host,
                                     "storeId", Integer.valueOf(storeId));
                         }
+
+                        /*
+                        判斷是否是推廣頁面過來的
+                        landingPage=home&source=TW100000&medium=ADV
+                         */
+                        String source = uri.getQueryParameter("source");
+                        String landingPage = uri.getQueryParameter("landingPage");
+                        String medium = uri.getQueryParameter("medium");
+                        SLog.info("source[%s], landingPage[%s], medium[%s]", source, landingPage, medium);
+                        if (!StringUtil.isEmpty(source)) { // 如果是，則統計請求
+                            Util.promotionStatsRequest(this, source, medium, landingPage);
+                        }
                     } else if ("goods".equals(host)) { // 3 跳轉商品詳情
                         String commonId = uri.getQueryParameter("commonId");
                         if (commonId != null) {

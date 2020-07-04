@@ -87,6 +87,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1419,6 +1420,102 @@ public class Util {
         } else {
             return null;
         }
+    }
+
+
+
+    /**
+     * 獲取UUID
+     * 參考：
+     *      Android Q 适配指南 让你少走一堆弯路  #设备唯一标识符
+     *      https://juejin.im/post/5cad5b7ce51d456e5a0728b0#heading-8
+     * @return
+     */
+    public static String getUUID() {
+        // 優先從SharedPreferences中取
+        String uuid = Hawk.get(SPField.FIELD_DEVICE_UUID);
+        SLog.info("device_uuid[%s]", uuid);
+        if (!StringUtil.isEmpty(uuid)) {
+            return uuid;
+        }
+
+        // 如果SharedPreferences中沒有，才生成
+        String serial = null;
+
+        String m_szDevIDShort = "35" +
+                Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
+
+                Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
+
+                Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
+
+                Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10 +
+
+                Build.MODEL.length() % 10 + Build.PRODUCT.length() % 10 +
+
+                Build.TAGS.length() % 10 + Build.TYPE.length() % 10 +
+
+                Build.USER.length() % 10; //13 位
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                serial = android.os.Build.getSerial();
+            } else {
+                serial = Build.SERIAL;
+            }
+            //API>=9 使用serial号
+            return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
+        } catch (Exception exception) {
+            //serial需要一个初始化
+            serial = "serial"; // 随便一个初始化
+        }
+        //使用硬件信息拼凑出来的15位号码
+        uuid = new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
+        SLog.info("device_uuid[%s]", uuid);
+        Hawk.put(SPField.FIELD_DEVICE_UUID, uuid);
+
+        return uuid;
+    }
+
+    public static void promotionStatsRequest(Context context, String source, String medium, String landingPage) {
+        /*
+        名称	类型	必填	参数位置	默认值	备注
+            source	string	true	普通参数		來源（H5喚醒APP提供）
+            medium	string	true	普通参数		媒介（H5喚醒APP提供）
+            landingPage	string	true	普通参数		落地頁（H5喚醒APP提供）
+            clientUuid	string	true	普通参数		設備唯一標識
+            clientType	string	true	普通参数		客戶端類型
+         */
+        String uuid = getUUID();
+        SLog.info("uuid[%s]", uuid);
+        if (StringUtil.isEmpty(source) || StringUtil.isEmpty(medium) || StringUtil.isEmpty(landingPage) || StringUtil.isEmpty(uuid)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "source", source,
+                "medium", medium,
+                "landingPage", landingPage,
+                "clientUuid", uuid,
+                "clientType", Constant.CLIENT_TYPE_ANDROID
+        );
+        SLog.info("url[%s], params[%s]", Api.PATH_STORE_PROMOTION_STATS, params);
+        Api.postUI(Api.PATH_STORE_PROMOTION_STATS, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(context, responseObj)) {
+                    SLog.info("Error!PATH_STORE_PROMOTION_STATS failed");
+                    return;
+                }
+            }
+        });
     }
 }
 
