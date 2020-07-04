@@ -169,29 +169,34 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-            new XPopup.Builder(context)
-//                         .dismissOnTouchOutside(false)
-                    // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new TwConfirmPopup(context, "圖片過大是否壓縮后上傳",null   , "確認", "取消",new OnConfirmCallback() {
-                @Override
-                public void onYes() {
-                    SLog.info("onYes");
-                }
+//            showPop();
 
-                @Override
-                public void onNo() {
-                    SLog.info("onNo");
-                }
-            })).show();
         }
+    }
+
+    private void showPop() {
+        new XPopup.Builder(context)
+//                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
+                    @Override
+                    public void onDismiss() {
+                    }
+                }).asCustom(new TwConfirmPopup(context, "圖片過大是否壓縮后上傳",null   , "確認", "取消",new OnConfirmCallback() {
+            @Override
+            public void onYes() {
+                SLog.info("onYes");
+            }
+
+            @Override
+            public void onNo() {
+                SLog.info("onNo");
+            }
+        })).show();
     }
 
     private void gotoTestFragment() {
