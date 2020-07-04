@@ -1014,7 +1014,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             // 添加上汇总项目
             ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
             confirmOrderItemList.add(confirmOrderSummaryItem);
-            adapter.setNewData(confirmOrderItemList);
+            _mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.setNewData(confirmOrderItemList);
+                }
+            });
             return new Pair<>(true, "");
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
