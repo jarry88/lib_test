@@ -136,6 +136,10 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     boolean needReloadData;
 
+    public static final int GO_STATE_ONGOING = 0;
+    public static final int GO_STATE_SUCCESS = 1;
+    public static final int GO_STATE_FAILURE = 2;
+    int goState;
     int ordersState;
     int showRefundWaiting;
 
@@ -193,7 +197,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     @OnClick(R.id.btn_buy_again)
     public void buyAgain(View v) {
-        if (isGroup == Constant.TRUE_INT) { // 如果是團購，則為邀請好友
+        SLog.info("isGroup[%d], goState[%d]", isGroup, goState);
+        if (isGroup == Constant.TRUE_INT && goState != GO_STATE_FAILURE) { // 如果是團購，則為邀請好友
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
@@ -917,14 +922,14 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         TextView tvGroupStatus = contentView.findViewById(R.id.tv_group_status);
 
 
-                        int goState = ordersVo.getInt("goState");
+                        goState = ordersVo.getInt("goState");
                         /*
                          0拼團中 1拼團成功 2拼團失敗
                          */
                         if (Config.DEVELOPER_MODE) {
                             // goState = 0;
                         }
-                        if (goState == 0) {
+                        if (goState == GO_STATE_ONGOING) {
                             tvGroupStatus.setText("拼團中");
                             tvGroupCountDown.setVisibility(View.VISIBLE);
                             groupEndTime = ordersVo.getLong("groupEndTime");
@@ -934,12 +939,14 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             tvOrderStatus.setText("拼團中");
                             tvOrderStatusDesc.setText("您的訂單正在努力成團中，快來邀請好友一起參與吧");
                             startCountDown(groupEndTime);
-                        } else if (goState == 1) {
+                        } else if (goState == GO_STATE_SUCCESS) {
                             tvGroupStatus.setText("拼團成功");
-                        } else if (goState == 2) {
+                        } else if (goState == GO_STATE_FAILURE) {
                             tvOrderStatus.setText("拼團失敗");
                             tvOrderStatusDesc.setText("該訂單已自動進行退款，敬請關注其他活動信息");
                             tvGroupStatus.setText("拼團失敗");
+                            btnBuyAgain.setVisibility(View.VISIBLE);
+                            btnBuyAgain.setText("再次購買");
                         }
 
                         List<String> groupMemberAvatarList = new ArrayList<>(); // 團購成員列表
@@ -955,7 +962,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             groupMemberAvatarList.add(""); // 待加入的團員頭像地址用空字符串表示
                         }
 
-
+                        llGroupMemberList.removeAllViews();
                         for (String memberAvatarUrl : groupMemberAvatarList) {
                             /*
                             android:layout_width="32dp"
@@ -1012,8 +1019,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 showMemberComplain,
                                 goodsVo.getInt("complainId")
 //                                (float )goodsVo.getDouble("tariffAmount")
-                        )
-
+                            )
                         );
                     }
 
