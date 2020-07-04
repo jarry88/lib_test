@@ -816,7 +816,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 //                carouselLoaded = true;
             }
             if (discountBannerList.length() == 1) {
-                SLog.info("here0");
+//                SLog.info("here0");
                 bannerView.getViewPager().setOnScrollChangeListener(null);
                 bannerView.getViewPager().setNestedScrollingEnabled(false);
                 bannerView.setCanLoop(false);
