@@ -56,12 +56,10 @@ override val layoutId: Int
                         when(item.isCommend){
                             2 ->{
                                 item.isCommend = 0
-                                binding.btnMore.setImageResource(R.drawable.icon_add_blue)
 
                             }
                             else ->{
                                 item.isCommend = 2
-                                binding.btnMore.setImageResource(R.drawable.ic_blue_mium)
 
                             }
 

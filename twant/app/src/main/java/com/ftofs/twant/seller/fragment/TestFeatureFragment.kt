@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -59,6 +60,15 @@ class TestFeatureFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayoutBindin
     }
 
     override fun initData() {
+        binding.btnBack.setOnClickListener{
+            ToastUtils.showShort("點擊返回")
+            hideSoftInputPop()
+        }
+        binding.btnMenu.setOnClickListener {
+            ToastUtils.showShort("點擊菜單")
+        }
+        binding.iconAddGoods.visibility=View.GONE
+        binding.tvTitle.text="選擇鎮店之寶"
         loadingUtil = LoadingUtil(activity)
         viewModel.doGetServerNews() //请求网络数据
         initRecyclerView()
@@ -175,19 +185,7 @@ class TestFeatureFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayoutBindin
         viewModel.doGetServerNews() //请求网络数据
         hideSoftInputPop()
     }
-    // TODO tip 2：此处通过 DataBinding 来规避 在 setOnClickListener 时存在的 视图调用的一致性问题，
-    // 也即，有绑定就有绑定，没绑定也没什么大不了的，总之 不会因一致性问题造成 视图调用的空指针。
-    // 如果这么说还不理解的话，详见 https://xiaozhuanlan.com/topic/9816742350
-    inner class ClickProxy {
-        fun back() {
-            hideSoftInputPop()
-        }
 
-//        fun login() {
-//            nav().navigate(R.id.action_mainFragment_to_loginFragment)
-//        }
-
-    }
 
 
     override fun onDestroy() {

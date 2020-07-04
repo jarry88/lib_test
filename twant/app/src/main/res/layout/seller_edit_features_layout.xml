@@ -15,9 +15,6 @@
         <variable
             name="adapter"
             type="com.ftofs.twant.kotlin.SellerGoodsListAdapter" />
-        <variable
-            name="click"
-            type="com.ftofs.twant.seller.fragment.TestFeatureFragment.ClickProxy" />
 
     </data>
 <LinearLayout
@@ -34,7 +31,6 @@
 <!--onclick-->
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
-            android:onClick="@{()->click.back()}"
             android:layout_width="31dp"
             android:layout_height="31dp"
             android:layout_marginStart="7dp"
@@ -54,13 +50,12 @@
             android:textColor="@color/tw_black"
             />
         <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/icon_add_goods"
             android:layout_width="32dp"
             android:layout_height="24dp"
             android:paddingStart="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
             android:layout_toStartOf="@+id/btn_menu"
-
-            android:id="@+id/icon_add_goods"
             app:icon_src="@drawable/icon_circle_add"
             android:layout_centerVertical="true"/>
         <com.ftofs.twant.widget.ScaledButton
@@ -72,7 +67,6 @@
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_shop_menu"
             android:visibility="visible">
-
         </com.ftofs.twant.widget.ScaledButton>
     </RelativeLayout>
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
