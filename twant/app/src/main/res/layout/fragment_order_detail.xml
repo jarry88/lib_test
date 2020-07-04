@@ -80,19 +80,20 @@
                         android:text="00:00:00:0"
                         android:textSize="16sp"
                         android:textColor="@android:color/white"
-                        android:visibility="invisible">
+                        android:visibility="gone">
                     </TextView>
 
                     <TextView
                         android:id="@+id/tv_order_status_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
+                        android:layout_marginTop="12dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:textSize="@dimen/sp_14"
                         android:textColor="@color/tw_white"
                         android:text=""
+                        android:gravity="center_horizontal"
                         />
                     <TextView
                         android:id="@+id/btn_buy_again"
