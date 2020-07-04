@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/tw_grey_F3F3"
     android:orientation="vertical">
 
     <!-- 工具欄 -->
@@ -19,478 +18,675 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
             android:layout_centerVertical="true"
-            app:icon_src="@drawable/icon_back"
-            />
+            android:layout_marginLeft="7dp"
+            app:icon_src="@drawable/icon_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="18sp"
-            android:textColor="@color/tw_black"
             android:text="購物"
-            />
+            android:textColor="@color/tw_black"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/container_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/tw_grey_F3F3"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:orientation="vertical">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/toolbar_margin_left"
-                    android:layout_marginRight="@dimen/toolbar_margin_right"
-                    android:layout_marginTop="20dp">
-                    <TextView
-                        android:id="@+id/vw_tag"
-                        android:layout_width="2dp"
-                        android:layout_height="18dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_centerVertical="true"
-                        android:background="@color/tw_blue"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@id/vw_tag"
-                        android:layout_centerVertical="true"
-                        android:text="@string/my_bill"
-                        android:textSize="16sp"
-                        android:textColor="@color/tw_black"
-                        />
-
-                    <LinearLayout
-                        android:id="@+id/btn_my_bill"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingLeft="30dp"
-                            android:text="@string/text_view_all"
-                            />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="10dp"
-                            android:src="@drawable/expand_button"
-                            />
-                    </LinearLayout>
-
-                </RelativeLayout>
-
+                android:orientation="vertical"
+                android:layout_marginStart="@dimen/dp_14"
+                android:layout_marginEnd="14dp"
+                android:paddingBottom="10dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="@dimen/toolbar_margin_left"
-                    android:layout_marginRight="@dimen/toolbar_margin_right"
-                    android:paddingTop="19dp"
-                    android:paddingBottom="19dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="#F6F6F6">
+                    android:orientation="vertical"
+                    android:background="@drawable/white_6dp_radius_bg">
                     <RelativeLayout
-                        android:id="@+id/btn_to_be_paid"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
-                        <LinearLayout
-                            android:id="@+id/ll_to_be_paid"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:orientation="vertical">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/icon_to_be_paid"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:layout_gravity="center_horizontal"
-                                android:text="@string/text_bill_to_be_paid"
-                                android:textColor="@color/tw_black"
-                                android:textSize="14sp"
-                                />
-                        </LinearLayout>
-                        <TextView
-                            android:id="@+id/tv_to_be_paid_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="12dp"
-                            android:layout_toRightOf="@id/ll_to_be_paid"
-                            android:layout_marginLeft="-10dp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:gravity="center"
-                            android:text="85"
-                            android:textColor="@android:color/white"
-                            android:textSize="8sp"
-                            android:background="@drawable/my_order_indicator_bg"
-                            android:visibility="gone"
-                            />
-                    </RelativeLayout>
+                        android:layout_marginTop="8dp"
+                        android:paddingStart="@dimen/dp_10"
+                        android:paddingEnd="@dimen/dp_10"
+                        android:layout_marginBottom="7dp"
+                        >
 
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/vw_tag"
+                            android:layout_width="2dp"
+                            android:layout_height="18dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:background="@color/tw_blue" />
 
-                    <RelativeLayout
-                        android:id="@+id/btn_to_be_shipped"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-                        <LinearLayout
-                            android:id="@+id/ll_to_be_shipped"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:orientation="vertical">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/icon_to_be_sent"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:layout_gravity="center_horizontal"
-                                android:text="@string/text_bill_to_be_shipped"
-                                android:textColor="@color/tw_black"
-                                android:textSize="14sp"
-                                />
-                        </LinearLayout>
-                        <TextView
-                            android:id="@+id/tv_to_be_shipped_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="12dp"
-                            android:layout_toRightOf="@id/ll_to_be_shipped"
-                            android:layout_marginLeft="-10dp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:gravity="center"
-                            android:text="85"
-                            android:textColor="@android:color/white"
-                            android:textSize="8sp"
-                            android:background="@drawable/my_order_indicator_bg"
-                            android:visibility="gone"
-                            />
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:id="@+id/btn_to_be_received"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-                        <LinearLayout
-                            android:id="@+id/ll_to_be_received"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:orientation="vertical">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/icon_to_be_received"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:layout_gravity="center_horizontal"
-                                android:text="@string/text_bill_to_be_received"
-                                android:textColor="@color/tw_black"
-                                android:textSize="14sp"
-                                />
-                        </LinearLayout>
-                        <TextView
-                            android:id="@+id/tv_to_be_received_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="12dp"
-                            android:layout_toRightOf="@id/ll_to_be_received"
-                            android:layout_marginLeft="-10dp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:gravity="center"
-                            android:text="85"
-                            android:textColor="@android:color/white"
-                            android:textSize="8sp"
-                            android:background="@drawable/my_order_indicator_bg"
-                            android:visibility="gone"
-                            />
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:id="@+id/btn_to_be_commented"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-                        <LinearLayout
-                            android:id="@+id/ll_to_be_commented"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:orientation="vertical">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/icon_to_be_commented"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:layout_gravity="center_horizontal"
-                                android:text="@string/text_bill_to_be_commented"
-                                android:textColor="@color/tw_black"
-                                android:textSize="14sp"
-                                />
-                        </LinearLayout>
-                        <TextView
-                            android:id="@+id/tv_to_be_commented_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="12dp"
-                            android:layout_toRightOf="@id/ll_to_be_commented"
-                            android:layout_marginLeft="-10dp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:gravity="center"
-                            android:text="85"
-                            android:textColor="@android:color/white"
-                            android:textSize="8sp"
-                            android:background="@drawable/my_order_indicator_bg"
-                            android:visibility="gone"
-                            />
-                    </RelativeLayout>
-                    <LinearLayout
-                        android:id="@+id/icon_return_or_exchange"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/icon_return_or_exchange"
-                            />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_gravity="center_horizontal"
-                            android:text="售後"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/vw_tag"
+                            android:text="@string/my_bill"
                             android:textColor="@color/tw_black"
-                            android:textSize="14sp"
-                            />
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:id="@+id/btn_my_bill"
+                            android:layout_marginEnd="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:paddingStart="30dp"
+                                android:textSize="12sp"
+                                android:text="@string/text_view_all" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:src="@drawable/expand_button" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/tw_light_grey_EDED" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="19dp"
+                        android:paddingBottom="19dp">
+
+                        <RelativeLayout
+                            android:id="@+id/btn_to_be_paid"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.9">
+
+                            <LinearLayout
+                                android:id="@+id/ll_to_be_paid"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:src="@drawable/icon_to_be_paid" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:text="@string/text_bill_to_be_paid"
+                                    android:textColor="@color/tw_black"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_to_be_paid_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="12dp"
+                                android:layout_marginLeft="-10dp"
+                                android:layout_toRightOf="@id/ll_to_be_paid"
+                                android:background="@drawable/my_order_indicator_bg"
+                                android:gravity="center"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:text="85"
+                                android:textColor="@android:color/white"
+                                android:textSize="8sp"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:id="@+id/btn_to_be_shipped"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:id="@+id/ll_to_be_shipped"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:src="@drawable/icon_to_be_sent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:text="@string/text_bill_to_be_shipped"
+                                    android:textColor="@color/tw_black"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_to_be_shipped_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="12dp"
+                                android:layout_marginStart="-10dp"
+                                android:layout_toRightOf="@id/ll_to_be_shipped"
+                                android:background="@drawable/my_order_indicator_bg"
+                                android:gravity="center"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:text="85"
+                                android:textColor="@android:color/white"
+                                android:textSize="8sp"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/btn_to_be_received"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:id="@+id/ll_to_be_received"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:src="@drawable/icon_to_be_received" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:text="@string/text_bill_to_be_received"
+                                    android:textColor="@color/tw_black"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_to_be_received_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="12dp"
+                                android:layout_marginLeft="-10dp"
+                                android:layout_toRightOf="@id/ll_to_be_received"
+                                android:background="@drawable/my_order_indicator_bg"
+                                android:gravity="center"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:text="85"
+                                android:textColor="@android:color/white"
+                                android:textSize="8sp"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/btn_to_be_commented"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:id="@+id/ll_to_be_commented"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:src="@drawable/icon_to_be_commented" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:text="@string/text_bill_to_be_commented"
+                                    android:textColor="@color/tw_black"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_to_be_commented_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="12dp"
+                                android:layout_marginLeft="-10dp"
+                                android:layout_toRightOf="@id/ll_to_be_commented"
+                                android:background="@drawable/my_order_indicator_bg"
+                                android:gravity="center"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:text="85"
+                                android:textColor="@android:color/white"
+                                android:textSize="8sp"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/icon_return_or_exchange"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.9"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/icon_return_or_exchange" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="6dp"
+                                android:text="售後"
+                                android:textColor="@color/tw_black"
+                                android:textSize="12sp" />
+                        </LinearLayout>
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/toolbar_margin_left"
-                    android:layout_marginRight="@dimen/toolbar_margin_right"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical"
-                    android:background="@drawable/border_type_a">
+                    android:id="@+id/ll_available_coupon_container"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:padding="14dp"
+                    android:background="@drawable/white_6dp_radius_bg">
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="86dp"
+                        android:id="@+id/btn_my_store_coupon"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
                         android:orientation="horizontal">
-                        <RelativeLayout
-                            android:id="@+id/btn_my_store_coupon"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border_type_b">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:orientation="vertical">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:src="@drawable/icon_coupon"
-                                    />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="11dp"
-                                    android:layout_gravity="center_horizontal"
-                                    android:textSize="14sp"
-                                    android:textColor="@color/tw_black"
-                                    android:text="@string/text_coupon"
-                                    />
-                            </LinearLayout>
-                        </RelativeLayout>
-                        <RelativeLayout
-                            android:id="@+id/btn_wallet"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border_type_b">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:orientation="vertical">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:src="@drawable/icon_want_pay_wallet"
-                                    />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="11dp"
-                                    android:layout_gravity="center_horizontal"
-                                    android:textSize="14sp"
-                                    android:textColor="@color/tw_black"
-                                    android:text="@string/text_want_pay_wallet"
-                                    />
-                            </LinearLayout>
-                        </RelativeLayout>
-                        <RelativeLayout
-                            android:id="@+id/btn_my_footprint"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border_type_d">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:orientation="vertical">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:src="@drawable/icon_footprint"
-                                    />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="11dp"
-                                    android:layout_gravity="center_horizontal"
-                                    android:textSize="14sp"
-                                    android:textColor="@color/tw_black"
-                                    android:text="@string/text_footprint"
-                                    />
-                            </LinearLayout>
-                        </RelativeLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/icon_coupon" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/dp_4"
+                            android:text="@string/text_coupon"
+                            android:textColor="@color/tw_black"
+                            android:textSize="15sp" />
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="兌換"
+                        android:textSize="13sp"
+                        android:textColor="@color/tw_blue"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:layout_marginTop="@dimen/dp_4"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_express_container"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:padding="14dp"
+                    android:background="@drawable/white_6dp_radius_bg">
+                    <LinearLayout
+                        android:id="@+id/btn_my_express"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/icon_my_logistics" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/dp_4"
+                            android:text="寄快遞"
+                            android:textColor="@color/tw_black"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="查詢"
+                        android:textSize="13sp"
+                        android:textColor="@color/tw_blue"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:layout_marginTop="@dimen/dp_4"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_wallet_container"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:padding="14dp"
+                    android:background="@drawable/white_6dp_radius_bg">
+                    <LinearLayout
+                        android:id="@+id/btn_wallet"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/icon_want_pay_wallet" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/dp_4"
+                            android:text="@string/text_want_pay_wallet"
+                            android:textColor="@color/tw_black"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+                    <TextView
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="兌換"
+                        android:textSize="13sp"
+                        android:textColor="@color/tw_blue"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:layout_marginTop="@dimen/dp_4"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/white_6dp_radius_bg"
+                    android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="86dp"
                         android:orientation="horizontal">
+
                         <RelativeLayout
-                            android:id="@+id/btn_my_express"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@drawable/border_type_c">
+
                             <LinearLayout
+                                android:id="@+id/ll_my_footprint"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 android:orientation="vertical">
+
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:src="@drawable/icon_my_logistics"
-                                    />
+                                    android:src="@drawable/icon_footprint" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="11dp"
                                     android:layout_gravity="center_horizontal"
-                                    android:textSize="14sp"
+                                    android:layout_marginTop="11dp"
+                                    android:text="@string/text_footprint"
                                     android:textColor="@color/tw_black"
-                                    android:text="寄快遞"
-                                    />
+                                    android:textSize="14sp" />
                             </LinearLayout>
                         </RelativeLayout>
+
                         <RelativeLayout
                             android:id="@+id/btn_my_bonus"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@drawable/border_type_c">
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 android:orientation="vertical">
+
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:src="@drawable/icon_bonus"
-                                    />
+                                    android:src="@drawable/icon_bonus" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="11dp"
                                     android:layout_gravity="center_horizontal"
-                                    android:textSize="14sp"
-                                    android:textColor="@color/tw_black"
+                                    android:layout_marginTop="11dp"
                                     android:text="@string/text_bonus"
-                                    />
+                                    android:textColor="@color/tw_black"
+                                    android:textSize="14sp" />
                             </LinearLayout>
                         </RelativeLayout>
+
                         <RelativeLayout
                             android:id="@+id/btn_my_trust_value"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 android:orientation="vertical">
+
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:src="@drawable/icon_trust_value"
-                                    />
+                                    android:src="@drawable/icon_trust_value" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="11dp"
                                     android:layout_gravity="center_horizontal"
-                                    android:textSize="14sp"
-                                    android:textColor="@color/tw_black"
+                                    android:layout_marginTop="11dp"
                                     android:text="@string/text_trust_value"
-                                    />
+                                    android:textColor="@color/tw_black"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/white_6dp_radius_bg"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:paddingStart="@dimen/dp_10"
+                        android:paddingEnd="@dimen/dp_10"
+                        android:layout_marginBottom="7dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="砍價"
+                            android:textColor="@color/tw_black"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:id="@+id/btn_more_price"
+                            android:layout_marginEnd="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:paddingStart="30dp"
+                                android:textSize="12sp"
+                                android:text="查看更多砍價商品" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:src="@drawable/expand_button" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/tw_light_grey_EDED" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="86dp"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:id="@+id/btn_handle_price"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_type_c">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:src="@drawable/icon_bonus" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="11dp"
+                                    android:text="發起的砍價"
+                                    android:textColor="@color/tw_black"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/btn_help_price"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:src="@drawable/icon_help_price" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="11dp"
+                                    android:text="幫別人砍價"
+                                    android:textColor="@color/tw_black"
+                                    android:textSize="14sp" />
                             </LinearLayout>
                         </RelativeLayout>
                     </LinearLayout>
@@ -502,9 +698,8 @@
                     android:layout_marginTop="26dp"
                     android:gravity="center"
                     android:text="@string/text_guess_your_like"
-                    android:textSize="21sp"
                     android:textColor="@color/tw_black"
-                    />
+                    android:textSize="21sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -513,15 +708,13 @@
                     android:gravity="center"
                     android:text="RECOMMEND"
                     android:textColor="@color/tw_black"
-                    android:textSize="10sp"
-                    />
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <com.ftofs.twant.widget.MaxHeightRecyclerView
                 android:id="@+id/rv_guess_list"
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
-            </com.ftofs.twant.widget.MaxHeightRecyclerView>
+                android:layout_height="0dp"></com.ftofs.twant.widget.MaxHeightRecyclerView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>
