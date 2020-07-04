@@ -1499,6 +1499,15 @@ public class Util {
                 "clientUuid", uuid,
                 "clientType", Constant.CLIENT_TYPE_ANDROID
         );
+
+        String token = User.getToken();
+        if (!StringUtil.isEmpty(token)) {  // 如果有token，则传上token
+            try {
+                params.set("token", token);
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+        }
         SLog.info("url[%s], params[%s]", Api.PATH_STORE_PROMOTION_STATS, params);
         Api.postUI(Api.PATH_STORE_PROMOTION_STATS, params, new UICallback() {
             @Override
