@@ -735,7 +735,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     markPayId(SPField.FIELD_ALI_PAY_ID);
                     hideSoftInputPop();
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -787,7 +787,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     markPayId(SPField.FIELD_ALI_PAY_HK_ID);
                     hideSoftInputPop();
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

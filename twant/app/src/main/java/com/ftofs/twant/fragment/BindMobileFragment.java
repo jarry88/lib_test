@@ -141,6 +141,7 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
         btnRefreshCaptcha.setOnClickListener(this);
 
         etMobile = view.findViewById(R.id.et_mobile);
+
         etCaptcha = view.findViewById(R.id.et_captcha);
         etSmsCode = view.findViewById(R.id.et_sms_code);
         etSmsCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {

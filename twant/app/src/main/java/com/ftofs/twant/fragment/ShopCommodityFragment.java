@@ -1031,19 +1031,21 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     }
 
     private void categoryOnSubItemClick(boolean down) {
-        int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
-        BaseViewHolder holder=(BaseViewHolder)rvCategoryList.findViewHolderForAdapterPosition(preIndex);
-        LinearLayout llSubCategoryList = holder.getView(R.id.ll_sub_ategory_list);
-        int subIndex=storeCategoryListAdapter.getPrevSelectedSubItemIndex()+(down?1:-1);
-        SLog.info("SubIndex %d", subIndex);
         try {
+            int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
+            BaseViewHolder holder=(BaseViewHolder)rvCategoryList.findViewHolderForAdapterPosition(preIndex);
+            if (holder == null) {
+                return;
+            }
+            LinearLayout llSubCategoryList = holder.getView(R.id.ll_sub_ategory_list);
+            int subIndex=storeCategoryListAdapter.getPrevSelectedSubItemIndex()+(down?1:-1);
+            SLog.info("SubIndex %d", subIndex);
+
             categoryToNext=false;
             llSubCategoryList.getChildAt(subIndex).performClick();
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-
         }
-
     }
 }
 

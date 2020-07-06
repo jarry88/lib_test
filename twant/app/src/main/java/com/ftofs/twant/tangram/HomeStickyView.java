@@ -25,6 +25,7 @@ import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
+import com.ftofs.twant.fragment.RegisterConfirmFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
@@ -34,7 +35,9 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
+import com.ftofs.twant.widget.ViewMoreGroupPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tmall.wireless.tangram.structure.BaseCell;
@@ -161,28 +164,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-            new XPopup.Builder(context)
-//                         .dismissOnTouchOutside(false)
-                    // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new TwConfirmPopup(context, "圖片過大是否壓縮后上傳",null   , "確認", "取消",new OnConfirmCallback() {
-                @Override
-                public void onYes() {
-                    SLog.info("onYes");
-                }
 
-                @Override
-                public void onNo() {
-                    SLog.info("onNo");
-                }
-            })).show();
+            Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13425038570", 10));
         }
     }
 

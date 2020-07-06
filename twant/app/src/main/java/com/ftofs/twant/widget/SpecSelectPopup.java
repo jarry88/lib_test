@@ -102,13 +102,15 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     boolean canViewSkuImage = false;
     boolean groupBuyMode;
 
+    int goId; // 開團Id 0: 表示自己開團  -1: 表示無效
+
     public SpecSelectPopup(@NonNull Context context, int action, int commonId, List<Spec> specList,
                            Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
                            int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy,
                            int discountState, List<SkuGalleryItem> skuGalleryItemList) {
         this(context, action, commonId, specList, specValueIdMap, specValueIdList,
                     quantity, goodsInfoMap, viewPagerFragment, limitBuy,
-                    discountState, skuGalleryItemList, false);
+                    discountState, skuGalleryItemList, false, Constant.INVALID_GO_ID);
     }
 
 
@@ -125,11 +127,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * @param limitBuy
      * @param skuGalleryItemList sku圖片列表（如果specList為null，skuGalleryItemList也必須為null）
      * @param groupBuyMode 是否為團購模式
+     * @param goId 開團Id
      */
     public SpecSelectPopup(@NonNull Context context, int action, int commonId, List<Spec> specList,
                            Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
                            int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy,
-                           int discountState, List<SkuGalleryItem> skuGalleryItemList, boolean groupBuyMode) {
+                           int discountState, List<SkuGalleryItem> skuGalleryItemList, boolean groupBuyMode, int goId) {
         super(context);
 
         SLog.info("groupBuyMode[%s]", groupBuyMode);
@@ -147,6 +150,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         this.discountState = discountState;
         this.skuGalleryItemList = skuGalleryItemList;
         this.groupBuyMode = groupBuyMode;
+        this.goId = goId;
     }
 
     @Override
@@ -467,12 +471,22 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         // 當前選中的goodsId
         int goodsId = getSelectedGoodsId();
         // [{"buyNum":21,"goodsId":446},{"buyNum":2,"goodsId":445}]
-        EasyJSONArray easyJSONArray = EasyJSONArray.generate(EasyJSONObject.generate(
+        EasyJSONObject buyItem = EasyJSONObject.generate(
                 "buyNum", abQuantity.getValue(),
-                "goodsId", goodsId));
+                "goodsId", goodsId);
+
+        if (goId != Constant.INVALID_GO_ID) {
+            try {
+                buyItem.set("goId", goId);
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+        }
+
+        EasyJSONArray easyJSONArray = EasyJSONArray.generate(buyItem);
 
         SLog.info("groupBuyMode[%s]", groupBuyMode);
-        Util.startFragment(ConfirmOrderFragment.newInstance(0, easyJSONArray.toString(), groupBuyMode ? Constant.TRUE_INT : Constant.FALSE_INT));
+        Util.startFragment(ConfirmOrderFragment.newInstance(0, easyJSONArray.toString(), groupBuyMode ? Constant.TRUE_INT : Constant.FALSE_INT, goId));
     }
 
     private void selectSpecs() {
@@ -555,7 +569,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             SLog.info("goodsId[%d]", goodsId);
             return 0;
         }
-        SLog.info("Error!根據規格Id[%s]找不到goodsId", specValueIds);
         return goodsId;
     }
 

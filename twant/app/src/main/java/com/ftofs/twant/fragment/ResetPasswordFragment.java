@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -45,6 +46,8 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -80,6 +83,8 @@ public class ResetPasswordFragment extends BaseFragment implements
     private TextView btnNext;
     private boolean checkAgreeState;
     private ImageView imgCheckAgree;
+    private LinearLayout llMobileErrorContainer;
+    private TextView tvMobileError;
 
 
     public static ResetPasswordFragment newInstance(int usage, boolean isModifyPaymentPassword) {
@@ -139,6 +144,9 @@ public class ResetPasswordFragment extends BaseFragment implements
         btnRefreshCaptcha.setOnClickListener(this);
 
         etMobile = view.findViewById(R.id.et_mobile);
+        tvMobileError =view.findViewById(R.id.tv_mobile_error);
+        llMobileErrorContainer = view.findViewById(R.id.ll_container_mobile_error);
+        llMobileErrorContainer.setVisibility(View.GONE);
         etMobile.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -152,6 +160,41 @@ public class ResetPasswordFragment extends BaseFragment implements
 
             @Override
             public void afterTextChanged(Editable s) {
+                String mobile = s.toString();
+                if (!checkMobileZoneList()||StringUtil.isEmpty(mobile)) {
+                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
+                    return;
+                }
+                MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
+                String[] mobileRex = new String[] {
+                        "",
+                        "^[569][0-9]{0,7}$", // 香港
+                        "^1[0-9]{0,10}$",    // 大陸
+                        "^6[0-9]{0,7}$"   // 澳門
+                };
+
+                Pattern pattern = Pattern.compile(mobileRex[mobileZone.areaId]);
+
+                Matcher matcher = pattern.matcher(mobile);
+
+                boolean result = matcher.matches();
+                if (!result) {
+                    String[] areaArray = new String[] {
+                            "",
+                            getString(R.string.text_hongkong),
+                            getString(R.string.text_mainland),
+                            getString(R.string.text_macao)
+                    };
+
+                    String msg = String.format(getString(R.string.text_error_tip_mobile), areaArray[mobileZone.areaId]);
+                    tvMobileError.setText(msg);
+                    tvMobileError.setTextColor(getResources().getColor(R.color.tw_red,null));
+                    if (llMobileErrorContainer.getVisibility() != View.VISIBLE) {
+                        llMobileErrorContainer.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
+                }
                 updataBtnNext();
             }
         });
@@ -177,7 +220,12 @@ public class ResetPasswordFragment extends BaseFragment implements
         refreshCaptcha();
         getMobileZoneList();
     }
-
+    private boolean checkMobileZoneList() {
+        if (mobileZoneList == null || mobileZoneList.size() <= selectedMobileZoneIndex) {
+            return false;
+        }
+        return true;
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -298,7 +346,7 @@ public class ResetPasswordFragment extends BaseFragment implements
     }
 
     private boolean checkInfo(boolean toastEnable) {
-        if (mobileZoneList.size() <= selectedMobileZoneIndex) {
+        if (mobileZoneList == null || mobileZoneList.size() <= selectedMobileZoneIndex) {
             return false;
         }
         // 獲取區號
@@ -396,6 +444,8 @@ public class ResetPasswordFragment extends BaseFragment implements
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
         updataBtnNext();
+        etMobile.setText(etMobile.getText());
+
     }
 
     private void updataBtnNext() {

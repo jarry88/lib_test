@@ -340,4 +340,16 @@ public class Constant {
 
 
     public static final double DOUBLE_ZERO_THRESHOLD = 0.000001d;
+
+
+    /*
+    "promotionType": 0,  #0無促銷活動 1限時折扣 2全款預售 3定金預售 4多人拼團 5優惠套裝 6秒殺活動 7砍價活動
+     */
+    public static final int PROMOTION_TYPE_NONE = 0;
+    public static final int PROMOTION_TYPE_TIME_LIMITED_DISCOUNT = 1;
+    public static final int PROMOTION_TYPE_GROUP = 4;
+
+
+    // 無效的開團Id
+    public static final int INVALID_GO_ID = -1;
 }

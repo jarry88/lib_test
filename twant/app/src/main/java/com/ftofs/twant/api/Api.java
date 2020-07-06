@@ -1460,11 +1460,28 @@ public class Api {
      */
     public static final String PATH_CHANNEL_UPDATE = "/app/android/channel";
 
-
     /**
      * 服務協議和隱私協議
      */
     public static final String PATH_ARTICLE_DETAIL = "/article/info_h5";
+
+    /**
+     * 商品分享口令生成
+     */
+    public static final String PATH_GOODS_CREATE_WORD = "/app/command/create";
+
+
+    /**
+     * 商品開團列表
+     */
+    public static final String PATH_GROUP_LIST = "/app/goods/group/list";
+
+
+    /**
+     * 店鋪首頁渠道推廣統計
+     */
+    public static final String PATH_STORE_PROMOTION_STATS = "/store/home/record";
+
 
 
     /**
@@ -1486,7 +1503,7 @@ public class Api {
         } else {
             url = API_BASE_URL + path;
         }
-        SLog.info("url[%s]", url);
+        SLog.info("%s url[%s]", method == METHOD_GET ? "GET" : "POST", url);
         Request request = null;
 
         if (method == METHOD_GET) {

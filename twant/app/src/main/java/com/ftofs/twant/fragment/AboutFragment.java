@@ -22,6 +22,9 @@ import com.ftofs.twant.util.Util;
 public class AboutFragment extends BaseFragment implements View.OnClickListener {
     TextView tvAppVersion;
 
+    View btnCheckUpdate;
+    View btnGotoRate;
+
     public static AboutFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -56,8 +59,19 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
          */
 
-        Util.setOnClickListener(view, R.id.btn_check_update, this);
-        Util.setOnClickListener(view, R.id.btn_goto_rate, this);
+        btnCheckUpdate = view.findViewById(R.id.btn_check_update);
+        btnCheckUpdate.setOnClickListener(this);
+
+        btnGotoRate = view.findViewById(R.id.btn_goto_rate);
+        btnGotoRate.setOnClickListener(this);
+
+        if (Constant.FLAVOR_GOOGLE.equals(BuildConfig.FLAVOR)) { // Google Play渠道才显示去评分功能
+            btnGotoRate.setVisibility(View.VISIBLE);
+            btnCheckUpdate.setBackgroundResource(R.drawable.border_type_d);
+        } else {
+            btnGotoRate.setVisibility(View.GONE);
+            btnCheckUpdate.setBackground(null);
+        }
 
         Util.setOnClickListener(view, R.id.btn_back, this);
     }
