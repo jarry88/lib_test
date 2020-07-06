@@ -1392,7 +1392,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         startCountDown();
 
         if (PermissionUtil.hasPermission(new String[] {Permission.ACCESS_COARSE_LOCATION, Permission.ACCESS_FINE_LOCATION})) {
-            TencentLocationTask.doLocation(_mActivity);
+            TencentLocationTask.doLocation(_mActivity, true);
         }
 
         showStoreMapButton();
