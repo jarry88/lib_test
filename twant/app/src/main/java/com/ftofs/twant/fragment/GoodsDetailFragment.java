@@ -2188,7 +2188,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      *
      */
     private void showPriceTag(GoodsInfo goodsInfo) {
-        if (promotionType == Constant.PROMOTION_TYPE_NONE) {
+        SLog.info("promotionType[%d], promotionCountDownTime[%d]", promotionEndTime, promotionCountDownTime);
+        if (promotionType == Constant.PROMOTION_TYPE_NONE || promotionCountDownTime == 0) {
             rlPriceTag.setVisibility(VISIBLE);
         } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
             updateDiscount(goodsInfo);
