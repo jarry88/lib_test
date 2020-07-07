@@ -40,6 +40,7 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -70,6 +71,7 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
     private int categoryId1;
     private int categoryId2;
     private int categoryId3;
+    private List<ListPopupItem> spinnerLogoItems;
 
     public static SellerEditBasicFragment newInstance(SellerGoodsDetailFragment parent) {
         SellerEditBasicFragment fragment= new SellerEditBasicFragment();
@@ -101,6 +103,8 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
         tvAddGoodLogo = view.findViewById(R.id.tv_add_good_logo);
         tvAddGoodLocation = view.findViewById(R.id.tv_add_good_location);
         tvCategoryId = view.findViewById(R.id.tv_category_id);
+        spinnerLogoItems = new ArrayList<>();
+
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
         Util.setOnClickListener(view, R.id.tv_add_good_unit, this);
@@ -203,6 +207,9 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             explainData();
         } else {
             loadData();
+        }
+        if (spinnerLogoItems.size() == 0) {
+            updateLogoInfo();
         }
     }
 
@@ -377,11 +384,11 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "品牌所在地", PopupType.GOODS_LOCATION, parent.spinnerLogoCountryItems, countryIndex, this)).show();
         }
         if (id == R.id.tv_add_good_logo) {
-            if (parent.spinnerLogoItems.size() == 0) {
+            if (spinnerLogoItems.size() == 0) {
                 ToastUtil.error(_mActivity,"該分類暫時沒有可選品牌");
             }
             hideSoftInput();
-            new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "品牌", PopupType.GOODS_LOGO, parent.spinnerLogoItems, logoIndex, this)).show();
+            new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "品牌", PopupType.GOODS_LOGO, spinnerLogoItems, logoIndex, this)).show();
         }
 
         if (id == R.id.tv_add_good_unit) {
@@ -450,10 +457,10 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
                         return;
                     }
                     EasyJSONArray brandList = responseObj.getArray("datas.brandList");
-                    parent.spinnerLogoItems.clear();
+                    spinnerLogoItems.clear();
                     for (Object object : brandList) {
                         Brand item = Brand.parase((EasyJSONObject) object);
-                        parent.spinnerLogoItems.add(new ListPopupItem(item.getBrandId(),item.getBrandName(),item));
+                        spinnerLogoItems.add(new ListPopupItem(item.getBrandId(),item.getBrandName(),item));
                     }
 
                 } catch (Exception e) {
