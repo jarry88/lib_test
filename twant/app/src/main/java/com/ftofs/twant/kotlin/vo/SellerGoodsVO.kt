@@ -1,6 +1,6 @@
 package com.ftofs.twant.kotlin.vo
 
-data class SellerGoodsVO(
+data class SellerGoodsVO (
         var commonId: Int ,
         var goodsName: String ,
         var imageName: String,
@@ -12,6 +12,6 @@ data class SellerGoodsVO(
         var isVirtual: Int ,
         var appUsable: Int ,
         var goodsState: Int ,
-        var tariffEnable: Int ,//是否為鎮店之寶 默認0 2-鎮店之寶
-        var isCommend: Int
+        var tariffEnable: Int ,
+        var isCommend: Int//是否為鎮店之寶 默認0 2-鎮店之寶
 )

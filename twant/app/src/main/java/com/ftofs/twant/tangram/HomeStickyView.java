@@ -32,7 +32,6 @@ import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.seller.fragment.SellerFeaturesFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -43,6 +42,7 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
+import com.ftofs.twant.kotlin.testnet.TestNetFragment;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -149,7 +149,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         int id = v.getId();
         if (Config.DEVELOPER_MODE) {
             if (id == R.id.icon_takewant) {
-                Util.startFragment(SellerFeaturesFragment.newInstance());
+//                Util.startFragment(SellerFeaturesFragment.newInstance());
+                Util.startFragment(new TestNetFragment());
             }
         }
         if (id == R.id.btn_goto_activity) {

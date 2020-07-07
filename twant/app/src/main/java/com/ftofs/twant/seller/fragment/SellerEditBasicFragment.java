@@ -53,11 +53,7 @@ import okhttp3.Call;
  */
 public class SellerEditBasicFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     TextView tvTitle;
-    private int goodsModal=-1;//銷售模式 銷售模式 0零售 1跨城購 2虛擬 【必填】
-    private EasyJSONArray unitList;
     private EasyJSONObject publishGoodsInfo= new EasyJSONObject();
-    private EasyJSONArray specJsonVoList;
-    private String unitName;
     private int commonId;
     SellerGoodsDetailFragment parent;
     private int categoryId=-1;
@@ -78,8 +74,6 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
     public static SellerEditBasicFragment newInstance(SellerGoodsDetailFragment parent) {
         SellerEditBasicFragment fragment= new SellerEditBasicFragment();
         fragment.parent = parent;
-        fragment.unitList = parent.unitList;
-        fragment.specJsonVoList = parent.specJsonVoList;
         return fragment;
     }
 
@@ -101,12 +95,12 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
         View view = getView();
         tvTitle = view.findViewById(R.id.tv_title);
 
-        tvTitle.setText("基本信息");
+        tvTitle.setText("編輯基本信息");
         etName=view.findViewById(R.id.et_add_good_name);
         etJingle=view.findViewById(R.id.et_add_good_description);
         tvAddGoodLogo = view.findViewById(R.id.tv_add_good_logo);
         tvAddGoodLocation = view.findViewById(R.id.tv_add_good_location);
-
+        tvCategoryId = view.findViewById(R.id.tv_category_id);
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
         Util.setOnClickListener(view, R.id.tv_add_good_unit, this);
@@ -127,17 +121,18 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
         });
         loadGoodsCountry(view);
 
-        explainData();
     }
 
     private void explainData() {
         try{
+            commonId = parent.commonId;
             brandId = parent.goodsVo.getInt("brandId");
             String brandName = parent.goodsVo.getSafeString("brandName");
             if (!StringUtil.isEmpty(brandName)) {
                 tvAddGoodLogo.setText(brandName);
             }
             String goodsCountryName=parent.goodsVo.getSafeString("goodsCountryName");
+            goodsCountry=parent.goodsVo.getInt("goodsCountry");
             if (!StringUtil.isEmpty(goodsCountryName)) {
                 tvAddGoodLocation.setText(goodsCountryName);
             }
@@ -149,12 +144,19 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             }
             tvCategoryId.setText(parent.goodsVo.getSafeString("categoryNames"));
             categoryId = parent.goodsVo.getInt("categoryId");
+            clearCategory();
             categoryId1 = parent.goodsVo.getInt("categoryId1");
             categoryId2 = parent.goodsVo.getInt("categoryId2");
             categoryId3 = parent.goodsVo.getInt("categoryId3");
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+
+    private void clearCategory() {
+        categoryId1 = 0;
+        categoryId2 = 0;
+        categoryId3 = 0;
     }
 
     private void loadGoodsCountry(View view) {
@@ -196,13 +198,15 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        loadData();
+
+        if (parent.goodsVo != null) {
+            explainData();
+        } else {
+            loadData();
+        }
     }
 
     private void loadData() {
-        if (parent.goodsVo!= null) {
-            return;
-        }
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
             return;
@@ -239,12 +243,13 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
                         return;
                     }
 
-                    EasyJSONObject goodsVo = responseObj.getSafeObject("datas.GoodsVo");
+                    parent.goodsVo = responseObj.getSafeObject("datas.GoodsVo");
+                    commonId = parent.goodsVo.getInt("commonId");
                     ((TextView) contentView.findViewById(R.id.tv_spu_id)).setText(String.valueOf(commonId));
-                    ((TextView) contentView.findViewById(R.id.tv_goods_name)).setText(goodsVo.getSafeString("goodsName"));
+                    ((TextView) contentView.findViewById(R.id.tv_goods_name)).setText(parent.goodsVo.getSafeString("goodsName"));
                     ImageView goodsImage = contentView.findViewById(R.id.goods_image);
 
-                    int tariffEnable = goodsVo.getInt("tariffEnable");
+                    int tariffEnable = parent.goodsVo.getInt("tariffEnable");
                     SLog.info("tariffEnable__[%d]", tariffEnable);
                     contentView.findViewById(R.id.cross_border_indicator).setVisibility(tariffEnable == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
 
@@ -279,8 +284,6 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
     }
 
     private boolean checkBasicInfo() {
-
-        View primaryView = getView();
         String goodsName =etName.getText().toString();
         if (StringUtil.isEmpty(goodsName)) {
             ToastUtil.error(_mActivity,"請填寫商品名稱");
@@ -304,13 +307,34 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             return false;
         }
         try {
+            publishGoodsInfo.set("commonId", commonId);
+
+            publishGoodsInfo.set("editType",1);//1為基本信息
             publishGoodsInfo.set("goodsName", goodsName);
             publishGoodsInfo.set("categoryId", categoryId);
             publishGoodsInfo.set("jingle", jingle);
-            int i = 1;
-            for (Category category : selectCategoryList) {
-                String keyName = String.format("categoryId%d", i++);
-                publishGoodsInfo.set(keyName, category.getCategoryId());
+            clearCategory();
+            if (selectCategoryList!=null) {
+                int i = 1;
+                for (Category category : selectCategoryList) {
+                    if (i == 1) {
+                        categoryId1 = category.getCategoryId();
+                        publishGoodsInfo.set("categoryId1", category.getCategoryId());
+                        categoryId = categoryId1;
+                    }if (i == 2) {
+                        categoryId2 = category.getCategoryId();
+                        categoryId = categoryId2;
+                        publishGoodsInfo.set("categoryId2", category.getCategoryId());
+
+                    }if (i == 3) {
+                        categoryId3 = category.getCategoryId();
+                        categoryId = categoryId3;
+                        publishGoodsInfo.set("categoryId3", category.getCategoryId());
+
+                    }
+                    publishGoodsInfo.set("categoryId", categoryId);
+                    i++;
+                }
             }
             publishGoodsInfo.set("brandId", brandId);
             publishGoodsInfo.set("goodsCountry", goodsCountry);
@@ -337,10 +361,12 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
         }
         if (id == R.id.btn_ok) {
             if (checkBasicInfo()) {
+                // TODO: 2020/6/26  所在地選擇后 商品詳情頁未更新
                 parent.saveGoodsInfo(publishGoodsInfo, new SimpleCallback() {
                     @Override
                     public void onSimpleCall(Object data) {
-                        SLog.info("保存成功");
+                        ToastUtil.success(_mActivity,data.toString());
+                        hideSoftInputPop();
                     }
                 });
             }
@@ -370,29 +396,21 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             selectCategoryList = (List<Category>) extra;
             Category categoryLast = new Category();
             StringBuilder selectCategoryName = new StringBuilder();
-
+            
             for (Category category : selectCategoryList) {
                 categoryLast = category;
                 selectCategoryName.append(category.getCategoryName()).append(" -- ");
             }
             if (!StringUtil.isEmpty(selectCategoryName.toString())) {
                 selectCategoryName.delete(selectCategoryName.length() - 4, selectCategoryName.length() - 1);
-//                if (vpAddGood.getCurrentItem() == PRIMARY_INDEX) {
                     ((TextView)( getView().findViewById(R.id.tv_category_id))).setText(selectCategoryName.toString());
                     categoryId = categoryLast.getCategoryId();
-//                    updateLogoInfo();
-//                } else if (vpAddGood.getCurrentItem() == DETAIL_INDEX) {
-//                    ((TextView) (mViews.get(DETAIL_INDEX).findViewById(R.id.tv_select_store_category))).setText(selectCategoryName.toString());
-//                    storeLabelId = categoryLast.getCategoryId();
-//                    EasyJSONArray array = new EasyJSONArray();
-//                    for (Category category : selectCategoryList) {
-//                        array.append(category.getCategoryId());
-//                    }
-//                    storeLabelIdList = array;
-//                }
-            }
 
-        }
+            }
+             updateLogoInfo();
+
+
+          }
           else if (type == PopupType.GOODS_LOCATION) {
               countryIndex = id;
               AdminCountry item = (AdminCountry) extra;

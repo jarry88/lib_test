@@ -10,6 +10,7 @@ import com.ftofs.twant.R
 import com.ftofs.twant.api.Api
 import com.ftofs.twant.api.UICallback
 import com.ftofs.twant.databinding.SellerGoodsItemUnswipeBinding
+import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.KotlinInterfaceApi
 import com.ftofs.twant.kotlin.vo.SellerGoodsVO
 import com.ftofs.twant.log.SLog
@@ -28,7 +29,9 @@ class FeatureGoodAdapter : DataBoundAdapter<SellerGoodsVO, SellerGoodsItemUnswip
         get() = R.layout.seller_goods_item_unswipe
 
     override fun initView(binding: SellerGoodsItemUnswipeBinding, item: SellerGoodsVO) {
-        binding.vo = item
+        // TODO: 2020/7/3  
+        //这里有问题
+        binding.vo = SellerGoodsItem()
         binding.btnMore.setOnClickListener{
                     var params = EasyJSONObject.generate("token", User.getToken(), "commonId", item.commonId)
                     val loadingPopup = Util.createLoadingPopup(context).show()

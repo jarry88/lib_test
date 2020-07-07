@@ -229,7 +229,8 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.icon_add_goods) {
-            Util.startFragment(FeatureGoodSelectFragment.Companion.newInstance());
+//            Util.startFragment(FeatureGoodSelectFragment.Companion.newInstance());
+            Util.startFragment(TestFeatureFragment.Companion.newInstance());
         }
     }
 

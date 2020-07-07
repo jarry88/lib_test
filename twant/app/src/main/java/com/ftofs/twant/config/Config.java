@@ -4,6 +4,7 @@ import com.ftofs.twant.constant.SPField;
 import com.macau.pay.sdk.MPaySdk;
 import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
+import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
 
 /**
  * 配置類
@@ -106,6 +107,8 @@ public class Config {
     public static void changeEnvironment(int env) {
         currEnv = env;
         Hawk.put(SPField.FIELD_CURRENT_ENV, currEnv);
+        //將環境值存入mmkv中，供mvvm架構的網絡調用
+        MmkvUtils.putIntValue("env",env);
         if (env == ENV_28 || env == ENV_229 || env == ENV_29) {
             PROD = false;
             DEVELOPER_MODE = true;

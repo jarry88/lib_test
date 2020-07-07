@@ -1,22 +1,16 @@
 package com.ftofs.twant.seller.fragment
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.ftofs.twant.R
-import com.ftofs.twant.databinding.SellerEditFeaturesLayoutBinding
-import com.ftofs.twant.kotlin.BaseKotlinFragment
-import com.ftofs.twant.kotlin.HomeVM
+import com.ftofs.twant.fragment.BaseFragment
 import com.ftofs.twant.kotlin.adapter.FeatureGoodAdapter
-import com.ftofs.twant.kotlin.extension.viewModel
 import com.ftofs.twant.log.SLog
 
 //在Fragment中使用，引入资源文件，直接使用id访问视图有一点特别注意：
 // 在onCreateView中不直接访问视图，因为视图没有加载完成，容易引起空指针，需要在onViewCreated中访问视图，代码如下：
-class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBinding>() {
-    override val layoutId: Int
-        get() = R.layout.seller_edit_features_layout
-    val vm by viewModel<HomeVM>()
+class FeatureGoodSelectFragment: BaseFragment() {
+//    override val layoutId: Int
+//        get() = R.layout.seller_edit_features_layout
+//    val vm by viewModel<HomeVM>()
     private val adapter = FeatureGoodAdapter()
 
     companion object{
@@ -29,28 +23,35 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.vm = vm
-        binding.executePendingBindings()
-        binding.refreshLayout.autoRefresh()
+//        binding.vm = vm
+//        binding.executePendingBindings()
+//        binding.refreshLayout.autoRefresh()
+        initView()
         initRecyclerView()
-        vm.back.observe(this, Observer {
-            if (it) {
-                hideSoftInputPop()
-            }
-        })
+//        vm.back.observe(this, Observer {
+//            if (it) {
+//                hideSoftInputPop()
+//            }
+//        })
     }
+
+    private fun initView() {
+//        binding.iconAddGoods.visibility= View.GONE
+//        binding.btnMenu.visibility= View.GONE
+    }
+
     private fun initRecyclerView() {
-        binding.rvFeaturesGoodsList.also {
-            it.adapter = adapter
-            it.layoutManager = LinearLayoutManager(activity)
+//        binding.rvFeaturesGoodsList.also {
+//            it.adapter = adapter
+//            it.layoutManager = LinearLayoutManager(activity)
         }
 
-        vm.goodsItems.observe(this, Observer {
-            if (it != null) {
-                SLog.info("${it.goodsList[0]}")
-                adapter.addAll(it.goodsList, it.pageEntity.curPage == 1)
-            }
-        })
+//        vm.goodsItems.observe(this, Observer {
+//            if (it != null) {
+//                SLog.info("${it.goodsList[0]}")
+//                adapter.addAll(it.goodsList, it.pageEntity.curPage == 1)
+//            }
+//        })
     }
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        super.onViewCreated(view, savedInstanceState)
@@ -101,4 +102,3 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
 //            SLog.info("dsf")
 //        }
 //    }
-}
