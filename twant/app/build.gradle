@@ -257,6 +257,7 @@ dependencies {
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     implementation 'com.github.donkingliang:ImageSelector:1.9.2'
+    implementation 'com.youth.banner:banner:2.0.12'
 }
 repositories {
     mavenCentral()
