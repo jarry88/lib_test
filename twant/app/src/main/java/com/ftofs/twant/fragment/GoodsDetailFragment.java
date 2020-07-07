@@ -1470,7 +1470,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             textView.setText(goodsMobileBodyVo.getValue());
                             textView.setTextColor(getResources().getColor(R.color.tw_black, null));
                             textView.setTextSize(16);
-                            textView.setGravity(Gravity.CENTER);
+                            // textView.setGravity(Gravity.CENTER);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             layoutParams.leftMargin = Util.dip2px(_mActivity, 20);
                             layoutParams.rightMargin = layoutParams.leftMargin;
