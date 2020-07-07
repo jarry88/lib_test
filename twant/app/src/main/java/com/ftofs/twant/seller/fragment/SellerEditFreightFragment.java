@@ -107,20 +107,21 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
         sbFreightTemple.setButtonCheckedBlue();
         sbFixedTemple.setOnClickListener(v ->  {
             if (!sbFixedTemple.isChecked()) {
-                sbFixedTemple.setChecked(true);
-                freightTemplateId = -1;
+                useFixedFreight = true;
+                updateCheckView();
             }
-            sbFreightTemple.setChecked(false);
-            useFixedFreight = sbFixedTemple.isChecked();
         });
         sbFreightTemple.setOnClickListener(v -> {
             boolean checked = sbFreightTemple.isChecked();
-            if (!sbFreightTemple.isChecked()) {
-                sbFreightTemple.setChecked(true);
+            if (!checked) {
+                useFixedFreight = false;
             }
-            sbFixedTemple.setChecked(false);
-            useFixedFreight = sbFreightTemple.isChecked();
         });
+    }
+
+    private void updateCheckView() {
+        sbFreightTemple.setChecked(!useFixedFreight);
+        sbFixedTemple.setChecked(useFixedFreight);
     }
 
     @Override
@@ -135,24 +136,21 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
     }
 
     private void explainData() {
-        try{
-            parent.explainFreight();
-        }catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
-        goodsFreight = parent.goodsFreight;
         freightTemplateId = parent.freightTemplateId;
+        if (freightTemplateId > 0) {
+            useFixedFreight = false;
+            onSelected(PopupType.GOODS_FREIGHT_RULE,freightTemplateId,null);
+        }
         if (goodsFreight > 0) {
-            sbFixedTemple.setChecked(true);
             fetFreight.setFixedText(String.valueOf(goodsFreight));
-        } else if (freightTemplateId > 0) {
-            sbFreightTemple.setChecked(true);
         }
         if (parent.freightVolume > 0) {
             etV.setText(String.valueOf(parent.freightVolume));
         }if (parent.freightVolume > 0) {
             etW.setText(String.valueOf(parent.freightWeight));
         }
+
+        updateCheckView();
     }
     private void loadFreightListDate() {
         if (!freightList.isEmpty()) {
@@ -244,9 +242,7 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
                     if (contentView == null) {
                         return;
                     }
-
-                    EasyJSONObject goodsVo = responseObj.getSafeObject("datas.GoodsVo");
-                    parent.goodsVo=goodsVo;
+                    parent.updateDataFromJson(responseObj);
                     explainData();
 
                 } catch (Exception e) {
