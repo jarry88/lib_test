@@ -43,7 +43,16 @@ public enum CustomAction {
     /**
      * 【商家】編輯規格
      */
+<<<<<<< HEAD
     CUSTOM_ACTION_SELLER_EDIT_SPEC,
+=======
+    public static final String CUSTOM_ACTION_SELLER_EDIT_SKU_INFO = "seller_edit_sku_info";
+
+    /**
+     * 選擇拼團
+     */
+    public static final String CUSTOM_ACTION_SELECT_JOIN_GROUP = "select_join_group";
+>>>>>>> new_join_group2
 }
 
 

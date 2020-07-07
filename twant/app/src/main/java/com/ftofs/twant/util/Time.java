@@ -111,4 +111,28 @@ public class Time {
 
         return timeInfo;
     }
+
+    /**
+     * 計算離團購結束還有多長時間
+     * @param currTime 當前時間
+     * @param endTime 結束時間
+     * @return
+     */
+    public static TimeInfo groupTimeDiff(long currTime, long endTime) {
+        if (currTime > endTime) {  // 如果當前時間大於結束時間，返回null
+            return null;
+        }
+
+        long d = endTime - currTime;
+        int diffSecond = (int) (d / 1000);
+        TimeInfo timeInfo = new TimeInfo();
+
+        timeInfo.hour = diffSecond / 3600;
+        diffSecond = diffSecond % 3600;
+        timeInfo.minute = diffSecond / 60;
+        timeInfo.second = diffSecond % 60;
+        timeInfo.milliSecond = (int) (d % 1000);
+
+        return timeInfo;
+    }
 }

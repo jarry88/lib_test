@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/white_r16dp_bg">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="口令分享碼已複製"
+        android:textColor="@color/tw_black"
+        android:textSize="18sp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:padding="12dp"
+        android:background="@drawable/f4_r8dp_bg">
+    </TextView>
+    
+    <TextView
+        android:id="@+id/btn_share"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="225dp"
+        android:layout_height="38dp"
+        android:text="去微信粘貼給好友"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:background="@drawable/blue_button">
+    </TextView>
+</LinearLayout>

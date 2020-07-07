@@ -21,9 +21,9 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
 
-        versionCode 159
+        versionCode 166
 
-        versionName "1.2.4.04"
+        versionName "1.2.4.05"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -118,7 +118,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.squareup.okhttp3:okhttp:3.12.6'
     implementation 'com.orhanobut:hawk:2.0.1'
-    implementation 'cn.snailpad:EasyJSON:1.0.22'
+    implementation 'cn.snailpad:EasyJSON:1.0.25'
     implementation 'com.alibaba:fastjson:1.2.41'
     implementation 'org.litepal.android:java:3.0.0'
 
@@ -262,6 +262,7 @@ dependencies {
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     implementation 'com.github.donkingliang:ImageSelector:1.9.2'
+<<<<<<< HEAD
 
 
 
@@ -283,6 +284,9 @@ dependencies {
     implementation 'io.github.iamyours:router-api:1.0.1'
 
 
+=======
+    implementation 'com.youth.banner:banner:2.0.12'
+>>>>>>> new_join_group2
 }
 repositories {
     mavenCentral()

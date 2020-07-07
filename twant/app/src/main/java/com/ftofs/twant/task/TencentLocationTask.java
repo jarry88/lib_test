@@ -15,6 +15,16 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 public class TencentLocationTask {
     public static void doLocation(Context context) {
+        doLocation(context, false);
+    }
+
+
+    /**
+     * 進行定位操作
+     * @param context
+     * @param showErrorMessage  如果沒有定位權限，是否顯示錯誤信息
+     */
+    public static void doLocation(Context context, boolean showErrorMessage) {
         SLog.info("doLocation");
         PermissionUtil.actionWithPermission(context, new String[] {Permission.ACCESS_COARSE_LOCATION, Permission.ACCESS_FINE_LOCATION}, "", new CommonCallback() {
             @Override
@@ -29,7 +39,10 @@ public class TencentLocationTask {
 
             @Override
             public String onFailure(@Nullable String data) {
-                ToastUtil.error(context, "您拒絕了授權，無法使用定位功能>_<");
+                SLog.info("您拒絕了授權，無法使用定位功能>_<");
+                if (showErrorMessage) {
+                    ToastUtil.error(context, "您拒絕了授權，無法使用定位功能>_<");
+                }
                 return null;
             }
         });
