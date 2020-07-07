@@ -91,44 +91,24 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
         sbVirtual.setButtonCheckedBlue();
         sbAcross.setButtonCheckedBlue();
         sbRetail.setOnClickListener(v -> {
-            sbRetail.setChecked(!sbRetail.isChecked());
-            if (sbRetail.isChecked()) {
-                goodsModal = 0;
-                sbVirtual.setChecked(false);
-                sbAcross.setChecked(false);
-            } else {
-                if (sbVirtual.isChecked() || sbAcross.isChecked()) {
-
-                } else {
-                    goodsModal = -1;
-                }
+            if (!sbRetail.isChecked()) {
+                tariffEnable = 0;
+                isVirtual = 0;
+                updateView();
             }
         });
         sbVirtual.setOnClickListener(v -> {
-            sbVirtual.setChecked(!sbVirtual.isChecked());
-            if (sbVirtual.isChecked()) {
-                goodsModal = 2;
-                sbRetail.setChecked(false);
-                sbAcross.setChecked(false);
-            }else {
-                if (sbRetail.isChecked() || sbAcross.isChecked()) {
-                } else {
-                    goodsModal = -1;
-                }
+            if (!sbVirtual.isChecked()) {
+                tariffEnable = 0;
+                isVirtual = 1;
+                updateView();
             }
         });
         sbAcross.setOnClickListener(v -> {
-            sbAcross.setChecked(!sbAcross.isChecked());
-
-            if (sbAcross.isChecked()) {
-                goodsModal = 1;
-                sbRetail.setChecked(false);
-                sbVirtual.setChecked(false);
-            }else {
-                if (sbRetail.isChecked() || sbVirtual.isChecked()) {
-                } else {
-                    goodsModal = -1;
-                }
+            if (!sbAcross.isChecked()) {
+                allowTariff = 1;
+                tariffEnable = 1;
+                updateView();
             }
         });
 //        sbRetail.performClick();
@@ -148,8 +128,8 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
     private void explainData() {
         try{
             SLog.info("%d",parent.allowTariff);
-            tariffEnable = parent.goodsVo.getInt("tariffEnable");
-            isVirtual = parent.goodsVo.getInt("isVirtual");
+            tariffEnable = parent.tariffEnable;
+            isVirtual = parent.isVirtual;
             unitName = parent.unitName;
             commonId = parent.commonId;
             allowTariff = parent.allowTariff;
@@ -160,27 +140,27 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
     }
 
     private void updateView() {
+        tvAddGoodUnit.setText(unitName);
         if (allowTariff != 1) {
             getView().findViewById(R.id.ll_across_container).setVisibility(View.GONE);
-        }
-        tvAddGoodUnit.setText(unitName);
-        if (isVirtual==1) {
-            goodsModal =2;
-            if (!sbVirtual.isChecked()) {
-                sbVirtual.performClick();
-            }
-        } else if (allowTariff==1&&tariffEnable == 1) {
-            goodsModal = 1;
-            if (!sbAcross.isChecked()) {
-                sbAcross.performClick();
-            }
-        }else {
-            goodsModal = 0;
-            if (!sbRetail.isChecked()) {
-                sbRetail.performClick();
-            }
+            withoutTariff();
+        } else if (tariffEnable == 1) {
+            goodsModal = 2;
+            sbRetail.setChecked(false);
+            sbVirtual.setChecked(false);
+            sbAcross.setChecked(true);
+        } else {
+            sbAcross.setChecked(false);
+            withoutTariff();
         }
     }
+
+    private void withoutTariff() {
+        goodsModal = isVirtual;
+        sbVirtual.setChecked(isVirtual == 1);
+        sbRetail.setChecked(isVirtual != 1);
+    }
+
     private void updateBasicView(EasyJSONObject data) throws Exception{
 
         EasyJSONArray unitListJson =data.getArray("unitList");
@@ -271,9 +251,7 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
                     if (contentView == null) {
                         return;
                     }
-
-                    parent.goodsVo = responseObj.getSafeObject("datas.GoodsVo");
-                    parent.allowTariff = responseObj.getInt("datas.allowTariff");
+                    parent.updateDataFromJson(responseObj);
                     explainData();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

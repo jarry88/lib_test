@@ -114,6 +114,7 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
             useFixedFreight = sbFixedTemple.isChecked();
         });
         sbFreightTemple.setOnClickListener(v -> {
+            boolean checked = sbFreightTemple.isChecked();
             if (!sbFreightTemple.isChecked()) {
                 sbFreightTemple.setChecked(true);
             }
@@ -257,7 +258,6 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
     private boolean checkFreightInfo() {
         try{
 
-            View view = getView();
             String freightText = fetFreight.getText()==null?"":fetFreight.getText().toString();
             if (useFixedFreight) {
                 if (StringUtil.isEmpty(freightText)) {

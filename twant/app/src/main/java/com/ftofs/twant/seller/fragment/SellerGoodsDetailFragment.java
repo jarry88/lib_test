@@ -46,6 +46,7 @@ import okhttp3.Call;
 public class SellerGoodsDetailFragment extends BaseFragment implements View.OnClickListener {
     public List<ListPopupItem> unitList = new ArrayList<>();
     public String unitName;
+    public String detailVideo;
 
     List<ListPopupItem> spinnerLogoItems = new ArrayList<>();
 
@@ -79,6 +80,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     private String goodsDetailVideoUrl;
     public String formatTopName;
     public String formatBottomName;
+    public int isVirtual;
+    public  int tariffEnable;
 
 
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
@@ -167,8 +170,9 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                         return;
                     }
 
-                     goodsVo = responseObj.getSafeObject("datas.GoodsVo");
-                    allowTariff = responseObj.getInt("datas.allowTariff");
+                    updateDataFromJson(responseObj);
+
+
                     ((TextView) contentView.findViewById(R.id.tv_spu_id)).setText(String.valueOf(commonId));
                     ((TextView) contentView.findViewById(R.id.tv_goods_name)).setText(goodsVo.getSafeString("goodsName"));
                     ImageView goodsImage = contentView.findViewById(R.id.goods_image);
@@ -176,7 +180,6 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
                     }
 
-                    int tariffEnable = goodsVo.getInt("tariffEnable");
                     SLog.info("tariffEnable__[%d]", tariffEnable);
                     contentView.findViewById(R.id.cross_border_indicator).setVisibility(tariffEnable == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
 
@@ -191,29 +194,22 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_goods_jingle)).setText(goodsVo.getSafeString("jingle"));
                     ((TextView) contentView.findViewById(R.id.tv_brand)).setText(goodsVo.getSafeString("brandName"));
                     ((TextView) contentView.findViewById(R.id.tv_brand_location)).setText(goodsVo.getSafeString("goodsCountryName"));
-                    formatTopName=goodsVo.getSafeString("formatTopName");
-                    formatBottomName=goodsVo.getSafeString("formatBottomName");
                     ((TextView) contentView.findViewById(R.id.tv_top_name)).setText(formatTopName);
                     ((TextView) contentView.findViewById(R.id.tv_bottom_name)).setText(formatBottomName);
-                    storeLabelNames = goodsVo.getSafeString("storeLabelNames");
                     ((TextView) contentView.findViewById(R.id.tv_goods_category_in_store)).setText(storeLabelNames);
-                    unitName = goodsVo.getSafeString("unitName");
                     ((TextView) contentView.findViewById(R.id.tv_unit)).setText(unitName);
 
-                    int isVirtual = goodsVo.getInt("isVirtual");
-                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(isVirtual == Constant.TRUE_INT ? "虛擬商品" : "零售商品");
+                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(allowTariff == Constant.TRUE_INT ?
+                            (tariffEnable== Constant.TRUE_INT?"跨城購商品":(isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品")):
+                            (isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品"));
 
                     explainFreight();
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
-                    joinBigSale = goodsVo.getInt("joinBigSale");
                     ((TextView) contentView.findViewById(R.id.tv_goods_participate_bargain)).setText(joinBigSale==1?"是":"否");
 
-                    specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
                     updateGoodsSpecView();
 
-                    goodsVideoUrl = goodsVo.getSafeString("goodsVideo");
-                    goodsDetailVideoUrl = goodsVo.getSafeString("detailVideo");
                     if (!StringUtil.isEmpty(goodsVideoUrl)) {
                         tvGoodsVideoUrl.setText(Html.fromHtml("<u>" + goodsVideoUrl + "</u>"));
                         tvGoodsVideoUrl.setOnClickListener(SellerGoodsDetailFragment.this);
@@ -222,7 +218,6 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                         tvGoodsDetailVideoUrl.setOnClickListener(SellerGoodsDetailFragment.this);
                     }
 
-                    mobileBodyVoList = goodsVo.getArray("mobileBodyVoList");
                     btnViewGoodsDetail.setOnClickListener(SellerGoodsDetailFragment.this);
 
                 } catch (Exception e) {
@@ -230,6 +225,26 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                 }
             }
         });
+    }
+
+    public void updateDataFromJson(EasyJSONObject responseObj) throws Exception{
+
+        goodsVo = responseObj.getSafeObject("datas.GoodsVo");
+        allowTariff = responseObj.getInt("datas.allowTariff");
+        tariffEnable = goodsVo.getInt("tariffEnable");
+
+        detailVideo=goodsVo.getSafeString("detailVideo");
+        formatTopName=goodsVo.getSafeString("formatTopName");
+        formatBottomName=goodsVo.getSafeString("formatBottomName");
+        storeLabelNames = goodsVo.getSafeString("storeLabelNames");
+        unitName = goodsVo.getSafeString("unitName");
+        isVirtual = goodsVo.getInt("isVirtual");
+        joinBigSale = goodsVo.getInt("joinBigSale");
+        specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
+
+        goodsVideoUrl = goodsVo.getSafeString("goodsVideo");
+        goodsDetailVideoUrl = goodsVo.getSafeString("detailVideo");
+        mobileBodyVoList = goodsVo.getArray("mobileBodyVoList");
     }
 
     public void explainFreight() throws Exception{

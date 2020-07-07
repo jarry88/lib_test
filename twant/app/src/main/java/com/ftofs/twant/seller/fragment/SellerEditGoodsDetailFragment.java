@@ -124,6 +124,9 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
             if (!StringUtil.isEmpty(parent.formatTopName)) {
                 tvFormatTop.setText(parent.formatTopName);
             }
+            if (!StringUtil.isEmpty(parent.detailVideo)) {
+                etVideos.setText(parent.detailVideo);
+            }
 //            storeLabelIdList = parent.storeLabelIdList;
             updateView();
         }catch (Exception e) {
