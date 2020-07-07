@@ -403,7 +403,7 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             selectCategoryList = (List<Category>) extra;
             Category categoryLast = new Category();
             StringBuilder selectCategoryName = new StringBuilder();
-            
+
             for (Category category : selectCategoryList) {
                 categoryLast = category;
                 selectCategoryName.append(category.getCategoryName()).append(" -- ");

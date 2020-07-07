@@ -1218,7 +1218,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             mAddrItem = new AddrItem(addressId, realName, areaIdList, areaId, areaInfo, address, mobileAreaCode, mobPhone, isDefault);
                             updateAddrView();
                             break;
-                        }
+                            }
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

@@ -148,7 +148,7 @@ public class NativeJsBridge {
 //            url = url + "#/20191226/index";
 //            SLog.info("url[%s]",url);
 
-            Util.startFragment(H5GameFragment.newInstance(url, true, true, title));
+            Util.startFragment(H5GameFragment.newInstance(url, true, true, title, H5GameFragment.ARTICLE_ID_INVALID));
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }

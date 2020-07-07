@@ -1475,6 +1475,7 @@ public class Api {
     public static final String PATH_CHANNEL_UPDATE = "/app/android/channel";
 
     /**
+<<<<<<< HEAD
      * 【賣家】添加規格信息
      */
     public static final String PATH_SELLER_ADD_SPEC = "/member/seller/spec/save.json";
@@ -1497,6 +1498,12 @@ public class Api {
      * 查詢商品規格、SKU、圖片信息（編輯商品SKU頁需用到）
      */
     public static final String PATH_SELLER_GET_SKU_INFO = "/member/seller/goods/skuAndSpec";
+
+    /**
+     * 服務協議和隱私協議
+     */
+    public static final String PATH_ARTICLE_DETAIL = "/article/info_h5";
+
 
     /**
      * 商品分享口令生成

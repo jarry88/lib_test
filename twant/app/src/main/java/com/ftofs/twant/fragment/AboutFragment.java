@@ -106,7 +106,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         } else if (id == R.id.btn_check_update) {
             ((MainActivity) _mActivity).checkUpdate(true);
         } else if (id == R.id.btn_goto_rate) {
-            Util.gotoGooglePlay(_mActivity);
+            Util.gotoAppStore(_mActivity, BuildConfig.FLAVOR);
         }
     }
 }
