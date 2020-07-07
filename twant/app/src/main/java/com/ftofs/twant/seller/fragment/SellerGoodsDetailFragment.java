@@ -82,7 +82,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     public String formatBottomName;
     public int isVirtual;
     public  int tariffEnable;
-    private int goodsState;
+    public int goodsState;
+    public int limitBuy;
 
 
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
@@ -249,6 +250,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         mobileBodyVoList = goodsVo.getArray("mobileBodyVoList");
         explainFreight();
         goodsState = goodsVo.getInt("goodsState");
+        limitBuy = goodsVo.getInt("limitBuy");
 
     }
 

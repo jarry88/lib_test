@@ -4,7 +4,9 @@ import android.app.ActionBar;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.TwDate;
 import com.ftofs.twant.seller.widget.CalendarPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -175,13 +178,14 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
         tvBeginDate.setOnClickListener((view1)->{
             if (pvTime != null) {
                 isBiginDate = true;
-                pvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
+                pvTime.setDate(Jarbon.toCalender(limitBuyStartTime));
+                pvTime.show();//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
             }
         });
         tvEndDate.setOnClickListener((view1)->{
             if (pvTime != null) {
                 isBiginDate = false;
-
+                pvTime.setDate(Jarbon.toCalender(limitBuyEndTime));
                 pvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
             }
         });
@@ -227,7 +231,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
     private void explainData() {
         try{
             joinBigSale = parent.joinBigSale;
-            limitBuy = parent.goodsVo.getInt("limitBuy");
+            limitBuy = parent.limitBuy;
             limitBuyStartTime = parent.goodsVo.getSafeString("limitBuyStartTime");
             limitBuyEndTime = parent.goodsVo.getSafeString("limitBuyEndTime");
             updateView();
@@ -284,10 +288,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
                         return;
                     }
 
-                    EasyJSONObject goodsVo = responseObj.getSafeObject("datas.GoodsVo");
-                    parent.goodsVo = goodsVo;
-                    parent.commonId = goodsVo.getInt("commonId");
-                    parent.joinBigSale = goodsVo.getInt("joinBigSale");
+                    parent.updateDataFromJson(responseObj);
                     explainData();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
