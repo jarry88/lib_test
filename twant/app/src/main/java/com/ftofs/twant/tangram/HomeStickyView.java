@@ -172,7 +172,6 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-
             Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13425038570", 10));
         }
     }
