@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SimpleViewPagerAdapter;
 import com.ftofs.twant.entity.ElemeGroupedItem;
+import com.ftofs.twant.log.SLog;
 import com.google.gson.Gson;
 import com.kunminx.linkage.LinkageRecyclerView;
 import com.kunminx.linkage.adapter.viewholder.LinkagePrimaryViewHolder;
@@ -55,6 +56,13 @@ public class BlackTestFragment extends BaseFragment{
         viewpager.setAdapter(new SimpleViewPagerAdapter(_mActivity,null));
 
         initLinkageDatas(linkage);
+        TextView tvTitle = view.findViewById(R.id.tvTitle);
+        tvTitle.setOnClickListener((v -> {
+            v.postDelayed(() -> {
+                SLog.info("C");
+                pop();}, 30);
+        }));
+        tvTitle.performClick();
 
 
     }

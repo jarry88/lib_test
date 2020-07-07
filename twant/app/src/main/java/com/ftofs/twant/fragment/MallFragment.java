@@ -97,7 +97,8 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
         Util.setOnClickListener(view, R.id.btn_my_express, this);
         Util.setOnClickListener(view, R.id.btn_my_store_coupon, this);
-        Util.setOnClickListener(view, R.id.btn_my_footprint, this);
+        //我的足迹隐藏
+//        Util.setOnClickListener(view, R.id.btn_my_footprint, this);
         Util.setOnClickListener(view, R.id.btn_wallet, this);
         Util.setOnClickListener(view, R.id.btn_my_bonus, this);
         Util.setOnClickListener(view, R.id.btn_my_trust_value, this);
@@ -194,9 +195,9 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 Util.startFragment(CouponFragment.newInstance());
                 break;
 
-            case R.id.btn_my_footprint:
-                Util.startFragment(FootprintFragment.newInstance());
-                break;
+//            case R.id.btn_my_footprint:
+//                Util.startFragment(FootprintFragment.newInstance());
+//                break;
 
             case R.id.btn_wallet:
                 startWantPayWallet();

@@ -49,6 +49,8 @@
                         android:paddingRight="8dp"
                         android:paddingTop="2dp"
                         android:paddingBottom="2dp"
+                        android:layout_marginEnd="8dp"
+
                         android:text="零售"
                         android:textColor="#5AA1D8"
                         android:textSize="12sp"
@@ -63,7 +65,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
 
-                        android:layout_marginStart="8dp"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="2dp"
@@ -159,7 +160,7 @@
                         android:scaleType="fitXY"
                         android:textColor="@color/tw_text_dark"
                         android:textSize="13sp"
-                        android:src="@{vo.isCommend==2?@drawable/icon_add_blue:@drawable/ic_blue_mium}">
+                        android:src="@{vo.isCommend==2?@drawable/ic_blue_add_circle_outline_24:@drawable/ic_blue_remove_circle_outline_24}">
                     </ImageView>
                 </RelativeLayout>
             </LinearLayout>

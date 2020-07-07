@@ -86,16 +86,11 @@ public class Goods implements MultiItemEntity {
 
 
         Goods goods1=new Goods(commonId,goodsImage,goodsName,jingle,price);
-<<<<<<< HEAD
-        goods1.appPriceMin = price;
-        if (appUsable > 0) {
-=======
         if (goods.exists("promotionType")) {
             goods1.promotionType = goods.getInt("promotionType");
         }
 
         if (appUsable > 0 && goods1.promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
->>>>>>> release
             goods1.showDiscount = true;
             goods1.batchPrice0 = batchPrice0;
             goods1.appUsabe = appUsable;

@@ -46,13 +46,10 @@ public enum CustomAction {
 
     CUSTOM_ACTION_SELLER_EDIT_SPEC,
 
-
-
     /**
      * 選擇拼團
      */
     CUSTOM_ACTION_SELECT_JOIN_GROUP,
-
 }
 
 

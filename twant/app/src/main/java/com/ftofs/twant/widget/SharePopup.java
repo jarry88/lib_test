@@ -310,16 +310,14 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             }))
                     .show();
         } else if (id == R.id.btn_share_to_takewant_circle) { // 分享到想要圈
-<<<<<<< HEAD
             if (isFastClick()) {
                 return;
             }
 
-=======
             if (data == null || !(data instanceof EasyJSONObject)) {
                 return;
             }
->>>>>>> release
+
             EasyJSONObject dataObj = (EasyJSONObject) data;
             ApiUtil.addPost(getContext(),false,dataObj);
 //            Util.startFragment(AddPostFragment.newInstance(dataObj, false));
