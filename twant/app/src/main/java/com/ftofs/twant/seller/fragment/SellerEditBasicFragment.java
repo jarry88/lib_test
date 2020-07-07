@@ -72,6 +72,7 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
     private int categoryId2;
     private int categoryId3;
     private List<ListPopupItem> spinnerLogoItems;
+    private String brandName;
 
     public static SellerEditBasicFragment newInstance(SellerGoodsDetailFragment parent) {
         SellerEditBasicFragment fragment= new SellerEditBasicFragment();
@@ -131,6 +132,7 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
         try{
             commonId = parent.commonId;
             brandId = parent.goodsVo.getInt("brandId");
+            brandName = parent.goodsVo.getSafeString("brandName");
             String brandName = parent.goodsVo.getSafeString("brandName");
             if (!StringUtil.isEmpty(brandName)) {
                 tvAddGoodLogo.setText(brandName);
@@ -147,6 +149,9 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
                 tvAddGoodLogo.setText(brandName);
             }
             tvCategoryId.setText(parent.goodsVo.getSafeString("categoryNames"));
+            if (!StringUtil.isEmpty(brandName)) {
+                tvAddGoodLogo.setText(brandName);
+            }
             categoryId = parent.goodsVo.getInt("categoryId");
             clearCategory();
             categoryId1 = parent.goodsVo.getInt("categoryId1");

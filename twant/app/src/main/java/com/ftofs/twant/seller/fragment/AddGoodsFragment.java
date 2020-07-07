@@ -171,6 +171,7 @@ public class AddGoodsFragment extends BaseFragment
     private TextView tvEndDate;
     private TimePickerView pvTime;
     private boolean isBiginDate;
+    private LinearLayout llNoticeContainer;
 
     public static AddGoodsFragment newInstance() {
 
@@ -245,7 +246,6 @@ public class AddGoodsFragment extends BaseFragment
 //    }
 
     private void hideAddGuide() {
-        Hawk.put(SPField.SELLER_ADD_GUIDE_HIDE, sbNotice.isChecked());
         getView().findViewById(R.id.rl_guide_container).setVisibility(View.GONE);
         getView().findViewById(R.id.vp_seller_good_add).setVisibility(View.VISIBLE);
         vpAddGood.setCurrentItem(0);
@@ -265,6 +265,7 @@ public class AddGoodsFragment extends BaseFragment
         rlDetailBody = (RelativeLayout) view.findViewById(R.id.rl_detail_body);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         sbNotice = (ScaledButton) view.findViewById(R.id.sb_check_notice);
+        llNoticeContainer =  view.findViewById(R.id.ll_notice);
         vpAddGood = (NoScrollViewPager) view.findViewById(R.id.vp_seller_good_add);
         view.findViewById(R.id.sb_check_notice).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,12 +309,16 @@ public class AddGoodsFragment extends BaseFragment
         storeLabelIdList = new EasyJSONArray();
         publishGoodsInfo = new EasyJSONObject();
         sbNotice.setButtonCheckedBlue();
-        sbNotice.setChecked(Hawk.get(SPField.SELLER_ADD_GUIDE_HIDE, false));
-        if (sbNotice.isChecked()) {
-            hideAddGuide();
-        }
-        sbNotice.setIconResource(R.drawable.icon_cart_item_unchecked);
-        sbNotice.setChecked(false);
+        boolean hideNotice = Hawk.get(SPField.SELLER_ADD_GUIDE_HIDE, false);
+        SLog.info("%s",hideNotice);
+        sbNotice.setChecked(hideNotice);
+//        if (sbNotice.isChecked()) {
+//            hideAddGuide();
+//        }
+        sbNotice.setOnClickListener((v)->{
+            SLog.info("%s",sbNotice.isChecked());
+            Hawk.put(SPField.SELLER_ADD_GUIDE_HIDE, sbNotice.isChecked());
+        });
         mViews.add(primaryView());
         mViews.add(basicView());
         mViews.add(specView());

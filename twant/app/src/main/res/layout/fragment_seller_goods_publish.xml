@@ -55,17 +55,17 @@
                 android:textSize="16sp"/>
 
             <LinearLayout
-                android:visibility="gone"
-                android:layout_below="@id/tv_notice"
+                android:id="@+id/ll_notice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:gravity="center"
+                android:paddingEnd="@dimen/dp_10">
 
                 <com.ftofs.twant.widget.ScaledButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="26dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/sb_check_notice"
-                    app:icon_src="@drawable/icon_image_un_select"/>
+                    app:icon_src="@drawable/icon_image_un_select" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
