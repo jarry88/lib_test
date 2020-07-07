@@ -133,7 +133,6 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             commonId = parent.commonId;
             brandId = parent.goodsVo.getInt("brandId");
             brandName = parent.goodsVo.getSafeString("brandName");
-            String brandName = parent.goodsVo.getSafeString("brandName");
             if (!StringUtil.isEmpty(brandName)) {
                 tvAddGoodLogo.setText(brandName);
             }
@@ -145,13 +144,9 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
 
             etName.setText(parent.goodsVo.getString("goodsName"));
             etJingle.setText(parent.goodsVo.getString("jingle"));
-            if (!StringUtil.isEmpty(brandName)) {
-                tvAddGoodLogo.setText(brandName);
-            }
+
             tvCategoryId.setText(parent.goodsVo.getSafeString("categoryNames"));
-            if (!StringUtil.isEmpty(brandName)) {
-                tvAddGoodLogo.setText(brandName);
-            }
+
             categoryId = parent.goodsVo.getInt("categoryId");
             clearCategory();
             categoryId1 = parent.goodsVo.getInt("categoryId1");
@@ -419,6 +414,11 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
                     categoryId = categoryLast.getCategoryId();
 
             }
+
+              TextView tvLogo = getView().findViewById(R.id.tv_add_good_logo);
+              tvLogo.setText("");
+              logoIndex = 0;
+              brandId = 0;
              updateLogoInfo();
 
 
@@ -439,10 +439,6 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
           }
     }
     private void updateLogoInfo() {
-        TextView tvLogo = getView().findViewById(R.id.tv_add_good_logo);
-        tvLogo.setText("");
-        logoIndex = 0;
-        brandId = 0;
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "categoryId", categoryId);
         SLog.info("params[%s]", params);
         Api.getUI(Api.PATH_SELLER_QUERY_BIND_BRANDS, params, new UICallback() {

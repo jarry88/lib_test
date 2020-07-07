@@ -312,12 +312,14 @@ public class AddGoodsFragment extends BaseFragment
         boolean hideNotice = Hawk.get(SPField.SELLER_ADD_GUIDE_HIDE, false);
         SLog.info("%s",hideNotice);
         sbNotice.setChecked(hideNotice);
-//        if (sbNotice.isChecked()) {
-//            hideAddGuide();
-//        }
+        if (hideNotice) {
+            hideAddGuide();
+        }
         sbNotice.setOnClickListener((v)->{
+            boolean hide=Hawk.get(SPField.SELLER_ADD_GUIDE_HIDE, false);
+            sbNotice.setChecked(!hide);
             SLog.info("%s",sbNotice.isChecked());
-            Hawk.put(SPField.SELLER_ADD_GUIDE_HIDE, sbNotice.isChecked());
+            Hawk.put(SPField.SELLER_ADD_GUIDE_HIDE, !hide);
         });
         mViews.add(primaryView());
         mViews.add(basicView());
