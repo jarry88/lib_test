@@ -84,7 +84,7 @@ public class ViewMoreGroupPopup extends CenterPopupView implements View.OnClickL
 
                     if (simpleCallback != null) {
                         CustomActionData customActionData = new CustomActionData();
-                        customActionData.action = CustomAction.CUSTOM_ACTION_SELECT_JOIN_GROUP;
+                        customActionData.action = CustomAction.CUSTOM_ACTION_SELECT_JOIN_GROUP.ordinal();
                         customActionData.data = EasyJSONObject.generate(
                                 "goId", goId
                         );
