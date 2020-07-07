@@ -19,6 +19,7 @@ import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PermissionUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
@@ -109,17 +110,7 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
             通过配置Flavors和自定义buildConfigField进行多个服务器地址打包
             https://blog.csdn.net/qxf5777404/article/details/51580431
              */
-
-            if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_GOOGLE)) {
-                // 跳轉到Google Play
-                Util.gotoGooglePlay(activity);
-            } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_TENCENT)) {
-                // 跳轉到應用寶
-                Util.gotoQqDownloader(activity);
-            } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_HUAWEI)) {
-                // 跳轉到應用寶
-                Util.gotoQqDownloader(activity);
-            } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_OFFICIAL)) {
+            if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_OFFICIAL)) { // 官網渠道特殊處理
                 PermissionUtil.actionWithPermission(getContext(), new String[] {Permission.WRITE_EXTERNAL_STORAGE,
                         Permission.READ_EXTERNAL_STORAGE}, "下載升級包需要授予", new CommonCallback() {
 
@@ -135,6 +126,8 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
                         return null;
                     }
                 });
+            } else {
+                Util.gotoAppStore(activity, BuildConfig.FLAVOR);
             }
         }
 
@@ -145,10 +138,7 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
 
     private void downloadApk() {
         SLog.info("flavor[%s]", BuildConfig.FLAVOR);
-        if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_GOOGLE)) {
-            // 跳轉到Google Play
-            Util.gotoGooglePlay(activity);
-        } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_OFFICIAL)) {
+        if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_OFFICIAL)) {
             Uri uri = Uri.parse("https://www.twant.com/web/app-download.html");
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             MainActivity mainActivity = MainActivity.getInstance();

@@ -289,6 +289,8 @@ public class Constant {
     public static final String FLAVOR_OFFICIAL = "official";
     public static final String FLAVOR_TENCENT = "tencent";
     public static final String FLAVOR_HUAWEI = "huawei";
+    public static final String FLAVOR_XIAOMI = "xiaomi";
+
 
     /**
      * 微信授權的用途

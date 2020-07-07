@@ -264,7 +264,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
             SLog.info("打开URL[%s]", url);
             if (StringUtil.isUrlString(url)) {
                 if (h5 == null) {
-                    h5 = H5GameFragment.newInstance(url, true, true, null);
+                    h5 = H5GameFragment.newInstance(url, true, true, null, H5GameFragment.ARTICLE_ID_INVALID);
                 }
                 Util.startFragment(h5);
             } else {
