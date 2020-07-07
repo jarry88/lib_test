@@ -50,7 +50,12 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
     EditText etPassword;
     EditText etConfirmPassword;
     EditText etNickname;
+    EditText etPromotionCode;
     private TextView btnRegister;
+
+    ImageView icPromotionCodeVisibility;
+    View rlPromotionCodeContainer;
+    boolean promotionCodeVisible = false;  // 推薦碼是否處於可見狀態
 
     /**
      *
@@ -164,6 +169,10 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                 updateBtnRegister();
             }
         });
+        etPromotionCode = view.findViewById(R.id.et_promotion_code);
+        icPromotionCodeVisibility = view.findViewById(R.id.ic_promotion_code_visibility);
+        rlPromotionCodeContainer = view.findViewById(R.id.rl_promotion_code_container);
+        Util.setOnClickListener(view, R.id.btn_switch_promotion_code_visibility, this);
     }
 
     private void updateBtnRegister() {
@@ -195,6 +204,10 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
         int id = v.getId();
         if (id == R.id.btn_back) {
             hideSoftInputPop();
+        } else if (id == R.id.btn_switch_promotion_code_visibility) {
+            promotionCodeVisible = !promotionCodeVisible;
+            icPromotionCodeVisibility.setImageResource(promotionCodeVisible ? R.drawable.ic_baseline_arrow_drop_up_24 : R.drawable.ic_baseline_arrow_drop_down_24);
+            rlPromotionCodeContainer.setVisibility(promotionCodeVisible ? View.VISIBLE : View.GONE);
         } else if (id == R.id.btn_register) {
             if (Config.PROD) {
                 MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.REGISTER);
@@ -234,14 +247,30 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
             }
 
             SLog.info("mobile[%s]", fullMobile);
-
-            Api.postUI(Api.PATH_MOBILE_REGISTER, EasyJSONObject.generate(
+            EasyJSONObject params = EasyJSONObject.generate(
                     "mobile", fullMobile,
                     "smsAuthCode", smsCode,
                     "memberPwd", password,
                     "memberPwdRepeat", confirmPassword,
                     "clientType", Constant.CLIENT_TYPE_ANDROID,
-                    "nickName", nickname), new UICallback() {
+                    "nickName", nickname);
+
+            // 拼湊推薦碼和uuid
+            String promotionCode = etPromotionCode.getText().toString().trim();
+            if (!StringUtil.isEmpty(promotionCode)) {
+                String uuid = Util.getUUID();
+                if (!StringUtil.isEmpty(uuid)) {
+                    try {
+                        params.set("recommendNumber", promotionCode);
+                        params.set("clientUuid", uuid);
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            }
+
+            SLog.info("url[%s], params[%s]", Api.PATH_MOBILE_REGISTER, params);
+            Api.postUI(Api.PATH_MOBILE_REGISTER, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);

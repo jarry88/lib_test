@@ -1498,6 +1498,23 @@ public class Api {
      */
     public static final String PATH_SELLER_GET_SKU_INFO = "/member/seller/goods/skuAndSpec";
 
+    /**
+     * 商品分享口令生成
+     */
+    public static final String PATH_GOODS_CREATE_WORD = "/app/command/create";
+
+
+    /**
+     * 商品開團列表
+     */
+    public static final String PATH_GROUP_LIST = "/app/goods/group/list";
+
+
+    /**
+     * 店鋪首頁渠道推廣統計
+     */
+    public static final String PATH_STORE_PROMOTION_STATS = "/store/home/record";
+
 
     /**
      * 發送Http請求
@@ -1518,7 +1535,7 @@ public class Api {
         } else {
             url = API_BASE_URL + path;
         }
-        SLog.info("url[%s]", url);
+        SLog.info("%s url[%s]", method == METHOD_GET ? "GET" : "POST", url);
         Request request = null;
 
         if (method == METHOD_GET) {

@@ -180,6 +180,75 @@
     </RelativeLayout>
 
 
+    <!-- 推荐码 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="@dimen/toolbar_margin_left"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <LinearLayout
+            android:id="@+id/btn_switch_promotion_code_visibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我有推薦碼"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black">
+
+            </TextView>
+            <ImageView
+                android:id="@+id/ic_promotion_code_visibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_arrow_drop_down_24">
+
+            </ImageView>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_promotion_code_container"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/border_type_d"
+            android:visibility="gone">
+            <ImageView
+                android:layout_marginStart="@dimen/length_15dp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_pen"
+                />
+
+            <EditText
+                android:id="@+id/et_promotion_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="41dp"
+                android:background="@null"
+                android:textColor="@color/tw_black"
+                android:textColorHint="@color/tw_grey"
+                android:hint="請輸入您的推薦碼"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:textSize="15sp"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -190,7 +259,7 @@
             android:layout_height="44dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="15dp"
 
             android:background="@drawable/grey_button"
             android:text="@string/text_register_now"

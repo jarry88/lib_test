@@ -94,6 +94,18 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
     int isFromCart;
     int isGroup;
+    int goId; // 開團Id
+
+    // 是否不需要再支付（比如，买1元的商品，用1元的代金抵扣）
+    int isPayed = Constant.FALSE_INT;
+
+    /*
+        /buy/step2
+            或
+        /buy/take/save
+        接口返回的payId
+     */
+    int finalPayId = 0;
 
     List<PayWayItem> payWayItemList = new ArrayList<>();
     List<ListPopupItem> shippingItemList = new ArrayList<>();
@@ -120,6 +132,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     ConfirmOrderStoreAdapter adapter;
     List<MultiItemEntity> confirmOrderItemList = new ArrayList<>();
 
+    // 当前选中的支付方式代码
+    String currPaymentTypeCode = Constant.PAYMENT_TYPE_CODE_ONLINE;
     String currencyTypeSign;
     int totalItemCount; // 整個訂單的總件數： 如果sku1有2件，sku2有3件，那么總件數就是5
     String textConfirmOrderTotalItemCount;
@@ -165,7 +179,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * @param isGroup 是否為團購  1 -- 是   0 -- 否
      * @return
      */
-    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup) {
+    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup, int goId) {
         Bundle args = new Bundle();
 
         args.putInt("isFromCart", isFromCart);
@@ -174,14 +188,15 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         ConfirmOrderFragment fragment = new ConfirmOrderFragment();
         fragment.setArguments(args);
         fragment.isGroup = isGroup;
-        SLog.info("isGroup[%d]", isGroup);
+        fragment.goId = goId;
+        SLog.info("isGroup[%d], goId[%d]", isGroup, goId);
 
         return fragment;
     }
 
 
     public static ConfirmOrderFragment newInstance(int isFromCart, String buyData) {
-        return newInstance(isFromCart, buyData, Constant.FALSE_INT);
+        return newInstance(isFromCart, buyData, Constant.FALSE_INT, Constant.INVALID_GO_ID);
     }
 
 
@@ -397,6 +412,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
             if (isGroup == Constant.TRUE_INT) {
                 commitBuyData.set("isGroup", 1);
+            }
+
+            if (goId != Constant.INVALID_GO_ID) {
+                commitBuyData.set("goId", goId);
             }
 
             if (platformCouponIndex != -1) { // 如果有選擇平台券
@@ -615,9 +634,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 }
 
                 String path;
-                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) {
+                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) { // 门店自提
                     path = Api.PATH_SELF_TAKE;
-                } else {
+                } else { // 直接购买
                     path = Api.PATH_COMMIT_BILL_DATA;
                 }
                 SLog.info("url[%s],params[%s]",path,params.toString());
@@ -654,23 +673,33 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                             .show();
                                     return;
                                 } else {
-                                    pop();
+                                    hideSoftInputPop();
                                 }
-                                int payId = responseObj.getInt("datas.payId");
-                                start(PayVendorFragment.newInstance(payId, totalPrice, 0));
+                                finalPayId = responseObj.getInt("datas.payId");
+                                isPayed = responseObj.getInt("datas.isPayed");
+
+                                SLog.info("isPayed[%d], finalPayId[%d]", isPayed, finalPayId);
+                                if (isPayed == Constant.TRUE_INT && finalPayId > 0) { // 不需要再支付，直接显示支付成功页面
+                                    SLog.info("不需要再支付，直接显示支付成功页面");
+                                    hideSoftInputPop();
+                                    Util.startFragment(PaySuccessFragment.newInstance(finalPayId));
+
+                                    return;
+                                }
+
+                                start(PayVendorFragment.newInstance(finalPayId, totalPrice, 0));
                             } catch (Exception e) {
                                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                             }
-                        } else {
-                            int payId = 0;
+                        } else { // 货到付款
                             try {
-                                payId = responseObj.getInt("datas.payId");
+                                finalPayId = responseObj.getInt("datas.payId");
                             } catch (Exception e) {
                                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                             }
-                            SLog.info("payId[%d]", payId);
+                            SLog.info("finalPayId[%d]", finalPayId);
                             pop();
-                            Util.startFragment(PaySuccessFragment.newInstance(payId, true));
+                            Util.startFragment(PaySuccessFragment.newInstance(finalPayId, true));
 
                             ToastUtil.success(_mActivity, "訂單提交成功");
 
@@ -744,7 +773,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             mAddrItem = addrItem;
             checkPayWay();
 //            loadOrderData();
-//            updateTotalOrderData();
+            updateTotalOrderData();
             updateFreightTotalAmount();
         } else if (ReceiptInfoFragment.class.getName().equals(from)) {
             int position = data.getInt("position");
@@ -810,9 +839,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         };
 
         observable.subscribe(observer);
-
-
-
     }
 
     /**
@@ -834,7 +860,15 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             if (multiItemEntity.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
                 ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) multiItemEntity;
                 for (ConfirmOrderSkuItem skuItem : storeItem.confirmOrderSkuItemList) {
-                    currBuyData.append(EasyJSONObject.generate("buyNum", skuItem.buyNum, "goodsId", skuItem.goodsId,""));
+                    EasyJSONObject buyItem = EasyJSONObject.generate("buyNum", skuItem.buyNum, "goodsId", skuItem.goodsId);
+                    if (goId != Constant.INVALID_GO_ID) {
+                        try {
+                            buyItem.set("goId", goId);
+                        } catch (Exception e) {
+                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                        }
+                    }
+                    currBuyData.append(buyItem);
                 }
             }
         }
@@ -982,7 +1016,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             // 添加上汇总项目
             ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
             confirmOrderItemList.add(confirmOrderSummaryItem);
-            adapter.setNewData(confirmOrderItemList);
+            _mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.setNewData(confirmOrderItemList);
+                }
+            });
             return new Pair<>(true, "");
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1038,7 +1077,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * 更新地址信息的顯示
      */
     private void updateAddrView() {
-        if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(getSummaryItem().paymentTypeCode)) {
+        SLog.info("currPaymentTypeCode[%s]", currPaymentTypeCode);
+        if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(currPaymentTypeCode)) {
             btnChangeShippingAddress.setVisibility(View.GONE);
             btnChangeShippingAddress.setVisibility(View.GONE);
             llSelfFetchInfoContainer.setVisibility(View.VISIBLE);
@@ -1226,6 +1266,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void loadOrderData() {
+        SLog.info("xxyy");
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
         TaskObserver taskObserver = new TaskObserver() {
             @Override
@@ -1262,7 +1303,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     if (StringUtil.isEmpty(token)) {
                         return "用戶未登錄";
                     }
-
+                    SLog.info("xxyy");
                     // 整個訂單的總件數
                     totalItemCount = 0;
 
@@ -1272,6 +1313,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             "buyData", buyData,
                             "clientType", Constant.CLIENT_TYPE_ANDROID,
                             "isCart", isFromCart);
+                    if (isGroup == Constant.TRUE_INT) {
+                        params.set("isGroup", isGroup);
+                    }
                     SLog.info("params[%s]", params.toString());
                     String responseStr = Api.syncPost(Api.PATH_DISPLAY_BILL_DATA, params);
 
@@ -1283,7 +1327,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         }
                         return null;
                     }
-
+                    SLog.info("xxyy");
                     // 獲取配送時間列表
                     shippingItemList.clear();
 //                    tariffEnable = responseObj.getInt("datas.tariffEnable");
@@ -1298,7 +1342,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                     // 獲取商店券
                     confirmOrderItemList.clear();
-
+                    SLog.info("xxyy");
                     EasyJSONArray buyStoreVoList = responseObj.getSafeArray("datas.buyStoreVoList");
                     SLog.info("HERE storeSize[%d]",buyStoreVoList.length());
                     for (Object object : buyStoreVoList) {  // 遍歷每家商店
@@ -1318,8 +1362,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         voucherMap.put(storeId, storeVoucherVoList);
                         int conformId = -1;
                         // 获取满减优惠
+                        SLog.info("buyStoreVo[%s]", buyStoreVo);
                         if (buyStoreVo.exists("conform.conformId")) {
-                             conformId = buyStoreVo.getInt("conform.conformId");
+                            conformId = buyStoreVo.getInt("conform.conformId");
                             storeConformIdMap.put(storeId, conformId);
                         }
 
@@ -1414,7 +1459,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     // 添加上汇总项目
                     ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
                     confirmOrderItemList.add(confirmOrderSummaryItem);
-
+                    SLog.info("xxyy");
                     // 第2步：計算運費
                     // 收集地址信息
                     EasyJSONObject address = responseObj.getObject("datas.address");
@@ -1429,13 +1474,13 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             }
                         }
                     }
-
+                    SLog.info("xxyy");
                     // 第3步(請求參數與第2步相同) 計算最終結果
                     calcAmount();
 
                     // 請求平台券列表(請求參數與第2步相同)
                     getPlatformCoupon();
-
+                    SLog.info("xxyy");
                     confirmOrderSummaryItem.platformCouponCount = platformCouponList.size();
                     confirmOrderSummaryItem.platformCouponStatus = Util.getAvailableCouponCountDesc(confirmOrderSummaryItem.platformCouponCount);
                     SLog.info("confirmOrderSummaryItem.platformCouponCount[%d]", confirmOrderSummaryItem.platformCouponCount);
@@ -1464,10 +1509,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             template=getResources().getString(R.string.text_confirm_order_total_with_tax_item_count);
         }
         tvItemCount.setText(String.format(template, totalItemCount));
-        double totalPrice = summaryItem.calcTotalPrice();
-        tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,totalPrice,0,2));
-        Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, totalPrice);
-
+        if (summaryItem != null) {
+            double totalPrice = summaryItem.calcTotalPrice();
+            tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,totalPrice,0,2));
+            Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, totalPrice);
+        }
 
         // 更新每家商店的優惠額
         updateStoreAmount();
@@ -1685,6 +1731,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
 
             summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
+            currPaymentTypeCode = summaryItem.paymentTypeCode;
+            SLog.info("currPaymentTypeCode[%s]", currPaymentTypeCode);
             summaryItem.payWayIndex = payWay;
             SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
             adapter.notifyItemChanged(confirmOrderItemList.size() - 1);
@@ -1791,9 +1839,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      */
     private ConfirmOrderSummaryItem getSummaryItem() {
         int size = confirmOrderItemList.size();
+        SLog.info("__size[%d]", size);
         if (size < 1) {
             return null;
         }
+        SLog.info("__size[%d]", size);
         return (ConfirmOrderSummaryItem) confirmOrderItemList.get(size - 1);
     }
 

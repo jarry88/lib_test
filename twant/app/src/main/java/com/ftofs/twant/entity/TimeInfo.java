@@ -5,6 +5,7 @@ public class TimeInfo {
     public int hour;
     public int minute;
     public int second;
+    public int milliSecond;
 
 
     @Override
