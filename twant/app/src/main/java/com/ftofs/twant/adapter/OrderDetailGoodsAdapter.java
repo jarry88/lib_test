@@ -13,6 +13,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
     private Stream<View> btnViews;
     Context context;
     String timesSign;
+
+    String paymentTypeCode;
 
     /**
      * 構造方法
@@ -104,6 +107,17 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
                 btnViewComplaint.setVisibility(View.VISIBLE);
             }
         }
+
+        /*
+        貨到付款的訂單，「待發貨」、「待收貨」狀態，不顯示退款或退貨按鈕；
+         */
+        SLog.info("paymentTypeCode[%s], orderState[%d]", paymentTypeCode, itemData.orderState);
+        if (Constant.PAYMENT_TYPE_CODE_OFFLINE.equals(paymentTypeCode)
+                && (itemData.orderState == OrderState.TO_BE_SEND || itemData.orderState == OrderState.TO_BE_RECEIVE)) {
+            btnRefund.setVisibility(View.GONE);
+            btnReturn.setVisibility(View.GONE);
+        }
+
         btnViews = Stream.of(btnViewComplaint,btnComplain,btnReturn,btnRefundWaiting,btnRefundAll,btnRefund);
         AtomicInteger index=new AtomicInteger(0);
         btnViews.filter(view -> view.getVisibility()==View.VISIBLE).forEach(view->{
@@ -114,6 +128,10 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
             }
         });
 
+    }
+
+    public void setPaymentTypeCode(String paymentTypeCode) {
+        this.paymentTypeCode = paymentTypeCode;
     }
 }
 

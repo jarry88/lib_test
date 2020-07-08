@@ -797,6 +797,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         paymentTypeCode = ordersVo.getSafeString("paymentCode");
                     }
                     SLog.info("paymentTypeCode[%s]", paymentTypeCode);
+                    adapter.setPaymentTypeCode(paymentTypeCode);
 
                     storeId = ordersVo.getInt("storeId");
                     storeName = ordersVo.getSafeString("storeName");
