@@ -90,6 +90,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     String paySnStr;
     int payId;
     double ordersAmount = -1;
+    String paymentTypeCode; // 当前的支付方式
 
     int isGroup = Constant.FALSE_INT;
     int goId;
@@ -725,8 +726,17 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     if (tariffBuy == Constant.TRUE_INT) {
                         tariffAmount = ordersVo.getDouble("taxAmount");
                         rlTaxContainer.setVisibility(View.VISIBLE);
-
                     }
+
+                    // 读取paymentTypeCode
+                    if (ordersVo.exists("paymentTypeCode")) {
+                        paymentTypeCode = ordersVo.getSafeString("paymentTypeCode");
+                    }
+                    // 如果读不到，尝试读取paymentCode
+                    if (StringUtil.isEmpty(paymentTypeCode) && ordersVo.exists("paymentCode")) {
+                        paymentTypeCode = ordersVo.getSafeString("paymentCode");
+                    }
+                    SLog.info("paymentTypeCode[%s]", paymentTypeCode);
 
                     storeId = ordersVo.getInt("storeId");
                     storeName = ordersVo.getSafeString("storeName");
@@ -765,7 +775,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     double freightAmount = ordersVo.getDouble("freightAmount");
                     double itemAmount= ordersVo.getDouble("itemAmount");
                     double storeDiscountAmount=ordersVo.getDouble("storeDiscountAmount");
-                    double counponAmount=ordersVo.getDouble("couponAmount");
+                    double couponAmount=ordersVo.getDouble("couponAmount");
                     ordersAmount = ordersVo.getDouble("ordersAmount");
                     String shipTime = ordersVo.getSafeString("shipTime");
                     String finishTime=ordersVo.getSafeString("finishTime");
@@ -837,7 +847,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
                     tvGoodsAmount.setText(StringUtil.formatPrice(_mActivity, itemAmount, 1,2));
                     tvStoreWelfare.setText("-"+StringUtil.formatPrice(_mActivity, storeDiscountAmount, 1,2));
-                    tvPlatformWelfare.setText("-"+StringUtil.formatPrice(_mActivity, counponAmount, 1,2));
+                    tvPlatformWelfare.setText("-"+StringUtil.formatPrice(_mActivity, couponAmount, 1,2));
                     tvOrdersAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1,2));
                     tvShipDate.setText(shipTime);
                     tvOrdersSn.setText(String.valueOf(ordersSn));
