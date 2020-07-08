@@ -81,13 +81,12 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
 
                 if (itemData.orderState == OrderState.TO_BE_SEND) {
                     btnRefund.setVisibility(View.GONE);
-                    btnRefundAll.setVisibility(View.VISIBLE);
                     btnReturn.setVisibility(View.GONE);
                 } else if (itemData.orderState == OrderState.TO_BE_RECEIVE) {
                     btnRefund.setVisibility(View.VISIBLE);
-                    btnRefundAll.setVisibility(View.GONE);
                     btnReturn.setVisibility(View.VISIBLE);
                 }
+                btnRefundAll.setVisibility(itemData.showMemberRefundAll == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
             }
 
         } else if (itemData.refundType == 1) { // 查看退款

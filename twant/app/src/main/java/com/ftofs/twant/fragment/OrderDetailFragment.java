@@ -803,6 +803,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String ordersStateName = ordersVo.getSafeString("ordersStateName");
                     ordersState = ordersVo.getInt("ordersState");
                     showRefundWaiting = ordersVo.getInt("showRefundWaiting");
+
                     switch (ordersState) {
                         case OrderState.TO_BE_PAY:
                             iconOrderStatus.setImageResource(R.drawable.icon_wait_pay);
@@ -951,6 +952,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             continue;
                         }
                         if (ordersVo.getInt(buttonName) == 1) {
+                            SLog.info("__buttonName[%s]", buttonName);
                             showButtonNameList.add(buttonName);
                         }
                     }
@@ -1078,6 +1080,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     EasyJSONArray ordersGoodsVoList = ordersVo.getSafeArray("ordersGoodsVoList");
                     orderDetailGoodsItemList.clear();
 
+                    int showMemberRefundAll = ordersVo.getInt("showMemberRefundAll");
                     for (Object object : ordersGoodsVoList) {
                         EasyJSONObject goodsVo = (EasyJSONObject) object;
 
@@ -1087,10 +1090,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("ordersId"),
                                 ordersState,
                                 showRefundWaiting,
+                                showMemberRefundAll,
                                 goodsVo.getInt("ordersGoodsId"),
                                 goodsVo.getSafeString("imageSrc"),
                                 goodsVo.getSafeString("goodsName"),
-                                (float) goodsVo.getDouble("goodsPrice"),
+                                goodsVo.getDouble("goodsPrice"),
                                 goodsVo.getInt("buyNum"),
                                 goodsVo.getSafeString("goodsFullSpecs"),
                                 goodsVo.getInt("refundType"),
