@@ -521,8 +521,8 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
         String dataStr = (String) data;
         EasyJSONObject dataObj = EasyJSONObject.parse(dataStr);
         try {
-            String action = dataObj.getSafeString("action");
-            if (CustomAction.CUSTOM_ACTION_CLEAR_ALL_HISTORY.equals(action)) {
+            int action = dataObj.getInt("action");
+            if (CustomAction.CUSTOM_ACTION_CLEAR_ALL_HISTORY.ordinal() == action) {
                 loadSearchHistoryData();
             }
         } catch (Exception e) {

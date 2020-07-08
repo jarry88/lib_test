@@ -31,6 +31,7 @@ import com.ftofs.twant.fragment.ShopCustomerServiceFragment;
 import com.ftofs.twant.fragment.ShopHomeFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.fragment.SellerFeaturesFragment;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.XPopup;
@@ -78,6 +79,10 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
      * 貼文詳情頁
      */
     public static final int TYPE_POST_DETAIL = 8;
+    /**
+     * 商家商品管理頁
+     */
+    public static final int TYPE_SELLER_GOODS = 9;
 
 
     Context context;
@@ -139,6 +144,19 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_scan_qr_code);
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_add_friend);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_add_friend);
+        }else if (type == TYPE_SELLER_GOODS) {
+//            ((ImageView) findViewById(R.id.icon_item_1)).setImageResource(R.drawable.icon_black_menu_home);
+            ((TextView) findViewById(R.id.tv_item_1)).setText("商品管理");
+//            ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.icon_meun_bag);
+            ((TextView) findViewById(R.id.tv_item_2)).setText("商品發佈");
+//            ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_black_menu_my);
+            ((TextView) findViewById(R.id.tv_item_3)).setText("商品規格");
+//            ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_black_menu_message);
+            ((TextView) findViewById(R.id.tv_item_4)).setText("鎮店之寶");
+
+        } else if (type == TYPE_POST_DETAIL) {
+            ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_report);
+            ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_report);
         }else if (type == TYPE_CHAT) {
             ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.icon_goto_store_info);
             ((TextView) findViewById(R.id.tv_item_2)).setText(R.string.text_store_enc);
@@ -147,9 +165,6 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_enc_mini);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_goto_enc);
 
-        } else if (type == TYPE_POST_DETAIL) {
-            ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_report);
-            ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_report);
         }
 
         // 在這里可以做一些findViewById等查找控件，進行自定義操作
@@ -286,6 +301,8 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 baseFragment.popTo(MainFragment.class, false);
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.HOME_FRAGMENT);
                 break;
+            case TYPE_SELLER_GOODS:
+                //商品管理
             default:
                 break;
         }
@@ -392,6 +409,10 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 break;
             case TYPE_POST_DETAIL:
                 Util.startFragment(CommitFeedbackFragment.newInstance());
+                break;
+            case TYPE_SELLER_GOODS:
+                Util.startFragment(SellerFeaturesFragment.newInstance());
+                break;
             default:
                 break;
         }

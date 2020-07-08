@@ -42,6 +42,7 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
+import com.ftofs.twant.kotlin.testnet.TestNetFragment;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -83,6 +84,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         contentView.findViewById(R.id.btn_category_store).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_goods).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_brand).setOnClickListener(this);
+        contentView.findViewById(R.id.icon_takewant).setOnClickListener(this);
 
         tvStoreCount = contentView.findViewById(R.id.tv_store_count);
         tvGoodsCount = contentView.findViewById(R.id.tv_goods_count);
@@ -145,6 +147,12 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        if (Config.DEVELOPER_MODE) {
+            if (id == R.id.icon_takewant) {
+//                Util.startFragment(SellerFeaturesFragment.newInstance());
+                Util.startFragment(new TestNetFragment());
+            }
+        }
         if (id == R.id.btn_goto_activity) {
 //            gotoTestFragment();
             gotoActivity();
@@ -164,7 +172,6 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-
             Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13425038570", 10));
         }
     }

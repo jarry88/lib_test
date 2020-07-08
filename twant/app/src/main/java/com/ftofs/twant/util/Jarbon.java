@@ -2,6 +2,7 @@ package com.ftofs.twant.util;
 
 import com.ftofs.twant.log.SLog;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -401,5 +402,14 @@ public class Jarbon {
 
     public int getDayOfWeek() {
         return dayOfWeek;
+    }
+
+    public static Calendar toCalender(String timeStamp) {
+        Calendar calendar = Calendar.getInstance();
+        Jarbon jarbon = Jarbon.parse(timeStamp);
+        if (jarbon != null) {
+           calendar.set(jarbon.getYear(),jarbon.month,jarbon.day,jarbon.hour,jarbon.minute,jarbon.second);
+        }
+        return calendar;
     }
 }

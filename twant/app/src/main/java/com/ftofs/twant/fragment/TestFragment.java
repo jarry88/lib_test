@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -101,19 +102,20 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         mNotificationManager = (NotificationManager) _mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
         createNotificationChanel();
 
+
         Util.setOnClickListener(view,R.id.tv_28,this);
         Util.setOnClickListener(view,R.id.tv_29,this);
         Util.setOnClickListener(view,R.id.tv_prod,this);
         Util.setOnClickListener(view,R.id.btn_shoppingSession,this);
         Util.setOnClickListener(view,R.id.test_im,this);
 
-        token = User.getToken();
-        etToken = view.findViewById(R.id.et_token);
-        if (StringUtil.isEmpty(token)) {
-            etToken.setText("用户未登录");
-        } else {
-            etToken.setText(token);
-        }
+//        token = User.getToken();
+//        etToken = view.findViewById(R.id.et_token);
+//        if (StringUtil.isEmpty(token)) {
+//            etToken.setText("用户未登录");
+//        } else {
+//            etToken.setText(token);
+//        }
 
 
         etUrl = view.findViewById(R.id.et_url);

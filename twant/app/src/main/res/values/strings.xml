@@ -334,7 +334,7 @@
     <string name="text_share">分享</string>
     <string name="text_map">地圖</string>
     <string name="text_shop_comment">說說</string>
-    <string name="text_view_all">查看全部</string>
+    <string name="text_view_all">查看更多</string>
 
     <string name="text_wx_chat">微信好友</string>
     <string name="text_wx_timeline">微信朋友圈</string>
@@ -811,7 +811,11 @@
     <string name="text_refund_goods">退款商品</string>
     <string name="text_apply_time">申請時間</string>
 
+    <string name="total_stock_m">总库存：</string>
+    <string name="goods_sale_num_m">销量：</string>
+
     <!-- 用u标签添加下划线 -->
     <string name="text_sku_goods_list"><u>SKU商品列表</u></string>
     <string name="text_select">選擇</string>
+    <string name="text_sku_detail"><u>sku详情</u></string>
 </resources>

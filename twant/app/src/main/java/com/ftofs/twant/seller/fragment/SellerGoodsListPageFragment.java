@@ -150,7 +150,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                     ToastUtil.success(_mActivity, currTab == SellerGoodsListFragment.TAB_GOODS_IN_SALE ? "下架成功" : "上架成功");
                     if (simpleCallback != null) {
                         simpleCallback.onSimpleCall(EasyJSONObject.generate(
-                                "action", CustomAction.CUSTOM_ACTION_RELOAD_DATA
+                                "action", CustomAction.CUSTOM_ACTION_RELOAD_DATA.ordinal()
                         ));
                     }
                 } catch (Exception e) {
@@ -280,7 +280,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
 
                     if (simpleCallback != null) {
                         simpleCallback.onSimpleCall(EasyJSONObject.generate(
-                                "action", CustomAction.CUSTOM_ACTION_RELOAD_DATA
+                                "action", CustomAction.CUSTOM_ACTION_RELOAD_DATA.ordinal()
                         ));
                     }
                 } catch (Exception e) {
@@ -312,8 +312,8 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
     public void onSimpleCall(Object data) {
         EasyJSONObject dataObj = (EasyJSONObject) data;
         try {
-            String action = dataObj.getSafeString("action");
-            if (CustomAction.CUSTOM_ACTION_SELLER_DELETE_GOODS.equals(action)) {
+            int action = dataObj.getInt("action");
+            if (CustomAction.CUSTOM_ACTION_SELLER_DELETE_GOODS.ordinal() == action) {
                 int commonId = dataObj.getInt("commonId");
                 new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
@@ -338,10 +338,10 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                         SLog.info("onNo");
                     }
                 })).show();
-            } else if (CustomAction.CUSTOM_ACTION_SELLER_SWITCH_GOODS_SHELF_STATUS.equals(action)) {
+            } else if (CustomAction.CUSTOM_ACTION_SELLER_SWITCH_GOODS_SHELF_STATUS.ordinal() == action) {
                 if (simpleCallback != null) {
                     simpleCallback.onSimpleCall(EasyJSONObject.generate(
-                            "action", CustomAction.CUSTOM_ACTION_RELOAD_DATA
+                            "action", CustomAction.CUSTOM_ACTION_RELOAD_DATA.ordinal()
                     ));
                 }
             }

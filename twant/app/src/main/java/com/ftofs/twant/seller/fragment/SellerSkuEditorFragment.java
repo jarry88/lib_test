@@ -17,6 +17,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.EditorResultInterface;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
@@ -27,6 +28,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.HwLoadingPopup;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.google.android.material.tabs.TabLayout;
 import com.lxj.xpopup.XPopup;
 
@@ -46,6 +48,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * 【賣家】SKU信息頁
+ * @author zwm
+ */
 public class SellerSkuEditorFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
     EditorResultInterface editorResultInterface;
     List<String> specValueIdStringList;
@@ -62,6 +68,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
     private List<Fragment> fragmentList = new ArrayList<>();
 
     HwLoadingPopup loadingPopup;
+    private boolean loaded;
 
 
     public static SellerSkuEditorFragment newInstance(
@@ -103,6 +110,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         }
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_ok, this);
 
 
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
@@ -146,6 +154,25 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         int id = v.getId();
 
         if (id == R.id.btn_back) {
+            if (loaded) {
+                hideSoftInputPop();
+            } else {
+                new XPopup.Builder(_mActivity)
+                        .asCustom((new TwConfirmPopup(_mActivity, "确认离开？", null, "确定离开", "继续编辑", new OnConfirmCallback() {
+                            @Override
+                            public void onYes() {
+                                SLog.info("onYes");
+                                hideSoftInputPop();
+                            }
+
+                            @Override
+                            public void onNo() {
+                                SLog.info("onNo");
+                            }
+                        }))).show();
+            }
+                    }
+        if (id == R.id.btn_ok) {
             popBefore();
         }
     }
@@ -258,6 +285,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
                                     "isDefault", (order == 1 ? Constant.TRUE_INT: Constant.FALSE_INT)
                             );
                             goodsPicVoList.append(goodsPicVo);
+                            loaded = true;
                         } else {
                             SLog.info("Error!上传失败");
                             emitter.onError(new Exception("Error!上传失败"));
@@ -299,6 +327,13 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         };
 
         observable.subscribe(observer);
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
+        return true;
     }
 }
 

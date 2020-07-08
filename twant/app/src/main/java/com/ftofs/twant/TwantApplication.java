@@ -1,22 +1,24 @@
 package com.ftofs.twant;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.ftofs.twant.activity.MainActivity;
@@ -26,9 +28,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.fragment.MainFragment;
-import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.Emoji;
@@ -36,22 +36,15 @@ import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.orm.UserStatus;
-import com.ftofs.twant.task.TaskObservable;
-import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.HawkUtil;
-import com.ftofs.twant.util.MsgNotifyReceiver;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Time;
-import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
-import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.member.MemberVo;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
-import com.huawei.hms.aaid.HmsInstanceId;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -61,15 +54,22 @@ import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMOptions;
-import com.hyphenate.chat.EMPushConfigs;
-import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.push.EMPushConfig;
+import com.jeremyliao.liveeventbus.LiveEventBus;
 import com.macau.pay.sdk.MPaySdk;
 import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshInitializer;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.tencent.mmkv.MMKV;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
@@ -79,27 +79,27 @@ import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
+import com.wzq.mvvmsmart.base.AppManagerMVVM;
+import com.wzq.mvvmsmart.net.net_utils.Utils;
+import com.wzq.mvvmsmart.utils.KLog;
+import com.wzq.mvvmsmart.utils.Tasks;
 
-import org.json.JSONException;
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import cat.ereza.customactivityoncrash.config.CaocConfig;
 import cn.snailpad.easyjson.EasyJSONObject;
+import kotlin.jvm.Synchronized;
 import me.yokeyword.fragmentation.Fragmentation;
+
 import static android.app.PendingIntent.getActivity;
 import static com.orhanobut.hawk.Hawk.init;
 
@@ -133,6 +133,14 @@ public class TwantApplication extends Application {
     PushAgent mPushAgent;
     //保存當前會員身份信息，目前主要用於取得role，來判斷用戶身份
     private MemberVo currMemberInfo=null;
+    static {//使用static代码段可以防止内存泄漏
+        ClassicsFooter.REFRESH_FOOTER_LOADING = "加载中...";
+        //设置全局默认配置（优先级最低，会被其他设置覆盖）
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator((context, layout) -> new ClassicsHeader(context));
+
+        //全局设置默认的 Header
+        SmartRefreshLayout.setDefaultRefreshFooterCreator(((context, layout) -> new ClassicsFooter(context).setDrawableSize(20)));
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -146,11 +154,17 @@ public class TwantApplication extends Application {
         instance = this;
 
         //Bugly异常处理
-        CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
+        //双重保险，开发模式时不上传
+        if (!Config.DEVELOPER_MODE) {
+            CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
+        }
 
         // 添加全局異常處理
         // CrashHandler crashHandler = CrashHandler.getInstance();
         // crashHandler.init(getApplicationContext());
+
+        //初始化mvvm操作
+        initMVVM();
 
         // 在開發過程中，啟用 StrictMode
         if (Config.DEVELOPER_MODE) {
@@ -159,6 +173,7 @@ public class TwantApplication extends Application {
                             .ThreadPolicy
                             .Builder()
                             .detectDiskReads()
+                            .detectDiskWrites()
                             .detectDiskWrites()
                             .detectNetwork()
                             .penaltyLog()
@@ -262,7 +277,84 @@ public class TwantApplication extends Application {
         //創建通知等級
     }
 
+    private void initMVVM() {
+        Tasks.init();
+        Utils.init(this);
+        //是否开启打印日志
+//        KLog.init(BuildConfig.DEBUG);
+        KLog.INSTANCE.init(BuildConfig.DEBUG);
+        //初始化全局异常崩溃
+        initCrash();
+        MMKV.initialize(this);   // 替换sp
+        LiveEventBus  // 事件儿总线通信
+                .config().supportBroadcast(this) // 配置支持跨进程、跨APP通信，传入Context，需要在application onCreate中配置
+                .lifecycleObserverAlwaysActive(true); //    整个生命周期（从onCreate到onDestroy）都可以实时收到消息
+        setActivityLifecycle(this);
+    }
 
+    /**
+     * app 崩溃重启的配置
+     */
+     private void initCrash() {
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT) //背景模式,开启沉浸式
+                .enabled(true) //是否启动全局异常捕获
+                .showErrorDetails(true) //是否显示错误详细信息
+                .showRestartButton(true) //是否显示重启按钮
+                .trackActivities(true) //是否跟踪Activity
+                .minTimeBetweenCrashesMs(2000) //崩溃的间隔时间(毫秒)
+                .errorDrawable(R.mipmap.ic_launcher) //错误图标
+                .restartActivity(MainActivity.class) //重新启动后的activity
+                //                                .errorActivity(YourCustomErrorActivity.class) //崩溃后的错误activity
+                //                                .eventListener(new YourCustomEventListener()) //崩溃后的错误监听
+                .apply();
+    }
+    /**
+     * 当主工程没有继承BaseApplication时，可以使用setApplication方法初始化BaseApplication
+     *
+     * @param application
+     */
+    @Synchronized
+    void setActivityLifecycle( Application application) {
+        //注册监听每个activity的生命周期,便于堆栈式管理
+        application.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+                AppManagerMVVM.Companion.get().addActivity(activity);
+            }
+
+            @Override
+            public void onActivityStarted(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {
+                AppManagerMVVM.Companion.get().removeActivity(activity);
+
+            }
+
+        });
+    }
     private void initNotification() {
         //创建自定义通知渠道，和全局通知管理器
         if (!Hawk.contains(SPField.USER_RECEIVE_NEWS)) {

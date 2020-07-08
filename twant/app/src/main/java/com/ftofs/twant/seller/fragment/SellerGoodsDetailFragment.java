@@ -12,20 +12,27 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.ArraySet;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.lxj.xpopup.core.BasePopupView;
+import com.lxj.xpopup.impl.LoadingPopupView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -37,6 +44,12 @@ import okhttp3.Call;
  * @author zwm
  */
 public class SellerGoodsDetailFragment extends BaseFragment implements View.OnClickListener {
+    public List<ListPopupItem> unitList = new ArrayList<>();
+    public String unitName;
+    public String detailVideo;
+
+    List<ListPopupItem> spinnerLogoItems = new ArrayList<>();
+
     int commonId;
     String goodsImageUrl;
     int twBlack;
@@ -48,7 +61,30 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     EasyJSONArray mobileBodyVoList = EasyJSONArray.generate();
 
     LinearLayout llSpecContainer;
+    LinearLayout btnEditBasicInfo;
     EasyJSONArray specJsonVoList;
+
+    List<ListPopupItem> spinnerLogoCountryItems = new ArrayList<>();
+    public EasyJSONObject goodsVo;
+    LinearLayout btnEditTransactionInfo;
+    private LinearLayout btnEditFreightInfo;
+    private LinearLayout btnEditOtherInfo;
+    public int allowTariff;
+    public int joinBigSale;
+    public double goodsFreight;
+    public double freightWeight;
+    public double freightVolume;
+    public int freightTemplateId;
+    public String storeLabelNames;
+    private TextView tvGoodsDetailVideoUrl;
+    private String goodsDetailVideoUrl;
+    public String formatTopName;
+    public String formatBottomName;
+    public int isVirtual;
+    public  int tariffEnable;
+    public int goodsState;
+    public int limitBuy;
+
 
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
         Bundle args = new Bundle();
@@ -76,13 +112,26 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         Util.setOnClickListener(view, R.id.btn_back, this);
 
         btnViewGoodsDetail = view.findViewById(R.id.btn_view_goods_detail);
-
+        btnEditBasicInfo =view.findViewById(R.id.btn_edit_basic_info);
+        btnEditTransactionInfo =view.findViewById(R.id.btn_edit_transaction_info);
+        btnEditFreightInfo =view.findViewById(R.id.btn_seller_goods_freight_edit);
+        btnEditOtherInfo =view.findViewById(R.id.btn_seller_goods_other_edit);
         twBlack = _mActivity.getColor(R.color.tw_black);
         tvGoodsVideoUrl = view.findViewById(R.id.tv_goods_video_url);
+        tvGoodsDetailVideoUrl = view.findViewById(R.id.tv_introduction_video_url);
 
+        Util.setOnClickListener(view, R.id.btn_edit_basic_info, this);
+        Util.setOnClickListener(view, R.id.btn_edit_transaction_info, this);
         Util.setOnClickListener(view, R.id.btn_edit_spec, this);
+        Util.setOnClickListener(view, R.id.btn_seller_goods_detail_edit, this);
+        Util.setOnClickListener(view, R.id.btn_seller_goods_freight_edit, this);
+        Util.setOnClickListener(view, R.id.btn_seller_goods_other_edit, this);
         llSpecContainer = view.findViewById(R.id.ll_spec_container);
+    }
 
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
         loadData();
     }
 
@@ -96,16 +145,20 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token
         );
-
         SLog.info("url[%s], params[%s]", url, params);
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
+
+        loadingPopup.show();
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
                 try {
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
@@ -119,7 +172,9 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                         return;
                     }
 
-                    EasyJSONObject goodsVo = responseObj.getSafeObject("datas.GoodsVo");
+                    updateDataFromJson(responseObj);
+
+
                     ((TextView) contentView.findViewById(R.id.tv_spu_id)).setText(String.valueOf(commonId));
                     ((TextView) contentView.findViewById(R.id.tv_goods_name)).setText(goodsVo.getSafeString("goodsName"));
                     ImageView goodsImage = contentView.findViewById(R.id.goods_image);
@@ -127,7 +182,6 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
                     }
 
-                    int tariffEnable = goodsVo.getInt("tariffEnable");
                     SLog.info("tariffEnable__[%d]", tariffEnable);
                     contentView.findViewById(R.id.cross_border_indicator).setVisibility(tariffEnable == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
 
@@ -142,27 +196,33 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_goods_jingle)).setText(goodsVo.getSafeString("jingle"));
                     ((TextView) contentView.findViewById(R.id.tv_brand)).setText(goodsVo.getSafeString("brandName"));
                     ((TextView) contentView.findViewById(R.id.tv_brand_location)).setText(goodsVo.getSafeString("goodsCountryName"));
-                    ((TextView) contentView.findViewById(R.id.tv_unit)).setText(goodsVo.getSafeString("unitName"));
+                    ((TextView) contentView.findViewById(R.id.tv_top_name)).setText(formatTopName);
+                    ((TextView) contentView.findViewById(R.id.tv_bottom_name)).setText(formatBottomName);
+                    ((TextView) contentView.findViewById(R.id.tv_goods_category_in_store)).setText(storeLabelNames);
+                    ((TextView) contentView.findViewById(R.id.tv_unit)).setText(unitName);
 
-                    int isVirtual = goodsVo.getInt("isVirtual");
-                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(isVirtual == Constant.TRUE_INT ? "虛擬商品" : "零售商品");
+                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(allowTariff == Constant.TRUE_INT ?
+                            (tariffEnable== Constant.TRUE_INT?"跨城購商品":(isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品")):
+                            (isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品"));
 
-                    double freightWeight = goodsVo.getDouble("freightWeight");
-                    double freightVolume = goodsVo.getDouble("freightVolume");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_freight)).setText(StringUtil.formatFloat(goodsFreight));
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
-                    ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_volume)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_participate_bargain)).setText(joinBigSale==1?"是":"否");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_publish_way)).setText(goodsState==1?"立即發佈":"放入倉庫");
 
-                    specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
                     updateGoodsSpecView();
 
-                    goodsVideoUrl = goodsVo.getSafeString("goodsVideo");
                     if (!StringUtil.isEmpty(goodsVideoUrl)) {
                         tvGoodsVideoUrl.setText(Html.fromHtml("<u>" + goodsVideoUrl + "</u>"));
                         tvGoodsVideoUrl.setOnClickListener(SellerGoodsDetailFragment.this);
+                    }if (!StringUtil.isEmpty(goodsDetailVideoUrl)) {
+                        tvGoodsDetailVideoUrl.setText(Html.fromHtml("<u>" + goodsDetailVideoUrl + "</u>"));
+                        tvGoodsDetailVideoUrl.setOnClickListener(SellerGoodsDetailFragment.this);
                     }
 
-                    mobileBodyVoList = goodsVo.getArray("mobileBodyVoList");
                     btnViewGoodsDetail.setOnClickListener(SellerGoodsDetailFragment.this);
+
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -170,8 +230,42 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         });
     }
 
+    public void updateDataFromJson(EasyJSONObject responseObj) throws Exception{
+
+        goodsVo = responseObj.getSafeObject("datas.GoodsVo");
+        allowTariff = responseObj.getInt("datas.allowTariff");
+        tariffEnable = goodsVo.getInt("tariffEnable");
+
+        detailVideo=goodsVo.getSafeString("detailVideo");
+        formatTopName=goodsVo.getSafeString("formatTopName");
+        formatBottomName=goodsVo.getSafeString("formatBottomName");
+        storeLabelNames = goodsVo.getSafeString("storeLabelNames");
+        unitName = goodsVo.getSafeString("unitName");
+        isVirtual = goodsVo.getInt("isVirtual");
+        joinBigSale = goodsVo.getInt("joinBigSale");
+        specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
+
+        goodsVideoUrl = goodsVo.getSafeString("goodsVideo");
+        goodsDetailVideoUrl = goodsVo.getSafeString("detailVideo");
+        mobileBodyVoList = goodsVo.getArray("mobileBodyVoList");
+        explainFreight();
+        goodsState = goodsVo.getInt("goodsState");
+        limitBuy = goodsVo.getInt("limitBuy");
+
+    }
+
+    public void explainFreight() throws Exception{
+        freightWeight = goodsVo.getDouble("freightWeight");
+        freightVolume = goodsVo.getDouble("freightVolume");
+        goodsFreight = goodsVo.getDouble("goodsFreight");
+        freightTemplateId = goodsVo.getInt("freightTemplateId");
+
+    }
+
     private void updateGoodsSpecView() {
         try {
+            llSpecContainer.removeAllViews();
+
             for (Object object : specJsonVoList) {
                 EasyJSONObject specJsonVo = (EasyJSONObject) object;
                 StringBuilder specInfo = new StringBuilder();
@@ -210,8 +304,18 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
             }
         } else if (id == R.id.btn_view_goods_detail) {
             Util.startFragment(SellerGoodsDetailViewerFragment.newInstance(mobileBodyVoList));
+        }  else if (id == R.id.btn_edit_basic_info) {
+            Util.startFragment(SellerEditBasicFragment.newInstance(this));
+        }  else if (id == R.id.btn_edit_transaction_info) {
+            Util.startFragment(SellerEditTransactionFragment.newInstance(this));
         } else if (id == R.id.btn_edit_spec) {
             start(SellerEditGoodsSpecFragment.newInstance(commonId, specJsonVoList));
+        }  else if (id == R.id.btn_seller_goods_detail_edit) {
+            Util.startFragment(SellerEditGoodsDetailFragment.newInstance(this));
+        }   else if (id == R.id.btn_seller_goods_freight_edit) {
+            Util.startFragment(SellerEditFreightFragment.newInstance(this));
+        }  else if (id == R.id.btn_seller_goods_other_edit) {
+            Util.startFragment(SellerEditOtherFragment.newInstance(this));
         }
     }
 
@@ -220,6 +324,34 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         SLog.info("onBackPressedSupport");
         hideSoftInputPop();
         return true;
+    }
+
+    public void saveGoodsInfo(EasyJSONObject publishGoodsInfo, SimpleCallback ui) {
+        String path = Api.SELLER_GOODS_EDIT + "?token=" + User.getToken();
+          SLog.info("path[%s]", path);
+          SLog.info("paramas[%s]", publishGoodsInfo.toString());
+          Api.postJsonUi(path, publishGoodsInfo.toString(), new UICallback() {
+             @Override
+             public void onFailure(Call call, IOException e) {
+                 ToastUtil.showNetworkError(_mActivity, e);
+             }
+         
+             @Override
+             public void onResponse(Call call, String responseStr) throws IOException {
+                 try {
+                     SLog.info("responseStr[%s]", responseStr);
+         
+                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                         return;
+                     }
+//                     ToastUtil.success(_mActivity,responseObj.getString("datas.success"));
+                     ui.onSimpleCall(responseObj.getString("datas.success"));
+                 } catch (Exception e) {
+                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                 }
+             }
+          });
     }
 }
 

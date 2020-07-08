@@ -355,6 +355,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 if (!StringUtil.isEmpty(conversation.nickname)) {
                     friendInfo.nickname = conversation.nickname;
                     friendInfo.avatarUrl = conversation.avatarUrl;
+                    friendInfo.storeAvatar = conversation.storeAvatarUrl;
+                    friendInfo.storeName = conversation.storeName;
                     friendInfo.storeAvatarUrl = conversation.storeAvatarUrl;
                     friendInfo.role = conversation.role;
                     friendInfo.storeName = conversation.storeName;
@@ -412,6 +414,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             updateConversationInfo();
             SLog.info("updateSize[%s]",updateConversationList.size());
             displayUnreadCount();
+            if (chatConversationList.size() > 2) {
+                //在結尾添加一個空白item
+                chatConversationList.add(null);
+            }
 //            chatConversationList.add(null);
 
             adapter.setNewData(chatConversationList);
@@ -730,7 +736,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             if (chatConversation == null) {
                 continue;
             }
-            SLog.info("unread[%d]", chatConversation.unreadCount);
+//            SLog.info("unread[%d]", chatConversation.unreadCount);
         }
         displayUnreadCount();
     }
@@ -772,6 +778,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             if (messageContent.startsWith("image")) {
                                 messageContent = "[圖片]";
                             }
+
                             SLog.info("messageFragment [%s]",messageContent);
                             String sendTime =conversation.getSafeString("sendTime");
                             boolean has = false;
@@ -822,6 +829,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 conversation1.timestamp = time;
                                 conversation1.save();
 //                                newChat.timestamp = sendTime;
+
+                                Conversation.saveNewChat(newChat);
                                 SLog.info("messageFragment [%s]","second");
 
                                 chatConversationList.add(newChat);

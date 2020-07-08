@@ -36,7 +36,9 @@ import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -47,6 +49,9 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +89,8 @@ public class PasswordLoginFragment extends BaseFragment implements
     boolean loginButtonEnable = true; // 防止重覆點擊
     boolean checkButtonState = true; // 防止重覆點擊
     private ImageView imgClick;
+    //测试专用验证 登陆的快捷方式
+    private Bitmap captchaBitMap;
 
     public void setCommonCallback(CommonCallback commonCallback) {
         this.commonCallback = commonCallback;
@@ -390,8 +397,44 @@ public class PasswordLoginFragment extends BaseFragment implements
                 }
                 captchaKey = result.second;
                 btnRefreshCaptcha.setImageBitmap(result.first);
+                if (Config.DEVELOPER_MODE) {
+                    captchaBitMap = result.first;
+                }
             }
         });
+    }
+
+    public void getUrl(TaskObserver task) {
+        File cacheDir=_mActivity.getCacheDir();
+        if (!cacheDir.exists()){
+            cacheDir.mkdirs();
+        }
+        String fileName="pic.jpg";
+
+        try {
+            File outFile =new File(cacheDir,fileName);
+            if (!outFile.exists()){
+                boolean res=outFile.createNewFile();
+                if (!res){
+                    SLog.info("文件创建失败");
+
+                    return;
+                }
+            } else {
+                outFile.delete();
+                boolean res=outFile.createNewFile();
+                // 文件已經存在，跳過
+                SLog.info("文件已經存在，大小[%d]", outFile.length());
+            }
+                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outFile));
+                captchaBitMap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                bos.flush();
+                bos.close();
+            Api.syncTestUploadFile(outFile,task);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

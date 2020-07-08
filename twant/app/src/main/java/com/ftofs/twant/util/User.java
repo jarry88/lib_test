@@ -54,6 +54,7 @@ public class User {
      * 退出登錄，清空數據
      */
     public static void logout() {
+        SLog.bt();
         EMClient emClient = EMClient.getInstance();
         if (emClient != null) {
             emClient.logout(true, new EMCallBack() {

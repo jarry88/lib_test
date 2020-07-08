@@ -36,17 +36,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 public class ShopRelativePostFragment extends BaseFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private int storeId;
-    private Unbinder unbinder;
     private SimpleTabManager simpleTabManager;
     private boolean hasMore;
     private int totalPage;
@@ -57,22 +53,22 @@ public class ShopRelativePostFragment extends BaseFragment implements View.OnCli
     private ShopRelativePostAdapter adapter;
     private boolean isPostDataLoaded;
 
-    @OnClick(R.id.btn_back)
+
     public void back() {
         hideSoftInputPop();
     }
 
-    @OnClick({R.id.stb_good_post})
+
     public void showGoodPost() {
         hideSoftInputPop();
     }
-    @OnClick({R.id.stb_shop_post})
+
     public void showShopPost() {
         hideSoftInputPop();
     }
-    @BindView(R.id.swipe_refresh_layout)
+
     SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.rv_shop_relative_post)
+
     RecyclerView rvRelativeList;
 
     public static ShopRelativePostFragment newInstance(int storeId) {
@@ -88,7 +84,26 @@ public class ShopRelativePostFragment extends BaseFragment implements View.OnCli
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.shop_relative_post_layout, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        rvRelativeList = (RecyclerView) view.findViewById(R.id.rv_shop_relative_post);
+        view.findViewById(R.id.stb_shop_post).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showShopPost();
+            }
+        });
+        view.findViewById(R.id.stb_good_post).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showGoodPost();
+            }
+        });
+        view.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
         return view;
     }
 
@@ -239,13 +254,6 @@ public class ShopRelativePostFragment extends BaseFragment implements View.OnCli
         }
 
         loadShopPost(currPage+1);
-    }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
     }
 
     /**

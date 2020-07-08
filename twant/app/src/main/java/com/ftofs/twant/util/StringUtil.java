@@ -40,6 +40,7 @@ import org.litepal.LitePal;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -942,5 +943,39 @@ public class StringUtil {
         }
 
         return str.substring(begin, end + 1);
+    }
+
+    /**
+     * 将规格Id字符串从小到大重新排序，
+     * 例如  32,15,35 => 15,32,35
+     * @param str
+     * @return
+     */
+    public static String sortSpecValueIdString(String str) {
+        if (isEmpty(str)) {
+            return str;
+        }
+
+        String[] strArr = str.split(",");
+        List<Integer> idList = new ArrayList<>();
+        for (String item : strArr) {
+            idList.add(Integer.parseInt(item));
+        }
+
+        Collections.sort(idList);
+
+        StringBuilder result = new StringBuilder();
+
+        boolean first = true;
+        for (Integer id : idList) {
+            if (!first) {
+                result.append(",");
+            }
+
+            result.append(id);
+            first = false;
+        }
+
+        return result.toString();
     }
 }

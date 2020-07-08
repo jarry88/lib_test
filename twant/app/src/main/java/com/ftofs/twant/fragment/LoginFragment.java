@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,11 +34,16 @@ import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.ApiUtil;
+import com.ftofs.twant.util.HawkUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
 import com.lxj.xpopup.XPopup;
+import com.orhanobut.hawk.Hawk;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,6 +54,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -69,6 +76,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     private boolean showlist;
     private boolean byWebView;
     TabLayout tabLayout;
+    private String mAPiKey="1ac840e10b88957";
 
     public static LoginFragment newInstance() {
         Bundle args = new Bundle();
@@ -258,16 +266,14 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         } else if (!showlist&&id == R.id.btn_test) {
             if (tabClickCount > 5) {
                 showlist = true;
-                String[] data = {"取消","prod/線上" , "29", "229", "28","驗收/F1","日誌開關","test"};
+                String[] data = {"取消","prod/線上" , "29", "229", "28","驗收/F1","日誌開關","test","captra"};
                 XPopup.Builder builder = new XPopup.Builder(_mActivity);
                 builder.dismissOnTouchOutside(false);
                 builder.asCenterList("切換環境:", data, (position, text) -> {
                     SLog.info("position[%d], text[%s]", position, text);
                     if (position == 0) {
-
                     } else if (position == 1) {
                         Config.changeEnvironment(Config.ENV_PROD);
-
                         exit();
                     } else if (position == 2) {
                         Config.changeEnvironment(Config.ENV_29);
@@ -290,6 +296,31 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                         }
                     } else if (position == 7) {
                         Util.startFragment(TestFragment.newInstance());
+                    }else if (position == 8) {
+                       TaskObserver task= new TaskObserver() {
+                            @Override
+                            public void onMessage() {
+                                if (message == null) {
+                                    return;
+                                }
+                                String str = message.toString();
+                                StringBuffer stringBuffer = new StringBuffer();
+                                stringBuffer.append("https://test.weshare.team/attachment/")
+                                        .append(str.charAt(str.length() - 1))
+                                        .append("/")
+                                        .append(str.charAt(str.length() - 2))
+                                        .append("/")
+                                        .append(str.charAt(str.length() - 3))
+                                        .append("/")
+                                        .append(str)
+                                        .append(".jpg");
+                                String url = stringBuffer.toString();
+                                SLog.info("url[%s]",url);
+                                setCaptcha(url);
+                            }
+                        };
+//                        ((PasswordLoginFragment) fragmentList.get(0)).getUrl(task);
+
                     }else {
                         Util.startFragment(DebugFragment.newInstance());
                     }
@@ -311,6 +342,46 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         } else if (id == R.id.login_tab_layout) {
             SLog.info("here225");
         }
+    }
+
+    private void setCaptcha(String imageUrl) {
+        String url = "https://api.ocr.space/parse/image";
+
+        boolean isOverlayRequired=false;
+//                        String imageUrl="http://dl.a9t9.com/blog/ocr-online/screenshot.jpg";
+//                        String imageUrl="https://192.168.5.29/api/captcha/makecaptcha?captchaKey=95ff1df80e17a274b9b4c73c42236502&clientType=android";
+        Object language="eng";
+        EasyJSONObject params =EasyJSONObject.generate("apikey", mAPiKey,"isOverlayRequired", isOverlayRequired,"url",imageUrl,"language",language);
+        SLog.info("params[%s]", params);
+        Api.postUI(url, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    EasyJSONArray list = responseObj.getSafeArray("ParsedResults");
+                    String text = "";
+                    for (Object object : list) {
+                        text = ((EasyJSONObject) object).getSafeString("ParsedText");
+                        break;
+                    }
+                    text.trim();
+                    if (!StringUtil.isEmpty(text)) {
+                        ((PasswordLoginFragment) fragmentList.get(0)).etCaptcha.setText(text);
+                        ((PasswordLoginFragment) fragmentList.get(0)).etPassword.setText("qwer1234");
+                        ((PasswordLoginFragment) fragmentList.get(0)).etMobile.setText("69000001");
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     @Override
@@ -403,12 +474,24 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     }
     /**退出程序*/
     protected void exit() {
-        // 这里使用clear + new task的方式清空整个任务栈,只保留新打开的Main页面
-        // 然后Main页面接收到退出的标志位exit=true,finish自己,这样就关闭了全部页面
-
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra("exit", true);
-        startActivity(intent);
+        //使用sp记录下来
+//        SPUtils.getInstance("test", MainActivity.this).put("ip", text);
+        Hawk.put("ip", "sd");
+        //延时1秒重启app,让sp能保存值
+        new Handler().postAtTime(new Runnable() {
+            @Override
+            public void run() {
+                //TODO("如果你用的是Retrofit2,不重启ip地址切换不会生效")
+                //重启app
+                Util.restartAPP(_mActivity);
+            }
+        },500);
+//        // 这里使用clear + new task的方式清空整个任务栈,只保留新打开的Main页面
+//        // 然后Main页面接收到退出的标志位exit=true,finish自己,这样就关闭了全部页面
+//
+//        Intent intent = new Intent(getActivity(), MainActivity.class);
+//        intent.putExtra("exit", true);
+//        startActivity(intent);
     }
 
 

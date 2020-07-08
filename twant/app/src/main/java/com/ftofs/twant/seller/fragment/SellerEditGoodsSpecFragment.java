@@ -72,9 +72,9 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
     // SpecValueId 與 SpecValueName的映射
     Map<Integer, String> specValueMap = new HashMap<>();
 
-    // 規格值Id的字符串拼接(例5,12,8)與SKU信息的映射關係
+    // 規格值Id的字符串拼接(例5,8,12)與SKU信息的映射關係，規格值Id按升序排列
     Map<String, SellerSpecPermutation> specValueIdStringMap = new HashMap<>();
-    // 規格值Id的字符串拼接(例5,12,8)的列表
+    // 規格值Id的字符串拼接(例5,8,12)的列表，規格值Id按升序排列
     List<String> specValueIdStringList = new ArrayList<>();
 
     // colorId與圖片列表的映射關係
@@ -84,6 +84,9 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
 
     // 原先已經添加的specValue集合
     Set<Integer> initSpecValueSet = new HashSet<>();
+
+    // 标记SKU数据是否已经加载
+    boolean isSkuDataLoaded = false;
 
 
     public static SellerEditGoodsSpecFragment newInstance(int commonId, EasyJSONArray specJsonVoList) {
@@ -190,7 +193,6 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                         return;
                     }
 
-
                     new XPopup.Builder(_mActivity)
                             // 如果不加这个，评论弹窗会移动到软键盘上面
                             .moveUpToKeyboard(false)
@@ -203,6 +205,92 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
             layoutParams.topMargin = Util.dip2px(_mActivity, 8);
             llSelectedSpecContainer.addView(selectedSpecItemView, layoutParams);
         }
+    }
+
+    private void loadSkuData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "commonId", commonId
+        );
+
+        SLog.info("url[%s], params[%s]", Api.PATH_SELLER_GET_SKU_INFO, params);
+        Api.postUI(Api.PATH_SELLER_GET_SKU_INFO, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    // 處理規格信息
+                    EasyJSONArray goodsJsonVoList = responseObj.getSafeArray("datas.goodsJsonVoList");
+                    for (Object object : goodsJsonVoList) {
+                        EasyJSONObject goodsJsonVo = (EasyJSONObject) object;
+
+                        String specValueIds = goodsJsonVo.getSafeString("specValueIds");
+                        specValueIds = StringUtil.sortSpecValueIdString(specValueIds);
+                        SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIds);
+                        if (permutation != null) {
+                            /*
+                                public double price;
+                                public String goodsSN = "";  // 商品編號
+                                public int storage; // 庫存
+                                public int reserved; // 預存庫存
+                             */
+                            permutation.price = goodsJsonVo.getDouble("goodsPrice0");
+                            permutation.goodsSN = goodsJsonVo.getSafeString("goodsSerial");
+                            permutation.storage = goodsJsonVo.getInt("goodsStorage");
+                            permutation.reserved = goodsJsonVo.getInt("reserveStorage");
+                        }
+                    }
+
+                    // 處理圖片信息
+                    EasyJSONArray goodsPicVoList = responseObj.getSafeArray("datas.goodsPicVoList");
+                    for (Object object : goodsPicVoList) {
+                        EasyJSONObject goodsPicVo = (EasyJSONObject) object;
+
+                        int colorId = goodsPicVo.getInt("colorId");
+                        List<SellerGoodsPicVo> sellerGoodsPicVoList = colorImageMap.get(colorId);
+                        if (sellerGoodsPicVoList == null) {
+                            sellerGoodsPicVoList = new ArrayList<>();
+                            colorImageMap.put(colorId, sellerGoodsPicVoList);
+                        }
+
+                        SellerGoodsPicVo sellerGoodsPicVo = new SellerGoodsPicVo();
+                        /*
+                        public int colorId;
+                        public String colorName;
+                        public String imageName;  // 遠端圖片路徑（相對路徑）
+                        public String absolutePath;  // 本地圖片路徑（值不為空,表示待上傳）
+                        public int imageSort;
+                        public int isDefault;
+                         */
+                        sellerGoodsPicVo.colorId = colorId;
+                        sellerGoodsPicVo.colorName = specValueMap.get(colorId);
+                        sellerGoodsPicVo.imageName = goodsPicVo.getSafeString("imageName");
+                        sellerGoodsPicVo.imageSort = goodsPicVo.getInt("imageSort");
+                        sellerGoodsPicVo.isDefault = goodsPicVo.getInt("isDefault");
+
+                        sellerGoodsPicVoList.add(sellerGoodsPicVo);
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     private void loadSellerSpecList() {
@@ -280,6 +368,8 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                     }
 
                     generateSpecPermutation();
+
+                    loadSkuData();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -535,6 +625,7 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
 
             SLog.info("skuDesc[%s]", skuDesc.toString());
             String specValueIdString = StringUtil.trim(specValueIdStringSB.toString(), new char[] {','});
+            specValueIdString = StringUtil.sortSpecValueIdString(specValueIdString);
             specValueIdStringList.add(specValueIdString);
 
             SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIdString);

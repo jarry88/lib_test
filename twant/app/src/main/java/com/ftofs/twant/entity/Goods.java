@@ -13,7 +13,10 @@ import cn.snailpad.easyjson.EasyJSONObject;
  */
 public class Goods implements MultiItemEntity {
 
+    public double appPriceMin;
     public boolean showDiscount;
+    public int isVirtual;
+    public int tariffEnable;
     private double promotionDiscountRate;
     private double batchPrice0;
     private int goodsStorage=1;
@@ -106,6 +109,12 @@ public class Goods implements MultiItemEntity {
         if (goods.exists("goodsStatus")) {
             goods1.goodsStatus = goods.getInt("goodsStatus");
         }
+        if (goods.exists("isVirtual")) {
+            goods1.isVirtual = goods.getInt("isVirtual");
+        }
+        if (goods.exists("tariffEnable")) {
+            goods1.tariffEnable = goods.getInt("tariffEnable");
+        }
         return goods1 ;
     }
 
@@ -124,5 +133,9 @@ public class Goods implements MultiItemEntity {
 
     public boolean hasGoodsStorage() {
         return goodsStorage > 0;
+    }
+
+    public int getGoodsStorage() {
+        return goodsStorage;
     }
 }

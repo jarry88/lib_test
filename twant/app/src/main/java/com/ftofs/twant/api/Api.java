@@ -25,6 +25,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -1366,7 +1368,16 @@ public class Api {
      * 【商家】
      * 退款訂單信息(產品交易信息)
      */
-    public static final String PATH_SELLER_ORDERS_INFO = "/member/seller/orders/info";
+    public static final String PATH_SELLER_ORDERS_INFO = "/member/seller/orders/info"
+            ;
+    /**
+     * 取消镇店之宝
+     */
+    public static final String REMOVE_FEATURES_GOODS = "/member/seller/goods/cancel_features.json";
+    /**
+     * 编辑商品
+     */
+    public static final String SELLER_GOODS_EDIT = "/member/seller/goods/edit";
     /**
      * 【商家】
      * 退貨訂單列表
@@ -1442,7 +1453,10 @@ public class Api {
      * 【賣家】獲取商品Sku列表
      */
     public static final String PATH_SELLER_GOODS_SKU_LIST = "/member/seller/goods/sku";
-
+    @Nullable
+    public static final String SELLER_GOODS_FEATURES ="/member/seller/goods/features.json";
+    @Nullable
+    public static final String SELLER_CANCEL_FEATURES ="/member/seller/goods/cancel_features.json";
 
     /**
      * 【賣家】編輯商品詳情
@@ -1461,9 +1475,35 @@ public class Api {
     public static final String PATH_CHANNEL_UPDATE = "/app/android/channel";
 
     /**
+<<<<<<< HEAD
+     * 【賣家】添加規格信息
+     */
+    public static final String PATH_SELLER_ADD_SPEC = "/member/seller/spec/save.json";
+
+
+    /**
+     * 【賣家】編輯規格信息
+     */
+    public static final String PATH_SELLER_EDIT_SPEC = "/member/seller/spec/edit/save.json";
+
+
+    /**
+     * 【賣家】刪除規格及規格值
+     */
+    public static final String PATH_SELLER_DELETE_SPEC = "/member/seller/spec/delete";
+
+
+    /**
+     * 【賣家】獲取SKU信息
+     * 查詢商品規格、SKU、圖片信息（編輯商品SKU頁需用到）
+     */
+    public static final String PATH_SELLER_GET_SKU_INFO = "/member/seller/goods/skuAndSpec";
+
+    /**
      * 服務協議和隱私協議
      */
     public static final String PATH_ARTICLE_DETAIL = "/article/info_h5";
+
 
     /**
      * 商品分享口令生成
@@ -1481,7 +1521,6 @@ public class Api {
      * 店鋪首頁渠道推廣統計
      */
     public static final String PATH_STORE_PROMOTION_STATS = "/store/home/record";
-
 
 
     /**
@@ -1719,7 +1758,6 @@ public class Api {
                     .url(url)
                     .build();
             Response response = client.newCall(request).execute();
-
             is = response.body().byteStream();
             bitmap = BitmapFactory.decodeStream(is);
         } catch (Exception e) {
@@ -1731,6 +1769,7 @@ public class Api {
                 }
             }
             catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
 
             if (bitmap == null || captchaKey == null) {
@@ -1955,6 +1994,55 @@ public class Api {
         SLog.info("Here");
         return null;
     }
+ /**
+     * 上传文件到测试服务器
+     * @param file
+     */
+    public static String syncTestUploadFile(File file,TaskObserver taskObserver) {
+
+        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            @Override
+            public Object doWork() {
+                SLog.info("上傳圖片開始");
+                OkHttpClient client = getOkHttpClient();
+                MultipartBody.Builder builder = new MultipartBody.Builder();
+                builder.setType(MultipartBody.FORM);
+
+                builder.addFormDataPart("c", "File");
+                builder.addFormDataPart("a", "uploadAttachment");
+//        builder.addFormDataPart("access_token", "");
+                // 拼装文件参数
+                builder.addFormDataPart("weshare_file", file.getName(), RequestBody.create(STREAM, file));
+                SLog.info("文件大小[%s]",file.length());
+
+                RequestBody requestBody = builder.build();
+
+                String url = "https://test.weshare.team/api";
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(requestBody)
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    String responseStr = response.body().string();
+                    SLog.info(" responseStr[%s]",responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.isError(responseObj)) {
+                        return null;
+                    }
+
+                    return responseObj.getSafeString("data.file_id");
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+                return null;
+        }
+        });
+        return null;
+    }
 
 
     /**
@@ -2086,7 +2174,7 @@ public class Api {
                 messageBody.set("ordersSn", ordersSn);
             }
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
 

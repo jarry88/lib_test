@@ -3,9 +3,11 @@ package com.ftofs.twant.fragment;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Outline;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.DrawableWrapper;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
@@ -51,6 +55,7 @@ import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.entity.WantedPostItem;
+import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.SloganView;
@@ -61,6 +66,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.view.BannerViewHolder;
 import com.ftofs.twant.widget.AmapPopup;
 import com.ftofs.twant.widget.DataCircleImageView;
 import com.ftofs.twant.widget.DataImageView;
@@ -78,6 +84,8 @@ import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.rd.PageIndicatorView;
 import com.yanzhenjie.permission.runtime.Permission;
+import com.zhouwei.mzbanner.MZBannerView;
+import com.zhouwei.mzbanner.holder.MZHolderCreator;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -89,9 +97,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -110,43 +115,43 @@ import static java.util.concurrent.Executors.*;
  */
 public class ShopHomeFragment extends BaseFragment implements View.OnClickListener, AutoVerticalScrollTextViewUtil.OnMyClickListener {
     ShopMainFragment parentFragment;
-    @BindView(R.id.img_store_status)
+
     ImageView imgStoreStatus;
-    @BindView(R.id.img_store_figure)
+
     ImageView imgShopLogo;
-    @BindView(R.id.tv_store_name)
+
     TextView tvStoreName;
-    @BindView(R.id.btn_shop_signature)
+
     LinearLayout btnShopSignature;
-    @BindView(R.id.tv_shop_signature)
+
     TextView tvShopSignature;
-    @BindView(R.id.tv_store_open_days)
+
     TextView tvShopOpenDay;
-    @BindView(R.id.tv_shop_open_day)
+
     TextView tvOpenDay;
-    @BindView(R.id.viewpager)
+
     ViewPager viewpager;
 
-    @BindView(R.id.smartTabLayout)
+
     SmartTabLayout smartTabLayout;
-    @BindView(R.id.ll_sns_container)
+
     LinearLayout llSnsContainer;
 
-    @BindView(R.id.pageIndicatorView)
+
     PageIndicatorView pageIndicatorView;
     private int currGalleryPosition;
-    @BindView(R.id.rv_gallery_image_list)
+
     RecyclerView rvGalleryImageList;
 
-    @BindView(R.id.tv_like_count)
+
     TextView tvLikeCount;
-    @BindView(R.id.tv_store_view)
-    TextView tvStoreView;
+
+    TextView tvStoreView ;
     int likeCount;
     TextView tvFavoriteCount;
     int favoriteCount;
     int isFavorite;
-    ImageView btnStoreFavorite;
+    ImageView btnStoreFavorite ;
 
     int isLike;
     ImageView btnStoreThumb;
@@ -180,12 +185,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private TextView tvPhoneNumber;
     private TextView tvShopAddress;
 
-    @BindView(R.id.container_view)
+
     NestedScrollView containerView;
     int containerViewHeight;
     private scrollStateHandler mHandler;
     private ImageView btnShopUp;
     private boolean bannerAuto;
+    private PagerSnapHelper pagerSnapHelper;
+    private MZBannerView bannerView;
 
     static class scrollStateHandler extends Handler {
         NestedScrollView scrollViewContainer;
@@ -268,7 +275,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     public static final int NOTICE_FRAGMENT = 3;
 
     List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
-    private Unbinder unbinder;
     private GoodsGalleryAdapter goodsGalleryAdapter;
     private List<String> currGalleryImageList=new ArrayList<>();
     private ScheduledExecutorService timer;
@@ -311,12 +317,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         bannerAuto = true;
 //        SLog.info("执行自动滚");
         currGalleryPosition++;
-        if (currGalleryPosition>100) {
+        if (currGalleryPosition>1000) {
             currGalleryPosition = 0;
+            rvGalleryImageList.scrollToPosition(currGalleryPosition);
         }
 //            currGalleryPosition = (position+1) % currGalleryImageList.size();
 //            rvGalleryImageList.smoothScrollToPosition(currGalleryPosition+1);
         rvGalleryImageList.smoothScrollToPosition(currGalleryPosition);
+        pageIndicatorView.setSelection(currGalleryPosition%currGalleryImageList.size());
     }
 
     public static ShopHomeFragment newInstance() {
@@ -332,7 +340,21 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_home, container, false);
-        unbinder= ButterKnife.bind(this, view);
+        imgStoreStatus = (ImageView) view.findViewById(R.id.img_store_status);
+        imgShopLogo = (ImageView) view.findViewById(R.id.img_store_figure);
+        tvStoreName = (TextView) view.findViewById(R.id.tv_store_name);
+        btnShopSignature = (LinearLayout) view.findViewById(R.id.btn_shop_signature);
+        tvShopSignature = (TextView) view.findViewById(R.id.tv_shop_signature);
+        tvShopOpenDay = (TextView)view.findViewById(R.id.tv_store_open_days);
+        tvOpenDay = (TextView) view.findViewById(R.id.tv_shop_open_day);
+        viewpager = (ViewPager) view.findViewById(R.id.viewpager);
+        smartTabLayout = (SmartTabLayout) view.findViewById(R.id.smartTabLayout);
+        llSnsContainer = (LinearLayout) view.findViewById(R.id.ll_sns_container);
+        pageIndicatorView = (PageIndicatorView) view.findViewById(R.id.pageIndicatorView);
+        rvGalleryImageList = (RecyclerView) view.findViewById(R.id.rv_gallery_image_list);
+        tvLikeCount = (TextView) view.findViewById(R.id.tv_like_count);
+        tvStoreView = (TextView) view.findViewById(R.id.tv_store_view);
+        containerView = (NestedScrollView) view.findViewById(R.id.container_view);
         return view;
     }
 
@@ -342,6 +364,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         parentFragment = (ShopMainFragment) getParentFragment();
         storeId = parentFragment.storeId;
 
+        bannerView = view.findViewById(R.id.banner_store);
         btnShopUp = view.findViewById(R.id.btn_shop_signature_up);
         btnShopUp.setOnClickListener(this);
         tvShopSignature.setOnClickListener(this);
@@ -446,9 +469,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
     }
 
     private void broadcastNestedScrollingEnabled(boolean enable) {
@@ -753,6 +773,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void updateBanner(boolean hasSlider) {
+        setBannerDate();
         if (!hasSlider || currGalleryImageList.size() < 1) {
             currGalleryImageList.clear();
             currGalleryImageList.add("placeholder");  // 如果沒有圖片，加一張默認的空櫥窗占位圖
@@ -786,7 +807,30 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             pageIndicatorView.setVisibility(VISIBLE);
         }
     }
+    private void setBannerDate() {
+        List<WebSliderItem> webSliderItemList=new ArrayList<>();
+        for (String imageUrl : currGalleryImageList) {
+            WebSliderItem webSliderItem = new WebSliderItem(StringUtil.normalizeImageUrl(imageUrl), null, null, null, "[]");
+            webSliderItemList.add(webSliderItem);
+            // 设置数据
 
+//                carouselLoaded = true;
+        }
+        bannerView.setPages(webSliderItemList, (MZHolderCreator<BannerViewHolder>) () -> new BannerViewHolder(webSliderItemList));
+
+        if (currGalleryImageList.size() == 1) {
+//                SLog.info("here0");
+                bannerView.getViewPager().setOnScrollChangeListener(null);
+                bannerView.getViewPager().setNestedScrollingEnabled(false);
+                bannerView.setCanLoop(false);
+                bannerView.setNestedScrollingEnabled(false);
+                bannerView.setHorizontalFadingEdgeEnabled(false);
+                bannerView.setHorizontalScrollBarEnabled(false);
+            } else {
+                bannerView.start();
+                bannerView.setDelayedTime(2500);
+            }
+    }
     private void setStoreInfo(EasyJSONObject storeInfo) {
         try {
             storeName = storeInfo.getSafeString("storeName");
@@ -1284,43 +1328,86 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void setImageBanner() {
+
+        //設置banner頁圓角
+        bannerView.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), 5);
+            }
+        });
+        bannerView.setClipToOutline(true);
+        bannerView.setIndicatorVisible(true);
+        int heightPadding = Util.getScreenDimension(_mActivity).first * 9 / 16 - Util.dip2px(_mActivity, 36);
+        bannerView.setIndicatorPadding(0,heightPadding,0,0);
+        bannerView.setIndicatorRes(R.drawable.circle_grey_dot,R.drawable.circle_white_dot);
+
         // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
         // https://www.jianshu.com/p/e54db232df62
         countDownHandler = new CountDownHandler(this);
+        pagerSnapHelper = new PagerSnapHelper();
         rvGalleryImageList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
-        (new PagerSnapHelper()).attachToRecyclerView(rvGalleryImageList);
+        (pagerSnapHelper).attachToRecyclerView(rvGalleryImageList);
         goodsGalleryAdapter = new GoodsGalleryAdapter(_mActivity, currGalleryImageList);
-
         rvGalleryImageList.setAdapter(goodsGalleryAdapter);
-
-        rvGalleryImageList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rvGalleryImageList.postDelayed(new Runnable() {
             @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                try{
-                    int positon = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                    if (!bannerAuto) {
-                        bannerStart = false;
-                        SLog.info("position [%d]", positon);
-                    }
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        bannerStart = true;
-                        bannerAuto = false;
-                        if (positon >= 0) {
-                            pageIndicatorView.setSelection(positon%currGalleryImageList.size());
+            public void run() {
+                int targetPosition = Constant.INFINITE_LOOP_VALUE / 2;
+                rvGalleryImageList.scrollToPosition(targetPosition);
+                                    /*
+                                    解決PagerSnapHelper的scrollToPosition不能居中的問題
+                                    https://stackoverflow.com/questions/42988016/how-to-programmatically-snap-to-position-on-recycler-view-with-linearsnaphelper
+                                     */
+                rvGalleryImageList.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        SLog.info("featuresGoodsLayoutManager[%s]",rvGalleryImageList.toString());
+
+                        View view = rvGalleryImageList.getLayoutManager().findViewByPosition(targetPosition);
+
+                        SLog.info("featuresGoodsLayoutManagerView[%s]",rvGalleryImageList.getLayoutManager().toString());
+                        if (view == null) {
+                            SLog.info("Error!Cant find target View for initial Snap");
+                            return;
                         }
-//                        pageIndicatorView.setSelection(positon);
-                    }
-                }catch (Exception e) {
-                   SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                }
-            }
 
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+                        int[] snapDistance = pagerSnapHelper.calculateDistanceToFinalSnap(rvGalleryImageList.getLayoutManager(), view);
+                        if (snapDistance[0] != 0 || snapDistance[1] != 0) {
+                            rvGalleryImageList.scrollBy(snapDistance[0], snapDistance[1]);
+                        }
+                    }
+                });
             }
-        });
+        }, 50);
+//        rvGalleryImageList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                try{
+//                    int positon = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//                    if (!bannerAuto) {
+//                        bannerStart = false;
+//                        SLog.info("position [%d]", positon);
+//                    }
+//                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                        bannerStart = true;
+//                        bannerAuto = false;
+//                        if (positon >= 0) {
+//                            pageIndicatorView.setSelection(positon%currGalleryImageList.size());
+//                        }
+////                        pageIndicatorView.setSelection(positon);
+//                    }
+//                }catch (Exception e) {
+//                   SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+//                }
+//            }
+//
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//            }
+//        });
     }
     private void updateThumbView() {
         if (isLike == Constant.ONE) {
