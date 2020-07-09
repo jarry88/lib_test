@@ -1,0 +1,8 @@
+/twant/app/build/
+/twant/.idea/
+/twant/.gradle/
+/twant/gradlew
+/twant/gradlew.bat
+/twant/twant.iml
+/twant/local.properties
+/twant/gradle/
