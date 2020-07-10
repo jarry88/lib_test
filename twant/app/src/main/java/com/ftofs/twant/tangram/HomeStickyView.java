@@ -18,6 +18,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.StickyCellData;
+import com.ftofs.twant.fragment.BargainListFragment;
 import com.ftofs.twant.fragment.CategoryFragment;
 import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.ExplorerFragment;
@@ -172,7 +173,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-            Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13425038570", 10));
+            Util.startFragment(BargainListFragment.newInstance());
         }
     }
 

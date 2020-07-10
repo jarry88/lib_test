@@ -1475,7 +1475,6 @@ public class Api {
     public static final String PATH_CHANNEL_UPDATE = "/app/android/channel";
 
     /**
-<<<<<<< HEAD
      * 【賣家】添加規格信息
      */
     public static final String PATH_SELLER_ADD_SPEC = "/member/seller/spec/save.json";
@@ -1521,6 +1520,20 @@ public class Api {
      * 店鋪首頁渠道推廣統計
      */
     public static final String PATH_STORE_PROMOTION_STATS = "/store/home/record";
+
+
+    /**
+     * 砍价商品列表
+     */
+    public static final String PATH_BARGAIN_LIST = "/bargain/list";
+
+
+    /**
+     * 查询开砍记录
+     */
+    public static final String PATH_BARGAIN_OWNER = "/member/bargain/owner";
+
+
 
 
     /**

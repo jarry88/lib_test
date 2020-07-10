@@ -59,14 +59,7 @@ public class Constant {
     public static final int SERVER_ORDERS_STATE_UNINITIALIZED = -1; // 未初始化的，表示未取到服務器端的值
     public static final int SERVER_ORDERS_STATE_TO_BE_PAID = 10; // 待付款
 
-/**
- * 標題Item
- */
-     public static final int ITEM_TYPE_TITLE =4;
-    /**
-     * 沒有數據的Item
-     */
-    public static final int ITEM_TYPE_NO_DATA = 5;
+
 
     /**
      * 正常的Item
@@ -77,13 +70,22 @@ public class Constant {
      */
     public static final int ITEM_TYPE_LOAD_END_HINT = 2;
     /**
+     * Banner
+     */
+    public static final int ITEM_TYPE_BANNER = 3;
+    /**
+     * 標題Item
+     */
+    public static final int ITEM_TYPE_TITLE =4;
+    /**
+     * 沒有數據的Item
+     */
+    public static final int ITEM_TYPE_NO_DATA = 5;
+    /**
      * 數據全部加載完成的提示
      */
     public static final int ITEM_TYPE_NO_STORE_DATA = 6;
-    /**
-     * 雙十一活動Banner
-     */
-    public static final int ITEM_TYPE_DOUBLE_ELEVEN_BANNER = 3;
+
 
 
     /**

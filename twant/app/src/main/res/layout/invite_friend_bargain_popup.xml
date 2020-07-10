@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/real_name_instruction_popup_bg">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/border_type_d">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="邀請好友砍價"
+            android:textSize="18sp"
+            android:textColor="@color/tw_black">
+        </TextView>
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_close"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="7dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/btn_close">
+        </com.ftofs.twant.widget.ScaledButton>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/goods_image"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/border_type_a"
+        android:src="@drawable/cs_avatar_160">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/tv_goods_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="19dp"
+        android:layout_marginRight="19dp"
+        android:textColor="@color/tw_black"
+        android:text="快來幫我砍價德国原装进口（Braun）耳温快來幫我砍價德国原装进口（Braun）耳温"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:ellipsize="end">
+    </TextView>
+
+    <ImageView
+        android:id="@+id/img_qr_code"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/qr_code">
+    </ImageView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="43dp"
+        android:text="微信掃描二維碼分享好友及朋友圈"
+        android:textColor="@color/tw_black"
+        android:textSize="14sp">
+
+    </TextView>
+</LinearLayout>

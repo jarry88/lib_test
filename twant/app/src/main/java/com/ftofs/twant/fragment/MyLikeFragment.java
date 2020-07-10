@@ -191,7 +191,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                 int itemType = pair.getItemType();
                 if (itemType == Constant.ITEM_TYPE_NORMAL) {
                     return 1;
-                } else if (itemType == Constant.ITEM_TYPE_LOAD_END_HINT || itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
+                } else if (itemType == Constant.ITEM_TYPE_LOAD_END_HINT || itemType == Constant.ITEM_TYPE_BANNER) {
                     return 2;
                 }
                 return 1;
