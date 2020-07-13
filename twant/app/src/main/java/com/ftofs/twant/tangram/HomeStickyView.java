@@ -25,6 +25,7 @@ import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.LabFragment;
+import com.ftofs.twant.fragment.LinkageContainerFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.RegisterConfirmFragment;
@@ -168,7 +169,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-            Util.startFragment(LabFragment.newInstance());
+//            Util.startFragment(LabFragment.newInstance());
+            Util.startFragment(LinkageContainerFragment.Companion.newInstance());
         }
     }
 
