@@ -276,6 +276,9 @@ dependencies {
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     api rootProject.ext.dependencies["smartRefreshLayout"] // 刷新框架
+    api rootProject.ext.dependencies["rxjava"] // rxjava2
+    api rootProject.ext.dependencies["adapter-rxjava2"] // rxjava2
+    api rootProject.ext.dependencies["rxandroid"] // rxjava2
     implementation "androidx.room:room-runtime:2.2.5"
     kapt "android.arch.persistence.room:compiler:2.2.3"     // java
     annotationProcessor "androidx.room:room-compiler:2.2.5"

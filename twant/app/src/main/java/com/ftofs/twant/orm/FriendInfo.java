@@ -124,7 +124,7 @@ public class FriendInfo extends LitePalSupport {
                 memberName, nickname, storeName,avatarUrl,storeAvatarUrl, role);
     }
 
-    public String getAvatar() {
+    public String getRoleAvatar() {
         return role==0||role==3?avatarUrl: storeAvatarUrl;
     }
 
