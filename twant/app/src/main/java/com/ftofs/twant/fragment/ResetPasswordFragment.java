@@ -243,11 +243,14 @@ public class ResetPasswordFragment extends BaseFragment implements
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_mobile_zone) {
+            try {
+
             List<ListPopupItem> itemList = new ArrayList<>();
             for (MobileZone mobileZone : mobileZoneList) {
                 ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);
                 itemList.add(item);
             }
+
 
             hideSoftInput();
 
@@ -257,6 +260,10 @@ public class ResetPasswordFragment extends BaseFragment implements
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
                             PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+
+            }
         } else if (id == R.id.btn_refresh_captcha) {
             refreshCaptcha();
         } else if (id == R.id.btn_next) {

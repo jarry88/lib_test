@@ -140,7 +140,7 @@ public class Conversation extends LitePalSupport {
         EasyJSONObject extFieldObj = EasyJSONObject.parse(extField);
         try {
             nickname = extFieldObj.getSafeString("nickName");
-            storeName = extFieldObj.getSafeString("storeName");
+//            storeName = extFieldObj.getSafeString("storeName");
             avatarUrl = extFieldObj.getSafeString("avatarUrl");
             role = extFieldObj.getInt("role");
         } catch (Exception e) {
