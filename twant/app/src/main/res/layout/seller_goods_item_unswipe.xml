@@ -160,7 +160,7 @@
                         android:scaleType="fitXY"
                         android:textColor="@color/tw_text_dark"
                         android:textSize="13sp"
-                        android:src="@{vo.isCommend==2?@drawable/ic_blue_add_circle_outline_24:@drawable/ic_blue_remove_circle_outline_24}">
+                        android:src="@{vo.isCommend!=2?@drawable/ic_blue_add_circle_outline_24:@drawable/ic_blue_remove_circle_outline_24}">
                     </ImageView>
                 </RelativeLayout>
             </LinearLayout>
