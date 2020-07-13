@@ -1529,11 +1529,21 @@ public class Api {
 
 
     /**
-     * 查询开砍记录
+     * 發起的砍價列表
      */
     public static final String PATH_BARGAIN_OWNER = "/member/bargain/owner";
 
 
+    /**
+     * 發起的砍價列表
+     */
+    public static final String PATH_BARGAIN_HELP = "/member/bargain/help";
+
+
+    /**
+     * 砍價商品詳情
+     */
+    public static final String PATH_BARGAIN_GOODS = "/bargain/goods";
 
 
     /**

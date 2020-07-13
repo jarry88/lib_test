@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:src="@drawable/cs_avatar_160">
+
+            </ImageView>
+            <LinearLayout
+                android:layout_width="183dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/tw_black"
+                    android:text="GRACO葛莱婴儿推车 可座可平躺 轻便折叠伞车双 可座可平躺 轻便折叠伞车双"
+                    android:lines="2"
+                    android:ellipsize="end">
+
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="顏色：黑色"
+                    android:textColor="#929292"
+                    android:textSize="13sp">
+
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="2020.2.20-2020.5.20"
+                    android:textSize="13sp"
+                    android:textColor="#A6A6A6">
+                </TextView>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="當前價格"
+                        android:textSize="11sp"
+                        android:textColor="#A1A1A1">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/tv_current_bargain_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_red"
+                        android:text="345.00">
+                    </TextView>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+        <!-- 分隔線 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/tw_light_grey">
+        </View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_my_bargain_item_help_count">
+            </ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:textColor="#929292"
+                android:text="5人幫砍"
+                android:textSize="13sp">
+            </TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="19dp"
+                android:src="@drawable/ic_my_bargain_item_down_price">
+            </ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:textColor="#929292"
+                android:text="已砍掉$34.00"
+                android:textSize="13sp">
+            </TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="19dp"
+                android:src="@drawable/ic_my_bargain_item_bottom_price">
+            </ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:textColor="#929292"
+                android:text="底价：¥300.00"
+                android:textSize="13sp">
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

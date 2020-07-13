@@ -102,6 +102,9 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_wallet, this);
         Util.setOnClickListener(view, R.id.btn_my_bonus, this);
         Util.setOnClickListener(view, R.id.btn_my_trust_value, this);
+        Util.setOnClickListener(view, R.id.btn_more_price, this);
+        Util.setOnClickListener(view, R.id.btn_handle_price, this);
+        Util.setOnClickListener(view, R.id.btn_help_price, this);
 
 
         rvGuessList = view.findViewById(R.id.rv_guess_list);
@@ -209,6 +212,19 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
             case R.id.btn_my_trust_value:
                 Util.startFragment(TrustValueFragment.newInstance(TrustValueFragment.DATA_TYPE_TRUST_VALUE));
+                break;
+            case R.id.btn_more_price:
+                Util.startFragment(BargainListFragment.newInstance());
+                break;
+            case R.id.btn_handle_price:
+            case R.id.btn_help_price:
+                int dataType;
+                if (id == R.id.btn_handle_price) {
+                    dataType = MyBargainListFragment.DATA_TYPE_INITIATE;
+                } else {
+                    dataType = MyBargainListFragment.DATA_TYPE_PARTICIPATE;
+                }
+                Util.startFragment(MyBargainListFragment.newInstance(dataType));
                 break;
             default:
                 break;
