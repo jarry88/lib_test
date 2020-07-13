@@ -81,7 +81,7 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
                 int id = view.getId();
                 if (id == R.id.btn_versatile) {
                     BargainItem bargainItem = bargainItemList.get(position);
-                    Util.startFragment(GoodsDetailFragment.newInstance(bargainItem.commonId, bargainItem.goodsId));
+                    Util.startFragment(GoodsDetailFragment.newInstance(bargainItem.commonId, bargainItem.goodsId, bargainItem.bargainId));
                 }
             }
         });
@@ -141,6 +141,7 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
                         BargainItem bargainItem = new BargainItem(Constant.ITEM_TYPE_NORMAL);
                         bargainItem.commonId = bargainGoodsVo.getInt("commonId");
                         bargainItem.goodsId = bargainGoodsVo.getInt("goodsId");
+                        bargainItem.bargainId = bargainGoodsVo.getInt("bargainId");
                         bargainItem.imageSrc = bargainGoodsVo.getSafeString("imageSrc");
                         bargainItem.goodsName = bargainGoodsVo.getSafeString("goodsName");
                         bargainItem.jingle = bargainGoodsVo.getSafeString("jingle");

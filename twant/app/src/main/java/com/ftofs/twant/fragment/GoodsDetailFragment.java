@@ -116,6 +116,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private static final int BEFORE_DISCOUNT=1;
     private static final int IN_DISCOUNT=2;
     private static final int OUT_DISCOUNT=3;
+
+    // 砍價Id
+    int bargainId = Constant.INVALID_BARGAIN_ID;
     // 產品Id
     int commonId;
     // 當前選中的goodsId
@@ -293,6 +296,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int promotionType = Constant.PROMOTION_TYPE_NONE;
     long promotionCountDownTime;
 
+    long bargainStartTime = 0;
+    long bargainEndTime = 0;
+
     // 倒計時
     CountDownTimer countDownTimer;
 
@@ -373,17 +379,23 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      *
      * @param commonId spuId
      * @param goodsId  skuId, 用于選中指定的sku，如果傳0,表示默認選中第一個sku
+     * @param bargainId 砍價Id
      * @return
      */
-    public static GoodsDetailFragment newInstance(int commonId, int goodsId) {
+    public static GoodsDetailFragment newInstance(int commonId, int goodsId, int bargainId) {
         Bundle args = new Bundle();
 
         args.putInt("commonId", commonId);
         args.putInt("goodsId", goodsId);
         GoodsDetailFragment fragment = new GoodsDetailFragment();
         fragment.setArguments(args);
+        fragment.bargainId = bargainId;
 
         return fragment;
+    }
+
+    public static GoodsDetailFragment newInstance(int commonId, int goodsId) {
+        return newInstance(commonId, goodsId, Constant.INVALID_BARGAIN_ID);
     }
 
     @Nullable
@@ -1238,6 +1250,265 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    private void loadData() {
+        if (bargainId != Constant.INVALID_BARGAIN_ID) {
+            loadBargainGoods();
+        } else {
+            loadGoodsDetail();
+        }
+    }
+
+    private void loadBargainGoods() {
+        if (bargainId == Constant.INVALID_BARGAIN_ID) {
+            return;
+        }
+
+        promotionType = Constant.PROMOTION_TYPE_BARGAIN;
+
+        try {
+            String token = User.getToken();
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "bargainId", bargainId);
+
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
+            }
+
+            String url = Api.PATH_BARGAIN_GOODS;
+            SLog.info("url[%s], params[%s]", url, params);
+            Api.postUI(url, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                    adapter.loadMoreFail();
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    try {
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            adapter.loadMoreFail();
+                            return;
+                        }
+
+                        EasyJSONObject goodsCommon = responseObj.getSafeObject("datas.bargainGoodsDetailVo.goodsCommon");
+                        EasyJSONObject bargain = responseObj.getSafeObject("datas.bargainGoodsDetailVo.bargain");
+
+                        goodsName = goodsCommon.getSafeString("goodsName");
+                        tvGoodsName.setText(goodsName);
+                        jingle = goodsCommon.getSafeString("jingle");
+                        tvGoodsJingle.setText(jingle);
+                        //產品状态 可以购买1，下架0
+                        int goodsState = goodsCommon.getInt("goodsState");
+                        //針對用戶id限購 可以购买0，提示限購-1
+                        setGoodsStatus(goodsState);
+
+                        goodsPrice = Util.getSpuPrice(goodsCommon);
+                        tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
+                        UiUtil.toPriceUI(tvGoodsPrice,0);
+
+                        storeId = goodsCommon.getInt("storeId");
+
+                        if (goodsCommon.exists("detailVideo")) {
+                            String detailVideoUrl = goodsCommon.getSafeString("detailVideo");
+                            SLog.info("detailVideoUrl[%s]", detailVideoUrl);
+                            if (!StringUtil.isEmpty(detailVideoUrl)) {
+                                detailVideoId = Util.getYoutubeVideoId(detailVideoUrl);
+                                if (!StringUtil.isEmpty(detailVideoId)) { // 如果有介紹視頻
+                                    String coverUrl = String.format("https://img.youtube.com/vi/%s/sddefault.jpg", detailVideoId);
+                                    View detailVideoView = LayoutInflater.from(_mActivity).inflate(R.layout.goods_detail_video, llGoodsDetailImageContainer, false);
+                                    ImageView imgDetailVideoCover = detailVideoView.findViewById(R.id.img_detail_video_cover);
+                                    Glide.with(_mActivity).load(coverUrl).centerCrop().into(imgDetailVideoCover);
+
+                                    detailVideoView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Util.playYoutubeVideo(_mActivity, detailVideoId);
+                                        }
+                                    });
+
+                                    llGoodsDetailImageContainer.addView(detailVideoView);
+                                }
+                            }
+                        }
+
+                        String bargainStartTimeStr = bargain.getSafeString("startTime");
+                        Jarbon bargainStartTimeJarbon = Jarbon.parse(bargainStartTimeStr);
+                        bargainStartTime = bargainStartTimeJarbon.getTimestampMillis();
+                        String bargainEndTimeStr = bargain.getSafeString("endTime");
+                        Jarbon bargainEndTimeJarbon = Jarbon.parse(bargainEndTimeStr);
+                        bargainEndTime = bargainEndTimeJarbon.getTimestampMillis();
+                        SLog.info("bargainStartTime[%d], bargainEndTime[%d]", bargainStartTime, bargainEndTime);
+
+                        llGroupListContainer.setVisibility(GONE);
+
+
+
+
+                        // 【贈品】優惠
+                        boolean first = true;
+                        EasyJSONArray goodsInfoVoList = responseObj.getSafeArray("datas.goodsDetail.goodsInfoVoList");
+                        for (Object object : goodsInfoVoList) {
+                            GoodsInfo goodsInfo = new GoodsInfo();
+
+                            EasyJSONObject goodsInfoVo = (EasyJSONObject) object;
+                            int goodsId = goodsInfoVo.getInt("goodsId");
+                            EasyJSONArray giftVoList = goodsInfoVo.getSafeArray("giftVoList");
+
+                            List<GiftItem> giftItemList = new ArrayList<>();
+                            for (Object object2 : giftVoList) {
+                                EasyJSONObject giftVo = (EasyJSONObject) object2;
+
+                                GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, giftVo.toString());
+                                giftItemList.add(giftItem);
+                            }
+                            // SLog.info("ddddddddddddddddddxxxxx[%d][%d]", goodsId, giftItemList.size());
+                            giftMap.put(goodsId, giftItemList);
+                            // 如果從外面傳進來的參數沒有指定goodsId, 則默認選中第一項sku
+                            if (currGoodsId == 0 && first) {
+                                currGoodsId = goodsId;
+                                SLog.info("默認選中第一項sku, goodsId[%d]", goodsId);
+                            }
+
+                            // 獲取每個sku對應的輪播圖列表
+                            List<String> goodsGalleryImageList = new ArrayList<>();
+                            EasyJSONArray goodsImageList = goodsInfoVo.getSafeArray("goodsImageList");
+                            for (Object object2 : goodsImageList) {
+                                EasyJSONObject goodsImageObj = (EasyJSONObject) object2;
+                                String imageName = goodsImageObj.getSafeString("imageName");
+                                goodsGalleryImageList.add(imageName);
+                            }
+
+                            skuGoodsGalleryMap.put(goodsId, goodsGalleryImageList);
+
+                            goodsInfo.goodsId = goodsId;
+                            goodsInfo.commonId = commonId;
+                            goodsInfo.goodsFullSpecs = goodsInfoVo.getSafeString("goodsFullSpecs");
+                            goodsInfo.specValueIds = goodsInfoVo.getSafeString("specValueIds");
+                            goodsInfo.goodsPrice0 =  goodsInfoVo.getDouble("goodsPrice0");
+                            goodsInfo.price = Util.getSkuPrice(goodsInfoVo);
+                            SLog.info("__goodsInfo.price[%s], goodsInfoVo[%s]", goodsInfo.price, goodsInfoVo.toString());
+                            goodsInfo.imageSrc = goodsInfoVo.getSafeString("imageSrc");
+                            goodsInfo.goodsStorage = goodsInfoVo.getInt("goodsStorage");
+                            goodsInfo.reserveStorage = goodsInfoVo.getInt("reserveStorage");
+                            goodsInfo.limitAmount = goodsInfoVo.getInt("limitAmount");
+                            goodsInfo.unitName = goodsInfoVo.getSafeString("unitName");
+                            goodsInfo.goodsName = goodsName;
+                            goodsInfo.promotionType =goodsInfoVo.getInt("promotionType");
+                            goodsInfo.appUsable =goodsInfoVo.getInt("appUsable");
+                            goodsInfo.isGroup = 0;
+                            Object tmpObj = goodsInfoVo.get("isGroup");
+                            if (!Util.isJsonNull(tmpObj)) {
+                                goodsInfo.isGroup = goodsInfoVo.getInt("isGroup");
+                            }
+                            if (goodsInfo.isGroup == Constant.TRUE_INT) {
+                                goodsInfo.groupPrice = goodsInfoVo.getDouble("groupPrice");
+                                goodsInfo.groupDiscountAmount = goodsInfo.goodsPrice0 - goodsInfo.groupPrice;
+                            }
+
+                            goodsInfoMap.put(goodsId, goodsInfo);
+
+                            SkuGalleryItem skuGalleryItem = new SkuGalleryItem(
+                                    goodsId,
+                                    StringUtil.normalizeImageUrl(goodsInfo.imageSrc),
+                                    goodsInfoVo.getSafeString("goodsSpecString"),
+                                    goodsInfo.goodsPrice0,
+                                    goodsInfo.specValueIds
+                            );
+                            skuGalleryItemList.add(skuGalleryItem);
+
+                            first = false;
+                        }
+
+
+                        // 【滿減】優惠
+                        EasyJSONArray conformList = responseObj.getSafeArray("datas.goodsDetail.conformList");
+                        if (conformList.length() > 0) {
+                            first = true;
+                            StringBuilder conformText = new StringBuilder();
+                            for (Object object : conformList) {
+                                if (!first) {
+                                    conformText.append(" / ");
+                                }
+
+                                EasyJSONObject conform = (EasyJSONObject) object;
+                                conformText.append(conform.getSafeString("shortRule"));
+
+                                GoodsConformItem goodsConformItem = new GoodsConformItem();
+                                goodsConformItem.conformId = conform.getInt("conformId");
+                                goodsConformItem.startTime = conform.getSafeString("startTime");
+                                goodsConformItem.endTime = conform.getSafeString("endTime");
+                                goodsConformItem.limitAmount = conform.getInt("limitAmount");
+                                goodsConformItem.conformPrice = conform.getInt("conformPrice");
+                                goodsConformItem.isFreeFreight = conform.getInt("isFreeFreight");
+                                goodsConformItem.templateId = conform.getInt("templateId");
+                                goodsConformItem.templatePrice = conform.getInt("templatePrice");
+
+                                EasyJSONArray giftVoList = conform.getSafeArray("giftVoList");
+                                if (giftVoList.length() > 0) {
+                                    goodsConformItem.giftVoList = new ArrayList<>();
+                                    for (Object object2 : giftVoList) {
+                                        GiftVo giftVo = (GiftVo) EasyJSONBase.jsonDecode(GiftVo.class, object2.toString());
+                                        SLog.info("giftVo[%s]", giftVo);
+                                        goodsConformItem.giftVoList.add(giftVo);
+                                    }
+                                }
+
+
+                                goodsConformItemList.add(goodsConformItem);
+                                first = false;
+                            }
+                            btnShowConform.setVisibility(VISIBLE);
+                            vwSeparator0.setVisibility(View.VISIBLE);
+                        }
+
+                        // 初始化默認選擇
+                        SLog.info("初始化默認選擇 currGoodsId[%d]", currGoodsId);
+                        selectSku(currGoodsId);
+
+                        commentCount = responseObj.getInt("datas.wantCommentVoInfoCount");
+                        tvCommentCount.setText(String.format(getString(R.string.text_comment) + "(%d)", commentCount));
+                        tvGoodsCommentCount.setText(String.valueOf(commentCount));
+
+                        SLog.info("commentCount[%d]", commentCount);
+                        if (commentCount > 0) {
+                            // 如果有說說，顯示首條說說
+                            EasyJSONObject wantCommentVoInfo = responseObj.getSafeObject("datas.wantCommentVoInfoList[0]");
+
+                            String commenterAvatarUrl = StringUtil.normalizeImageUrl(wantCommentVoInfo.getSafeString("memberVo.avatar"));
+                            SLog.info("commenterAvatarUrl[%s]", commenterAvatarUrl);
+                            if (StringUtil.useDefaultAvatar(commenterAvatarUrl)) {
+                                Glide.with(_mActivity).load(R.drawable.grey_default_avatar).centerCrop().into(imgCommenterAvatar);
+                            } else {
+                                Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(commenterAvatarUrl)).centerCrop().into(imgCommenterAvatar);
+                            }
+
+                            tvCommenterNickname.setText(wantCommentVoInfo.getSafeString("memberVo.nickName"));
+                            String comment = wantCommentVoInfo.getSafeString("content");
+                            if (StringUtil.isEmpty(comment)) {  // 如果說說內容為空，表明為圖片說說
+                                comment = "[圖片]";
+                            }
+                            tvComment.setText(StringUtil.translateEmoji(_mActivity, comment, (int) tvComment.getTextSize()));
+                        } else {
+                            // 如果沒有說說，隱藏相應的控件
+                            llFirstCommentContainer.setVisibility(GONE);
+                        }
+
+                        isDataValid = true;
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
     private void loadGoodsDetail() {
         View contentView = getView();
         if (contentView == null) {
@@ -1591,6 +1862,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             startCountDown();
                         } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) { // 限時折扣
                             startCountDown();
+                        } else if (promotionType == Constant.PROMOTION_TYPE_BARGAIN) { // 砍價功能
+
                         }
                     }
 
@@ -1958,7 +2231,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         SLog.info("onSupportVisible");
 
         if (!isDataValid) {
-            loadGoodsDetail();
+            loadData();
         }
     }
 

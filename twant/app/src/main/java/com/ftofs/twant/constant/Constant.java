@@ -350,8 +350,11 @@ public class Constant {
     public static final int PROMOTION_TYPE_NONE = 0;
     public static final int PROMOTION_TYPE_TIME_LIMITED_DISCOUNT = 1;
     public static final int PROMOTION_TYPE_GROUP = 4;
+    public static final int PROMOTION_TYPE_BARGAIN = 7;
 
 
     // 無效的開團Id
     public static final int INVALID_GO_ID = -1;
+    // 無效的砍價Id
+    public static final int INVALID_BARGAIN_ID = -1;
 }
