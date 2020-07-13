@@ -35,4 +35,10 @@
             android:background="#ffa">
         </View>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layerType="software"
+        android:background="@drawable/dash_line" />
 </LinearLayout>

@@ -24,6 +24,7 @@ import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
+import com.ftofs.twant.fragment.LabFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.RegisterConfirmFragment;
@@ -148,12 +149,6 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (Config.DEVELOPER_MODE) {
-            if (id == R.id.icon_takewant) {
-//                Util.startFragment(SellerFeaturesFragment.newInstance());
-                Util.startFragment(new TestNetFragment());
-            }
-        }
         if (id == R.id.btn_goto_activity) {
 //            gotoTestFragment();
             gotoActivity();
@@ -173,7 +168,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-            Util.startFragment(BargainListFragment.newInstance());
+            Util.startFragment(LabFragment.newInstance());
         }
     }
 
