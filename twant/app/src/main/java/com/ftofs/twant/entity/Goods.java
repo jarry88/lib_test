@@ -4,7 +4,6 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
@@ -22,7 +21,7 @@ public class Goods implements MultiItemEntity {
     private int goodsStorage=1;
     public int goodsStatus=1;
     public int buyNum;
-    private int appUsabe;
+    public int appUsable;
     public int promotionType = Constant.PROMOTION_TYPE_NONE;
 
     public Goods(int commonId, String imageUrl, String name, String jingle, double price) {
@@ -93,7 +92,7 @@ public class Goods implements MultiItemEntity {
         if (appUsable > 0 && goods1.promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
             goods1.showDiscount = true;
             goods1.batchPrice0 = batchPrice0;
-            goods1.appUsabe = appUsable;
+            goods1.appUsable = appUsable;
         }
         if (goods.exists("buyNum")) {
             goods1.buyNum = goods.getInt("buyNum");
