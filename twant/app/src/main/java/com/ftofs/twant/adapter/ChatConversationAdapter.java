@@ -6,6 +6,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -13,6 +15,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ChatConversation;
+import com.ftofs.twant.interfaces.DiffCallBack;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Jarbon;
@@ -28,6 +31,9 @@ import java.util.List;
  */
 public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, BaseViewHolder> {
     Jarbon now;
+    private DiffUtil.ItemCallback<ChatConversation> diffCallback = new DiffCallBack();
+    private AsyncListDiffer<ChatConversation> chatConversationAsyncListDiffer=new AsyncListDiffer<ChatConversation>(this,diffCallback);
+
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -40,7 +46,19 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
 
         now = new Jarbon();
     }
-
+    @Override
+    public int getItemCount() {
+        if (chatConversationAsyncListDiffer == null) {
+            return 0;
+        }
+        return chatConversationAsyncListDiffer.getCurrentList().size();
+    }
+    public void submitList(List<ChatConversation> data) {
+        chatConversationAsyncListDiffer.submitList(data);
+    }
+    public ChatConversation getItem(int position) {
+        return chatConversationAsyncListDiffer.getCurrentList().get(position);
+    }
     @Override
     protected void convert(BaseViewHolder helper, ChatConversation chatConversation) {
         LinearLayout linearLayout = helper.getView(R.id.ll_message_item_container);
@@ -59,13 +77,14 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
 
         }
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
-        String avatarUrl = chatConversation.friendInfo.getAvatar();
+        //此处已经按身份区分并返回头像
+        String avatarUrl = chatConversation.friendInfo.getRoleAvatar();
 
         if (StringUtil.isEmpty(avatarUrl)) {
             if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
                 Glide.with(mContext).load(R.drawable.icon_twant_loge).centerCrop().into(imgAvatar);
-            } else if(chatConversation.friendInfo.role>0) {
-                Glide.with(mContext).load(chatConversation.friendInfo.storeAvatar).centerCrop().into(imgAvatar);
+            } else {
+                Glide.with(mContext).load(R.drawable.icon_default_avatar).centerCrop().into(imgAvatar);
             }
         } else {
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imgAvatar);

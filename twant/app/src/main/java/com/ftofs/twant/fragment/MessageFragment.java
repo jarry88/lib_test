@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -27,6 +29,7 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.UnreadCount;
+import com.ftofs.twant.interfaces.DiffCallBack;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
@@ -59,6 +62,7 @@ import com.lxj.xpopup.interfaces.XPopupCallback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.reactivestreams.Subscriber;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,10 +70,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DefaultObserver;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 
 
@@ -349,31 +359,23 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 }
 
                 //不是每條都在數據庫保存過，直接取數據庫不可以 gzp
+                //如果没有找到会返回一个新建的 friendinfo 所以friendinfo 不会为空
                 FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
                 String extField = conversation.extField;
-                SLog.info("extField[%s],Conversation[%s]", extField,conversation.toString());
+                SLog.info("friendName,[%s},extField[%s],Conversation[%s]",friendInfo.memberName, extField,conversation.toString());
                 if (!StringUtil.isEmpty(conversation.nickname)) {
-                    friendInfo.nickname = conversation.nickname;
-                    friendInfo.avatarUrl = conversation.avatarUrl;
-                    friendInfo.storeAvatar = conversation.storeAvatarUrl;
-                    friendInfo.storeName = conversation.storeName;
-                    friendInfo.storeAvatarUrl = conversation.storeAvatarUrl;
-                    friendInfo.role = conversation.role;
-                    friendInfo.storeName = conversation.storeName;
+                    //获取环形的最新数据，更新friendInfo
+                    friendInfo = conversation.toFriendInfo();
                     SLog.info("會話框數據從extFied得到");
 //                    friendInfo.storeName = extFieldObj.getSafeString("storeName");
                 } else {
                     // 如果没有扩展字段，并且数据库有保存，则从数据库中拿
                     SLog.info("會話框數據從數據庫得到");
-                    FriendInfo savedFriendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
-                    if (savedFriendInfo != null) {
-                        friendInfo = savedFriendInfo;
-                    }
                 }
 
 
-                SLog.info("unreadCount[%d],memberName[%s], lastMessage[%s], timestamp[%s], nickname[%s], avatar[%s]",
-                       conversation.unreadMsgCount, memberName, conversation.lastMessageText, Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"),
+                SLog.info("unreadCount[%d],conversationName[%s],friend memberName[%s], lastMessage[%s], timestamp[%s], nickname[%s], avatar[%s]",
+                       conversation.unreadMsgCount, conversation.memberName,friendInfo.memberName, conversation.lastMessageText, Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"),
                         friendInfo.nickname, friendInfo.avatarUrl);
 
                 SLog.info("friendInfo[%s],lastMessage %s", friendInfo,conversation.lastMessageText);
@@ -390,14 +392,14 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 totalIMUnreadCount += chatConversation.unreadCount;
                 SLog.info("here!!storeid%d, platId%d",friendInfo.storeId,PLATFORM_CUSTOM_STORE_ID);
                if (friendInfo.storeId != PLATFORM_CUSTOM_STORE_ID&&!StringUtil.isEmpty(friendInfo.nickname)) {
-                    //過濾平臺客服鏈接
+                    //如果不是平臺客服鏈接
                    chatConversationList.add(chatConversation);
                }else{
 
                }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                chatConversationList.sort((o1, o2) -> o1.timestamp>o2.timestamp?-1:0);
+                chatConversationList.sort((o1, o2) -> comO1O2(o1,o2));
             }
             // 獲取環信所有會話列表
             if (!isPlatformCustomer) {
@@ -421,7 +423,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 //            chatConversationList.add(null);
 
             adapter.setNewData(chatConversationList);
-
+//            adapter.submitList(chatConversationList);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -444,7 +446,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             SLog.info("storeavatar[%s]",member.storeAvatar);
                         }
                     }
-                    adapter.notifyDataSetChanged();
+//                    adapter.notifyDataSetChanged();
+                    adapter.submitList(chatConversationList);
                 });
             }
         }
@@ -523,14 +526,28 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     displayUnreadCount();
 
                     // 消息排序
-                    Collections.sort(chatConversationList, (o1, o2) -> (int) (o1.timestamp - o2.timestamp));
+                    Collections.sort(chatConversationList, (o1, o2) -> comO1O2(o1,o2));
 
-                    adapter.setNewData(chatConversationList);
+
+//                    adapter.setNewData(chatConversationList);
+                    adapter.submitList(chatConversationList);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
+    }
+
+    private int comO1O2(ChatConversation o1, ChatConversation o2) {
+        if (o1.unreadCount > 0 && o2.unreadCount > 0 || o1.unreadCount == o2.unreadCount && o1.unreadCount == 0) {
+            return (int) ( o2.timestamp-o1.timestamp);
+        } else {
+            if (o1.unreadCount > 0) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
     }
 
     private void loadUnreadMessageCount() {
@@ -783,8 +800,11 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             String sendTime =conversation.getSafeString("sendTime");
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
-                                if (chatConversation.friendInfo != null) {
-                                    if (chatConversation.friendInfo.memberName.equals(friendInfo.memberName)) {
+                                if (chatConversation == null) {
+                                    continue;
+                                }
+                                if (chatConversation.friendInfo != null&&friendInfo!=null) {
+                                    if (TextUtils.equals(chatConversation.friendInfo.memberName,friendInfo.memberName)&&friendInfo.memberName!=null) {
                                         has = true;
                                         int timestamp = Jarbon.parse(sendTime).getTimestamp();
                                         chatConversation.friendInfo = friendInfo;
@@ -802,7 +822,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                     }
                                 }
                             }
-                            SLog.info("messageFragment [%s]","0");
 
                             if (!has) {
                                 ChatConversation newChat = new ChatConversation();
@@ -822,6 +841,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                     conversation1.nickname = friendInfo.storeName+" "+friendInfo.nickname;
                                 }
                                 conversation1.avatarUrl = friendInfo.role>0?friendInfo.storeAvatarUrl:friendInfo.avatarUrl;
+                                conversation1.storeAvatarUrl = friendInfo.storeAvatarUrl;
                                 conversation1.lastMessageText = messageContent;
                                 conversation1.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                 conversation1.storeId = friendInfo.storeId;
@@ -840,7 +860,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 //                    if (chatConversationList.size() > oldCount) {
                     SLog.info("messageFragment [%s]","3");
 
-                    adapter.notifyDataSetChanged();
+//                    adapter.notifyDataSetChanged();
+                    adapter.submitList(chatConversationList);
 //                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

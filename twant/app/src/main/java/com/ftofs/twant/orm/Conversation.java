@@ -103,7 +103,7 @@ public class Conversation extends LitePalSupport {
         }
         Conversation conversation1 = Conversation.getByMemberName(newChat.friendInfo.memberName);
         conversation1.nickname = newChat.friendInfo.nickname;
-        conversation1.storeName = newChat.friendInfo.nickname;
+        conversation1.storeName = newChat.friendInfo.storeName;
         conversation1.avatarUrl = newChat.friendInfo.avatarUrl;
         conversation1.storeAvatarUrl = newChat.friendInfo.storeAvatar;
         conversation1.lastMessageText = newChat.lastMessage;
@@ -140,6 +140,7 @@ public class Conversation extends LitePalSupport {
         EasyJSONObject extFieldObj = EasyJSONObject.parse(extField);
         try {
             nickname = extFieldObj.getSafeString("nickName");
+            storeName = extFieldObj.getSafeString("storeName");
             avatarUrl = extFieldObj.getSafeString("avatarUrl");
             role = extFieldObj.getInt("role");
         } catch (Exception e) {
@@ -189,8 +190,8 @@ public class Conversation extends LitePalSupport {
     @NonNull
     @Override
     public String toString() {
-        return String.format("memberName[%s], nickname[%s], avatarUrl[%s], role[%s],lastMessage[%s],lastMessageTime[%s]",
-                memberName, nickname, avatarUrl, role,lastMessageText,lastMessageTime);
+        return String.format("memberName[%s], nickname[%s],storeName[%s] avatarUrl[%s], role[%s],lastMessage[%s],lastMessageTime[%s]",
+                memberName, nickname,storeName, avatarUrl, role,lastMessageText,lastMessageTime);
     }
 
     public boolean needUpdate() {
@@ -198,5 +199,18 @@ public class Conversation extends LitePalSupport {
             return true;
         }
         return false;
+    }
+
+    public FriendInfo toFriendInfo() {
+        FriendInfo friendInfo = new FriendInfo();
+        friendInfo.nickname = nickname;
+        friendInfo.memberName = memberName;
+        friendInfo.avatarUrl = avatarUrl;
+        friendInfo.storeAvatar = storeAvatarUrl;
+        friendInfo.storeName = storeName;
+        friendInfo.storeAvatarUrl = storeAvatarUrl;
+        friendInfo.role = role;
+        friendInfo.storeName = storeName;
+        return friendInfo;
     }
 }

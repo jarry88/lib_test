@@ -457,7 +457,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 yourAvatarUrl = yourInfo.storeAvatar;
                 Conversation conversation=Conversation.getByMemberName(yourMemberName);
                 conversation.nickname = yourNickname;
-
+                conversation.storeName = yourInfo.storeName;
+                conversation.storeAvatarUrl = yourInfo.storeAvatar;
                 conversation.save();
             }
             showGoodsAndOrder();
@@ -504,7 +505,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         EventBus.getDefault().unregister(this);
 
         // 指定会话消息未读数清零(離開會話處)
-        conversation.markAllMessagesAsRead();
+        if (conversation != null) {
+            conversation.markAllMessagesAsRead();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1653,6 +1656,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     public void setConversation(EMConversation conversation) {
         this.conversation = conversation;
+        SLog.info(conversation.toString());
     }
 
     public void setFriendInfo(FriendInfo friendInfo) {
