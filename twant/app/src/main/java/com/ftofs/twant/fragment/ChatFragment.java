@@ -458,6 +458,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 Conversation conversation=Conversation.getByMemberName(yourMemberName);
                 conversation.nickname = yourNickname;
                 conversation.storeName = yourInfo.storeName;
+                conversation.storeAvatarUrl = yourInfo.storeAvatar;
                 conversation.save();
             }
             showGoodsAndOrder();
