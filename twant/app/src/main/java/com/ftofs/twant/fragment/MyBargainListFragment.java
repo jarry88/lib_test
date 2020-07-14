@@ -84,7 +84,7 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
 
         rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        adapter = new MyBargainListAdapter(R.layout.my_bargain_list_item, myBargainItemList);
+        adapter = new MyBargainListAdapter(_mActivity, R.layout.my_bargain_list_item, myBargainItemList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
         rvList.setAdapter(adapter);
@@ -135,6 +135,24 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
                     if (!hasMore) {
                         adapter.loadMoreEnd();
                         adapter.setEnableLoadMore(false);
+                    }
+
+                    EasyJSONArray bargainGoodsOpenLogVoList = responseObj.getSafeArray("datas.bargainGoodsOpenLogVoList");
+                    for (Object object : bargainGoodsOpenLogVoList) {
+                        EasyJSONObject bargainGoodsOpenLogVo = (EasyJSONObject) object;
+                        MyBargainListItem item = new MyBargainListItem();
+
+                        item.imageSrc = bargainGoodsOpenLogVo.getSafeString("imageSrc");
+                        item.goodsName = bargainGoodsOpenLogVo.getSafeString("goodsName");
+                        item.goodsFullSpecs = bargainGoodsOpenLogVo.getSafeString("goodsFullSpecs");
+                        item.startTime = bargainGoodsOpenLogVo.getSafeString("startTime");
+                        item.endTime = bargainGoodsOpenLogVo.getSafeString("endTime");
+                        item.openPrice = bargainGoodsOpenLogVo.getDouble("openPrice"); // 當前價
+                        item.bargainPrice = bargainGoodsOpenLogVo.getDouble("bargainPrice");  // 已砍掉的價錢
+                        item.bargainTimes = bargainGoodsOpenLogVo.getInt("bargainTimes"); // 幫砍次數
+                        item.bottomPrice = bargainGoodsOpenLogVo.getDouble("bottomPrice");
+
+                        myBargainItemList.add(item);
                     }
 
                     adapter.loadMoreComplete();

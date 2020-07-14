@@ -449,7 +449,7 @@
                                         android:id="@+id/tv_bargain_remain_day"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="5天"
+                                        android:text="0天"
                                         android:textSize="12sp"
                                         android:textColor="@android:color/white">
                                     </TextView>
@@ -459,7 +459,7 @@
                                         android:layout_height="18dp"
                                         android:layout_marginLeft="2dp"
                                         android:background="@drawable/white_r2dp_bg"
-                                        android:text="23"
+                                        android:text="00"
                                         android:textColor="@color/tw_yellow"
                                         android:textSize="12sp"
                                         android:gravity="center">
@@ -478,7 +478,7 @@
                                         android:layout_width="18dp"
                                         android:layout_height="18dp"
                                         android:background="@drawable/white_r2dp_bg"
-                                        android:text="23"
+                                        android:text="00"
                                         android:textColor="@color/tw_yellow"
                                         android:textSize="12sp"
                                         android:gravity="center">
@@ -497,7 +497,7 @@
                                         android:layout_width="18dp"
                                         android:layout_height="18dp"
                                         android:background="@drawable/white_r2dp_bg"
-                                        android:text="23"
+                                        android:text="00"
                                         android:textColor="@color/tw_yellow"
                                         android:textSize="12sp"
                                         android:gravity="center">

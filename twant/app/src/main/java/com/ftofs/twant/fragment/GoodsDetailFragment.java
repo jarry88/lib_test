@@ -300,8 +300,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int promotionType = Constant.PROMOTION_TYPE_NONE;
     long promotionCountDownTime;
 
-    long bargainStartTime = 0;
-    long bargainEndTime = 0;
     TextView btnBargain;
 
     // 倒計時
@@ -329,6 +327,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     TextView btnBuy;
     TextView btnAddToCart;
+
+    TextView tvBargainRemainDay;
+    TextView tvBargainRemainHour;
+    TextView tvBargainRemainMinute;
+    TextView tvBargainRemainSecond;
 
     @Override
     public void onSimpleCall(Object data) {
@@ -522,6 +525,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         tvCountDownTime1 = view.findViewById(R.id.tv_count_down_time_1);
         tvCountDownTime2 = view.findViewById(R.id.tv_count_down_time_2);
+
+        tvBargainRemainDay = view.findViewById(R.id.tv_bargain_remain_day);
+        tvBargainRemainHour = view.findViewById(R.id.tv_bargain_remain_hour);
+        tvBargainRemainMinute = view.findViewById(R.id.tv_bargain_remain_minute);
+        tvBargainRemainSecond = view.findViewById(R.id.tv_bargain_remain_second);
 
         btnArrivalNotice = view.findViewById(R.id.btn_arrival_notice);
         btnArrivalNotice.setOnClickListener(this);
@@ -1346,6 +1354,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         contentView.findViewById(R.id.ll_bargain_state_container).setVisibility(VISIBLE);
 
         promotionType = Constant.PROMOTION_TYPE_BARGAIN;
+        promotionCountDownTimeType = COUNT_DOWN_TYPE_END;
 
         try {
             String token = User.getToken();
@@ -1455,11 +1464,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                         String bargainStartTimeStr = bargain.getSafeString("startTime");
                         Jarbon bargainStartTimeJarbon = Jarbon.parse(bargainStartTimeStr);
-                        bargainStartTime = bargainStartTimeJarbon.getTimestampMillis();
+                        promotionStartTime = bargainStartTimeJarbon.getTimestampMillis();
                         String bargainEndTimeStr = bargain.getSafeString("endTime");
                         Jarbon bargainEndTimeJarbon = Jarbon.parse(bargainEndTimeStr);
-                        bargainEndTime = bargainEndTimeJarbon.getTimestampMillis();
-                        SLog.info("bargainStartTime[%d], bargainEndTime[%d]", bargainStartTime, bargainEndTime);
+                        promotionEndTime = bargainEndTimeJarbon.getTimestampMillis();
+                        SLog.info("promotionStartTime[%d], promotionEndTime[%d]", promotionStartTime, promotionEndTime);
 
                         llGroupListContainer.setVisibility(GONE);
 
@@ -1584,6 +1593,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                         rlPriceTag.setVisibility(GONE); //  隱藏價格標籤
                         isDataValid = true;
+
+                        startCountDown();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
@@ -1947,8 +1958,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             startCountDown();
                         } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) { // 限時折扣
                             startCountDown();
-                        } else if (promotionType == Constant.PROMOTION_TYPE_BARGAIN) { // 砍價功能
-
                         }
                     }
 
@@ -2409,10 +2418,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             }
                         }
                     }
+                } else if (promotionType == Constant.PROMOTION_TYPE_BARGAIN) {
+                    if (timeInfo != null) {
+                        tvBargainRemainDay.setText(String.format("%d天", timeInfo.day));
+                        tvBargainRemainHour.setText(String.format("%02d", timeInfo.hour));
+                        tvBargainRemainMinute.setText(String.format("%02d", timeInfo.minute));
+                        tvBargainRemainSecond.setText(String.format("%02d", timeInfo.second));
+                    }
                 }
             }
             public void onFinish() {
-                llGroupListContainer.setVisibility(GONE);
+                if (promotionType == Constant.PROMOTION_TYPE_GROUP) {
+                    llGroupListContainer.setVisibility(GONE);
+                }
             }
         }.start();
     }

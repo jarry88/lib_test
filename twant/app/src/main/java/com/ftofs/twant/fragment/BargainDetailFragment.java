@@ -46,6 +46,12 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
 
     BargainHelpListAdapter adapter;
 
+    // 分享數據
+    String shareUrl;
+    String shareTitle;
+    String shareDescription;
+    String shareCoverUrl;
+
     public static BargainDetailFragment newInstance(int openId) {
         Bundle args = new Bundle();
 
@@ -68,6 +74,7 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_invite_friend, this);
+        Util.setOnClickListener(view, R.id.btn_buy_now, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
 
         loadData();
@@ -145,6 +152,12 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
                     }
 
                     adapter.setData(bargainHelpList);
+
+                    EasyJSONObject shareVo = responseObj.getSafeObject("datas.shareVo");
+                    shareTitle = shareVo.getSafeString("title");
+                    shareDescription = shareVo.getSafeString("content");
+                    shareUrl = shareVo.getSafeString("shareUrl");
+                    shareCoverUrl = shareVo.getSafeString("image");
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -159,17 +172,12 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_invite_friend) {
-            /*
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(groupShareCommonId, groupShareGoodsId), groupShareTitle,
-                            groupShareContent, groupShareImage, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
-                            "commonId", groupShareCommonId, "goodsName", groupShareTitle,
-                            "goodsImage", groupShareImage, "goodsPrice", groupSharePrice)))
+                    .asCustom(new SharePopup(_mActivity, shareUrl, shareTitle, shareDescription, shareCoverUrl, null))
                     .show();
 
-             */
         } else if (id == R.id.btn_buy_now) {
             if (isOwner != Constant.TRUE_INT) {
                 ToastUtil.error(_mActivity, "只有砍價發起人才有購買資格");
