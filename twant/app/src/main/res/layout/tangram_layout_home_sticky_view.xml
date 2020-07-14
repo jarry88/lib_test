@@ -70,45 +70,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
+                <!-- 活動入口按鈕的占位符 -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1">
+
                     <LinearLayout
                         android:id="@+id/btn_category_store"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_chainStyle="spread"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toLeftOf="@id/btn_category_goods"
-                        app:layout_constraintHorizontal_chainStyle="spread"
-                        android:orientation="horizontal">
+                        app:layout_constraintTop_toTopOf="parent">
+
                         <LinearLayout
                             android:id="@+id/ll_category_store"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="2dp"
                             android:layout_gravity="bottom"
-                            android:orientation="vertical"
+                            android:layout_marginBottom="2dp"
+                            android:background="@drawable/tw_category_icon_bg_new"
                             android:gravity="center_horizontal"
-                            android:background="@drawable/tw_category_icon_bg_new">
+                            android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="想要店"
-                                android:textSize="15sp"
                                 android:textColor="@android:color/white"
-                                />
+                                android:textSize="15sp" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="SHOP"
-                                android:textSize="7sp"
                                 android:textColor="@android:color/white"
-                                />
+                                android:textSize="7sp" />
                         </LinearLayout>
 
                         <TextView
@@ -116,123 +120,127 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:translationX="-4dp"
-                            android:paddingLeft="3dp"
-                            android:paddingRight="3dp"
                             android:background="@drawable/circle_red_bubble_bg"
                             android:gravity="center"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
                             android:text="25555552"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
+                            android:translationX="-4dp"
                             android:visibility="gone"
 
                             />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/btn_category_goods"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@id/btn_category_store"
                         app:layout_constraintRight_toLeftOf="@id/btn_category_brand"
-                        android:orientation="horizontal">
+                        app:layout_constraintTop_toTopOf="parent">
+
                         <LinearLayout
                             android:id="@+id/ll_category_goods"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="2dp"
                             android:layout_gravity="bottom"
-                            android:orientation="vertical"
+                            android:layout_marginBottom="2dp"
+                            android:background="@drawable/tw_category_icon_bg_new"
                             android:gravity="center_horizontal"
-                            android:background="@drawable/tw_category_icon_bg_new">
+                            android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="想要品"
-                                android:textSize="15sp"
                                 android:textColor="@android:color/white"
-                                />
+                                android:textSize="15sp" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="PRODUCT"
-                                android:textSize="7sp"
                                 android:textColor="@android:color/white"
-                                />
+                                android:textSize="7sp" />
                         </LinearLayout>
+
                         <TextView
                             android:id="@+id/tv_goods_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/ll_category_goods"
                             android:layout_marginTop="4dp"
-                            android:translationX="-4dp"
-                            android:paddingLeft="3dp"
-                            android:paddingRight="3dp"
+                            android:layout_toRightOf="@id/ll_category_goods"
                             android:background="@drawable/circle_red_bubble_bg"
                             android:gravity="center"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
                             android:text="185555555"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
+                            android:translationX="-4dp"
                             android:visibility="gone"
 
                             />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/btn_category_brand"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@id/btn_category_goods"
                         app:layout_constraintRight_toRightOf="parent"
-                        android:orientation="horizontal">
+                        app:layout_constraintTop_toTopOf="parent">
+
                         <LinearLayout
                             android:id="@+id/ll_category_post"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="2dp"
                             android:layout_gravity="bottom"
-                            android:orientation="vertical"
+                            android:layout_marginBottom="2dp"
+                            android:background="@drawable/tw_category_icon_bg_new"
                             android:gravity="center_horizontal"
-                            android:background="@drawable/tw_category_icon_bg_new">
+                            android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="想要圈"
-                                android:textSize="15sp"
                                 android:textColor="@android:color/white"
-                                />
+                                android:textSize="15sp" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="TAKEWANT"
-                                android:textSize="7sp"
                                 android:textColor="@android:color/white"
-                                />
+                                android:textSize="7sp" />
                         </LinearLayout>
+
                         <TextView
                             android:id="@+id/tv_post_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/ll_category_post"
                             android:layout_marginTop="4dp"
-                            android:translationX="-4dp"
-                            android:paddingLeft="3dp"
-                            android:paddingRight="3dp"
+                            android:layout_toEndOf="@id/ll_category_post"
                             android:background="@drawable/circle_red_bubble_bg"
                             android:gravity="center"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
                             android:text="123333"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
-                            android:visibility="gone"
-                            />
+                            android:translationX="-4dp"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- 活動入口按鈕的占位符 -->
                 <View
                     android:id="@+id/vw_activity_entrance_placeholder"
                     android:layout_width="63.5dp"
