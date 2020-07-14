@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,7 @@ import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.Footprint;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.log.SLog;
@@ -60,6 +64,8 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
     // id: tv_to_be_paid_count, tv_to_be_shipped_count, tv_to_be_received_count, tv_to_be_commented_count;
     TextView tvToBePaidCount, tvToBeShippedCount, tvToBeReceivedCount, tvToBeCommentedCount;
+    private int myBargain;
+    private TextView tvHelpCount;
 
     public static MallFragment newInstance() {
         Bundle args = new Bundle();
@@ -85,6 +91,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         tvToBeShippedCount = view.findViewById(R.id.tv_to_be_shipped_count);
         tvToBeReceivedCount = view.findViewById(R.id.tv_to_be_received_count);
         tvToBeCommentedCount = view.findViewById(R.id.tv_to_be_commented_count);
+        tvHelpCount = view.findViewById(R.id.tvHelpCount);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_my_bill, this);
@@ -96,10 +103,13 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.icon_return_or_exchange, this);
 
         Util.setOnClickListener(view, R.id.btn_my_express, this);
+        Util.setOnClickListener(view, R.id.ll_express_container, this);
         Util.setOnClickListener(view, R.id.btn_my_store_coupon, this);
+        Util.setOnClickListener(view, R.id.ll_available_coupon_container, this);
         //我的足迹隐藏
-//        Util.setOnClickListener(view, R.id.btn_my_footprint, this);
+        Util.setOnClickListener(view, R.id.ll_my_footprint, this);
         Util.setOnClickListener(view, R.id.btn_wallet, this);
+        Util.setOnClickListener(view, R.id.ll_wallet_container, this);
         Util.setOnClickListener(view, R.id.btn_my_bonus, this);
         Util.setOnClickListener(view, R.id.btn_my_trust_value, this);
         Util.setOnClickListener(view, R.id.btn_more_price, this);
@@ -153,7 +163,6 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
         loadGuessData();
         loadOrderCountData();
-
         checkWalletStatus(false);
     }
 
@@ -190,19 +199,19 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 Util.startFragment(RefundFragment.newInstance());
                 break;
 
-            case R.id.btn_my_express:
+            case R.id.ll_express_container:
                 Util.startFragment(SendPackageFragment.newInstance());
                 break;
 
-            case R.id.btn_my_store_coupon:
+            case R.id.ll_available_coupon_container:
                 Util.startFragment(CouponFragment.newInstance());
                 break;
 
-//            case R.id.btn_my_footprint:
-//                Util.startFragment(FootprintFragment.newInstance());
-//                break;
+            case R.id.ll_my_footprint:
+                Util.startFragment(FootprintFragment.newInstance());
+                break;
 
-            case R.id.btn_wallet:
+            case R.id.ll_wallet_container:
                 startWantPayWallet();
                 break;
 
@@ -396,6 +405,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                     int payCount = responseObj.getInt("datas.pay");
                     int sendCount = responseObj.getInt("datas.send");
                     int noevalCount = responseObj.getInt("datas.noeval");
+                    int bargainCount = responseObj.getInt("datas.bargainCount");
 
                     if (newCount > 0) {
                         tvToBePaidCount.setText(String.valueOf(newCount));
@@ -424,6 +434,11 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                     } else {
                         tvToBeCommentedCount.setVisibility(View.GONE);
                     }
+                    String text = String.format("%d筆", bargainCount);
+                    SpannableString sp = new SpannableString(text);
+                    sp.setSpan(new AbsoluteSizeSpan(14, true), 0, text.length() - 2, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    sp.setSpan(new AbsoluteSizeSpan(32, true), text.length() - 2, text.length() - 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    tvHelpCount.setText(sp);
                 } catch (Exception e) {
 
                 }
@@ -453,4 +468,23 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     public void onSupportInvisible() {
         super.onSupportInvisible();
     }
+
+    static public class ClickProxy {
+        public void gotoBargainList() {
+            Util.startFragment(MyBargainListFragment.newInstance(MyBargainListFragment.DATA_TYPE_INITIATE));
+        }
+        public void gotoFootPrint() {
+            Util.startFragment(FootprintFragment.newInstance());
+        }
+        public void gotoWallet() {
+            Util.startFragment(WalletFragment.newInstance());
+        }
+        public void gotoSendPackage() {
+            Util.startFragment(SendPackageFragment.newInstance());
+        }
+        public void gotoMyCoupon() {
+            Util.startFragment(CouponFragment.newInstance());
+        }
+    }
+
 }

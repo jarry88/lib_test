@@ -1,6 +1,5 @@
 package com.ftofs.twant.seller.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,34 +12,26 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.fragment.BaseFragment;
-import com.ftofs.twant.kotlin.ApiResponse;
-import com.ftofs.twant.kotlin.KotlinInterfaceApi;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerFeaturesGoodsAdapter;
 import com.ftofs.twant.seller.api.SellerApi;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.ScaledButton;
-import com.ftofs.twant.widget.SimpleTabManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * 商家鎮店之寶添加編輯頁面 需求913
@@ -230,7 +221,7 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
         int id = v.getId();
         if (id == R.id.icon_add_goods) {
 //            Util.startFragment(FeatureGoodSelectFragment.Companion.newInstance());
-            Util.startFragment(TestFeatureFragment.Companion.newInstance());
+            Util.startFragment(SelectFeatureGoodsFragment.Companion.newInstance());
         }
     }
 

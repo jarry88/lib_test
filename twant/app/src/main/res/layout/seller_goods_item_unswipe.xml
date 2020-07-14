@@ -147,7 +147,6 @@
                         android:textSize="13sp"
                         android:textColor="#2776D3"
                         />
-                    <!--                        android:src="@{vo.isCommend!=2?@drawable/icon_add_blue:@drawable/ic_minus}"-->
 
                     <ImageView
                         android:id="@+id/btn_more"
