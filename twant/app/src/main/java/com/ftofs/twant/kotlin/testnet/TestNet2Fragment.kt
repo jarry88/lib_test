@@ -1,103 +1,81 @@
-package com.ftofs.twant.fragment
+package com.ftofs.twant.kotlin.testnet
 
-import android.annotation.SuppressLint
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
-import com.ftofs.twant.databinding.LinkageContainerLayoutBinding
-import com.ftofs.twant.databinding.SellerEditFeaturesLayoutBinding
+import com.ftofs.twant.databinding.FragmentTestNe2Binding
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
-import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
-import com.ftofs.twant.kotlin.LinkageContainerViewModel
 import com.ftofs.twant.kotlin.SellerGoodsListAdapter
 import com.ftofs.twant.log.SLog
-import com.ftofs.twant.seller.adapter.SellerGoodsAdapter
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.LoadingUtil
 import com.wzq.mvvmsmart.utils.ToastUtils
-import java.util.ArrayList
 
-class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBinding, LinkageContainerViewModel>(){
-    private lateinit var mAdapter: BuyerGoodsListAdapter
-    private var goodsList: List<SellerGoodsItem> = ArrayList()
+/**
+ * Create Date：2019/01/25
+ * Description：RecycleView多布局实现
+ */
+class TestNet2Fragment : BaseTwantFragmentMVVM<FragmentTestNe2Binding, TestNet2ViewModel>() {
+    private lateinit var mAdapter: SellerGoodsListAdapter
     private var loadingUtil: LoadingUtil? = null
+
+    private var count:Int = 0
     private val  zoneId by  lazy { arguments?.getInt("zoneId") }
+
     companion object{
-        fun newInstance(zoneId:Int): LinkageContainerFragment {
+        fun newInstance(zoneId:Int): TestNet2Fragment {
             val args = Bundle()
-            val fragment = LinkageContainerFragment()
+            val fragment = TestNet2Fragment()
             args.putInt("zoneId",zoneId)
             fragment.arguments = args
             return fragment
         }
     }
-    @SuppressLint("SourceLockedOrientationActivity")
-    override fun initParam() {
-        //获取列表传入的实体
-        super.initParam()
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
-    }
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
-        return R.layout.linkage_container_layout
+        return R.layout.fragment_test_ne2
     }
 
     override fun initVariableId(): Int {
-       return BR.viewModel
+        return BR.viewModel
     }
 
     override fun initData() {
-        binding.btnBack.setOnClickListener{
-            ToastUtils.showShort("點擊返回")
-            hideSoftInputPop()
-        }
-        binding.btnMenu.setOnClickListener {
-            ToastUtils.showShort("點擊菜單")
-        }
-
         initRecyclerView()
-        zoneId?.let { viewModel.doGetGoodsItems(it) } //请求网络数据
     }
-    private fun initRecyclerView() {
-        mAdapter = BuyerGoodsListAdapter()
-        binding.layoutManager = LinearLayoutManager(activity)
-        binding.adapter = mAdapter
-//        sellerGoodsListAdapter.setOnItemClickListener { adapter, view, position -> ToastUtils.showShort("点击了条目--" + position) }
-//        sellerGoodsListAdapter.onItemLongClickListener = BaseQuickAdapter.OnItemLongClickListener { adapter, view, position ->
-//            ToastUtils.showShort("长按了条目--" + position)
-//            true
-//        }
-//
-//        sellerGoodsListAdapter.setOnItemChildClickListener { adapter, view, position ->
-//            if (view.id == R.id.goods_image) {
-//                KLog.e("点击了button")
-//                val goodsData = goodsList[position]
-//                //删除选择对话框
-//                val builder = AlertDialog.Builder(activity as Context)
-//                builder.setTitle("尊敬的用户")
-//                builder.setMessage("你真的要卸载我吗？")
-//                builder.setPositiveButton("残忍卸载") { dialog, which ->
-//                    viewModel.deleteItem(goodsData)
-//                    //                            sellerGoodsListAdapter.remove(position);
-//                    sellerGoodsListAdapter.notifyItemRemoved(position)
-//                    builder.setNegativeButton("我再想想") { dialog, which ->
-//                    }
-//                    val alert = builder.create()
-//                    alert.show()
-//                }
-//            }
-//        }
-    }
+
     override fun initViewObservable() {
         super.initViewObservable()
+        binding.button.setOnClickListener { v: View? ->
+            KLog.e("发起请求")
+            viewModel.doPostServerNews() // 请求网络数据;
+            viewModel.doGetServerNews()
+        }
+        binding.buttonScope.setOnClickListener { v: View? ->
+            KLog.e("发起请求")
+            viewModel.doScope() // 请求网络数据;
+        }
+
+        viewModel.liveData.observe(this, Observer {
+            if (it.isNotEmpty()) {
+                binding.tvJson.text = it[0].toString()
+            }
+        })
+
+
+
+
+
+
+
+
         viewModel.liveData.observe(this, Observer { goodsList: List<SellerGoodsItem> ->
             if (goodsList.isNotEmpty()) {
                 KLog.e("mLiveData的listBeans.size():" + goodsList.size)
@@ -109,7 +87,7 @@ class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBind
 //                sellerGoodsListAdapter.data.clear() // 请求多页数据后再请求第1页,先删除之前数据
                 if (goodsList.isEmpty()) {
                     //  第一页无数据,就显示默认页
-                    showEmptyLayout(binding.refreshLayout, this@LinkageContainerFragment.resources.getString(R.string.tip_a_page_no_data), R.mipmap.ic_launcher_mvvmsmart, false)
+                    showEmptyLayout(binding.refreshLayout, this@TestNet2Fragment.resources.getString(R.string.tip_a_page_no_data), R.mipmap.ic_launcher_mvvmsmart, false)
                 } else {
                     showNormalLayout(binding.refreshLayout)
                     mAdapter.addAll(goodsList,true)
@@ -126,13 +104,14 @@ class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBind
         })
         binding.refreshLayout.setOnRefreshListener {
             viewModel.pageNum = 1
-            zoneId?.let { it1 -> viewModel.doGetGoodsItems(it1) }
+            viewModel.doGetServerNews()
+//            zoneId?.let { it1 -> viewModel.doGetGoodsItems(it1) }
         }
         //上拉加载更多
         binding.refreshLayout.setOnLoadMoreListener { refreshLayout: RefreshLayout? ->
             viewModel.pageNum++
             //            loadMoreTestData();   // 模拟加载更多数据
-            zoneId?.let { viewModel.doGetGoodsItems(it) }
+//            zoneId?.let { viewModel.doGetGoodsItems(it) }
         }
         /**
          * 每个界面默认页效果不同
@@ -171,18 +150,22 @@ class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBind
             }
         })
     }
-    // 无数据默认页,点击请求网络
-    override fun onContentReload() {
-        super.onContentReload()
-        KLog.e("点击空白页")
-//        viewModel.doGetServerNews() //请求网络数据
+    private fun initRecyclerView() {
+        mAdapter = SellerGoodsListAdapter()
+        binding.layoutManager = LinearLayoutManager(activity)
+        binding.adapter = mAdapter
+    }
+    override fun onBackPressedSupport(): Boolean {
         hideSoftInputPop()
+        return  true
     }
 
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        loadingUtil?.hideLoading()
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+//        binding.btnToB.postDelayed({
+//            count++
+//            SLog.info("由A啓動B[%d]",count)
+//            binding.btnToB.performClick()
+//        }, 100)
     }
 }

@@ -10,6 +10,9 @@ import com.ftofs.twant.kotlin.vo.SellerPageVO;
 import com.wzq.mvvmsmart.net.base.BaseRequest;
 import com.wzq.mvvmsmart.net.base.BaseResponse;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -23,11 +26,17 @@ import okhttp3.RequestBody;
  */
 public class MRequest extends BaseRequest {
 
-    private DemoApiService service;
+    public DemoApiService service;
 
     public static MRequest getInstance() {
         return Holder.INSTANCE;
     }
+
+    @NotNull
+    public Object doScope(@Nullable String bean2String) {
+        return null;
+    }
+
 
     private static class Holder {
 
@@ -64,5 +73,4 @@ public class MRequest extends BaseRequest {
         Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>> observable = service.doSellerGoodsList(params);
         return observable;
     }
-
 }
