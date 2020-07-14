@@ -43,6 +43,7 @@ import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.AddrItem;
+import com.ftofs.twant.entity.BargainItem;
 import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
@@ -323,6 +324,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int goId2 = Constant.INVALID_GO_ID;
 
     TextView btnBuy;
+    TextView btnAddToCart;
 
     @Override
     public void onSimpleCall(Object data) {
@@ -589,7 +591,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_menu_round, this);
         Util.setOnClickListener(view, R.id.btn_menu, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
-        Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
+        btnAddToCart = view.findViewById(R.id.btn_add_to_cart);
+        btnAddToCart.setOnClickListener(this);
+        if (bargainId != Constant.INVALID_BARGAIN_ID) {
+            btnAddToCart.setText("原價購買");
+        }
         Util.setOnClickListener(view, R.id.btn_select_spec, this);
         Util.setOnClickListener(view, R.id.btn_select_addr, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_follow, this);
@@ -600,7 +606,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.tv_goods_name, this);
         btnBuy = view.findViewById(R.id.btn_buy);
         btnBuy.setOnClickListener(this);
-
+        if (bargainId != Constant.INVALID_BARGAIN_ID) {
+            btnBuy.setText("砍一刀");
+        }
         Util.setOnClickListener(view, R.id.btn_view_more_group, this); // 查看更加的拼團
         btnQuickJoinGroup1 = view.findViewById(R.id.btn_quick_join_group_1);
         btnQuickJoinGroup1.setOnClickListener(this);
@@ -781,6 +789,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         .show();
                 break;
             case R.id.btn_add_to_cart:
+                if (bargainId != Constant.INVALID_BARGAIN_ID) { // 原價購買
+                    return;
+                }
                 if(goodsStatus==0){
                     ToastUtil.error(_mActivity,"商品已下架");
                     return;
@@ -799,6 +810,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 }
                 break;
             case R.id.btn_buy:
+                if (bargainId != Constant.INVALID_BARGAIN_ID) { // 砍一刀
+                    bargain();
+                    return;
+                }
                 if(goodsStatus==0){
                     ToastUtil.error(_mActivity,"商品已下架");
                     return;
@@ -1250,6 +1265,46 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    /**
+     * 砍一刀
+     */
+    private void bargain() {
+        SLog.info("砍一刀");
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            Util.showLoginFragment();
+            return;
+        }
+        EasyJSONObject params = EasyJSONObject.generate(
+                "bargainId", bargainId,
+                "token", token);
+
+        String url = Api.PATH_BARGAIN_FIRST;
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.postUI(url, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
+
     private void loadData() {
         if (bargainId != Constant.INVALID_BARGAIN_ID) {
             loadBargainGoods();
@@ -1262,6 +1317,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         if (bargainId == Constant.INVALID_BARGAIN_ID) {
             return;
         }
+
+        View contentView = getView();
+        if (contentView == null) {
+            return;
+        }
+
+        // 隱藏【規格】、【送至】、【說說】、【城友】
+        contentView.findViewById(R.id.rl_spec_container).setVisibility(GONE);
+        contentView.findViewById(R.id.rl_send_to_container).setVisibility(GONE);
+        contentView.findViewById(R.id.ll_comment_container).setVisibility(GONE);
+        contentView.findViewById(R.id.rl_shop_friend_container).setVisibility(GONE);
 
         promotionType = Constant.PROMOTION_TYPE_BARGAIN;
 
@@ -1295,8 +1361,35 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             return;
                         }
 
-                        EasyJSONObject goodsCommon = responseObj.getSafeObject("datas.bargainGoodsDetailVo.goodsCommon");
-                        EasyJSONObject bargain = responseObj.getSafeObject("datas.bargainGoodsDetailVo.bargain");
+                        EasyJSONObject bargainOpen = responseObj.getSafeObject("datas.bargainOpen");
+                        EasyJSONObject bargainGoodsDetailVo = responseObj.getSafeObject("datas.bargainGoodsDetailVo");
+                        EasyJSONObject goodsCommon = bargainGoodsDetailVo.getSafeObject("goodsCommon");
+                        EasyJSONArray goodsImageList = bargainGoodsDetailVo.getSafeArray("goodsImageList");
+                        EasyJSONObject bargain = bargainGoodsDetailVo.getSafeObject("bargain");
+                        EasyJSONObject goods = bargainGoodsDetailVo.getSafeObject("goods");
+                        EasyJSONArray conformList = bargainGoodsDetailVo.getSafeArray("conformList");
+                        EasyJSONArray giftVoList = bargainGoodsDetailVo.getSafeArray("giftVoList");
+
+                        if (Util.isJsonObjectEmpty(bargainOpen)) {
+                            contentView.findViewById(R.id.rl_bargain_info_container).setVisibility(GONE);
+                        } else {
+                            contentView.findViewById(R.id.rl_bargain_info_container).setVisibility(VISIBLE);
+
+                            TextView btnBargain = contentView.findViewById(R.id.btn_bargain);
+                            int bargainTimes = bargainOpen.getInt("bargainTimes");
+                            btnBargain.setText(bargainTimes + "人幫砍");
+
+                            TextView tvBargainNickname = contentView.findViewById(R.id.tv_bargain_nickname);
+                            tvBargainNickname.setText(bargainOpen.getSafeString("memberName"));
+
+                            ImageView imgBargainAvatar = contentView.findViewById(R.id.img_bargain_avatar);
+                            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(bargainOpen.getSafeString("avatar")))
+                                    .centerCrop().into(imgBargainAvatar);
+
+                            TextView tvCurrentBargainPrice = contentView.findViewById(R.id.tv_current_bargain_price);
+                            double openPrice = bargainOpen.getDouble("openPrice");
+                            tvCurrentBargainPrice.setText(StringUtil.formatPrice(_mActivity, openPrice, 0));
+                        }
 
                         goodsName = goodsCommon.getSafeString("goodsName");
                         tvGoodsName.setText(goodsName);
@@ -1347,86 +1440,57 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         llGroupListContainer.setVisibility(GONE);
 
 
-
-
                         // 【贈品】優惠
-                        boolean first = true;
-                        EasyJSONArray goodsInfoVoList = responseObj.getSafeArray("datas.goodsDetail.goodsInfoVoList");
-                        for (Object object : goodsInfoVoList) {
-                            GoodsInfo goodsInfo = new GoodsInfo();
+                        GoodsInfo goodsInfo = new GoodsInfo();
+                        List<GiftItem> giftItemList = new ArrayList<>();
+                        for (Object object2 : giftVoList) {
+                            EasyJSONObject giftVo = (EasyJSONObject) object2;
 
-                            EasyJSONObject goodsInfoVo = (EasyJSONObject) object;
-                            int goodsId = goodsInfoVo.getInt("goodsId");
-                            EasyJSONArray giftVoList = goodsInfoVo.getSafeArray("giftVoList");
-
-                            List<GiftItem> giftItemList = new ArrayList<>();
-                            for (Object object2 : giftVoList) {
-                                EasyJSONObject giftVo = (EasyJSONObject) object2;
-
-                                GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, giftVo.toString());
-                                giftItemList.add(giftItem);
-                            }
-                            // SLog.info("ddddddddddddddddddxxxxx[%d][%d]", goodsId, giftItemList.size());
-                            giftMap.put(goodsId, giftItemList);
-                            // 如果從外面傳進來的參數沒有指定goodsId, 則默認選中第一項sku
-                            if (currGoodsId == 0 && first) {
-                                currGoodsId = goodsId;
-                                SLog.info("默認選中第一項sku, goodsId[%d]", goodsId);
-                            }
-
-                            // 獲取每個sku對應的輪播圖列表
-                            List<String> goodsGalleryImageList = new ArrayList<>();
-                            EasyJSONArray goodsImageList = goodsInfoVo.getSafeArray("goodsImageList");
-                            for (Object object2 : goodsImageList) {
-                                EasyJSONObject goodsImageObj = (EasyJSONObject) object2;
-                                String imageName = goodsImageObj.getSafeString("imageName");
-                                goodsGalleryImageList.add(imageName);
-                            }
-
-                            skuGoodsGalleryMap.put(goodsId, goodsGalleryImageList);
-
-                            goodsInfo.goodsId = goodsId;
-                            goodsInfo.commonId = commonId;
-                            goodsInfo.goodsFullSpecs = goodsInfoVo.getSafeString("goodsFullSpecs");
-                            goodsInfo.specValueIds = goodsInfoVo.getSafeString("specValueIds");
-                            goodsInfo.goodsPrice0 =  goodsInfoVo.getDouble("goodsPrice0");
-                            goodsInfo.price = Util.getSkuPrice(goodsInfoVo);
-                            SLog.info("__goodsInfo.price[%s], goodsInfoVo[%s]", goodsInfo.price, goodsInfoVo.toString());
-                            goodsInfo.imageSrc = goodsInfoVo.getSafeString("imageSrc");
-                            goodsInfo.goodsStorage = goodsInfoVo.getInt("goodsStorage");
-                            goodsInfo.reserveStorage = goodsInfoVo.getInt("reserveStorage");
-                            goodsInfo.limitAmount = goodsInfoVo.getInt("limitAmount");
-                            goodsInfo.unitName = goodsInfoVo.getSafeString("unitName");
-                            goodsInfo.goodsName = goodsName;
-                            goodsInfo.promotionType =goodsInfoVo.getInt("promotionType");
-                            goodsInfo.appUsable =goodsInfoVo.getInt("appUsable");
-                            goodsInfo.isGroup = 0;
-                            Object tmpObj = goodsInfoVo.get("isGroup");
-                            if (!Util.isJsonNull(tmpObj)) {
-                                goodsInfo.isGroup = goodsInfoVo.getInt("isGroup");
-                            }
-                            if (goodsInfo.isGroup == Constant.TRUE_INT) {
-                                goodsInfo.groupPrice = goodsInfoVo.getDouble("groupPrice");
-                                goodsInfo.groupDiscountAmount = goodsInfo.goodsPrice0 - goodsInfo.groupPrice;
-                            }
-
-                            goodsInfoMap.put(goodsId, goodsInfo);
-
-                            SkuGalleryItem skuGalleryItem = new SkuGalleryItem(
-                                    goodsId,
-                                    StringUtil.normalizeImageUrl(goodsInfo.imageSrc),
-                                    goodsInfoVo.getSafeString("goodsSpecString"),
-                                    goodsInfo.goodsPrice0,
-                                    goodsInfo.specValueIds
-                            );
-                            skuGalleryItemList.add(skuGalleryItem);
-
-                            first = false;
+                            GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, giftVo.toString());
+                            giftItemList.add(giftItem);
                         }
+                        // SLog.info("ddddddddddddddddddxxxxx[%d][%d]", goodsId, giftItemList.size());
+                        giftMap.put(currGoodsId, giftItemList);
+
+
+                        // 獲取每個sku對應的輪播圖列表
+                        List<String> goodsGalleryImageList = new ArrayList<>();
+                        for (Object object2 : goodsImageList) {
+                            EasyJSONObject goodsImageObj = (EasyJSONObject) object2;
+                            String imageName = goodsImageObj.getSafeString("imageName");
+                            goodsGalleryImageList.add(imageName);
+                        }
+
+                        skuGoodsGalleryMap.put(currGoodsId, goodsGalleryImageList);
+
+                        goodsInfo.goodsId = currGoodsId;
+                        goodsInfo.commonId = commonId;
+                        goodsInfo.goodsFullSpecs = goods.getSafeString("goodsFullSpecs");
+                        goodsInfo.goodsPrice0 =  goods.getDouble("goodsPrice0");
+                        goodsInfo.price = Util.getSkuPrice(goods);
+                        SLog.info("__goodsInfo.price[%s], goods[%s]", goodsInfo.price, goods.toString());
+                        goodsInfo.imageSrc = goods.getSafeString("imageSrc");
+                        goodsInfo.goodsStorage = goods.getInt("goodsStorage");
+                        goodsInfo.reserveStorage = goods.getInt("reserveStorage");
+                        goodsInfo.limitAmount = goods.getInt("limitAmount");
+                        goodsInfo.goodsName = goodsName;
+                        goodsInfo.promotionType =goods.getInt("promotionType");
+
+                        goodsInfoMap.put(currGoodsId, goodsInfo);
+
+                        SkuGalleryItem skuGalleryItem = new SkuGalleryItem(
+                                currGoodsId,
+                                StringUtil.normalizeImageUrl(goodsInfo.imageSrc),
+                                goods.getSafeString("goodsSpecString"),
+                                goodsInfo.goodsPrice0,
+                                goodsInfo.specValueIds
+                        );
+                        skuGalleryItemList.add(skuGalleryItem);
+
 
 
                         // 【滿減】優惠
-                        EasyJSONArray conformList = responseObj.getSafeArray("datas.goodsDetail.conformList");
+                        boolean first;
                         if (conformList.length() > 0) {
                             first = true;
                             StringBuilder conformText = new StringBuilder();
@@ -1448,10 +1512,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsConformItem.templateId = conform.getInt("templateId");
                                 goodsConformItem.templatePrice = conform.getInt("templatePrice");
 
-                                EasyJSONArray giftVoList = conform.getSafeArray("giftVoList");
-                                if (giftVoList.length() > 0) {
+                                EasyJSONArray giftVoArr = conform.getSafeArray("giftVoList");
+                                if (giftVoArr.length() > 0) {
                                     goodsConformItem.giftVoList = new ArrayList<>();
-                                    for (Object object2 : giftVoList) {
+                                    for (Object object2 : giftVoArr) {
                                         GiftVo giftVo = (GiftVo) EasyJSONBase.jsonDecode(GiftVo.class, object2.toString());
                                         SLog.info("giftVo[%s]", giftVo);
                                         goodsConformItem.giftVoList.add(giftVo);
@@ -1469,10 +1533,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         // 初始化默認選擇
                         SLog.info("初始化默認選擇 currGoodsId[%d]", currGoodsId);
                         selectSku(currGoodsId);
-
-                        commentCount = responseObj.getInt("datas.wantCommentVoInfoCount");
-                        tvCommentCount.setText(String.format(getString(R.string.text_comment) + "(%d)", commentCount));
-                        tvGoodsCommentCount.setText(String.valueOf(commentCount));
 
                         SLog.info("commentCount[%d]", commentCount);
                         if (commentCount > 0) {
@@ -2118,7 +2178,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         if (goodsStatus == 0) {
             getView().findViewById(R.id.ll_goods_take_off).setVisibility(VISIBLE);
             btnBuy.setBackgroundResource(R.drawable.icon_take_off_buy);
-            getView().findViewById(R.id.btn_add_to_cart).setBackgroundResource(R.drawable.icon_take_off_cart);
+            btnAddToCart.setBackgroundResource(R.drawable.icon_take_off_cart);
         }
     }
 
