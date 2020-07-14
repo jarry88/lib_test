@@ -357,4 +357,6 @@ public class Constant {
     public static final int INVALID_GO_ID = -1;
     // 無效的砍價Id
     public static final int INVALID_BARGAIN_ID = -1;
+    // 無效的砍價OpenId
+    public static final int INVALID_BARGAIN_OPEN_ID = -1;
 }

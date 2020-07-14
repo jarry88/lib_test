@@ -42,6 +42,7 @@ import com.ftofs.twant.constant.GroupBuyStatus;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
+import com.ftofs.twant.domain.bargain.Bargain;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.BargainItem;
 import com.ftofs.twant.entity.CustomActionData;
@@ -120,6 +121,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     // 砍價Id
     int bargainId = Constant.INVALID_BARGAIN_ID;
+    int bargainOpenId = Constant.INVALID_BARGAIN_OPEN_ID;
+
     // 產品Id
     int commonId;
     // 當前選中的goodsId
@@ -299,6 +302,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     long bargainStartTime = 0;
     long bargainEndTime = 0;
+    TextView btnBargain;
 
     // 倒計時
     CountDownTimer countDownTimer;
@@ -583,6 +587,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         imgCommenterAvatar = view.findViewById(R.id.img_commenter_avatar);
         tvCommenterNickname = view.findViewById(R.id.tv_commenter_nickname);
         tvComment = view.findViewById(R.id.tv_comment);
+        btnBargain = view.findViewById(R.id.btn_bargain);
+        btnBargain.setOnClickListener(this);
 
         Util.setOnClickListener(view, R.id.btn_back_round, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -790,6 +796,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_add_to_cart:
                 if (bargainId != Constant.INVALID_BARGAIN_ID) { // 原價購買
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, currGoodsId));
                     return;
                 }
                 if(goodsStatus==0){
@@ -982,6 +989,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 } else if (id == R.id.btn_quick_join_group_2 && goId2 != Constant.INVALID_GO_ID) {
                     showSpecSelectPopup(Constant.ACTION_BUY, goId2);
                 }
+                break;
+            case R.id.btn_bargain:
+                if (bargainOpenId == Constant.INVALID_BARGAIN_OPEN_ID) {
+                    return;
+                }
+                Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId));
                 break;
             default:
                 break;
@@ -1329,6 +1342,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         contentView.findViewById(R.id.ll_comment_container).setVisibility(GONE);
         contentView.findViewById(R.id.rl_shop_friend_container).setVisibility(GONE);
 
+        contentView.findViewById(R.id.fl_bargain_label).setVisibility(VISIBLE);
+        contentView.findViewById(R.id.ll_bargain_state_container).setVisibility(VISIBLE);
+
         promotionType = Constant.PROMOTION_TYPE_BARGAIN;
 
         try {
@@ -1375,7 +1391,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         } else {
                             contentView.findViewById(R.id.rl_bargain_info_container).setVisibility(VISIBLE);
 
-                            TextView btnBargain = contentView.findViewById(R.id.btn_bargain);
+                            bargainOpenId = bargainOpen.getInt("openId");
+
                             int bargainTimes = bargainOpen.getInt("bargainTimes");
                             btnBargain.setText(bargainTimes + "人幫砍");
 
@@ -1401,8 +1418,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         setGoodsStatus(goodsState);
 
                         goodsPrice = Util.getSpuPrice(goodsCommon);
-                        tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
-                        UiUtil.toPriceUI(tvGoodsPrice,0);
+                        ((TextView) contentView.findViewById(R.id.tv_bargain_state_price)).setText(StringUtil.formatFloat(goodsPrice));
+
+                        double bargainBottomPrice = bargain.getDouble("bottomPrice");
+                        ((TextView) contentView.findViewById(R.id.tv_bargain_state_bottom_price))
+                                .setText("底價 " + StringUtil.formatPrice(_mActivity, bargainBottomPrice, 0));
+
+                        int bargainMemberCount = bargain.getInt("joinNumber");
+                        ((TextView) contentView.findViewById(R.id.tv_bargain_state_member_count))
+                                .setText(String.format("已有%d人參與", bargainMemberCount));
 
                         storeId = goodsCommon.getInt("storeId");
 
@@ -1558,6 +1582,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             llFirstCommentContainer.setVisibility(GONE);
                         }
 
+                        rlPriceTag.setVisibility(GONE); //  隱藏價格標籤
                         isDataValid = true;
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

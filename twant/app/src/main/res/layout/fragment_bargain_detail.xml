@@ -52,9 +52,9 @@
                     android:gravity="center_vertical"
                     android:background="@android:color/white">
                     <ImageView
+                        android:id="@+id/goods_image"
                         android:layout_width="130dp"
                         android:layout_height="130dp">
-
                     </ImageView>
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -67,6 +67,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
                             <TextView
+                                android:id="@+id/tv_goods_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="德国原装进口（Braun）耳温枪IRT6520WE"
@@ -74,6 +75,7 @@
                                 android:textColor="@color/tw_black">
                             </TextView>
                             <TextView
+                                android:id="@+id/tv_goods_spec"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
@@ -88,6 +90,7 @@
                             android:layout_alignParentBottom="true"
                             android:orientation="vertical">
                             <TextView
+                                android:id="@+id/tv_bargain_state_desc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="2人幫忙砍，已砍掉$33.3元"
@@ -109,6 +112,7 @@
                                     android:textSize="16sp">
                                 </TextView>
                                 <TextView
+                                    android:id="@+id/tv_bottom_price"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="14dp"
