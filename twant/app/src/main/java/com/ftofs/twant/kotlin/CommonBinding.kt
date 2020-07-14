@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.StringUtil
 
 
@@ -16,9 +17,11 @@ fun loadImageUrl(v: ImageView, url: String?) {
         Glide.with(v).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(v)
     }
 }
-@BindingAdapter(value = ["fir","len","pointSize","defaultSize","text"])
-fun setSpText(v: TextView, fir:Int,len:Int,pointSize:Int,defaultSize:Int,text:String) {
-    text.run {
+@BindingAdapter(value = ["fir","len","pointSize","defaultSize","textInput"],requireAll = false)
+fun setSpText(v: TextView, fir:Int,len:Int,pointSize:Int,defaultSize:Int,textInput:String) {
+    var text=v.text
+    SLog.info(textInput)
+    textInput.run {
         val sp = SpannableString(text)
         sp.setSpan(AbsoluteSizeSpan(defaultSize,true),0,fir,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         sp.setSpan(AbsoluteSizeSpan(pointSize,true),fir,fir+len,Spannable.SPAN_INCLUSIVE_INCLUSIVE)

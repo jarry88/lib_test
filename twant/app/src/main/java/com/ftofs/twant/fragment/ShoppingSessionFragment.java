@@ -398,6 +398,8 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
         primaryAdapterConfig.setTwColor(twColor);
         ElemeSecondaryAdapterConfig secondaryAdapterConfig = new ElemeSecondaryAdapterConfig();
         linkage.init(items,primaryAdapterConfig,secondaryAdapterConfig);
+        //看起来像分页
+        linkage.setScrollSmoothly(false);
 
     }
 
