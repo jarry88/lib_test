@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
+import com.ftofs.twant.fragment.BargainListFragment;
+import com.ftofs.twant.fragment.GroupInfoListFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -41,6 +43,8 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
     private LinearLayout llContainer;
     private LinearLayout llFirstLine;
     private LinearLayout llSecondLine;
+    private  ConstraintLayout clGroup;
+    private  ConstraintLayout clBargain;
     private boolean themeLoaded =false;
 
     public SloganView(Context context) {
@@ -71,6 +75,12 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
         llFirstLine = contentView.findViewById(R.id.ll_zone_first);
         llSecondLine = contentView.findViewById(R.id.ll_zone_second);
         clSecondLine = contentView.findViewById(R.id.cl_second_line);
+        clGroup = contentView.findViewById(R.id.cl_group_entrance);
+        clBargain = contentView.findViewById(R.id.cl_bargain_entrance);
+        ImageView imgGroup = clGroup.findViewById(R.id.img_group_entrance);
+        imgGroup.setOnClickListener(v -> Util.startFragment(GroupInfoListFragment.newInstance()));
+        ImageView imgBargain = clBargain.findViewById(R.id.img_bargain_entrance);
+        imgBargain.setOnClickListener(v -> Util.startFragment(BargainListFragment.newInstance()));
         addView(contentView);
     }
 
