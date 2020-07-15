@@ -457,7 +457,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        SLog.info("OrderDetailFragment::onEBMessage()");
+        SLog.info("OrderDetailFragment::onEBMessage(), messageType[%s]", message.messageType);
         if (message.messageType == EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL) {
             // 重新加載訂單詳情
             SLog.info("重新加載訂單詳情");

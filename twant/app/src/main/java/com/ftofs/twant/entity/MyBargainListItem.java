@@ -1,6 +1,10 @@
 package com.ftofs.twant.entity;
 
 public class MyBargainListItem {
+    public int commonId;
+    public int goodsId;
+    public int bargainId;
+    public int openId;
     public String imageSrc;
     public String goodsName;
     public String goodsFullSpecs;

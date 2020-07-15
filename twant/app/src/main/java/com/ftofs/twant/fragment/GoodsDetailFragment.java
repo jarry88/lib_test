@@ -1385,9 +1385,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
-                            adapter.loadMoreFail();
                             return;
                         }
+
+                        contentView.findViewById(R.id.ll_bargain_container).setVisibility(VISIBLE);
 
                         EasyJSONObject bargainOpen = responseObj.getSafeObject("datas.bargainOpen");
                         EasyJSONObject bargainGoodsDetailVo = responseObj.getSafeObject("datas.bargainGoodsDetailVo");

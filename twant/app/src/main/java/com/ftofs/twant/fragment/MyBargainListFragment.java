@@ -87,6 +87,14 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
         adapter = new MyBargainListAdapter(_mActivity, R.layout.my_bargain_list_item, myBargainItemList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MyBargainListItem myBargainListItem = myBargainItemList.get(position);
+                Util.startFragment(GoodsDetailFragment.newInstance(myBargainListItem.commonId, myBargainListItem.goodsId, myBargainListItem.bargainId));
+            }
+        });
+
         rvList.setAdapter(adapter);
 
         loadData(currPage + 1);
@@ -130,6 +138,15 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
                         return;
                     }
 
+                    if (page == 1) {
+                        // 設置空頁面
+                        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.layout_placeholder_no_data, null, false);
+                        // 設置空頁面的提示語
+                        TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
+                        tvEmptyHint.setText(R.string.no_data_hint);
+                        adapter.setEmptyView(emptyView);
+                    }
+
                     hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
                     SLog.info("hasMore[%s]", hasMore);
                     if (!hasMore) {
@@ -142,6 +159,10 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
                         EasyJSONObject bargainGoodsOpenLogVo = (EasyJSONObject) object;
                         MyBargainListItem item = new MyBargainListItem();
 
+                        item.commonId = bargainGoodsOpenLogVo.getInt("commonId");
+                        item.goodsId = bargainGoodsOpenLogVo.getInt("goodsId");
+                        item.bargainId = bargainGoodsOpenLogVo.getInt("bargainId");
+                        item.openId = bargainGoodsOpenLogVo.getInt("openId");
                         item.imageSrc = bargainGoodsOpenLogVo.getSafeString("imageSrc");
                         item.goodsName = bargainGoodsOpenLogVo.getSafeString("goodsName");
                         item.goodsFullSpecs = bargainGoodsOpenLogVo.getSafeString("goodsFullSpecs");
