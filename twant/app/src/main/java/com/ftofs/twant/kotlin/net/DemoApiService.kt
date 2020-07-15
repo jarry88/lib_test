@@ -7,6 +7,7 @@ import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.wzq.mvvmsmart.net.base.BaseResponse
 import io.reactivex.Observable
 import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.http.*
 import java.time.ZoneId
 import kotlin.collections.ArrayList
@@ -29,6 +30,9 @@ interface DemoApiService {
     //  获取商家商品列表
     @GET("member/seller/goods/list")
     fun doSellerGoodsList(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ): Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>>
+    //  获取商家商品列表
+    @GET("member/seller/goods/list")
+    suspend fun doSellerGoodsListtest(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ):BaseResponse<SellerPageVO<SellerGoodsItem>>
 
     //  获取购物专场数据
     @GET("shoppingzone/{zoneId}")

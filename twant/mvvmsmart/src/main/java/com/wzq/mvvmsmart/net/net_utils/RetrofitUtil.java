@@ -20,6 +20,7 @@ public class RetrofitUtil<T> {
                 .addConverterFactory(GsonConverterFactory.create())
                 //.addConverterFactory(GsonConverterFactory.create(GsonUtil.getGson()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .addCallAdapterFactory(CoroutineCall)
                 .baseUrl(MetaDataUtil.getBaseUrl())
                 .build();
     }

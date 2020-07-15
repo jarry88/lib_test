@@ -139,8 +139,6 @@ dependencies {
     implementation 'com.alibaba.android:tangram:3.3.6@aar'
 
     // we added rxjava in latest version, so need compile rxjava
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation('com.alibaba.android:virtualview:1.4.6@aar') {
         transitive = true
     }
@@ -277,8 +275,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     api rootProject.ext.dependencies["smartRefreshLayout"] // 刷新框架
     api rootProject.ext.dependencies["rxjava"] // rxjava2
-    api rootProject.ext.dependencies["adapter-rxjava2"] 
     api rootProject.ext.dependencies["rxandroid"]
+    api rootProject.ext.dependencies["adapter-rxjava2"]
     api rootProject.ext.dependencies["persistentCookieJar"] // persistentCookieJar
     implementation "androidx.room:room-runtime:2.2.5"
     kapt "android.arch.persistence.room:compiler:2.2.3"     // java

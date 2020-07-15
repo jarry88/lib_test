@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ftofs.twant.entity.SellerGoodsItem
+import com.ftofs.twant.kotlin.LinkageModel
 import com.ftofs.twant.kotlin.base.BaseViewModel
 import com.ftofs.twant.kotlin.bean.NewsData
 import com.ftofs.twant.kotlin.net.MRequest
@@ -30,6 +31,7 @@ import java.util.*
  */
 class TestNet2ViewModel(application: Application) : BaseViewModel(application) {
     //给RecyclerView添加ObservableList
+    val viewModel:LinkageModel= LinkageModel()
     var pageNum:Int=1
     val liveData: MutableLiveData<ArrayList<SellerGoodsItem>> by lazy {
         MutableLiveData<ArrayList<SellerGoodsItem>>()
@@ -97,8 +99,9 @@ class TestNet2ViewModel(application: Application) : BaseViewModel(application) {
 //                val result = viewModel.getShoppingGoodsList(zoneId)
                 val param = mapOf("key" to 24,"name" to "zhangsan","age" to 25)
 
-                val result = MRequest.getInstance().doScope(GsonUtil.bean2String(param))
-                SLog.info(result.toString())
+//                val result = viewModel.getShoppingGoodsList1(20)
+                val result = MRequest.getInstance().service.doSellerGoodsListtest(param)
+                result.let { SLog.info(it.toString()) }
             }
         }
     }
