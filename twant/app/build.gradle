@@ -264,7 +264,6 @@ dependencies {
 
 
     // rxandroid
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
 
 //添加HttpLoggingInterceptor进行调试
 //3.9.0版本是使用Java写的，从4.0.0后改用的Kotlin写的
@@ -277,8 +276,8 @@ dependencies {
     api rootProject.ext.dependencies["rxjava"] // rxjava2
     api rootProject.ext.dependencies["rxandroid"]
     api rootProject.ext.dependencies["adapter-rxjava2"]
-    api rootProject.ext.dependencies["persistentCookieJar"] // persistentCookieJar
-    implementation "androidx.room:room-runtime:2.2.5"
+    api rootProject.ext.dependencies["room-runtime"]
+    api rootProject.ext.dependencies["treerecyclerview"]
     kapt "android.arch.persistence.room:compiler:2.2.3"     // java
     annotationProcessor "androidx.room:room-compiler:2.2.5"
     implementation 'com.kaopiz:kprogresshud:1.2.0'

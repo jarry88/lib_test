@@ -22,6 +22,8 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 /**
@@ -31,6 +33,7 @@ import java.util.*
  */
 class TestNet2ViewModel(application: Application) : BaseViewModel(application) {
     //给RecyclerView添加ObservableList
+
     val viewModel:LinkageModel= LinkageModel()
     var pageNum:Int=1
     val liveData: MutableLiveData<ArrayList<SellerGoodsItem>> by lazy {
@@ -101,7 +104,8 @@ class TestNet2ViewModel(application: Application) : BaseViewModel(application) {
 
 //                val result = viewModel.getShoppingGoodsList1(20)
                 val result = MRequest.getInstance().service.doSellerGoodsListtest(param)
-                result.let { SLog.info(it.toString()) }
+                result.let { it.datas.let { SLog.info(it.toString())}}
+                result.let { SLog.info("%d",it.code)}
             }
         }
     }
