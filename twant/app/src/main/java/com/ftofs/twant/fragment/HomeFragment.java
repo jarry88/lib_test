@@ -17,28 +17,21 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.seller.fragment.AddGoodsFragment;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ActivityPopup;
-import com.ftofs.twant.widget.BlackDropdownMenu;
-import com.ftofs.twant.widget.HwLoadingPopup;
-import com.ftofs.twant.widget.ListPopup;
-import com.ftofs.twant.widget.ReceiveWordCouponResultPopup;
-import com.google.gson.JsonObject;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.core.DrawerPopupView;
 import com.orhanobut.hawk.Hawk;
 import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
@@ -51,7 +44,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -66,6 +58,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800; // 浮動按鈕滑動顯示與隱藏效果的延遲時間(毫秒)
 
     boolean popAd = false;
+    int enableEveryTimeAppPopupAd;  // 0 -- 当前APP版本只彈一次 1 -- 每次訪問彈出 2 -- 每天首次訪問彈出
     String appPopupAdImage;
     String appPopupAdLinkType;
     String appPopupAdLinkValue;
@@ -228,11 +221,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                     int enableAppPopupAd = Integer.parseInt(enableAppPopupAdStr);
                     if (enableAppPopupAd == Constant.TRUE_INT) {
-                        // 0 -- 当前APP版本只彈一次 1 -- 每次訪問彈出
+                        // 0 -- 当前APP版本只彈一次 1 -- 每次訪問彈出 2 -- 每天首次訪問彈出
                         String enableEveryTimeAppPopupAdStr = responseObj.getSafeString("datas.enableEveryTimeAppPopupAd");
-                        int enableEveryTimeAppPopupAd = Integer.parseInt(enableEveryTimeAppPopupAdStr);
+                        enableEveryTimeAppPopupAd = Integer.parseInt(enableEveryTimeAppPopupAdStr);
 
-                        if (enableEveryTimeAppPopupAd == Constant.TRUE_INT) {
+                        if (enableEveryTimeAppPopupAd == Constant.ENABLE_EVERY_TIME_APP_POPUP_AD_ALWAYS || enableEveryTimeAppPopupAd == Constant.ENABLE_EVERY_TIME_APP_POPUP_AD_DAILY_ONCE) {
                             popAd = true;
                         } else { // 查看当前版本是否有弹出
                             String appVersion = BuildConfig.VERSION_NAME.replace(".", "_");
@@ -292,12 +285,27 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void showPopupAd() {
+        long now = System.currentTimeMillis();
         // 每次resume時都顯示一次
         long resumeTimestamp = ((MainActivity) _mActivity).resumeTimestamp;
         if (popAd && showAppPopupAdTimestamp != resumeTimestamp ) {
             if (StringUtil.isEmpty(appPopupAdImage)) {
                 return;
             }
+
+            // 如果是enableEveryTimeAppPopupAd值2 -- 每天首次訪問彈出，還要判斷下當天是否有彈出過
+            if (enableEveryTimeAppPopupAd == Constant.ENABLE_EVERY_TIME_APP_POPUP_AD_DAILY_ONCE) {
+                long lastShowTimestamp = Hawk.get(SPField.FIELD_POPUP_AD_TIMESTAMP, 0L);
+                String today = new Jarbon().toDateString();
+                String lastShowDate = new Jarbon(lastShowTimestamp).toDateString();
+
+                SLog.info("today[%s], lastShowDate[%s]", today, lastShowDate);
+                if (today.equals(lastShowDate)) {
+                    // 如果當天有顯示過，則不顯示
+                    return;
+                }
+            }
+
             if (popupViewAd == null) {
                 popupViewAd = new XPopup.Builder(_mActivity)
                         .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
@@ -320,6 +328,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
             String key = String.format(SPField.FIELD_POPUP_AD_STATUS_APP_VER, appVersion);
             Hawk.put(key, Constant.TRUE_INT);
+            Hawk.put(SPField.FIELD_POPUP_AD_TIMESTAMP, now);
         }
     }
 
@@ -334,25 +343,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
             Util.startFragment(LabFragment.newInstance());
-
-
-//            HwLoadingPopup loadingPopup = (HwLoadingPopup) new XPopup.Builder(_mActivity)
-//                    .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
-//                    .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
-//                    // 如果不加这个，评论弹窗会移动到软键盘上面
-//                    .moveUpToKeyboard(false)
-//                    .asCustom(new HwLoadingPopup(_mActivity, "正在上傳圖片，請稍候..."));
-//            loadingPopup.show();
-            // Util.startFragment(ShopMainFragment.newInstance(397, ShopMainFragment.ACTIVITY_FRAGMENT));
-
-//            new XPopup.Builder(_mActivity)
-//                    .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
-//                    .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true
-//                    // 如果不加这个，评论弹窗会移动到软键盘上面
-//                    .moveUpToKeyboard(false)
-//                    .asCustom(new ReceiveWordCouponResultPopup(_mActivity, ReceiveWordCouponResultPopup.RESULT_RUN_OUT, EasyJSONObject.generate()))
-//                    .show();
-            // Util.startFragment(ShopSearchResultFragment.newInstance(296, null));
         }
     }
 

@@ -486,7 +486,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         EasyJSONArray easyJSONArray = EasyJSONArray.generate(buyItem);
 
         SLog.info("groupBuyMode[%s]", groupBuyMode);
-        Util.startFragment(ConfirmOrderFragment.newInstance(0, easyJSONArray.toString(), groupBuyMode ? Constant.TRUE_INT : Constant.FALSE_INT, goId));
+        Util.startFragment(ConfirmOrderFragment.newInstance(0, easyJSONArray.toString(), groupBuyMode ? Constant.TRUE_INT : Constant.FALSE_INT,
+                goId, Constant.INVALID_BARGAIN_OPEN_ID));
     }
 
     private void selectSpecs() {

@@ -628,7 +628,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         btnQuickJoinGroup1.setOnClickListener(this);
         btnQuickJoinGroup2 = view.findViewById(R.id.btn_quick_join_group_2);
         btnQuickJoinGroup2.setOnClickListener(this);
-
+        Util.setOnClickListener(view, R.id.btn_view_bargain_instruction, this);
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
@@ -1002,7 +1002,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 if (bargainOpenId == Constant.INVALID_BARGAIN_OPEN_ID) {
                     return;
                 }
-                Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId));
+                Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, currGoodsId));
+                break;
+            case R.id.btn_view_bargain_instruction:
+                Util.startFragment(H5GameFragment.newInstance(Constant.BARGAIN_INSTRUCTION_URL, null));
                 break;
             default:
                 break;

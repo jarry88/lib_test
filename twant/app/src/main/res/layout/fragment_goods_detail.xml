@@ -1001,6 +1001,7 @@
                     android:orientation="vertical"
                     android:background="@drawable/border_type_d">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/btn_view_bargain_instruction"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp">
@@ -1095,6 +1096,17 @@
                             android:textColor="@color/tw_medium_grey">
 
                         </TextView>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginRight="15dp"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:src="@drawable/ic_bargain_instruction">
+
+                        </ImageView>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                     <RelativeLayout
                         android:id="@+id/rl_bargain_info_container"
