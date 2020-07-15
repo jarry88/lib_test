@@ -422,8 +422,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             }
 //            chatConversationList.add(null);
 
-            adapter.setNewData(chatConversationList);
-//            adapter.submitList(chatConversationList);
+//            adapter.setNewData(chatConversationList);
+            adapter.submitList(chatConversationList);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -796,7 +796,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 messageContent = "[圖片]";
                             }
 
-                            SLog.info("messageFragment [%s]",messageContent);
+//                            SLog.info("messageFragment [%s]",messageContent);
                             String sendTime =conversation.getSafeString("sendTime");
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
@@ -814,10 +814,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                             chatConversation.timestamp = timestamp;
                                             SLog.info("db[%s]timestamp[%s]", chatConversation.timestamp, timestamp);
                                         }
-//                                        else {
-//                                            if (chatConversation.timestamp<timestamp) {
-//                                                chatConversation.timestamp = timestamp;
-//                                            }
+                                        else if (chatConversation.timestamp<timestamp) {
+                                                chatConversation.timestamp = timestamp;
+                                            }
                                         break;
                                     }
                                 }
