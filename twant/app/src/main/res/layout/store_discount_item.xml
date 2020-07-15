@@ -21,7 +21,10 @@
             android:layout_marginTop="21dp"
             android:textColor="@color/tw_black"
             android:textSize="19sp"
-            android:text="雙11狂歡"
+            android:singleLine="true"
+            android:layout_marginStart="34dp"
+            android:layout_marginEnd="26dp"
+            android:text="雙11狂歡雙11狂歡雙11狂歡雙11狂歡雙11狂歡雙11狂歡"
             />
 
         <LinearLayout
@@ -127,8 +130,9 @@
         android:id="@+id/tv_discount_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="@dimen/dp_2"
         android:textSize="14sp"
         android:textColor="@android:color/white"
         android:text="6.56折"
