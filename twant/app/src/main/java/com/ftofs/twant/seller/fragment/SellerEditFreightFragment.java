@@ -84,7 +84,7 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
         View view = getView();
         tvTitle = view.findViewById(R.id.tv_title);
 
-        tvTitle.setText("编辑物流信息");
+        tvTitle.setText("編輯物流信息");
 
         etW=view.findViewById(R.id.et_freight_weight);
         etV=view.findViewById(R.id.et_freight_v);

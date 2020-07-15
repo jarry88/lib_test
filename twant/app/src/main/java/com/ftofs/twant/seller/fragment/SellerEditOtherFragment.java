@@ -126,12 +126,11 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
                         Log.i("pvTime", "onTimeSelectChanged");
                     }
                 })
-                .setTitleText("选择时间")
+                .setTitleText(isBiginDate?"開始時間":"結束時間")
                 .setCancelText("取消")//取消按钮文字
-                .setSubmitText("确认")//确认按钮文字
+                .setSubmitText("確認")//确认按钮文字
 //                .setContentSize(18)//滚轮文字大小
                 .setTitleSize(20)//标题文字大小
-                .setTitleText("Title")//标题文字
                 .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
                 .isCyclic(true)//是否循环滚动
                 .setTitleColor(Color.BLACK)//标题文字颜色
@@ -140,7 +139,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
                 .setTitleBgColor(getResources().getColor(R.color.tw_dark_white))//标题背景颜色 Night mode
                 .setBgColor(getResources().getColor(R.color.tw_white))//滚轮背景颜色 Night mode
 //                .setRange(calendar.get(Calendar.YEAR) - 20, calendar.get(Calendar.YEAR) + 20)//默认是1900-2100年
-                .setDate(Calendar.getInstance())// 如果不设置的话，默认是系统时间*/
+//                .setDate(Calendar.getInstance().getTime())// 如果不设置的话，默认是系统时间*/
                 .setType(new boolean[]{true, true, true, true, true, true})
                 .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
                 .build();
@@ -168,7 +167,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
     private void initView() {
         View view = getView();
         tvTitle = view.findViewById(R.id.tv_title);
-        tvTitle.setText("编辑其它信息");
+        tvTitle.setText("編輯其它信息");
 
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
@@ -178,7 +177,10 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
         tvBeginDate.setOnClickListener((view1)->{
             if (pvTime != null) {
                 isBiginDate = true;
+                SLog.info(limitBuyStartTime);
                 pvTime.setDate(Jarbon.toCalender(limitBuyStartTime));
+                pvTime.setTitleText("開始時間");
+
                 pvTime.show();//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
             }
         });
@@ -186,6 +188,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
             if (pvTime != null) {
                 isBiginDate = false;
                 pvTime.setDate(Jarbon.toCalender(limitBuyEndTime));
+                pvTime.setTitleText("結束時間");
                 pvTime.show(view);//弹出时间选择器，传递参数过去，回调的时候则可以绑定此view
             }
         });
