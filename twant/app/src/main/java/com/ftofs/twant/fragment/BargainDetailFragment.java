@@ -42,6 +42,7 @@ import okhttp3.Call;
  */
 public class BargainDetailFragment extends BaseFragment implements View.OnClickListener {
     int openId;
+    int goodsId;
     int isOwner;
 
     BargainHelpListAdapter adapter;
@@ -52,12 +53,13 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
     String shareDescription;
     String shareCoverUrl;
 
-    public static BargainDetailFragment newInstance(int openId) {
+    public static BargainDetailFragment newInstance(int openId, int goodsId) {
         Bundle args = new Bundle();
 
         BargainDetailFragment fragment = new BargainDetailFragment();
         fragment.setArguments(args);
         fragment.openId = openId;
+        fragment.goodsId = goodsId;
 
         return fragment;
     }
@@ -76,6 +78,7 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
         Util.setOnClickListener(view, R.id.btn_invite_friend, this);
         Util.setOnClickListener(view, R.id.btn_buy_now, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_view_bargain_instruction, this);
 
         loadData();
     }
@@ -183,7 +186,23 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
                 ToastUtil.error(_mActivity, "只有砍價發起人才有購買資格");
                 return;
             }
-            Util.startFragment(ConfirmOrderFragment.newInstance(Constant.FALSE_INT, null));
+
+            EasyJSONObject buyItem = EasyJSONObject.generate(
+                    "buyNum", 1,
+                    "goodsId", goodsId);
+
+            try {
+                buyItem.set("bargainOpenId", openId);
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+
+            EasyJSONArray easyJSONArray = EasyJSONArray.generate(buyItem);
+            String buyData = easyJSONArray.toString();
+            SLog.info("buyData[%s]", buyData);
+            Util.startFragment(ConfirmOrderFragment.newInstance(Constant.FALSE_INT, buyData, Constant.FALSE_INT, Constant.INVALID_GO_ID, openId));
+        } else if (id == R.id.btn_view_bargain_instruction) {
+            Util.startFragment(H5GameFragment.newInstance(Constant.BARGAIN_INSTRUCTION_URL, null));
         }
     }
 

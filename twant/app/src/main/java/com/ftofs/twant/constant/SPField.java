@@ -148,6 +148,11 @@ public class SPField {
     public static final String FIELD_POPUP_AD_STATUS_APP_VER = "popup_ad_status_app_ver_%s";
 
     /**
+     * 活動彈窗彈出的UNIX時間戳(毫秒,long)
+     */
+    public static final String FIELD_POPUP_AD_TIMESTAMP = "popup_ad_timestamp";
+
+    /**
      * 退款方式記錄，每用戶一條，用於記錄用戶最近一次的退款方式(%d用於打印用戶Id)
      */
     public static final String FIELD_USER_REFUND_WAY = "user_refund_way_%d";
