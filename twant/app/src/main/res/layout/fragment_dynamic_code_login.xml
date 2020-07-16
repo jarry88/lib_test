@@ -22,6 +22,8 @@
         android:layout_width="0dp"
         android:layout_height="75dp"
 
+        android:layout_marginStart="@dimen/toolbar_margin_left"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_mobile_zone_container"
@@ -103,6 +105,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/toolbar_margin_left"
             android:layout_centerVertical="true"
             android:src="@drawable/captcha"
             />
@@ -141,8 +144,9 @@
         android:layout_width="0dp"
         android:layout_height="65dp"
         android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginStart="@dimen/toolbar_margin_left"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
         android:paddingStart="@dimen/margin12"
-        android:paddingEnd="@dimen/margin12"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rl_captcha_container"
@@ -200,11 +204,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <ImageView
                 android:id="@+id/img_check"
-                android:padding="@dimen/dp_4"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:paddingRight="@dimen/dp_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_checked">
@@ -212,10 +219,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="0dp"
                 android:text="@string/agree_and_login"
                 android:textColor="#CBCBCB"
-                android:textSize="14sp">
+                android:textSize="11sp">
             </TextView>
             <TextView
                 android:id="@+id/btn_view_tos"
@@ -224,7 +231,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="《服務協議》"
-                android:textSize="14sp"
+                android:textSize="11sp"
                 android:textColor="@color/tw_blue">
             </TextView>
             <TextView
@@ -232,7 +239,7 @@
                 android:layout_height="wrap_content"
                 android:text="與"
                 android:textColor="#CBCBCB"
-                android:textSize="14sp">
+                android:textSize="11sp">
             </TextView>
             <TextView
                 android:id="@+id/btn_view_private_terms"
@@ -241,7 +248,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="《私隱條款》"
-                android:textSize="14sp"
+                android:textSize="11sp"
                 android:textColor="@color/tw_blue">
             </TextView>
         </LinearLayout>
@@ -250,7 +257,6 @@
             android:id="@+id/btn_forget_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
             android:layout_marginEnd="@dimen/toolbar_margin_right"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -258,6 +264,7 @@
             android:paddingBottom="10dp"
             android:text="@string/text_forget_password"
             android:textColor="@color/tw_blue"
+            android:textSize="11sp"
             />
     </RelativeLayout>
 

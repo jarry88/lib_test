@@ -77,6 +77,8 @@ public class GroupInfoListFragment extends BaseFragment implements View.OnClickL
     int twBlack;
     int twBlue;
 
+    View btnGotoTop;
+
     public static GroupInfoListFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -97,7 +99,8 @@ public class GroupInfoListFragment extends BaseFragment implements View.OnClickL
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
-        Util.setOnClickListener(view, R.id.btn_goto_top, this);
+        btnGotoTop = view.findViewById(R.id.btn_goto_top);
+        btnGotoTop.setOnClickListener(this);
 
         Util.setOnClickListener(view, R.id.btn_sort_general, this);
         Util.setOnClickListener(view, R.id.btn_sort_sale, this);
@@ -127,8 +130,35 @@ public class GroupInfoListFragment extends BaseFragment implements View.OnClickL
         });
 
         rvList.setAdapter(adapter);
+        rvList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    hideFloatButton();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    showFloatButton();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
 
         loadData(currPage + 1);
+    }
+
+    private void hideFloatButton() {
+        btnGotoTop.setTranslationX(Util.dip2px(_mActivity, 30.5f));
+    }
+
+    private void showFloatButton() {
+        btnGotoTop.setTranslationX(Util.dip2px(_mActivity, 0));
     }
 
     private void reloadData() {
@@ -196,12 +226,16 @@ public class GroupInfoListFragment extends BaseFragment implements View.OnClickL
 
                         GroupGoods groupGoods = new GroupGoods();
                         groupGoods.commonId = group.getInt("commonId");
+                        if (group.exists("goodsId")) {
+                            groupGoods.goodsId = group.getInt("goodsId");
+                        }
                         groupGoods.imageName = group.getSafeString("imageName");
                         groupGoods.goodsName = group.getSafeString("goodsName");
                         groupGoods.jingle = group.getSafeString("jingle");
                         groupGoods.groupPrice = group.getDouble("groupPrice");
                         groupGoods.goodsPrice = group.getDouble("goodsPrice");
                         groupGoods.joinedNum = group.getInt("joinedNum");
+                        groupGoods.groupRequireNum = group.getInt("groupRequireNum");
 
                         groupGoodsList.add(groupGoods);
                     }

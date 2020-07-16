@@ -14,4 +14,5 @@ public class GroupGoods {
     public double goodsPrice;
     public double groupPrice;
     public int joinedNum;
+    public int groupRequireNum;
 }
