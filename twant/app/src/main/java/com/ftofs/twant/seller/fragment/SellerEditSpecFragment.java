@@ -49,7 +49,7 @@ import okhttp3.Call;
  * @author zwm
  */
 public class SellerEditSpecFragment extends BaseFragment implements View.OnClickListener {
-    int action;
+    int action; // 動作：表示添加還是編輯
 
     RecyclerView rvList;
     SellerSpecValueListAdapter adapter;
@@ -102,6 +102,13 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
         TextView tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         tvFragmentTitle.setText(action == Constant.ACTION_ADD ? "添加規格" : "編輯規格");
 
+        if (action == Constant.ACTION_ADD) {
+            // 如果是添加規格的話，先添加3個空的規格值編輯框
+            for (int i = 0; i < 3; i++) {
+                specValueList.add(new SellerSpecValueListItem(SellerSpecValueListItem.ITEM_TYPE_NORMAL, 0, ""));
+            }
+        }
+
         // 底部的【添加規格】按鈕
         specValueList.add(new SellerSpecValueListItem(SellerSpecValueListItem.ITEM_TYPE_FOOTER, 0, null));
 
@@ -121,6 +128,10 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                 if (id == R.id.btn_remove) { // 刪除規格值
                     removeItem(position);
                 } else if (id == R.id.btn_add_spec_value) { // 添加規格值
+                    if (specValueList.size() >= (35 + 1)) { // 額外加1是因為最後那個【添加規格】按鈕
+                        ToastUtil.error(_mActivity, "每個規格最多只能添加35個規格值");
+                        return;
+                    }
                     int targetIndex = specValueList.size() - 1;
                     specValueList.add(targetIndex, new SellerSpecValueListItem(SellerSpecValueListItem.ITEM_TYPE_NORMAL, 0, ""));
                     adapter.notifyItemInserted(targetIndex);
