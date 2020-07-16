@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -352,7 +353,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     continue;
                 };
                 long timestamp = conversation.lastMessageTime;
-                SLog.info("本地保存记录：%s,时间%d",conversation.nickname,timestamp);
+                SLog.info("本地保存记录：%s,时间%d,環形記錄時間[%d]",conversation.nickname,timestamp,conversation.timestamp);
                 if (conversation.needUpdate()) {
 //                    SLog.info("%s需要更新",memberName);
                     updateConversationList.add(memberName);
@@ -388,6 +389,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 chatConversation.lastMessage = conversation.lastMessageText;
                 if (timestamp > 1) {
                     chatConversation.timestamp = timestamp;
+                } else {
+                    chatConversation.timestamp = conversation.lastMessageTime;
                 }
                 totalIMUnreadCount += chatConversation.unreadCount;
                 SLog.info("here!!storeid%d, platId%d",friendInfo.storeId,PLATFORM_CUSTOM_STORE_ID);
@@ -399,7 +402,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                chatConversationList.sort((o1, o2) -> comO1O2(o1,o2));
+
+//                chatConversationList.sort((o1, o2) -> comO1O2(o1,o2));
+
+                comO1O2();
             }
             // 獲取環信所有會話列表
             if (!isPlatformCustomer) {
@@ -422,8 +428,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             }
 //            chatConversationList.add(null);
 
-//            adapter.setNewData(chatConversationList);
-            adapter.submitList(chatConversationList);
+            adapter.setNewData(chatConversationList);
+//            adapter.submitList(chatConversationList);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -463,7 +469,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             if (loacal == null) {
                 SLog.info("Error,存取對話失敗");
             } else {
-                SLog.info("第%d个，memberName[%s],nickName %s,lastMessage %s,unread[%d]",count++ ,memberName, loacal.nickname,loacal.lastMessageText,conversation.getUnreadMsgCount());
+                SLog.info("第%d个，memberName[%s],nickName %s,lastMessage %s,unread[%d],lastMessageTime[%d]",count++ ,memberName, loacal.nickname,loacal.lastMessageText,conversation.getUnreadMsgCount(),loacal.lastMessageTime);
             }
         }
     }
@@ -482,6 +488,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
@@ -526,7 +533,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     displayUnreadCount();
 
                     // 消息排序
-                    Collections.sort(chatConversationList, (o1, o2) -> comO1O2(o1,o2));
+                    comO1O2();
 
 
 //                    adapter.setNewData(chatConversationList);
@@ -538,16 +545,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         });
     }
 
-    private int comO1O2(ChatConversation o1, ChatConversation o2) {
-        if (o1.unreadCount > 0 && o2.unreadCount > 0 || o1.unreadCount == o2.unreadCount && o1.unreadCount == 0) {
-            return (int) ( o2.timestamp-o1.timestamp);
-        } else {
-            if (o1.unreadCount > 0) {
-                return -1;
-            } else {
-                return 1;
-            }
-        }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private  void comO1O2() {
+
+        Comparator<ChatConversation> UnreadCount = Comparator.comparing(ChatConversation::getUnreadCount).reversed();//按照降序
+        Comparator<ChatConversation> byLastTimeStamp = Comparator.comparing(ChatConversation::getTimeStamp).reversed();
+        Collections.sort(chatConversationList, UnreadCount.thenComparing(byLastTimeStamp));
     }
 
     private void loadUnreadMessageCount() {
@@ -812,11 +815,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                             chatConversation.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                             chatConversation.lastMessage = "txt::" + messageContent + ":";
                                             chatConversation.timestamp = timestamp;
-                                            SLog.info("db[%s]timestamp[%s]", chatConversation.timestamp, timestamp);
                                         }
-                                        else if (chatConversation.timestamp<timestamp) {
+                                        else if (chatConversation.timestamp<timestamp&&System.currentTimeMillis()/1000-timestamp>12960000) {//150天
                                                 chatConversation.timestamp = timestamp;
-                                            }
+//                                                SLog.info("db[%s]timestamp[%s],", System.currentTimeMillis()/1000, timestamp);
+
+                                        }
+//                                        SLog.info("db[%s]timestamp[%s],", chatConversation.timestamp, timestamp);
                                         break;
                                     }
                                 }
@@ -861,6 +866,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
 //                    adapter.notifyDataSetChanged();
                     adapter.submitList(chatConversationList);
+//                    adapter.notifyDataSetChanged();
 //                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
