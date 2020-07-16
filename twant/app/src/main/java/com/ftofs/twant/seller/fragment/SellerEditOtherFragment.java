@@ -309,8 +309,12 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
             publishGoodsInfo.set("goodsState", goodsState);
             publishGoodsInfo.set("commonId", parent.commonId);
             publishGoodsInfo.set("editType", 6);
-            publishGoodsInfo.set("limitBuyStartTime", limitBuyStartTime);
-            publishGoodsInfo.set("limitBuyEndTime", limitBuyEndTime);
+            if (!StringUtil.isEmpty(limitBuyStartTime)) {
+                publishGoodsInfo.set("limitBuyStartTime", limitBuyStartTime);
+            }
+            if (!StringUtil.isEmpty(limitBuyEndTime)) {
+                publishGoodsInfo.set("limitBuyEndTime", limitBuyEndTime);
+            }
             publishGoodsInfo.set("limitBuy",limitBuy);
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

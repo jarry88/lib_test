@@ -183,6 +183,7 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
                         return;
                     }
                     updateFreightView(data);
+                    onSelected(PopupType.GOODS_FREIGHT_RULE,freightTemplateId,null);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -272,12 +273,13 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
             try{
                 publishGoodsInfo.set("commonId", parent.commonId);
                 publishGoodsInfo.set("editType", 5);
-                if (freightTemplateId >= 0) {
-                    publishGoodsInfo.set("freightTemplateId", freightTemplateId);
-                } else {
+                if (useFixedFreight) {
                     double goodsFreight = Double.parseDouble(freightText);
                     publishGoodsInfo.set("goodsFreight", goodsFreight);
+                } else {
+                    publishGoodsInfo.set("freightTemplateId", freightTemplateId);
                 }
+
                 if (!StringUtil.isEmpty(freightWeightStr)) {
 
                     publishGoodsInfo.set("freightWeight", Double.parseDouble(freightWeightStr));
@@ -335,8 +337,10 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
     public void onSelected(PopupType type, int id, Object extra) {
         if (type == PopupType.GOODS_FREIGHT_RULE) {
             freightRuleIndex = id;
-            freightTemplateId = freightList.get(id).id;
-            tvRule.setText(extra.toString());
+            if (freightList.size() > 0) {
+                freightTemplateId = freightList.get(id).id;
+                tvRule.setText(extra.toString());
+            }
         }
     }
 }
