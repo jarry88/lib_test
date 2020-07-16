@@ -1326,9 +1326,9 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         // 如果現在是用價格排序，則顯示價格升序、降序圖標
         if (goodsSortButtonIndex == GOODS_SEARCH_SORT_PRICE) {
             if (sortPriceAsc) {
-                iconPriceOrder.setImageResource(R.drawable.icon_unfold_good_filter);
+                iconPriceOrder.setImageResource(R.drawable.ic_sort_off);
             } else {
-                iconPriceOrder.setImageResource(R.drawable.icon_blue_unfold_good_filter);
+                iconPriceOrder.setImageResource(R.drawable.ic_sort_asc);
             }
             iconPriceOrder.setVisibility(View.VISIBLE);
         }

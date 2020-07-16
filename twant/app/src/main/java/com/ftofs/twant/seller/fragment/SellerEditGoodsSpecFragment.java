@@ -449,8 +449,10 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
             List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();
             Map<Integer, List<SellerSpecItem>> sellerSpecValueMap = new HashMap<>();
 
+            int selectedCount = 0;
             for (Map.Entry<Integer, SellerSpecMapItem> entry : sellerSpecMap.entrySet()) {
                 if (entry.getValue().selected) {
+                    selectedCount++;
                     continue;
                 }
 
@@ -462,6 +464,10 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                 sellerSpecValueMap.put(entry.getKey(), entry.getValue().sellerSpecItemList);
             }
 
+            if (selectedCount >= 3) {
+                ToastUtil.error(_mActivity, "每個商品最多只能添加3個規格");
+                return;
+            }
 
             if (sellerSpecItemList.size() < 1) {
                 ToastUtil.error(_mActivity, "已添加所有的規格");

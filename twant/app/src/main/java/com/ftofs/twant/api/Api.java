@@ -1556,6 +1556,11 @@ public class Api {
      */
     public static final String PATH_BARGAIN_SHARE = "/bargain/share";
 
+    /**
+     * 團購商品列表
+     */
+    public static final String PATH_GROUP_GOODS_LIST = "/group/list";
+
 
     /**
      * 發送Http請求
