@@ -47,6 +47,7 @@ public class SellerSpecValueListAdapter extends BaseMultiItemQuickAdapter<Seller
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    int position = helper.getAdapterPosition();
                     List<SellerSpecValueListItem> data = getData();
                     SellerSpecValueListItem item = data.get(position);
                     item.specValueName = s.toString();
