@@ -278,5 +278,12 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
+        return true;
+    }
 }
 

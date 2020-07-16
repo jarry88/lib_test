@@ -327,7 +327,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         // 添加兩個固定在頂部的菜單
         StoreNavigationItem storeNavigationItem = new StoreNavigationItem();
         storeNavigationItem.id = -1;
-        storeNavigationItem.title = "推廣直播";
+        storeNavigationItem.title = "推銷直播";
         storeNavigationItemList.add(storeNavigationItem);
 
         storeNavigationItem = new StoreNavigationItem();
