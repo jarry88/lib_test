@@ -110,7 +110,6 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
                 "token", token,
                 "page", page);
 
-        SLog.info("params[%s]", params);
 
         String url;
         if (dataType == DATA_TYPE_INITIATE) {
@@ -118,6 +117,8 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
         } else {
             url = Api.PATH_BARGAIN_HELP;
         }
+
+        SLog.info("url[%s], params[%s]", url, params);
 
         Api.postUI(url, params, new UICallback() {
             @Override

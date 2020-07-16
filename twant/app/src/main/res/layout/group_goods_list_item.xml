@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="161dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginLeft="@dimen/toolbar_margin_left"
+    android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/white_r4dp_bg">
+
+    <ImageView
+        android:id="@+id/goods_image"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/cs_avatar_160">
+    </ImageView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp">
+        <LinearLayout
+            android:id="@+id/ll_group_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_goods_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                android:text="GRACO葛莱婴儿推车 可座可平躺 轻便折叠伞车双向推行葛莱婴儿推车 可座可平躺 轻便折叠伞车双向推行"
+                android:lines="2"
+                android:ellipsize="end">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_goods_jingle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="賣點"
+                android:textColor="#BFBEBE"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:ellipsize="end">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_group_price_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="0人拼團價"
+                android:textColor="@color/tw_yellow"
+                android:textSize="11sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_group_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="$129.00"
+                android:textColor="@color/tw_red"
+                android:textSize="16sp">
+            </TextView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_original_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:text="$180.00"
+                    android:textSize="11sp"
+                    android:textColor="#A1A1A1">
+                </TextView>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:background="#A1A1A1">
+                </View>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="24dp"
+            app:layout_constraintRight_toRightOf="@id/ll_group_info_container"
+            app:layout_constraintBottom_toBottomOf="@id/ll_group_info_container"
+            android:background="@drawable/narrow_red_button"
+            android:gravity="center"
+            android:text="快速成團"
+            android:textColor="@android:color/white"
+            android:textSize="13sp">
+
+        </TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -416,11 +416,11 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
             tvTextNewest.setTextColor(twBlue);
         } else if (sortCriteriaIndex == SORT_PRICE_ASC) {
             tvTextPrice.setTextColor(twBlue);
-            iconPriceOrder.setImageResource(R.drawable.icon_blue_unfold_good_filter);
+            iconPriceOrder.setImageResource(R.drawable.ic_sort_asc);
             iconPriceOrder.setVisibility(View.VISIBLE);
         } else if (sortCriteriaIndex == SORT_PRICE_DESC) {
             tvTextPrice.setTextColor(twBlue);
-            iconPriceOrder.setImageResource(R.drawable.icon_unfold_good_filter);
+            iconPriceOrder.setImageResource(R.drawable.ic_sort_off);
             iconPriceOrder.setVisibility(View.VISIBLE);
         }
     }
