@@ -309,8 +309,12 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             return false;
         }
         String jingle =etJingle.getText().toString();
-        if (StringUtil.isEmpty(jingle)) {
-            ToastUtil.error(_mActivity,"請填寫商品賣點");
+//        if (StringUtil.isEmpty(jingle)) {
+//            ToastUtil.error(_mActivity,"請填寫商品賣點");
+//            return false;
+//        }
+        if (jingle.length() > 140) {
+            ToastUtil.error(_mActivity,"商品賣點長度為0到140個字符");
             return false;
         }
         try {
