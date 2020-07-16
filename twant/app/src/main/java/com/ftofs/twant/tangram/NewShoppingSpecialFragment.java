@@ -401,7 +401,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
                     fragmentList.add(withoutCategoryFragment);
                     SLog.info("無類別商品標簽數據");
-//                tabLayout.removeTabAt(0);
                     withoutCategoryFragment.setNestedScroll(this);
                     withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
                 }
