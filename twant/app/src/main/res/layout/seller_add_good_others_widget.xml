@@ -113,7 +113,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="限购数量:"
+                    android:text="限購數量:"
                     android:textColor="@color/tw_black"
 
                     android:layout_marginEnd="38dp"/>
@@ -140,7 +140,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="限购起止时间:"
+                    android:text="限購起止時間:"
                     android:textColor="@color/tw_black"
 
                     android:layout_marginEnd="@dimen/margin12"/>
@@ -166,7 +166,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:hint="选择开始时间">
+                            android:hint="選擇開始時間">
                         </TextView>
                         <ImageView
                             android:layout_width="16dp"
@@ -192,7 +192,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:hint="选择结束时间">
+                            android:hint="選擇結束時間">
                         </TextView>
                         <ImageView
                             android:layout_width="16dp"

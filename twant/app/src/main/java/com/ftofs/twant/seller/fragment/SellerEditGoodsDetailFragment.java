@@ -85,7 +85,7 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
     private void initView() {
         View view = getView();
         tvTitle = view.findViewById(R.id.tv_title);
-        tvTitle.setText("编辑详情信息");
+        tvTitle.setText("編輯詳情信息");
 
         etVideos = view.findViewById(R.id.et_goods_video_url);
         tvCategory = view.findViewById(R.id.tv_select_store_category);

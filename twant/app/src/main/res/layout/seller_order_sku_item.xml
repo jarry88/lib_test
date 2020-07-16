@@ -81,7 +81,7 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:background="@drawable/seller_order_sku_item_tag_bg"
-                android:text="限時折扣"
+                android:text="限時促銷"
                 android:textSize="11sp"
                 android:textColor="@android:color/white">
             </TextView>

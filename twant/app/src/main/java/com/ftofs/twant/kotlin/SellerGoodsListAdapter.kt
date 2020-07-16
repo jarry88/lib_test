@@ -64,9 +64,8 @@ override val layoutId: Int
                             }
 
                         }
-
-//                        changeItemCommend(item)
-//                        notifyItemChanged(p)
+                        notifyItemChanged(getData().indexOf(item))
+                        ToastUtil.success(context,responseObj.getSafeString("datas.success"))
                     } catch (e: Exception) {
                         SLog.info("Error!message[%s], trace[%s]", e.message, Log.getStackTraceString(e))
                     }
