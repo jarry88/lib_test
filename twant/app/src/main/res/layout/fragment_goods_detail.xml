@@ -51,6 +51,40 @@
                     android:gravity="center">
                 </TextView>
 
+                <!-- 砍價活動Label -->
+                <FrameLayout
+                    android:id="@+id/fl_bargain_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/rv_gallery_image_list"
+                    android:background="@drawable/tv_group_buy_label"
+                    android:visibility="gone">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_bargain_label">
+
+                        </ImageView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:text="砍價"
+                            android:textColor="@android:color/white"
+                            android:textSize="15sp">
+
+                        </TextView>
+                    </LinearLayout>
+                </FrameLayout>
+                <!-- END OF 砍價活動Label -->
+
                 <com.rd.PageIndicatorView
                     android:id="@+id/pageIndicatorView"
                     android:layout_width="wrap_content"
@@ -322,6 +356,157 @@
                         </LinearLayout>
                     </LinearLayout>
                     <!-- END OF 拼团活动 -->
+
+                    <!-- 砍價活動 -->
+                    <LinearLayout
+                        android:id="@+id/ll_bargain_state_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:background="@drawable/banner_618_activity_bg"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="16sp">
+                                </TextView>
+                                <TextView
+                                    android:id="@+id/tv_bargain_state_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="2dp"
+                                    android:text="900.00"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="30sp">
+                                </TextView>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="8dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/tv_bargain_state_bottom_price"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:layout_constraintTop_toBottomOf="parent"
+                                        app:layout_constraintLeft_toLeftOf="parent"
+                                        app:layout_constraintRight_toRightOf="parent"
+                                        android:textSize="12sp"
+                                        android:text="底價 $1000.00"
+                                        android:textColor="@android:color/white">
+                                    </TextView>
+                                    <TextView
+                                        android:id="@+id/tv_bargain_state_member_count"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="20dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
+                                        android:textSize="13sp"
+                                        android:textColor="@color/tw_yellow"
+                                        android:text="已有2人參與"
+                                        android:gravity="center"
+                                        android:background="@drawable/white_r10dp_bg">
+
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="right">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="活動倒計時"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="13sp">
+
+                                </TextView>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+                                    <TextView
+                                        android:id="@+id/tv_bargain_remain_day"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0天"
+                                        android:textSize="12sp"
+                                        android:textColor="@android:color/white">
+                                    </TextView>
+                                    <TextView
+                                        android:id="@+id/tv_bargain_remain_hour"
+                                        android:layout_width="18dp"
+                                        android:layout_height="18dp"
+                                        android:layout_marginLeft="2dp"
+                                        android:background="@drawable/white_r2dp_bg"
+                                        android:text="00"
+                                        android:textColor="@color/tw_yellow"
+                                        android:textSize="12sp"
+                                        android:gravity="center">
+                                    </TextView>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="1dp"
+                                        android:layout_marginRight="1dp"
+                                        android:text=":"
+                                        android:textColor="@android:color/white"
+                                        android:textSize="12sp">
+                                    </TextView>
+                                    <TextView
+                                        android:id="@+id/tv_bargain_remain_minute"
+                                        android:layout_width="18dp"
+                                        android:layout_height="18dp"
+                                        android:background="@drawable/white_r2dp_bg"
+                                        android:text="00"
+                                        android:textColor="@color/tw_yellow"
+                                        android:textSize="12sp"
+                                        android:gravity="center">
+                                    </TextView>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="1dp"
+                                        android:layout_marginRight="1dp"
+                                        android:text=":"
+                                        android:textColor="@android:color/white"
+                                        android:textSize="12sp">
+                                    </TextView>
+                                    <TextView
+                                        android:id="@+id/tv_bargain_remain_second"
+                                        android:layout_width="18dp"
+                                        android:layout_height="18dp"
+                                        android:background="@drawable/white_r2dp_bg"
+                                        android:text="00"
+                                        android:textColor="@color/tw_yellow"
+                                        android:textSize="12sp"
+                                        android:gravity="center">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <!-- END OF 砍價活動 -->
 
                     <!-- 限時折扣活動信息 -->
                     <RelativeLayout
@@ -805,7 +990,7 @@
 
                 <!-- 砍價詳情 -->
                 <LinearLayout
-                    android:id="@+id/ll_bargain_info_container"
+                    android:id="@+id/ll_bargain_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/toolbar_margin_left"
@@ -814,11 +999,14 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:orientation="vertical"
-                    android:background="@drawable/border_type_d">
+                    android:background="@drawable/border_type_d"
+                    android:visibility="gone">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/btn_view_bargain_instruction"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp">
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="8dp">
                         <ImageView
                             android:id="@+id/ic_bargain_status_start"
                             android:layout_width="28dp"
@@ -910,12 +1098,23 @@
                             android:textColor="@color/tw_medium_grey">
 
                         </TextView>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="15dp"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:src="@drawable/ic_bargain_instruction">
+
+                        </ImageView>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                     <RelativeLayout
                         android:id="@+id/rl_bargain_info_container"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:layout_marginTop="14dp"
+                        android:layout_marginTop="6dp"
                         android:layout_marginBottom="8dp">
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -923,9 +1122,7 @@
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:id="@+id/img_bargain_avatar"
                                 android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/avatar_female">
-
+                                android:layout_height="40dp">
                             </de.hdodenhof.circleimageview.CircleImageView>
 
                             <RelativeLayout
@@ -936,7 +1133,7 @@
                                     android:id="@+id/tv_bargain_nickname"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="雲輝童鞋"
+                                    android:text=""
                                     android:textSize="13sp"
                                     android:textColor="@color/tw_black">
                                 </TextView>
@@ -956,7 +1153,7 @@
                                         android:id="@+id/tv_current_bargain_price"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="$123.00"
+                                        android:text="$0.00"
                                         android:textColor="@color/tw_red"
                                         android:textSize="13sp">
 
@@ -970,7 +1167,7 @@
                             android:layout_height="24dp"
                             android:layout_alignParentBottom="true"
                             android:layout_alignParentRight="true"
-                            android:text="2人幫砍"
+                            android:text="0人幫砍"
                             android:textColor="@android:color/white"
                             android:textSize="13sp"
                             android:gravity="center"
@@ -987,7 +1184,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/toolbar_margin_left"
                     android:layout_marginEnd="@dimen/toolbar_margin_right"
-                    app:layout_constraintTop_toBottomOf="@id/ll_bargain_info_container"
+                    app:layout_constraintTop_toBottomOf="@id/ll_bargain_container"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:orientation="vertical"

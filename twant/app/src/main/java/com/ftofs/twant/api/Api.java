@@ -1551,6 +1551,11 @@ public class Api {
      */
     public static final String PATH_BARGAIN_FIRST = "/bargain/first";
 
+    /**
+     * 开砍活动分享页面
+     */
+    public static final String PATH_BARGAIN_SHARE = "/bargain/share";
+
 
     /**
      * 發送Http請求

@@ -15,14 +15,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.domain.store.Seller;
 import com.ftofs.twant.entity.Goods;
+import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerFeaturesGoodsAdapter;
 import com.ftofs.twant.seller.api.SellerApi;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ListPopup;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +43,7 @@ import okhttp3.Call;
  * 商家鎮店之寶添加編輯頁面 需求913
  * @author gzp
  */
-public class SellerFeaturesFragment extends BaseFragment implements View.OnClickListener{
+public class SellerFeaturesFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     private List<Goods> goodsCommonList =new ArrayList<>();
     private SellerFeaturesGoodsAdapter adpter;
 
@@ -77,6 +83,20 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
             public void onClick(View v) {
                 back();
             }
+        });
+        view.findViewById(R.id.btn_menu).setOnClickListener((v)->{
+                List<ListPopupItem> itemList = new ArrayList<>();
+                itemList.add(new ListPopupItem(0, "商品管理", null));
+                itemList.add(new ListPopupItem(1, "商品發布", null));
+                itemList.add(new ListPopupItem(2, "商品規格", null));
+                itemList.add(new ListPopupItem(3, "鎮店之寶", null));
+
+                hideSoftInput();
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new ListPopup(_mActivity, "請選擇操作",
+                                PopupType.MENU, itemList, -1, this)).show();
         });
         return view;
     }
@@ -225,5 +245,27 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
         }
     }
 
+    @Override
+    public void onSelected(PopupType type, int id, Object extra) {
+        SLog.info("onSelected, type[%s], id[%d], extra[%s]", type, id, extra);
+        if (type == PopupType.MENU) {
+            if (id == 1) {
+                start(AddGoodsFragment.newInstance());
+                hideSoftInputPop();
+            } else if (id == 2) { // 商品規格
+
+                start(SellerSpecFragment.newInstance());
+                hideSoftInputPop();
+            } else if (id == 0) {//商品管理
+                try {
+                    popTo(SellerGoodsListFragment.class,false);
+
+                } catch (Exception e) {
+                    start(SellerGoodsListFragment.newInstance());
+                    hideSoftInputPop();
+                }
+            }
+        }
+    }
 }
 

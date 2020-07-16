@@ -11,7 +11,8 @@
     <RelativeLayout
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height">
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@drawable/border_type_d">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
             android:layout_width="31dp"
@@ -52,9 +53,9 @@
                     android:gravity="center_vertical"
                     android:background="@android:color/white">
                     <ImageView
+                        android:id="@+id/goods_image"
                         android:layout_width="130dp"
                         android:layout_height="130dp">
-
                     </ImageView>
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -67,6 +68,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
                             <TextView
+                                android:id="@+id/tv_goods_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="德国原装进口（Braun）耳温枪IRT6520WE"
@@ -74,6 +76,7 @@
                                 android:textColor="@color/tw_black">
                             </TextView>
                             <TextView
+                                android:id="@+id/tv_goods_spec"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
@@ -88,6 +91,7 @@
                             android:layout_alignParentBottom="true"
                             android:orientation="vertical">
                             <TextView
+                                android:id="@+id/tv_bargain_state_desc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="2人幫忙砍，已砍掉$33.3元"
@@ -109,6 +113,7 @@
                                     android:textSize="16sp">
                                 </TextView>
                                 <TextView
+                                    android:id="@+id/tv_bottom_price"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="14dp"
@@ -121,10 +126,116 @@
                     </RelativeLayout>
                 </LinearLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btn_view_bargain_instruction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:paddingBottom="10dp"
+                    android:background="@android:color/white">
+
+                    <ImageView
+                        android:id="@+id/ic_bargain_status_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:src="@drawable/ic_bargain_status_start_enabled">
+                    </ImageView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        app:layout_constraintTop_toBottomOf="@id/ic_bargain_status_start"
+                        app:layout_constraintLeft_toLeftOf="@id/ic_bargain_status_start"
+                        app:layout_constraintRight_toRightOf="@id/ic_bargain_status_start"
+                        android:text="1.發起砍價/參與"
+                        android:textSize="11sp"
+                        android:textColor="@color/tw_yellow">
+                    </TextView>
+
+                    <ImageView
+                        android:id="@+id/ic_bargain_status_invitation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:src="@drawable/ic_bargain_status_invitation_enabled">
+                    </ImageView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        app:layout_constraintTop_toBottomOf="@id/ic_bargain_status_invitation"
+                        app:layout_constraintLeft_toLeftOf="@id/ic_bargain_status_invitation"
+                        app:layout_constraintRight_toRightOf="@id/ic_bargain_status_invitation"
+                        android:text="2.邀請好友幫砍"
+                        android:textSize="11sp"
+                        android:textColor="@color/tw_yellow">
+                    </TextView>
+
+                    <ImageView
+                        android:id="@+id/ic_bargain_status_finish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:src="@drawable/ic_bargain_status_finish_disabled">
+                    </ImageView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        app:layout_constraintTop_toBottomOf="@id/ic_bargain_status_finish"
+                        app:layout_constraintLeft_toLeftOf="@id/ic_bargain_status_finish"
+                        app:layout_constraintRight_toRightOf="@id/ic_bargain_status_finish"
+                        android:text="3.砍價成功底價購買"
+                        android:textSize="11sp"
+                        android:textColor="@color/tw_medium_grey">
+                    </TextView>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="2dp"
+                        app:layout_constraintLeft_toRightOf="@id/ic_bargain_status_start"
+                        app:layout_constraintRight_toLeftOf="@id/ic_bargain_status_invitation"
+                        app:layout_constraintTop_toTopOf="@id/ic_bargain_status_start"
+                        app:layout_constraintBottom_toBottomOf="@id/ic_bargain_status_start"
+                        android:background="@drawable/dash_line"
+                        android:layerType="software">
+                    </View>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="2dp"
+                        app:layout_constraintLeft_toRightOf="@id/ic_bargain_status_invitation"
+                        app:layout_constraintRight_toLeftOf="@id/ic_bargain_status_finish"
+                        app:layout_constraintTop_toTopOf="@id/ic_bargain_status_invitation"
+                        app:layout_constraintBottom_toBottomOf="@id/ic_bargain_status_invitation"
+                        android:background="@drawable/dash_line"
+                        android:layerType="software">
+                    </View>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="15dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:src="@drawable/ic_bargain_instruction">
+                    </ImageView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="77dp"
+                    android:layout_marginTop="4dp"
                     android:background="@android:color/white"
                     android:orientation="vertical">
                     <TextView

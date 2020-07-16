@@ -25,4 +25,10 @@ public class ChatConversation {
     public int unreadCount; // 未讀消息條數
     public boolean isPlatformCustomer; // 是否為置頂的平台客服對話總聊天入口
 
+    public int getUnreadCount() {
+        return unreadCount;
+    }
+    public long getTimeStamp() {
+        return timestamp;
+    }
 }

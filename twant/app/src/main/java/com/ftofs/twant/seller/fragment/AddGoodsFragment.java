@@ -450,9 +450,9 @@ public class AddGoodsFragment extends BaseFragment
                         Log.i("pvTime", "onTimeSelectChanged");
                     }
                 })
-                .setTitleText("选择时间")
+                .setTitleText("选择時間")
                 .setCancelText("取消")//取消按钮文字
-                .setSubmitText("确认")//确认按钮文字
+                .setSubmitText("確認")//确认按钮文字
 //                .setContentSize(18)//滚轮文字大小
                 .setTitleSize(20)//标题文字大小
                 .setTitleText("Title")//标题文字

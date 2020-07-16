@@ -478,14 +478,16 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 //        SPUtils.getInstance("test", MainActivity.this).put("ip", text);
         Hawk.put("ip", "sd");
         //延时1秒重启app,让sp能保存值
-        new Handler().postAtTime(new Runnable() {
-            @Override
-            public void run() {
-                //TODO("如果你用的是Retrofit2,不重启ip地址切换不会生效")
-                //重启app
-                Util.restartAPP(_mActivity);
-            }
-        },500);
+//        new Handler().postAtTime(new Runnable() {
+//            @Override
+//            public void run() {
+//                //TODO("如果你用的是Retrofit2,不重启ip地址切换不会生效")
+//                //重启app
+//                Util.restartAPP(_mActivity);
+//            }
+//        },500);
+
+
 //        // 这里使用clear + new task的方式清空整个任务栈,只保留新打开的Main页面
 //        // 然后Main页面接收到退出的标志位exit=true,finish自己,这样就关闭了全部页面
 //

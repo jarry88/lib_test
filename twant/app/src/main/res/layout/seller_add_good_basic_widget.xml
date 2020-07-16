@@ -49,7 +49,7 @@
                 android:hint="請選擇計量單位"
                 android:background="@drawable/spinner_border_bg"
                 android:layout_width="match_parent"
-                android:layout_height="26dp"
+                android:layout_height="wrap_content"
                 android:autofillHints="選擇"
                 android:textColor="@color/tw_black"
                 android:layout_marginTop="@dimen/dp_4"

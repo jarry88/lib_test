@@ -353,8 +353,17 @@ public class Constant {
     public static final int PROMOTION_TYPE_BARGAIN = 7;
 
 
+    // 廣告彈窗彈出策略   0 -- 当前APP版本只彈一次 1 -- 每次訪問彈出 2 -- 每天首次訪問彈出
+    public static final int ENABLE_EVERY_TIME_APP_POPUP_AD_VERSION_ONCE = 0;
+    public static final int ENABLE_EVERY_TIME_APP_POPUP_AD_ALWAYS = 1;
+    public static final int ENABLE_EVERY_TIME_APP_POPUP_AD_DAILY_ONCE = 2;
+
     // 無效的開團Id
     public static final int INVALID_GO_ID = -1;
     // 無效的砍價Id
     public static final int INVALID_BARGAIN_ID = -1;
+    // 無效的砍價OpenId
+    public static final int INVALID_BARGAIN_OPEN_ID = -1;
+
+    public static final String BARGAIN_INSTRUCTION_URL = "https://www.twant.com/mobile/bargain/introduction";
 }

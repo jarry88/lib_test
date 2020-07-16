@@ -95,6 +95,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     int isFromCart;
     int isGroup;
     int goId; // 開團Id
+    int bargainOpenId; // 砍價Id
 
     // 是否不需要再支付（比如，买1元的商品，用1元的代金抵扣）
     int isPayed = Constant.FALSE_INT;
@@ -179,7 +180,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * @param isGroup 是否為團購  1 -- 是   0 -- 否
      * @return
      */
-    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup, int goId) {
+    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup, int goId, int bargainOpenId) {
         Bundle args = new Bundle();
 
         args.putInt("isFromCart", isFromCart);
@@ -189,6 +190,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         fragment.setArguments(args);
         fragment.isGroup = isGroup;
         fragment.goId = goId;
+        fragment.bargainOpenId = bargainOpenId;
         SLog.info("isGroup[%d], goId[%d]", isGroup, goId);
 
         return fragment;
@@ -196,7 +198,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
 
     public static ConfirmOrderFragment newInstance(int isFromCart, String buyData) {
-        return newInstance(isFromCart, buyData, Constant.FALSE_INT, Constant.INVALID_GO_ID);
+        return newInstance(isFromCart, buyData, Constant.FALSE_INT, Constant.INVALID_GO_ID, Constant.INVALID_BARGAIN_OPEN_ID);
     }
 
 
@@ -416,6 +418,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
             if (goId != Constant.INVALID_GO_ID) {
                 commitBuyData.set("goId", goId);
+            }
+
+            if (bargainOpenId != Constant.INVALID_BARGAIN_OPEN_ID) {
+                commitBuyData.set("bargainOpenId", bargainOpenId);
             }
 
             if (platformCouponIndex != -1) { // 如果有選擇平台券
@@ -861,12 +867,16 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) multiItemEntity;
                 for (ConfirmOrderSkuItem skuItem : storeItem.confirmOrderSkuItemList) {
                     EasyJSONObject buyItem = EasyJSONObject.generate("buyNum", skuItem.buyNum, "goodsId", skuItem.goodsId);
-                    if (goId != Constant.INVALID_GO_ID) {
-                        try {
+
+                    try {
+                        if (goId != Constant.INVALID_GO_ID) {
                             buyItem.set("goId", goId);
-                        } catch (Exception e) {
-                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                         }
+                        if (bargainOpenId != Constant.INVALID_BARGAIN_OPEN_ID) {
+                            buyItem.set("bargainOpenId", bargainOpenId);
+                        }
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                     currBuyData.append(buyItem);
                 }

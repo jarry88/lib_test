@@ -298,7 +298,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                                 StoreDiscount storeDiscount = new StoreDiscount(
                                         discount.getInt("storeId"),
                                         discount.getInt("discountId"),
-                                        discount.getSafeString("discountName"),
+                                        discount.getSafeString("discountTitleFinal"),
                                         discount.getDouble("discountRate"),
                                         discount.getInt("goodsCount"),
                                         discount.getInt("promotionCountDownTime"));

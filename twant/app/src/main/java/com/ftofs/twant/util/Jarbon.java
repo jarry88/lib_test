@@ -407,9 +407,11 @@ public class Jarbon {
     public static Calendar toCalender(String timeStamp) {
         Calendar calendar = Calendar.getInstance();
         Jarbon jarbon = Jarbon.parse(timeStamp);
-        if (jarbon != null) {
-           calendar.set(jarbon.getYear(),jarbon.month,jarbon.day,jarbon.hour,jarbon.minute,jarbon.second);
+        if (jarbon == null||StringUtil.isEmpty(timeStamp)) {
+            return null;
+        } else {
+            calendar.set(jarbon.getYear(), jarbon.month, jarbon.day, jarbon.hour, jarbon.minute, jarbon.second);
+            return calendar;
         }
-        return calendar;
     }
 }
