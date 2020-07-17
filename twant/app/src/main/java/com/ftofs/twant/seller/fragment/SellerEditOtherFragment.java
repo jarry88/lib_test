@@ -78,7 +78,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
     private String limitBuyStartTime;
     private String limitBuyEndTime;
     private int limitBuy;
-
+    EditText etLimitNum;
     public static SellerEditOtherFragment newInstance(SellerGoodsDetailFragment parent) {
         SellerEditOtherFragment fragment= new SellerEditOtherFragment();
         fragment.parent = parent;
@@ -167,6 +167,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
     private void initView() {
         View view = getView();
         tvTitle = view.findViewById(R.id.tv_title);
+        etLimitNum = view.findViewById(R.id.et_limit_num);
         tvTitle.setText("編輯其它信息");
 
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
@@ -245,7 +246,6 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
 
     private void updateView() {
         sbJoinActivity.setChecked(joinBigSale==1);
-        EditText etLimitNum = getView().findViewById(R.id.et_limit_num);
         etLimitNum.setText(String.valueOf(limitBuy));
         tvBeginDate.setText(limitBuyStartTime);
         tvEndDate.setText(limitBuyEndTime);
@@ -303,6 +303,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
     private boolean checkOtherInfo() {
         joinBigSale = sbJoinActivity.isChecked() ? Constant.TRUE_INT : Constant.FALSE_INT;
         goodsState = sbInstancePublish.isChecked() ? 1 : 0;
+        limitBuy = Integer.parseInt(etLimitNum.getText().toString());
 
         try {
             publishGoodsInfo.set("joinBigSale", joinBigSale);
