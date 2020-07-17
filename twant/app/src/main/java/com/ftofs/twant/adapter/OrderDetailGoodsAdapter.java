@@ -52,7 +52,6 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void bindView(int position, View itemView, OrderDetailGoodsItem itemData) {
         ImageView goodsImage = itemView.findViewById(R.id.goods_image);
@@ -117,17 +116,27 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
             btnRefund.setVisibility(View.GONE);
             btnReturn.setVisibility(View.GONE);
         }
+        
+        List<View> btnViewList = new ArrayList<>();
+        btnViewList.add(btnViewComplaint);
+        btnViewList.add(btnComplain);
+        btnViewList.add(btnReturn);
+        btnViewList.add(btnRefundWaiting);
+        btnViewList.add(btnRefundAll);
+        btnViewList.add(btnRefund);
 
-        btnViews = Stream.of(btnViewComplaint,btnComplain,btnReturn,btnRefundWaiting,btnRefundAll,btnRefund);
-        AtomicInteger index=new AtomicInteger(0);
-        btnViews.filter(view -> view.getVisibility()==View.VISIBLE).forEach(view->{
-            if (index.getAndIncrement() % 2 == 1) {
+        int counter = 0;
+        for (View view : btnViewList) {
+            if (view.getVisibility() != View.VISIBLE) {
+                continue;
+            }
+            if (counter % 2 == 1) {
                 view.setBackgroundResource(R.drawable.smaller_outline_button);
             } else {
                 view.setBackgroundResource(R.drawable.smaller_outline_button_revert);
             }
-        });
-
+            counter++;
+        }
     }
 
     public void setPaymentTypeCode(String paymentTypeCode) {
