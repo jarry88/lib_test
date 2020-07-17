@@ -4,4 +4,5 @@
 
     <item name="data_absolute_path" type="id"></item>
     <item name="data_index" type="id"></item>
+    <item name="data_text_watcher" type="id"></item>
 </resources>

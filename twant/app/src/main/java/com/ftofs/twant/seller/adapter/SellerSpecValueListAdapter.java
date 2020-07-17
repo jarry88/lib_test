@@ -30,28 +30,43 @@ public class SellerSpecValueListAdapter extends BaseMultiItemQuickAdapter<Seller
     protected void convert(BaseViewHolder helper, SellerSpecValueListItem item) {
         if (item.getItemType() == SellerSpecValueListItem.ITEM_TYPE_NORMAL) {
             helper.addOnClickListener(R.id.btn_remove);
-            
+
             EditText etSpecValue = helper.getView(R.id.et_spec_value);
+            /*
+            參考：
+            防止setText()方法調用TextWatcher
+            using setText() don't want to call textwatcher events?
+            https://stackoverflow.com/questions/33819478/using-settext-dont-want-to-call-textwatcher-events
+             */
+            TextWatcher textWatcher = (TextWatcher) etSpecValue.getTag(R.id.data_text_watcher);
+            if (textWatcher != null) {
+                etSpecValue.removeTextChangedListener(textWatcher);
+            } else {
+                textWatcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        int position = helper.getAdapterPosition();
+                        List<SellerSpecValueListItem> data = getData();
+                        if (data == null || data.size() <= position) {
+                            return;
+                        }
+                        SellerSpecValueListItem item = data.get(position);
+                        item.specValueName = s.toString();
+                    }
+                };
+            }
             etSpecValue.setText(item.specValueName);
-            etSpecValue.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    int position = helper.getAdapterPosition();
-                    List<SellerSpecValueListItem> data = getData();
-                    SellerSpecValueListItem item = data.get(position);
-                    item.specValueName = s.toString();
-                }
-            });
+            etSpecValue.addTextChangedListener(textWatcher);
             SLog.info("specValueName[%s]", item.specValueName);
         } else {
             helper.addOnClickListener(R.id.btn_add_spec_value);
