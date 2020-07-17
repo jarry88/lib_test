@@ -112,7 +112,7 @@ class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBind
                     showEmptyLayout(binding.refreshLayout, this@LinkageContainerFragment.resources.getString(R.string.tip_a_page_no_data), R.mipmap.ic_launcher_mvvmsmart, false)
                 } else {
                     showNormalLayout(binding.refreshLayout)
-                    mAdapter.addAll(goodsList,true)
+//                    mAdapter.addAll(goodsList,true)
                 }
             } else { // 不是第一页
                 if (goodsList.isEmpty()) {
@@ -120,7 +120,7 @@ class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBind
                     binding.refreshLayout.finishLoadMoreWithNoMoreData()
                     binding.refreshLayout.setNoMoreData(true)
                 } else {
-                    mAdapter.addAll(goodsList,false)
+//                    mAdapter.addAll(goodsList,false)
                 }
             }
         })

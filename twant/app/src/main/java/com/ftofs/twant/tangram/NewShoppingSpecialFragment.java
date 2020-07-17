@@ -400,7 +400,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                     tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
                     fragmentList.add(shoppingLinkageFragment);
 //                tabLayout.removeTabAt(1);
-                shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
+                    shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
                     shoppingLinkageFragment.setNestedScroll(this);
                 }
 

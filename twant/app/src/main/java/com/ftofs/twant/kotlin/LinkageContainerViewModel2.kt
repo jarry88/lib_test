@@ -4,9 +4,12 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.base.BaseViewModel
+import com.ftofs.twant.kotlin.net.Result
 import com.ftofs.twant.log.SLog
+import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,15 +22,27 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
     val liveData: MutableLiveData<ArrayList<SellerGoodsItem>> by lazy {
         MutableLiveData<ArrayList<SellerGoodsItem>>()
     }
-    val categoryData: MutableLiveData<ArrayList<ZoneCategory>> by lazy {
-        MutableLiveData<ArrayList<ZoneCategory>>()
+    val currCategoryId :MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val categoryData: MutableLiveData<List<ZoneCategory>> by lazy {
+        MutableLiveData<List<ZoneCategory>>()
+    }
+    val goodsList: MutableLiveData<List<Goods>> by lazy {
+        MutableLiveData<List<Goods>>()
     }
     val uiState: LiveData<LinkageUiModel>
         get() = _uiState
-    fun getShoppingZone(zoneId: Int){
+    fun getZoneCategoryList(zoneId: Int){
+        SLog.info("执行請求数据")
         viewModelScope.launch (Dispatchers.Default){
             withContext(Dispatchers.Main){
-                val result = viewModel.getShoppingZone(zoneId)
+                val result = viewModel.getZoneCategoryList(zoneId)
+                if (result is Result.Success) {
+                    SLog.info("拿到數據")
+                    val categoryList=result.datas
+                    categoryData.value=categoryList.zoneGoodsCategoryList
+                }
             }
         }
     }
@@ -39,20 +54,19 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                 SLog.info(result.toString())
             }
         }
-        SLog.info("执行数据")
     }
-    fun doGetZoneGoodsItems(zoneId:Int) {
-        SLog.info("执行請求数据")
-        val item = SellerGoodsItem()
-        when (liveData.value?.size?.let { it%2 }){
-            0 -> item.goodsName="張三"
-            1 -> item.goodsName="零零"
-            else -> item.goodsName="李思思"
+    fun doGetZoneGoodsItems(categoryId:String,page:Int=1) {
+        viewModelScope.launch (Dispatchers.Default){
+            withContext(Dispatchers.Main){
+                val result = viewModel.getShoppingZoneGoods(categoryId, page)
+                if (result is Result.Success) {
+                    goodsList.value = result.datas.zoneGoodsList
+                } else if(result is Result.DataError){
+                    SLog.info(result.datas.error)
+                    ToastUtils.showShort(result.datas.error)
+                }
+            }
         }
-        liveData.value?.let { it.add(item) }?:let { liveData.value= arrayListOf(item) }
-        SLog.info("[%d] [%s]",liveData.value?.size,item.goodsName)
-        liveData.value =liveData.value
-
     }
 
     //    private val viewModel: LinkageContainerViewModel = LinkageContainerViewModel()

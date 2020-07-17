@@ -23,6 +23,7 @@ public class Goods implements MultiItemEntity {
     public int buyNum;
     public int appUsable;
     public int promotionType = Constant.PROMOTION_TYPE_NONE;
+    public int goodsClick;
 
     public Goods(int commonId, String imageUrl, String name, String jingle, double price) {
         itemType = Constant.ITEM_TYPE_NORMAL;

@@ -22,6 +22,7 @@ class LinkageContainerViewModel(application:Application) :BaseViewModel(applicat
             withContext(Dispatchers.Main){
 //                val result = viewModel.getShoppingGoodsList(zoneId)
                 val result = viewModel.getShoppingGoodsList1(zoneId)
+
                 SLog.info(result.toString())
             }
         }

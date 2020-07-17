@@ -1,8 +1,11 @@
 package com.ftofs.twant.kotlin.net
 
 import com.ftofs.twant.entity.SellerGoodsItem
+import com.ftofs.twant.kotlin.CategoryItem
+import com.ftofs.twant.kotlin.ZoneCategory
 import com.ftofs.twant.kotlin.bean.NewsData
 import com.ftofs.twant.kotlin.bean.TwantResponse
+import com.ftofs.twant.kotlin.bean.ZoneInfo
 import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.wzq.mvvmsmart.net.base.BaseResponse
 import io.reactivex.Observable
@@ -37,6 +40,14 @@ interface DemoApiService {
     //  获取购物专场数据
     @GET("shoppingzone/{zoneId}")
     suspend fun getShoppingZone(@Path("zoneId") zoneId: Int ): TwantResponse<SellerPageVO<SellerGoodsItem>>
+
+    //  获取购物专场数据
+    @GET("shoppingzone/{zoneId}")
+    suspend fun doZoneCategoryList(@Path("zoneId") zoneId: Int ): TwantResponse<ZoneInfo>
+
+    //  获取购物专场商品数据
+    @GET("shoppingzone/goods/{categoryId}")
+    fun getShoppingZoneGoods(@Path("categoryId")categoryId: String, @Query("page")page: Int): TwantResponse<ZoneInfo>
 
 //@Field
 }
