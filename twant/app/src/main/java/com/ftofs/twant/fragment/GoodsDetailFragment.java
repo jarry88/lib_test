@@ -1410,7 +1410,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             btnBargain.setText(bargainTimes + "人幫砍");
 
                             TextView tvBargainNickname = contentView.findViewById(R.id.tv_bargain_nickname);
-                            tvBargainNickname.setText(bargainOpen.getSafeString("memberName"));
+                            tvBargainNickname.setText(bargainOpen.getSafeString("nickName"));
 
                             ImageView imgBargainAvatar = contentView.findViewById(R.id.img_bargain_avatar);
                             Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(bargainOpen.getSafeString("avatar")))

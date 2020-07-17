@@ -75,14 +75,11 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
         rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         adapter = new BargainListAdapter(_mActivity, bargainItemList);
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                int id = view.getId();
-                if (id == R.id.btn_versatile) {
-                    BargainItem bargainItem = bargainItemList.get(position);
-                    Util.startFragment(GoodsDetailFragment.newInstance(bargainItem.commonId, bargainItem.goodsId, bargainItem.bargainId));
-                }
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                BargainItem bargainItem = bargainItemList.get(position);
+                Util.startFragment(GoodsDetailFragment.newInstance(bargainItem.commonId, bargainItem.goodsId, bargainItem.bargainId));
             }
         });
 

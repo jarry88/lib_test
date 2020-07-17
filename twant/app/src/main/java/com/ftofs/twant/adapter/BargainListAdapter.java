@@ -44,8 +44,6 @@ public class BargainListAdapter extends BaseMultiItemQuickAdapter<BargainItem, B
             ImageView imgBanner = helper.getView(R.id.img_banner);
             Glide.with(context).load(item.bannerUrl).centerCrop().into(imgBanner);
         } else if (itemType == Constant.ITEM_TYPE_NORMAL) {
-            helper.addOnClickListener(R.id.btn_versatile);
-
             ImageView goodsImage = helper.getView(R.id.goods_image);
             Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(goodsImage);
 

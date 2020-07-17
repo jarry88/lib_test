@@ -218,8 +218,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         buyData = args.getString("buyData");
         SLog.info("buyData[%s]", buyData);
 
-        currencyTypeSign = getResources().getString(R.string.currency_type_sign);
-        textConfirmOrderTotalItemCount = getResources().getString(R.string.text_confirm_order_total_item_count);
+        currencyTypeSign = getString(R.string.currency_type_sign);
+        textConfirmOrderTotalItemCount = getString(R.string.text_confirm_order_total_item_count);
 
         paymentTypeCodeMap.put(Constant.PAY_WAY_ONLINE, Constant.PAYMENT_TYPE_CODE_ONLINE);
         paymentTypeCodeMap.put(Constant.PAY_WAY_DELIVERY, Constant.PAYMENT_TYPE_CODE_OFFLINE);
@@ -388,7 +388,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_shipping_time),
+                .asCustom(new ListPopup(_mActivity, TwantApplication.getInstance().getString(R.string.text_shipping_time),
                         PopupType.SHIPPING_TIME, shippingItemList, summaryItem.shipTimeType, this, position))
                 .show();
     }
@@ -731,7 +731,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
+                    .asCustom(new ListPopup(_mActivity, TwantApplication.getInstance().getString(R.string.mobile_zone_text),
                             PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
         }
@@ -1514,9 +1514,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         updateAddrView();
 
         ConfirmOrderSummaryItem summaryItem = getSummaryItem();
-        String template = getResources().getString(R.string.text_confirm_order_total_item_count);
+        String template = TwantApplication.getInstance().getString(R.string.text_confirm_order_total_item_count);
         if (tariffTotalEnable == Constant.TRUE_INT) {
-            template=getResources().getString(R.string.text_confirm_order_total_with_tax_item_count);
+            template = TwantApplication.getInstance().getString(R.string.text_confirm_order_total_with_tax_item_count);
         }
         tvItemCount.setText(String.format(template, totalItemCount));
         if (summaryItem != null) {
@@ -1674,9 +1674,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             summaryItem.totalFreight,summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
 
                     totalPrice = summaryItem.calcTotalPrice();
-                    String template = getResources().getString(R.string.text_confirm_order_total_item_count);
+                    String template = TwantApplication.getInstance().getString(R.string.text_confirm_order_total_item_count);
                     if (tariffTotalEnable == Constant.TRUE_INT) {
-                        template=getResources().getString(R.string.text_confirm_order_total_with_tax_item_count);
+                        template = TwantApplication.getInstance().getString(R.string.text_confirm_order_total_with_tax_item_count);
                     }
                     tvItemCount.setText(String.format(template, totalItemCount));
                     tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0,2));

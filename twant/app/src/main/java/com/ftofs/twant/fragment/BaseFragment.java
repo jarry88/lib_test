@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @author zwm
  */
 public abstract class BaseFragment extends SupportFragment {
+    protected Context _mContext;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -106,4 +108,15 @@ public abstract class BaseFragment extends SupportFragment {
         }
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        _mContext = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        _mContext = null;
+    }
 }

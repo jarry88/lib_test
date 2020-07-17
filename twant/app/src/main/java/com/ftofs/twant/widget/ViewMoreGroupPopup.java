@@ -9,28 +9,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
-import com.ftofs.twant.activity.AppGuideActivity;
-import com.ftofs.twant.activity.MainActivity;
-import com.ftofs.twant.activity.SplashActivity;
 import com.ftofs.twant.adapter.GroupListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.CustomAction;
-import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.GroupListItem;
-import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
-import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 import java.util.ArrayList;
