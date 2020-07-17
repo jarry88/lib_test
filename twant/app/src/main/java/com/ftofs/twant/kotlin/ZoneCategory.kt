@@ -8,5 +8,6 @@ data class ZoneCategory(
         val categoryId:String,
         val zoneId:Int,
         val categoryName:String,
-        val nextList:ArrayList<ZoneCategory>
+        val nextList:ArrayList<ZoneCategory>,
+        var fold:Int=1  //1展开 0合上
 ): Serializable

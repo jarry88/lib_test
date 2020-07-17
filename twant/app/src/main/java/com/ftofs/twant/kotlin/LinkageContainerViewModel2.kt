@@ -40,8 +40,11 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                 val result = viewModel.getZoneCategoryList(zoneId)
                 if (result is Result.Success) {
                     SLog.info("拿到數據")
-                    val categoryList=result.datas
-                    categoryData.value=categoryList.zoneGoodsCategoryList
+                    val categoryList = result.datas
+                    categoryData.value = categoryList.zoneGoodsCategoryList
+                    stateLiveData.postSuccess()
+                } else {
+                    stateLiveData.postError()
                 }
             }
         }
@@ -55,15 +58,21 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
             }
         }
     }
-    fun doGetZoneGoodsItems(categoryId:String,page:Int=1) {
+    fun doGetZoneGoodsItems(categoryId:String) {
         viewModelScope.launch (Dispatchers.Default){
             withContext(Dispatchers.Main){
-                val result = viewModel.getShoppingZoneGoods(categoryId, page)
+                val result = viewModel.getShoppingZoneGoods(categoryId, pageNum)
+                SLog.info(result.toString())
                 if (result is Result.Success) {
                     goodsList.value = result.datas.zoneGoodsList
-                } else if(result is Result.DataError){
+                    stateLiveData.postSuccess()
+
+                } else if (result is Result.DataError) {
                     SLog.info(result.datas.error)
                     ToastUtils.showShort(result.datas.error)
+                    stateLiveData.postError()
+                } else {
+                    stateLiveData.postNoData()
                 }
             }
         }

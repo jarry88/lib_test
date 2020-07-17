@@ -26,7 +26,7 @@
             android:layout_width="90dp"
             android:layout_height="90dp"
             android:layout_margin="5dp"
-            app:imageUrl="@{vo.imageUrl}"
+            app:imageUrl="@{vo.goodsImage}"
             app:riv_corner_radius="3dp"
             />
 
@@ -41,7 +41,7 @@
                 android:textSize="12sp"
                 android:textColor="@color/tw_black"
                 android:lineSpacingExtra="5dp"
-                android:text="@{vo.name}"
+                android:text="@{vo.goodsName}"
                 android:maxLines="2"
                 android:ellipsize="end"
                 />
@@ -58,13 +58,13 @@
                     android:layout_centerVertical="true"
                     android:textSize="14sp"
                     android:textColor="@color/tw_red"
-                    android:text="$ 320"
+                    app:price="@{vo.appPriceMin}"
                     />
                 <ImageView
                     android:id="@+id/btn_add_to_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_add_to_cart_blue"
                     />

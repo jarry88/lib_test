@@ -2,7 +2,8 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewModel"
@@ -11,73 +12,62 @@
             name="adapter"
             type="com.ftofs.twant.kotlin.BuyerGoodsListAdapter" />
         <variable
+            name="categoryAdapter"
+            type="com.ftofs.twant.adapter.ZoneCategoryListAdapter" />
+        <variable
             name="treeAdapter"
             type="com.baozi.treerecyclerview.adpater.TreeRecyclerAdapter" />
-        <variable
-            name="layoutManager"
-            type="androidx.recyclerview.widget.RecyclerView.LayoutManager" />
-        <variable
-            name="treeManager"
-            type="androidx.recyclerview.widget.RecyclerView.LayoutManager" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.065"
-            tools:srcCompat="@tools:sample/avatars" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
+                android:id="@+id/recyclerView2"
+                android:layout_width="wrap_content"
+                android:minWidth="@dimen/dp_85"
+                android:layout_height="match_parent"
+                app:adapter="@{treeAdapter}"
+                tools:listitem="@layout/store_category_list_item"
+                binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageButton"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="250dp"
-            android:layout_height="517dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton"
-            app:layout_constraintVertical_bias="0.65"
-            android:id="@+id/rv_right_list"
-            app:adapter="@{adapter}"
-            app:layoutManager="@{layoutManager}"
-            android:background="@color/tw_green"/>
+            <androidx.recyclerview.widget.RecyclerView
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView2"
-            android:layout_width="160dp"
-            android:layout_height="544dp"
-            android:background="@color/colorDarkBlue"
-            app:adapter="@{treeAdapter}"
-            app:layoutManager="@{treeManager}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton"/>
+                android:id="@+id/rv_zone_category"
+                android:layout_width="wrap_content"
+                android:minWidth="@dimen/dp_90"
+                android:layout_height="match_parent"
+                app:adapter="@{categoryAdapter}"
+                tools:listitem="@layout/store_category_list_item"
+                binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageButton"/>
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/refreshLayout" >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageButton"
+                    app:layout_constraintVertical_bias="0.65"
+                    android:id="@+id/rv_right_list"
+                    app:adapter="@{adapter}"
+                    tools:listitem="@layout/zone_goods_list_item"
 
-        <Button
-            android:id="@+id/btn_get_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:text="請求數據"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.049"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                    binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

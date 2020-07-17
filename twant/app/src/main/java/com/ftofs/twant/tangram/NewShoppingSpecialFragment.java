@@ -390,48 +390,59 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
             String goodsTabTitle = zoneVo.getSafeString("goodsTabTitle");
 
 
-            EasyJSONArray zoneGoodsVoList = zoneVo.getArray("zoneGoodsVoList");
-
             EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
             //舊的列表顯示邏輯
-            if (hasGoodsCategory == Constant.TRUE_INT) {
-                if (!StringUtil.isEmpty(goodsTabTitle)) {
-                    titleList.add(goodsTabTitle);
-                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
-                    fragmentList.add(shoppingLinkageFragment);
-//                tabLayout.removeTabAt(1);
-                    shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
-                    shoppingLinkageFragment.setNestedScroll(this);
-                }
-
-            } else {
-                if (!StringUtil.isEmpty(goodsTabTitle)) {
-                    titleList.add(goodsTabTitle);
-                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
+//            if (hasGoodsCategory == Constant.TRUE_INT) {
+//                if (!StringUtil.isEmpty(goodsTabTitle)) {
+//                    titleList.add(goodsTabTitle);
+//                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
+//                    fragmentList.add(shoppingLinkageFragment);
+////                tabLayout.removeTabAt(1);
+//                    shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
+//                    shoppingLinkageFragment.setNestedScroll(this);
+//                }
 //
-//                    fragmentList.add(withoutCategoryFragment);
-//                    SLog.info("無類別商品標簽數據");
-//                    withoutCategoryFragment.setNestedScroll(this);
-//                    withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
-                    LinkageContainerFragment2 linkageContainerFragment2 = new LinkageContainerFragment2();
-                    fragmentList.add(linkageContainerFragment2);
-                }
-
-            }
-
-            EasyJSONArray zoneStoreVoList = zoneVo.getSafeArray("zoneStoreVoList");
-            if (zoneStoreVoList != null && zoneStoreVoList.length() > 0) {
-                SLog.info("設置商店列表數據");
-                if (!StringUtil.isEmpty(storeTabTitle)) {
-                    titleList.add(storeTabTitle);
-                    tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
-                    fragmentList.add(storeListFragment);
-                    storeListFragment.setOnNestedScroll(this);
-                    storeListFragment.setStoreList(zoneStoreVoList);
-                }
-
-            }
+//            } else {
+//                if (!StringUtil.isEmpty(goodsTabTitle)) {
+//                    titleList.add(goodsTabTitle);
+//                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
+////
+////                    fragmentList.add(withoutCategoryFragment);
+////                    SLog.info("無類別商品標簽數據");
+////                    withoutCategoryFragment.setNestedScroll(this);
+////                    withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
+//                    LinkageContainerFragment2 linkageContainerFragment2 = new LinkageContainerFragment2();
+//                    fragmentList.add(linkageContainerFragment2);
+//                }
+//
+//            }
+//
+//            EasyJSONArray zoneStoreVoList = zoneVo.getSafeArray("zoneStoreVoList");
+//            if (zoneStoreVoList != null && zoneStoreVoList.length() > 0) {
+//                SLog.info("設置商店列表數據");
+//                if (!StringUtil.isEmpty(storeTabTitle)) {
+//                    titleList.add(storeTabTitle);
+//                    tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
+//                    fragmentList.add(storeListFragment);
+//                    storeListFragment.setOnNestedScroll(this);
+//                    storeListFragment.setStoreList(zoneStoreVoList);
+//                }
+//
+//            }
             //舊的列表處理邏輯結束
+
+            if (zoneType == DEFAULT_ZONE || zoneType == GOOD_ZONE) {
+                if (!StringUtil.isEmpty(goodsTabTitle)) {
+                    titleList.add(goodsTabTitle);
+                    tabLayout.addTab(tabLayout.newTab().setText("測試二級聯動頁面"+goodsTabTitle));
+                }
+//                fragmentList.add(shoppingLinkageFragment);
+                shoppingLinkageFragment.setNestedScroll(this);
+
+                LinkageContainerFragment2 linkageContainerFragment2  = LinkageContainerFragment2.Companion.newInstance(zoneId);
+                linkageContainerFragment2.parent = this;
+                fragmentList.add(linkageContainerFragment2);
+            }
 
             if (zoneType == DEFAULT_ZONE || zoneType == SHOP_ZONE) {
                 if (!StringUtil.isEmpty(storeTabTitle)) {
@@ -440,18 +451,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                 }
                 fragmentList.add(storeListFragment);
                 storeListFragment.setOnNestedScroll(this);
-            }
-            if (zoneType == DEFAULT_ZONE || zoneType == GOOD_ZONE) {
-                if (!StringUtil.isEmpty(goodsTabTitle)) {
-                    titleList.add(goodsTabTitle);
-                    tabLayout.addTab(tabLayout.newTab().setText("測試二級聯動頁面"+goodsTabTitle));
-                }
-//                fragmentList.add(shoppingLinkageFragment);
-//                shoppingLinkageFragment.setNestedScroll(this);
-
-                LinkageContainerFragment linkageContainerFragment = LinkageContainerFragment.Companion.newInstance(zoneId);
-
-                fragmentList.add(LinkageContainerFragment.Companion.newInstance(zoneId));
             }
             //刷新UI的邏輯
             initViewPager();

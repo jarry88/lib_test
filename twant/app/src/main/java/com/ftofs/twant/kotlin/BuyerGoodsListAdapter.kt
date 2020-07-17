@@ -78,7 +78,7 @@ override val layoutId: Int
 //            Util.startFragment(SellerGoodsSkuListFragment.newInstance(item.commonId))
 //        }
         binding.root.setOnClickListener{
-            Util.startFragment(GoodsDetailFragment.newInstance(item.id, 0))
+            Util.startFragment(GoodsDetailFragment.newInstance(item.commonId, 0))
         }
     }
 
