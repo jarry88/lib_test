@@ -30,8 +30,7 @@ public class SellerSpecValueListAdapter extends BaseMultiItemQuickAdapter<Seller
     protected void convert(BaseViewHolder helper, SellerSpecValueListItem item) {
         if (item.getItemType() == SellerSpecValueListItem.ITEM_TYPE_NORMAL) {
             helper.addOnClickListener(R.id.btn_remove);
-
-            int position = helper.getAdapterPosition();
+            
             EditText etSpecValue = helper.getView(R.id.et_spec_value);
             etSpecValue.setText(item.specValueName);
             etSpecValue.addTextChangedListener(new TextWatcher() {
