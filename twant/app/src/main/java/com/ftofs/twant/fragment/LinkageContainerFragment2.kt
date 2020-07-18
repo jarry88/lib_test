@@ -76,22 +76,29 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
         binding.treeAdapter= mTreeAdapter
 
         mCategoryAdapter = ZoneCategoryListAdapter(context,R.layout.store_category_list_item,ArrayList<ZoneCategory>(), OnSelectedListener(fun (type:PopupType,id:Int,extra:Any){
-            ToastUtils.showShort("s")
+            val subCategory = extra as ZoneCategory
+            ToastUtils.showShort("位置$id,name ${subCategory.categoryName},选中${subCategory.fold}")
+            mCategoryAdapter.notifyItemChanged(id)
         }))
         binding.categoryAdapter = mCategoryAdapter
         mCategoryAdapter.setOnItemClickListener { adapter, view, position ->
             val a =adapter.getItem(position) as ZoneCategory
-            ToastUtils.showShort("点击了${a.categoryName}")
             val prevSelectedItemIndex: Int = mCategoryAdapter.getPrevSelectedItemIndex()
+            ToastUtils.showShort("点击了${a.categoryName}前一个$prevSelectedItemIndex")
+            if (prevSelectedItemIndex == position) {
+                binding.rvRightList.scrollToPosition(0)
+                return@setOnItemClickListener
+            }
+            val prevSelectedItem = adapter.getItem(prevSelectedItemIndex) as ZoneCategory
             if (prevSelectedItemIndex != -1) {
-                val prevSelectedItem:ZoneCategory = viewModel.categoryData.value?.get(prevSelectedItemIndex)!!
                 prevSelectedItem.fold=Constant.FALSE_INT
                 adapter.notifyItemChanged(prevSelectedItemIndex)
             }
-            viewModel.categoryData.value?.get(position)?.fold=Constant.TRUE_INT // 設置為展開狀態
-            viewModel.currCategoryId.value=viewModel.currCategoryId.value
-            mCategoryAdapter.prevSelectedItemIndex=position
+            a.fold=Constant.TRUE_INT // 設置為展開狀態
             viewModel.currCategoryId.value=a.categoryId
+            adapter.notifyItemChanged(position)
+
+            mCategoryAdapter.prevSelectedItemIndex=position
             if (prevSelectedItemIndex != position) {
                 //点击条目刷新后回到顶部
                 UiUtil.moveToMiddle(binding.rvRightList,0)
@@ -125,20 +132,18 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
             }
 //            mCategoryAdapter.setNewData(categoryList)
             val  list = arrayListOf<ZoneCategory>()
-            SLog.info(categoryList.get(0).toString())
 
-            val sub1 = ZoneCategory("1",20,"sub1", list)
-            val sub2 = ZoneCategory("1",20,"sub2", list)
-            val sub3 = ZoneCategory("1",20,"sub3", list)
-            val sub4 = ZoneCategory("1",20,"sub4", list)
+            val sub1 = ZoneCategory("1",20,"sub1", list,0)
+            val sub2 = ZoneCategory("1",20,"sub2", list,0)
+            val sub3 = ZoneCategory("1",20,"sub3", list,0)
+            val sub4 = ZoneCategory("1",20,"sub4", list,0)
             val  list1 = arrayListOf(sub1,sub2)
             val  list2 = arrayListOf(sub1,sub2,sub3)
             val  list3 = arrayListOf(sub3,sub4)
-            val item1 = ZoneCategory("1",20,"yi", list)
-            SLog.info(item1.fold.toString())
-            val item2 = ZoneCategory("1",20,"y2", list1)
-            val item3 = ZoneCategory("1",20,"y3", list2)
-            val item4 = ZoneCategory("1",20,"y4", list3)
+            val item1 = ZoneCategory("1",20,"yi", list,0)
+            val item2 = ZoneCategory("1",20,"y2", list1,0)
+            val item3 = ZoneCategory("1",20,"y3", list2,0)
+            val item4 = ZoneCategory("1",20,"y4", list3,0)
             mCategoryAdapter.setNewData(listOf(item1,item2,item3,item4))
 
         })

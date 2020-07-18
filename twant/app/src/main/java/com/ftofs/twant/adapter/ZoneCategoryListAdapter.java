@@ -60,7 +60,6 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
         TextView tvCategoryName = helper.getView(R.id.tv_category_name);
         tvCategoryName.setTextSize(14);
         tvCategoryName.setText(labelName);
-        SLog.info(String.valueOf(item.getFold()));
         LinearLayout llSubCategoryList = helper.getView(R.id.ll_sub_ategory_list);
 
         if (item.getFold() == Constant.FALSE_INT) {
@@ -130,23 +129,14 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
         try {
             ZoneCategory storeLabel = item.getNextList().get(finalI);
 
-            storeLabel.setFold(Constant.FALSE_INT);
+            storeLabel.setFold(Constant.TRUE_INT);
 
-            SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
             // 上一次選中的二級菜單取消選中
             if (prevSelectedSubItemIndex != -1) {
-                SLog.info("prevSelectedSubItemIndex[%d]", prevSelectedSubItemIndex);
-//            StoreLabel prevSelectedSubItem = item.getStoreLabelList().get(prevSelectedSubItemIndex);
-//            prevSelectedSubItem.setIsFold(Constant.TRUE_INT);
-                storeLabel.setFold(Constant.FALSE_INT);
 
                 SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
-                // 上一次選中的二級菜單取消選中
-                if (prevSelectedSubItemIndex != -1) {
-                    SLog.info("prevSelectedSubItemIndex[%d]", prevSelectedSubItemIndex);
-                    ZoneCategory prevSelectedSubItem = item.getNextList().get(prevSelectedSubItemIndex);
-                    prevSelectedSubItem.setFold(Constant.TRUE_INT);
-                }
+                ZoneCategory prevSelectedSubItem = item.getNextList().get(prevSelectedSubItemIndex);
+                prevSelectedSubItem.setFold(Constant.FALSE_INT);
 
 //            SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
 //            prevSelectedSubItemIndex = finalI;
@@ -167,6 +157,7 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
     /**
      * 設置上一次選中的菜單item的索引
      * @param index
+     * @deprecated 记录上次选中的item索引 并且清空subitem选中状态
      */
     public void setPrevSelectedItemIndex(int index) {
         if (prevSelectedItemIndex != -1) {
@@ -175,7 +166,7 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
             List<ZoneCategory> subItemList = dataList.get(prevSelectedItemIndex).getNextList();
             if (subItemList != null) {
                 for (ZoneCategory storeLabel : subItemList) {
-                    storeLabel.setFold(Constant.TRUE_INT);
+                    storeLabel.setFold(Constant.FALSE_INT);
                 }
             }
         }

@@ -9,5 +9,5 @@ data class ZoneCategory(
         val zoneId:Int,
         var categoryName:String,
         val nextList:ArrayList<ZoneCategory>,
-        var fold:Int=1  //0展开 1合上
+        var fold:Int  //json解析到的无字段不会使用默认初始值
 ): Serializable
