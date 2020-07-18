@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 
 
 class LinkageContainerViewModel2(application:Application) :BaseViewModel(application){
+    var isRefresh: Boolean=false
     var viewModel: LinkageModel = LinkageModel()
     private val _uiState = MutableLiveData<LinkageUiModel>()
 
@@ -105,36 +106,23 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
             categoryId?.let {
                 SLog.info("执行加载商品列表数据$it")
                 withContext(Dispatchers.Main){
+                    if(isRefresh) pageNum=1
+                    else pageNum++
+
                     val result = viewModel.getShoppingZoneGoods(it, pageNum)
                     SLog.info(result.toString())
                     if (result is Result.Success) {
-                        result.datas.zoneGoodsList?.let {
-                            if (it.size == 0) {
-                                if (pageNum <= 1) {
-                                    stateLiveData.postNoData()
-
-                                } else {
-                                    pageNum--
-                                    stateLiveData.postNoMoreData()
-                                }
-                            }
-//                            goodsList.value
-//                            goodsList.value?.let {
-//                                it.addAll(result.datas.zoneGoodsList!!)
-//                            }?:let{
-                                goodsList.value = result.datas.zoneGoodsList
-//                            }
-                            stateLiveData.postSuccess()
-                        }?:let{
-                            ToastUtils.showShort("拿到數據爲空")
-                            if (pageNum <= 1) {
-                                //表示執行下拉刷新
-                                stateLiveData.postNoData()
-                            }else{
-                                stateLiveData.postNoMoreData()
+                        val list =result.datas.zoneGoodsList
+                        if (list == null || list.size == 0) {
+                            if (isRefresh)stateLiveData.postNoData()
+                            else{
                                 pageNum--
-                                ToastUtils.showShort("沒有更多數據了")
+                                stateLiveData.postNoMoreData()
                             }
+                        }else{
+                            goodsList.value = result.datas.zoneGoodsList
+                            stateLiveData.postSuccess()
+
                         }
                         hasMore=result.datas.pageEntity.hasMore
 

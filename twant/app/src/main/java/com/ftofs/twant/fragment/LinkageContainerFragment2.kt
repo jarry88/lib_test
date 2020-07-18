@@ -172,27 +172,27 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
         })
 
         viewModel.goodsList.observe(this, Observer { goodsList:List<Goods>->
-            if (goodsList.isEmpty()) {
-                SLog.info("空")
-                return@Observer
-            }
-            mAdapter.clear()
-            mAdapter.addAll(goodsList,viewModel.pageNum==1)
+            if (viewModel.isRefresh) mAdapter.clear()
+            mAdapter.addAll(goodsList,viewModel.isRefresh)
+//
+//            mAdapter.run {
+//                if (viewModel.isRefresh) this.setnreplaceData(list.datas)
+//                else addData(list.datas)
+//            }
+//            mAdapter.clear()
+//            mAdapter.addAll(goodsList,viewModel.pageNum==1)
         })
         binding.refreshLayout.setOnRefreshListener {
-            viewModel.pageNum = 1
-            viewModel.currCategoryId.value?.let{
-                viewModel.doGetZoneGoodsItems()
-
-            }?:it.finishRefresh()
-            binding.rvRightList.scrollToPosition(0)
-
+            refresh()
         }
+
+
+
         //上拉加载更多
         binding.refreshLayout.setOnLoadMoreListener{ refreshLayout: RefreshLayout? ->
             //            loadMoreTestData();   // 模拟加载更多数据
+            viewModel.isRefresh=false
             if (viewModel.hasMore) {
-                viewModel.pageNum++//請求到數據后，如果獲得list為空，會在vm中將pagenum-1
                 viewModel.doGetZoneGoodsItems()
             } else {
                 viewModel.stateLiveData.postNoMoreData()
@@ -236,6 +236,15 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
             }
         })
     }
+    private fun refresh() {
+        viewModel.isRefresh=true
+        viewModel.currCategoryId.value?.let{
+            viewModel.doGetZoneGoodsItems()
+
+        }?:binding.refreshLayout.finishRefresh()
+        binding.rvRightList.scrollToPosition(0)
+    }
+
     // 无数据默认页,点击请求网络
     override fun onContentReload() {
         super.onContentReload()

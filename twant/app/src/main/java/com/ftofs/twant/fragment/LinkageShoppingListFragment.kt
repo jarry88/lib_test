@@ -82,11 +82,11 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
                     it.zoneGoodsVoList?.let {
 
                         val commonId: Int = if (id == R.id.goods_image_middle_container) {
-                            it.get(0).id
+                            it.get(0).commonId
                         } else if (id == R.id.goods_image_left_container) {
-                            it.get(1).id
+                            it.get(1).commonId
                         } else {
-                           it.get(2).id
+                           it.get(2).commonId
                         }
                         Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0))
                     }

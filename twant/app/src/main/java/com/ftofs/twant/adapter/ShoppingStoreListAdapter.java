@@ -56,7 +56,7 @@ public class ShoppingStoreListAdapter extends BaseQuickAdapter<StoreItem, BaseVi
         goodsImageRightContainer.setVisibility(GONE);
         List<Goods> goodsList = item.zoneGoodsVoList;
         for (int i = 0; i < goodsList.size(); i++) {
-            String imageSrc = StringUtil.normalizeImageUrl(goodsList.get(i).imageUrl, "?x-oss-process=image/resize,w_300");
+            String imageSrc = StringUtil.normalizeImageUrl(goodsList.get(i).goodsImage, "?x-oss-process=image/resize,w_300");
 
             if (i == 0) {
                 goodsImageMiddleContainer.setVisibility(View.VISIBLE);
