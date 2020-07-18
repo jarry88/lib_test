@@ -14,7 +14,7 @@ import kotlin.collections.ArrayList
 
 data class ZoneInfo(
         var zoneGoodsList:ArrayList<Goods>?,
-        var zoneGoodsCategoryList: List<ZoneCategory>,
+        var zoneGoodsCategoryList: List<ZoneCategory>?,
         var pageEntity: PageVO,
         var zoneStoreList: ArrayList<StoreItem>?,
         var zoneVo:ZoneVO,

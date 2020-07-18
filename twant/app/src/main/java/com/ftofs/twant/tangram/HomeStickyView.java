@@ -18,36 +18,22 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.StickyCellData;
-import com.ftofs.twant.fragment.BargainListFragment;
 import com.ftofs.twant.fragment.CategoryFragment;
 import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
-import com.ftofs.twant.fragment.LabFragment;
-import com.ftofs.twant.fragment.LinkageContainerFragment;
-import com.ftofs.twant.fragment.LinkageContainerFragment2;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
-import com.ftofs.twant.fragment.RegisterConfirmFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
-import com.ftofs.twant.fragment.ShoppingSpecialFragment;
-import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.kotlin.testnet.TestNet2Fragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.SharePopup;
-import com.ftofs.twant.widget.TwConfirmPopup;
-import com.ftofs.twant.widget.ViewMoreGroupPopup;
-import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
-import com.ftofs.twant.kotlin.testnet.TestNetFragment;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -178,10 +164,6 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         }
     }
 
-    private void gotoTestFragment() {
-        Util.startFragment(ShoppingSpecialFragment.newInstance(20));//+(int)(Math.random()*10)%2)
-
-    }
 
     /**
      * 點擊導航欄活動按鈕

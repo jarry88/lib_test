@@ -48,34 +48,38 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
             withContext(Dispatchers.Main){
                 val result = viewModel.getZoneCategoryList(zoneId)
                 if (result is Result.Success) {
-                    val categoryList = result.datas
+                    val categoryList = result.datas.zoneGoodsCategoryList
+                    val checkedCategory =result.datas.checkedCategory
                     var a=0
                     var b=-1
-                    if(categoryList.zoneGoodsCategoryList.isEmpty()){
-                        currCategoryId.value=categoryList.checkedCategory
-                        return@withContext
+                    if (categoryList == null) {
+                        currCategoryId.value=checkedCategory
                     }
-                    categoryList.zoneGoodsCategoryList.forEach outside@{ it ->
-                        if (it.equals(categoryList.checkedCategory)) {
-                            return@outside
-                        }
-                        b=-1
-                        it.nextList.forEach inside@{sub->
-                            if (sub.equals(categoryList.checkedCategory)) {
-                                    b++
+                    categoryList?.let {
+                        it.forEach()outside@{ it ->
+                            if (it.equals(checkedCategory)) {
                                 return@outside
                             }
-                            b++
+                            b=-1
+                            it.nextList.forEach inside@{sub->
+                                if (sub.equals(checkedCategory)) {
+                                    b++
+                                    return@outside
+                                }
+                                b++
+                            }
+                            a++
                         }
-                        a++
-                    }
-                    if (a >= categoryList.zoneGoodsCategoryList.size) {
-                        a=0
-                    }
-                    categoryData.value = categoryList.zoneGoodsCategoryList
+                        if (a >= it.size) {
+                            a=0
+                        }
+                        categoryData.value = it
 
-                    delayClick(a,b)
-                    stateLiveData.postIdle()
+                        delayClick(a,b)
+                        stateLiveData.postIdle()
+
+                    }
+
                 } else {
                     stateLiveData.postNoData()
                 }

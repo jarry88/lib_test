@@ -35,7 +35,6 @@ import com.ftofs.twant.fragment.FirstFragment;
 import com.ftofs.twant.fragment.LinkageContainerFragment2;
 import com.ftofs.twant.fragment.LinkageShoppingListFragment;
 import com.ftofs.twant.fragment.SecondFragment;
-import com.ftofs.twant.fragment.ShoppingLinkageFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialLinkageFragment;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
@@ -92,7 +91,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     static int SHOP_ZONE = 2;
     private int hasGoodsCategory;
     private TextView tvZoneName;
-    private ShoppingLinkageFragment withoutCategoryFragment;
     private RelativeLayout rlToolBar;
     private LinkageShoppingListFragment storeListFragment;
     private ShoppingSpecialLinkageFragment shoppingLinkageFragment;
@@ -155,7 +153,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         shoppingLinkageFragment = ShoppingSpecialLinkageFragment.newInstance();
 //        storeListFragment =ShoppingStoreListFragment.newInstance();
         storeListFragment = LinkageShoppingListFragment.Companion.newInstance(zoneId);
-        withoutCategoryFragment = ShoppingLinkageFragment.newInstance();
 
         bannerView = view.findViewById(R.id.banner_view);
         initBanner();
