@@ -23,6 +23,20 @@ public class Goods implements MultiItemEntity {
     public int buyNum;
     public int appUsable;
     public int promotionType = Constant.PROMOTION_TYPE_NONE;
+    public int goodsClick;
+
+
+    private int itemType;
+    public int id;
+    public String imageUrl;
+    public String name;
+    public String jingle;
+    public double price;
+
+    //来自zone的信息
+    public int commonId;
+    public String goodsName;
+    public String goodsImage;
 
     public Goods(int commonId, String imageUrl, String name, String jingle, double price) {
         itemType = Constant.ITEM_TYPE_NORMAL;
@@ -37,13 +51,6 @@ public class Goods implements MultiItemEntity {
     public Goods() {
         itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
     }
-
-    private int itemType;
-    public int id;
-    public String imageUrl;
-    public String name;
-    public String jingle;
-    public double price;
 
     public Goods(int itemType) {
         this.itemType = itemType;

@@ -29,8 +29,6 @@ class FeatureGoodAdapter : DataBoundAdapter<SellerGoodsVO, SellerGoodsItemUnswip
         get() = R.layout.seller_goods_item_unswipe
 
     override fun initView(binding: SellerGoodsItemUnswipeBinding, item: SellerGoodsVO) {
-        // TODO: 2020/7/3  
-        //这里有问题
         binding.vo = SellerGoodsItem()
         binding.btnMore.setOnClickListener{
                     var params = EasyJSONObject.generate("token", User.getToken(), "commonId", item.commonId)

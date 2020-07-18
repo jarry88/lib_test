@@ -1406,6 +1406,10 @@ public class Api {
      * 【購物專場】新版可復用購物專場主頁
      */
     public static final String PATH_SHOPPING_ZONE = "/shoppingzone";
+    /**
+     * 【購物專場】新版可復用購物專場店鋪查詢頁
+     */
+    public static final String PATH_SHOPPING_ZONE_STORE = "/shoppingzone/store";
 
 
     /**

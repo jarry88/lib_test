@@ -8,6 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
+import android.view.animation.TranslateAnimation;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,10 +32,10 @@ import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.fragment.CartFragment;
 import com.ftofs.twant.fragment.FirstFragment;
+import com.ftofs.twant.fragment.LinkageContainerFragment2;
+import com.ftofs.twant.fragment.LinkageShoppingListFragment;
 import com.ftofs.twant.fragment.SecondFragment;
-import com.ftofs.twant.fragment.ShoppingLinkageFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialLinkageFragment;
-import com.ftofs.twant.fragment.ShoppingStoreListFragment;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
@@ -42,29 +47,24 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import android.view.ViewOutlineProvider;
-import android.view.animation.TranslateAnimation;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.umeng.analytics.MobclickAgent;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
+/**
+ * @deprecated 新購物專場入口頁
+ */
 public class NewShoppingSpecialFragment extends BaseFragment implements View.OnClickListener, NestedScrollingCallback {
     private MZBannerView bannerView;
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
@@ -85,11 +85,14 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     FirstFragment firstFragment;
     SecondFragment secondFragment;
     private int zoneId;
+    private int zoneType;//專場類型 0通用 1店鋪 2商品
+    static int DEFAULT_ZONE = 0;
+    static int GOOD_ZONE = 1;
+    static int SHOP_ZONE = 2;
     private int hasGoodsCategory;
     private TextView tvZoneName;
-    private ShoppingLinkageFragment withoutCategoryFragment;
     private RelativeLayout rlToolBar;
-    private ShoppingStoreListFragment storeListFragment;
+    private LinkageShoppingListFragment storeListFragment;
     private ShoppingSpecialLinkageFragment shoppingLinkageFragment;
     private CommonFragmentPagerAdapter adapter;
 
@@ -100,6 +103,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     private LinearLayout llFloatButtonContainer;
     private boolean showTab=true;
     private LinearLayout llBanner;
+    private LinkageContainerFragment2 linkageGoodsFragment2;
 
     public static NewShoppingSpecialFragment newInstance(int zoneId) {
         Bundle args = new Bundle();
@@ -147,9 +151,8 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         vwAnchor = view.findViewById(R.id.vw_anchor);
 
         shoppingLinkageFragment = ShoppingSpecialLinkageFragment.newInstance();
-//        secondFragment = SecondFragment.newInstance();
-        storeListFragment =ShoppingStoreListFragment.newInstance();
-        withoutCategoryFragment = ShoppingLinkageFragment.newInstance();
+//        storeListFragment =ShoppingStoreListFragment.newInstance();
+        storeListFragment = LinkageShoppingListFragment.Companion.newInstance(zoneId);
 
         bannerView = view.findViewById(R.id.banner_view);
         initBanner();
@@ -268,12 +271,13 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                 // 如果列表滑动到顶部，则启用嵌套滚动
 
 
-                storeListFragment.setNestedScrollingEnabled(nestedScroll);
-                if (hasGoodsCategory==1) {
-                    shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
-                }else {
-                    withoutCategoryFragment.setNestedScrollingEnabled(nestedScroll);
-                }
+                storeListFragment.getViewModel().getNestedScrollingEnable().setValue(nestedScroll);
+                linkageGoodsFragment2.getViewModel().getNestedScrollingEnable().setValue(nestedScroll);
+//                if (hasGoodsCategory==1) {
+//                    shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
+//                }else {
+//                    withoutCategoryFragment.setNestedScrollingEnabled(nestedScroll);
+//                }
 
                 if (!nestedScroll) {
                     if (oldScrollY > scrollY) {
@@ -329,7 +333,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
 
-        // 獲取商店首頁信息
+        // 獲取專場入口頁信息
         String path = Api.PATH_SHOPPING_ZONE + "/" + zoneId;
         Api.getUI(path, null, new UICallback() {
             @Override
@@ -361,7 +365,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
             zoneId = zoneVo.getInt("zoneId");
             //第一階段無用
 //            zoneState = zoneVo.getInt("zoneState");
-//            zoneType = zoneVo.getInt("zoneType");
+            zoneType = zoneVo.getInt("zoneType");
 //            String appLogo = zoneVo.getSafeString("appLogo");
 
             String appColor = zoneVo.getSafeString("appColor");
@@ -380,46 +384,69 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
             String goodsTabTitle = zoneVo.getSafeString("goodsTabTitle");
 
 
-            EasyJSONArray zoneGoodsVoList = zoneVo.getArray("zoneGoodsVoList");
-
             EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
-            //商品列表
-            if (hasGoodsCategory == Constant.TRUE_INT) {
+            //舊的列表顯示邏輯
+//            if (hasGoodsCategory == Constant.TRUE_INT) {
+//                if (!StringUtil.isEmpty(goodsTabTitle)) {
+//                    titleList.add(goodsTabTitle);
+//                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
+//                    fragmentList.add(shoppingLinkageFragment);
+////                tabLayout.removeTabAt(1);
+//                    shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
+//                    shoppingLinkageFragment.setNestedScroll(this);
+//                }
+//
+//            } else {
+//                if (!StringUtil.isEmpty(goodsTabTitle)) {
+//                    titleList.add(goodsTabTitle);
+//                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
+////
+////                    fragmentList.add(withoutCategoryFragment);
+////                    SLog.info("無類別商品標簽數據");
+////                    withoutCategoryFragment.setNestedScroll(this);
+////                    withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
+//                    LinkageContainerFragment2 linkageContainerFragment2 = new LinkageContainerFragment2();
+//                    fragmentList.add(linkageContainerFragment2);
+//                }
+//
+//            }
+//
+//            EasyJSONArray zoneStoreVoList = zoneVo.getSafeArray("zoneStoreVoList");
+//            if (zoneStoreVoList != null && zoneStoreVoList.length() > 0) {
+//                SLog.info("設置商店列表數據");
+//                if (!StringUtil.isEmpty(storeTabTitle)) {
+//                    titleList.add(storeTabTitle);
+//                    tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
+//                    fragmentList.add(storeListFragment);
+//                    storeListFragment.setOnNestedScroll(this);
+//                    storeListFragment.setStoreList(zoneStoreVoList);
+//                }
+//
+//            }
+            //舊的列表處理邏輯結束
+
+            if (zoneType == DEFAULT_ZONE || zoneType == GOOD_ZONE) {
                 if (!StringUtil.isEmpty(goodsTabTitle)) {
                     titleList.add(goodsTabTitle);
-                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
-                    fragmentList.add(shoppingLinkageFragment);
-//                tabLayout.removeTabAt(1);
-                shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
-                    shoppingLinkageFragment.setNestedScroll(this);
+                    tabLayout.addTab(tabLayout.newTab().setText("測試二級聯動頁面"+goodsTabTitle));
                 }
+//                fragmentList.add(shoppingLinkageFragment);
+                shoppingLinkageFragment.setNestedScroll(this);
 
-            } else {
-                if (!StringUtil.isEmpty(goodsTabTitle)) {
-                    titleList.add(goodsTabTitle);
-                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
-
-                    fragmentList.add(withoutCategoryFragment);
-                    SLog.info("無類別商品標簽數據");
-                    withoutCategoryFragment.setNestedScroll(this);
-                    withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
-                }
-
+                 linkageGoodsFragment2  = LinkageContainerFragment2.Companion.newInstance(zoneId);
+                linkageGoodsFragment2.parent = this;
+                fragmentList.add(linkageGoodsFragment2);
             }
 
-            EasyJSONArray zoneStoreVoList = zoneVo.getSafeArray("zoneStoreVoList");
-            if (zoneStoreVoList != null && zoneStoreVoList.length() > 0) {
-                SLog.info("設置商店列表數據");
+            if (zoneType == DEFAULT_ZONE || zoneType == SHOP_ZONE) {
                 if (!StringUtil.isEmpty(storeTabTitle)) {
                     titleList.add(storeTabTitle);
                     tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
-                    fragmentList.add(storeListFragment);
-                    storeListFragment.setOnNestedScroll(this);
-                    storeListFragment.setStoreList(zoneStoreVoList);
                 }
-
+                fragmentList.add(storeListFragment);
+                storeListFragment.parent=this;
             }
-
+            //刷新UI的邏輯
             initViewPager();
 
             if (tabLayout.getTabCount() <= 1) {
@@ -502,11 +529,12 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
         } else if (id == R.id.btn_goto_top) {
             containerView.scrollTo(0,0);
-            if (hasGoodsCategory == 1) {
-                shoppingLinkageFragment.scrollToTop();
-            } else if(withoutCategoryFragment!=null){
-                withoutCategoryFragment.scrollToTop();
-            }
+//            if (hasGoodsCategory == 1) {
+//                shoppingLinkageFragment.scrollToTop();
+//            } else if(withoutCategoryFragment!=null){
+//                withoutCategoryFragment.scrollToTop();
+//            }
+            linkageGoodsFragment2.scrollToTop();
             storeListFragment.scrollToTop();
         }
     }
@@ -578,5 +606,9 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                     SLog.info("執行隱藏");
                 }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY
         );
+    }
+
+    public int getZoneId() {
+        return zoneId;
     }
 }

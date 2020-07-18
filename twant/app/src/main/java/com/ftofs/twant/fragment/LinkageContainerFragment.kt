@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.LinkageContainerLayoutBinding
+import com.ftofs.twant.databinding.SellerEditFeaturesLayoutBinding
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
 import com.ftofs.twant.kotlin.LinkageContainerViewModel
 import com.ftofs.twant.kotlin.SellerGoodsListAdapter
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.seller.adapter.SellerGoodsAdapter
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
@@ -24,13 +26,15 @@ import com.wzq.mvvmsmart.utils.ToastUtils
 import java.util.ArrayList
 
 class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBinding, LinkageContainerViewModel>(){
-    private lateinit var buyerGoodsListAdapter: BuyerGoodsListAdapter
+    private lateinit var mAdapter: BuyerGoodsListAdapter
     private var goodsList: List<SellerGoodsItem> = ArrayList()
     private var loadingUtil: LoadingUtil? = null
+    private val  zoneId by  lazy { arguments?.getInt("zoneId") }
     companion object{
-        fun newInstance(): LinkageContainerFragment {
+        fun newInstance(zoneId:Int): LinkageContainerFragment {
             val args = Bundle()
             val fragment = LinkageContainerFragment()
+            args.putInt("zoneId",zoneId)
             fragment.arguments = args
             return fragment
         }
@@ -59,13 +63,13 @@ class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBind
             ToastUtils.showShort("點擊菜單")
         }
 
-//        viewModel.doGetServerNews() //请求网络数据
         initRecyclerView()
+        zoneId?.let { viewModel.doGetGoodsItems(it) } //请求网络数据
     }
     private fun initRecyclerView() {
-        buyerGoodsListAdapter = BuyerGoodsListAdapter()
+        mAdapter = BuyerGoodsListAdapter()
         binding.layoutManager = LinearLayoutManager(activity)
-        binding.adapter = buyerGoodsListAdapter
+        binding.adapter = mAdapter
 //        sellerGoodsListAdapter.setOnItemClickListener { adapter, view, position -> ToastUtils.showShort("点击了条目--" + position) }
 //        sellerGoodsListAdapter.onItemLongClickListener = BaseQuickAdapter.OnItemLongClickListener { adapter, view, position ->
 //            ToastUtils.showShort("长按了条目--" + position)
@@ -101,14 +105,14 @@ class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBind
 //                setBeautifulGirlImg(goodsList);  // 图片链接经常失效,设置美女图片,但每次上下拉头像会变;
             }
             if (viewModel.pageNum == 1) {
-                buyerGoodsListAdapter.clear()
+                mAdapter.clear()
 //                sellerGoodsListAdapter.data.clear() // 请求多页数据后再请求第1页,先删除之前数据
                 if (goodsList.isEmpty()) {
                     //  第一页无数据,就显示默认页
                     showEmptyLayout(binding.refreshLayout, this@LinkageContainerFragment.resources.getString(R.string.tip_a_page_no_data), R.mipmap.ic_launcher_mvvmsmart, false)
                 } else {
                     showNormalLayout(binding.refreshLayout)
-                    buyerGoodsListAdapter.addAll(goodsList,true)
+//                    mAdapter.addAll(goodsList,true)
                 }
             } else { // 不是第一页
                 if (goodsList.isEmpty()) {
@@ -116,19 +120,19 @@ class LinkageContainerFragment :BaseTwantFragmentMVVM<LinkageContainerLayoutBind
                     binding.refreshLayout.finishLoadMoreWithNoMoreData()
                     binding.refreshLayout.setNoMoreData(true)
                 } else {
-                    buyerGoodsListAdapter.addAll(goodsList,false)
+//                    mAdapter.addAll(goodsList,false)
                 }
             }
         })
         binding.refreshLayout.setOnRefreshListener {
             viewModel.pageNum = 1
-//            viewModel.doGetServerNews()
+            zoneId?.let { it1 -> viewModel.doGetGoodsItems(it1) }
         }
         //上拉加载更多
         binding.refreshLayout.setOnLoadMoreListener { refreshLayout: RefreshLayout? ->
             viewModel.pageNum++
             //            loadMoreTestData();   // 模拟加载更多数据
-//            viewModel.doGetServerNews()
+            zoneId?.let { viewModel.doGetGoodsItems(it) }
         }
         /**
          * 每个界面默认页效果不同

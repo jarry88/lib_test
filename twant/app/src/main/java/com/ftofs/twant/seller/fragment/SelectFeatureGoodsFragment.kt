@@ -104,7 +104,6 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
         super.initViewObservable()
         viewModel.liveData.observe(this, Observer { goodsList: List<SellerGoodsItem> ->
             if (goodsList.isNotEmpty()) {
-                KLog.e("mLiveData的listBeans.size():" + goodsList.size)
                 SLog.info("mLiveData的listBeans.size():" + goodsList.size)
 //                setBeautifulGirlImg(goodsList);  // 图片链接经常失效,设置美女图片,但每次上下拉头像会变;
             }
@@ -165,6 +164,7 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
                     KLog.e("空闲状态--关闭loading")
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()
+
                 }
                 else -> {
                     KLog.e("其他状态--关闭loading")

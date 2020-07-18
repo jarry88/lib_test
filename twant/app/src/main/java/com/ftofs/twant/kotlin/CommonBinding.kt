@@ -17,6 +17,12 @@ fun loadImageUrl(v: ImageView, url: String?) {
         Glide.with(v).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(v)
     }
 }
+@BindingAdapter(value = ["price"])
+fun setTextPrice(v: TextView, price: Double) {
+    price?.run {
+        v.text= StringUtil.formatPrice( null,price, 0, 2)
+    }
+}
 @BindingAdapter(value = ["fir","len","pointSize","defaultSize","textInput"],requireAll = false)
 fun setSpText(v: TextView, fir:Int,len:Int,pointSize:Int,defaultSize:Int,textInput:String) {
     var text=v.text
