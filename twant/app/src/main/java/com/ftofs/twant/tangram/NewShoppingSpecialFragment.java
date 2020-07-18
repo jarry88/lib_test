@@ -8,6 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
+import android.view.animation.TranslateAnimation;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,19 +28,16 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
-import com.ftofs.twant.databinding.LinkageContainerLayout2Binding;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.fragment.CartFragment;
 import com.ftofs.twant.fragment.FirstFragment;
-import com.ftofs.twant.fragment.LinkageContainerFragment;
 import com.ftofs.twant.fragment.LinkageContainerFragment2;
+import com.ftofs.twant.fragment.LinkageShoppingListFragment;
 import com.ftofs.twant.fragment.SecondFragment;
 import com.ftofs.twant.fragment.ShoppingLinkageFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialLinkageFragment;
-import com.ftofs.twant.fragment.ShoppingStoreListFragment;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
-import com.ftofs.twant.kotlin.LinkageContainerViewModel2;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -46,24 +48,16 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import android.view.ViewOutlineProvider;
-import android.view.animation.TranslateAnimation;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.umeng.analytics.MobclickAgent;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -100,7 +94,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     private TextView tvZoneName;
     private ShoppingLinkageFragment withoutCategoryFragment;
     private RelativeLayout rlToolBar;
-    private ShoppingStoreListFragment storeListFragment;
+    private LinkageShoppingListFragment storeListFragment;
     private ShoppingSpecialLinkageFragment shoppingLinkageFragment;
     private CommonFragmentPagerAdapter adapter;
 
@@ -159,8 +153,8 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         vwAnchor = view.findViewById(R.id.vw_anchor);
 
         shoppingLinkageFragment = ShoppingSpecialLinkageFragment.newInstance();
-//        secondFragment = SecondFragment.newInstance();
-        storeListFragment =ShoppingStoreListFragment.newInstance();
+//        storeListFragment =ShoppingStoreListFragment.newInstance();
+        storeListFragment = LinkageShoppingListFragment.Companion.newInstance(zoneId);
         withoutCategoryFragment = ShoppingLinkageFragment.newInstance();
 
         bannerView = view.findViewById(R.id.banner_view);
@@ -280,13 +274,13 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                 // 如果列表滑动到顶部，则启用嵌套滚动
 
 
-                storeListFragment.setNestedScrollingEnabled(nestedScroll);
+                storeListFragment.getViewModel().getNestedScrollingEnable().setValue(nestedScroll);
                 linkageGoodsFragment2.getViewModel().getNestedScrollingEnable().setValue(nestedScroll);
-                if (hasGoodsCategory==1) {
-                    shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
-                }else {
-                    withoutCategoryFragment.setNestedScrollingEnabled(nestedScroll);
-                }
+//                if (hasGoodsCategory==1) {
+//                    shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
+//                }else {
+//                    withoutCategoryFragment.setNestedScrollingEnabled(nestedScroll);
+//                }
 
                 if (!nestedScroll) {
                     if (oldScrollY > scrollY) {
@@ -453,7 +447,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                     tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
                 }
                 fragmentList.add(storeListFragment);
-                storeListFragment.setOnNestedScroll(this);
+                storeListFragment.parent=this;
             }
             //刷新UI的邏輯
             initViewPager();
@@ -538,11 +532,12 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
         } else if (id == R.id.btn_goto_top) {
             containerView.scrollTo(0,0);
-            if (hasGoodsCategory == 1) {
-                shoppingLinkageFragment.scrollToTop();
-            } else if(withoutCategoryFragment!=null){
-                withoutCategoryFragment.scrollToTop();
-            }
+//            if (hasGoodsCategory == 1) {
+//                shoppingLinkageFragment.scrollToTop();
+//            } else if(withoutCategoryFragment!=null){
+//                withoutCategoryFragment.scrollToTop();
+//            }
+            linkageGoodsFragment2.scrollToTop();
             storeListFragment.scrollToTop();
         }
     }
@@ -614,5 +609,9 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                     SLog.info("執行隱藏");
                 }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY
         );
+    }
+
+    public int getZoneId() {
+        return zoneId;
     }
 }

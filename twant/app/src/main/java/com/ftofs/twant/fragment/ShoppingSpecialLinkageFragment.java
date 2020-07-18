@@ -37,11 +37,6 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
     RecyclerView rvList;
     ItemAdapter itemAdapter;
     List<Item> itemList = new ArrayList<>();
-
-    // 各個分類的Item數
-    int[] categoryItemCount = new int[] {
-            17, 3, 11, 9, 5, 12, 6, 13, 15, 9, 19, 6, 19, 16, 19, 15, 11, 4, 16, 12
-    };
     private List<Goods> items = new ArrayList<>();
     private boolean dataLoaded;
     private EasyJSONArray dataList;
@@ -212,21 +207,6 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
-    }
-    private void setCategory() {
-        int categoryTitlePosition = 0;
-
-        for (int i = 0; i < categoryItemCount.length; i++) {
-            int itemCount = categoryItemCount[i];
-            for (int j = 0; j < itemCount; j++) {
-                itemList.add(new Item(j == 0, i, j));
-            }
-//            menuList.add(new Menu(i, i == 0, categoryTitlePosition));
-
-            categoryTitlePosition += itemCount;
-        }
-        menuList.get(0).isSelected = true;
-
     }
 
     @Override

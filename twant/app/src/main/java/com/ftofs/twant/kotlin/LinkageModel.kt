@@ -28,6 +28,13 @@ class LinkageModel : BaseRepository(){
 
     private suspend fun requestShoppingZoneGoods(categoryId: String,page: Int): Result<ZoneInfo> =
             executeResponse(api.getShoppingZoneGoods(categoryId,page))
+
+    suspend fun getZoneStoreList(zoneId: Int,page: Int): Result<ZoneInfo> {
+        return safeApiCall(call = {requestShoppingZoneStore(zoneId,page)})
+    }
+
+    private suspend fun requestShoppingZoneStore(zoneId: Int, page: Int): Result<ZoneInfo> =
+        executeResponse(api.getShoppingZoneStore(zoneId,page))
 }
 
 

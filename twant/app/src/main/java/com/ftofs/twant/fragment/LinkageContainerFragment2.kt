@@ -7,6 +7,8 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
@@ -100,8 +102,8 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
 //            ToastUtils.showShort("点击了${a.categoryName}前一个$prevSelectedItemIndex")
             if (prevSelectedItemIndex == position) {
                 binding.rvRightList.scrollToPosition(0)
-                val preIndex = mCategoryAdapter.selectedItemIndex
-                if (preIndex >= 0) {
+                val preIndex = mCategoryAdapter.prevSelectedSubItemIndex
+                if (preIndex >= 0&&preIndex<a.nextList.size) {
                     a.nextList.get(preIndex).fold = Constant.FALSE_INT
                     mCategoryAdapter.prevSelectedSubItemIndex = -1
                     adapter.notifyItemChanged(position)
@@ -154,6 +156,7 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
             if (mCategoryAdapter.data.isEmpty() || it >= mCategoryAdapter.data.size) {
 
             } else {
+                binding.rvRightList.scrollToPosition(0)
                 binding.rvZoneCategory.get(it).performClick()
             }
         })
@@ -188,11 +191,14 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
         //上拉加载更多
         binding.refreshLayout.setOnLoadMoreListener{ refreshLayout: RefreshLayout? ->
             //            loadMoreTestData();   // 模拟加载更多数据
-            viewModel.pageNum++//請求到數據后，如果獲得list為空，會在vm中將pagenum-1
-            viewModel.doGetZoneGoodsItems()
+            if (viewModel.hasMore) {
+                viewModel.pageNum++//請求到數據后，如果獲得list為空，會在vm中將pagenum-1
+                viewModel.doGetZoneGoodsItems()
+            } else {
+                viewModel.stateLiveData.postNoMoreData()
+            }
         }
-
-
+        //備用參考上拉加載聯動功能
         /**
          * 每个界面默认页效果不同
          * 在这里可以动态替换 无网络页,数据错误页, 无数据默认页;
@@ -238,11 +244,32 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
         hideSoftInputPop()
     }
 
+    private fun test() {
+        val preSelectionIndex =mCategoryAdapter.prevSelectedItemIndex
+
+        if (mCategoryAdapter.hasNextSubItem(true)) {
+                    binding.rvZoneCategory.get(preSelectionIndex).findViewById<LinearLayout>(R.id.ll_sub_ategory_list).getChildAt(mCategoryAdapter.prevSelectedSubItemIndex + 1).performClick()
+                    viewModel.stateLiveData.postNoMoreData()
+
+                } else {
+                    if (preSelectionIndex +1 >= mCategoryAdapter.data.size) {
+                        viewModel.stateLiveData.postNoMoreData()
+                    } else {
+                        ToastUtils.showShort("點了$preSelectionIndex+1")
+                        binding.refreshLayout.finishLoadMore()
+                        viewModel.delayClick(preSelectionIndex+1,0)
+                    }
+                }
+    }
 
 
 
     override fun onDestroy() {
         super.onDestroy()
         loadingUtil?.hideLoading()
+    }
+
+    fun scrollToTop() {
+        binding.rvRightList.scrollToPosition(0)
     }
 }

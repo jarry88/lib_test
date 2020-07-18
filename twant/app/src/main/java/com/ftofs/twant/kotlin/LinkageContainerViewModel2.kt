@@ -37,8 +37,8 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
     val categoryData: MutableLiveData<List<ZoneCategory>> by lazy {
         MutableLiveData<List<ZoneCategory>>()
     }
-    val goodsList: MutableLiveData<List<Goods>> by lazy {
-        MutableLiveData<List<Goods>>()
+    val goodsList: MutableLiveData<ArrayList<Goods>> by lazy {
+        MutableLiveData<ArrayList<Goods>>()
     }
     val uiState: LiveData<LinkageUiModel>
         get() = _uiState
@@ -82,9 +82,9 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
         }
     }
 
-    private fun delayClick(item:Int, subIndex:Int) {
+    fun delayClick(item:Int, subIndex:Int) {
         viewModelScope.launch {
-            delay(200)
+            delay(150)
             currCategoryIndex.value=item//添加默认列表Id
         }
     }
@@ -109,10 +109,21 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                     SLog.info(result.toString())
                     if (result is Result.Success) {
                         result.datas.zoneGoodsList?.let {
+                            if (it.size == 0) {
+                                if (pageNum <= 1) {
+                                    stateLiveData.postNoData()
 
-                            ToastUtils.showShort("拿到數據了")
-
-                            goodsList.value = result.datas.zoneGoodsList
+                                } else {
+                                    pageNum--
+                                    stateLiveData.postNoMoreData()
+                                }
+                            }
+//                            goodsList.value
+//                            goodsList.value?.let {
+//                                it.addAll(result.datas.zoneGoodsList!!)
+//                            }?:let{
+                                goodsList.value = result.datas.zoneGoodsList
+//                            }
                             stateLiveData.postSuccess()
                         }?:let{
                             ToastUtils.showShort("拿到數據爲空")
@@ -125,6 +136,7 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                                 ToastUtils.showShort("沒有更多數據了")
                             }
                         }
+                        hasMore=result.datas.pageEntity.hasMore
 
                     } else if (result is Result.DataError) {
                         SLog.info(result.datas.error)
@@ -141,6 +153,7 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
 
     //    private val viewModel: LinkageContainerViewModel = LinkageContainerViewModel()
     var pageNum:Int=1
+    var hasMore:Boolean=false
     //    var liveData: MutableLiveData<MutableList<ItemsEntity?>> = MutableLiveData()
 
     data class LinkageUiModel(

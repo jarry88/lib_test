@@ -50,5 +50,9 @@ interface DemoApiService {
     @GET("shoppingzone/goods/{categoryId}")
     suspend fun getShoppingZoneGoods(@Path("categoryId")categoryId: String, @Query("page")page: Int): TwantResponse<ZoneInfo>
 
+    //  获取购物专场商店数据
+    @GET("shoppingzone/store/{zoneId}")
+    suspend fun getShoppingZoneStore(@Path("zoneId")zoneId: Int, @Query("page")page:Int): TwantResponse<ZoneInfo>
+
 //@Field
 }

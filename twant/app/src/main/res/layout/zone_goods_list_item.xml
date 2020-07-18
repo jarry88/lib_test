@@ -61,6 +61,7 @@
                     app:price="@{vo.appPriceMin}"
                     />
                 <ImageView
+                    android:padding="5dp"
                     android:id="@+id/btn_add_to_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/rv_simple"/>
-</RelativeLayout>
+<layout xmlns:bindding="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="adapter"
+            type="com.ftofs.twant.adapter.ShoppingStoreListAdapter" />
+    </data>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent">
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/refreshLayout">
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rv_simple"
+                android:adapter="@{adapter}"
+                bindding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </RelativeLayout>
+</layout>

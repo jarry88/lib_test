@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ShopGoodsListAdapter;
+import com.ftofs.twant.api.Api;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.Goods;
@@ -167,6 +168,12 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
     public void setGoodVoList(EasyJSONArray zoneGoodsVoList) {
         this.zoneGoodsVoList = zoneGoodsVoList;
         updateView();
+
+    }
+
+    void loadDate() {
+        String url = Api.PATH_SHOPPING_ZONE + String.format("/%s", parentFragment.getZoneId());
+//        Api.getUI(url);
 
     }
 
