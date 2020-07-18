@@ -4,22 +4,30 @@ import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
+import com.ftofs.twant.TwantApplication
 import com.ftofs.twant.adapter.ShoppingStoreListAdapter
+import com.ftofs.twant.config.Config
+import com.ftofs.twant.constant.UmengAnalyticsActionName
 import com.ftofs.twant.databinding.SimpleRvListBinding
 import com.ftofs.twant.entity.StoreItem
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.LinkageShoppingListModel
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.UiUtil
+import com.ftofs.twant.util.Util
 import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.umeng.analytics.MobclickAgent
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.LoadingUtil
+import java.util.*
 
 class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, LinkageShoppingListModel>(){
 
@@ -62,9 +70,39 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
     }
 
     private fun initRecyclerView() {
-        mAdapter = ShoppingStoreListAdapter(R.layout.store_view, arrayListOf<StoreItem>())
+        val item=StoreItem()
+        mAdapter = ShoppingStoreListAdapter(R.layout.shopping_store_view, arrayListOf())
         binding.adapter = mAdapter
 
+        mAdapter.setOnItemChildClickListener(BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>?, view1: View, position: Int ->
+            val id = view1.id
+            if (id == R.id.goods_image_left_container || id == R.id.goods_image_middle_container || id == R.id.goods_image_right_container) {
+                var storeItem= adapter?.data?.get(position) as StoreItem
+                storeItem?.let {
+                    it.zoneGoodsVoList?.let {
+
+                        val commonId: Int = if (id == R.id.goods_image_middle_container) {
+                            it.get(0).id
+                        } else if (id == R.id.goods_image_left_container) {
+                            it.get(1).id
+                        } else {
+                           it.get(2).id
+                        }
+                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0))
+                    }
+                }
+            }
+        })
+        mAdapter.setOnItemClickListener { adapter, view1, position ->
+            val store = adapter.data.get(position) as StoreItem
+
+            if (Config.PROD) {
+                val analyticsDataMap = HashMap<String, Any>()
+                analyticsDataMap["storeId"] = store.storeId
+                MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.ACTIVITY_STORE, analyticsDataMap)
+            }
+            Util.startFragment(ShopMainFragment.newInstance(store.storeId))
+        }
 
         parent.let {
             binding.rvSimple.isNestedScrollingEnabled=false
@@ -80,6 +118,7 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
             })
 
         }
+
     }
     override fun initViewObservable() {
         super.initViewObservable()

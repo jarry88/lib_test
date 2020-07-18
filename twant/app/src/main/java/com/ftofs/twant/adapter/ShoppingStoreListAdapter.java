@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -37,7 +38,7 @@ public class ShoppingStoreListAdapter extends BaseQuickAdapter<StoreItem, BaseVi
         ImageView imgStoreAvatar = helper.getView(R.id.img_store_avatar);
 
         String storeAvatarUrl =StringUtil.normalizeImageUrl(item.storeAvatar);
-        if ("https://192.168.5.29/public/img/default_store_avatar.png".equals(storeAvatarUrl)) {
+        if ("https://192.168.5.29/public/img/default_store_avatar.png".equals(storeAvatarUrl)||StringUtil.isEmpty(storeAvatarUrl)) {
             Glide.with(mContext).load(R.drawable.default_store_avatar).into(imgStoreAvatar);
         } else {
             Glide.with(mContext).load(storeAvatarUrl).into(imgStoreAvatar);
@@ -53,8 +54,9 @@ public class ShoppingStoreListAdapter extends BaseQuickAdapter<StoreItem, BaseVi
         goodsImageLeftContainer.setVisibility(GONE);
         goodsImageMiddleContainer.setVisibility(GONE);
         goodsImageRightContainer.setVisibility(GONE);
-        for (int i = 0; i < item.goodsList.size(); i++) {
-            String imageSrc = StringUtil.normalizeImageUrl(item.goodsList.get(i).imageUrl, "?x-oss-process=image/resize,w_300");
+        List<Goods> goodsList = item.zoneGoodsVoList;
+        for (int i = 0; i < goodsList.size(); i++) {
+            String imageSrc = StringUtil.normalizeImageUrl(goodsList.get(i).imageUrl, "?x-oss-process=image/resize,w_300");
 
             if (i == 0) {
                 goodsImageMiddleContainer.setVisibility(View.VISIBLE);
@@ -72,7 +74,7 @@ public class ShoppingStoreListAdapter extends BaseQuickAdapter<StoreItem, BaseVi
         TextView tvStoreClass = helper.getView(R.id.tv_store_class);
         ImageView imgStoreFigure = helper.getView(R.id.img_store_figure);
         tvStoreName.setText(item.storeName);
-        tvStoreClass.setText(item.storeClass);
+        tvStoreClass.setText(item.className);
 //        helper.addOnClickListener()
         Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.storeFigureImage)).centerCrop().into(imgStoreFigure);
     }

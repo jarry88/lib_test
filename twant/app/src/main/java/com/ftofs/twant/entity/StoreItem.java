@@ -19,6 +19,8 @@ public class StoreItem implements MultiItemEntity {
     public String storeAvatar;
 
     public List<Goods> goodsList;
+    public List<Goods> zoneGoodsVoList;
+    public String className;
 
     public StoreItem() {
         this.itemType = Constant.ITEM_TYPE_NORMAL;
