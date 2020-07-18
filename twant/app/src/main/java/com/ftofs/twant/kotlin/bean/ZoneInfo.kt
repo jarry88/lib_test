@@ -11,7 +11,7 @@ import java.io.Serializable
 import java.util.*
 
 data class ZoneInfo(
-        var zoneGoodsList:List<Goods>,
+        var zoneGoodsList:List<Goods>?,
         var zoneGoodsCategoryList: List<ZoneCategory>,
         var pageEntity: PageVO,
         var zoneStoreList: ArrayList<Objects>,

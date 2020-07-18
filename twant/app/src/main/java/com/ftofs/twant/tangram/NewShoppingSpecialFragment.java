@@ -35,6 +35,7 @@ import com.ftofs.twant.fragment.ShoppingLinkageFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialLinkageFragment;
 import com.ftofs.twant.fragment.ShoppingStoreListFragment;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
+import com.ftofs.twant.kotlin.LinkageContainerViewModel2;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -110,6 +111,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     private LinearLayout llFloatButtonContainer;
     private boolean showTab=true;
     private LinearLayout llBanner;
+    private LinkageContainerFragment2 linkageGoodsFragment2;
 
     public static NewShoppingSpecialFragment newInstance(int zoneId) {
         Bundle args = new Bundle();
@@ -279,6 +281,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
 
                 storeListFragment.setNestedScrollingEnabled(nestedScroll);
+                linkageGoodsFragment2.getViewModel().getNestedScrollingEnable().setValue(nestedScroll);
                 if (hasGoodsCategory==1) {
                     shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
                 }else {
@@ -439,9 +442,9 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 //                fragmentList.add(shoppingLinkageFragment);
                 shoppingLinkageFragment.setNestedScroll(this);
 
-                LinkageContainerFragment2 linkageContainerFragment2  = LinkageContainerFragment2.Companion.newInstance(zoneId);
-                linkageContainerFragment2.parent = this;
-                fragmentList.add(linkageContainerFragment2);
+                 linkageGoodsFragment2  = LinkageContainerFragment2.Companion.newInstance(zoneId);
+                linkageGoodsFragment2.parent = this;
+                fragmentList.add(linkageGoodsFragment2);
             }
 
             if (zoneType == DEFAULT_ZONE || zoneType == SHOP_ZONE) {

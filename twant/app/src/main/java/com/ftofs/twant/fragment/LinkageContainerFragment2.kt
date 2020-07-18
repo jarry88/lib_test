@@ -3,8 +3,11 @@ package com.ftofs.twant.fragment
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.baozi.treerecyclerview.adpater.TreeRecyclerAdapter
@@ -30,7 +33,8 @@ import com.wzq.mvvmsmart.utils.ToastUtils
 import java.util.*
 
 class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Binding, LinkageContainerViewModel2>(){
-//    private var parent by lazy { arguments?.get("parent") }
+
+    //    private var parent by lazy { arguments?.get("parent") }
     private lateinit var mAdapter: BuyerGoodsListAdapter
     private lateinit var mTreeAdapter: TreeRecyclerAdapter
     private lateinit var mCategoryAdapter: ZoneCategoryListAdapter
@@ -52,6 +56,9 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
         super.initParam()
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
+    }
+    fun getViewModel():LinkageContainerViewModel2{
+        return viewModel
     }
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.linkage_container_layout2
@@ -77,38 +84,51 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
 
         mCategoryAdapter = ZoneCategoryListAdapter(context,R.layout.store_category_list_item,ArrayList<ZoneCategory>(), OnSelectedListener(fun (type:PopupType,id:Int,extra:Any){
             val subCategory = extra as ZoneCategory
-            ToastUtils.showShort("位置$id,name ${subCategory.categoryName},选中${subCategory.fold}")
-            mCategoryAdapter.notifyItemChanged(id)
+//            ToastUtils.showShort("位置$id,name ${subCategory.categoryName},选中${subCategory.fold}")
+            if (viewModel.currCategoryId.value != subCategory.categoryId) {
+                viewModel.currCategoryId.value = subCategory.categoryId
+                mCategoryAdapter.notifyItemChanged(id)
+            } else {
+                binding.rvRightList.scrollToPosition(0)
+            }
+
         }))
         binding.categoryAdapter = mCategoryAdapter
         mCategoryAdapter.setOnItemClickListener { adapter, view, position ->
             val a =adapter.getItem(position) as ZoneCategory
             val prevSelectedItemIndex: Int = mCategoryAdapter.getPrevSelectedItemIndex()
-            ToastUtils.showShort("点击了${a.categoryName}前一个$prevSelectedItemIndex")
+//            ToastUtils.showShort("点击了${a.categoryName}前一个$prevSelectedItemIndex")
             if (prevSelectedItemIndex == position) {
                 binding.rvRightList.scrollToPosition(0)
-                return@setOnItemClickListener
+                val preIndex = mCategoryAdapter.selectedItemIndex
+                if (preIndex >= 0) {
+                    a.nextList.get(preIndex).fold = Constant.FALSE_INT
+                    mCategoryAdapter.prevSelectedSubItemIndex = -1
+                    adapter.notifyItemChanged(position)
+                }
+            } else {
+                //点击条目刷新后回到顶部
+                UiUtil.moveToMiddle(binding.rvRightList,0)
+                val prevSelectedItem = adapter.getItem(prevSelectedItemIndex) as ZoneCategory
+                if (prevSelectedItemIndex != -1) {
+                    prevSelectedItem.fold=Constant.FALSE_INT
+                    adapter.notifyItemChanged(prevSelectedItemIndex)
+                }
             }
-            val prevSelectedItem = adapter.getItem(prevSelectedItemIndex) as ZoneCategory
-            if (prevSelectedItemIndex != -1) {
-                prevSelectedItem.fold=Constant.FALSE_INT
-                adapter.notifyItemChanged(prevSelectedItemIndex)
-            }
+
             a.fold=Constant.TRUE_INT // 設置為展開狀態
             viewModel.currCategoryId.value=a.categoryId
             adapter.notifyItemChanged(position)
 
             mCategoryAdapter.prevSelectedItemIndex=position
-            if (prevSelectedItemIndex != position) {
-                //点击条目刷新后回到顶部
-                UiUtil.moveToMiddle(binding.rvRightList,0)
-            }
         }
 
         parent.let {
+            binding.rvRightList.isNestedScrollingEnabled=false
             binding.rvRightList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
+                    SLog.info("子頁面滾動監聽")
                     when (newState) {
                         RecyclerView.SCROLL_STATE_DRAGGING -> parent.onCbStartNestedScroll()
                         RecyclerView.SCROLL_STATE_IDLE->parent.onCbStopNestedScroll()
@@ -121,30 +141,30 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
     override fun initViewObservable() {
         super.initViewObservable()
 
+        viewModel.nestedScrollingEnable.observe(this, Observer {
+            binding.rvRightList.isNestedScrollingEnabled=it
+        })
         //检测当前选中categoryid变化
         viewModel.currCategoryId.observe(this, Observer {
+            SLog.info("categoryid变化")
             binding.refreshLayout.autoRefresh()
+        })
+        //检测当前选中categoryIndex变化
+        viewModel.currCategoryIndex.observe(this, Observer {
+            if (mCategoryAdapter.data.isEmpty() || it >= mCategoryAdapter.data.size) {
+
+            } else {
+                binding.rvZoneCategory.get(it).performClick()
+            }
         })
         viewModel.categoryData.observe(this, Observer { categoryList:List<ZoneCategory>->
             if(categoryList.isEmpty()){
                 SLog.info("categoryData.size为空")
+                binding.rvZoneCategory.visibility= View.GONE
                 return@Observer
             }
-//            mCategoryAdapter.setNewData(categoryList)
-            val  list = arrayListOf<ZoneCategory>()
 
-            val sub1 = ZoneCategory("1",20,"sub1", list,0)
-            val sub2 = ZoneCategory("1",20,"sub2", list,0)
-            val sub3 = ZoneCategory("1",20,"sub3", list,0)
-            val sub4 = ZoneCategory("1",20,"sub4", list,0)
-            val  list1 = arrayListOf(sub1,sub2)
-            val  list2 = arrayListOf(sub1,sub2,sub3)
-            val  list3 = arrayListOf(sub3,sub4)
-            val item1 = ZoneCategory("1",20,"yi", list,0)
-            val item2 = ZoneCategory("1",20,"y2", list1,0)
-            val item3 = ZoneCategory("1",20,"y3", list2,0)
-            val item4 = ZoneCategory("1",20,"y4", list3,0)
-            mCategoryAdapter.setNewData(listOf(item1,item2,item3,item4))
+            mCategoryAdapter.setNewData(categoryList)
 
         })
 
@@ -157,22 +177,19 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
             mAdapter.addAll(goodsList,viewModel.pageNum==1)
         })
         binding.refreshLayout.setOnRefreshListener {
-
             viewModel.pageNum = 1
             viewModel.currCategoryId.value?.let{
-                viewModel.doGetZoneGoodsItems(it)
+                viewModel.doGetZoneGoodsItems()
 
             }?:it.finishRefresh()
-            binding.recyclerView2.scrollToPosition(0)
+            binding.rvRightList.scrollToPosition(0)
 
         }
         //上拉加载更多
         binding.refreshLayout.setOnLoadMoreListener{ refreshLayout: RefreshLayout? ->
-            viewModel.pageNum++
             //            loadMoreTestData();   // 模拟加载更多数据
-            viewModel.currCategoryId.value?.let{
-                viewModel.doGetZoneGoodsItems(it)
-            }?:refreshLayout?.finishLoadMore()
+            viewModel.pageNum++//請求到數據后，如果獲得list為空，會在vm中將pagenum-1
+            viewModel.doGetZoneGoodsItems()
         }
 
 
@@ -195,8 +212,8 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
                 }
                 StateLiveData.StateEnum.Idle -> {
                     KLog.e("空闲状态--关闭loading")
-                    binding.refreshLayout.finishRefresh()
-                    binding.refreshLayout.finishLoadMore()
+//                    binding.refreshLayout.finishRefresh()
+//                    binding.refreshLayout.finishLoadMore()
                     loadingUtil?.hideLoading()
                 }
                 StateLiveData.StateEnum.NoData -> {
@@ -217,7 +234,7 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
     override fun onContentReload() {
         super.onContentReload()
         KLog.e("点击空白页")
-//        viewModel.doGetServerNews() //请求网络数据
+        viewModel.doGetZoneGoodsItems() //请求网络数据
         hideSoftInputPop()
     }
 

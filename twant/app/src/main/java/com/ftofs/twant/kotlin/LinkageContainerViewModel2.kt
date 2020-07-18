@@ -4,13 +4,16 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.base.BaseViewModel
 import com.ftofs.twant.kotlin.net.Result
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.tangram.SloganView
 import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -25,6 +28,12 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
     val currCategoryId :MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+    val currCategoryIndex :MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+    val nestedScrollingEnable :MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
     val categoryData: MutableLiveData<List<ZoneCategory>> by lazy {
         MutableLiveData<List<ZoneCategory>>()
     }
@@ -34,21 +43,52 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
     val uiState: LiveData<LinkageUiModel>
         get() = _uiState
     fun getZoneCategoryList(zoneId: Int){
-        SLog.info("执行請求数据")
         viewModelScope.launch (Dispatchers.Default){
             withContext(Dispatchers.Main){
                 val result = viewModel.getZoneCategoryList(zoneId)
                 if (result is Result.Success) {
                     val categoryList = result.datas
+                    var a=0
+                    var b=-1
+                    if(categoryList.zoneGoodsCategoryList.isEmpty()){
+                        currCategoryId.value=categoryList.checkedCategory
+                        return@withContext
+                    }
+                    categoryList.zoneGoodsCategoryList.forEach outside@{ it ->
+                        if (it.equals(categoryList.checkedCategory)) {
+                            return@outside
+                        }
+                        b=-1
+                        it.nextList.forEach inside@{sub->
+                            if (sub.equals(categoryList.checkedCategory)) {
+                                    b++
+                                return@outside
+                            }
+                            b++
+                        }
+                        a++
+                    }
+                    if (a >= categoryList.zoneGoodsCategoryList.size) {
+                        a=0
+                    }
                     categoryData.value = categoryList.zoneGoodsCategoryList
-                    currCategoryId.value=categoryList.checkedCategory//添加默认列表Id
-                    stateLiveData.postSuccess()
+
+                    delayClick(a,b)
+                    stateLiveData.postIdle()
                 } else {
-                    stateLiveData.postError()
+                    stateLiveData.postNoData()
                 }
             }
         }
     }
+
+    private fun delayClick(item:Int, subIndex:Int) {
+        viewModelScope.launch {
+            delay(200)
+            currCategoryIndex.value=item//添加默认列表Id
+        }
+    }
+
     fun doGetGoodsItems(zoneId:Int) {
         viewModelScope.launch (Dispatchers.Default){
             withContext(Dispatchers.Main){
@@ -58,29 +98,49 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
             }
         }
     }
-    fun doGetZoneGoodsItems(categoryId:String) {
+    fun doGetZoneGoodsItems() {
         viewModelScope.launch (Dispatchers.Default){
-            SLog.info("执行加载商品列表数据$categoryId")
-            withContext(Dispatchers.Main){
-                val result = viewModel.getShoppingZoneGoods(categoryId, pageNum)
-                SLog.info(result.toString())
-                if (result is Result.Success) {
-                    goodsList.value = result.datas.zoneGoodsList
-                    stateLiveData.postSuccess()
+            val categoryId = currCategoryId.value
+            categoryId?:stateLiveData.postError()
+            categoryId?.let {
+                SLog.info("执行加载商品列表数据$it")
+                withContext(Dispatchers.Main){
+                    val result = viewModel.getShoppingZoneGoods(it, pageNum)
+                    SLog.info(result.toString())
+                    if (result is Result.Success) {
+                        result.datas.zoneGoodsList?.let {
 
-                } else if (result is Result.DataError) {
-                    SLog.info(result.datas.error)
-                    ToastUtils.showShort(result.datas.error)
-                    stateLiveData.postError()
-                } else {
-                    stateLiveData.postNoData()
+                            ToastUtils.showShort("拿到數據了")
+
+                            goodsList.value = result.datas.zoneGoodsList
+                            stateLiveData.postSuccess()
+                        }?:let{
+                            ToastUtils.showShort("拿到數據爲空")
+                            if (pageNum <= 1) {
+                                //表示執行下拉刷新
+                                stateLiveData.postNoData()
+                            }else{
+                                stateLiveData.postNoMoreData()
+                                pageNum--
+                                ToastUtils.showShort("沒有更多數據了")
+                            }
+                        }
+
+                    } else if (result is Result.DataError) {
+                        SLog.info(result.datas.error)
+                        ToastUtils.showShort(result.datas.error)
+                        stateLiveData.postError()
+                    } else {
+                        stateLiveData.postNoData()
+                    }
                 }
             }
+
         }
     }
 
     //    private val viewModel: LinkageContainerViewModel = LinkageContainerViewModel()
-    var pageNum = 1
+    var pageNum:Int=1
     //    var liveData: MutableLiveData<MutableList<ItemsEntity?>> = MutableLiveData()
 
     data class LinkageUiModel(

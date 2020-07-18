@@ -187,6 +187,9 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
     public int getPrevSelectedSubItemIndex() {
         return prevSelectedSubItemIndex;
     }
+    public void setPrevSelectedSubItemIndex(int data) {
+        prevSelectedSubItemIndex=data;
+    }
     /**
      * 獲取當前選中的菜單item的索引
      * @return
