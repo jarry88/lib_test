@@ -58,27 +58,12 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
         String labelName = item.getCategoryName();
 
         TextView tvCategoryName = helper.getView(R.id.tv_category_name);
+        tvCategoryName.setTextSize(14);
         tvCategoryName.setText(labelName);
-
+        SLog.info(String.valueOf(item.getFold()));
         LinearLayout llSubCategoryList = helper.getView(R.id.ll_sub_ategory_list);
 
-//
-//        int goodsCount = item.getGoodsCount();
-//        if (goodsCount < 1) {
-//            // 如果對應分類下沒有商品時， 不顯示紅點
-//            helper.setGone(R.id.fl_goods_category_item_count_container, false);
-//        } else {
-//            String goodsCountText;
-//            if (goodsCount < 999) {
-//                goodsCountText = String.valueOf(goodsCount);
-//            } else {
-//                goodsCountText = "...";
-//            }
-//            helper.setText(R.id.tv_goods_category_item_count, goodsCountText);
-//            helper.setGone(R.id.fl_goods_category_item_count_container, false);
-//        }
-
-        if (item.getFold() == Constant.TRUE_INT) {
+        if (item.getFold() == Constant.FALSE_INT) {
             helper.itemView.setBackgroundColor(Color.WHITE);
             helper.setGone(R.id.vw_selected_indicator, false);
             tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_black, null));
@@ -103,7 +88,7 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
                     tvSubCategory.setLineSpacing(1,1.1f);
                     tvSubCategory.setTextSize(12);
                     tvSubCategory.setEllipsize(TextUtils.TruncateAt.END);
-                    if (storeLabel.getFold() == Constant.FALSE_INT) {
+                    if (storeLabel.getFold() == Constant.TRUE_INT) {
                         tvSubCategory.setTextColor(twBlue);
                     } else {
                         tvSubCategory.setTextColor(twBlack);
@@ -119,7 +104,7 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
                     });
 
                     tvSubCategory.setPadding(0, Util.dip2px(context, 12.5f), 0, Util.dip2px(context, 12.5f));
-                    tvSubCategory.setText("·" + storeLabel.getCategoryName());
+                    tvSubCategory.setText(String.format("·%s", storeLabel.getCategoryName()));
                     llSubCategoryList.addView(tvSubCategory);
                 }
                 llSubCategoryList.setVisibility(View.VISIBLE);

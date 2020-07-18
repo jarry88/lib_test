@@ -39,9 +39,9 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
             withContext(Dispatchers.Main){
                 val result = viewModel.getZoneCategoryList(zoneId)
                 if (result is Result.Success) {
-                    SLog.info("拿到數據")
                     val categoryList = result.datas
                     categoryData.value = categoryList.zoneGoodsCategoryList
+                    currCategoryId.value=categoryList.checkedCategory//添加默认列表Id
                     stateLiveData.postSuccess()
                 } else {
                     stateLiveData.postError()
@@ -60,6 +60,7 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
     }
     fun doGetZoneGoodsItems(categoryId:String) {
         viewModelScope.launch (Dispatchers.Default){
+            SLog.info("执行加载商品列表数据$categoryId")
             withContext(Dispatchers.Main){
                 val result = viewModel.getShoppingZoneGoods(categoryId, pageNum)
                 SLog.info(result.toString())

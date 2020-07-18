@@ -12,12 +12,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ftofs.twant.fragment.BaseFragment
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.base.IBaseViewMVVM
 import com.wzq.mvvmsmart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> : BaseFragment(), IBaseViewMVVM {
+    lateinit var parent: NewShoppingSpecialFragment
     protected lateinit var binding: V
     protected lateinit var viewModel: VM
     private var emptyViewHelper: EmptyViewHelper? = null

@@ -16,5 +16,6 @@ data class ZoneInfo(
         var pageEntity: PageVO,
         var zoneStoreList: ArrayList<Objects>,
         var zoneVo:ZoneVO,
-        val error:String
+        val error:String,
+        val checkedCategory:String
 ): Serializable

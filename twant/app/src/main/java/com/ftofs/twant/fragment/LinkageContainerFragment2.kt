@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.baozi.treerecyclerview.adpater.TreeRecyclerAdapter
 import com.baozi.treerecyclerview.base.ViewHolder
 import com.baozi.treerecyclerview.factory.ItemHelperFactory
@@ -15,35 +16,32 @@ import com.ftofs.twant.adapter.ZoneCategoryListAdapter
 import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.constant.PopupType
 import com.ftofs.twant.databinding.LinkageContainerLayout2Binding
-import com.ftofs.twant.domain.store.StoreLabel
 import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.interfaces.OnSelectedListener
 import com.ftofs.twant.interfaces.SimpleCallback
 import com.ftofs.twant.kotlin.*
 import com.ftofs.twant.log.SLog
-import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.UiUtil
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.LoadingUtil
 import com.wzq.mvvmsmart.utils.ToastUtils
-import org.litepal.util.Const
 import java.util.*
 
 class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Binding, LinkageContainerViewModel2>(){
-    private var parent by lazy { arguments?.get("parent") }
+//    private var parent by lazy { arguments?.get("parent") }
     private lateinit var mAdapter: BuyerGoodsListAdapter
     private lateinit var mTreeAdapter: TreeRecyclerAdapter
     private lateinit var mCategoryAdapter: ZoneCategoryListAdapter
     private var loadingUtil: LoadingUtil? = null
     private val  zoneId by  lazy { arguments?.getInt("zoneId") }
     companion object{
-        fun newInstance(zoneId:Int,parent:NewShoppingSpecialFragment): LinkageContainerFragment2 {
+        fun newInstance(zoneId:Int): LinkageContainerFragment2 {
             val args = Bundle()
             val fragment = LinkageContainerFragment2()
             args.putInt("zoneId",zoneId)
-            args.put("parent",parent)
+//            args.put("parent",parent)
             fragment.arguments = args
             return fragment
         }
@@ -64,7 +62,7 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
     }
 
     override fun initData() {
-        ToastUtilsparentFragment::class.java.name
+//        ToastUtils.showShort(parentFragment.getText(R.id.tvTitle))
         initRecyclerView()
         zoneId?.let { viewModel.doGetGoodsItems(it) } //请求网络数据
         zoneId?.let { viewModel.getZoneCategoryList(it) } //请求网络数据
@@ -87,61 +85,64 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
             val prevSelectedItemIndex: Int = mCategoryAdapter.getPrevSelectedItemIndex()
             if (prevSelectedItemIndex != -1) {
                 val prevSelectedItem:ZoneCategory = viewModel.categoryData.value?.get(prevSelectedItemIndex)!!
-                prevSelectedItem.fold=Constant.TRUE_INT
+                prevSelectedItem.fold=Constant.FALSE_INT
+                adapter.notifyItemChanged(prevSelectedItemIndex)
             }
-            viewModel.categoryData.value?.get(position)?.fold=Constant.FALSE_INT // 設置為展開狀態
+            viewModel.categoryData.value?.get(position)?.fold=Constant.TRUE_INT // 設置為展開狀態
             viewModel.currCategoryId.value=viewModel.currCategoryId.value
             mCategoryAdapter.prevSelectedItemIndex=position
-
             viewModel.currCategoryId.value=a.categoryId
+            if (prevSelectedItemIndex != position) {
+                //点击条目刷新后回到顶部
+                UiUtil.moveToMiddle(binding.rvRightList,0)
+            }
         }
 
-        mTreeAdapter.setOnItemClickListener(fun(v:ViewHolder?,p){
-            v?.let {
-                UiUtil.moveToMiddle(binding.recyclerView2,p)
-                context?.getColor(R.color.tw_blue)?.let { it1 -> it.getTextView(R.id.tv_category_name).setTextColor(it1) }
-                if (mTreeAdapter.getData(p) is ClickLoadGroupItem) {
-                    val groupItem=mTreeAdapter.getData(p) as ClickLoadGroupItem
-                    viewModel.currCategoryId.value=groupItem.getmDate().categoryId
-                    groupItem.isExpand = !groupItem.isExpand
-
-//                    groupItem.clickChild.forEach(fun(item){
-//                        item.selected=item.data.categoryId.equals(viewModel.currCategoryId.value)
-//                    })
-//                    mTreeAdapter.notifyDataSetChanged()
+        parent.let {
+            binding.rvRightList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    when (newState) {
+                        RecyclerView.SCROLL_STATE_DRAGGING -> parent.onCbStartNestedScroll()
+                        RecyclerView.SCROLL_STATE_IDLE->parent.onCbStopNestedScroll()
+                    }
                 }
-            }?:UiUtil.moveToMiddle(binding.recyclerView2,p)
-        })
+            })
+
+        }
     }
     override fun initViewObservable() {
         super.initViewObservable()
 
+        //检测当前选中categoryid变化
+        viewModel.currCategoryId.observe(this, Observer {
+            binding.refreshLayout.autoRefresh()
+        })
         viewModel.categoryData.observe(this, Observer { categoryList:List<ZoneCategory>->
             if(categoryList.isEmpty()){
                 SLog.info("categoryData.size为空")
                 return@Observer
             }
-            mTreeAdapter.clear()
-            val items= arrayListOf<ClickLoadGroupItem>()
-            categoryList.forEach(fun (category:ZoneCategory){
-                SLog.info(category.categoryName)
-                val item =ItemHelperFactory.createItem(category,ClickLoadGroupItem::class.java,null) as ClickLoadGroupItem
-                item.callback= SimpleCallback { data ->
-                    data as ZoneCategory
-                    ToastUtils.showShort(data.categoryName)
-                    viewModel.currCategoryId.value=data.categoryId
-                    SLog.info(data.categoryId)
-                }
-                item.mContext=context
-                items.add(item)
+//            mCategoryAdapter.setNewData(categoryList)
+            val  list = arrayListOf<ZoneCategory>()
+            SLog.info(categoryList.get(0).toString())
 
-            })
-            mTreeAdapter.itemManager.replaceAllItem(items as List<ClickLoadGroupItem>?)
-            mCategoryAdapter.setNewData(categoryList)
+            val sub1 = ZoneCategory("1",20,"sub1", list)
+            val sub2 = ZoneCategory("1",20,"sub2", list)
+            val sub3 = ZoneCategory("1",20,"sub3", list)
+            val sub4 = ZoneCategory("1",20,"sub4", list)
+            val  list1 = arrayListOf(sub1,sub2)
+            val  list2 = arrayListOf(sub1,sub2,sub3)
+            val  list3 = arrayListOf(sub3,sub4)
+            val item1 = ZoneCategory("1",20,"yi", list)
+            SLog.info(item1.fold.toString())
+            val item2 = ZoneCategory("1",20,"y2", list1)
+            val item3 = ZoneCategory("1",20,"y3", list2)
+            val item4 = ZoneCategory("1",20,"y4", list3)
+            mCategoryAdapter.setNewData(listOf(item1,item2,item3,item4))
+
         })
-        viewModel.currCategoryId.observe(this, Observer {
-            binding.refreshLayout.autoRefresh()
-        })
+
         viewModel.goodsList.observe(this, Observer { goodsList:List<Goods>->
             if (goodsList.isEmpty()) {
                 SLog.info("空")

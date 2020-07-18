@@ -7,7 +7,7 @@ import java.io.Serializable
 data class ZoneCategory(
         val categoryId:String,
         val zoneId:Int,
-        val categoryName:String,
+        var categoryName:String,
         val nextList:ArrayList<ZoneCategory>,
-        var fold:Int=1  //1展开 0合上
+        var fold:Int=1  //0展开 1合上
 ): Serializable
