@@ -364,10 +364,10 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
         if (type == PopupType.SELLER_FORMAT_TOP) {
             TextView tvFormatTop = getView().findViewById(R.id.tv_format_top);
 
-            if (extra == null) {
+            if (extra == null||id<0) {
                 formatTop = 0;
                 formatTopIndex = 0;
-                tvFormatBottom.setText("請選擇");
+                tvFormatTop.setText("請選擇");
 
             } else {
                 tvFormatTop.setText(((Format) extra).getFormatName());

@@ -102,6 +102,8 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
             if (showUncheckedIndicator) {
                 viewHolder.checkedImage.setVisibility(View.VISIBLE);
                 viewHolder.checkedImage.setImageResource(R.drawable.icon_cart_item_unchecked);
+            }else {
+                viewHolder.checkedImage.setVisibility(View.GONE);
             }
 
             if (item.unselectedIconResId != 0) {
