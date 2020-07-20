@@ -112,16 +112,16 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
             }
         });
         sbFreightTemple.setOnClickListener(v -> {
-            boolean checked = sbFreightTemple.isChecked();
-            if (!checked) {
+            if (!sbFreightTemple.isChecked()) {
                 useFixedFreight = false;
+                updateCheckView();
             }
         });
     }
 
     private void updateCheckView() {
-        sbFreightTemple.setChecked(!useFixedFreight);
         sbFixedTemple.setChecked(useFixedFreight);
+        sbFreightTemple.setChecked(!useFixedFreight);
     }
 
     @Override
@@ -137,8 +137,10 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
 
     private void explainData() {
         freightTemplateId = parent.freightTemplateId;
-        if (freightTemplateId > 0) {
-            useFixedFreight = false;
+        useFixedFreight = freightTemplateId <= 0;
+        ToastUtil.info(_mActivity,String.format("%ssd%d",useFixedFreight,freightTemplateId));
+
+        if (!useFixedFreight) {
             onSelected(PopupType.GOODS_FREIGHT_RULE,freightTemplateId,null);
         }
         if (goodsFreight > 0) {
@@ -262,10 +264,8 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
                     return false;
                 }
             } else {
-                if (freightTemplateId <= 0) {
-                    ToastUtil.error(_mActivity, "請選擇運費模板");
-                    return false;
-                }
+                ToastUtil.error(_mActivity, "請選擇運費模板");
+                return false;
             }
             String freightWeightStr = etW.getText()==null?"":etW.getText().toString();
             String freightVolumeStr = etV.getText()==null?"":etV.getText().toString();
@@ -339,7 +339,9 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
             freightRuleIndex = id;
             if (freightList.size() > 0) {
                 freightTemplateId = freightList.get(id).id;
-                tvRule.setText(extra.toString());
+                if (extra != null) {
+                    tvRule.setText(extra.toString());
+                }
             }
         }
     }

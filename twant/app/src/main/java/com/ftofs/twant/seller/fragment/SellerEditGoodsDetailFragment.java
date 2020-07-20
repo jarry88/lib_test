@@ -206,12 +206,13 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
             }
 
             publishGoodsInfo.set("detailVideo", detailVideo);
-            if (formatBottom > 0) {
-                publishGoodsInfo.set("formatBottom", formatBottom);
-            }
-            if (formatTop > 0) {
+            if (formatTop!=null&&formatTop > 0) {
                 publishGoodsInfo.set("formatTop", formatTop);
             }
+            if (formatBottom!=null&&formatBottom > 0) {
+                publishGoodsInfo.set("formatBottom", formatBottom);
+            }
+
 //            goodsMobileBodyVoList
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -317,6 +318,11 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
                         new ListPopup(_mActivity,"底部版式", PopupType.SELLER_FORMAT_BOTTOM, list, formatBottomIndex, this)
                 ).show();
             });
+            if (parent != null) {
+                for (Object o : formatBottomList) {
+
+                }
+            }
         }
         EasyJSONArray formatTopList = data.getArray("formatTopList");
 
@@ -375,6 +381,8 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
                 formatTopIndex = id;
                 formatTop = ((Format) extra).getFormatId();
             }
+            SLog.info("formatTop[%s]",formatTop);
+
         } else if (type == PopupType.SELLER_FORMAT_BOTTOM) {
             TextView tvFormatBottom =getView().findViewById(R.id.tv_format_bottom);
             if (extra == null) {
@@ -386,8 +394,8 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
                 formatBottomIndex = id;
                 formatBottom = ((Format) extra).getFormatId();
                 tvFormatBottom.setText(((Format) extra).getFormatName());
-
             }
+            SLog.info("formatBottom[%s]",formatBottom);
         }
     }
 }

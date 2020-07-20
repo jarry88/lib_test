@@ -205,7 +205,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                             (tariffEnable== Constant.TRUE_INT?"跨城購商品":(isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品")):
                             (isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品"));
 
-                    ((TextView) contentView.findViewById(R.id.tv_goods_freight)).setText(StringUtil.formatFloat(goodsFreight));
+                    ((TextView) contentView.findViewById(R.id.tv_goods_freight)).setText("$ "+StringUtil.formatFloat(goodsFreight));
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
                     ((TextView) contentView.findViewById(R.id.tv_goods_volume)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
                     ((TextView) contentView.findViewById(R.id.tv_goods_participate_bargain)).setText(joinBigSale==1?"是":"否");
