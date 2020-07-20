@@ -1711,7 +1711,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 first = false;
                             }
                             btnShowConform.setVisibility(VISIBLE);
-                            vwSeparator0.setVisibility(View.VISIBLE);
                         }
 
                         // 初始化默認選擇
@@ -1742,6 +1741,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             llFirstCommentContainer.setVisibility(GONE);
                         }
 
+                        vwSeparator0.setVisibility(GONE);
                         rlPriceTag.setVisibility(GONE); //  隱藏價格標籤
                         isDataValid = true;
 

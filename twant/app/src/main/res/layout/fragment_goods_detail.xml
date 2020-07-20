@@ -643,7 +643,6 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:padding="15dp"
-                    android:background="@drawable/border_type_d"
                     android:orientation="vertical">
                     <TextView
                         android:id="@+id/tv_goods_name"
@@ -751,12 +750,22 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/vw_separator_goods_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/ll_goods_name_container"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:background="@color/tw_slight_grey">
+                </View>
+
                 <!-- 拼團列表 -->
                 <LinearLayout
                     android:id="@+id/ll_group_list_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/ll_goods_name_container"
+                    app:layout_constraintTop_toBottomOf="@id/vw_separator_goods_name"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:paddingLeft="@dimen/toolbar_margin_left"
@@ -999,7 +1008,6 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:orientation="vertical"
-                    android:background="@drawable/border_type_d"
                     android:visibility="gone">
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/btn_view_bargain_instruction"
@@ -1177,6 +1185,17 @@
                     </RelativeLayout>
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/vw_separator_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/ll_bargain_container"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:background="@color/tw_slight_grey">
+                </View>
+
+
                 <!-- 優惠券列表 -->
                 <LinearLayout
                     android:id="@+id/ll_coupon_list"
@@ -1184,7 +1203,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/toolbar_margin_left"
                     android:layout_marginEnd="@dimen/toolbar_margin_right"
-                    app:layout_constraintTop_toBottomOf="@id/ll_bargain_container"
+                    app:layout_constraintTop_toBottomOf="@id/vw_separator_3"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:orientation="vertical"
