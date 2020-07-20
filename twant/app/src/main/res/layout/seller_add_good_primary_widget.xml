@@ -114,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="top">
                     <TextView
+                        android:visibility="invisible"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/tw_red"
@@ -200,7 +201,7 @@
                     android:textColor="@color/tw_black"
                     android:textSize="15sp"
                     android:background="@drawable/spinner_border_bg"
-                    android:layout_height="26dp" />
+                    android:layout_height="wrap_content" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

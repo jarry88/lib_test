@@ -1336,6 +1336,7 @@ public class Api {
     /**
      * 【商家】
      * 商品發佈頁
+     * isPublish 商品發佈傳1  商品編輯傳0
      */
     public static final String PATH_SELLER_GOODS_PUBLISH_PAGE = "/member/seller/goods/publish/page";
 

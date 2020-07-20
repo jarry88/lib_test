@@ -729,7 +729,7 @@ public class AddGoodsFragment extends BaseFragment
     }
 
     private void loadDate() {
-        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(),"isPublish",1);
         String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE;
         if (Config.DEVELOPER_MODE) {
             // url = "https://test.snailpad.cn/tmp/3.json";

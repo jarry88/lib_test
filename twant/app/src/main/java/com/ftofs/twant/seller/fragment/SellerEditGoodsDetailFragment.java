@@ -127,7 +127,6 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
             if (!StringUtil.isEmpty(parent.detailVideo)) {
                 etVideos.setText(parent.detailVideo);
             }
-//            storeLabelIdList = parent.storeLabelIdList;
             updateView();
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -194,15 +193,18 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
         if (etVideos.getText() != null) {
             detailVideo = etVideos.getText().toString();
         }
-        if (storeLabelId <=0) {
-            ToastUtil.error(_mActivity,"請選擇店内分類");
-            return false;
-        }
+//        if (storeLabelId <=0) {
+//            ToastUtil.error(_mActivity,"請選擇店内分類");
+//            return false;
+//        }
 
         try{
             publishGoodsInfo.set("commonId", parent.commonId);
             publishGoodsInfo.set("editType", 4);
-            publishGoodsInfo.set("storeLabelIdList", storeLabelIdList);
+            if (storeLabelId >0) {
+                publishGoodsInfo.set("storeLabelIdList", storeLabelIdList);
+            }
+
             publishGoodsInfo.set("detailVideo", detailVideo);
             if (formatBottom > 0) {
                 publishGoodsInfo.set("formatBottom", formatBottom);
@@ -246,7 +248,7 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
     }
 
     private void loadDetailDate() {
-        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(),"isPublish",0);
         String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE;
 
         SLog.info("url[%s], params[%s]", url, params);
@@ -300,7 +302,9 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
         EasyJSONArray formatBottomList = data.getArray("formatBottomList");
 
         if (formatBottomList != null) {
+
             List<ListPopupItem> list = new ArrayList<>();
+            list.add(new ListPopupItem(-1, "取消選擇", null));
             for (Object o : formatBottomList) {
                 Format format = Format.parse(((EasyJSONObject) o));
                 ListPopupItem item = new ListPopupItem(format.getFormatId(),format.getFormatName(),format);
@@ -319,6 +323,7 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
 
         if (formatTopList != null) {
             List<ListPopupItem> list = new ArrayList<>();
+            list.add(new ListPopupItem(-1, "取消選擇", null));
             for (Object o : formatTopList) {
                 Format format = Format.parse(((EasyJSONObject) o));
                 ListPopupItem item = new ListPopupItem(format.getFormatId(),format.getFormatName(),format);
@@ -358,14 +363,31 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
         }
         if (type == PopupType.SELLER_FORMAT_TOP) {
             TextView tvFormatTop = getView().findViewById(R.id.tv_format_top);
-            tvFormatTop.setText(((Format) extra).getFormatName());
-            formatTopIndex = id;
-            formatTop = ((Format) extra).getFormatId();
+
+            if (extra == null) {
+                formatTop = 0;
+                formatTopIndex = 0;
+                tvFormatBottom.setText("請選擇");
+
+            } else {
+                tvFormatTop.setText(((Format) extra).getFormatName());
+
+                formatTopIndex = id;
+                formatTop = ((Format) extra).getFormatId();
+            }
         } else if (type == PopupType.SELLER_FORMAT_BOTTOM) {
             TextView tvFormatBottom =getView().findViewById(R.id.tv_format_bottom);
-            tvFormatBottom.setText(((Format) extra).getFormatName());
-            formatBottomIndex = id;
-            formatBottom = ((Format) extra).getFormatId();
+            if (extra == null) {
+                formatBottom = 0;
+                formatBottomIndex = 0;
+                tvFormatBottom.setText("請選擇");
+
+            } else {
+                formatBottomIndex = id;
+                formatBottom = ((Format) extra).getFormatId();
+                tvFormatBottom.setText(((Format) extra).getFormatName());
+
+            }
         }
     }
 }

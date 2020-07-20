@@ -186,7 +186,7 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
 //            onSelected(PopupType.GOODS_UNITY,unityIndex,parent.unitList.get(unityIndex));
             return;
         }
-        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(),"isPublish",0);
         String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE;
 
         SLog.info("url[%s], params[%s]", url, params);
