@@ -1342,7 +1342,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
+                    bargainOpenId = responseObj.getInt("datas.openId");
 
+                    ToastUtil.success(_mActivity, "砍價成功");
+                    loadBargainGoods(true);
+
+                    // 跳轉到砍價詳情頁
+                    tvGoodsName.postDelayed(() -> Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, currGoodsId)), 800);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -1352,13 +1358,117 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     private void loadData() {
         if (bargainId != Constant.INVALID_BARGAIN_ID) {
-            loadBargainGoods();
+            loadBargainGoods(false);
         } else {
             loadGoodsDetail();
         }
     }
 
-    private void loadBargainGoods() {
+    /**
+     * 【砍價】加載商品詳情
+     */
+    private void loadBargainGoodsDetail() {
+        View contentView = getView();
+        if (contentView == null) {
+            return;
+        }
+
+        String token = User.getToken();
+
+        String path = Api.PATH_GOODS_DETAIL + "/" + commonId;
+        EasyJSONObject params = EasyJSONObject.generate();
+        if (!StringUtil.isEmpty(token)) {
+            try {
+                params.set("token", token);
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+        }
+
+        SLog.info("path[%s], params[%s]", path, params);
+        Api.postUI(path, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                try {
+                    // 產品詳情圖片
+                    int imageIndex = 0;
+                    EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.goodsMobileBodyVoList");
+                    for (Object object : easyJSONArray) {
+                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+                        GoodsMobileBodyVo goodsMobileBodyVo = new GoodsMobileBodyVo();
+                        goodsMobileBodyVo.setType(easyJSONObject.getSafeString("type"));
+                        goodsMobileBodyVo.setValue(easyJSONObject.getSafeString("value"));
+                        goodsMobileBodyVo.setWidth(easyJSONObject.getInt("width"));
+                        goodsMobileBodyVo.setHeight(easyJSONObject.getInt("height"));
+
+                        if (goodsMobileBodyVo.getType().equals("image")) {
+                            String imageUrl = StringUtil.normalizeImageUrl(easyJSONObject.getSafeString("value"));
+
+                            DataImageView imageView = new DataImageView(_mActivity);
+                            imageView.setCustomData(imageIndex);
+                            imageView.setAdjustViewBounds(true);
+
+                            imageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    SLog.info("imageUrl[%s],v[%s]", imageUrl,v instanceof DataImageView);
+                                    int currImageIndex = (int) ((DataImageView) v).getCustomData();
+                                    Util.startFragment(ImageFragment.newInstance(currImageIndex, goodsDetailImageList));
+
+                                }
+                            });
+                            // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
+                            // 參考 Glide加载图片模糊问题   https://blog.csdn.net/sinat_26710701/article/details/89384579
+
+                            String smallImageUrl = StringUtil.normalizeImageUrl(imageUrl, "?x-oss-process=image/resize,w_800"); // 限定宽度，防止加载图片OOM
+                            SLog.info("smallImageUrl[%s]", smallImageUrl);
+                            Glide.with(llGoodsDetailImageContainer).load(smallImageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
+                            llGoodsDetailImageContainer.addView(imageView);
+
+                            goodsDetailImageList.add(StringUtil.normalizeImageUrl(imageUrl));
+
+                            imageIndex++;
+                        } else if (goodsMobileBodyVo.getType().equals("text")) {
+                            TextView textView = new TextView(_mActivity);
+                            textView.setText(goodsMobileBodyVo.getValue());
+                            textView.setTextColor(getResources().getColor(R.color.tw_black, null));
+                            textView.setTextSize(16);
+                            // textView.setGravity(Gravity.CENTER);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            layoutParams.leftMargin = Util.dip2px(_mActivity, 20);
+                            layoutParams.rightMargin = layoutParams.leftMargin;
+                            layoutParams.topMargin = Util.dip2px(_mActivity, 10);
+                            layoutParams.bottomMargin = layoutParams.topMargin;
+                            textView.setLayoutParams(layoutParams);
+
+                            llGoodsDetailImageContainer.addView(textView);
+                        }
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 加載砍價商品商品詳情
+     * @param isReload  是否重新加載
+     */
+    private void loadBargainGoods(boolean isReload) {
         if (bargainId == Constant.INVALID_BARGAIN_ID) {
             return;
         }
@@ -1452,6 +1562,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             TextView tvCurrentBargainPrice = contentView.findViewById(R.id.tv_current_bargain_price);
                             double openPrice = bargainOpen.getDouble("openPrice");
                             tvCurrentBargainPrice.setText(StringUtil.formatPrice(_mActivity, openPrice, 0));
+                        }
+
+                        if (isReload) { // 如果是重新加載，後面的不用處理
+                            return;
                         }
 
                         goodsName = goodsCommon.getSafeString("goodsName");
@@ -1597,7 +1711,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 first = false;
                             }
                             btnShowConform.setVisibility(VISIBLE);
-                            vwSeparator0.setVisibility(View.VISIBLE);
                         }
 
                         // 初始化默認選擇
@@ -1628,12 +1741,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             llFirstCommentContainer.setVisibility(GONE);
                         }
 
+                        vwSeparator0.setVisibility(GONE);
                         rlPriceTag.setVisibility(GONE); //  隱藏價格標籤
                         isDataValid = true;
 
                         startCountDown();
 
                         loadCouponList();
+                        loadBargainGoodsDetail();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }

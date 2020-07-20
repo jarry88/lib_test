@@ -79,6 +79,9 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 BargainItem bargainItem = bargainItemList.get(position);
+                if (bargainItem.itemType == Constant.ITEM_TYPE_BANNER) {
+                    return;
+                }
                 Util.startFragment(GoodsDetailFragment.newInstance(bargainItem.commonId, bargainItem.goodsId, bargainItem.bargainId));
             }
         });
