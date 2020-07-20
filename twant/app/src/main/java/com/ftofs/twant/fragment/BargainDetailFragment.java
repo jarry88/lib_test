@@ -172,19 +172,28 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        View contentView = getView();
+        if (contentView == null) {
+            return;
+        }
+
         int id = v.getId();
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_invite_friend) {
+            if (isOwner != Constant.TRUE_INT) { // 我也要買
+                ((TextView) v).setText("我也要買");
+                return;
+            }
+
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new SharePopup(_mActivity, shareUrl, shareTitle, shareDescription, shareCoverUrl, null))
                     .show();
-
         } else if (id == R.id.btn_buy_now) {
-            if (isOwner != Constant.TRUE_INT) {
-                ToastUtil.error(_mActivity, "只有砍價發起人才有購買資格");
+            if (isOwner != Constant.TRUE_INT) { // 幫他砍價
+                ((TextView) contentView.findViewById(R.id.btn_buy_now_text)).setText("幫他砍價");
                 return;
             }
 

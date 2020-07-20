@@ -166,13 +166,22 @@ public class SplashActivity extends BaseActivity {
                     } else if ("activityindex".equals(host) || "home".equals(host)) { // 7 購物專場 8 商城首页
                         launchAppParams = EasyJSONObject.generate(
                                 "host", host);
+                    } else if ("bargain".equals(host)) {
+                        String bargainId = uri.getQueryParameter("bargainId");
+                        String commonId = uri.getQueryParameter("commonId");
+                        String goodsId = uri.getQueryParameter("goodsId");
+                        launchAppParams = EasyJSONObject.generate(
+                                "host", host,
+                                "bargainId", Integer.valueOf(bargainId),
+                                "commonId", Integer.valueOf(commonId),
+                                "goodsId", Integer.valueOf(goodsId)
+                        );
                     }
 
                     if (launchAppParams != null) {
                         SLog.info("launchAppParams[%s]", launchAppParams.toString());
                         Hawk.put(SPField.FIELD_LAUNCH_APP_PARAMS, launchAppParams.toString());
                     }
-
                 }
             }
         } else {

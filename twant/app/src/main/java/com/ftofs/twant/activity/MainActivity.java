@@ -43,6 +43,7 @@ import com.ftofs.twant.entity.Location;
 import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
+import com.ftofs.twant.fragment.BargainDetailFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.HomeFragment;
@@ -749,6 +750,10 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 } else { // 8 商城首页
                     // 什么也不需要做
                 }
+            } else if ("bargain".equals(host)) {
+                int bargainId = params.getInt("bargainId");
+                int goodsId = params.getInt("goodsId");
+                Util.startFragment(BargainDetailFragment.newInstance(bargainId, goodsId));
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
