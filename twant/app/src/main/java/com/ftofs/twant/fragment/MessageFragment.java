@@ -547,7 +547,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private  void comO1O2() {
-
+    //需要改写为list形式
         Comparator<ChatConversation> UnreadCount = Comparator.comparing(ChatConversation::getUnreadCount).reversed();//按照降序
         Comparator<ChatConversation> byLastTimeStamp = Comparator.comparing(ChatConversation::getTimeStamp).reversed();
         Collections.sort(chatConversationList, UnreadCount.thenComparing(byLastTimeStamp));

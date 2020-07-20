@@ -139,8 +139,6 @@ dependencies {
     implementation 'com.alibaba.android:tangram:3.3.6@aar'
 
     // we added rxjava in latest version, so need compile rxjava
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation('com.alibaba.android:virtualview:1.4.6@aar') {
         transitive = true
     }
@@ -266,7 +264,6 @@ dependencies {
 
 
     // rxandroid
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
 
 //添加HttpLoggingInterceptor进行调试
 //3.9.0版本是使用Java写的，从4.0.0后改用的Kotlin写的
@@ -277,9 +274,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     api rootProject.ext.dependencies["smartRefreshLayout"] // 刷新框架
     api rootProject.ext.dependencies["rxjava"] // rxjava2
-    api rootProject.ext.dependencies["adapter-rxjava2"] // rxjava2
-    api rootProject.ext.dependencies["rxandroid"] // rxjava2
-    implementation "androidx.room:room-runtime:2.2.5"
+    api rootProject.ext.dependencies["rxandroid"]
+    api rootProject.ext.dependencies["adapter-rxjava2"]
+    api rootProject.ext.dependencies["room-runtime"]
+    api rootProject.ext.dependencies["treerecyclerview"]
     kapt "android.arch.persistence.room:compiler:2.2.3"     // java
     annotationProcessor "androidx.room:room-compiler:2.2.5"
     implementation 'com.kaopiz:kprogresshud:1.2.0'

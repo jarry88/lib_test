@@ -18,7 +18,7 @@ import androidx.lifecycle.MutableLiveData
  */
 class StateLiveData<T> : MutableLiveData<T>() {
     enum class StateEnum {
-        Idle, Loading, Success, Error, NoData, NoMoreData, NoNet
+        Idle, Loading, Success, Error, NoData, NoMoreData, NoNet,NestedScrollEnable
     }
 
     // 封装的枚举,用MutableLiveData可以被view观察;

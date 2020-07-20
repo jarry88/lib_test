@@ -153,7 +153,6 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     ClipboardManager.OnPrimaryClipChangedListener mOnPrimaryClipChangedListener;
     CouponWordDialog couponWordDialog;
     boolean isResumed = false;
-
     // TODO: 2019/8/19 處理HandlerLeak
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {

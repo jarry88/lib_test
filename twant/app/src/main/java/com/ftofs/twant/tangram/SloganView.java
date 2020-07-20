@@ -21,14 +21,11 @@ import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.fragment.BargainListFragment;
 import com.ftofs.twant.fragment.GroupInfoListFragment;
-import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
-
-import java.util.List;
 
 public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
     Context context;

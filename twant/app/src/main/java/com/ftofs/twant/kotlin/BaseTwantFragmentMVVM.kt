@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ftofs.twant.fragment.BaseFragment
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.base.IBaseViewMVVM
 import com.wzq.mvvmsmart.widget.EmptyViewHelper
@@ -181,9 +182,4 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
         emptyViewHelper?.loadPlaceLayout(target, text, imgId, reload)
     }
 
-    override fun onBackPressedSupport(): Boolean {
-        SLog.info("onBackPressedSupport")
-        hideSoftInputPop()
-        return true
-    }
 }

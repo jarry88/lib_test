@@ -90,6 +90,7 @@ class FeatureGoodViewModel(application: Application) : BaseViewModel(application
      */
     fun deleteItem(newsData: SellerGoodsItem?) {
         //点击确定，在 observableList 绑定中删除，界面立即刷新
+
         KLog.e("调用了删除")
         KLog.e("size" + liveData.value?.size)
         val newsDataList = liveData.value

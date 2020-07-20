@@ -129,7 +129,11 @@ public class StringUtil {
      */
     public static String formatPrice(Context context, double price, int spaceCount,int net2) {
         if (isEmpty(currencyTypeSign)) {
-            currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
+            if (context == null) {
+                currencyTypeSign = "$";
+            } else {
+                currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
+            }
         }
 
         StringBuilder sb = new StringBuilder(currencyTypeSign);
