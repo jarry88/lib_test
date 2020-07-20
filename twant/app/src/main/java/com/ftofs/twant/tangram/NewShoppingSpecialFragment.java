@@ -504,6 +504,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
     @Override
     public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
         hideSoftInputPop();
         return true;
     }

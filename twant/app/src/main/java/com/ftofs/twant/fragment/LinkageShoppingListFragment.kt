@@ -20,6 +20,7 @@ import com.ftofs.twant.entity.StoreItem
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.LinkageShoppingListModel
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.UiUtil
 import com.ftofs.twant.util.Util
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -29,22 +30,26 @@ import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.LoadingUtil
 import java.util.*
 
-class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, LinkageShoppingListModel>(){
+class LinkageShoppingListFragment : BaseTwantFragmentMVVM<SimpleRvListBinding, LinkageShoppingListModel>() {
 
     //    private var parent by lazy { arguments?.get("parent") }
     private lateinit var mAdapter: ShoppingStoreListAdapter
+    lateinit var parent: NewShoppingSpecialFragment
+
     private var loadingUtil: LoadingUtil? = null
-    private val  zoneId by  lazy { arguments?.getInt("zoneId") }
-    companion object{
-        fun newInstance(zoneId:Int): LinkageShoppingListFragment {
+    private val zoneId by lazy { arguments?.getInt("zoneId") }
+
+    companion object {
+        fun newInstance(zoneId: Int): LinkageShoppingListFragment {
             val args = Bundle()
             val fragment = LinkageShoppingListFragment()
-            args.putInt("zoneId",zoneId)
+            args.putInt("zoneId", zoneId)
 //            args.put("parent",parent)
             fragment.arguments = args
             return fragment
         }
     }
+
     @SuppressLint("SourceLockedOrientationActivity")
     override fun initParam() {
         //获取列表传入的实体
@@ -52,15 +57,17 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
     }
-    fun getViewModel():LinkageShoppingListModel{
+
+    fun getViewModel(): LinkageShoppingListModel {
         return viewModel
     }
+
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.simple_rv_list
     }
 
     override fun initVariableId(): Int {
-       return BR.viewModel
+        return BR.viewModel
     }
 
     override fun initData() {
@@ -70,14 +77,14 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
     }
 
     private fun initRecyclerView() {
-        val item=StoreItem()
+        val item = StoreItem()
         mAdapter = ShoppingStoreListAdapter(R.layout.shopping_store_view, arrayListOf())
         binding.adapter = mAdapter
 
         mAdapter.setOnItemChildClickListener(BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>?, view1: View, position: Int ->
             val id = view1.id
             if (id == R.id.goods_image_left_container || id == R.id.goods_image_middle_container || id == R.id.goods_image_right_container) {
-                var storeItem= adapter?.data?.get(position) as StoreItem
+                var storeItem = adapter?.data?.get(position) as StoreItem
                 storeItem?.let {
                     it.zoneGoodsVoList?.let {
 
@@ -86,7 +93,7 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
                         } else if (id == R.id.goods_image_left_container) {
                             it.get(1).commonId
                         } else {
-                           it.get(2).commonId
+                            it.get(2).commonId
                         }
                         Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0))
                     }
@@ -105,14 +112,14 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
         }
 
         parent.let {
-            binding.rvSimple.isNestedScrollingEnabled=false
+            binding.rvSimple.isNestedScrollingEnabled = false
             binding.rvSimple.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     SLog.info("子頁面滾動監聽")
                     when (newState) {
                         RecyclerView.SCROLL_STATE_DRAGGING -> parent.onCbStartNestedScroll()
-                        RecyclerView.SCROLL_STATE_IDLE->parent.onCbStopNestedScroll()
+                        RecyclerView.SCROLL_STATE_IDLE -> parent.onCbStopNestedScroll()
                     }
                 }
             })
@@ -124,12 +131,12 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
         super.initViewObservable()
 
         viewModel.nestedScrollingEnable.observe(this, Observer {
-            binding.rvSimple.isNestedScrollingEnabled=it
+            binding.rvSimple.isNestedScrollingEnabled = it
         })
 
 
 
-        viewModel.storesList.observe(this, Observer { storesList:List<StoreItem>->
+        viewModel.storesList.observe(this, Observer { storesList: List<StoreItem> ->
             if (storesList.isEmpty()) {
                 SLog.info("空")
                 return@Observer
@@ -140,12 +147,12 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
             viewModel.pageNum = 1
             zoneId?.let {
                 viewModel.doGetStoreItems(it)
-            }?:binding.refreshLayout.finishRefresh()
+            } ?: binding.refreshLayout.finishRefresh()
             binding.rvSimple.scrollToPosition(0)
 
         }
         //上拉加载更多
-        binding.refreshLayout.setOnLoadMoreListener{ refreshLayout: RefreshLayout? ->
+        binding.refreshLayout.setOnLoadMoreListener { refreshLayout: RefreshLayout? ->
             //            loadMoreTestData();   // 模拟加载更多数据
             if (viewModel.hasMore) {
                 viewModel.pageNum++//請求到數據后，如果獲得list為空，會在vm中將pagenum-1
@@ -192,6 +199,7 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
             }
         })
     }
+
     // 无数据默认页,点击请求网络
     override fun onContentReload() {
         super.onContentReload()
@@ -219,13 +227,12 @@ class LinkageShoppingListFragment :BaseTwantFragmentMVVM<SimpleRvListBinding, Li
     }
 
 
-
     override fun onDestroy() {
         super.onDestroy()
         loadingUtil?.hideLoading()
     }
 
     fun scrollToTop() {
-        UiUtil.moveToMiddle(binding.rvSimple,0)
+        UiUtil.moveToMiddle(binding.rvSimple, 0)
     }
 }

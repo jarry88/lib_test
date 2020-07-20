@@ -19,7 +19,6 @@ import com.wzq.mvvmsmart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> : BaseFragment(), IBaseViewMVVM {
-    lateinit var parent: NewShoppingSpecialFragment
     protected lateinit var binding: V
     protected lateinit var viewModel: VM
     private var emptyViewHelper: EmptyViewHelper? = null
@@ -183,9 +182,4 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
         emptyViewHelper?.loadPlaceLayout(target, text, imgId, reload)
     }
 
-    override fun onBackPressedSupport(): Boolean {
-        SLog.info("onBackPressedSupport")
-        hideSoftInputPop()
-        return true
-    }
 }

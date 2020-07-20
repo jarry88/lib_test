@@ -26,6 +26,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener
 import com.ftofs.twant.interfaces.SimpleCallback
 import com.ftofs.twant.kotlin.*
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.UiUtil
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
@@ -37,6 +38,8 @@ import java.util.*
 class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Binding, LinkageContainerViewModel2>(){
 
     //    private var parent by lazy { arguments?.get("parent") }
+    open lateinit var parent:NewShoppingSpecialFragment
+
     private lateinit var mAdapter: BuyerGoodsListAdapter
     private lateinit var mTreeAdapter: TreeRecyclerAdapter
     private lateinit var mCategoryAdapter: ZoneCategoryListAdapter
@@ -270,7 +273,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
                     }
                 }
     }
-
 
 
     override fun onDestroy() {
