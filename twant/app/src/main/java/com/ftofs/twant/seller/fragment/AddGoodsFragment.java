@@ -388,12 +388,15 @@ public class AddGoodsFragment extends BaseFragment
         tvBeginDate.setOnClickListener((view1)->{
             isBiginDate = true;
             if (pvTime != null) {
+                pvTime.setTitleText("開始時間");
                 pvTime.show();
             }
         });
         tvEndDate.setOnClickListener((view1)->{
             isBiginDate = false;
             if (pvTime != null) {
+                pvTime.setTitleText("結束時間");
+
                 pvTime.show();
             }
         });
@@ -417,9 +420,8 @@ public class AddGoodsFragment extends BaseFragment
             }
         });
         llInstancePublish.performClick();
-//        goodsState
-//                joinBigSale
         sbJoinActivity = view.findViewById(R.id.sb_join_activity);
+        sbJoinActivity.setChecked(true);//默认参与活动
         initTimePicker();
         return view;
     }
@@ -455,7 +457,6 @@ public class AddGoodsFragment extends BaseFragment
                 .setSubmitText("確認")//确认按钮文字
 //                .setContentSize(18)//滚轮文字大小
                 .setTitleSize(20)//标题文字大小
-                .setTitleText("Title")//标题文字
                 .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
                 .isCyclic(true)//是否循环滚动
                 .setTitleColor(Color.BLACK)//标题文字颜色
@@ -1359,10 +1360,10 @@ public class AddGoodsFragment extends BaseFragment
         }
         EditText etJingle=primaryView.findViewById(R.id.et_add_good_description);
         String jingle =etJingle.getText().toString();
-        if (StringUtil.isEmpty(jingle)) {
-            ToastUtil.error(_mActivity,"請填寫商品賣點");
-            return false;
-        }
+//        if (StringUtil.isEmpty(jingle)) {
+//            ToastUtil.error(_mActivity,"請填寫商品賣點");
+//            return false;
+//        }
         try {
             publishGoodsInfo.set("goodsName", goodsName);
             publishGoodsInfo.set("categoryId", categoryId);

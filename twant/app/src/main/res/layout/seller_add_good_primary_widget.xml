@@ -169,7 +169,7 @@
                     android:id="@+id/tv_add_good_logo"
                     android:background="@drawable/spinner_border_bg"
                     android:layout_width="match_parent"
-                    android:layout_height="26dp"
+                    android:layout_height="wrap_content"
                     android:hint="請選擇品牌"
                     android:layout_marginTop="@dimen/dp_4"
                     android:textSize="15sp"
