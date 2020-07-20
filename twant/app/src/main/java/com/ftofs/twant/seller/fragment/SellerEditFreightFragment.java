@@ -52,7 +52,8 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
     private List<ListPopupItem> freightList=new ArrayList<>();
     private String freightTitle;
     private double goodsFreight;
-    private FixedEditText  fetFreight;
+//    private FixedEditText  fetFreight;
+    private EditText  fetFreight;
     private ScaledButton sbFreightTemple;
     private ScaledButton sbFixedTemple;
     private EditText etW;
@@ -97,7 +98,6 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.tv_add_freight_rule, this);
         fetFreight = view.findViewById(R.id.et_add_fixed_freight);
-        fetFreight.setFixedText("$ ");
 //        ScaledButton sbFixedFreight
 
         sbFreightTemple = view.findViewById(R.id.sb_freight_temple);
@@ -137,14 +137,13 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
 
     private void explainData() {
         freightTemplateId = parent.freightTemplateId;
+        goodsFreight = parent.goodsFreight;
         useFixedFreight = freightTemplateId <= 0;
-        ToastUtil.info(_mActivity,String.format("%ssd%d",useFixedFreight,freightTemplateId));
 
         if (!useFixedFreight) {
-            onSelected(PopupType.GOODS_FREIGHT_RULE,freightTemplateId,null);
-        }
-        if (goodsFreight > 0) {
-            fetFreight.setFixedText(String.valueOf(goodsFreight));
+            onSelected(PopupType.GOODS_FREIGHT_RULE, freightTemplateId, null);
+        } else{
+            fetFreight.setText(String.valueOf(goodsFreight));
         }
         if (parent.freightVolume > 0) {
             etV.setText(String.valueOf(parent.freightVolume));
@@ -185,7 +184,9 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
                         return;
                     }
                     updateFreightView(data);
-                    onSelected(PopupType.GOODS_FREIGHT_RULE,freightTemplateId,null);
+                    if (!useFixedFreight) {
+                        onSelected(PopupType.GOODS_FREIGHT_RULE,freightTemplateId,null);
+                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -264,8 +265,10 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
                     return false;
                 }
             } else {
-                ToastUtil.error(_mActivity, "請選擇運費模板");
-                return false;
+                if (freightTemplateId<=0) {
+                    ToastUtil.error(_mActivity, "請選擇運費模板");
+                    return false;
+                }
             }
             String freightWeightStr = etW.getText()==null?"":etW.getText().toString();
             String freightVolumeStr = etV.getText()==null?"":etV.getText().toString();

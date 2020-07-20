@@ -52,9 +52,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin12"
                     android:textSize="@dimen/sp_14"
+                    android:layout_marginEnd="8dp"
                     android:text="使用固定運費" />
 
                 <com.ftofs.twant.widget.FixedEditText
+                    android:visibility="gone"
                     android:layout_width="120dp"
                     android:paddingStart="@dimen/dp_4"
                     android:layout_height="match_parent"
@@ -63,8 +65,30 @@
                     android:hint="0"
                     android:background="@drawable/seller_edit_text_bg"
                     android:layout_marginStart="@dimen/margin8"
-                    android:inputType="numberDecimal"
-                    android:id="@+id/et_add_fixed_freight" />
+                    android:inputType="number" />
+                <LinearLayout
+                    android:layout_width="@dimen/dp_120"
+                    android:paddingStart="@dimen/dp_4"
+
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/seller_edit_text_bg">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:textSize="15sp"
+                        android:text="$"/>
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:background="@null"
+                        android:singleLine="true"
+                        android:textSize="13sp"
+                        android:hint="0"
+                        android:layout_marginStart="2dp"
+                        android:inputType="numberDecimal"
+                        android:id="@+id/et_add_fixed_freight" />
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:padding="@dimen/dp_4"
@@ -88,7 +112,7 @@
                     android:text="使用物流規則" />
 
                 <TextView
-                    android:layout_width="120dp"
+                    android:layout_width="145dp"
                     android:layout_height="match_parent"
                     android:singleLine="true"
                     android:hint="請選擇物流規則"
