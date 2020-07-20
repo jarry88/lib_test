@@ -17,6 +17,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.BargainHelpListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.BargainHelpListItem;
 import com.ftofs.twant.entity.BargainItem;
@@ -148,7 +149,7 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
 
                         BargainHelpListItem item = new BargainHelpListItem();
                         item.avatar = bargainOpenLog.getSafeString("avatar");
-                        item.nickname = bargainOpenLog.getSafeString("memberName");
+                        item.nickname = bargainOpenLog.getSafeString("nickName");
                         item.createTime = bargainOpenLog.getSafeString("createTime");
                         item.bargainPrice = bargainOpenLog.getDouble("bargainPrice");
                         bargainHelpList.add(item);
@@ -202,7 +203,7 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
             SLog.info("buyData[%s]", buyData);
             Util.startFragment(ConfirmOrderFragment.newInstance(Constant.FALSE_INT, buyData, Constant.FALSE_INT, Constant.INVALID_GO_ID, openId));
         } else if (id == R.id.btn_view_bargain_instruction) {
-            Util.startFragment(H5GameFragment.newInstance(Constant.BARGAIN_INSTRUCTION_URL, null));
+            Util.startFragment(H5GameFragment.newInstance(Config.MOBILE_WEB_BASE_URL + Constant.BARGAIN_INSTRUCTION_URL, null));
         }
     }
 

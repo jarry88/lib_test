@@ -365,5 +365,5 @@ public class Constant {
     // 無效的砍價OpenId
     public static final int INVALID_BARGAIN_OPEN_ID = -1;
 
-    public static final String BARGAIN_INSTRUCTION_URL = "https://www.twant.com/mobile/bargain/introduction";
+    public static final String BARGAIN_INSTRUCTION_URL = "/mobile/bargain/introduction";
 }

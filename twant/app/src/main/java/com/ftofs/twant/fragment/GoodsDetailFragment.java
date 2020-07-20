@@ -1016,7 +1016,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, currGoodsId));
                 break;
             case R.id.btn_view_bargain_instruction:
-                Util.startFragment(H5GameFragment.newInstance(Constant.BARGAIN_INSTRUCTION_URL, null));
+                Util.startFragment(H5GameFragment.newInstance(Config.MOBILE_WEB_BASE_URL + Constant.BARGAIN_INSTRUCTION_URL, null));
                 break;
             default:
                 break;

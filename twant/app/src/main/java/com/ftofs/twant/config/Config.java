@@ -63,6 +63,10 @@ public class Config {
             (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29")
             : (USE_F2 ? (USE_F1 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com");
 
+    public static String MOBILE_WEB_BASE_URL = DEVELOPER_MODE ?
+            (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29")
+            : "https://www.twant.com";
+
 
     /**
      * 大豐支付請求的服務器URL
@@ -150,6 +154,10 @@ public class Config {
         WEB_BASE_URL = DEVELOPER_MODE ?
                 (USE_28 ? "http://192.168.5.28/web" : env == ENV_29 ? "https://192.168.5.29/web" : "https://192.168.5.229/web")
                 : (USE_F2 ? "https://www.twant.com/web" : "https://www.twant.com/web");
+
+        MOBILE_WEB_BASE_URL = DEVELOPER_MODE ?
+                (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29")
+                : "https://www.twant.com";
 
 
         TAIFUNG_PAY_SERVER_URL = DEVELOPER_MODE ?
