@@ -630,6 +630,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         btnQuickJoinGroup2.setOnClickListener(this);
         Util.setOnClickListener(view, R.id.btn_view_bargain_instruction, this);
 
+        Util.setOnClickListener(view, R.id.btn_bargain_customer_service, this);
+        Util.setOnClickListener(view, R.id.btn_bargain_cart, this);
+
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
         rvStoreFriendsList.setLayoutManager(layoutManager);
@@ -695,6 +698,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void hideFloatButton() {
+        if (bargainId != Constant.INVALID_BARGAIN_ID) { // 砍價功能隱藏浮動按鈕
+            return;
+        }
         if (showFloatButton) {
             SLog.info("調用隱藏");
             showFloatButton = false;
@@ -711,6 +717,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void showFloatButton() {
+        if (bargainId != Constant.INVALID_BARGAIN_ID) { // 砍價功能隱藏浮動按鈕
+            return;
+        }
         if (!showFloatButton) {
             if (isScrolling) {
                 return;
@@ -817,6 +826,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     Util.showLoginFragment();
                 }
                 break;
+            case R.id.btn_bargain_cart:
             case R.id.btn_goto_cart:
                 if (userId > 0) {
                     Util.startFragment(CartFragment.newInstance(true));
@@ -969,6 +979,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_goods_comment:
                 Util.startFragment(CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS));
                 break;
+            case R.id.btn_bargain_customer_service:
             case R.id.btn_bottom_bar_customer_service:
                 showStoreCustomerService();
                 break;
@@ -1289,6 +1300,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+
     /**
      * 砍一刀
      */
@@ -1347,11 +1359,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             return;
         }
 
+        llFloatButton.setVisibility(GONE);
+
         // 隱藏【規格】、【送至】、【說說】、【城友】
         contentView.findViewById(R.id.rl_spec_container).setVisibility(GONE);
         contentView.findViewById(R.id.rl_send_to_container).setVisibility(GONE);
         contentView.findViewById(R.id.ll_comment_container).setVisibility(GONE);
         contentView.findViewById(R.id.rl_shop_friend_container).setVisibility(GONE);
+        contentView.findViewById(R.id.cl_extra_info_container).setVisibility(GONE);
+        contentView.findViewById(R.id.ll_normal_bottom_bar_container).setVisibility(GONE);
+        contentView.findViewById(R.id.ll_bargain_bottom_bar_container).setVisibility(VISIBLE);
 
         contentView.findViewById(R.id.fl_bargain_label).setVisibility(VISIBLE);
         contentView.findViewById(R.id.ll_bargain_state_container).setVisibility(VISIBLE);
@@ -1603,6 +1620,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         isDataValid = true;
 
                         startCountDown();
+
+                        loadCouponList();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }

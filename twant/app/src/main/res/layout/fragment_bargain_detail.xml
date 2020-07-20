@@ -195,7 +195,7 @@
                         app:layout_constraintTop_toBottomOf="@id/ic_bargain_status_finish"
                         app:layout_constraintLeft_toLeftOf="@id/ic_bargain_status_finish"
                         app:layout_constraintRight_toRightOf="@id/ic_bargain_status_finish"
-                        android:text="3.砍價成功底價購買"
+                        android:text="3.砍價成功低價購買"
                         android:textSize="11sp"
                         android:textColor="@color/tw_medium_grey">
                     </TextView>

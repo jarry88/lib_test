@@ -32,7 +32,7 @@ public class StoreServiceStaffListAdapter extends BaseQuickAdapter<CustomerServi
         if (StringUtil.useDefaultAvatar(item.avatar)) {
             Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgStaffAvatar);
         } else {
-            Glide.with(mContext).load(item.avatar).centerCrop().into(imgStaffAvatar);
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatar)).centerCrop().into(imgStaffAvatar);
         }
 
         helper.setText(R.id.tv_staff_name, item.staffName);

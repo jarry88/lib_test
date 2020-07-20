@@ -682,6 +682,7 @@
                     </RelativeLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_extra_info_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="28dp">
@@ -1093,7 +1094,7 @@
                             app:layout_constraintTop_toBottomOf="@id/ic_bargain_status_finish"
                             app:layout_constraintLeft_toLeftOf="@id/ic_bargain_status_finish"
                             app:layout_constraintRight_toRightOf="@id/ic_bargain_status_finish"
-                            android:text="3.砍價成功底價購買"
+                            android:text="3.砍價成功低價購買"
                             android:textSize="11sp"
                             android:textColor="@color/tw_medium_grey">
 
@@ -1832,134 +1833,194 @@
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:layout_gravity="center_vertical">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
             <LinearLayout
-                android:id="@+id/btn_bottom_bar_shop"
+                android:id="@+id/ll_bargain_bottom_bar_container"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:scaleType="fitXY"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_store_good"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/tw_black"
-                    android:textSize="11sp"
-                    android:text="@string/text_store"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_bottom_bar_customer_service"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_goods_customer"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/tw_black"
-                    android:textSize="11sp"
-                    android:text="@string/text_customer_service"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_bottom_bar_follow"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:id="@+id/icon_follow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    />
-                <TextView
-                    android:id="@+id/tv_follow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/tw_black"
-                    android:textSize="11sp"
-                    android:text=""
-                    />
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="210dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <!-- 有庫存時顯示這個 -->
-            <LinearLayout
-                android:id="@+id/ll_storage_ok_container"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:visibility="visible">
-                <TextView
-                    android:id="@+id/btn_add_to_cart"
+                android:visibility="gone">
+                <RelativeLayout
+                    android:id="@+id/btn_bargain_customer_service"
+                    android:layout_width="54dp"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_bargain_customer_service">
+                        </ImageView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="客服"
+                            android:textSize="11sp"
+                            android:textColor="@color/tw_black">
+
+                        </TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/btn_bargain_cart"
+                    android:layout_width="54dp"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_bargain_cart">
+                        </ImageView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="購物車"
+                            android:textSize="11sp"
+                            android:textColor="@color/tw_black">
+
+                        </TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_normal_bottom_bar_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:id="@+id/btn_bottom_bar_shop"
                     android:layout_width="0dp"
-                    android:layout_height="39dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/btn_add_to_cart_bg"
-                    android:gravity="center"
-                    android:textSize="14sp"
-                    android:textColor="#FFF"
-                    android:text="@string/text_want_to_add_to_cart"
-                    />
-                <TextView
-                    android:id="@+id/btn_buy"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/icon_store_good"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/tw_black"
+                        android:textSize="11sp"
+                        android:text="@string/text_store"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_bottom_bar_customer_service"
                     android:layout_width="0dp"
-                    android:layout_height="39dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/blue_button_106_39"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/icon_goods_customer"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/tw_black"
+                        android:textSize="11sp"
+                        android:text="@string/text_customer_service"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_bottom_bar_follow"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/icon_follow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        />
+                    <TextView
+                        android:id="@+id/tv_follow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/tw_black"
+                        android:textSize="11sp"
+                        android:text=""
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="210dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <!-- 有庫存時顯示這個 -->
+                <LinearLayout
+                    android:id="@+id/ll_storage_ok_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+                    <TextView
+                        android:id="@+id/btn_add_to_cart"
+                        android:layout_width="0dp"
+                        android:layout_height="39dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_add_to_cart_bg"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:textColor="#FFF"
+                        android:text="@string/text_want_to_add_to_cart"
+                        />
+                    <TextView
+                        android:id="@+id/btn_buy"
+                        android:layout_width="0dp"
+                        android:layout_height="39dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/blue_button_106_39"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:textColor="#FFF"
+                        android:text="@string/text_want_to_buy"
+                        />
+                </LinearLayout>
+                <!-- END OF 有庫存時顯示這個 -->
+                <TextView
+                    android:id="@+id/btn_arrival_notice"
+                    android:layout_width="match_parent"
+                    android:layout_height="39dp"
                     android:gravity="center"
+                    android:text="@string/text_arrival_notice"
+                    android:textColor="@android:color/white"
                     android:textSize="14sp"
-                    android:textColor="#FFF"
-                    android:text="@string/text_want_to_buy"
+                    android:background="@drawable/blue_button_210_39"
+                    android:visibility="gone"
                     />
             </LinearLayout>
-            <!-- END OF 有庫存時顯示這個 -->
-            <TextView
-                android:id="@+id/btn_arrival_notice"
-                android:layout_width="match_parent"
-                android:layout_height="39dp"
-                android:gravity="center"
-                android:text="@string/text_arrival_notice"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:background="@drawable/blue_button_210_39"
-                android:visibility="gone"
-                />
-        </LinearLayout>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

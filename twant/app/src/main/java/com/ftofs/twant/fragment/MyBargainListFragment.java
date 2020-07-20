@@ -91,7 +91,8 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 MyBargainListItem myBargainListItem = myBargainItemList.get(position);
-                Util.startFragment(GoodsDetailFragment.newInstance(myBargainListItem.commonId, myBargainListItem.goodsId, myBargainListItem.bargainId));
+                // Util.startFragment(GoodsDetailFragment.newInstance(myBargainListItem.commonId, myBargainListItem.goodsId, myBargainListItem.bargainId));
+                Util.startFragment(BargainDetailFragment.newInstance(myBargainListItem.openId, myBargainListItem.goodsId));
             }
         });
 
