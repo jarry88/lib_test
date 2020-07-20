@@ -50,7 +50,7 @@
                     android:layout_weight="0.2"
                     android:textColor="@color/tw_black"
                     android:textSize="14sp"
-                    android:hint="請選擇店ds内請選擇店ds内分類請選擇店ds内分類請選擇店ds内分類請選擇店ds内分類請選擇店ds内分類分類" />
+                    android:hint="請選擇店内分類" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

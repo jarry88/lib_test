@@ -1720,7 +1720,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     goodsPrice = Util.getSpuPrice(goodsDetail);
-                    tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
                     UiUtil.toPriceUI(tvGoodsPrice,0);
 
                     // 是否点赞
@@ -2585,8 +2584,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      *
      */
     private void showPriceTag(GoodsInfo goodsInfo) {
-        SLog.info("promotionType[%d], promotionCountDownTime[%d]", promotionEndTime, promotionCountDownTime);
+        SLog.info("promotionType[%d], promotionCountDownTime[%d]", promotionType, promotionCountDownTime);
         if (promotionType == Constant.PROMOTION_TYPE_NONE || promotionCountDownTime == 0) {
+            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
             rlPriceTag.setVisibility(VISIBLE);
         } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
             updateDiscount(goodsInfo);
@@ -2600,7 +2600,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                 startCountDown();
             } else {
-                tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+                tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
                 SLog.info("__result[%s]", StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
                 UiUtil.toPriceUI(tvGoodsPrice,13);
 
