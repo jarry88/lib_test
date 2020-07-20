@@ -127,7 +127,6 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
             if (!StringUtil.isEmpty(parent.detailVideo)) {
                 etVideos.setText(parent.detailVideo);
             }
-//            storeLabelIdList = parent.storeLabelIdList;
             updateView();
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -194,15 +193,18 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
         if (etVideos.getText() != null) {
             detailVideo = etVideos.getText().toString();
         }
-        if (storeLabelId <=0) {
-            ToastUtil.error(_mActivity,"請選擇店内分類");
-            return false;
-        }
+//        if (storeLabelId <=0) {
+//            ToastUtil.error(_mActivity,"請選擇店内分類");
+//            return false;
+//        }
 
         try{
             publishGoodsInfo.set("commonId", parent.commonId);
             publishGoodsInfo.set("editType", 4);
-            publishGoodsInfo.set("storeLabelIdList", storeLabelIdList);
+            if (storeLabelId >0) {
+                publishGoodsInfo.set("storeLabelIdList", storeLabelIdList);
+            }
+
             publishGoodsInfo.set("detailVideo", detailVideo);
             if (formatBottom > 0) {
                 publishGoodsInfo.set("formatBottom", formatBottom);

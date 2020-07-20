@@ -45,23 +45,29 @@
                     android:layout_marginEnd="@dimen/margin12"
                     android:singleLine="true"
                     android:id="@+id/tv_select_store_category"
+                    android:layout_height="match_parent"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
                     android:textColor="@color/tw_black"
                     android:textSize="14sp"
-
-                    android:hint="請選擇店内分類" />
-                <TextView
-
-                    android:id="@+id/btn_select_store_category_id"
-                    android:layout_width="wrap_content"
+                    android:hint="請選擇店ds内請選擇店ds内分類請選擇店ds内分類請選擇店ds内分類請選擇店ds内分類請選擇店ds内分類分類" />
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/tw_white"
-                    android:text="@string/text_select"
-                    android:background="@drawable/grey_5dp_bg"
+                    android:layout_weight="1">
+                    <TextView
 
-                    android:textSize="12sp"
-                    />
+                        android:id="@+id/btn_select_store_category_id"
+                        android:layout_width="wrap_content"
+                        android:minWidth="@dimen/dp_20"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textColor="@color/tw_white"
+                        android:text="@string/text_select"
+                        android:background="@drawable/grey_5dp_bg"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="@dimen/dp_4"
