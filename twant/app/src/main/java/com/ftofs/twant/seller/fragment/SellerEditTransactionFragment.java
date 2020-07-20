@@ -180,8 +180,10 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
     private void loadUnitListDate() {
         if (!parent.unitList.isEmpty()) {
             for (ListPopupItem item : parent.unitList) {
-                item.title.equals(parent.unitName);
-                unityIndex = item.id;
+                if (item.title.equals(parent.unitName)) {
+                    unityIndex = item.id;
+                    break;
+                }
             }
 //            onSelected(PopupType.GOODS_UNITY,unityIndex,parent.unitList.get(unityIndex));
             return;

@@ -172,6 +172,7 @@ public class AddGoodsFragment extends BaseFragment
     private TimePickerView pvTime;
     private boolean isBiginDate;
     private LinearLayout llNoticeContainer;
+    private EditText etLimitBuy;
 
     public static AddGoodsFragment newInstance() {
 
@@ -384,6 +385,7 @@ public class AddGoodsFragment extends BaseFragment
         LinearLayout llAddHub =view.findViewById(R.id.ll_add_hub);
         LinearLayout llInstancePublish =view.findViewById(R.id.ll_instance_publish);
         tvBeginDate = view.findViewById(R.id.tv_begin_date);
+        etLimitBuy = view.findViewById(R.id.et_limit_num);
         tvEndDate = view.findViewById(R.id.tv_end_date);
         tvBeginDate.setOnClickListener((view1)->{
             isBiginDate = true;
@@ -1265,6 +1267,12 @@ public class AddGoodsFragment extends BaseFragment
 
     private void saveOthersInfo() {
         joinBigSale = sbJoinActivity.isChecked() ? Constant.TRUE_INT : Constant.FALSE_INT;
+        String limitbuyStr = etLimitBuy.getText().toString();
+        if (!StringUtil.isEmpty(limitbuyStr)) {
+            limitBuy = Integer.parseInt(etLimitBuy.getText().toString());
+        } else {
+            limitBuy=0;//不限購
+        }
         try{
             publishGoodsInfo.set("joinBigSale", joinBigSale);
             publishGoodsInfo.set("goodsState", goodsState);

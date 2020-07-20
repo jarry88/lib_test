@@ -40,21 +40,25 @@
             <LinearLayout
                 android:layout_marginTop="@dimen/dp_4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="end">
                 <TextView
                     android:layout_marginEnd="@dimen/margin12"
                     android:singleLine="true"
                     android:id="@+id/tv_select_store_category"
                     android:layout_height="match_parent"
                     android:layout_width="wrap_content"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.02"
                     android:textColor="@color/tw_black"
                     android:textSize="14sp"
-                    android:hint="請選擇店内分類" />
+                    android:hint="請選擇店内分類    " />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_marginBottom="4dp"
+
+
+                    android:layout_weight="3">
                     <TextView
 
                         android:id="@+id/btn_select_store_category_id"
@@ -98,14 +102,18 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+
                 android:layout_marginTop="@dimen/dp_4"
-                android:textSize="14sp"
-                android:text="例如：https://www.youtube.com/watch?v=TH_oZ2cyDK0" />
+                android:textSize="13sp"
+                android:text="例如：https://www.youtube.com/watch?v=TH_oZ2cyDK0"
+                android:maxLines="2"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
+                android:textColor="@color/tw_black"
                 android:text="關聯版式：" />
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -121,10 +129,13 @@
                     <TextView
                         android:layout_marginStart="@dimen/dp_4"
                         android:layout_marginEnd="@dimen/dp_4"
-                        android:layout_width="120dp"
+                        android:layout_width="140dp"
                         android:layout_height="32dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:background="@drawable/spinner_border_bg"
                         android:id="@+id/tv_format_top"
+                        android:paddingEnd="22dp"
                         android:text="請選擇"
                         android:inputType="numberDecimal"/>
                 </LinearLayout>
@@ -148,13 +159,14 @@
                     <TextView
                         android:layout_marginStart="@dimen/dp_4"
                         android:layout_marginEnd="@dimen/dp_4"
-                        android:layout_width="120dp"
+                        android:layout_width="140dp"
                         android:layout_height="32dp"
+                        android:singleLine="true"
                         android:text="請選擇"
+                        android:paddingEnd="22dp"
 
                         android:background="@drawable/spinner_border_bg"
-                        android:id="@+id/tv_format_bottom"
-                        android:inputType="numberDecimal"/>
+                        android:id="@+id/tv_format_bottom"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
