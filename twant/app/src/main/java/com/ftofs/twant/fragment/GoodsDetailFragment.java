@@ -1342,7 +1342,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
+                    bargainOpenId = responseObj.getInt("datas.openId");
 
+                    ToastUtil.success(_mActivity, "砍價成功");
+                    loadBargainGoods(true);
+
+                    // 跳轉到砍價詳情頁
+                    tvGoodsName.postDelayed(() -> Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, currGoodsId)), 800);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -1352,13 +1358,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     private void loadData() {
         if (bargainId != Constant.INVALID_BARGAIN_ID) {
-            loadBargainGoods();
+            loadBargainGoods(false);
         } else {
             loadGoodsDetail();
         }
     }
 
-    private void loadBargainGoods() {
+    /**
+     * 加載砍價商品商品詳情
+     * @param isReload  是否重新加載
+     */
+    private void loadBargainGoods(boolean isReload) {
         if (bargainId == Constant.INVALID_BARGAIN_ID) {
             return;
         }
@@ -1452,6 +1462,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             TextView tvCurrentBargainPrice = contentView.findViewById(R.id.tv_current_bargain_price);
                             double openPrice = bargainOpen.getDouble("openPrice");
                             tvCurrentBargainPrice.setText(StringUtil.formatPrice(_mActivity, openPrice, 0));
+                        }
+
+                        if (isReload) { // 如果是重新加載，後面的不用處理
+                            return;
                         }
 
                         goodsName = goodsCommon.getSafeString("goodsName");
