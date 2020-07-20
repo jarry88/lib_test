@@ -1985,17 +1985,28 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:visibility="visible">
-                    <TextView
-                        android:id="@+id/btn_add_to_cart"
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="39dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_add_to_cart_bg"
-                        android:gravity="center"
-                        android:textSize="14sp"
-                        android:textColor="#FFF"
-                        android:text="@string/text_want_to_add_to_cart"
-                        />
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/btn_add_to_cart_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/btn_add_to_cart_bg"
+                            android:scaleType="fitXY">
+                        </ImageView>
+                        <TextView
+                            android:id="@+id/btn_add_to_cart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:textColor="#FFF"
+                            android:text="@string/text_want_to_add_to_cart"
+                            />
+                    </FrameLayout>
+
                     <TextView
                         android:id="@+id/btn_buy"
                         android:layout_width="0dp"
@@ -2046,6 +2057,4 @@
             android:src="@drawable/icon_store_comment"
             />
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

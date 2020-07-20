@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -327,6 +329,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     TextView btnBuy;
     TextView btnAddToCart;
+    ImageView btnAddToCartBg;
 
     TextView tvBargainRemainDay;
     TextView tvBargainRemainHour;
@@ -610,6 +613,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         if (bargainId != Constant.INVALID_BARGAIN_ID) {
             btnAddToCart.setText("原價購買");
         }
+        btnAddToCartBg = view.findViewById(R.id.btn_add_to_cart_bg);
         Util.setOnClickListener(view, R.id.btn_select_spec, this);
         Util.setOnClickListener(view, R.id.btn_select_addr, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_follow, this);
@@ -836,6 +840,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_buy:
                 if (bargainId != Constant.INVALID_BARGAIN_ID) { // 砍一刀
+                    if (bargainOpenId != Constant.INVALID_BARGAIN_OPEN_ID) { // 如果本人已經砍完，則跳轉到詳情頁
+                        Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, currGoodsId));
+                        return;
+                    }
+
                     bargain();
                     return;
                 }
@@ -1372,6 +1381,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         contentView.findViewById(R.id.fl_bargain_label).setVisibility(VISIBLE);
         contentView.findViewById(R.id.ll_bargain_state_container).setVisibility(VISIBLE);
+
+        // 設置背景為紅色
+        btnAddToCartBg.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(_mActivity, R.color.tw_red)));
 
         promotionType = Constant.PROMOTION_TYPE_BARGAIN;
         promotionCountDownTimeType = COUNT_DOWN_TYPE_END;
@@ -2238,7 +2250,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         if (goodsStatus == 0) {
             getView().findViewById(R.id.ll_goods_take_off).setVisibility(VISIBLE);
             btnBuy.setBackgroundResource(R.drawable.icon_take_off_buy);
-            btnAddToCart.setBackgroundResource(R.drawable.icon_take_off_cart);
+            btnAddToCartBg.setImageResource(R.drawable.icon_take_off_cart);
         }
     }
 

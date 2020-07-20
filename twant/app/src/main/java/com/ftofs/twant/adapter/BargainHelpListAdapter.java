@@ -30,5 +30,9 @@ public class BargainHelpListAdapter extends ViewGroupAdapter<BargainHelpListItem
         ((TextView) itemView.findViewById(R.id.tv_nickname)).setText(itemData.nickname);
         ((TextView) itemView.findViewById(R.id.tv_help_time)).setText(itemData.createTime);
         ((TextView) itemView.findViewById(R.id.tv_price)).setText(StringUtil.formatPrice(context, itemData.bargainPrice, 0));
+
+        if (position == getItemCount() - 1) { // 最後一項，不顯示分隔線
+            itemView.setBackground(null);
+        }
     }
 }
