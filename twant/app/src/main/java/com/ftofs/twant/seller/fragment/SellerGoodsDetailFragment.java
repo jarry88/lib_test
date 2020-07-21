@@ -84,6 +84,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     public  int tariffEnable;
     public int goodsState;
     public int limitBuy;
+    public  int goodsModal;//銷售模式 銷售模式 0零售 1跨城購 2虛擬
 
 
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
@@ -201,9 +202,10 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_goods_category_in_store)).setText(storeLabelNames);
                     ((TextView) contentView.findViewById(R.id.tv_unit)).setText(unitName);
 
-                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(allowTariff == Constant.TRUE_INT ?
-                            (tariffEnable== Constant.TRUE_INT?"跨城購商品":(isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品")):
-                            (isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品"));
+//                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(allowTariff == Constant.TRUE_INT ?
+//                            (tariffEnable== Constant.TRUE_INT?"跨城購商品":(isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品")):
+//                            (isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品"));
+                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(goodsModal==2 ?"跨城購商品":goodsModal== 1?"虛擬商品" : "零售商品");
 
                     ((TextView) contentView.findViewById(R.id.tv_goods_freight)).setText("$ "+StringUtil.formatFloat(goodsFreight));
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
@@ -242,6 +244,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         storeLabelNames = goodsVo.getSafeString("storeLabelNames");
         unitName = goodsVo.getSafeString("unitName");
         isVirtual = goodsVo.getInt("isVirtual");
+        goodsModal = goodsVo.getInt("goodsModal");
         joinBigSale = goodsVo.getInt("joinBigSale");
         specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
 
