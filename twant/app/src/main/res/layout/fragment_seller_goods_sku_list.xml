@@ -12,7 +12,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@android:color/white">
+        android:background="@drawable/border_type_d">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
             android:layout_width="31dp"
@@ -37,7 +37,8 @@
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/tw_slight_grey">
 
     </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

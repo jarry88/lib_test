@@ -212,6 +212,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_goods_volume)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
                     ((TextView) contentView.findViewById(R.id.tv_goods_participate_bargain)).setText(joinBigSale==1?"是":"否");
                     ((TextView) contentView.findViewById(R.id.tv_goods_publish_way)).setText(goodsState==1?"立即發佈":"放入倉庫");
+                    int limitBuy = responseObj.getInt("datas.GoodsVo.limitBuy");
+                    ((TextView) contentView.findViewById(R.id.tv_limit_buy)).setText(String.valueOf(limitBuy));
 
                     updateGoodsSpecView();
 
