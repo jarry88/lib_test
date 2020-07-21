@@ -133,6 +133,7 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
             unitName = parent.unitName;
             commonId = parent.commonId;
             allowTariff = parent.allowTariff;
+            goodsModal = parent.goodsModal;
             updateView();
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
