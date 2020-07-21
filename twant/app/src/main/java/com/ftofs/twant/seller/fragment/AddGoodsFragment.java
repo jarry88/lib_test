@@ -1300,7 +1300,7 @@ public class AddGoodsFragment extends BaseFragment
 
     private boolean saveFreightInfo() {
         View view = mViews.get(FREIGHT_INDEX);
-        FixedEditText etFreight = view.findViewById(R.id.et_add_fixed_freight);
+        EditText etFreight = view.findViewById(R.id.et_add_fixed_freight);
         String freightText = etFreight.getText()==null?"":etFreight.getText().toString();
         if (useFixedFreight) {
             if (StringUtil.isEmpty(freightText)) {
@@ -1308,7 +1308,7 @@ public class AddGoodsFragment extends BaseFragment
                 return false;
             }
         } else {
-            if (freightTemplateId < 0) {
+            if (freightTemplateId <= 0) {
                 ToastUtil.error(_mActivity, "請選擇運費模板");
                 return false;
             }
