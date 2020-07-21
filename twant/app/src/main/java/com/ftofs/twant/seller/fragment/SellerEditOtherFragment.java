@@ -304,19 +304,33 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
         joinBigSale = sbJoinActivity.isChecked() ? Constant.TRUE_INT : Constant.FALSE_INT;
         goodsState = sbInstancePublish.isChecked() ? 1 : 0;
         limitBuy = Integer.parseInt(etLimitNum.getText().toString());
+        if (limitBuy > 0) {
+            if (StringUtil.isEmpty(limitBuyStartTime)) {
+                ToastUtil.success(_mContext, "請填寫限購開始時間");
+                return false;
+            } else if (StringUtil.isEmpty(limitBuyEndTime)) {
+                ToastUtil.success(_mContext, "請填寫限購結束時間");
+                return false;
+            }
+            if (!StringUtil.isEmpty(limitBuyStartTime) && !StringUtil.isEmpty(limitBuyEndTime)) {
+                if(Jarbon.parse(limitBuyEndTime).getTimestamp() <= Jarbon.parse(limitBuyStartTime).getTimestamp()){
+                    ToastUtil.success(_mContext, "結束時間必須大於開始時間");
+                    return false;
+                };
+            }
+        }
 
         try {
             publishGoodsInfo.set("joinBigSale", joinBigSale);
             publishGoodsInfo.set("goodsState", goodsState);
             publishGoodsInfo.set("commonId", parent.commonId);
             publishGoodsInfo.set("editType", 6);
-            if (!StringUtil.isEmpty(limitBuyStartTime)) {
-                publishGoodsInfo.set("limitBuyStartTime", limitBuyStartTime);
-            }
-            if (!StringUtil.isEmpty(limitBuyEndTime)) {
-                publishGoodsInfo.set("limitBuyEndTime", limitBuyEndTime);
-            }
+
             publishGoodsInfo.set("limitBuy",limitBuy);
+            if (limitBuy>0) {//添加限購時間
+                    publishGoodsInfo.set("limitBuyStartTime", limitBuyStartTime);
+                    publishGoodsInfo.set("limitBuyEndTime", limitBuyEndTime);
+            }
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }

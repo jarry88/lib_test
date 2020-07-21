@@ -52,7 +52,8 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
     private List<ListPopupItem> freightList=new ArrayList<>();
     private String freightTitle;
     private double goodsFreight;
-    private FixedEditText  fetFreight;
+//    private FixedEditText  fetFreight;
+    private EditText  fetFreight;
     private ScaledButton sbFreightTemple;
     private ScaledButton sbFixedTemple;
     private EditText etW;
@@ -97,7 +98,6 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.tv_add_freight_rule, this);
         fetFreight = view.findViewById(R.id.et_add_fixed_freight);
-        fetFreight.setFixedText("$ ");
 //        ScaledButton sbFixedFreight
 
         sbFreightTemple = view.findViewById(R.id.sb_freight_temple);
@@ -112,16 +112,16 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
             }
         });
         sbFreightTemple.setOnClickListener(v -> {
-            boolean checked = sbFreightTemple.isChecked();
-            if (!checked) {
+            if (!sbFreightTemple.isChecked()) {
                 useFixedFreight = false;
+                updateCheckView();
             }
         });
     }
 
     private void updateCheckView() {
-        sbFreightTemple.setChecked(!useFixedFreight);
         sbFixedTemple.setChecked(useFixedFreight);
+        sbFreightTemple.setChecked(!useFixedFreight);
     }
 
     @Override
@@ -137,12 +137,13 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
 
     private void explainData() {
         freightTemplateId = parent.freightTemplateId;
-        if (freightTemplateId > 0) {
-            useFixedFreight = false;
-            onSelected(PopupType.GOODS_FREIGHT_RULE,freightTemplateId,null);
-        }
-        if (goodsFreight > 0) {
-            fetFreight.setFixedText(String.valueOf(goodsFreight));
+        goodsFreight = parent.goodsFreight;
+        useFixedFreight = freightTemplateId <= 0;
+
+        if (!useFixedFreight) {
+            onSelected(PopupType.GOODS_FREIGHT_RULE, freightTemplateId, null);
+        } else{
+            fetFreight.setText(String.valueOf(goodsFreight));
         }
         if (parent.freightVolume > 0) {
             etV.setText(String.valueOf(parent.freightVolume));
@@ -183,7 +184,9 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
                         return;
                     }
                     updateFreightView(data);
-                    onSelected(PopupType.GOODS_FREIGHT_RULE,freightTemplateId,null);
+                    if (!useFixedFreight) {
+                        onSelected(PopupType.GOODS_FREIGHT_RULE,freightTemplateId,null);
+                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -262,7 +265,7 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
                     return false;
                 }
             } else {
-                if (freightTemplateId <= 0) {
+                if (freightTemplateId<=0) {
                     ToastUtil.error(_mActivity, "請選擇運費模板");
                     return false;
                 }
@@ -339,7 +342,9 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
             freightRuleIndex = id;
             if (freightList.size() > 0) {
                 freightTemplateId = freightList.get(id).id;
-                tvRule.setText(extra.toString());
+                if (extra != null) {
+                    tvRule.setText(extra.toString());
+                }
             }
         }
     }

@@ -152,7 +152,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
         shoppingLinkageFragment = ShoppingSpecialLinkageFragment.newInstance();
 //        storeListFragment =ShoppingStoreListFragment.newInstance();
-        storeListFragment = LinkageShoppingListFragment.Companion.newInstance(zoneId);
+        storeListFragment = LinkageShoppingListFragment.Companion.newInstance(zoneId,this);
 
         bannerView = view.findViewById(R.id.banner_view);
         initBanner();
@@ -433,8 +433,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 //                fragmentList.add(shoppingLinkageFragment);
                 shoppingLinkageFragment.setNestedScroll(this);
 
-                 linkageGoodsFragment2  = LinkageContainerFragment2.Companion.newInstance(zoneId);
-                linkageGoodsFragment2.parent = this;
+                 linkageGoodsFragment2  = LinkageContainerFragment2.Companion.newInstance(zoneId,this);
                 fragmentList.add(linkageGoodsFragment2);
             }
 
@@ -444,7 +443,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                     tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
                 }
                 fragmentList.add(storeListFragment);
-                storeListFragment.parent=this;
             }
             //刷新UI的邏輯
             initViewPager();
