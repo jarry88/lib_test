@@ -750,10 +750,16 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 } else { // 8 商城首页
                     // 什么也不需要做
                 }
-            } else if ("bargain".equals(host)) {
+            } else if ("bargain".equals(host)) { // 砍價商品詳情頁
                 int bargainId = params.getInt("bargainId");
+                int commonId = params.getInt("commonId");
                 int goodsId = params.getInt("goodsId");
-                Util.startFragment(BargainDetailFragment.newInstance(bargainId, goodsId));
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, goodsId, bargainId));
+            } else if ("bargainShare".equals(host)) { // 砍價分享頁
+                int openId = params.getInt("openId");
+                int commonId = params.getInt("commonId");
+                int goodsId = params.getInt("goodsId");
+                Util.startFragment(BargainDetailFragment.newInstance(openId, commonId, goodsId));
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

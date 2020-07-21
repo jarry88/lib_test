@@ -176,6 +176,16 @@ public class SplashActivity extends BaseActivity {
                                 "commonId", Integer.valueOf(commonId),
                                 "goodsId", Integer.valueOf(goodsId)
                         );
+                    } else if ("bargainShare".equals(host)) {
+                        String openId = uri.getQueryParameter("openId");
+                        String commonId = uri.getQueryParameter("commonId");
+                        String goodsId = uri.getQueryParameter("goodsId");
+                        launchAppParams = EasyJSONObject.generate(
+                                "host", host,
+                                "openId", Integer.valueOf(openId),
+                                "commonId", Integer.valueOf(commonId),
+                                "goodsId", Integer.valueOf(goodsId)
+                        );
                     }
 
                     if (launchAppParams != null) {

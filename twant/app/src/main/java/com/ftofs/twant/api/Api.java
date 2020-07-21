@@ -1536,13 +1536,14 @@ public class Api {
     /**
      * 發起的砍價列表
      */
-    public static final String PATH_BARGAIN_OWNER = "/member/bargain/owner";
+    public static final String PATH_BARGAIN_OWNER_LIST = "/member/bargain/owner";
 
 
     /**
-     * 發起的砍價列表
+     * 幫別人的砍價列表
      */
-    public static final String PATH_BARGAIN_HELP = "/member/bargain/help";
+    public static final String PATH_BARGAIN_HELP_LIST = "/member/bargain/help";
+
 
 
     /**
@@ -1555,6 +1556,12 @@ public class Api {
      * 砍第一刀
      */
     public static final String PATH_BARGAIN_FIRST = "/bargain/first";
+
+    /**
+     * 別人幫砍
+     */
+    public static final String PATH_BARGAIN_HELP = "/bargain/help";
+
 
     /**
      * 开砍活动分享页面

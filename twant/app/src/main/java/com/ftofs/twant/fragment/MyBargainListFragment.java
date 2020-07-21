@@ -92,7 +92,7 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 MyBargainListItem myBargainListItem = myBargainItemList.get(position);
                 // Util.startFragment(GoodsDetailFragment.newInstance(myBargainListItem.commonId, myBargainListItem.goodsId, myBargainListItem.bargainId));
-                Util.startFragment(BargainDetailFragment.newInstance(myBargainListItem.openId, myBargainListItem.goodsId));
+                Util.startFragment(BargainDetailFragment.newInstance(myBargainListItem.openId, myBargainListItem.commonId, myBargainListItem.goodsId));
             }
         });
 
@@ -114,9 +114,9 @@ public class MyBargainListFragment extends BaseFragment implements View.OnClickL
 
         String url;
         if (dataType == DATA_TYPE_INITIATE) {
-            url = Api.PATH_BARGAIN_OWNER;
+            url = Api.PATH_BARGAIN_OWNER_LIST;
         } else {
-            url = Api.PATH_BARGAIN_HELP;
+            url = Api.PATH_BARGAIN_HELP_LIST;
         }
 
         SLog.info("url[%s], params[%s]", url, params);
