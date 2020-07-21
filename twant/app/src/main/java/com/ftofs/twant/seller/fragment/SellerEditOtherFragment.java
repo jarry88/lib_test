@@ -236,6 +236,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
         try{
             joinBigSale = parent.joinBigSale;
             limitBuy = parent.limitBuy;
+            goodsState = parent.goodsState;
             limitBuyStartTime = parent.goodsVo.getSafeString("limitBuyStartTime");
             limitBuyEndTime = parent.goodsVo.getSafeString("limitBuyEndTime");
             updateView();
@@ -245,6 +246,9 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
     }
 
     private void updateView() {
+        Boolean checked = goodsState == 1;
+        sbInstancePublish.setChecked(checked);
+        sbAddHub.setChecked(!checked);
         sbJoinActivity.setChecked(joinBigSale==1);
         etLimitNum.setText(String.valueOf(limitBuy));
         tvBeginDate.setText(limitBuyStartTime);
