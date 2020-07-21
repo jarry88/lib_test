@@ -55,6 +55,7 @@ import com.ftofs.twant.seller.widget.NoScrollViewPager;
 import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
 import com.ftofs.twant.util.AssetsUtil;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -1272,12 +1273,26 @@ public class AddGoodsFragment extends BaseFragment
         } else {
             limitBuy=0;//不限購
         }
+        if (limitBuy > 0) {
+            if (StringUtil.isEmpty(limitBuyStartTime)) {
+                ToastUtil.success(_mContext, "請填寫限購開始時間");
+            } else if (StringUtil.isEmpty(limitBuyEndTime)) {
+                ToastUtil.success(_mContext, "請填寫限購結束時間");
+            }
+            if (!StringUtil.isEmpty(limitBuyStartTime) && !StringUtil.isEmpty(limitBuyEndTime)) {
+                if(Jarbon.parse(limitBuyEndTime).getTimestamp() <= Jarbon.parse(limitBuyStartTime).getTimestamp()){
+                    ToastUtil.success(_mContext, "結束時間必須大於開始時間");
+                };
+            }
+        }
         try{
             publishGoodsInfo.set("joinBigSale", joinBigSale);
             publishGoodsInfo.set("goodsState", goodsState);
             publishGoodsInfo.set("limitBuy", limitBuy);
-            publishGoodsInfo.set("limitBuyStartTime", limitBuyStartTime);
-            publishGoodsInfo.set("limitBuyEndTime", limitBuyEndTime);
+            if (limitBuy > 0) {
+                publishGoodsInfo.set("limitBuyStartTime", limitBuyStartTime);
+                publishGoodsInfo.set("limitBuyEndTime", limitBuyEndTime);
+            }
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
