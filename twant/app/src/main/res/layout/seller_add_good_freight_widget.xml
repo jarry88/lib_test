@@ -214,7 +214,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_freight_next"
                     android:layout_margin="@dimen/margin12"
-                    android:text="下一步，商品詳情"
+                    android:text="下一步，其他信息"
                     android:textColor="@color/tw_white"
                     android:padding="@dimen/dp_4"
                     android:paddingStart="24dp"

@@ -23,6 +23,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.EditorResultInterface;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
@@ -34,7 +35,9 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -180,7 +183,6 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
 
             View btnEdit = selectedSpecItemView.findViewById(R.id.btn_edit);
             btnEdit.setTag(sellerSpecMapItem.specId);
-
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -201,10 +203,78 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                 }
             });
 
+            View btnRemove = selectedSpecItemView.findViewById(R.id.btn_remove);
+            btnRemove.setTag(sellerSpecMapItem.specId);
+            btnRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int specId = (int) v.getTag();
+                    SLog.info("specId[%d]", specId);
+
+
+                    SellerSpecMapItem item = sellerSpecMap.get(specId);
+                    if (item == null) {
+                        return;
+                    }
+
+                    new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                            // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                            .setPopupCallback(new XPopupCallback() {
+                                @Override
+                                public void onShow() {
+                                }
+                                @Override
+                                public void onDismiss() {
+                                }
+                            }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除規格嗎?",null, "確定", "取消",new OnConfirmCallback() {
+                        @Override
+                        public void onYes() {
+                            deleteSpec(specId);
+                        }
+
+                        @Override
+                        public void onNo() {
+                            SLog.info("onNo");
+                        }
+                    })).show();
+                }
+            });
+
             LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.MarginLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.topMargin = Util.dip2px(_mActivity, 8);
             llSelectedSpecContainer.addView(selectedSpecItemView, layoutParams);
         }
+    }
+
+    /**
+     * 刪除規格
+     * @param specId
+     */
+    private void deleteSpec(int specId) {
+        SellerSpecMapItem item = sellerSpecMap.get(specId);
+        if (item == null) {
+            return;
+        }
+
+        item.selected = false;
+        for (SellerSpecItem specItem : item.sellerSpecItemList) {
+            specItem.selected = false;
+        }
+
+        int i = 0;
+        for (; i < sellerSelectedSpecList.size(); i++) {
+            item = sellerSelectedSpecList.get(i);
+            if (item.specId == specId) {
+                break;
+            }
+        }
+        if (i < sellerSelectedSpecList.size()) {
+            sellerSelectedSpecList.remove(i);
+        }
+
+        updateSelectedSpecView();
     }
 
     private void loadSkuData() {

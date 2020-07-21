@@ -1582,7 +1582,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         //針對用戶id限購 可以购买0，提示限購-1
                         setGoodsStatus(goodsState);
 
-                        goodsPrice = Util.getSpuPrice(goodsCommon);
+                        goodsPrice = goods.getDouble("appPrice0");
                         ((TextView) contentView.findViewById(R.id.tv_bargain_state_price)).setText(StringUtil.formatFloat(goodsPrice));
 
                         bargainState = bargain.getInt("bargainState");
