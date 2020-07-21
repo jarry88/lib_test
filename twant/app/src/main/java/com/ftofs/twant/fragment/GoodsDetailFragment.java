@@ -124,6 +124,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     // 砍價Id
     int bargainId = Constant.INVALID_BARGAIN_ID;
     int bargainOpenId = Constant.INVALID_BARGAIN_OPEN_ID;
+    int bargainState = Constant.BARGAIN_STATE_NOT_STARTED;
 
     // 產品Id
     int commonId;
@@ -1579,6 +1580,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                         goodsPrice = Util.getSpuPrice(goodsCommon);
                         ((TextView) contentView.findViewById(R.id.tv_bargain_state_price)).setText(StringUtil.formatFloat(goodsPrice));
+
+                        bargainState = bargain.getInt("bargainState");
+                        TextView tvBargainCountDownLabel = contentView.findViewById(R.id.tv_bargain_count_down_label);
+                        if (bargainState == Constant.BARGAIN_STATE_NOT_STARTED) {
+                            tvBargainCountDownLabel.setText("距離活動開始");
+                        } else if (bargainState == Constant.BARGAIN_STATE_ONGOING) {
+                            tvBargainCountDownLabel.setText("活動倒計時");
+                        }
+
 
                         double bargainBottomPrice = bargain.getDouble("bottomPrice");
                         ((TextView) contentView.findViewById(R.id.tv_bargain_state_bottom_price))

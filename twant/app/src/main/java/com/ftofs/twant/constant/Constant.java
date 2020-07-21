@@ -366,4 +366,11 @@ public class Constant {
     public static final int INVALID_BARGAIN_OPEN_ID = -1;
 
     public static final String BARGAIN_INSTRUCTION_URL = "/mobile/bargain/introduction";
+    /*
+    砍价状态（0未开始，1已开始，2已结束，3已关闭）
+     */
+    public static final int BARGAIN_STATE_NOT_STARTED = 0;
+    public static final int BARGAIN_STATE_ONGOING = 1;
+    public static final int BARGAIN_STATE_FINISHED = 2;
+    public static final int BARGAIN_STATE_CLOSED = 3;
 }
