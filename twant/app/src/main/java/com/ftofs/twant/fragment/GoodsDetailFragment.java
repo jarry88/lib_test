@@ -841,7 +841,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_buy:
                 if (bargainId != Constant.INVALID_BARGAIN_ID) { // 砍一刀
                     if (bargainOpenId != Constant.INVALID_BARGAIN_OPEN_ID) { // 如果本人已經砍完，則跳轉到詳情頁
-                        Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, currGoodsId));
+                        Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, commonId, currGoodsId));
                         return;
                     }
 
@@ -1022,7 +1022,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 if (bargainOpenId == Constant.INVALID_BARGAIN_OPEN_ID) {
                     return;
                 }
-                Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, currGoodsId));
+                Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, commonId, currGoodsId));
                 break;
             case R.id.btn_view_bargain_instruction:
                 Util.startFragment(H5GameFragment.newInstance(Config.MOBILE_WEB_BASE_URL + Constant.BARGAIN_INSTRUCTION_URL, null));
@@ -1348,7 +1348,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     loadBargainGoods(true);
 
                     // 跳轉到砍價詳情頁
-                    tvGoodsName.postDelayed(() -> Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, currGoodsId)), 800);
+                    tvGoodsName.postDelayed(() -> Util.startFragment(BargainDetailFragment.newInstance(bargainOpenId, commonId, currGoodsId)), 800);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }

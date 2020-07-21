@@ -154,4 +154,9 @@ public enum RequestCode {
      * 【賣家】編輯SKU信息
      */
     // SELLER_EDIT_SKU_INFO,
+
+    /**
+     * 用戶登錄
+     */
+    USER_LOGIN,
 }

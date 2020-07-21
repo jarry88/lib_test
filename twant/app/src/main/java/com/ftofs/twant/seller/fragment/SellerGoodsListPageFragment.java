@@ -326,7 +326,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                             @Override
                             public void onDismiss() {
                             }
-                        }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎？", null, new OnConfirmCallback() {
+                        }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎？", null, "確定", "取消", new OnConfirmCallback() {
                     @Override
                     public void onYes() {
                         SLog.info("onYes");
