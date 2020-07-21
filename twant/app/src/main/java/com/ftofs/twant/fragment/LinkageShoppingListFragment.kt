@@ -40,10 +40,11 @@ class LinkageShoppingListFragment : BaseTwantFragmentMVVM<SimpleRvListBinding, L
     private val zoneId by lazy { arguments?.getInt("zoneId") }
 
     companion object {
-        fun newInstance(zoneId: Int): LinkageShoppingListFragment {
+        fun newInstance(zoneId: Int,p:NewShoppingSpecialFragment): LinkageShoppingListFragment {
             val args = Bundle()
             val fragment = LinkageShoppingListFragment()
             args.putInt("zoneId", zoneId)
+            fragment.parent=p
 //            args.put("parent",parent)
             fragment.arguments = args
             return fragment
@@ -111,15 +112,15 @@ class LinkageShoppingListFragment : BaseTwantFragmentMVVM<SimpleRvListBinding, L
             Util.startFragment(ShopMainFragment.newInstance(store.storeId))
         }
 
-        parent.let {
+        parent?.let {
             binding.rvSimple.isNestedScrollingEnabled = false
             binding.rvSimple.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     SLog.info("子頁面滾動監聽")
                     when (newState) {
-                        RecyclerView.SCROLL_STATE_DRAGGING -> parent.onCbStartNestedScroll()
-                        RecyclerView.SCROLL_STATE_IDLE -> parent.onCbStopNestedScroll()
+                        RecyclerView.SCROLL_STATE_DRAGGING -> it.onCbStartNestedScroll()
+                        RecyclerView.SCROLL_STATE_IDLE -> it.onCbStopNestedScroll()
                     }
                 }
             })

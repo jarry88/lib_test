@@ -496,8 +496,7 @@ public class AddGoodsFragment extends BaseFragment
         Util.setOnClickListener(view, R.id.btn_freight_prev, this);
         Util.setOnClickListener(view, R.id.btn_freight_next, this);
         Util.setOnClickListener(view, R.id.tv_add_freight_rule, this);
-        FixedEditText fetFreight = view.findViewById(R.id.et_add_fixed_freight);
-        fetFreight.setFixedText("$ ");
+        EditText fetFreight = view.findViewById(R.id.et_add_fixed_freight);
 //        ScaledButton sbFixedFreight
 
         ScaledButton sbFreightTemple = view.findViewById(R.id.sb_freight_temple);
