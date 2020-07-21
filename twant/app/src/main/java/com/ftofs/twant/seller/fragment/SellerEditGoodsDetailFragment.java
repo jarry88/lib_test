@@ -306,16 +306,25 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
 
             List<ListPopupItem> list = new ArrayList<>();
             list.add(new ListPopupItem(-1, "取消選擇", null));
+            String bottomText = tvFormatBottom.getText().toString();
+            int i = 1;
             for (Object o : formatBottomList) {
                 Format format = Format.parse(((EasyJSONObject) o));
                 ListPopupItem item = new ListPopupItem(format.getFormatId(),format.getFormatName(),format);
                 list.add(item);
+                if (item.title.equals(bottomText)) {
+                    formatBottomIndex = i;
+                }
+                i++;
             }
             TextView tvBottom=getView().findViewById(R.id.tv_format_bottom);
             OnSelectedListener listener = this;
+            if ("請選擇".equals(bottomText)) {
+                formatBottomIndex = 0;
+            }
             tvBottom.setOnClickListener(v ->{
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
-                        new ListPopup(_mActivity,"底部版式", PopupType.SELLER_FORMAT_BOTTOM, list, formatBottomIndex, this)
+                        new ListPopup(_mActivity,"底部版式", PopupType.SELLER_FORMAT_BOTTOM, list,formatBottomIndex, this)
                 ).show();
             });
             if (parent != null) {
@@ -330,10 +339,16 @@ public class SellerEditGoodsDetailFragment extends BaseFragment implements View.
         if (formatTopList != null) {
             List<ListPopupItem> list = new ArrayList<>();
             list.add(new ListPopupItem(-1, "取消選擇", null));
+            int i = 1;
+            String topText=tvFormatTop.getText().toString();
             for (Object o : formatTopList) {
                 Format format = Format.parse(((EasyJSONObject) o));
                 ListPopupItem item = new ListPopupItem(format.getFormatId(),format.getFormatName(),format);
 
+                if (item.title.equals(topText)) {
+                    formatTopIndex = i;
+                }
+                i++;
                 list.add(item);
             }
             TextView tvFormatTop=getView().findViewById(R.id.tv_format_top);

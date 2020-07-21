@@ -174,18 +174,28 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
                 item.data = item.title;
                 parent.unitList.add(item);
             }
-            onSelected(PopupType.GOODS_UNITY,unityIndex,parent.unitList.get(unityIndex));
+            updateUnitList();
         }
+    }
+
+    private void updateUnitList() {
+
+        if (!StringUtil.isEmpty(unitName)) {
+            int i = 0;
+            for (ListPopupItem item : parent.unitList) {
+                if (unitName.equals(item.title)) {
+                    unityIndex = i;
+                    break;
+                }
+                i++;
+            }
+        }
+        onSelected(PopupType.GOODS_UNITY,unityIndex,parent.unitList.get(unityIndex));
     }
 
     private void loadUnitListDate() {
         if (!parent.unitList.isEmpty()) {
-            for (ListPopupItem item : parent.unitList) {
-                if (item.title.equals(parent.unitName)) {
-                    unityIndex = item.id;
-                    break;
-                }
-            }
+           updateUnitList();
 //            onSelected(PopupType.GOODS_UNITY,unityIndex,parent.unitList.get(unityIndex));
             return;
         }

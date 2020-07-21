@@ -87,8 +87,8 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     private int zoneId;
     private int zoneType;//專場類型 0通用 1店鋪 2商品
     static int DEFAULT_ZONE = 0;
-    static int GOOD_ZONE = 1;
-    static int SHOP_ZONE = 2;
+    static int GOOD_ZONE = 2;
+    static int SHOP_ZONE = 1;
     private int hasGoodsCategory;
     private TextView tvZoneName;
     private RelativeLayout rlToolBar;
@@ -149,10 +149,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         tabLayout = view.findViewById(R.id.tab_layout);
         viewPager = view.findViewById(R.id.viewpager);
         vwAnchor = view.findViewById(R.id.vw_anchor);
-
-        shoppingLinkageFragment = ShoppingSpecialLinkageFragment.newInstance();
-//        storeListFragment =ShoppingStoreListFragment.newInstance();
-        storeListFragment = LinkageShoppingListFragment.Companion.newInstance(zoneId,this);
 
         bannerView = view.findViewById(R.id.banner_view);
         initBanner();
@@ -216,25 +212,8 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     }
     private void initViewPager() {
         adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                SLog.info( "page %d" ,position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabsFromPagerAdapter(adapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -270,14 +249,12 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 //                        viewPagerY, containerViewY, tabY, anchorViewY);
                 // 如果列表滑动到顶部，则启用嵌套滚动
 
-
-                storeListFragment.getViewModel().getNestedScrollingEnable().setValue(nestedScroll);
-                linkageGoodsFragment2.getViewModel().getNestedScrollingEnable().setValue(nestedScroll);
-//                if (hasGoodsCategory==1) {
-//                    shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
-//                }else {
-//                    withoutCategoryFragment.setNestedScrollingEnabled(nestedScroll);
-//                }
+                if (storeListFragment != null) {
+                    storeListFragment.getViewModel().getNestedScrollingEnable().setValue(nestedScroll);
+                }
+                if (linkageGoodsFragment2 != null) {
+                    linkageGoodsFragment2.getViewModel().getNestedScrollingEnable().setValue(nestedScroll);
+                }
 
                 if (!nestedScroll) {
                     if (oldScrollY > scrollY) {
@@ -384,64 +361,25 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
             String goodsTabTitle = zoneVo.getSafeString("goodsTabTitle");
 
 
-            EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
-            //舊的列表顯示邏輯
-//            if (hasGoodsCategory == Constant.TRUE_INT) {
-//                if (!StringUtil.isEmpty(goodsTabTitle)) {
-//                    titleList.add(goodsTabTitle);
-//                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
-//                    fragmentList.add(shoppingLinkageFragment);
-////                tabLayout.removeTabAt(1);
-//                    shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
-//                    shoppingLinkageFragment.setNestedScroll(this);
-//                }
-//
-//            } else {
-//                if (!StringUtil.isEmpty(goodsTabTitle)) {
-//                    titleList.add(goodsTabTitle);
-//                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
-////
-////                    fragmentList.add(withoutCategoryFragment);
-////                    SLog.info("無類別商品標簽數據");
-////                    withoutCategoryFragment.setNestedScroll(this);
-////                    withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
-//                    LinkageContainerFragment2 linkageContainerFragment2 = new LinkageContainerFragment2();
-//                    fragmentList.add(linkageContainerFragment2);
-//                }
-//
-//            }
-//
-//            EasyJSONArray zoneStoreVoList = zoneVo.getSafeArray("zoneStoreVoList");
-//            if (zoneStoreVoList != null && zoneStoreVoList.length() > 0) {
-//                SLog.info("設置商店列表數據");
-//                if (!StringUtil.isEmpty(storeTabTitle)) {
-//                    titleList.add(storeTabTitle);
-//                    tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
-//                    fragmentList.add(storeListFragment);
-//                    storeListFragment.setOnNestedScroll(this);
-//                    storeListFragment.setStoreList(zoneStoreVoList);
-//                }
-//
-//            }
-            //舊的列表處理邏輯結束
-
             if (zoneType == DEFAULT_ZONE || zoneType == GOOD_ZONE) {
-                if (!StringUtil.isEmpty(goodsTabTitle)) {
-                    titleList.add(goodsTabTitle);
-                    tabLayout.addTab(tabLayout.newTab().setText("測試二級聯動頁面"+goodsTabTitle));
+                if (StringUtil.isEmpty(goodsTabTitle)) {
+                    goodsTabTitle = "商品列表";
                 }
-//                fragmentList.add(shoppingLinkageFragment);
-                shoppingLinkageFragment.setNestedScroll(this);
+                    titleList.add(goodsTabTitle);
 
-                 linkageGoodsFragment2  = LinkageContainerFragment2.Companion.newInstance(zoneId,this);
+                tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
+                linkageGoodsFragment2  = LinkageContainerFragment2.Companion.newInstance(zoneId,this);
                 fragmentList.add(linkageGoodsFragment2);
             }
 
             if (zoneType == DEFAULT_ZONE || zoneType == SHOP_ZONE) {
-                if (!StringUtil.isEmpty(storeTabTitle)) {
-                    titleList.add(storeTabTitle);
-                    tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
+                if (StringUtil.isEmpty(storeTabTitle)) {
+                    storeTabTitle = "商店列表";
                 }
+
+                    titleList.add(storeTabTitle);
+                tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
+                storeListFragment = LinkageShoppingListFragment.Companion.newInstance(zoneId, this);
                 fragmentList.add(storeListFragment);
             }
             //刷新UI的邏輯
