@@ -930,6 +930,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 showSpecSelectPopup(Constant.ACTION_BUY, 0);
                 break;
             case R.id.btn_select_spec:
+                if (bargainId != Constant.INVALID_BARGAIN_ID) { // 如果是砍價，不讓選擇規格
+                    return;
+                }
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
                 break;
             case R.id.btn_select_addr:
@@ -1482,7 +1485,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         llFloatButton.setVisibility(GONE);
 
         // 隱藏【規格】、【送至】、【說說】、【城友】
-        contentView.findViewById(R.id.rl_spec_container).setVisibility(GONE);
+        contentView.findViewById(R.id.rl_spec_container).setVisibility(VISIBLE);
+        contentView.findViewById(R.id.ic_specs_expand_button).setVisibility(GONE);
         contentView.findViewById(R.id.rl_send_to_container).setVisibility(GONE);
         contentView.findViewById(R.id.ll_comment_container).setVisibility(GONE);
         contentView.findViewById(R.id.rl_shop_friend_container).setVisibility(GONE);
@@ -1657,9 +1661,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                         skuGoodsGalleryMap.put(currGoodsId, goodsGalleryImageList);
 
+                        String goodsFullSpecs = goods.getSafeString("goodsFullSpecs");
+                        tvCurrentSpecs.setText(goodsFullSpecs);
+
                         goodsInfo.goodsId = currGoodsId;
                         goodsInfo.commonId = commonId;
-                        goodsInfo.goodsFullSpecs = goods.getSafeString("goodsFullSpecs");
+                        goodsInfo.goodsFullSpecs = goodsFullSpecs;
                         goodsInfo.goodsPrice0 =  goods.getDouble("goodsPrice0");
                         goodsInfo.price = Util.getSkuPrice(goods);
                         SLog.info("__goodsInfo.price[%s], goods[%s]", goodsInfo.price, goods.toString());
