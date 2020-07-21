@@ -24,9 +24,9 @@ class FeatureGoodViewModel(application: Application) : BaseViewModel(application
     /**
      * 网络请求方法，在ViewModel中调用Model层，通过Okhttp+Retrofit+RxJava发起请求
      */
-    fun doGetServerNews() {
+    fun doGetFeaturesGoodsList() {
         //可以调用addSubscribe()添加Disposable，请求与View周期同步
-        val observable = viewModel.doSellerGoodsList(params = mapOf("token" to User.getToken() , "page" to pageNum))
+        val observable = viewModel.doSellerGoodsList(params = mapOf("token" to User.getToken() , "page" to pageNum ,"goodsState" to 1))
         observable.compose(RxUtil.observableToMain()) //线程调度,compose操作符是直接对当前Observable进行操作（可简单理解为不停地.方法名（）.方法名（）链式操作当前Observable）
                 .compose(RxUtil.exceptionTransformer()) // 网络错误的异常转换, 这里可以换成自己的ExceptionHandle
                 .doOnSubscribe(this@FeatureGoodViewModel) //  请求与ViewModel周期同步
