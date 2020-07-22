@@ -972,6 +972,10 @@ public class AddGoodsFragment extends BaseFragment
 
                 break;
             case R.id.tv_add_good_unit:
+                if (unitList == null || unitList.size() == 0) {
+                    ToastUtil.success(_mActivity,"未獲取單位列表數據");
+                    return;
+                }
                 new XPopup.Builder(_mActivity)
                         .moveUpToKeyboard(false)
                         .asCustom(new ListPopup(_mActivity,"計量單位",
