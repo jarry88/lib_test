@@ -749,9 +749,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             SLog.info("onSupportVisible");
             loadPlatformCustomerData();
         } else {
+            loadConversation();
             loadData();
             //加載服務器數據補充
-            loadConversation();
         }
         for (ChatConversation chatConversation : chatConversationList) {
             if (chatConversation == null) {

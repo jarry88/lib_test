@@ -266,7 +266,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         } else if (!showlist&&id == R.id.btn_test) {
             if (tabClickCount > 5) {
                 showlist = true;
-                String[] data = {"取消","prod/線上" , "29", "229", "28","驗收/F1","日誌開關","test","captra"};
+                String[] data = {"取消","prod/線上" , "29", "229", "28","驗收/F3","日誌開關","test","captra"};
                 XPopup.Builder builder = new XPopup.Builder(_mActivity);
                 builder.dismissOnTouchOutside(false);
                 builder.asCenterList("切換環境:", data, (position, text) -> {
@@ -285,7 +285,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                         Config.changeEnvironment(Config.ENV_28);
                         exit();
                     } else if(position==5){
-                        Config.changeEnvironment(Config.ENV_F1);
+                        Config.changeEnvironment(Config.ENV_F3);
+                        ToastUtil.success(_mActivity,"切換f3環境，重啓應用");
                         exit();
                     } else if (position == 6) {
                         if (Config.SLOGENABLE) {

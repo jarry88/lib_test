@@ -562,7 +562,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 boolean exit = bundle.getBoolean("exit");
                 if (exit) {
                     String huanjingName = String.format("當前為%d環境",27+Config.currEnv);
-                    if (Config.currEnv == Config.ENV_F1) {
+                    if (Config.currEnv == Config.ENV_F3) {
                         huanjingName = "當前環境為驗收環境";
                     } else if(Config.currEnv == Config.ENV_PROD){
                         huanjingName = "當前環境為正式生成環境";

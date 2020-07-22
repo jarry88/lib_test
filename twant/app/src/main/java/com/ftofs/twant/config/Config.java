@@ -40,7 +40,7 @@ public class Config {
 
     public static boolean USE_28 = false;   // 開發模式下: true -- 使用28服務器  false -- 使用29服務器
     public static final boolean USE_F2 = true;  // 生產模式下: true -- 使用F2服務器  false -- 使用www服務器
-    public static boolean USE_F1 = false;  // 生產模式下: true -- 使用F1服務器  false -- 使用www服務器
+    public static boolean USE_F3 = false;  // 生產模式下: true -- 使用F3服務器  false -- 使用www服務器
 
     /**
      * 日誌開關
@@ -54,14 +54,14 @@ public class Config {
 
     public static String API_BASE_URL = DEVELOPER_MODE ?
             (USE_28 ? "http://192.168.5.28/api" : "https://192.168.5.29/api")
-            : (USE_F2 ? (USE_F1 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/api");
+            : (USE_F2 ? (USE_F3 ? "https://f3.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/api");
 
     public static String WEB_BASE_URL = DEVELOPER_MODE ?
             (USE_28 ? "http://192.168.5.28/web" : "https://192.168.5.29/web")
-            : (USE_F2 ? (USE_F1 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/web");
+            : (USE_F2 ? (USE_F3 ? "https://f3.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/web");
     public static String BASE_URL = DEVELOPER_MODE ?
             (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29")
-            : (USE_F2 ? (USE_F1 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com");
+            : (USE_F2 ? (USE_F3 ? "https://f3.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com");
 
     public static String MOBILE_WEB_BASE_URL = DEVELOPER_MODE ?
             (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29")
@@ -99,7 +99,7 @@ public class Config {
     public static final int ENV_28 = 1;
     public static final int ENV_29 = 2;
     public static final int ENV_PROD = 3;
-    public static final int ENV_F1 = 4;
+    public static final int ENV_F3 = 4;
     public static int currEnv = ENV_PROD;
 
     /**
@@ -123,7 +123,7 @@ public class Config {
             //User.logout();
             PROD = true;
             DEVELOPER_MODE = false;
-            USE_F1 = env == ENV_F1;
+            USE_F3 = env == ENV_F3;
         }
         // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT
         ConstantBase.setMPayPackageName(Config.DEVELOPER_MODE ?
@@ -146,7 +146,7 @@ public class Config {
 
         API_BASE_URL = DEVELOPER_MODE ?
                 (USE_28 ? "http://192.168.5.28/api" : env == ENV_29 ? "https://192.168.5.29/api" : "https://192.168.5.229/api")
-                : (USE_F2 ? (USE_F1 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/api");
+                : (USE_F2 ? (USE_F3 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/api");
 //        API_BASE_URL = DEVELOPER_MODE ?
 //               (USE_28 ? "http://192.168.5.28/api" : "http://120.196.113.116:8001/api")
 //                : (USE_F2 ? "https://f2.twant.com/api" : "https://www.twant.com/api");

@@ -76,9 +76,9 @@ public class MetaDataUtil {
                 //baseUrl = "https://www.oschina.net/"; //  29环境
                 baseUrl = "https://192.168.5.29/api/"; //  29环境
                 break;
-            case 4://f1环境
+            case 4://f3环境
                 //baseUrl = "https://www.oschina.net/"; //  qa环境
-                baseUrl = "https://f1.twant.com/api/"; //  f1环境
+                baseUrl = "https://f3.twant.com/api/"; //  f1环境
                 break;
             default:
                 baseUrl = "https://www.twant.com/api/"; //  线上环境
@@ -115,7 +115,7 @@ public class MetaDataUtil {
             } else if (environment == 3) {
                 KLog.INSTANCE.e("environment:" + environment + "--生产环境");
             } else if (environment == 4) {
-                KLog.INSTANCE.e("environment:" + environment + "--f1环境");
+                KLog.INSTANCE.e("environment:" + environment + "--f3环境");
             }
             return environment;
         } catch (Exception e) {
