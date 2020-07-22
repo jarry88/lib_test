@@ -7,3 +7,4 @@
 /twant/local.properties
 /twant/gradle/
 *.salive
+.idea/misc.xml

@@ -428,8 +428,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             }
 //            chatConversationList.add(null);
 
-            adapter.setNewData(chatConversationList);
-//            adapter.submitList(chatConversationList);
+//            adapter.setNewData(chatConversationList);
+            adapter.submitList(chatConversationList);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -749,8 +749,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             SLog.info("onSupportVisible");
             loadPlatformCustomerData();
         } else {
-            loadConversation();
             loadData();
+            //加載服務器數據補充
+            loadConversation();
         }
         for (ChatConversation chatConversation : chatConversationList) {
             if (chatConversation == null) {
@@ -801,11 +802,18 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
 //                            SLog.info("messageFragment [%s]",messageContent);
                             String sendTime =conversation.getSafeString("sendTime");
+                            int i = 0;
+
+                            //需要新增列表item
+
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
+                                i++;
                                 if (chatConversation == null) {
                                     continue;
                                 }
+
+
                                 if (chatConversation.friendInfo != null&&friendInfo!=null) {
                                     if (TextUtils.equals(chatConversation.friendInfo.memberName,friendInfo.memberName)&&friendInfo.memberName!=null) {
                                         has = true;
@@ -816,12 +824,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                             chatConversation.lastMessage = "txt::" + messageContent + ":";
                                             chatConversation.timestamp = timestamp;
                                         }
-                                        else if (chatConversation.timestamp<timestamp&&System.currentTimeMillis()/1000-timestamp>12960000) {//150天
+                                        else if (chatConversation.timestamp<timestamp&&System.currentTimeMillis()/1000-timestamp>12960000) {//安卓自己定義了150天
                                                 chatConversation.timestamp = timestamp;
 //                                                SLog.info("db[%s]timestamp[%s],", System.currentTimeMillis()/1000, timestamp);
 
                                         }
-//                                        SLog.info("db[%s]timestamp[%s],", chatConversation.timestamp, timestamp);
+                                        SLog.info("第[%s]dbtime[%s]sendtimestamp[%s],sendtime[%s],%s,", i,chatConversation.timestamp, timestamp,sendTime,System.currentTimeMillis()/1000-timestamp>12960000);
                                         break;
                                     }
                                 }
@@ -855,18 +863,15 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 //                                newChat.timestamp = sendTime;
 
                                 Conversation.saveNewChat(newChat);
-                                SLog.info("messageFragment [%s]","second");
+                                SLog.info("time，[%s]",time);
 
                                 chatConversationList.add(newChat);
                             }
                         }
                     }
-//                    if (chatConversationList.size() > oldCount) {
-                    SLog.info("messageFragment [%s]","3");
-
-//                    adapter.notifyDataSetChanged();
-                    adapter.submitList(chatConversationList);
-//                    adapter.notifyDataSetChanged();
+//                    adapter.setNewData(chatConversationList);
+//                    adapter.submitList(chatConversationList);
+                    adapter.notifyDataSetChanged();
 //                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
