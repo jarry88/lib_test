@@ -137,7 +137,7 @@
                 android:textColor="#999999"
                 android:paddingBottom="2dp"
                 android:textStyle="bold"
-                android:visibility="@{vo.promotionType==1?View.VISIBLE:View.GONE}"
+                android:visibility="@{vo.promotionType==1?vo.appUsable==1?View.VISIBLE:View.GONE:View.GONE}"
                 app:showOringial="@{vo.original}"
                 />
 

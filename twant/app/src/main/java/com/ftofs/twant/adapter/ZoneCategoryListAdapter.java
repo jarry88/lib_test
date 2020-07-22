@@ -71,14 +71,14 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
         }
         if (item.getFold() == Constant.FALSE_INT) {//收起狀態
             helper.itemView.setBackgroundColor(Color.parseColor("#F3F3F3"));
-            Glide.with(context).load(R.drawable.icon_up_triangle).centerCrop().into(imgFold);
+            Glide.with(context).load(R.drawable.icon_down_triangle).centerCrop().into(imgFold);
             tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
             llSubCategoryList.setVisibility(View.GONE);
         } else {
             helper.itemView.setBackgroundColor(Color.WHITE);
             tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-            Glide.with(context).load(R.drawable.icon_down_triangle).centerCrop().into(imgFold);
+            Glide.with(context).load(R.drawable.icon_up_triangle).centerCrop().into(imgFold);
 
 //            tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_blue, null));
 //            tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
