@@ -12,6 +12,7 @@ public class GoodsInfo {
     public String goodsFullSpecs;
     public String specValueIds;
     public double goodsPrice0; // 原價
+    public double appPrice0;
     public double price;  // 最終價，如果沒有打折，最終價與原價相同
     public double groupPrice; // 團購價格
     public double groupDiscountAmount;  // 團購折扣額
