@@ -6,12 +6,14 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
@@ -60,20 +62,25 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
         TextView tvCategoryName = helper.getView(R.id.tv_category_name);
         tvCategoryName.setTextSize(14);
         tvCategoryName.setText(labelName);
+        ImageView imgFold = helper.getView(R.id.img_fold);
         LinearLayout llSubCategoryList = helper.getView(R.id.ll_sub_ategory_list);
-
-        if (item.getFold() == Constant.FALSE_INT) {
-            helper.itemView.setBackgroundColor(Color.WHITE);
-            helper.setGone(R.id.vw_selected_indicator, false);
-            tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_black, null));
+        if (item.getNextList() == null || item.getNextList().size() == 0) {
+            imgFold.setVisibility(View.GONE);
+        }else {
+            imgFold.setVisibility(View.VISIBLE);
+        }
+        if (item.getFold() == Constant.FALSE_INT) {//收起狀態
+            helper.itemView.setBackgroundColor(Color.parseColor("#F3F3F3"));
+            Glide.with(context).load(R.drawable.icon_up_triangle).centerCrop().into(imgFold);
             tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
             llSubCategoryList.setVisibility(View.GONE);
         } else {
-            helper.itemView.setBackgroundColor(Color.parseColor("#F3F3F3"));
+            helper.itemView.setBackgroundColor(Color.WHITE);
             tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-            helper.setGone(R.id.vw_selected_indicator, true);
-            tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_blue, null));
+            Glide.with(context).load(R.drawable.icon_down_triangle).centerCrop().into(imgFold);
+
+//            tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_blue, null));
 //            tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
             if (subItemCount > 0) {
@@ -103,7 +110,7 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
                     });
 
                     tvSubCategory.setPadding(0, Util.dip2px(context, 12.5f), 0, Util.dip2px(context, 12.5f));
-                    tvSubCategory.setText(String.format("·%s", storeLabel.getCategoryName()));
+                    tvSubCategory.setText(String.format("•%s", storeLabel.getCategoryName()));
                     llSubCategoryList.addView(tvSubCategory);
                 }
                 llSubCategoryList.setVisibility(View.VISIBLE);
