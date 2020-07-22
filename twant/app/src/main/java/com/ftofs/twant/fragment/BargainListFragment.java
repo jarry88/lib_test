@@ -83,7 +83,11 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
                 if (bargainItem.itemType == Constant.ITEM_TYPE_BANNER) {
                     return;
                 }
-                Util.startFragment(GoodsDetailFragment.newInstance(bargainItem.commonId, bargainItem.goodsId, bargainItem.bargainId));
+                if (bargainItem.bargainState == Constant.BARGAIN_STATE_NOT_STARTED) {
+                    ToastUtil.error(_mActivity, "砍價活動未開始");
+                } else if (bargainItem.bargainState == Constant.BARGAIN_STATE_ONGOING) {
+                    Util.startFragment(GoodsDetailFragment.newInstance(bargainItem.commonId, bargainItem.goodsId, bargainItem.bargainId));
+                }
             }
         });
 
