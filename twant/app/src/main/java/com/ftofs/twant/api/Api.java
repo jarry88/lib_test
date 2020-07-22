@@ -1406,7 +1406,7 @@ public class Api {
     /**
      * 【購物專場】新版可復用購物專場主頁
      */
-    public static final String PATH_SHOPPING_ZONE = "/shoppingzone";
+    public static final String PATH_SHOPPING_ZONE = "/shoppingzone/info";
     /**
      * 【購物專場】新版可復用購物專場店鋪查詢頁
      */

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
+    android:minWidth="90dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="12dp"
@@ -19,12 +20,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/store_category_selected_indicator"
+            android:visibility="invisible"
             />
         <TextView
             android:id="@+id/tv_category_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
+            android:layout_marginStart="15dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,6 +39,17 @@
             android:ellipsize="end"
             android:textColor="@color/tw_black"
             />
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="3dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/icon_down_triangle"
+            android:id="@+id/img_fold"/>
+
 
         <FrameLayout
             android:visibility="gone"

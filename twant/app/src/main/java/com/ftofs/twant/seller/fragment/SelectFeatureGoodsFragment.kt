@@ -70,6 +70,12 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
         viewModel.doGetFeaturesGoodsList() //请求出售中的商品列表
         initRecyclerView()
     }
+
+    override fun onBackPressedSupport(): Boolean {
+        hideSoftInputPop()
+        return false
+    }
+
     private fun initRecyclerView() {
         sellerGoodsListAdapter = SellerGoodsListAdapter()
         binding.layoutManager = LinearLayoutManager(activity)

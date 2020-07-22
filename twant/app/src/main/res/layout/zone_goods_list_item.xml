@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="android.view.View"/>
+
         <variable
             name="vo"
             type="com.ftofs.twant.entity.Goods" />
@@ -9,15 +11,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="12dp"
-        android:orientation="vertical"
-        android:background="@drawable/post_list_item_bg">
+        android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,81 +19,140 @@
             android:padding="8dp"
             android:visibility="gone"
             android:id="@+id/tv_category_label"/>
-        <LinearLayout
-
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/post_list_item_bg">
+            android:id="@+id/iv_goods_item"
+            android:layout_height="100dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="12dp"
+            >
+            <View android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:background="@drawable/white_6dp_radius_bg"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/view_bg">
 
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/img_goods"
-                android:background="@color/tw_grey_F3F3"
+            </View>
+            <RelativeLayout
+                android:id="@+id/iv_goods_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/img_goods_item"
+                    android:layout_width="86dp"
+                    android:layout_height="86dp"
+                    android:padding="0.5dp"
+                    android:background="@color/tw_grey_F3F3"
+                    app:imageUrl="@{vo.goodsImage}"
 
-                android:layout_width="86dp"
-                android:layout_height="86dp"
-                android:layout_margin="5dp"
-                android:padding="0.5dp"
-                app:imageUrl="@{vo.goodsImage}"
-                app:riv_corner_radius="0.5dp"
+                    android:scaleType="fitXY"/>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/iv_goods_img_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="@+id/iv_goods_img"
+                app:layout_constraintTop_toTopOf="@+id/iv_goods_img" />
+            <com.ftofs.twant.widget.SlantedWidget
+                android:id="@+id/sw_price"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="10dp"
+                android:visibility="gone"
                 />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp">
-                <TextView
-                    android:id="@+id/tv_goods_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/tw_black"
-                    android:lineSpacingExtra="5dp"
-                    android:text="@{vo.goodsName}"
-                    android:maxLines="2"
-                    android:layout_marginBottom="4dp"
-                    android:ellipsize="end"
-                    />
-                <TextView
-                    android:id="@+id/tv_goods_jingle"
-                    android:layout_below="@id/tv_goods_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:textColor="@color/tw_grey_99"
-                    android:lineSpacingExtra="5dp"
-                    android:text="@{vo.jingle}"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    />
+            <TextView
+                android:id="@+id/tv_goods_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="4dp"
+                android:textColor="@color/tw_black"
+                android:text="@{vo.goodsName}"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@+id/iv_goods_img"
+                app:layout_constraintTop_toTopOf="@+id/iv_goods_img"
+                app:layout_constraintRight_toRightOf="@id/view_bg" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="5dp">
-                    <TextView
-                        android:id="@+id/tv_goods_price_left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:textSize="14sp"
-                        android:textColor="@color/tw_red"
-                        app:price="@{vo.appPriceMin}"
-                        />
-                    <ImageView
-                        android:padding="5dp"
-                        android:id="@+id/btn_add_to_cart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/icon_add_to_cart_blue"
-                        />
 
-                </RelativeLayout>
-            </RelativeLayout>
-        </LinearLayout>
+
+            <TextView
+            android:id="@+id/tv_goods_comment"
+            app:layout_constraintLeft_toLeftOf="@id/tv_goods_name"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginEnd="4dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="@{vo.jingle}"
+            android:textColor="@color/tw_grey_99"
+            android:textSize="10sp"
+            app:layout_constraintLeft_toRightOf="@+id/iv_goods_img"
+            app:layout_constraintTop_toBottomOf="@+id/tv_goods_name"
+            app:layout_constraintRight_toRightOf="@id/view_bg"
+            />
+
+            <TextView
+                android:id="@+id/tv_goods_price"
+                app:layout_constraintBottom_toBottomOf="@id/view_bg"
+                app:layout_constraintLeft_toLeftOf="@id/tv_goods_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/tw_red"
+                android:textStyle="bold"
+                app:price="@{vo.appPriceMin}"
+
+                />
+            <TextView
+                android:id="@+id/tv_goods_original_price"
+                app:layout_constraintBottom_toBottomOf="@id/view_bg"
+                app:layout_constraintLeft_toRightOf="@id/tv_goods_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin8"
+                android:layout_marginEnd="4dp"
+                android:layout_centerVertical="true"
+                android:textSize="10sp"
+                android:textColor="#999999"
+                android:paddingBottom="2dp"
+                android:textStyle="bold"
+                android:visibility="@{vo.promotionType==1?vo.appUsable==1?View.VISIBLE:View.GONE:View.GONE}"
+                app:showOringial="@{vo.original}"
+                />
+
+
+            <ImageView
+                android:id="@+id/iv_goods_add"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="1dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_blue_add"
+                android:layout_marginEnd="@dimen/margin12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
 </layout>
