@@ -72,6 +72,13 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
     }
 
     @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        SLog.info("onSupportVisible");
+
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 

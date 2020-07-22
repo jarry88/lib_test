@@ -436,8 +436,8 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                     }
                     String text = String.format("%d筆", bargainCount);
                     SpannableString sp = new SpannableString(text);
-                    sp.setSpan(new AbsoluteSizeSpan(14, true), 0, text.length() - 2, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    sp.setSpan(new AbsoluteSizeSpan(32, true), text.length() - 2, text.length() - 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    sp.setSpan(new AbsoluteSizeSpan(32, true), 0, text.length() , Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    sp.setSpan(new AbsoluteSizeSpan(14, true), text.length() - 1, text.length() , Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                     tvHelpCount.setText(sp);
                 } catch (Exception e) {
 

@@ -38,11 +38,11 @@ interface DemoApiService {
     suspend fun doSellerFeaturesGoodsList(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ):BaseResponse<SellerPageVO<SellerGoodsItem>>
 
     //  获取购物专场数据
-    @GET("shoppingzone/{zoneId}")
+    @GET("shoppingzone/info/{zoneId}")
     suspend fun getShoppingZone(@Path("zoneId") zoneId: Int ): TwantResponse<SellerPageVO<SellerGoodsItem>>
 
     //  获取购物专场数据
-    @GET("shoppingzone/{zoneId}")
+    @GET("shoppingzone/info/{zoneId}")
     suspend fun doZoneCategoryList(@Path("zoneId") zoneId: Int ): TwantResponse<ZoneInfo>
 
     //  获取购物专场商品数据

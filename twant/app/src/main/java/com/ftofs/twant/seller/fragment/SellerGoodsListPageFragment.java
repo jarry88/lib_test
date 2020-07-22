@@ -74,6 +74,16 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
     }
 
     @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        SLog.info("onSupportVisible");
+
+        currPage = 0;
+        loadData(currPage + 1);
+
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -108,7 +118,6 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         rvList.setAdapter(sellerGoodsAdapter);
 
-        loadData(currPage + 1);
     }
 
     private void switchSellerGoodsStatus(int commonId) {

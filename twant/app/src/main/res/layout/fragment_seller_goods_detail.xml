@@ -718,6 +718,7 @@
                     android:background="@drawable/border_type_d">
 
                     <TextView
+                        android:id="@+id/tv_freight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="運費："

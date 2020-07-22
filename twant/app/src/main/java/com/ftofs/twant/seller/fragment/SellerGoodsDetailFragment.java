@@ -85,6 +85,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     public int goodsState;
     public int limitBuy;
     public  int goodsModal;//銷售模式 銷售模式 0零售 1跨城購 2虛擬
+    private String freightTemplateName;
 
 
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
@@ -207,7 +208,16 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
 //                            (isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品"));
                     ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(goodsModal==2 ?"跨城購商品":goodsModal== 1?"虛擬商品" : "零售商品");
 
-                    ((TextView) contentView.findViewById(R.id.tv_goods_freight)).setText("$ "+StringUtil.formatFloat(goodsFreight));
+                    if (freightTemplateId > 0) {
+                        ((TextView) contentView.findViewById(R.id.tv_freight)).setText("物流規則：");
+                        ((TextView) contentView.findViewById(R.id.tv_goods_freight)).setText(freightTemplateName);
+
+
+                    } else {
+                        ((TextView) contentView.findViewById(R.id.tv_freight)).setText("固定運費：");
+                        ((TextView) contentView.findViewById(R.id.tv_goods_freight)).setText("$ "+StringUtil.formatFloat(goodsFreight));
+
+                    }
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
                     ((TextView) contentView.findViewById(R.id.tv_goods_volume)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
                     ((TextView) contentView.findViewById(R.id.tv_goods_participate_bargain)).setText(joinBigSale==1?"是":"否");
@@ -264,6 +274,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         freightVolume = goodsVo.getDouble("freightVolume");
         goodsFreight = goodsVo.getDouble("goodsFreight");
         freightTemplateId = goodsVo.getInt("freightTemplateId");
+        freightTemplateName = goodsVo.getSafeString("freightTemplateName");
 
     }
 
