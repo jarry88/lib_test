@@ -1242,44 +1242,40 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         storeVoucherList.clear();
                         EasyJSONArray couponList = responseObj.getSafeArray("datas.list");
                         if (couponList.length() > 0) {
+                            int couponCount = 0;
                             for (Object object : couponList) {
-                                LinearLayout linearLayout = new LinearLayout(_mActivity);
-                                linearLayout.setBackgroundResource(R.color.tw_yellow);
-                                // linearLayout.setPadding(2,2,2,2);
-                                linearLayout.setGravity(Gravity.CENTER_VERTICAL);
-                                TextView textView = new TextView(_mActivity);
-                                textView.setHeight(Util.dip2px(_mActivity, 21));
-                                textView.setWidth(Util.dip2px(_mActivity, 20));
-                                textView.setGravity(Gravity.CENTER);
-                                textView.setText("領");
-                                textView.setTextColor(getResources().getColor(android.R.color.white, null));
-                                textView.setTextSize(12);
-                                textView.setBackgroundResource(R.color.tw_yellow);
-                                TextView tvVoucher = new TextView(_mActivity);
-                                tvVoucher.setTextSize(12);
-                                tvVoucher.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-                                tvVoucher.setGravity(Gravity.CENTER);
-                                tvVoucher.setBackgroundResource(R.drawable.yellow_voucher_bg);
-                                tvVoucher.setPadding(Util.dip2px(_mActivity, 5.5f), 0,
-                                        Util.dip2px(_mActivity, 5.5f), 0);
-                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                                layoutParams.rightMargin = Util.dip2px(_mActivity, 10);
-                                linearLayout.addView(textView);
-                                linearLayout.addView(tvVoucher, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
                                 EasyJSONObject voucher = (EasyJSONObject) object;
-                                int limitAmount = (int) voucher.getDouble("searchCouponActivityVo.limitAmount");
                                 int couponPrice = (int) voucher.getDouble("searchCouponActivityVo.couponPrice");
 
-                                if (limitAmount == 0) {
-                                    // 如果為0，表示無門檻
-                                    // tvVoucher.setText(String.format("$%d無門檻", couponPrice));
+                                if (couponCount < 3) {  // 只顯示前3個
+                                    LinearLayout linearLayout = new LinearLayout(_mActivity);
+                                    linearLayout.setBackgroundResource(R.color.tw_yellow);
+                                    // linearLayout.setPadding(2,2,2,2);
+                                    linearLayout.setGravity(Gravity.CENTER_VERTICAL);
+                                    TextView textView = new TextView(_mActivity);
+                                    textView.setHeight(Util.dip2px(_mActivity, 21));
+                                    textView.setWidth(Util.dip2px(_mActivity, 20));
+                                    textView.setGravity(Gravity.CENTER);
+                                    textView.setText("領");
+                                    textView.setTextColor(getResources().getColor(android.R.color.white, null));
+                                    textView.setTextSize(12);
+                                    textView.setBackgroundResource(R.color.tw_yellow);
+                                    TextView tvVoucher = new TextView(_mActivity);
+                                    tvVoucher.setTextSize(12);
+                                    tvVoucher.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
+                                    tvVoucher.setGravity(Gravity.CENTER);
+                                    tvVoucher.setBackgroundResource(R.drawable.yellow_voucher_bg);
+                                    tvVoucher.setPadding(Util.dip2px(_mActivity, 5.5f), 0,
+                                            Util.dip2px(_mActivity, 5.5f), 0);
+                                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                    layoutParams.rightMargin = Util.dip2px(_mActivity, 10);
+                                    linearLayout.addView(textView);
+                                    linearLayout.addView(tvVoucher, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
                                     tvVoucher.setText(String.format("%d元券", couponPrice));
-                                } else {
-                                    // tvVoucher.setText(String.format("滿%d減%d", limitAmount, couponPrice));
-                                    tvVoucher.setText(String.format("%d元券", couponPrice));
+
+                                    llVoucherContainer.addView(linearLayout, layoutParams);
                                 }
-                                llVoucherContainer.addView(linearLayout, layoutParams);
 
                                 String useGoodsRangeExplain = voucher.getSafeString("searchCouponActivityVo.useGoodsRangeExplain");
                                 int memberIsReceive = voucher.getInt("memberIsReceive");
@@ -1299,6 +1295,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 storeVoucher.searchSn = voucher.getSafeString("searchCouponActivityVo.searchSn");
 
                                 storeVoucherList.add(storeVoucher);
+                                couponCount++;
                             }
 
                             rlVoucherList.setVisibility(VISIBLE);
@@ -1582,7 +1579,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         //針對用戶id限購 可以购买0，提示限購-1
                         setGoodsStatus(goodsState);
 
-                        goodsPrice = Util.getSpuPrice(goodsCommon);
+                        goodsPrice = goods.getDouble("appPrice0");
                         ((TextView) contentView.findViewById(R.id.tv_bargain_state_price)).setText(StringUtil.formatFloat(goodsPrice));
 
                         bargainState = bargain.getInt("bargainState");

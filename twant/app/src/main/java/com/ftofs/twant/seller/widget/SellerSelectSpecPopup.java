@@ -208,7 +208,7 @@ public class SellerSelectSpecPopup extends BottomPopupView implements View.OnCli
 
 
                     if (specValueIdList.length() < 1) {
-                        ToastUtil.error(context, String.format("請選擇【%s】值", specName));
+                        ToastUtil.error(context, "請至少選擇一個規格值");
                         return;
                     }
 
