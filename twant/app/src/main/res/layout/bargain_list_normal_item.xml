@@ -154,7 +154,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="距活動結束"
+                        android:layout_gravity="right"
+                        android:text="距活動開始"
                         android:textColor="#A2A1A1"
                         android:textSize="13sp">
                     </TextView>
@@ -165,11 +166,22 @@
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
                         <TextView
+                            android:id="@+id/tv_count_down_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="18dp"
+                            android:layout_marginRight="3dp"
+                            android:textSize="12sp"
+                            android:textColor="@color/tw_yellow"
+                            android:text="0天"
+                            android:gravity="center">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/tv_count_down_hour"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:textSize="12sp"
                             android:textColor="@android:color/white"
-                            android:text="23"
+                            android:text="00"
                             android:gravity="center"
                             android:background="@drawable/yellow_r2dp_bg">
                         </TextView>
@@ -183,11 +195,12 @@
                             android:textColor="@color/tw_yellow">
                         </TextView>
                         <TextView
+                            android:id="@+id/tv_count_down_minute"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:textSize="12sp"
                             android:textColor="@android:color/white"
-                            android:text="09"
+                            android:text="00"
                             android:gravity="center"
                             android:background="@drawable/yellow_r2dp_bg">
                         </TextView>
@@ -201,11 +214,12 @@
                             android:textColor="@color/tw_yellow">
                         </TextView>
                         <TextView
+                            android:id="@+id/tv_count_down_second"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:textSize="12sp"
                             android:textColor="@android:color/white"
-                            android:text="53"
+                            android:text="00"
                             android:gravity="center"
                             android:background="@drawable/yellow_r2dp_bg">
                         </TextView>
