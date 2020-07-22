@@ -20,14 +20,12 @@
             android:layout_marginTop="17dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
-            <com.makeramen.roundedimageview.RoundedImageView
+            <ImageView
                 android:id="@+id/goods_image"
                 android:layout_width="78dp"
                 android:layout_height="78dp"
-                app:riv_border_width="1dp"
-                app:riv_border_color="#DFDFDF"
                 android:src="@drawable/cs_avatar_160">
-            </com.makeramen.roundedimageview.RoundedImageView>
+            </ImageView>
             <LinearLayout
                 android:layout_width="183dp"
                 android:layout_height="wrap_content"
@@ -74,6 +72,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="right"
                         android:text="當前價格"
                         android:textSize="11sp"
                         android:textColor="#A1A1A1">
