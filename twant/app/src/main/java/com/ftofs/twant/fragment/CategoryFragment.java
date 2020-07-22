@@ -411,10 +411,6 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
      * @param switchViewPager  是否需要切換ViewPager
      */
     private void selectTab(int tabIndex, boolean switchViewPager) {
-        if (currTabIndex == tabIndex) {
-            return;
-        }
-
         if (switchViewPager) {
             viewPager.setCurrentItem(tabIndex);
         }
