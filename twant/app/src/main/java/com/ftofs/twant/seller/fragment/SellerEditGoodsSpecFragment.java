@@ -274,6 +274,7 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
             sellerSelectedSpecList.remove(i);
         }
 
+        generateSpecPermutation();
         updateSelectedSpecView();
     }
 
@@ -668,12 +669,24 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
         // 先清空列表
         specValueIdStringList.clear();
 
-        int totalSkuCount = 1;
+        // 顏色（主規格Id)的規格值列表，如果沒有元素，往裏面塞一個0
+        List<Integer> colorSpecValueList = new ArrayList<>();
 
+        int totalSkuCount = 1;
         for (SellerSpecMapItem item : sellerSelectedSpecList) {
             totalSkuCount *= item.sellerSpecItemList.size();
+
+            if (item.specId == Constant.COLOR_SPEC_ID) {
+                for (SellerSpecItem sellerSpecItem: item.sellerSpecItemList) {
+                    colorSpecValueList.add(sellerSpecItem.id);
+                }
+            }
         }
         SLog.info("totalSkuCount[%d]", totalSkuCount);
+
+        if (colorSpecValueList.size() == 0) {
+            colorSpecValueList.add(0);
+        }
 
         for (int i = 0; i < totalSkuCount; i++) {
             int n = i;
@@ -715,6 +728,25 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
 
                 specValueIdStringMap.put(specValueIdString, permutation);
             }
+        }
+
+        // 將colorImageMap中不再需要的舊數據刪除
+        List<Integer> removeColorSpecValueList = new ArrayList<>();
+        for (Map.Entry<Integer, List<SellerGoodsPicVo>> entry : colorImageMap.entrySet()) {
+            int colorSpecValueId = entry.getKey();
+            if (!colorSpecValueList.contains(colorSpecValueId)) {
+                removeColorSpecValueList.add(colorSpecValueId);
+            }
+        }
+        for (int removeColorSpecValueId : removeColorSpecValueList) {
+            SLog.info("刪除顏色規格值removeColorSpecValueId[%d]", removeColorSpecValueId);
+            colorImageMap.remove(removeColorSpecValueId);
+        }
+
+        // 添加colorImageMap中不存在的新數據
+        for (int addColorSpecValueId : colorSpecValueList) {
+            SLog.info("添加顏色規格值addColorSpecValueId[%d]", addColorSpecValueId);
+            colorImageMap.put(addColorSpecValueId, new ArrayList<>());
         }
     }
 
@@ -832,7 +864,13 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                     "isDefault": 1 #1是0否主圖，同一組(colorId相同)規格只有一張主圖
                 }
                  */
+
                 List<SellerGoodsPicVo> picVoList = entry.getValue();
+                SLog.info("colorId[%d], size[%d]", entry.getKey(), picVoList.size());
+                if (picVoList.size() < 1) {
+                    return new Pair<>(false, "每種顏色都必須設置產品圖片");
+                }
+
                 for (SellerGoodsPicVo vo : picVoList) {
                     goodsPicVoList.append(EasyJSONObject.generate(
                             "colorId", vo.colorId,
