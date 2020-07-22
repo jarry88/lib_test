@@ -1,5 +1,7 @@
 package com.ftofs.twant.kotlin
 
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -21,6 +23,16 @@ fun loadImageUrl(v: ImageView, url: String?) {
 fun setTextPrice(v: TextView, price: Double) {
     price?.run {
         v.text= StringUtil.formatPrice( null,price, 0, 2)
+    }
+}
+@BindingAdapter(value = ["showOringial"])
+fun setTextOriginal(v: TextView, original: Double) {
+    original?.run {
+        v.setText(StringUtil.formatPrice(null,original, 0, true))
+        v.setTypeface(Typeface.DEFAULT)
+        // 原價顯示刪除線
+        // 原價顯示刪除線
+        v.setPaintFlags(v.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
     }
 }
 @BindingAdapter(value = ["fir","len","pointSize","defaultSize","textInput"],requireAll = false)

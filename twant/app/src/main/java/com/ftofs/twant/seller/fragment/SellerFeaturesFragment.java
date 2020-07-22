@@ -253,9 +253,8 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
                 start(AddGoodsFragment.newInstance());
                 hideSoftInputPop();
             } else if (id == 2) { // 商品規格
-
-                start(SellerSpecFragment.newInstance());
                 hideSoftInputPop();
+                start(SellerSpecFragment.newInstance());
             } else if (id == 0) {//商品管理
                 try {
                     popTo(SellerGoodsListFragment.class,false);

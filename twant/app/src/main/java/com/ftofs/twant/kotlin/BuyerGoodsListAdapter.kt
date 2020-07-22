@@ -23,7 +23,7 @@ override val layoutId: Int
 
     override fun initView(binding: ZoneGoodsListItemBinding, item: Goods) {
         binding.vo = item
-        binding.btnAddToCart.setOnClickListener{
+        binding.ivGoodsAdd.setOnClickListener{
             if(item.goodsStatus==0){
                 ToastUtils.showShort("商品已下架");
                 return@setOnClickListener
