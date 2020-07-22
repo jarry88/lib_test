@@ -21,6 +21,7 @@ import com.ftofs.twant.domain.bargain.Bargain;
 import com.ftofs.twant.entity.BargainItem;
 import com.ftofs.twant.entity.MyFriendListItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -94,6 +95,14 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
         loadData(currPage + 1);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (adapter != null) {
+            adapter.cancelAllTimers();
+        }
+    }
 
     private void loadData(int page) {
         EasyJSONObject params = EasyJSONObject.generate(
@@ -142,6 +151,9 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
                         bargainItem.commonId = bargainGoodsVo.getInt("commonId");
                         bargainItem.goodsId = bargainGoodsVo.getInt("goodsId");
                         bargainItem.bargainId = bargainGoodsVo.getInt("bargainId");
+                        String startTimeStr = bargainGoodsVo.getSafeString("startTime");
+                        bargainItem.startTime = Jarbon.parse(startTimeStr).getTimestampMillis();
+                        bargainItem.bargainState = bargainGoodsVo.getInt("bargainState");
                         bargainItem.imageSrc = bargainGoodsVo.getSafeString("imageSrc");
                         bargainItem.goodsName = bargainGoodsVo.getSafeString("goodsName");
                         bargainItem.jingle = bargainGoodsVo.getSafeString("jingle");
