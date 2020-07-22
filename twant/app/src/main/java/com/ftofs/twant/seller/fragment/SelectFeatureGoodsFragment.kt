@@ -67,38 +67,13 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
         binding.iconAddGoods.visibility=View.GONE
         binding.tvTitle.text="選擇鎮店之寶"
         loadingUtil = LoadingUtil(activity)
-        viewModel.doGetServerNews() //请求网络数据
+        viewModel.doGetFeaturesGoodsList() //请求出售中的商品列表
         initRecyclerView()
     }
     private fun initRecyclerView() {
         sellerGoodsListAdapter = SellerGoodsListAdapter()
         binding.layoutManager = LinearLayoutManager(activity)
         binding.adapter = sellerGoodsListAdapter
-//        sellerGoodsListAdapter.setOnItemClickListener { adapter, view, position -> ToastUtils.showShort("点击了条目--" + position) }
-//        sellerGoodsListAdapter.onItemLongClickListener = BaseQuickAdapter.OnItemLongClickListener { adapter, view, position ->
-//            ToastUtils.showShort("长按了条目--" + position)
-//            true
-//        }
-//
-//        sellerGoodsListAdapter.setOnItemChildClickListener { adapter, view, position ->
-//            if (view.id == R.id.goods_image) {
-//                KLog.e("点击了button")
-//                val goodsData = goodsList[position]
-//                //删除选择对话框
-//                val builder = AlertDialog.Builder(activity as Context)
-//                builder.setTitle("尊敬的用户")
-//                builder.setMessage("你真的要卸载我吗？")
-//                builder.setPositiveButton("残忍卸载") { dialog, which ->
-//                    viewModel.deleteItem(goodsData)
-//                    //                            sellerGoodsListAdapter.remove(position);
-//                    sellerGoodsListAdapter.notifyItemRemoved(position)
-//                    builder.setNegativeButton("我再想想") { dialog, which ->
-//                    }
-//                    val alert = builder.create()
-//                    alert.show()
-//                }
-//            }
-//        }
     }
     override fun initViewObservable() {
         super.initViewObservable()
@@ -129,13 +104,13 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
         })
         binding.refreshLayout.setOnRefreshListener {
             viewModel.pageNum = 1
-            viewModel.doGetServerNews()
+            viewModel.doGetFeaturesGoodsList()
         }
         //上拉加载更多
         binding.refreshLayout.setOnLoadMoreListener { refreshLayout: RefreshLayout? ->
             viewModel.pageNum++
             //            loadMoreTestData();   // 模拟加载更多数据
-            viewModel.doGetServerNews()
+            viewModel.doGetFeaturesGoodsList()
         }
         /**
          * 每个界面默认页效果不同
@@ -179,7 +154,7 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
     override fun onContentReload() {
         super.onContentReload()
         KLog.e("点击空白页")
-        viewModel.doGetServerNews() //请求网络数据
+        viewModel.doGetFeaturesGoodsList() //请求网络数据
         hideSoftInputPop()
     }
 

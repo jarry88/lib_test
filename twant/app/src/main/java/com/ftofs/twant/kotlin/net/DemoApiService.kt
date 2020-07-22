@@ -35,7 +35,7 @@ interface DemoApiService {
     fun doSellerGoodsList(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ): Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>>
     //  获取商家商品列表
     @GET("member/seller/goods/list")
-    suspend fun doSellerGoodsListtest(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ):BaseResponse<SellerPageVO<SellerGoodsItem>>
+    suspend fun doSellerFeaturesGoodsList(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ):BaseResponse<SellerPageVO<SellerGoodsItem>>
 
     //  获取购物专场数据
     @GET("shoppingzone/{zoneId}")
