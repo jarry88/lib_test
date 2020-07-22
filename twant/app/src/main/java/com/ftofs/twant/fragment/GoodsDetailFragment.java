@@ -1482,7 +1482,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         llFloatButton.setVisibility(GONE);
 
         // 隱藏【規格】、【送至】、【說說】、【城友】
-        contentView.findViewById(R.id.rl_spec_container).setVisibility(VISIBLE);
+        View rlSpecContainer = contentView.findViewById(R.id.rl_spec_container);
+        rlSpecContainer.setVisibility(VISIBLE);
+        rlSpecContainer.setBackground(null);
         contentView.findViewById(R.id.ic_specs_expand_button).setVisibility(GONE);
         contentView.findViewById(R.id.rl_send_to_container).setVisibility(GONE);
         contentView.findViewById(R.id.ll_comment_container).setVisibility(GONE);
