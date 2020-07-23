@@ -37,6 +37,7 @@ import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
@@ -467,6 +468,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("commonId", commonId);
             MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_BUY, analyticsDataMap);
+        }
+
+        if (!User.isLogin()) {
+            dismiss();
+            Util.showLoginFragment();
+            return;
         }
 
         dismiss();
