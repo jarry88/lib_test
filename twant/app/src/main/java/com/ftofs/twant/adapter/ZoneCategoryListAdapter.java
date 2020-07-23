@@ -65,7 +65,7 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
         ImageView imgFold = helper.getView(R.id.img_fold);
         LinearLayout llSubCategoryList = helper.getView(R.id.ll_sub_ategory_list);
         if (item.getNextList() == null || item.getNextList().size() == 0) {
-            imgFold.setVisibility(View.GONE);
+            imgFold.setVisibility(View.INVISIBLE);
         }else {
             imgFold.setVisibility(View.VISIBLE);
         }

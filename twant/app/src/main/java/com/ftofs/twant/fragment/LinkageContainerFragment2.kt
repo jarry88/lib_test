@@ -12,9 +12,6 @@ import android.widget.TextView
 import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.baozi.treerecyclerview.adpater.TreeRecyclerAdapter
-import com.baozi.treerecyclerview.base.ViewHolder
-import com.baozi.treerecyclerview.factory.ItemHelperFactory
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.adapter.ZoneCategoryListAdapter
@@ -41,7 +38,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
     lateinit var parent:NewShoppingSpecialFragment
 
     private lateinit var mAdapter: BuyerGoodsListAdapter
-    private lateinit var mTreeAdapter: TreeRecyclerAdapter
     private lateinit var mCategoryAdapter: ZoneCategoryListAdapter
     private var loadingUtil: LoadingUtil? = null
     private val  zoneId by  lazy { arguments?.getInt("zoneId") }
@@ -86,8 +82,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
         mAdapter = BuyerGoodsListAdapter()
         binding.adapter = mAdapter
 
-        mTreeAdapter = TreeRecyclerAdapter()
-        binding.treeAdapter= mTreeAdapter
 
         mCategoryAdapter = ZoneCategoryListAdapter(context,R.layout.store_category_list_item,ArrayList<ZoneCategory>(), OnSelectedListener(fun (type:PopupType,id:Int,extra:Any){
             val subCategory = extra as ZoneCategory
