@@ -106,6 +106,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.ll_express_container, this);
         Util.setOnClickListener(view, R.id.btn_my_store_coupon, this);
         Util.setOnClickListener(view, R.id.ll_available_coupon_container, this);
+        Util.setOnClickListener(view, R.id.btn_coupon_change, this);
         //我的足迹隐藏
         Util.setOnClickListener(view, R.id.ll_my_footprint, this);
         Util.setOnClickListener(view, R.id.btn_wallet, this);
@@ -205,6 +206,9 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
             case R.id.ll_available_coupon_container:
                 Util.startFragment(CouponFragment.newInstance());
+                break;
+            case R.id.btn_coupon_change:
+                Util.startFragment(ReceiveCouponFragment.newInstance(Constant.COUPON_TYPE_PLATFORM));
                 break;
 
             case R.id.ll_my_footprint:
@@ -470,6 +474,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     }
 
     static public class ClickProxy {
+        //寫了個寂寞 這地方用不了
         public void gotoBargainList() {
             Util.startFragment(MyBargainListFragment.newInstance(MyBargainListFragment.DATA_TYPE_INITIATE));
         }
@@ -483,7 +488,12 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
             Util.startFragment(SendPackageFragment.newInstance());
         }
         public void gotoMyCoupon() {
+            SLog.info("進入卡券頁");
             Util.startFragment(CouponFragment.newInstance());
+        }
+        public void gotoChangeMyCoupon() {
+            SLog.info("進入兌換頁");
+            Util.startFragment(ReceiveCouponFragment.newInstance(Constant.COUPON_TYPE_PLATFORM));
         }
     }
 
