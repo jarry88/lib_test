@@ -384,6 +384,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
                         // 前一個選中的按鈕
                         TextView prevButton = selSpecButtonList.get(currData.position);
+                        if (prevButton == null) {
+                            return;
+                        }
                         SpecButtonData prevData = (SpecButtonData) prevButton.getTag();
                         prevData.isSelected = false;
                         currData.isSelected = true;
