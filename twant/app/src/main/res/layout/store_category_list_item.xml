@@ -34,7 +34,7 @@
             android:lineSpacingMultiplier="1.1"
             android:lineSpacingExtra="1dp"
             android:textSize="12sp"
-            android:text="sdfasdfasdfsdsfsdfsdfdfsddsfdsfadfasdf"
+            android:text=""
             android:ellipsize="end"
             android:textColor="@color/tw_black"
             />

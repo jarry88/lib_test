@@ -104,6 +104,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
         Util.setOnClickListener(view, R.id.btn_my_express, this);
         Util.setOnClickListener(view, R.id.ll_express_container, this);
+        Util.setOnClickListener(view, R.id.btn_look_package, this);
         Util.setOnClickListener(view, R.id.btn_my_store_coupon, this);
         Util.setOnClickListener(view, R.id.ll_available_coupon_container, this);
         Util.setOnClickListener(view, R.id.btn_coupon_change, this);
@@ -202,6 +203,9 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
             case R.id.ll_express_container:
                 Util.startFragment(SendPackageFragment.newInstance());
+                break;
+            case R.id.btn_look_package:
+                Util.startFragment(QueryPackageFragment.newInstance());
                 break;
 
             case R.id.ll_available_coupon_container:
