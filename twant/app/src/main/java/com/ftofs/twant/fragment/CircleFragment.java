@@ -509,14 +509,17 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                             button.setText(postCategory.categoryName);
                             button.setSelectedColor(twBlue);
                             LinearLayout.LayoutParams layoutParams =
-                                    new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+                                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
                             layoutParams.leftMargin = Util.dip2px(_mActivity, 8);
                             layoutParams.rightMargin = Util.dip2px(_mActivity, 8);
+                            /*
                             if (count == 0) {
                                 layoutParams.weight = 1.3f;
                             } else {
                                 layoutParams.weight = 1;
                             }
+
+                             */
                             llTabButtonContainer.addView(button, layoutParams);
 
                             tabManager.add(button);

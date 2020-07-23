@@ -117,7 +117,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:background="@color/tw_red"
+            android:background="@color/tw_blue"
             android:text="商店">
 
         </TextView>

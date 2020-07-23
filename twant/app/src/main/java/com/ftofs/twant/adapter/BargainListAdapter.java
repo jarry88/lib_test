@@ -115,7 +115,7 @@ public class BargainListAdapter extends BaseMultiItemQuickAdapter<BargainItem, C
                             TimeInfo timeInfo = Time.diff((int) (System.currentTimeMillis() / 1000), (int) (item.startTime / 1000));
                             if (timeInfo != null) {
                                 tvCountDownDay.setText(timeInfo.day + "天");
-                                tvCountDownHour.setText(String.format("%d", timeInfo.hour));
+                                tvCountDownHour.setText(String.format("%02d", timeInfo.hour));
                                 tvCountDownMinute.setText(String.format("%02d", timeInfo.minute));
                                 tvCountDownSecond.setText(String.format("%02d", timeInfo.second));
                             }
