@@ -246,27 +246,36 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                 @Override
                 public void onMessage() {
                     String filepath = (String) message;
+                    if (StringUtil.isEmpty(filepath)) {
+                        ToastUtil.error(context, "處理微信分享圖片失敗");
+                        return;
+                    }
                     shareToWeixin(scene, filepath);
                 }
             };
             TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
-                    String filename = Urls.parse(coverUrl).path().filename();
-                    String ext = PathUtil.getExtension(filename, true);
-                    SLog.info("coverUrl[%s], filename[%s]", coverUrl, filename);
-                    File file = FileUtil.getCacheFile(context, filename);
-                    if (Api.syncDownloadFile(coverUrl, file)) {
-                        SLog.info("封面圖片下載成功[%s]", file.getAbsolutePath());
-                        // 裁剪圖片大小在微信限制范圍內
-                        String thumbFilename = Guid.getSpUuid() + "." + ext;
-                        SLog.info("thumbFilename[%s]", thumbFilename);
-                        File thumb = FileUtil.getCacheFile(context, thumbFilename);
-                        ImageProcess.with(context).from(file).centerCrop().resize(160, 160).toFile(thumb.getAbsolutePath());
-                        SLog.info("thumb[%s]", thumb.getAbsolutePath());
-                        return thumb.getAbsolutePath();
-                    } else {
-                        SLog.info("Error!封面圖片下載失敗");
+                    try {
+                        String filename = Urls.parse(coverUrl).path().filename();
+                        String ext = PathUtil.getExtension(filename, true);
+                        SLog.info("coverUrl[%s], filename[%s]", coverUrl, filename);
+                        File file = FileUtil.getCacheFile(context, filename);
+                        if (Api.syncDownloadFile(coverUrl, file)) {
+                            SLog.info("封面圖片下載成功[%s]", file.getAbsolutePath());
+                            // 裁剪圖片大小在微信限制范圍內
+                            String thumbFilename = Guid.getSpUuid() + "." + ext;
+                            SLog.info("thumbFilename[%s]", thumbFilename);
+                            File thumb = FileUtil.getCacheFile(context, thumbFilename);
+                            ImageProcess.with(context).from(file).centerCrop().resize(160, 160).toFile(thumb.getAbsolutePath());
+                            SLog.info("thumb[%s]", thumb.getAbsolutePath());
+                            return thumb.getAbsolutePath();
+                        } else {
+                            SLog.info("Error!封面圖片下載失敗");
+                            return null;
+                        }
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                         return null;
                     }
                 }
