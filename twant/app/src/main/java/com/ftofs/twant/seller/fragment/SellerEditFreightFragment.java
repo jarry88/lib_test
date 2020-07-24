@@ -340,7 +340,7 @@ public class SellerEditFreightFragment extends BaseFragment implements View.OnCl
     public void onSelected(PopupType type, int id, Object extra) {
         if (type == PopupType.GOODS_FREIGHT_RULE) {
             freightRuleIndex = id;
-            if (freightList.size() > 0) {
+            if (freightList != null && id < freightList.size()) {
                 freightTemplateId = freightList.get(id).id;
                 if (extra != null) {
                     tvRule.setText(extra.toString());
