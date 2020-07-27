@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ import com.ftofs.twant.entity.DownloadImageResult;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.NineLuckPan;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +38,8 @@ import java.io.FileInputStream;
  * @author zwm
  */
 public class LabFragment extends BaseFragment implements View.OnClickListener {
+    private NineLuckPan luckpan;
+
     public static LabFragment newInstance() {
         LabFragment fragment = new LabFragment();
         Bundle args = new Bundle();
@@ -54,29 +58,19 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Util.setOnClickListener(view, R.id.btn_get_image, this);
+        luckpan = view.findViewById(R.id.luckpan);
+        luckpan.setOnLuckPanAnimEndListener(new NineLuckPan.OnLuckPanAnimEndListener() {
+            @Override
+            public void onAnimEnd(int position, String msg) {
+                Toast.makeText(_mActivity, "位置："+position+"提示信息："+msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_get_image) {
-            String url = "https://test.snailpad.cn/test2.jpg";
-            Util.getRemoteImage(_mActivity, url, new SimpleCallback() {
-                @Override
-                public void onSimpleCall(Object data) {
-                    if (data == null) {
-                        return;
-                    }
 
-                    DownloadImageResult result = (DownloadImageResult) data;
-
-                    if (result.success) {
-                        SLog.info("width[%d], height[%d]", result.bitmap.getWidth(), result.bitmap.getHeight());
-                    }
-                }
-            });
-        }
     }
 
     @Override
