@@ -3,6 +3,8 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +112,10 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
                 return;
             }
 
+            if (mobileZoneList == null || selectedMobileZoneIndex >= mobileZoneList.size()) {
+                return;
+            }
+
             MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
             String mobile = etMobile.getText().toString().trim();
 
@@ -154,7 +160,7 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
                         ToastUtil.success(_mActivity, "設置成功");
                         hideSoftInputPop();
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
