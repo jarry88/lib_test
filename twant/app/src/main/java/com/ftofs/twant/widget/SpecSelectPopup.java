@@ -324,13 +324,13 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         selSpecValueIdList = new ArrayList<>(specCount);
         selSpecButtonList = new ArrayList<>(specCount);
         for (int i = 0; i < specCount; i++) {
-            if (specValueIdList != null && specValueIdList.size() > 0) {
+            if (specValueIdList != null && i < specValueIdList.size()) {
                 selSpecValueIdList.add(specValueIdList.get(i));
             } else {
                 selSpecValueIdList.add(0);
             }
 
-            selSpecButtonList.add(null);
+            selSpecButtonList.add(null);  // 先全部初始化為null
         }
 
         int position = 0; // 哪一類規格
