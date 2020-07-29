@@ -17,11 +17,15 @@
         android:layout_height="wrap_content"
         android:text="test2">
     </Button>
+    <View
+        android:id="@+id/vw"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="15dp">
+    </View>
     <com.ftofs.twant.widget.NineLuckPan
         android:id="@+id/luckpan"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </com.ftofs.twant.widget.NineLuckPan>
-
-
 </LinearLayout>

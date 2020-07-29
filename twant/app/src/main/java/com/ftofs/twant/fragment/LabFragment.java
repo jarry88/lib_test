@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.RestartApp;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.NineLuckPan;
 
 import java.io.File;
@@ -70,6 +72,9 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
                 Toast.makeText(_mActivity, "位置："+position+"提示信息："+msg, Toast.LENGTH_SHORT).show();
             }
         });
+
+        View vw = view.findViewById(R.id.vw);
+        vw.setBackground(BackgroundDrawable.create(Color.CYAN, Util.dip2px(_mActivity, 8)));
     }
 
     @Override

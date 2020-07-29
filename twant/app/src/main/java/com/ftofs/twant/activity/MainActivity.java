@@ -44,6 +44,7 @@ import com.ftofs.twant.entity.AliPayResult;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.Location;
+import com.ftofs.twant.entity.SoldOutGoodsItem;
 import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
@@ -52,6 +53,7 @@ import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.HomeFragment;
 import com.ftofs.twant.fragment.JobDetailFragment;
+import com.ftofs.twant.fragment.LabFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
@@ -82,6 +84,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.util.Vendor;
 import com.ftofs.twant.widget.AppUpdatePopup;
 import com.ftofs.twant.widget.CouponWordDialog;
+import com.ftofs.twant.widget.RealNameInstructionPopup;
+import com.ftofs.twant.widget.SoldOutPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.huawei.hms.aaid.HmsInstanceId;
 import com.hyphenate.chat.EMClient;
@@ -442,19 +446,24 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                     hideDebugIcon();
                                 } else if (position == 1) {
                                     Config.changeEnvironment(Config.ENV_PROD);
-                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    // RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    RestartApp.restartThroughIntentCompatMakeRestartActivityTask(MainActivity.this);
                                 } else if (position == 2) {
                                     Config.changeEnvironment(Config.ENV_29);
-                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    // RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    RestartApp.restartThroughIntentCompatMakeRestartActivityTask(MainActivity.this);
                                 } else if (position == 3) {
                                     Config.changeEnvironment(Config.ENV_229);
-                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    // RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    RestartApp.restartThroughIntentCompatMakeRestartActivityTask(MainActivity.this);
                                 } else if(position == 4){
                                     Config.changeEnvironment(Config.ENV_28);
-                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    // RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    RestartApp.restartThroughIntentCompatMakeRestartActivityTask(MainActivity.this);
                                 } else if(position == 5){
                                     Config.changeEnvironment(Config.ENV_F3);
-                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    // RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    RestartApp.restartThroughIntentCompatMakeRestartActivityTask(MainActivity.this);
                                 } else if (position == 6) {
                                     if (Config.SLOGENABLE) {
                                         ToastUtil.success(MainActivity.this, "日誌輸出已開啟");
@@ -463,13 +472,33 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                         Config.SLOGENABLE = true;
                                     }
                                 } else if (position == 7) {
-                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    // RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                    RestartApp.restartThroughIntentCompatMakeRestartActivityTask(MainActivity.this);
                                 } else if (position == 8) {
                                     MainActivity.this.getSupportDelegate().showFragmentStackHierarchyView();
                                 } else if (position == 9) { // 測試1
-
+                                    Util.startFragment(LabFragment.newInstance());
                                 } else if (position == 10) { // 測試2
+                                    List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
+                                    SoldOutGoodsItem item = new SoldOutGoodsItem();
+                                    item.goodsImage = "https://img.twant.com/image/eb/eb/ebeb877bc950904818b8207d5187f340.jpg";
+                                    item.goodsName = "日式單根睫毛嫁接";
+                                    item.buyNum = 20;
+                                    item.reasonDesc = "xxxxxx";
+                                    soldOutGoodsItemList.add(item);
 
+                                    item = new SoldOutGoodsItem();
+                                    item.goodsImage = "https://img.twant.com/image/3a/4f/3a4f369428ded32c1b108d7355accb4e.jpg";
+                                    item.goodsName = "日式單根睫毛嫁接sdfafasfsafsadfasdf";
+                                    item.buyNum = 22;
+                                    item.reasonDesc = "uuuuuuuu";
+                                    soldOutGoodsItemList.add(item);
+
+                                    new XPopup.Builder(MainActivity.this)
+                                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                                            .moveUpToKeyboard(false)
+                                            .asCustom(new SoldOutPopup(MainActivity.this, soldOutGoodsItemList))
+                                            .show();
                                 }
                             }
                         })
