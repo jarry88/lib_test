@@ -26,6 +26,8 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.entity.DownloadImageResult;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.RestartApp;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.NineLuckPan;
 
@@ -58,6 +60,9 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Util.setOnClickListener(view, R.id.btn_test1, this);
+        Util.setOnClickListener(view, R.id.btn_test2, this);
+
         luckpan = view.findViewById(R.id.luckpan);
         luckpan.setOnLuckPanAnimEndListener(new NineLuckPan.OnLuckPanAnimEndListener() {
             @Override
@@ -71,6 +76,13 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         int id = v.getId();
 
+        if (id == R.id.btn_test1) {
+            ToastUtil.info(_mActivity, "way1");
+            RestartApp.restartThroughIntentCompatMakeRestartActivityTask(_mActivity);
+        } else if (id == R.id.btn_test2) {
+            ToastUtil.info(_mActivity, "way2");
+            RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);
+        }
     }
 
     @Override

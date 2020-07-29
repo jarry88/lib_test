@@ -13,8 +13,12 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -53,6 +57,7 @@ import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
+import com.ftofs.twant.handler.StackViewTouchListener;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
@@ -68,6 +73,7 @@ import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.PermissionUtil;
+import com.ftofs.twant.util.RestartApp;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
@@ -81,6 +87,7 @@ import com.huawei.hms.aaid.HmsInstanceId;
 import com.hyphenate.chat.EMClient;
 import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
@@ -114,6 +121,8 @@ import java.util.Map;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
+import de.hdodenhof.circleimageview.CircleImageView;
+import me.yokeyword.fragmentation.debug.DebugStackDelegate;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -128,6 +137,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     AppUpdatePopup appUpdatePopup;
 
     TangramEngine engine;
+    CircleImageView stackView;
+    int dp18;
+    boolean debugIconClickable = true;  // 標記調試按鈕是否可以點擊
 
     public MainFragment getMainFragment() {
         return mainFragment;
@@ -334,6 +346,134 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         } catch (Exception e){
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // 下面显示调试按钮
+        View root = findViewById(android.R.id.content);
+        if (root instanceof FrameLayout) {
+            FrameLayout content = (FrameLayout) root;
+            stackView = new CircleImageView(this);
+            stackView.setImageResource(R.drawable.icon_debug_512_compressed);
+            dp18 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, getResources().getDisplayMetrics());
+            stackView.setLayoutParams(getDebugIconLayoutParams(true));
+            content.addView(stackView);
+            stackView.setOnTouchListener(new StackViewTouchListener(stackView, dp18 / 4));
+            stackView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!debugIconClickable) {
+                        return;
+                    }
+                    showDebugPopup();
+                }
+            });
+        }
+
+        boolean showDebugIcon = Hawk.get(SPField.FIELD_SHOW_DEBUG_ICON, false);
+        if (!showDebugIcon) { // 只有开发者模式才
+            hideDebugIcon();
+        }
+    }
+
+
+    /**
+     * 獲取debugIcon的佈局參數
+     * @param normalMode 是否為normal模式，或enlarge模式
+     */
+    private FrameLayout.LayoutParams getDebugIconLayoutParams(boolean normalMode) {
+        FrameLayout.LayoutParams params;
+        if (normalMode) {
+            params = new FrameLayout.LayoutParams(Util.dip2px(this, 32), Util.dip2px(this, 32));
+        } else {
+            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        params.gravity = Gravity.START;
+        params.topMargin = dp18 * 7;
+        params.leftMargin = dp18;
+
+        return params;
+    }
+
+    /**
+     * 显示调试按钮
+     */
+    public void showDebugIcon() {
+        if (stackView != null) {
+            Hawk.put(SPField.FIELD_SHOW_DEBUG_ICON, true);
+            debugIconClickable = false;
+            stackView.setVisibility(View.VISIBLE);
+            stackView.setLayoutParams(getDebugIconLayoutParams(false));
+            stackView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    stackView.setLayoutParams(getDebugIconLayoutParams(true));
+                    debugIconClickable = true;
+                }
+            }, 500);
+        }
+    }
+
+
+    /**
+     * 隐藏调试按钮
+     */
+    public void hideDebugIcon() {
+        if (stackView != null) {
+            Hawk.put(SPField.FIELD_SHOW_DEBUG_ICON, false);
+            stackView.setVisibility(View.GONE);
+        }
+    }
+
+    public void showDebugPopup() {
+        new XPopup.Builder(this)
+//                        .maxWidth(600)
+                .asCenterList("請選擇操作", new String[]{"隱藏浮動按鈕", "prod/線上，並重啟", "29，並重啟", "229，並重啟", "28，並重啟", "驗收/F3，並重啟", "打開日誌", "重啟", "顯示Fragment棧", "測試1", "測試2"},
+                        new OnSelectListener() {
+                            @Override
+                            public void onSelect(int position, String text) {
+                                SLog.info("position[%d], text[%s]", position, text);
+                                if (position == 0) {
+                                    hideDebugIcon();
+                                } else if (position == 1) {
+                                    Config.changeEnvironment(Config.ENV_PROD);
+                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                } else if (position == 2) {
+                                    Config.changeEnvironment(Config.ENV_29);
+                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                } else if (position == 3) {
+                                    Config.changeEnvironment(Config.ENV_229);
+                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                } else if(position == 4){
+                                    Config.changeEnvironment(Config.ENV_28);
+                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                } else if(position == 5){
+                                    Config.changeEnvironment(Config.ENV_F3);
+                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                } else if (position == 6) {
+                                    if (Config.SLOGENABLE) {
+                                        ToastUtil.success(MainActivity.this, "日誌輸出已開啟");
+                                    } else {
+                                        ToastUtil.success(MainActivity.this, "打開日誌輸出");
+                                        Config.SLOGENABLE = true;
+                                    }
+                                } else if (position == 7) {
+                                    RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
+                                } else if (position == 8) {
+                                    MainActivity.this.getSupportDelegate().showFragmentStackHierarchyView();
+                                } else if (position == 9) { // 測試1
+
+                                } else if (position == 10) { // 測試2
+
+                                }
+                            }
+                        })
+                .show();
     }
 
     private void updateDeviceToken() {

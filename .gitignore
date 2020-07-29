@@ -8,3 +8,5 @@
 /twant/gradle/
 *.salive
 .idea/misc.xml
+/twant/*.log
+
