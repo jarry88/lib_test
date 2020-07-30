@@ -602,7 +602,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                 @Override
                                 public void onDismiss() {
                                 }
-                            }).asCustom(new TwConfirmPopup(_mActivity, "每次交易總金額不的超過￥20,000，請調整購物數量再提交",null, new OnConfirmCallback() {
+                            }).asCustom(new TwConfirmPopup(_mActivity, "每次交易總金額不得超過$20,000，請調整購物數量再提交",null, new OnConfirmCallback() {
                         @Override
                         public void onYes() {
                             SLog.info("onYes");
