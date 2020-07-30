@@ -66,6 +66,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.CarouselView;
 import com.ftofs.twant.tangram.HomeStickyView;
 import com.ftofs.twant.tangram.LogoView;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.tangram.StoreItemView;
 import com.ftofs.twant.tangram.TangramClickSupport;
@@ -929,6 +930,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 int commonId = params.getInt("commonId");
                 int goodsId = params.getInt("goodsId");
                 Util.startFragment(BargainDetailFragment.newInstance(openId, commonId, goodsId));
+            } else if ("activityindexNew".equals(host)) { // 購物專場
+                int zoneId = params.getInt("zoneId");
+                Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId));
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
