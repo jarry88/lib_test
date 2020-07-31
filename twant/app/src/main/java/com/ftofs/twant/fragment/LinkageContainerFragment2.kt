@@ -34,8 +34,7 @@ import java.util.*
 
 class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Binding, LinkageContainerViewModel2>(){
 
-    //    private var parent by lazy { arguments?.get("parent") }
-    lateinit var parent:NewShoppingSpecialFragment
+    var parent:NewShoppingSpecialFragment?=null
 
     private lateinit var mAdapter: BuyerGoodsListAdapter
     private lateinit var mCategoryAdapter: ZoneCategoryListAdapter
@@ -123,7 +122,7 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
 
             mCategoryAdapter.prevSelectedItemIndex=position
         }
-
+        parent?:return
         parent?.let {
             binding.rvRightList.isNestedScrollingEnabled=false
             binding.rvRightList.addOnScrollListener(object : RecyclerView.OnScrollListener() {

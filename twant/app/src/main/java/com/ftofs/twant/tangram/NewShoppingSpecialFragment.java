@@ -63,7 +63,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * @deprecated 新購物專場入口頁
+ *新購物專場入口頁
  */
 public class NewShoppingSpecialFragment extends BaseFragment implements View.OnClickListener, NestedScrollingCallback {
     private MZBannerView bannerView;
