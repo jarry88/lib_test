@@ -18,6 +18,7 @@
             android:layout_height="31dp"
             android:layout_gravity="center_vertical"
             app:icon_src="@drawable/icon_cart_item_unchecked"
+            android:background="@color/tw_grey_99"
             />
         <LinearLayout
             android:layout_width="match_parent"
