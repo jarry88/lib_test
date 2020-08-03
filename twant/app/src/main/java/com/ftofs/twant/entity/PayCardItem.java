@@ -13,15 +13,15 @@ import java.util.List;
 public class PayCardItem {
     public static final int PAY_TYPE_MPAY = 0;
     public static final int PAY_TYPE_WALLET = 1;
-    // public static final int PAY_TYPE_TAIFUNG = 2;
+    public static final int PAY_TYPE_TAIFUNG = 2;
     public static final int PAY_TYPE_ALIHK = 3;
     public static final int PAY_TYPE_WEIXING = 4;
     public static final int PAY_TYPE_ALI = 5;
     public static final int SUPPORT_PAY_TYPE_COUNT = 6;
     public final int payType;
-    public static int[] macOrder = new int[] {PAY_TYPE_MPAY,PAY_TYPE_ALIHK,PAY_TYPE_WEIXING,PAY_TYPE_ALI,PAY_TYPE_WALLET};
-    public static int[] hkOrder = new int[] {PAY_TYPE_ALIHK,PAY_TYPE_MPAY,PAY_TYPE_WEIXING,PAY_TYPE_ALI,PAY_TYPE_WALLET};
-    public static int[] mainlandOrder = new int[] {PAY_TYPE_WEIXING,PAY_TYPE_ALI,PAY_TYPE_MPAY,PAY_TYPE_ALIHK,PAY_TYPE_WALLET};
+    public static int[] macOrder = new int[] {PAY_TYPE_MPAY,PAY_TYPE_TAIFUNG,PAY_TYPE_ALIHK,PAY_TYPE_WEIXING,PAY_TYPE_ALI,PAY_TYPE_WALLET};
+    public static int[] hkOrder = new int[] {PAY_TYPE_ALIHK,PAY_TYPE_MPAY,PAY_TYPE_TAIFUNG,PAY_TYPE_WEIXING,PAY_TYPE_ALI,PAY_TYPE_WALLET};
+    public static int[] mainlandOrder = new int[] {PAY_TYPE_WEIXING,PAY_TYPE_ALI,PAY_TYPE_MPAY,PAY_TYPE_TAIFUNG,PAY_TYPE_ALIHK,PAY_TYPE_WALLET};
 
     public boolean showMask;
     public String textBalance;
@@ -67,12 +67,12 @@ public class PayCardItem {
                 walletCard.showBalance = true;
                 walletCard.textBalance = "(未激活)";
                 return walletCard;
-//            case PAY_TYPE_TAIFUNG:
-//                String textSupport = "支持銀聯信用卡和大陸提款卡支付";
-//                PayCardItem taifungCard = new PayCardItem("大豐銀行電子支付", R.drawable.pay_vendor_bg_yellow, R.drawable.new_icon_pay_taifung, PayCardItem.PAY_TYPE_TAIFUNG);
-//                taifungCard.textSupport = textSupport;
-//                taifungCard.showSupport = true;
-//                return taifungCard;
+            case PAY_TYPE_TAIFUNG:
+                String textSupport = "支持銀聯信用卡和大陸提款卡支付";
+                PayCardItem taifungCard = new PayCardItem("大豐銀行電子支付", R.drawable.pay_vendor_bg_yellow, R.drawable.new_icon_pay_taifung, PayCardItem.PAY_TYPE_TAIFUNG);
+                taifungCard.textSupport = textSupport;
+                taifungCard.showSupport = true;
+                return taifungCard;
             case PAY_TYPE_WEIXING:
                 PayCardItem weixinCard = new PayCardItem("微信支付（內地）", R.drawable.pay_vendor_bg_green, R.drawable.new_icon_pay_weixin, PayCardItem.PAY_TYPE_WEIXING);
                 return weixinCard;

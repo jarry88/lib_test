@@ -52,6 +52,7 @@ import okhttp3.Call;
  * @author zwm
  */
 public class SharePopup extends BottomPopupView implements View.OnClickListener {
+    int shareType;
     public static final int SHARE_TYPE_STORE = 1;
     public static final int SHARE_TYPE_GOODS = 2;
 
@@ -88,6 +89,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     View btnShareToWord;
 
     String goodsWord;  // 商品分享口令
+    String storeWord;  // 店鋪分享口令
 
     /*
     public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data) {
@@ -140,10 +142,16 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             if (data != null && data instanceof EasyJSONObject) {
                 EasyJSONObject shareData = (EasyJSONObject) data;
                 if (shareData.exists("shareType")) {
-                    int shareType = shareData.getInt("shareType");
-                    int commonId = shareData.getInt("commonId");
+                    shareType = shareData.getInt("shareType");
                     if (shareType == SHARE_TYPE_GOODS) {
-                        getGoodsWord(commonId);
+                        int commonId = shareData.getInt("commonId");
+                        getCommandWord(shareType, commonId);
+
+                        btnShareToWord.setOnClickListener(this);
+                        btnShareToWord.setVisibility(VISIBLE);
+                    } else if (shareType == SHARE_TYPE_STORE) {
+                        int storeId = shareData.getInt("storeId");
+                        getCommandWord(shareType, storeId);
 
                         btnShareToWord.setOnClickListener(this);
                         btnShareToWord.setVisibility(VISIBLE);
@@ -156,16 +164,28 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     }
 
     /**
-     * 獲取商品口令碼
-     * @param commonId
+     * 獲取商品或店鋪口令碼
+     * @param type 类型，店铺或商品
+     * @param id
      */
-    private void getGoodsWord(int commonId) {
-        EasyJSONObject params = EasyJSONObject.generate(
-                "commonId", commonId
-        );
+    private void getCommandWord(int type, int id) {
+        String url;
+        EasyJSONObject params;
 
-        SLog.info("url[%s], params[%s]", Api.PATH_GOODS_CREATE_WORD, params);
-        Api.getUI(Api.PATH_GOODS_CREATE_WORD, params, new UICallback() {
+        if (type == SHARE_TYPE_STORE) {
+            url = Api.PATH_STORE_CREATE_WORD;
+            params = EasyJSONObject.generate(
+                    "storeId", id
+            );
+        } else {
+            url = Api.PATH_GOODS_CREATE_WORD;
+            params = EasyJSONObject.generate(
+                    "commonId", id
+            );
+        }
+
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(context, e);
@@ -181,13 +201,20 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                 }
 
                 try {
-                    goodsWord = responseObj.getSafeString("datas.command");
+                    if (type == SHARE_TYPE_GOODS) {
+                        goodsWord = responseObj.getSafeString("datas.command");
+                    } else {
+                        storeWord = responseObj.getSafeString("datas.command");
+                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
     }
+
+
+
 
     //完全可见执行
     @Override
@@ -333,7 +360,13 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 //            Util.startFragment(AddPostFragment.newInstance(dataObj, false));
             dismiss();
         } else if (id == R.id.btn_share_to_word) { // 分享口令碼
-            if (StringUtil.isEmpty(goodsWord)) {
+            String word = null;
+            if (shareType == SHARE_TYPE_STORE) {
+                word = storeWord;
+            } else if (shareType == SHARE_TYPE_GOODS) {
+                word = goodsWord;
+            }
+            if (StringUtil.isEmpty(word)) {
                 ToastUtil.error(context, "口令為空，請稍後再試");
                 return;
             }
@@ -348,7 +381,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                         @Override
                         public void onDismiss() {
                         }
-                    }).asCustom(new WordSharePopup(context, goodsWord)).show();
+                    }).asCustom(new WordSharePopup(context, word)).show();
 
             dismiss();
         }

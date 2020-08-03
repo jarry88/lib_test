@@ -34,7 +34,9 @@ public class PayVendorListAdapter extends BaseQuickAdapter<PayCardItem, BaseView
         helper.setGone(R.id.ll_cashier_wechat_pay,false);
         helper.setGone(R.id.ll_cashier_taifung_pay,false);
         helper.setGone(R.id.ll_cashier_mpay_pay,false);
-        if (item.payType == PayCardItem.PAY_TYPE_MPAY) {
+        if (item.payType == PayCardItem.PAY_TYPE_TAIFUNG) {
+            helper.setVisible(R.id.ll_cashier_taifung_pay, true);
+        } else if (item.payType == PayCardItem.PAY_TYPE_MPAY) {
             helper.setVisible(R.id.ll_cashier_mpay_pay, true);
             if (item.getPayDesc() != null && item.showActivityDesc) {
                 helper.setText(R.id.tv_pay_activity_indicator, item.getPayDesc());

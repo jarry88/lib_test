@@ -1516,6 +1516,12 @@ public class Api {
 
 
     /**
+     * 商品分享口令生成
+     */
+    public static final String PATH_STORE_CREATE_WORD = "/app/command/create/store";
+
+
+    /**
      * 商品開團列表
      */
     public static final String PATH_GROUP_LIST = "/app/goods/group/list";
