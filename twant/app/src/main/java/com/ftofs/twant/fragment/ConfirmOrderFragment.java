@@ -1408,6 +1408,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             int storageStatus =buyGoodsItem.getInt("storageStatus");
                             int allowSend =buyGoodsItem.getInt("allowSend");
                             int tariffEnable = buyGoodsItem.getInt("tariffEnable");
+                            int joinBigSale = buyGoodsItem.getInt("joinBigSale");
                             if (tariffEnable == Constant.TRUE_INT) {
                                 storeTariff = Constant.TRUE_INT;
                                 tariffTotalEnable = Constant.TRUE_INT;
@@ -1429,6 +1430,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             confirmOrderSkuItem.cartId = cartId;
                             confirmOrderSkuItem.storageStatus = storageStatus;
                             confirmOrderSkuItem.allowSend = allowSend;
+                            confirmOrderSkuItem.joinBigSale = joinBigSale;
                             confirmOrderSkuItemList.add(confirmOrderSkuItem);
 
                             String keyName = "cartId";
