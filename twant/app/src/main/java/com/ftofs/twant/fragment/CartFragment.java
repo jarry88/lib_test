@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -46,6 +47,7 @@ import com.ftofs.twant.widget.CartCrossBorderPopup;
 import com.ftofs.twant.widget.RealNameInstructionPopup;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -396,11 +398,17 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                 int goodsStatus = cartSkuVo.getInt("goodsStatus");
                                 int onlineStorage = cartSkuVo.getInt("onlineStorage");
                                 ImageView maskImage = cartSpuItem.findViewById(R.id.mask_image);
+                                btnCheckSpu.setEnabled(true);
                                 if (goodsStatus == 0) { // 產品下架
                                     Glide.with(_mActivity).load(R.drawable.icon_take_off).into(maskImage);
+                                    btnCheckSpu.setEnabled(false);
+                                    btnCheckSpu.setIconResource(R.drawable.icon_disable_check);
                                 } else if (onlineStorage == 0) { // 售罄
                                     Glide.with(_mActivity).load(R.drawable.icon_no_storage).into(maskImage);
+                                    btnCheckSpu.setEnabled(false);
+                                    btnCheckSpu.setIconResource(R.drawable.icon_disable_check);
                                 }else if (onlineStorage <= 2) { // 庫存緊張
+
                                     Glide.with(_mActivity).load(R.drawable.icon_less_storage).into(maskImage);
                                 }
 

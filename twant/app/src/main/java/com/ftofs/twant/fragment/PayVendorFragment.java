@@ -851,16 +851,20 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     @Override
                     public void onDismiss() {
                     }
-                }).asCustom(new TwConfirmPopup(_mActivity, "是否取消當前訂單的支付", null, "確認取消", "繼續購買", new OnConfirmCallback() {
+                }).asCustom(
+                        new TwConfirmPopup(_mActivity, "是否取消當前訂單的支付", null,
+                //继续在右，优化用户体验
+                "繼續購買", "確認取消"
+                                , new OnConfirmCallback() {
             @Override
             public void onYes() {
-                SLog.info("onYes");
-                hideSoftInputPop();
+                SLog.info("onNo");
             }
 
             @Override
             public void onNo() {
-                SLog.info("onNo");
+                SLog.info("onYes");
+                hideSoftInputPop();
             }
         }))
                 .show();

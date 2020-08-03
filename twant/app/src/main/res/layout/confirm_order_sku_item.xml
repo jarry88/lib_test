@@ -41,15 +41,15 @@
                     android:ellipsize="end"
                     />
 
-                <TextView
-                    android:id="@+id/tv_sku_price"
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:text=""
-                    android:textSize="12sp"
-                    android:textColor="@color/tw_black"
-                    />
+                    <TextView
+                        android:id="@+id/tv_sku_price"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text=""
+                        android:textSize="12sp"
+                        android:textColor="@color/tw_black"
+                        />
             </LinearLayout>
 
             <LinearLayout
@@ -89,6 +89,16 @@
                     android:visibility="gone"
                     />
             </LinearLayout>
+            <TextView
+                android:id="@+id/tv_activity_label"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="不参加优惠"
+                android:textSize="12sp"
+                android:textColor="@color/tw_red"
+                android:visibility="gone"
+                />
         </LinearLayout>
     </LinearLayout>
 

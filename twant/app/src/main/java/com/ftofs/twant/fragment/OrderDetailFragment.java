@@ -811,7 +811,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             Jarbon createTime = Jarbon.parse(ordersVo.getSafeString("createTime"));
                             int diff =createTime.diffInMinutes(new Jarbon());
 
-                            tvOrderStatusDesc.setText(String.format("您的訂單還未付款，%d小時%d分鐘後將取消訂單請及時完成支付~", 23-diff / 60, 60-diff % 60));
+                            tvOrderStatusDesc.setText(String.format("您的訂單還未付款，%d小時%d分鐘後將取消訂單請及時完成支付~", 1-diff / 60, 60-diff % 60));
                             llShipInfo.setVisibility(View.GONE);
                             llShipType.setVisibility(View.GONE);
                             btnBuyAgain.setVisibility(View.GONE);
