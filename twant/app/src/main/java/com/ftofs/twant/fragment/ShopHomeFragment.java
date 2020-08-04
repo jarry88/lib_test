@@ -947,6 +947,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         } else {
             btnShopCall.setVisibility(VISIBLE);
             tvPhoneNumber.setText(storePhone);
+            tvPhoneNumber.setOnClickListener(v -> call_shop());
         }
         tvShopAddress.setText(storeAddress);
     }
@@ -1164,12 +1165,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 switchFavoriteState();
                 break;
             case R.id.btn_shop_call:
-                SLog.info("storePhone[%s]", storePhone);
-                if (StringUtil.isEmpty(storePhone)) {
-                    ToastUtil.error(_mActivity, getString(R.string.text_seller_phone_not_set));
-                    return;
-                }
-                Util.dialPhone(_mActivity, storePhone);
+                call_shop();
+
                 break;
             case R.id.btn_shop_map:
                 if (storeMapInfo == null) {
@@ -1234,6 +1231,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             default:
                 break;
         }
+    }
+
+    private void call_shop() {
+        SLog.info("storePhone[%s]", storePhone);
+        if (StringUtil.isEmpty(storePhone)) {
+            ToastUtil.error(_mActivity, getString(R.string.text_seller_phone_not_set));
+            return;
+        }
+        Util.dialPhone(_mActivity, storePhone);
     }
 
     public void pullShare() {

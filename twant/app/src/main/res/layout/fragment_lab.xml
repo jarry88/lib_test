@@ -17,6 +17,10 @@
         android:layout_height="wrap_content"
         android:text="test2">
     </Button>
+    <com.ftofs.twant.widget.CheckPhoneView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/check_phone"/>
     <View
         android:id="@+id/vw"
         android:layout_width="match_parent"
