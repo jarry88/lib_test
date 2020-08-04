@@ -224,20 +224,23 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
      * @return
      */
     public boolean hasNextSubItem(boolean down) {
-            List<StoreLabel> dataList = getData();
+        List<StoreLabel> dataList = getData();
 
-            List<StoreLabel> subItemList = dataList.get(prevSelectedItemIndex).getStoreLabelList();
-            if (subItemList != null) {
-                if (down) {
-                    if (prevSelectedSubItemIndex == -1) {
-                        return 0<subItemList.size() - 1;
-                    }
-                    return prevSelectedSubItemIndex < subItemList.size() - 1;
-                } else {
-                    SLog.info("prevSelectedSubItemIndex %d",prevSelectedSubItemIndex);
-                    return prevSelectedSubItemIndex > 0;
+        if (dataList == null || prevSelectedItemIndex >= dataList.size()) {
+            return false;
+        }
+        List<StoreLabel> subItemList = dataList.get(prevSelectedItemIndex).getStoreLabelList();
+        if (subItemList != null) {
+            if (down) {
+                if (prevSelectedSubItemIndex == -1) {
+                    return 0<subItemList.size() - 1;
                 }
+                return prevSelectedSubItemIndex < subItemList.size() - 1;
+            } else {
+                SLog.info("prevSelectedSubItemIndex %d",prevSelectedSubItemIndex);
+                return prevSelectedSubItemIndex > 0;
             }
+        }
         return false;
     }
 

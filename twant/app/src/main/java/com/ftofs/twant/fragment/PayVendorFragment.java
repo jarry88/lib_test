@@ -51,6 +51,8 @@ import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.pro.k;
+import com.vivebest.taifung.api.PaymentHandler;
+import com.vivebest.taifung.api.TaifungSDK;
 
 
 import java.io.IOException;
