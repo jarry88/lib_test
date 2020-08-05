@@ -262,6 +262,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         Util.setOnClickListener(view, R.id.btn_sort_goods_sale, this);
         Util.setOnClickListener(view, R.id.btn_sort_goods_price, this);
 
+        Util.setOnClickListener(view, R.id.btn_goto_category, this);
+
         btnPublishWantPost = view.findViewById(R.id.btn_publish_want_post);
         btnPublishWantPost.setOnClickListener(this);
         //Glide.with(_mActivity).load("file:///android_asset/christmas/publish_want_post_dynamic.gif").centerCrop().into(btnPublishWantPost);
@@ -1214,6 +1216,9 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     return;
                 }
                 doSearch(searchType, currPage + 1, keyword, currFilter);
+                break;
+            case R.id.btn_goto_category:
+                Util.startFragment(CategoryFragment.newInstance(searchType, null));
                 break;
             default:
                 break;

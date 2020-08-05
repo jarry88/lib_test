@@ -146,19 +146,13 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         } else if (id == R.id.ll_search_box) {
             Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
         } else if (id == R.id.btn_category_store) {
-            /*
             Util.startFragment(SearchResultFragment.newInstance(SearchType.STORE.name(),
                     EasyJSONObject.generate("keyword", "").toString()));
-
-             */
-            Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
+            // Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
         } else if (id == R.id.btn_category_goods) {
-            /*
             Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
                     EasyJSONObject.generate("keyword", "").toString()));
-
-             */
-            Util.startFragment(CategoryFragment.newInstance(SearchType.GOODS, null));
+            // Util.startFragment(CategoryFragment.newInstance(SearchType.GOODS, null));
         } else if (id == R.id.btn_category_brand) {
             SearchPostParams searchPostParams = new SearchPostParams();
             searchPostParams.keyword = "";
