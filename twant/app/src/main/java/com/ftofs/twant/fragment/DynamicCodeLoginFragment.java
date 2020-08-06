@@ -44,6 +44,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.CheckPhoneView;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 import com.umeng.analytics.MobclickAgent;
@@ -72,7 +73,8 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     List<MobileZone> mobileZoneList = new ArrayList<>();
     ImageView btnRefreshCaptcha;
     String captchaKey;
-    EditText etMobile;
+    CheckPhoneView etMobileView;
+
     EditText etCaptcha;
     EditText etSmsCode;
     TextView tvAreaName;
@@ -148,58 +150,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
 
-        etMobile = view.findViewById(R.id.et_mobile);
-        etMobile.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String mobile = s.toString();
-                if (!checkMobileZoneList()||StringUtil.isEmpty(mobile)) {
-                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
-                    return;
-                }
-                MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
-                String[] mobileRex = new String[] {
-                        "",
-                        "^[569][0-9]{0,7}$", // 香港
-                        "^1[0-9]{0,10}$",    // 大陸
-                        "^6[0-9]{0,7}$"   // 澳門
-                };
-
-                Pattern pattern = Pattern.compile(mobileRex[mobileZone.areaId]);
-
-                Matcher matcher = pattern.matcher(mobile);
-
-                boolean result = matcher.matches();
-                if (!result) {
-                    String[] areaArray = new String[] {
-                            "",
-                            getString(R.string.text_hongkong),
-                            getString(R.string.text_mainland),
-                            getString(R.string.text_macao)
-                    };
-
-                    String msg = String.format(getString(R.string.text_error_tip_mobile), areaArray[mobileZone.areaId]);
-                    tvMobileError.setText(msg);
-                    tvMobileError.setTextColor(getResources().getColor(R.color.tw_red,null));
-                    if (llMobileErrorContainer.getVisibility() != View.VISIBLE) {
-                        llMobileErrorContainer.setVisibility(View.VISIBLE);
-                    }
-                    return;
-                }else{
-                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+        etMobileView = view.findViewById(R.id.et_mobile_view);
         etCaptcha = view.findViewById(R.id.et_captcha);
         etSmsCode = view.findViewById(R.id.et_sms_code);
         etSmsCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -259,26 +210,14 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
             }
             MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
 
-            String mobile = etMobile.getText().toString().trim();
-            if (StringUtil.isEmpty(mobile)) {
-                ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
-                return;
-            }
-
-            if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
-                String[] areaArray = new String[]{
-                        "",
-                        getString(R.string.text_hongkong),
-                        getString(R.string.text_mainland),
-                        getString(R.string.text_macao)
-                };
-
-                String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-                ToastUtil.error(_mActivity, msg);
+            kotlin.Pair<Boolean, String> pair = etMobileView.checkError();
+            if (!pair.component1()) {
+                ToastUtil.error(_mActivity, pair.component2());
                 return;
             }
 
 
+            String mobile=pair.component2();
             String fullMobile = mobileZone.areaCode + "," + mobile;
             String captchaText = etCaptcha.getText().toString().trim();
             SLog.info("captchaText[%s]", captchaText);
@@ -370,26 +309,14 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
             return;
         }
         MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
+        kotlin.Pair<Boolean, String> pair = etMobileView.checkError();
 
-        String mobile = etMobile.getText().toString().trim();
-        if (StringUtil.isEmpty(mobile)) {
-            ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
+        if (!pair.component1()) {
+            ToastUtil.error(_mActivity, pair.component2());
             return;
         }
 
-        if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
-            String[] areaArray = new String[] {
-                    "",
-                    getString(R.string.text_hongkong),
-                    getString(R.string.text_mainland),
-                    getString(R.string.text_macao)
-            };
-
-            String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-            ToastUtil.error(_mActivity, msg);
-            return;
-        }
-
+        String mobile=etMobileView.getPhone();
         String fullMobile = mobileZone.areaCode + "," + mobile;
         String smsCode = etSmsCode.getText().toString().trim();
         if (StringUtil.isEmpty(smsCode)) {
@@ -475,7 +402,8 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
 
                 SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
                 if (mobileZoneList.size() > 0) {
-                    tvAreaName.setText(mobileZoneList.get(0).areaName);
+                    etMobileView.setMobileList(mobileZoneList);
+                    onSelected(null,0,null);
                 }
             }
         });
@@ -485,13 +413,9 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("selectedMobileZoneIndex[%d], id[%d]", selectedMobileZoneIndex, id);
-        if (this.selectedMobileZoneIndex == id) {
-            return;
-        }
-
         this.selectedMobileZoneIndex = id;
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
-        etMobile.setText(etMobile.getText());
+        etMobileView.setZoneIndex(id);
     }
 }

@@ -36,6 +36,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.CheckPhoneView;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 import com.orhanobut.hawk.Hawk;
@@ -73,7 +74,7 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
     ImageView btnRefreshCaptcha;
 
 
-    EditText etMobile;
+    CheckPhoneView etMobileView;
     EditText etCaptcha;
     EditText etSmsCode;
 
@@ -140,7 +141,7 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
 
-        etMobile = view.findViewById(R.id.et_mobile);
+        etMobileView = view.findViewById(R.id.et_mobile_view);
 
         etCaptcha = view.findViewById(R.id.et_captcha);
         etSmsCode = view.findViewById(R.id.et_sms_code);
@@ -197,6 +198,7 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
 
                 SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
                 if (mobileZoneList.size() > 0) {
+                    etMobileView.setMobileList(mobileZoneList);
                     tvAreaName.setText(mobileZoneList.get(0).areaName);
                 }
             }
@@ -220,25 +222,13 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
                 return;
             }
             MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
-
-            String mobile = etMobile.getText().toString().trim();
-            if (StringUtil.isEmpty(mobile)) {
-                ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
+            kotlin.Pair<Boolean,String> pair = etMobileView.checkError();
+            if(!pair.component1()){
+                ToastUtil.error(_mActivity,pair.component2());
                 return;
             }
 
-            if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
-                String[] areaArray = new String[] {
-                        "",
-                        getString(R.string.text_hongkong),
-                        getString(R.string.text_mainland),
-                        getString(R.string.text_macao)
-                };
-
-                String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-                ToastUtil.error(_mActivity, msg);
-                return;
-            }
+            String mobile = etMobileView.getPhone();
 
 
             String fullMobile = mobileZone.areaCode + "," + mobile;
@@ -320,25 +310,12 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
             return;
         }
         MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
-
-        String mobile = etMobile.getText().toString().trim();
-        if (StringUtil.isEmpty(mobile)) {
-            ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
+        kotlin.Pair<Boolean,String> pair = etMobileView.checkError();
+        if(!pair.component1()){
+            ToastUtil.error(_mActivity,pair.component2());
             return;
         }
-
-        if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
-            String[] areaArray = new String[] {
-                    "",
-                    getString(R.string.text_hongkong),
-                    getString(R.string.text_mainland),
-                    getString(R.string.text_macao)
-            };
-
-            String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-            ToastUtil.error(_mActivity, msg);
-            return;
-        }
+        String mobile = etMobileView.getPhone();
 
         String fullMobile = mobileZone.areaCode + "," + mobile;
         String smsCode = etSmsCode.getText().toString().trim();
@@ -429,6 +406,7 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
         }
 
         this.selectedMobileZoneIndex = id;
+        etMobileView.setZoneIndex(id);
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
     }

@@ -143,12 +143,12 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             public void onPageSelected(int position) {
                 SLog.info( "page %d" ,position);
                 try {
-                    Editable editable1 = ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.getText();
-                    Editable editable = ((PasswordLoginFragment) fragmentList.get(0)).etMobile.getText();
+                    String editable1 = ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobileView.getPhone();
+                    String editable = ((PasswordLoginFragment) fragmentList.get(0)).etMobileView.getPhone();
                     if (position == 1) {
-                        ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.setText(editable);
+                        ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobileView.setPhone(editable);
                     } else {
-                        ((PasswordLoginFragment) fragmentList.get(0)).etMobile.setText(editable1);
+                        ((PasswordLoginFragment) fragmentList.get(0)).etMobileView.setPhone(editable1);
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -322,7 +322,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                     if (!StringUtil.isEmpty(text)) {
                         ((PasswordLoginFragment) fragmentList.get(0)).etCaptcha.setText(text);
                         ((PasswordLoginFragment) fragmentList.get(0)).etPassword.setText("qwer1234");
-                        ((PasswordLoginFragment) fragmentList.get(0)).etMobile.setText("69000001");
+                        ((PasswordLoginFragment) fragmentList.get(0)).etMobileView.setPhone("69000001");
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
