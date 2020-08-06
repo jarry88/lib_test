@@ -39,6 +39,7 @@ import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.CheckPhoneView;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 import com.umeng.analytics.MobclickAgent;
@@ -52,6 +53,7 @@ import java.util.regex.Pattern;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
+import retrofit2.http.PATCH;
 
 
 /**
@@ -75,7 +77,7 @@ public class ResetPasswordFragment extends BaseFragment implements
 
     String captchaKey;
     ImageView btnRefreshCaptcha;
-    EditText etMobile;
+    CheckPhoneView etMobileView;
     EditText etCaptcha;
     TextView tvAreaName;
     boolean isModifyPaymentPassword;
@@ -143,61 +145,10 @@ public class ResetPasswordFragment extends BaseFragment implements
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
 
-        etMobile = view.findViewById(R.id.et_mobile);
+        etMobileView = view.findViewById(R.id.et_mobile_view);
         tvMobileError =view.findViewById(R.id.tv_mobile_error);
         llMobileErrorContainer = view.findViewById(R.id.ll_container_mobile_error);
         llMobileErrorContainer.setVisibility(View.GONE);
-        etMobile.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String mobile = s.toString();
-                if (!checkMobileZoneList()||StringUtil.isEmpty(mobile)) {
-                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
-                    return;
-                }
-                MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
-                String[] mobileRex = new String[] {
-                        "",
-                        "^[569][0-9]{0,7}$", // 香港
-                        "^1[0-9]{0,10}$",    // 大陸
-                        "^6[0-9]{0,7}$"   // 澳門
-                };
-
-                Pattern pattern = Pattern.compile(mobileRex[mobileZone.areaId]);
-
-                Matcher matcher = pattern.matcher(mobile);
-
-                boolean result = matcher.matches();
-                if (!result) {
-                    String[] areaArray = new String[] {
-                            "",
-                            getString(R.string.text_hongkong),
-                            getString(R.string.text_mainland),
-                            getString(R.string.text_macao)
-                    };
-
-                    String msg = String.format(getString(R.string.text_error_tip_mobile), areaArray[mobileZone.areaId]);
-                    tvMobileError.setText(msg);
-                    tvMobileError.setTextColor(getResources().getColor(R.color.tw_red,null));
-                    if (llMobileErrorContainer.getVisibility() != View.VISIBLE) {
-                        llMobileErrorContainer.setVisibility(View.VISIBLE);
-                    }
-                }else{
-                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
-                }
-                updataBtnNext();
-            }
-        });
         etCaptcha = view.findViewById(R.id.et_captcha);
         etCaptcha.addTextChangedListener(new TextWatcher() {
             @Override
@@ -295,7 +246,7 @@ public class ResetPasswordFragment extends BaseFragment implements
             final MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
 
             // 注账号为 区号,手机号
-            final String mobile = etMobile.getText().toString().trim();
+            final String mobile = etMobileView.getPhone();
             String fullMobile = String.format("%s,%s", mobileZone.areaCode, mobile);
 
             String captchaText = etCaptcha.getText().toString().trim();
@@ -360,27 +311,9 @@ public class ResetPasswordFragment extends BaseFragment implements
         final MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
 
         // 注账号为 区号,手机号
-        final String mobile = etMobile.getText().toString().trim();
-        if (StringUtil.isEmpty(mobile)) {
-            if (toastEnable) {
-                ToastUtil.error(_mActivity, getString(R.string.tip_number_is_null));
-            }
-            return false;
-        }
-
-
-        if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
-            String[] areaArray = new String[] {
-                    "",
-                    getString(R.string.text_hongkong),
-                    getString(R.string.text_mainland),
-                    getString(R.string.text_macao)
-            };
-
-            String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-            if (toastEnable) {
-                ToastUtil.error(_mActivity, msg);
-            }
+        kotlin.Pair<Boolean, String> pair = etMobileView.checkError();
+        if (!pair.component1()) {
+            ToastUtil.error(_mActivity,pair.component2());
             return false;
         }
 
@@ -434,7 +367,8 @@ public class ResetPasswordFragment extends BaseFragment implements
                 }
                 SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
                 if (mobileZoneList.size() > 0) {
-                    tvAreaName.setText(mobileZoneList.get(0).areaName);
+                    etMobileView.setMobileList(mobileZoneList);
+                    onSelected(null,0,null);
                 }
             }
         });
@@ -443,15 +377,12 @@ public class ResetPasswordFragment extends BaseFragment implements
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("selectedMobileZoneIndex[%d], selectedIndex[%d]", selectedMobileZoneIndex, id);
-        if (this.selectedMobileZoneIndex == id) {
-            return;
-        }
 
         this.selectedMobileZoneIndex = id;
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
         updataBtnNext();
-        etMobile.setText(etMobile.getText());
+        etMobileView.setZoneIndex(id);
 
     }
 

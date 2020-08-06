@@ -31,6 +31,7 @@ import com.ftofs.twant.util.RestartApp;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BackgroundDrawable;
+import com.ftofs.twant.widget.CheckPhoneView;
 import com.ftofs.twant.widget.NineLuckPan;
 
 import java.io.File;
@@ -75,6 +76,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
 
         View vw = view.findViewById(R.id.vw);
         vw.setBackground(BackgroundDrawable.create(Color.CYAN, Util.dip2px(_mActivity, 8)));
+        CheckPhoneView checkPhoneView = view.findViewById(R.id.check_phone);
     }
 
     @Override

@@ -193,6 +193,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private boolean bannerAuto;
     private PagerSnapHelper pagerSnapHelper;
     private MZBannerView bannerView;
+    private TextView btnShopCall;
 
     static class scrollStateHandler extends Handler {
         NestedScrollView scrollViewContainer;
@@ -397,6 +398,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         tvVerticalScroll = view.findViewById(R.id.tv_vertical_scroll);
         tvPhoneNumber = view.findViewById(R.id.tv_phone_number);
+
+        btnShopCall = view.findViewById(R.id.btn_shop_call);
+        btnShopCall.setOnClickListener(this);
         tvShopAddress = view.findViewById(R.id.tv_shop_address);
 
         btnShopMap = view.findViewById(R.id.btn_shop_map);
@@ -938,7 +942,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     }
 
     public void setStoreContact(String storePhone, String storeAddress) {
-        tvPhoneNumber.setText(storePhone);
+        if (StringUtil.isEmpty(storePhone)) {
+            btnShopCall.setVisibility(View.GONE);
+        } else {
+            btnShopCall.setVisibility(VISIBLE);
+            tvPhoneNumber.setText(storePhone);
+            tvPhoneNumber.setOnClickListener(v -> call_shop());
+        }
         tvShopAddress.setText(storeAddress);
     }
 
@@ -1154,6 +1164,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             case R.id.ll_uo_like_container:
                 switchFavoriteState();
                 break;
+            case R.id.btn_shop_call:
+                call_shop();
+
+                break;
             case R.id.btn_shop_map:
                 if (storeMapInfo == null) {
                     return;
@@ -1217,6 +1231,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             default:
                 break;
         }
+    }
+
+    private void call_shop() {
+        SLog.info("storePhone[%s]", storePhone);
+        if (StringUtil.isEmpty(storePhone)) {
+            ToastUtil.error(_mActivity, getString(R.string.text_seller_phone_not_set));
+            return;
+        }
+        Util.dialPhone(_mActivity, storePhone);
     }
 
     public void pullShare() {

@@ -818,4 +818,5 @@
     <string name="text_sku_goods_list"><u>SKU商品列表</u></string>
     <string name="text_select">選擇</string>
     <string name="text_sku_detail"><u>sku详情</u></string>
+    <string name="text_call">撥打</string>
 </resources>
