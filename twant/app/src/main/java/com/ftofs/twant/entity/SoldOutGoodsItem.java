@@ -14,4 +14,16 @@ public class SoldOutGoodsItem {
     public int buyNum;
     public int reason;
     public String reasonDesc;
+
+    public SoldOutGoodsItem() {
+    }
+
+    public SoldOutGoodsItem(int goodsId, String goodsImage, String goodsName, int buyNum, int reason, String reasonDesc) {
+        this.goodsId = goodsId;
+        this.goodsImage = goodsImage;
+        this.goodsName = goodsName;
+        this.buyNum = buyNum;
+        this.reason = reason;
+        this.reasonDesc = reasonDesc;
+    }
 }

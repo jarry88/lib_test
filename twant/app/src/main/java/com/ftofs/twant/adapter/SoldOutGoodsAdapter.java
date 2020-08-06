@@ -32,6 +32,11 @@ public class SoldOutGoodsAdapter extends ViewGroupAdapter<SoldOutGoodsItem> {
         Glide.with(context).load(StringUtil.normalizeImageUrl(itemData.goodsImage)).centerCrop().into(goodsImage);
         setText(itemView, R.id.tv_goods_name, itemData.goodsName);
         setText(itemView, R.id.tv_buy_num, "x" + itemData.buyNum);
+        if (itemData.reason == SoldOutGoodsItem.REASON_SOLD_OUT) {
+            itemData.reasonDesc = "該產品已售罄";
+        } else if (itemData.reason == SoldOutGoodsItem.REASON_NOT_AVAILABLE) {
+            itemData.reasonDesc = "該地區不支持配送";
+        }
         setText(itemView, R.id.tv_reason, "原因：" + itemData.reasonDesc);
     }
 }

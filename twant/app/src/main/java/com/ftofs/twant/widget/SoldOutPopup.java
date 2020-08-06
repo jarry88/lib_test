@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +16,6 @@ import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,13 +25,15 @@ import java.util.List;
  */
 public class SoldOutPopup extends CenterPopupView implements View.OnClickListener {
     Context context;
-    List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
+    List<SoldOutGoodsItem> soldOutGoodsItemList;
+    boolean partialAvailable;  // true -- 部分售罄, false -- 全部售罄
 
-    public SoldOutPopup(@NonNull Context context, List<SoldOutGoodsItem> soldOutGoodsItemList) {
+    public SoldOutPopup(@NonNull Context context, List<SoldOutGoodsItem> soldOutGoodsItemList, boolean partialAvailable) {
         super(context);
 
         this.context = context;
         this.soldOutGoodsItemList = soldOutGoodsItemList;
+        this.partialAvailable = partialAvailable;
     }
 
     @Override
@@ -43,11 +45,21 @@ public class SoldOutPopup extends CenterPopupView implements View.OnClickListene
     protected void onCreate() {
         super.onCreate();
 
+        TextView tvTitle = findViewById(R.id.tv_title);
+        TextView btnOk = findViewById(R.id.btn_ok);
+        if (partialAvailable) {
+            tvTitle.setText("抱歉，部分產品已售罄！");
+            btnOk.setText("移除");
+        } else {
+            tvTitle.setText("抱歉，產品已售罄！");
+            btnOk.setText("返回");
+        }
+
         // 设置弹窗背景
         Drawable backgroundDrawable = BackgroundDrawable.create(Color.WHITE, Util.dip2px(context, 6));
         findViewById(R.id.ll_popup_content_view).setBackground(backgroundDrawable);
 
-        findViewById(R.id.btn_ok).setOnClickListener(this);
+        btnOk.setOnClickListener(this);
 
         LinearLayout llSoldOutListContainer = findViewById(R.id.ll_sold_out_list_container);
         SoldOutGoodsAdapter adapter = new SoldOutGoodsAdapter(context, llSoldOutListContainer, R.layout.sold_out_item);
@@ -76,7 +88,11 @@ public class SoldOutPopup extends CenterPopupView implements View.OnClickListene
         int id = v.getId();
 
         if (id == R.id.btn_ok) {
+            if (partialAvailable) {
 
+            } else { // 全部售罄
+                dismiss();
+            }
         }
     }
 }
