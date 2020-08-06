@@ -471,8 +471,12 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 //            } else if(withoutCategoryFragment!=null){
 //                withoutCategoryFragment.scrollToTop();
 //            }
-            linkageGoodsFragment2.scrollToTop();
-            storeListFragment.scrollToTop();
+            if (linkageGoodsFragment2 != null) {
+                linkageGoodsFragment2.scrollToTop();
+            }
+            if (storeListFragment != null) {
+                storeListFragment.scrollToTop();
+            }
         }
     }
 
