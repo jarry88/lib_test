@@ -148,12 +148,43 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                     for (Object object : couponList) {
                         EasyJSONObject voucher = (EasyJSONObject) object;
 
+                        // 状态 0表示未使用 1表示已用 2表示作废
+                        int couponState = voucher.getInt("couponState");
+                        int couponExpiredState = voucher.getInt("couponExpiredState");//1表示已过期 ，未使用已过期则等于作废
 
-                        StoreVoucher platformVoucher = StoreVoucher.parseStore(voucher);
-                        if (platformVoucher.state == Constant.COUPON_STATE_UNRECEIVED) {
-                            availableVoucherList.add(platformVoucher);
+                        // 轉換一下
+                        int state;
+                        if (couponState == 0) {
+                            if (couponExpiredState == Constant.TRUE_INT) {
+                                //未使用已过期则等于作废
+                                state = Constant.COUPON_STATE_DISCARDED;
+
+                            } else {
+
+                                state = Constant.COUPON_STATE_UNRECEIVED;
+                            }
+                        } else if (couponState == 1) {
+                            state = Constant.COUPON_STATE_USED;
                         } else {
-                            unavailableVoucherList.add(platformVoucher);
+                            state = Constant.COUPON_STATE_DISCARDED;
+                        }
+
+                        StoreVoucher storeVoucher = new StoreVoucher(
+                                0,
+                                0,
+                                voucher.getSafeString("useGoodsRangeExplain"),
+                                null,
+                                voucher.getInt("couponPrice"),
+                                voucher.getSafeString("limitAmountText"),
+                                voucher.getSafeString("usableClientTypeText"),
+                                voucher.getSafeString("useStartTimeText"),
+                                voucher.getSafeString("useEndTimeText"),
+                                state
+                        );
+                        if (state == Constant.COUPON_STATE_UNRECEIVED) {
+                            availableVoucherList.add(storeVoucher);
+                        } else {
+                            unavailableVoucherList.add(storeVoucher);
                         }
 
                     }
@@ -205,7 +236,18 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                     for (Object object : usableList) {
                         EasyJSONObject voucher = (EasyJSONObject) object;
 
-                        StoreVoucher storeVoucher = StoreVoucher.parseStore(voucher);
+                        StoreVoucher storeVoucher = new StoreVoucher(
+                                voucher.getInt("store.storeId"),
+                                voucher.getInt("templateId"),
+                                voucher.getSafeString("store.storeName"),
+                                voucher.getSafeString("store.storeAvatar"),
+                                voucher.getInt("price"),
+                                voucher.getSafeString("limitAmountText"),
+                                voucher.getSafeString("voucherUsableClientTypeText"),
+                                voucher.getSafeString("startTime"),
+                                voucher.getSafeString("endTime"),
+                                Constant.COUPON_STATE_RECEIVED
+                        );
                         availableVoucherList.add(storeVoucher);
                     }
                     SLog.info("length[%d]", availableVoucherList.size());

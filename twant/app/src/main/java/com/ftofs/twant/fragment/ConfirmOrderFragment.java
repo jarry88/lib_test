@@ -182,7 +182,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
     List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
     int totalGoodsCount;
-    private List<StoreVoucher> platformVoucherList=new ArrayList<>();
 
     /**
      * 創建確認訂單的實例
@@ -302,7 +301,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(false)
                                 .asCustom(new OrderVoucherPopup(_mActivity, storeItem.storeId, storeItem.storeName,
-                                        Constant.COUPON_TYPE_STORE, null, -1, ConfirmOrderFragment.this))
+                                        Constant.COUPON_TYPE_STORE, storeVoucherVoList, -1, ConfirmOrderFragment.this))
                                 .show();
                         SLog.info("HERE");
                         break;
@@ -312,7 +311,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(false)
                                 .asCustom(new OrderVoucherPopup(_mActivity, 0, "",
-                                        Constant.COUPON_TYPE_PLATFORM, platformVoucherList, platformCouponIndex, ConfirmOrderFragment.this))
+                                        Constant.COUPON_TYPE_PLATFORM, platformCouponList, platformCouponIndex, ConfirmOrderFragment.this))
                                 .show();
                         break;
                     default:
@@ -1769,7 +1768,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 if (!available) {
                     continue;
                 }
-                StoreVoucher storeVoucher = StoreVoucher.parsePlatform(coupon);
                 StoreVoucherVo storeVoucherVo = new StoreVoucherVo();
 
                 storeVoucherVo.voucherId = coupon.getInt("coupon.couponId");
@@ -1781,7 +1779,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 storeVoucherVo.price = (float) coupon.getDouble("coupon.couponPrice");
 
                 platformCouponList.add(storeVoucherVo);
-                platformVoucherList.add(storeVoucher);
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

@@ -2,9 +2,6 @@ package com.ftofs.twant.entity;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.domain.promotion.Voucher;
-
-import cn.snailpad.easyjson.EasyJSONObject;
 
 public class StoreVoucher {
     public StoreVoucher(int storeId, int templateId, String storeName, String storeAvatar, int templatePrice, String limitAmountText,
@@ -37,57 +34,6 @@ public class StoreVoucher {
      */
     public int state;
     public String searchSn;
-
-    public static StoreVoucher parsePlatform(EasyJSONObject coupon) throws Exception{
-
-        // 状态 0表示未使用 1表示已用 2表示作废
-        int couponState = coupon.getInt("couponState");
-        int couponExpiredState = coupon.getInt("couponExpiredState");//1表示已过期 ，未使用已过期则等于作废
-
-        // 轉換一下
-        int state;
-        if (couponState == 0) {
-            if (couponExpiredState == Constant.TRUE_INT) {
-                //未使用已过期则等于作废
-                state = Constant.COUPON_STATE_DISCARDED;
-
-            } else {
-
-                state = Constant.COUPON_STATE_UNRECEIVED;
-            }
-        } else if (couponState == 1) {
-            state = Constant.COUPON_STATE_USED;
-        } else {
-            state = Constant.COUPON_STATE_DISCARDED;
-        }
-        return new StoreVoucher(
-                0,
-                0,
-                coupon.getSafeString("useGoodsRangeExplain"),
-                null,
-                coupon.getInt("couponPrice"),
-                coupon.getSafeString("limitAmountText"),
-                coupon.getSafeString("usableClientTypeText"),
-                coupon.getSafeString("useStartTimeText"),
-                coupon.getSafeString("useEndTimeText"),
-                state
-        );
-
-    }
-
-    public static StoreVoucher parseStore(EasyJSONObject voucher) throws Exception {
-        return new StoreVoucher(
-                voucher.getInt("store.storeId"),
-                voucher.getInt("templateId"),
-                voucher.getSafeString("store.storeName"),
-                voucher.getSafeString("store.storeAvatar"),
-                voucher.getInt("price"),
-                voucher.getSafeString("limitAmountText"),
-                voucher.getSafeString("voucherUsableClientTypeText"),
-                voucher.getSafeString("startTime"),
-                voucher.getSafeString("endTime"),
-                Constant.COUPON_STATE_RECEIVED);
-    }
 
     /**
      * 優惠券是否可用
