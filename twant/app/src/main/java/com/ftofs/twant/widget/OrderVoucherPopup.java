@@ -5,13 +5,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.OrderVoucherListAdapter;
+import com.ftofs.twant.adapter.StoreVoucherListAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.StoreVoucherVo;
 import com.ftofs.twant.entity.VoucherUseStatus;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -19,6 +22,7 @@ import com.ftofs.twant.log.SLog;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +38,9 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
     int platformCouponIndex;
 
     OrderVoucherListAdapter adapter;
+    StoreVoucherListAdapter voucherAdapter;
     OnSelectedListener onSelectedListener;
+    private List<StoreVoucher> storeVoucherList=new ArrayList<>();
 
     /**
      * Constructor
@@ -42,12 +48,12 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
      * @param storeId
      * @param storeName
      * @param couponType 表示storeVoucherVoList是商店券還是平台券
-     * @param storeVoucherVoList 商店券列表 或 平台券列表
+     * @param storeVoucherList 商店券列表 或 平台券列表
      * @param platformCouponIndex 當前正在使用的平台券列表Index(-1表示沒有使用)，當couponType為平台券時才用
      * @param onSelectedListener
      */
     public OrderVoucherPopup(@NonNull Context context, int storeId, String storeName, int couponType,
-                             List<StoreVoucherVo> storeVoucherVoList, int platformCouponIndex,
+                             List<StoreVoucher> storeVoucherList, int platformCouponIndex,
                              OnSelectedListener onSelectedListener) {
         super(context);
 
@@ -56,6 +62,7 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
         this.storeName = storeName;
         this.couponType = couponType;
         this.storeVoucherVoList = storeVoucherVoList;
+        this.storeVoucherList = storeVoucherList;
         this.platformCouponIndex = platformCouponIndex;
         this.onSelectedListener = onSelectedListener;
     }
@@ -82,8 +89,13 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
         RecyclerView rvStoreVoucherList = findViewById(R.id.rv_voucher_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvStoreVoucherList.setLayoutManager(layoutManager);
-
+        LinearLayout llVoucherContainer = findViewById(R.id.ll_voucher_container);
         adapter = new OrderVoucherListAdapter(R.layout.order_voucher_item, storeName, couponType, storeVoucherVoList, platformCouponIndex);
+        voucherAdapter = new StoreVoucherListAdapter(context,llVoucherContainer,R.layout.order_voucher_item);
+        for (StoreVoucherVo storeVoucherVo : storeVoucherVoList) {
+//            StoreVoucher storeVoucher = new StoreVoucher(storeVoucherVo.storeId,0,storeName,storeVoucherVo.av);
+        }
+        voucherAdapter.setData(storeVoucherList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
