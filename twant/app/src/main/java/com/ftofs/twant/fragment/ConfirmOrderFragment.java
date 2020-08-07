@@ -924,28 +924,63 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
 
             confirmOrderItemList.clear();
+            traverseStore(responseObj);
 
+            // 添加上汇总项目
+            ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
+            confirmOrderItemList.add(confirmOrderSummaryItem);
+            _mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.setNewData(confirmOrderItemList);
+                }
+            });
+            return new Pair<>(true, "");
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            return new Pair<>(false, "");
+        }
+    }
+
+    private void traverseStore(EasyJSONObject responseObj) {
+        try {
             // 獲取商店券
             EasyJSONArray buyStoreVoList = responseObj.getSafeArray("datas.buyStoreVoList");
+            SLog.info("HERE storeSize[%d]",buyStoreVoList.length());
             for (Object object : buyStoreVoList) {  // 遍歷每家商店
                 int storeTariff = Constant.FALSE_INT;
                 List<StoreVoucherVo> storeVoucherVoList = new ArrayList<>();
                 EasyJSONObject buyStoreVo = (EasyJSONObject) object;
                 int storeId = buyStoreVo.getInt("storeId");
+
+                int maxAmountVoucherId = 0; // 最大面额的优惠券Id
+                double maxVoucherAmount = 0; // 最大面额的优惠券
+                StoreVoucherVo maxAmountStoreVoucherVo = null;  // 最大面额的优惠券对象
                 EasyJSONArray voucherVoList = buyStoreVo.getSafeArray("voucherVoList");
                 for (Object object2 : voucherVoList) {
-                    StoreVoucherVo storeVoucherVo = null;
-                    storeVoucherVo = (StoreVoucherVo) EasyJSONBase.jsonDecode(StoreVoucherVo.class, object2.toString());
-
-                    if (storeVoucherVo.useEnable == Constant.TRUE_INT) {
-                        storeVoucherVoList.add(storeVoucherVo);
+                    StoreVoucherVo storeVoucherVo = (StoreVoucherVo) EasyJSONBase.jsonDecode(StoreVoucherVo.class, object2.toString());
+                    if (storeVoucherVo.useEnable == Constant.FALSE_INT) {
+                        continue;
                     }
+
+                    if (storeVoucherVo.price > maxVoucherAmount) {
+                        maxAmountVoucherId = storeVoucherVo.voucherId;
+                        maxVoucherAmount = storeVoucherVo.price;
+                        maxAmountStoreVoucherVo = storeVoucherVo;
+                    }
+
+                    storeVoucherVoList.add(storeVoucherVo);
                     SLog.info("storeVoucherVo[%s]", storeVoucherVo);
+                }
+
+                if (maxAmountStoreVoucherVo != null) {
+                    maxAmountStoreVoucherVo.isInUse = true;
                 }
 
                 voucherMap.put(storeId, storeVoucherVoList);
                 int conformId = -1;
                 // 获取满减优惠
+                SLog.info("buyStoreVo[%s]", buyStoreVo);
                 if (buyStoreVo.exists("conform.conformId")) {
                     conformId = buyStoreVo.getInt("conform.conformId");
                     storeConformIdMap.put(storeId, conformId);
@@ -962,12 +997,13 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 EasyJSONArray buyGoodsItemVoList = buyStoreVo.getSafeArray("buyGoodsItemVoList");
                 List<ConfirmOrderSkuItem> confirmOrderSkuItemList = new ArrayList<>();
                 int storeItemCount = 0;
-                confirmOrderItemList.clear();
                 for (Object object2 : buyGoodsItemVoList) { // 遍歷每個Sku
                     EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
                     int goodsId;
+                    int cartId=-1;
                     if (isFromCart == 1) {
                         goodsId = buyGoodsItem.getInt("cartId");
+                        cartId = buyGoodsItem.getInt("cartId");
                     } else {
                         goodsId = buyGoodsItem.getInt("goodsId");
                     }
@@ -980,6 +1016,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     int storageStatus =buyGoodsItem.getInt("storageStatus");
                     int allowSend =buyGoodsItem.getInt("allowSend");
                     int tariffEnable = buyGoodsItem.getInt("tariffEnable");
+                    int joinBigSale = buyGoodsItem.getInt("joinBigSale");
                     if (tariffEnable == Constant.TRUE_INT) {
                         storeTariff = Constant.TRUE_INT;
                         tariffTotalEnable = Constant.TRUE_INT;
@@ -989,7 +1026,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     // 處理SKU贈品信息
                     List<GiftItem> giftItemList = new ArrayList<>();
                     EasyJSONArray giftVoList = buyGoodsItem.getSafeArray("giftVoList");
-                    if (giftVoList != null || giftVoList.length() > 0) {
+                    if (giftVoList != null && giftVoList.length() > 0) {
                         for (Object object3 : giftVoList) {
                             GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, object3.toString());
                             giftItemList.add(giftItem);
@@ -998,8 +1035,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                     ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, goodsId, goodsName,
                             goodsFullSpecs, buyNum, goodsPrice, giftItemList);
+                    confirmOrderSkuItem.cartId = cartId;
                     confirmOrderSkuItem.storageStatus = storageStatus;
                     confirmOrderSkuItem.allowSend = allowSend;
+                    confirmOrderSkuItem.joinBigSale = joinBigSale;
                     confirmOrderSkuItemList.add(confirmOrderSkuItem);
 
                     String keyName = "cartId";
@@ -1019,14 +1058,20 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     SLog.info("conformTemplatePrice[%s]", conformTemplatePrice);
                     // conformTemplatePrice = 999;
                 }
+                ConfirmOrderStoreItem storeItem;
                 if (storeTariff == Constant.TRUE_INT) {
                     SLog.info("跨城購店鋪數據[%s]",buyStoreVo.toString());
-                    confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
-                            0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList, conformTemplatePrice,0));
+                    storeItem = new ConfirmOrderStoreItem(storeId, storeName, 0,
+                            0, storeItemCount, storeVoucherVoList.size(), maxAmountVoucherId, confirmOrderSkuItemList, conformTemplatePrice,0);
                 } else {
-                    confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
-                            0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList, conformTemplatePrice));
+                    storeItem = new ConfirmOrderStoreItem(storeId, storeName, 0,
+                            0, storeItemCount, storeVoucherVoList.size(), maxAmountVoucherId, confirmOrderSkuItemList, conformTemplatePrice);
                 }
+
+                if (maxAmountStoreVoucherVo != null) { // 如果有优惠券，则使用最大面额的优惠券
+                    storeItem.voucherName = formatVoucherName(maxAmountStoreVoucherVo);
+                }
+                confirmOrderItemList.add(storeItem);
 
                 commitStoreList.append(EasyJSONObject.generate(
                         "storeId", storeId,
@@ -1035,24 +1080,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         "shipTimeType", shipTimeType,
                         //沒有活動是傳空字符串
                         "conformId",conformId>=0?conformId:""));
-            }
-            // END OF 遍歷每家商店
-
-            // 添加上汇总项目
-            ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
-            confirmOrderItemList.add(confirmOrderSummaryItem);
-            _mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.setNewData(confirmOrderItemList);
-                }
-            });
-            return new Pair<>(true, "");
+            }  // END OF 遍歷每家商店
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-            return new Pair<>(false, "");
         }
-
     }
 
     private void updateFreightTotalAmount() {
@@ -1303,6 +1334,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+    /**
+     * 首次加载订单数据
+     */
     private void loadOrderData() {
         SLog.info("xxyy");
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
@@ -1382,123 +1416,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         shippingItemList.add(new ListPopupItem(easyJSONObject.getInt("id"), easyJSONObject.getSafeString("name"), null));
                     }
 
-                    // 獲取商店券
                     confirmOrderItemList.clear();
-                    SLog.info("xxyy");
-                    EasyJSONArray buyStoreVoList = responseObj.getSafeArray("datas.buyStoreVoList");
-                    SLog.info("HERE storeSize[%d]",buyStoreVoList.length());
-                    for (Object object : buyStoreVoList) {  // 遍歷每家商店
-                        int storeTariff = Constant.FALSE_INT;
-                        List<StoreVoucherVo> storeVoucherVoList = new ArrayList<>();
-                        EasyJSONObject buyStoreVo = (EasyJSONObject) object;
-                        int storeId = buyStoreVo.getInt("storeId");
-                        EasyJSONArray voucherVoList = buyStoreVo.getSafeArray("voucherVoList");
-                        for (Object object2 : voucherVoList) {
-                            StoreVoucherVo storeVoucherVo = (StoreVoucherVo) EasyJSONBase.jsonDecode(StoreVoucherVo.class, object2.toString());
-                            if (storeVoucherVo.useEnable == Constant.TRUE_INT) {
-                                storeVoucherVoList.add(storeVoucherVo);
-                            }
-                            SLog.info("storeVoucherVo[%s]", storeVoucherVo);
-                        }
-
-                        voucherMap.put(storeId, storeVoucherVoList);
-                        int conformId = -1;
-                        // 获取满减优惠
-                        SLog.info("buyStoreVo[%s]", buyStoreVo);
-                        if (buyStoreVo.exists("conform.conformId")) {
-                            conformId = buyStoreVo.getInt("conform.conformId");
-                            storeConformIdMap.put(storeId, conformId);
-                        }
-
-                        String storeName = buyStoreVo.getSafeString("storeName");
-                        // int itemCount = buyStoreVo.getInt("itemCount");
-                        // float freightAmount = (float) buyStoreVo.getDouble("freightAmount"); 在第2步中獲取運費
-                        // float buyItemAmount = (float) buyStoreVo.getDouble("buyItemAmount"); 在第3步中獲取金額
-
-                        int shipTimeType = 0;
-
-                        EasyJSONArray goodsList = EasyJSONArray.generate();
-                        EasyJSONArray buyGoodsItemVoList = buyStoreVo.getSafeArray("buyGoodsItemVoList");
-                        List<ConfirmOrderSkuItem> confirmOrderSkuItemList = new ArrayList<>();
-                        int storeItemCount = 0;
-                        for (Object object2 : buyGoodsItemVoList) { // 遍歷每個Sku
-                            EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
-                            int goodsId;
-                            int cartId=-1;
-                            if (isFromCart == 1) {
-                                goodsId = buyGoodsItem.getInt("cartId");
-                                cartId = buyGoodsItem.getInt("cartId");
-                            } else {
-                                goodsId = buyGoodsItem.getInt("goodsId");
-                            }
-
-                            int buyNum = buyGoodsItem.getInt("buyNum");
-
-                            String imageSrc = buyGoodsItem.getSafeString("imageSrc");
-                            String goodsName = buyGoodsItem.getSafeString("goodsName");
-                            String goodsFullSpecs = buyGoodsItem.getSafeString("goodsFullSpecs");
-                            int storageStatus =buyGoodsItem.getInt("storageStatus");
-                            int allowSend =buyGoodsItem.getInt("allowSend");
-                            int tariffEnable = buyGoodsItem.getInt("tariffEnable");
-                            int joinBigSale = buyGoodsItem.getInt("joinBigSale");
-                            if (tariffEnable == Constant.TRUE_INT) {
-                                storeTariff = Constant.TRUE_INT;
-                                tariffTotalEnable = Constant.TRUE_INT;
-                            }
-                            float goodsPrice = (float) buyGoodsItem.getDouble("goodsPrice");
-
-                            // 處理SKU贈品信息
-                            List<GiftItem> giftItemList = new ArrayList<>();
-                            EasyJSONArray giftVoList = buyGoodsItem.getSafeArray("giftVoList");
-                            if (giftVoList != null && giftVoList.length() > 0) {
-                                for (Object object3 : giftVoList) {
-                                    GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, object3.toString());
-                                    giftItemList.add(giftItem);
-                                }
-                            }
-
-                            ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, goodsId, goodsName,
-                                    goodsFullSpecs, buyNum, goodsPrice, giftItemList);
-                            confirmOrderSkuItem.cartId = cartId;
-                            confirmOrderSkuItem.storageStatus = storageStatus;
-                            confirmOrderSkuItem.allowSend = allowSend;
-                            confirmOrderSkuItem.joinBigSale = joinBigSale;
-                            confirmOrderSkuItemList.add(confirmOrderSkuItem);
-
-                            String keyName = "cartId";
-                            if (isFromCart == Constant.ZERO) {
-                                keyName = "goodsId";
-                            }
-                            goodsList.append(EasyJSONObject.generate(keyName, goodsId, "buyNum", buyNum));
-
-                            storeItemCount += buyNum;
-                            totalItemCount += buyNum;
-                        } // END OF 遍歷每個Sku
-
-                        // 確認訂單時，店鋪滿減券
-                        float conformTemplatePrice = 0;
-                        if (buyStoreVo.exists("conform.templatePrice")) {
-                            conformTemplatePrice = (float) buyStoreVo.getDouble("conform.templatePrice");
-                            SLog.info("conformTemplatePrice[%s]", conformTemplatePrice);
-                            // conformTemplatePrice = 999;
-                        }
-                        if (storeTariff == Constant.TRUE_INT) {
-                            SLog.info("跨城購店鋪數據[%s]",buyStoreVo.toString());
-                            confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
-                                    0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList, conformTemplatePrice,0));
-                        } else {
-                            confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
-                                    0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList, conformTemplatePrice));
-                        }
-
-                        commitStoreList.append(EasyJSONObject.generate(
-                                "storeId", storeId,
-                                "storeName", storeName,
-                                "goodsList", goodsList,
-                                "shipTimeType", shipTimeType,
-                                //沒有活動是傳空字符串
-                                "conformId",conformId>=0?conformId:""));
-                    }  // END OF 遍歷每家商店
+                    traverseStore(responseObj);
 
                     // 添加上汇总项目
                     ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
@@ -1589,7 +1508,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             EasyJSONObject params = collectParams(false);
             SLog.info("params[%s]", params.toString());
             String responseStr = Api.syncPost(Api.PATH_CALC_FREIGHT, params);
-            responseStr = "{\"code\":200,\"datas\":{\"isAuth\":0,\"address\":{\"addressId\":695,\"memberId\":247,\"realName\":\"周伟明\",\"areaId1\":19,\"areaId2\":292,\"areaId3\":3066,\"areaId4\":0,\"areaId\":3066,\"areaInfo\":\"广东 珠海市 香洲区\",\"address\":\"Test\",\"mobPhone\":\"13425038750\",\"mobileAreaCode\":\"0086\",\"telPhone\":\"\",\"isDefault\":0},\"freightAmount\":6.00,\"storeList\":[{\"buyGoodsItemVoList\":[{\"cartId\":3552,\"goodsId\":5197,\"commonId\":3728,\"goodsName\":\"Y&I's\",\"goodsFullSpecs\":\"顔色：白色\",\"goodsPrice\":11.90,\"imageName\":\"image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"buyNum\":1,\"itemAmount\":11.90,\"variableItemAmount\":0,\"goodsFreight\":0.00,\"goodsStorage\":8,\"categoryId\":276,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":1,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"allowSend\":0,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":276,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":11.90,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":11.90,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":11.90,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":11.90,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":11.90,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":1,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":1,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0},{\"cartId\":3553,\"goodsId\":7190,\"commonId\":3837,\"goodsName\":\"測試_編輯商品自動加空格\",\"goodsFullSpecs\":null,\"goodsPrice\":9.00,\"imageName\":\"image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"buyNum\":1,\"itemAmount\":9.00,\"variableItemAmount\":0,\"goodsFreight\":6.00,\"goodsStorage\":8,\"categoryId\":281,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":0,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"allowSend\":1,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":281,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":9.00,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":9.00,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":9.00,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":9.00,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":9.00,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":7,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0}],\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storeId\":303,\"paymentTypeCode\":\"online\",\"isOwnShop\":0,\"receiverMessage\":null,\"invoiceTitle\":null,\"invoiceContent\":null,\"invoiceCode\":null,\"shipTimeType\":0,\"buyItemAmount\":20.90,\"buyItemExcludejoinBigSaleAmount\":20.90,\"freightAmount\":6.00,\"conform\":null,\"voucher\":null,\"couponAmount\":0.00,\"shopCommitmentAmount\":0.00,\"buyAmount0\":20.90,\"buyAmount1\":26.90,\"buyAmount2\":6.00,\"buyAmount3\":20.90,\"buyAmount4\":20.90,\"buyAmount5\":20.90,\"buyAmount6\":0,\"ordersType\":0,\"taxAmount\":0.00,\"tariffTotalAmount\":0.00,\"storeDiscountAmount\":0}]}}";
+            // responseStr = "{\"code\":200,\"datas\":{\"isAuth\":0,\"address\":{\"addressId\":695,\"memberId\":247,\"realName\":\"周伟明\",\"areaId1\":19,\"areaId2\":292,\"areaId3\":3066,\"areaId4\":0,\"areaId\":3066,\"areaInfo\":\"广东 珠海市 香洲区\",\"address\":\"Test\",\"mobPhone\":\"13425038750\",\"mobileAreaCode\":\"0086\",\"telPhone\":\"\",\"isDefault\":0},\"freightAmount\":6.00,\"storeList\":[{\"buyGoodsItemVoList\":[{\"cartId\":3552,\"goodsId\":5197,\"commonId\":3728,\"goodsName\":\"Y&I's\",\"goodsFullSpecs\":\"顔色：白色\",\"goodsPrice\":11.90,\"imageName\":\"image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"buyNum\":1,\"itemAmount\":11.90,\"variableItemAmount\":0,\"goodsFreight\":0.00,\"goodsStorage\":8,\"categoryId\":276,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":1,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"allowSend\":0,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":276,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":11.90,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":11.90,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":11.90,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":11.90,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":11.90,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":1,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":1,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0},{\"cartId\":3553,\"goodsId\":7190,\"commonId\":3837,\"goodsName\":\"測試_編輯商品自動加空格\",\"goodsFullSpecs\":null,\"goodsPrice\":9.00,\"imageName\":\"image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"buyNum\":1,\"itemAmount\":9.00,\"variableItemAmount\":0,\"goodsFreight\":6.00,\"goodsStorage\":8,\"categoryId\":281,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":0,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"allowSend\":1,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":281,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":9.00,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":9.00,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":9.00,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":9.00,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":9.00,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":7,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0}],\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storeId\":303,\"paymentTypeCode\":\"online\",\"isOwnShop\":0,\"receiverMessage\":null,\"invoiceTitle\":null,\"invoiceContent\":null,\"invoiceCode\":null,\"shipTimeType\":0,\"buyItemAmount\":20.90,\"buyItemExcludejoinBigSaleAmount\":20.90,\"freightAmount\":6.00,\"conform\":null,\"voucher\":null,\"couponAmount\":0.00,\"shopCommitmentAmount\":0.00,\"buyAmount0\":20.90,\"buyAmount1\":26.90,\"buyAmount2\":6.00,\"buyAmount3\":20.90,\"buyAmount4\":20.90,\"buyAmount5\":20.90,\"buyAmount6\":0,\"ordersType\":0,\"taxAmount\":0.00,\"tariffTotalAmount\":0.00,\"storeDiscountAmount\":0}]}}";
             SLog.info("responseStr[%s]", responseStr);
             EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
             if (ToastUtil.isError(responseObj)) {
@@ -1879,7 +1798,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                             if (voucherUseStatus.isInUse) { // 使用商店券
                                 // 獲取要使用的商店券名稱
-                                item.voucherName = StringUtil.formatPrice(_mActivity, storeVoucherVo.price, 0) + " " + storeVoucherVo.voucherTitle;
+                                item.voucherName = formatVoucherName(storeVoucherVo);
                             }
                         }
                     }
@@ -1897,6 +1816,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
             position++;
         }
+    }
+
+    private String formatVoucherName(StoreVoucherVo storeVoucherVo) {
+        return StringUtil.formatPrice(_mActivity, storeVoucherVo.price, 0) + " " + storeVoucherVo.voucherTitle;
     }
 
     /**
