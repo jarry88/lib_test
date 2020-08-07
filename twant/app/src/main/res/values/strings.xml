@@ -819,4 +819,8 @@
     <string name="text_select">選擇</string>
     <string name="text_sku_detail"><u>sku详情</u></string>
     <string name="text_call">撥打</string>
+    <string name="text_take_info">提貨信息</string>
+    <string name="text_store_phone">商家電話</string>
+    <string name="text_store_transport">交通方式</string>
+    <string name="text_take_addr">提貨地址</string>
 </resources>

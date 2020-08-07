@@ -156,6 +156,7 @@ public class TwantApplication extends Application {
         //Bugly异常处理
         //双重保险，开发模式时不上传
         if (!Config.DEVELOPER_MODE) {
+            SLog.info("initBugly");
             CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
         }
 

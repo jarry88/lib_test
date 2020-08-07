@@ -45,7 +45,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
             val args = Bundle()
             val fragment = LinkageContainerFragment2()
             args.putInt("zoneId",zoneId)
-            args.putInt("zoneId",zoneId)
             fragment.parent = p
 
             fragment.arguments = args

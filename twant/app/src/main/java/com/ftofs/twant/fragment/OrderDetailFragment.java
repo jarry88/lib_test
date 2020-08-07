@@ -33,6 +33,7 @@ import com.ftofs.twant.constant.GroupBuyStatus;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
+import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EvaluationGoodsItem;
 import com.ftofs.twant.entity.GoodsInfo;
@@ -47,6 +48,8 @@ import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.vo.store.StoreVo;
+import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
@@ -182,6 +185,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     TextView btnBuyAgain;
 
     TextView btnPayOrder;
+    private LinearLayout llTakeGoodsContainer;
+    private TextView tvStorePhone;
+    private TextView tvBusinessTimeWeekend;
+    private TextView tvBusinessTimeWorkingDay;
+    private TextView tvTakeAddr;
+    private TextView tvStoreTransport;
 
 
     public void back() {
@@ -325,6 +334,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         btnDialStorePhone = (LinearLayout) view.findViewById(R.id.btn_dial_store_phone);
         tvTakeCode = (TextView) view.findViewById(R.id.tv_take_code);
         rlTakeCodeContainer = (RelativeLayout) view.findViewById(R.id.rl_take_code_container);
+        llTakeGoodsContainer = (LinearLayout) view.findViewById(R.id.ll_get_goods_info);
         tvOrdersSn = (TextView) view.findViewById(R.id.tv_orders_sn);
         tvCreateTime = (TextView) view.findViewById(R.id.tv_create_time);
         llOrderCreateTimeContainer = (LinearLayout) view.findViewById(R.id.ll_order_create_time_container);
@@ -345,6 +355,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         tvPlatformWelfare = (TextView) view.findViewById(R.id.tv_platform_welfare);
         llOrderButtonContainer = (LinearLayout) view.findViewById(R.id.ll_order_button_container);
         rlSendContainer = (RelativeLayout) view.findViewById(R.id.rl_send_container);
+
+        tvStorePhone=view.findViewById(R.id.tv_store_phone);
+        tvBusinessTimeWeekend=view.findViewById(R.id.tv_business_time_weekend);
+        tvBusinessTimeWorkingDay=view.findViewById(R.id.tv_business_time_working_day);
+        tvTakeAddr=view.findViewById(R.id.tv_take_addr);
+        tvStoreTransport=view.findViewById(R.id.tv_store_transport);
         view.findViewById(R.id.btn_pay_order).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -887,6 +903,35 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         int takeCode = responseObj.getInt("datas.ordersVo.takeCode");
                         if (takeCode > 0) {
                             rlTakeCodeContainer.setVisibility(View.VISIBLE);
+                            if (responseObj.exists("datas.storeVo")) {
+                                EasyJSONObject jsonObject = responseObj.getObject("datas.storeVo");
+                                llTakeGoodsContainer.setVisibility(View.VISIBLE);
+                                    StoreVo storeVo = StoreVo.parse(jsonObject);
+                                String weekDayStartTime = jsonObject.getSafeString("weekDayStartTime");
+                                String weekDayEndTime = jsonObject.getSafeString("weekDayEndTime");
+                                String restDayStartTime = jsonObject.getSafeString("restDayStartTime");
+                                String restDayEndTime = jsonObject.getSafeString("restDayEndTime");
+                                String chainTrafficLine = jsonObject.getSafeString("chainTrafficLine");
+                                tvStorePhone.setText(storeVo.getChainPhone());
+                                tvTakeAddr.setText(storeVo.getChainAreaInfo()+storeVo.getChainAddress());
+                                tvStoreTransport.setText(chainTrafficLine);
+                                String weekDayRange = storeVo.getWeekDayStart() + "至" + storeVo.getWeekDayEnd();
+                                String weekDayRangeTime = weekDayStartTime + "-" + weekDayEndTime;
+                                String restDayRange = storeVo.getRestDayStart() + "至" + storeVo.getRestDayEnd();
+                                String restDayRangeTime = restDayStartTime + "-" + restDayEndTime;
+                                if (StringUtil.isEmpty(storeVo.getWeekDayStart())) {
+                                    tvBusinessTimeWeekend.setVisibility(View.GONE);
+                                    tvBusinessTimeWorkingDay.setText(weekDayRangeTime);
+                                } else {
+                                    tvBusinessTimeWorkingDay.setText(weekDayRange + "   " + weekDayRangeTime);
+                                }
+
+                                if (StringUtil.isEmpty(storeVo.getRestDayStart())) {
+                                    tvBusinessTimeWeekend.setVisibility(View.GONE);
+                                } else {
+                                    tvBusinessTimeWeekend.setText(restDayRange + "   " + restDayRangeTime);
+                                }
+                            }
                             tvTakeCode.setText(String.valueOf(takeCode));
                         }
                     }

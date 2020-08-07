@@ -1,6 +1,10 @@
 package com.ftofs.twant.vo.store;
 
+import com.ftofs.twant.domain.store.Store;
+
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * @Description: 商店視圖對象
@@ -208,7 +212,9 @@ public class StoreVo {
     /**
      * 工作日關店時間
      */
-    private String weekDayEnd;
+    private String weekDayEnd;  /**
+     * 工作日開店時間
+     */
 
     /**
      * 休息日開店時間
@@ -228,6 +234,24 @@ public class StoreVo {
      * 產品spu數量
      */
     private long goodsCommonCount = 0;
+
+    /**
+     * 会解析storeId storeName chainPhone weekDayStart weekDayEnd restDayStart restDayEnd areaInfo address
+     * @param jsonObject
+     * @return
+     * @throws Exception
+     */
+    public static StoreVo parse(EasyJSONObject jsonObject) throws Exception{
+        StoreVo storeVo = new StoreVo();
+        storeVo.setStoreId(jsonObject.getInt("storeId"));
+        storeVo.setStoreName(jsonObject.getSafeString("storeName"));
+        storeVo.setChainPhone(jsonObject.getSafeString("chainPhone"));
+        storeVo.setWeekDayStart(jsonObject.getSafeString("weekDayStart"));
+        storeVo.setWeekDayEnd(jsonObject.getSafeString("weekDayEnd"));
+        storeVo.setChainAddress(jsonObject.getSafeString("address"));
+        storeVo.setChainAreaInfo(jsonObject.getSafeString("areaInfo"));
+        return storeVo;
+    }
 
     public int getStoreId() {
         return storeId;
