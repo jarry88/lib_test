@@ -1,0 +1,11 @@
+diff a/twant/app/src/main/java/com/ftofs/twant/entity/StoreVoucher.java b/twant/app/src/main/java/com/ftofs/twant/entity/StoreVoucher.java	(rejected hunks)
+@@ -2,6 +2,9 @@
+ 
+ import com.ftofs.twant.R;
+ import com.ftofs.twant.constant.Constant;
++import com.ftofs.twant.domain.promotion.Voucher;
++
++import cn.snailpad.easyjson.EasyJSONObject;
+ 
+ public class StoreVoucher {
+     public StoreVoucher(int storeId, int templateId, String storeName, String storeAvatar, int templatePrice, String limitAmountText,

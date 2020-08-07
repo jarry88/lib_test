@@ -13,7 +13,9 @@
         android:id="@+id/ll_float_button_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:layout_marginStart="6dp"
+        android:layout_marginEnd="@dimen/dp_4"
         android:layout_marginBottom="84dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
@@ -25,15 +27,15 @@
             android:src="@drawable/icon_add_feedback"
             android:visibility="gone"
             />
+
         <ImageView
             android:id="@+id/btn_publish_want_post"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_60"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="6dp"
-            android:src="@drawable/icon_sendwant"
             android:scaleType="fitXY"
-            />
+            android:src="@drawable/icon_sendwant" />
 
         <ImageView
             android:id="@+id/btn_goto_top"

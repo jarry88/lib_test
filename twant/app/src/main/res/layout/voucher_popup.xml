@@ -31,6 +31,7 @@
             />
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:visibility="visible"
         android:id="@+id/rv_voucher_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

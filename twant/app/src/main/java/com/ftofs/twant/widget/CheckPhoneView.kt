@@ -46,7 +46,7 @@ val isValidRegex ="^1(([7][0,1])|([6][2,5,7])|[3][4][9])[0-9]{0,10}$"
 class CheckPhoneView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    lateinit var mobileList: MutableList<MobileZone>
+    var mobileList= listOf<MobileZone>()
     private val mContext:Context=context
     private val areaArray = arrayOf(
             "",
