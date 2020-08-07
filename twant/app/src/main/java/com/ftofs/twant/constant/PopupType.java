@@ -236,5 +236,10 @@ public enum PopupType {
     /**
      * 彈出Menu菜單
      */
-    MENU
+    MENU,
+
+    /**
+     * 處理訂單中售罄的商品
+     */
+    HANDLE_SOLD_OUT_GOODS,
 }
