@@ -1481,7 +1481,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         }
         tvItemCount.setText(String.format(template, totalItemCount));
         if (summaryItem != null) {
-            double totalPrice = summaryItem.calcTotalPrice();
+            totalPrice = summaryItem.calcTotalPrice();
             tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,totalPrice,0,2));
             Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, totalPrice);
         }
