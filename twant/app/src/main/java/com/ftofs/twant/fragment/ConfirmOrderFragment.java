@@ -180,8 +180,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
     PayWayItem specialItem;  // 只有選擇的收貨人信息是澳門地區才會顯示貨到付款這種交易方式，空地址、香港和內地的地址均不顯示；
 
+    // 售罄商品列表
     List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
-    int totalGoodsCount;
+    int totalGoodsCount; // 商品總數
+    // Map<Integer, Integer> cartIdToGoodsId = new HashMap<>();
+    Map<Integer, Integer> goodsIdToCartId = new HashMap<>();
 
     /**
      * 創建確認訂單的實例
@@ -191,6 +194,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * @return
      */
     public static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup, int goId, int bargainOpenId) {
+        SLog.info("ConfirmOrderFragment.newInstance: isFromCart[%d], buyData[%s], isGroup[%d], goId[%d], bargainOpenId[%d]",
+                isFromCart, buyData, isGroup, goId, bargainOpenId);
+
         Bundle args = new Bundle();
 
         args.putInt("isFromCart", isFromCart);
@@ -201,7 +207,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         fragment.isGroup = isGroup;
         fragment.goId = goId;
         fragment.bargainOpenId = bargainOpenId;
-        SLog.info("isGroup[%d], goId[%d]", isGroup, goId);
 
         return fragment;
     }
@@ -1001,9 +1006,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
                     int goodsId;
                     int cartId=-1;
-                    if (isFromCart == 1) {
+                    if (isFromCart == Constant.TRUE_INT) {
                         goodsId = buyGoodsItem.getInt("cartId");
                         cartId = buyGoodsItem.getInt("cartId");
+
+                        int realGoodsId = buyGoodsItem.getInt("goodsId");  // 真正的GoodsId, 而不是購物車Id
+                        goodsIdToCartId.put(realGoodsId, cartId);
                     } else {
                         goodsId = buyGoodsItem.getInt("goodsId");
                     }
@@ -1138,7 +1146,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SoldOutPopup(_mActivity, soldOutGoodsItemList, totalGoodsCount > soldOutGoodsItemList.size()))
+                .asCustom(new SoldOutPopup(_mActivity, soldOutGoodsItemList, totalGoodsCount > soldOutGoodsItemList.size(), this))
                 .show();
     }
 
@@ -1509,6 +1517,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             SLog.info("params[%s]", params.toString());
             String responseStr = Api.syncPost(Api.PATH_CALC_FREIGHT, params);
             // responseStr = "{\"code\":200,\"datas\":{\"isAuth\":0,\"address\":{\"addressId\":695,\"memberId\":247,\"realName\":\"周伟明\",\"areaId1\":19,\"areaId2\":292,\"areaId3\":3066,\"areaId4\":0,\"areaId\":3066,\"areaInfo\":\"广东 珠海市 香洲区\",\"address\":\"Test\",\"mobPhone\":\"13425038750\",\"mobileAreaCode\":\"0086\",\"telPhone\":\"\",\"isDefault\":0},\"freightAmount\":6.00,\"storeList\":[{\"buyGoodsItemVoList\":[{\"cartId\":3552,\"goodsId\":5197,\"commonId\":3728,\"goodsName\":\"Y&I's\",\"goodsFullSpecs\":\"顔色：白色\",\"goodsPrice\":11.90,\"imageName\":\"image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"buyNum\":1,\"itemAmount\":11.90,\"variableItemAmount\":0,\"goodsFreight\":0.00,\"goodsStorage\":8,\"categoryId\":276,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":1,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"allowSend\":0,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":276,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":11.90,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":11.90,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":11.90,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":11.90,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":11.90,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":1,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":1,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0},{\"cartId\":3553,\"goodsId\":7190,\"commonId\":3837,\"goodsName\":\"測試_編輯商品自動加空格\",\"goodsFullSpecs\":null,\"goodsPrice\":9.00,\"imageName\":\"image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"buyNum\":1,\"itemAmount\":9.00,\"variableItemAmount\":0,\"goodsFreight\":6.00,\"goodsStorage\":8,\"categoryId\":281,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":0,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"allowSend\":1,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":281,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":9.00,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":9.00,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":9.00,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":9.00,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":9.00,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":7,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0}],\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storeId\":303,\"paymentTypeCode\":\"online\",\"isOwnShop\":0,\"receiverMessage\":null,\"invoiceTitle\":null,\"invoiceContent\":null,\"invoiceCode\":null,\"shipTimeType\":0,\"buyItemAmount\":20.90,\"buyItemExcludejoinBigSaleAmount\":20.90,\"freightAmount\":6.00,\"conform\":null,\"voucher\":null,\"couponAmount\":0.00,\"shopCommitmentAmount\":0.00,\"buyAmount0\":20.90,\"buyAmount1\":26.90,\"buyAmount2\":6.00,\"buyAmount3\":20.90,\"buyAmount4\":20.90,\"buyAmount5\":20.90,\"buyAmount6\":0,\"ordersType\":0,\"taxAmount\":0.00,\"tariffTotalAmount\":0.00,\"storeDiscountAmount\":0}]}}";
+            // responseStr = "{\"code\":200,\"datas\":{\"isAuth\":0,\"address\":{\"addressId\":695,\"memberId\":247,\"realName\":\"周伟明\",\"areaId1\":19,\"areaId2\":292,\"areaId3\":3066,\"areaId4\":0,\"areaId\":3066,\"areaInfo\":\"广东 珠海市 香洲区\",\"address\":\"Test\",\"mobPhone\":\"13425038750\",\"mobileAreaCode\":\"0086\",\"telPhone\":\"\",\"isDefault\":0},\"freightAmount\":6.00,\"storeList\":[{\"buyGoodsItemVoList\":[{\"cartId\":3552,\"goodsId\":5197,\"commonId\":3728,\"goodsName\":\"Y&I's\",\"goodsFullSpecs\":\"顔色：白色\",\"goodsPrice\":11.90,\"imageName\":\"image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"buyNum\":1,\"itemAmount\":11.90,\"variableItemAmount\":0,\"goodsFreight\":0.00,\"goodsStorage\":7,\"categoryId\":276,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":0,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"allowSend\":1,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":276,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":11.90,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":11.90,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":11.90,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":11.90,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":11.90,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":1,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":1,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0},{\"cartId\":3553,\"goodsId\":7190,\"commonId\":3837,\"goodsName\":\"測試_編輯商品自動加空格\",\"goodsFullSpecs\":null,\"goodsPrice\":9.00,\"imageName\":\"image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"buyNum\":1,\"itemAmount\":9.00,\"variableItemAmount\":0,\"goodsFreight\":6.00,\"goodsStorage\":8,\"categoryId\":281,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":1,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"allowSend\":1,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":281,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":9.00,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":9.00,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":9.00,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":9.00,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":9.00,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":7,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0}],\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storeId\":303,\"paymentTypeCode\":\"online\",\"isOwnShop\":0,\"receiverMessage\":null,\"invoiceTitle\":null,\"invoiceContent\":null,\"invoiceCode\":null,\"shipTimeType\":0,\"buyItemAmount\":20.90,\"buyItemExcludejoinBigSaleAmount\":20.90,\"freightAmount\":6.00,\"conform\":null,\"voucher\":null,\"couponAmount\":0.00,\"shopCommitmentAmount\":0.00,\"buyAmount0\":20.90,\"buyAmount1\":26.90,\"buyAmount2\":6.00,\"buyAmount3\":20.90,\"buyAmount4\":20.90,\"buyAmount5\":20.90,\"buyAmount6\":0,\"ordersType\":0,\"taxAmount\":0.00,\"tariffTotalAmount\":0.00,\"storeDiscountAmount\":0}]},\"mapDatas\":null}";
             SLog.info("responseStr[%s]", responseStr);
             EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
             if (ToastUtil.isError(responseObj)) {
@@ -1771,12 +1780,61 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 StoreVoucherVo platformCoupon = platformCouponList.get(platformCouponIndex);
                 String statusText = StringUtil.formatPrice(_mActivity, platformCoupon.price, 0) + platformCoupon.limitText;
                 confirmOrderSummaryItem.platformCouponStatus = statusText;
-                calcAmount();
             }
 
             SLog.info("platformCouponIndex[%d]", platformCouponIndex);
-
             calcAmount();
+        } else if (type == PopupType.HANDLE_SOLD_OUT_GOODS) { // 處理售罄的商品
+            if (soldOutGoodsItemList.size() == totalGoodsCount) { // 如果全部售罄，返回上一面
+                SLog.info("all_sold_out");
+                hideSoftInputPop();
+            } else { // 如果部分售罄，刪除售罄的商品
+                SLog.info("partial_sold_out");
+                try {
+                    // 過濾售罄的商品
+                    EasyJSONArray newBuyDataArr = EasyJSONArray.generate();
+                    EasyJSONArray buyDataArr = EasyJSONArray.parse(buyData);
+                    SLog.info("soldOutGoodsItemList.size[%d]", soldOutGoodsItemList.size());
+                    for (Object object : buyDataArr) {
+                        EasyJSONObject buyDataItem = (EasyJSONObject) object;
+
+                        // 遍歷缺貨列表，看該商品是否缺貨
+                        boolean isSoldOut = false;
+                        int goodsId = buyDataItem.getInt("goodsId");
+                        for (SoldOutGoodsItem soldOutGoodsItem : soldOutGoodsItemList) {
+                            SLog.info("goodsId[%d], soldOutGoodsItem.goodsId[%d]", goodsId, soldOutGoodsItem.goodsId);
+                            int cartId;
+                            if (isFromCart == Constant.TRUE_INT) {
+                                Integer result = goodsIdToCartId.get(soldOutGoodsItem.goodsId);
+                                if (result == null) {
+                                    SLog.info("Error!根據goodsId找不到cartId");
+                                    continue;
+                                }
+                                cartId = result;
+                            } else {
+                                cartId = soldOutGoodsItem.goodsId;
+                            }
+                            if (goodsId == cartId) {
+                                isSoldOut = true;
+                                break;
+                            }
+                        }
+
+                        if (isSoldOut) {
+                            continue;
+                        }
+
+                        newBuyDataArr.append(buyDataItem);
+                    }
+
+                    buyData = newBuyDataArr.toString();
+                    SLog.info("NewBuyData[%s]", buyData);
+
+                    loadOrderData();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
         }
     }
 

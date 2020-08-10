@@ -11,7 +11,9 @@ import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SoldOutGoodsAdapter;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.SoldOutGoodsItem;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
@@ -27,13 +29,15 @@ public class SoldOutPopup extends CenterPopupView implements View.OnClickListene
     Context context;
     List<SoldOutGoodsItem> soldOutGoodsItemList;
     boolean partialAvailable;  // true -- 部分售罄, false -- 全部售罄
+    OnSelectedListener onSelectedListener;
 
-    public SoldOutPopup(@NonNull Context context, List<SoldOutGoodsItem> soldOutGoodsItemList, boolean partialAvailable) {
+    public SoldOutPopup(@NonNull Context context, List<SoldOutGoodsItem> soldOutGoodsItemList, boolean partialAvailable, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
         this.soldOutGoodsItemList = soldOutGoodsItemList;
         this.partialAvailable = partialAvailable;
+        this.onSelectedListener = onSelectedListener;
     }
 
     @Override
@@ -88,9 +92,8 @@ public class SoldOutPopup extends CenterPopupView implements View.OnClickListene
         int id = v.getId();
 
         if (id == R.id.btn_ok) {
-            if (partialAvailable) {
-
-            } else { // 全部售罄
+            if (onSelectedListener != null) {
+                onSelectedListener.onSelected(PopupType.HANDLE_SOLD_OUT_GOODS, 0, null);
                 dismiss();
             }
         }

@@ -498,7 +498,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                     new XPopup.Builder(MainActivity.this)
                                             // 如果不加这个，评论弹窗会移动到软键盘上面
                                             .moveUpToKeyboard(false)
-                                            .asCustom(new SoldOutPopup(MainActivity.this, soldOutGoodsItemList, false))
+                                            .asCustom(new SoldOutPopup(MainActivity.this, soldOutGoodsItemList, false, null))
                                             .show();
                                 }
                             }
