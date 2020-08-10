@@ -1,8 +1,11 @@
 package com.ftofs.twant.adapter;
 
 import androidx.annotation.Nullable;
+
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
@@ -12,6 +15,8 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrderVoucherListAdapter extends BaseQuickAdapter<StoreVoucherVo, BaseViewHolder> {
     String storeName;
@@ -43,7 +48,7 @@ public class OrderVoucherListAdapter extends BaseQuickAdapter<StoreVoucherVo, Ba
             helper.setText(R.id.tv_store_name, itemData.voucherTitle);
         }
 
-        String validTime = mContext.getString(R.string.text_valid_time) + ": " + itemData.startTime +
+        String validTime = itemData.startTime +
                 "  -  " + itemData.endTime;
         helper.setText(R.id.tv_valid_time, validTime);
 
@@ -66,6 +71,18 @@ public class OrderVoucherListAdapter extends BaseQuickAdapter<StoreVoucherVo, Ba
             } else {
                 helper.setGone(R.id.vw_voucher_in_use_indicator, false);
             }
+        }
+        CircleImageView imgCouponIcon = helper.getView(R.id.img_coupon_icon);
+        if (itemData.storeId > 0) {
+            helper.setText(R.id.tv_usage_desc, "商店專用");
+            if (StringUtil.useDefaultAvatar(itemData.storeAvatar)) {
+                Glide.with(mContext).load(R.drawable.default_store_avatar).centerCrop().into(imgCouponIcon);
+            } else {
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(itemData.storeAvatar)).centerCrop().into(imgCouponIcon);
+            }
+        } else {
+            helper.setText(R.id.tv_usage_desc, "平臺專用");
+            Glide.with(mContext).load(R.drawable.app_logo).centerCrop().into(imgCouponIcon);
         }
 
     }
