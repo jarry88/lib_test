@@ -1698,6 +1698,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 }
                 StoreVoucherVo storeVoucherVo = new StoreVoucherVo();
 
+                storeVoucherVo.storeId = 0;
                 storeVoucherVo.voucherId = coupon.getInt("coupon.couponId");
                 storeVoucherVo.voucherTitle = coupon.getSafeString("coupon.useGoodsRangeExplain");
                 storeVoucherVo.startTime = coupon.getSafeString("coupon.useStartTimeText");
