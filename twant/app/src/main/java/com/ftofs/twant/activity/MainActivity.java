@@ -74,6 +74,7 @@ import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.RestartApp;
@@ -478,7 +479,29 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                 } else if (position == 8) {
                                     MainActivity.this.getSupportDelegate().showFragmentStackHierarchyView();
                                 } else if (position == 9) { // 測試1
-                                    Util.startFragment(LabFragment.newInstance());
+                                    String url = Api.PATH_POST_THUMB;
+                                    EasyJSONObject params = EasyJSONObject.generate(
+                                            "a", "11111",
+                                            "b", 222
+                                    );
+                                    Api.postUI(url, null, new UICallback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {
+                                            LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
+                                            ToastUtil.showNetworkError(MainActivity.this, e);
+                                        }
+
+                                        @Override
+                                        public void onResponse(Call call, String responseStr) throws IOException {
+                                            SLog.info("responseStr[%s]", responseStr);
+                                            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                                            if (ToastUtil.checkError(MainActivity.this, responseObj)) {
+                                                LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                                                return;
+                                            }
+                                        }
+                                    });
                                 } else if (position == 10) { // 測試2
                                     List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
                                     SoldOutGoodsItem item = new SoldOutGoodsItem();
