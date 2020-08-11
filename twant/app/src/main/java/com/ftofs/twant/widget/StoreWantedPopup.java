@@ -17,6 +17,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -166,6 +167,7 @@ public class StoreWantedPopup extends BottomPopupView implements View.OnClickLis
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(path, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(context, e);
                 }
 
@@ -176,6 +178,7 @@ public class StoreWantedPopup extends BottomPopupView implements View.OnClickLis
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(context, responseObj)) {
+                            LogUtil.uploadAppLog(path, params.toString(), responseStr, "");
                             return;
                         }
 

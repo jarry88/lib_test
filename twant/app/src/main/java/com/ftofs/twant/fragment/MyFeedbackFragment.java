@@ -19,6 +19,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.FeedbackItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -89,13 +90,15 @@ public class MyFeedbackFragment extends BaseFragment implements View.OnClickList
             return;
         }
 
+        String url = Api.PATH_FEEDBACK_LIST;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token);
 
         SLog.info("params[%s]", params.toString());
-        Api.getUI(Api.PATH_FEEDBACK_LIST, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -106,6 +109,7 @@ public class MyFeedbackFragment extends BaseFragment implements View.OnClickList
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

@@ -27,6 +27,7 @@ import com.ftofs.twant.entity.footprint.StoreStatus;
 import com.ftofs.twant.entity.footprint.TotalStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -214,13 +215,15 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_DELETE_FOOTPRINT;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "browseIds", sb.toString());
 
-        Api.postUI(Api.PATH_DELETE_FOOTPRINT, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -231,6 +234,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -267,12 +271,14 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_FOOTPRINT;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token);
 
-        Api.postUI(Api.PATH_FOOTPRINT, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -283,6 +289,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

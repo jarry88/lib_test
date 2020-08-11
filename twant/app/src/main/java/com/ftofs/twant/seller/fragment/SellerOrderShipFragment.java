@@ -29,6 +29,7 @@ import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -174,6 +175,7 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -184,6 +186,7 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -330,14 +333,10 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
             String path = Api.PATH_SELLER_ORDER_SHIP + Api.makeQueryString(EasyJSONObject.generate("token", token));
             SLog.info("path[%s], json[%s]", path, json);
 
-            if (false) {
-                ToastUtil.error(_mActivity, "helloWorld");
-                return;
-            }
-
             Api.postJsonUi(path, json, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(path, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -348,6 +347,7 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(path, params.toString(), responseStr, "");
                             return;
                         }
 

@@ -23,6 +23,7 @@ import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -190,11 +191,13 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
             loadLocalData(categoryId);
             return;
         }
+        String url = Api.PATH_SELLER_GOODS_CATEGORY+String.format("/%d",categoryId);
          EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
           SLog.info("params[%s]", params);
-          Api.getUI(Api.PATH_SELLER_GOODS_CATEGORY+String.format("/%d",categoryId), params, new UICallback() {
+          Api.getUI(url, params, new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
+                 LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                  ToastUtil.showNetworkError(context, e);
              }
 
@@ -205,6 +208,7 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
 
                      EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                      if (ToastUtil.checkError(context, responseObj)) {
+                         LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                          return;
                      }
 

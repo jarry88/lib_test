@@ -18,6 +18,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -126,14 +127,16 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
             }
 
             // 加關注或取消關注
+            String url = Api.PATH_MEMBER_FOLLOW;
             EasyJSONObject params = EasyJSONObject.generate(
                     "memberName", memberName,
                     "state", 1 - isFollow,
                     "token", token
             );
-            Api.postUI(Api.PATH_MEMBER_FOLLOW, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -144,6 +147,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 
@@ -179,6 +183,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
             return;
         }
 
+        String url = Api.PATH_MEMBER_INFO;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "memberName", memberName
@@ -186,9 +191,10 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
 
         SLog.info("params[%s]", params.toString());
 
-        Api.postUI(Api.PATH_MEMBER_INFO, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -199,6 +205,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

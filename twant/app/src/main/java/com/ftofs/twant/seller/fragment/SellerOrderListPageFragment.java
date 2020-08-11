@@ -25,6 +25,7 @@ import com.ftofs.twant.seller.entity.SellerOrderFilterParams;
 import com.ftofs.twant.seller.entity.SellerOrderItem;
 import com.ftofs.twant.seller.entity.SellerOrderSkuItem;
 import com.ftofs.twant.seller.widget.BuyerInfoPopup;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -197,6 +198,7 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
             Api.getUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                     sellerOrderAdapter.loadMoreFail();
                 }
@@ -208,6 +210,7 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             sellerOrderAdapter.loadMoreFail();
                             return;
                         }

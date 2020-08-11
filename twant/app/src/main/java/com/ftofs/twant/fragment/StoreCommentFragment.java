@@ -23,6 +23,7 @@ import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.CommentReplyItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -189,11 +190,13 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                 params.set("token", token);
             }
 
+            String url = Api.PATH_COMMENT_LIST;
             SLog.info("params[%s]", params.toString());
 
-            Api.postUI(Api.PATH_COMMENT_LIST, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -204,6 +207,7 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             adapter.loadMoreFail();
                             return;
                         }
@@ -285,14 +289,16 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
         if (commentReplyItemList != null && commentReplyItemList.size() > 0) {
             CommentReplyItem item = commentReplyItemList.get(position);
 
+            String url = Api.PATH_COMMENT_LIKE;
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "commentId", item.commentId,
                     "state", 1 - item.isLike
             );
-            Api.postUI(Api.PATH_COMMENT_LIKE, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -303,6 +309,7 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 

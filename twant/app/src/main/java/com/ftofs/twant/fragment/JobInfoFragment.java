@@ -20,6 +20,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.JobInfoItem;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -205,11 +206,13 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void supportCommunicate(int position) {
+        String url = Api.PATH_COMMUNICATION_AUTHOR;
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "relationshipId", contactMeList.get(position).relationshipId,"state",1);
         SLog.info("params[%s]",params);
-        Api.postUI(Api.PATH_COMMUNICATION_AUTHOR, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity,e);
             }
 
@@ -219,8 +222,7 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
-
-                        SLog.info("更改失敗");
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
                     contactMeList.get(position).isLook = 1;
@@ -235,9 +237,11 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
-        Api.postUI(Api.PATH_RESUME_COMMUNICATION, params, new UICallback() {
+        String url = Api.PATH_RESUME_COMMUNICATION;
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity,e);
             }
 
@@ -247,6 +251,10 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
                     SLog.info("responseStr[%s]",responseStr);
                     loadingPopup.dismiss();
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
                     EasyJSONArray hrRelationshipVo = responseObj.getSafeArray("datas.hrRelationshipVoList");
                     for (Object object : hrRelationshipVo) {
                         EasyJSONObject post = (EasyJSONObject) object;
@@ -275,12 +283,14 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void loadMyFollow() {
+        String url = Api.PATH_RESUME_FOLLOW;
         EasyJSONObject params = EasyJSONObject.generate("token",User.getToken());
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
         SLog.info("params[%s]",params);
-        Api.postUI(Api.PATH_RESUME_FOLLOW, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
                 loadingPopup.dismiss();
             }
@@ -291,6 +301,10 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
                     SLog.info("responseStr[%s]", responseStr);
                     loadingPopup.dismiss();
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
                     EasyJSONArray hrRelationshipVo = responseObj.getSafeArray("datas.hrRelationshipVoList");
                     for (Object object : hrRelationshipVo) {
                         EasyJSONObject post = (EasyJSONObject) object;
@@ -321,12 +335,14 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void loadMyDeliver() {
+        String url = Api.PATH_RESUME_DELIVER;
         EasyJSONObject params = EasyJSONObject.generate("token",User.getToken());
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
         try {
-            Api.postUI(Api.PATH_RESUME_DELIVER, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     loadingPopup.dismiss();
                     ToastUtil.showNetworkError(_mActivity,e);
                 }
@@ -337,6 +353,10 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
                         loadingPopup.dismiss();
                         SLog.info("responseStr[%s]",responseStr);
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                            return;
+                        }
                         EasyJSONArray hrRelationshipVo = responseObj.getSafeArray("datas.hrRelationshipVoList");
                         for (Object object : hrRelationshipVo) {
                             EasyJSONObject post = (EasyJSONObject) object;

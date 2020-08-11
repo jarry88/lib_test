@@ -38,6 +38,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.ApiUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -634,9 +635,11 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
             final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
             SLog.info("商店內產品搜索,params[%s]", params.toString());
-            Api.getUI(Api.PATH_SEARCH_GOODS_IN_STORE, params, new UICallback() {
+            String url = Api.PATH_SEARCH_GOODS_IN_STORE;
+            Api.getUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     loadingPopup.dismiss();
 
                     ToastUtil.showNetworkError(_mActivity, e);
@@ -652,6 +655,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     try {
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             shopGoodsGridAdapter.loadMoreFail();
                             shopGoodsListAdapter.loadMoreFail();
                             return;
@@ -767,14 +771,16 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
      * 加載商店分類產品數據
      */
     private void loadShopCategoryData() {
+        String url = Api.PATH_STORE_CATEGORY;
         EasyJSONObject params = EasyJSONObject.generate(
                 "storeId", storeId
         );
 
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_STORE_CATEGORY, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -784,6 +790,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 
@@ -873,6 +880,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
                 videoListAdapter.loadMoreFail();
             }
@@ -883,6 +891,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 try {
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         videoListAdapter.loadMoreFail();
                         return;
                     }

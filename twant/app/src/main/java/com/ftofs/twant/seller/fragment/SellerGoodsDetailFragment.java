@@ -23,6 +23,7 @@ import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -154,6 +155,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
@@ -166,6 +168,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -349,6 +352,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
           Api.postJsonUi(path, publishGoodsInfo.toString(), new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
+                 LogUtil.uploadAppLog(path, publishGoodsInfo.toString(), "", e.getMessage());
                  ToastUtil.showNetworkError(_mActivity, e);
              }
          
@@ -359,6 +363,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
          
                      EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                      if (ToastUtil.checkError(_mActivity, responseObj)) {
+                         LogUtil.uploadAppLog(path, publishGoodsInfo.toString(), responseStr, "");
                          return;
                      }
 //                     ToastUtil.success(_mActivity,responseObj.getString("datas.success"));

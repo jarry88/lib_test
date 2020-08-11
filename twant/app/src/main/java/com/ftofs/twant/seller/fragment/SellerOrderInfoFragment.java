@@ -24,6 +24,7 @@ import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -106,9 +107,11 @@ public class SellerOrderInfoFragment extends BaseFragment implements View.OnClic
         if (isReturn) {
             path = Api.PATH_SELLER_RETURN_ORDERS_INFO;
         }
+        final String finalPath = path;
         Api.getUI(path + "/" + refundId, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(finalPath, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -118,6 +121,7 @@ public class SellerOrderInfoFragment extends BaseFragment implements View.OnClic
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(finalPath, params.toString(), responseStr, "");
                         return;
                     }
                     EasyJSONObject ordersVo = responseObj.getObject("datas.ordersVo");

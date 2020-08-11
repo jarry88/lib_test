@@ -12,6 +12,7 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.seller.fragment.SellerGoodsDetailFragment
 import com.ftofs.twant.seller.fragment.SellerGoodsSkuListFragment
+import com.ftofs.twant.util.LogUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
@@ -40,6 +41,7 @@ override val layoutId: Int
 
             Api.postUI(path, params, object : UICallback() {
                 override fun onFailure(call: Call, e: IOException) {
+                    LogUtil.uploadAppLog(path, params.toString(), "", e.message);
                     loadingPopup.dismiss()
                     ToastUtil.showNetworkError(context, e)
                 }

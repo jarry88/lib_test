@@ -34,6 +34,7 @@ import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.EditTextUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -433,10 +434,12 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
             return;
         }
 
+        String url = Api.PATH_SEARCH_SUGGESTION;
         EasyJSONObject params = EasyJSONObject.generate("term", term);
-        Api.getUI(Api.PATH_SEARCH_SUGGESTION, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -444,6 +447,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
             public void onResponse(Call call, String responseStr) throws IOException {
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.isError(responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 

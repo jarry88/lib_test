@@ -36,6 +36,7 @@ import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -264,10 +265,13 @@ public class ResetPasswordFragment extends BaseFragment implements
             } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
                 params.set("sendType", Sms.SEND_TYPE_SECURITY_VERIFY);
             }
+
+            String url = Api.PATH_SEND_SMS_CODE;
             SLog.info("params[%s]", params);
-            Api.getUI(Api.PATH_SEND_SMS_CODE, params, new UICallback() {
+            Api.getUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                     btnNext.setBackgroundResource(R.drawable.grey_button);
                 }
@@ -276,6 +280,11 @@ public class ResetPasswordFragment extends BaseFragment implements
                 public void onResponse(Call call, String responseStr) throws IOException {
                     SLog.info("responseStr[%s]", responseStr);
                     final EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
+
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {

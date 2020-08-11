@@ -38,6 +38,7 @@ import com.ftofs.twant.seller.fragment.SellerOrderListPageFragment;
 import com.ftofs.twant.seller.fragment.SellerRefundDetailFragment;
 import com.ftofs.twant.seller.widget.SellerOrderFilterDrawerPopupView;
 import com.ftofs.twant.tangram.SloganView;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -138,6 +139,7 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             Api.getUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -147,6 +149,7 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
                         SLog.info("responseStr[%s]", responseStr);
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
                         if (tabLayout.getSelectedTabPosition() == 0) {
@@ -340,11 +343,13 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
     private void handleRefundItem(SellerOrderRefundItem item) {
         SLog.info("handle%s,sn[%s]",item.getShowSellerHandle(),item.toString());
         if (item.getShowSellerHandle() == SellerOrderRefundItem.RECEIVE_GOOD_HANDLE) {
+            String url = Api.PATH_SELLER_RETURN_RECEIVE_SAVE;
             EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "refundId", item.getRefundId());
             SLog.info("params[%s]", params);
-            Api.postUI(Api.PATH_SELLER_RETURN_RECEIVE_SAVE, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -355,6 +360,7 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
                         ToastUtil.success(_mActivity, responseObj.getSafeString("datas.success"));

@@ -16,6 +16,7 @@ import com.ftofs.twant.kotlin.vo.SellerGoodsVO
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.seller.fragment.SellerGoodsDetailFragment
 import com.ftofs.twant.seller.fragment.SellerGoodsSkuListFragment
+import com.ftofs.twant.util.LogUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
@@ -39,6 +40,7 @@ class FeatureGoodAdapter : DataBoundAdapter<SellerGoodsVO, SellerGoodsItemUnswip
 
             Api.postUI(path, params, object : UICallback() {
                 override fun onFailure(call: Call, e: IOException) {
+                    LogUtil.uploadAppLog(path, params.toString(), "", e.message);
                     loadingPopup.dismiss()
                     ToastUtil.showNetworkError(context, e)
                 }
@@ -50,6 +52,7 @@ class FeatureGoodAdapter : DataBoundAdapter<SellerGoodsVO, SellerGoodsItemUnswip
                         SLog.info("responseStr[%s]", responseStr)
                         val responseObj = EasyJSONObject.parse<EasyJSONObject>(responseStr)
                         if (ToastUtil.checkError(context, responseObj)) {
+                            LogUtil.uploadAppLog(path, params.toString(), responseStr, "");
                             return
                         }
                         when(item.isCommend){

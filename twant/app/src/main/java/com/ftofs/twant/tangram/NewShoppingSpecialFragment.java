@@ -39,6 +39,7 @@ import com.ftofs.twant.fragment.ShoppingSpecialLinkageFragment;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.UiUtil;
@@ -315,6 +316,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         Api.getUI(path, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(path, "", "", e.getMessage());
                 loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
@@ -327,6 +329,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                 //測試數據
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(path, "", responseStr, "");
                     pop();
                     return;
                 }

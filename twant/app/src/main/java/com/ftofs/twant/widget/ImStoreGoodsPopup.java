@@ -21,6 +21,7 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ImStoreGoodsItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -145,10 +146,12 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
             }
         }
 
+        String url = Api.PATH_IM_STORE_GOODS_LIST;
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_IM_STORE_GOODS_LIST, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -158,6 +161,7 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(context, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 

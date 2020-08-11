@@ -25,6 +25,7 @@ import com.ftofs.twant.entity.CategoryCommodityList;
 import com.ftofs.twant.entity.CategoryCommodityRow;
 import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 
@@ -187,9 +188,11 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
      * 加載分類菜單數據
      */
     private void loadCategoryMenuData() {
-        Api.getUI(Api.PATH_COMMODITY_CATEGORY, null, new UICallback() {
+        String url = Api.PATH_COMMODITY_CATEGORY;
+        Api.getUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -200,6 +203,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, "", responseStr, "");
                         return;
                     }
 

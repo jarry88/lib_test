@@ -24,6 +24,7 @@ import com.ftofs.twant.entity.UniversalMemberItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -114,15 +115,17 @@ public class SearchFriendFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
+        String url = Api.PATH_CONTACT_SEARCH;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "type", 1, // 0全部1好友3商店群
                 "name", keyword);
 
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_CONTACT_SEARCH, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -133,6 +136,7 @@ public class SearchFriendFragment extends BaseFragment implements View.OnClickLi
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

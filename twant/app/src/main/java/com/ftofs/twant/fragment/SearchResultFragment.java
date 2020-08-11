@@ -52,6 +52,7 @@ import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.EditTextUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -629,9 +630,12 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     url = Api.PATH_SEARCH_PROMOTION;
                 }
 
+                final String finalUrl = url;
+                final EasyJSONObject finalParams = EasyJSONObject.parse(params.toString());
                 Api.getUI(url, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        LogUtil.uploadAppLog(finalUrl, finalParams.toString(), "", e.getMessage());
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                         ToastUtil.showNetworkError(_mActivity, e);
                         loadingPopup.dismiss();
@@ -648,6 +652,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                             if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                LogUtil.uploadAppLog(finalUrl, finalParams.toString(), responseStr, "");
                                 if (!isActivityShopping&& mGoodsAdapter != null) {
                                     mGoodsAdapter.loadMoreFail();
                                 }
@@ -807,12 +812,15 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     }
                 });
             } else if (searchType == SearchType.STORE) {
+                String url = Api.PATH_SEARCH_STORE;
                 SLog.info("params[%s]", params);
                 params = Util.upLocation(params);
                 SLog.info("params[%s]", params);
-                Api.getUI(Api.PATH_SEARCH_STORE, params, new UICallback() {
+                final EasyJSONObject finalParams = EasyJSONObject.parse(params.toString());
+                Api.getUI(url, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        LogUtil.uploadAppLog(url, finalParams.toString(), "", e.getMessage());
                         ToastUtil.showNetworkError(_mActivity, e);
                         loadingPopup.dismiss();
                         if (mStoreAdapter != null) {
@@ -828,6 +836,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                             if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                LogUtil.uploadAppLog(url, finalParams.toString(), responseStr, "");
                                 mStoreAdapter.loadMoreFail();
                                 return;
                             }

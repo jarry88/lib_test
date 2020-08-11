@@ -23,6 +23,7 @@ import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerGoodsAdapter;
 import com.ftofs.twant.seller.widget.SellerOperationPopup;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -143,6 +144,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
         Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -153,6 +155,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -212,6 +215,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
             Api.getUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                     sellerGoodsAdapter.loadMoreFail();
                 }
@@ -223,6 +227,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             sellerGoodsAdapter.loadMoreFail();
                             return;
                         }
@@ -263,15 +268,17 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
             return;
         }
 
+        String url = Api.PATH_SELLER_DELETE_GOODS;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "commonId", commonId
         );
 
-        SLog.info("url[%s], params[%s]", Api.PATH_SELLER_DELETE_GOODS, params);
-        Api.postUI(Api.PATH_SELLER_DELETE_GOODS, params, new UICallback() {
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -282,6 +289,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

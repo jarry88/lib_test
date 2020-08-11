@@ -17,6 +17,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ClipboardUtils;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -147,13 +148,15 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
     }
 
     private void receiveCoupon(String token) {
+        String url = Api.PATH_RECEIVE_WORD_COUPON;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "command", couponWord);
         SLog.info("params%s",params);
-        Api.postUI(Api.PATH_RECEIVE_WORD_COUPON, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -162,6 +165,10 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
                 try{
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
 
                     if (responseObj.exists("datas.storeId")) {
                         storeId = responseObj.getInt("datas.storeId");

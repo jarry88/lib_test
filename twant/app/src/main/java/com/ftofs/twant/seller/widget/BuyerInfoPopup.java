@@ -17,6 +17,7 @@ import com.ftofs.twant.fragment.ChatFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -80,6 +81,8 @@ public class BuyerInfoPopup extends BottomPopupView implements View.OnClickListe
         if (StringUtil.isEmpty(token)) {
             return;
         }
+
+        String url = Api.PATH_SELLER_BUYER_INFO;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "ordersId", ordersId,
@@ -87,9 +90,10 @@ public class BuyerInfoPopup extends BottomPopupView implements View.OnClickListe
         );
 
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_SELLER_BUYER_INFO, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -99,6 +103,7 @@ public class BuyerInfoPopup extends BottomPopupView implements View.OnClickListe
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
