@@ -1087,9 +1087,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        if (message.messageType == EBMessageType.MESSAGE_TYPE_RECREATE_MAIN_FRAGMENT) {
-            loadMainFragment();
-        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_SHOW_TOAST) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_SHOW_TOAST) {
             ToastData toastData = (ToastData) message.data;
             if (toastData.type == ToastData.TYPE_SUCCESS) {
                 ToastUtil.success(this, toastData.text);

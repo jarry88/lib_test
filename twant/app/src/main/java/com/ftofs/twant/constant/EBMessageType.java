@@ -52,11 +52,6 @@ public enum EBMessageType {
     MESSAGE_TYPE_UPDATE_FRIEND_INFO,
 
     /**
-     * 重建MainFragment
-     */
-    MESSAGE_TYPE_RECREATE_MAIN_FRAGMENT,
-
-    /**
      * 顯示某個Fragment
      */
     MESSAGE_TYPE_SHOW_FRAGMENT,
