@@ -13,12 +13,18 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.ftofs.twant.config.Config.API_BASE_URL;
+
 public class LogUtil {
     public static void uploadAppLog(String apiPath, String params, String response, String exceptionMessage) {
         uploadAppLog(apiPath, params, response, -1, exceptionMessage);
     }
 
     public static void uploadAppLog(String apiPath, String params, String response, int exceptionCode, String exceptionMessage) {
+        if (!StringUtil.isUrlString(apiPath)) { // 如果不是全路径URL地址，全补全
+            apiPath = API_BASE_URL + apiPath;
+        }
+
         EasyJSONObject request = EasyJSONObject.generate(
                 "c", "AppLog",
                 "a", "upload",
