@@ -321,7 +321,7 @@ public class ResetPasswordFragment extends BaseFragment implements
 
         // 注账号为 区号,手机号
         kotlin.Pair<Boolean, String> pair = etMobileView.checkError();
-        if (!pair.component1()) {
+        if (!pair.component1()&&toastEnable) {
             ToastUtil.error(_mActivity,pair.component2());
             return false;
         }
