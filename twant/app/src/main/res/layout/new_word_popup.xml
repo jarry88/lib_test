@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+    <LinearLayout
+        android:id="@+id/ll_main_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/image_view"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:riv_corner_radius="4dp">
+        </com.makeramen.roundedimageview.RoundedImageView>
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            android:singleLine="true"
+            android:ellipsize="end">
+        </TextView>
+        
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="231dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="20dp"
+            android:text="查看詳情"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:background="@drawable/blue_button_210_39">
+
+        </TextView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_close_activity_popup">
+        </ImageView>
+    </FrameLayout>
+
+
+</LinearLayout>
+

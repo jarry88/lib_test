@@ -86,6 +86,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.util.Vendor;
 import com.ftofs.twant.widget.AppUpdatePopup;
 import com.ftofs.twant.widget.CouponWordDialog;
+import com.ftofs.twant.widget.HwLoadingPopup;
+import com.ftofs.twant.widget.NewWordPopup;
 import com.ftofs.twant.widget.RealNameInstructionPopup;
 import com.ftofs.twant.widget.SoldOutPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
@@ -1411,18 +1413,23 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     }
 
                     /*
-                    根據commandType判斷彈框顯示的數據
+                    主要根據commandType判斷彈框顯示的數據
+                        商品commandType：
+                        goods 普通商品口令
+                        discount 折扣口令
+                        group 拼團口令
+                        seckill 秒殺口令
+                        bargain 砍價口令
 
-                    商品commandType： 這種類型跳轉到商品詳情頁
-                    goods 普通商品口令
-                    discount 折扣口令
-                    group 拼團口令
-                    seckill 秒殺口令
-                    bargain 砍價口令
+                        優惠券commandType：
+                        coupon 平台券口令
+                        voucher 店鋪券口令
 
-                    優惠券commandType： 這種類型顯示優惠券彈窗
-                    coupon 平台券口令
-                    voucher 店鋪券口令
+                        購物專場commandType:
+                        shoppingZone
+
+                        店鋪分享commandType:
+                        store
                      */
                     String commandType = responseObj.getSafeString("datas.commandType");
                     SLog.info("commandType[%s]", commandType);
@@ -1435,6 +1442,15 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                         ClipboardUtils.copyText(MainActivity.this, "");
 
                         Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                        return;
+                    } else if ("shoppingZone".equals(commandType)) {
+                        new XPopup.Builder(MainActivity.this)
+                                .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
+                                .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
+                                // 如果不加这个，评论弹窗会移动到软键盘上面
+                                .moveUpToKeyboard(false)
+                                .asCustom(new NewWordPopup(MainActivity.this, responseObj.getSafeObject("datas")))
+                                .show();
                         return;
                     }
 
