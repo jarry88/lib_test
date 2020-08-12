@@ -129,4 +129,10 @@ public class TotalStatus extends BaseStatus {
 
         return buyData;
     }
+
+    public void resetCheckable() {
+        for (StoreStatus storeStatus : storeStatusList) {
+            storeStatus.changeCheckableStatus(true,PHRASE_TARGET);
+        }
+    }
 }

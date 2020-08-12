@@ -1,6 +1,7 @@
 package com.ftofs.twant.entity.cart;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.widget.ScaledButton;
 
 public class BaseStatus {
@@ -20,6 +21,7 @@ public class BaseStatus {
 
     protected ScaledButton radio;
     protected boolean checked;
+    protected boolean checkable=true;
 
     /**
      * 改變是否選中的狀態
@@ -27,14 +29,33 @@ public class BaseStatus {
      * @param phrase 狀態傳播階段
      */
     public void changeCheckStatus(boolean checked, int phrase) {
+        if (!checkable) {
+            return;
+        }
         this.checked = checked;
+        updateChecked();
+
+    }
+
+    /**
+     * 改變是否選中的狀態
+     * @param checkable
+     * @param phrase 狀態傳播階段
+     */
+    public void changeCheckableStatus(boolean checkable, int phrase) {
+        setCheckable(checkable);
+
+    }
+
+    private void updateChecked() {
+        SLog.info(String.valueOf(checked));
         if (checked) {
             radio.setIconResource(R.drawable.icon_cart_item_checked);
         } else {
             radio.setIconResource(R.drawable.icon_cart_item_unchecked);
         }
-
     }
+
 
     public ScaledButton getRadio() {
         return radio;
@@ -46,6 +67,18 @@ public class BaseStatus {
     public boolean isChecked() {
         return checked;
     }
+    public void setCheckable(boolean checkable) {
+
+        this.checkable=checkable;
+        if (!checkable) {
+            radio.setIconResource(R.drawable.icon_disable_check);
+        } else {
+            updateChecked();
+        }
+    }
 
 
+    public boolean isCheckable() {
+        return checkable;
+    }
 }

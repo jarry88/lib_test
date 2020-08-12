@@ -71,6 +71,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 import static android.view.View.VISIBLE;
+import static com.ftofs.twant.entity.cart.BaseStatus.PHRASE_BUBBLE;
 
 
 /**
@@ -402,18 +403,26 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                 int goodsStatus = cartSkuVo.getInt("goodsStatus");
                                 int onlineStorage = cartSkuVo.getInt("onlineStorage");
                                 ImageView maskImage = cartSpuItem.findViewById(R.id.mask_image);
-                                btnCheckSpu.setEnabled(true);
+
                                 if (goodsStatus == 0) { // 產品下架
                                     Glide.with(_mActivity).load(R.drawable.icon_take_off).into(maskImage);
-                                    btnCheckSpu.setEnabled(false);
+//                                    btnCheckSpu.setEnabled(false);
+                                    ((SpuStatus)btnCheckSpu.getTag()).changeCheckableStatus(false,PHRASE_BUBBLE);
                                     btnCheckSpu.setIconResource(R.drawable.icon_disable_check);
                                 } else if (onlineStorage == 0) { // 售罄
                                     Glide.with(_mActivity).load(R.drawable.icon_no_storage).into(maskImage);
-                                    btnCheckSpu.setEnabled(false);
+//                                    btnCheckSpu.setEnabled(false);
+                                    ((SpuStatus)btnCheckSpu.getTag()).changeCheckableStatus(false,PHRASE_BUBBLE);
+
+
                                     btnCheckSpu.setIconResource(R.drawable.icon_disable_check);
                                 }else if (onlineStorage <= 2) { // 庫存緊張
+                                    ((SpuStatus)btnCheckSpu.getTag()).changeCheckableStatus(true,PHRASE_BUBBLE);
 
                                     Glide.with(_mActivity).load(R.drawable.icon_less_storage).into(maskImage);
+                                }else {
+                                    ((SpuStatus)btnCheckSpu.getTag()).changeCheckableStatus(true,PHRASE_BUBBLE);
+
                                 }
 
                                 if (spuCount == cartSpuVoList.length()-1&&spuCount>0) {
@@ -654,6 +663,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
             btnEdit.setText(getResources().getString(R.string.text_finish));
             btnEdit.setTextColor(getResources().getColor(R.color.tw_red, null));
+            totalStatus.resetCheckable();
             mode = Constant.MODE_EDIT;
         } else {
             btnDelete.setVisibility(View.GONE);
@@ -662,6 +672,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
             btnEdit.setText(getResources().getString(R.string.text_edit));
             btnEdit.setTextColor(getResources().getColor(R.color.tw_black, null));
             mode = Constant.MODE_VIEW;
+            reloadList();
+            totalStatus.changeCheckStatus(false, BaseStatus.PHRASE_TARGET);
         }
     }
 
@@ -686,6 +698,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
             public void onClick(View v) {
                 ScaledButton btnCheck = (ScaledButton) v;
                 BaseStatus status = (BaseStatus) btnCheck.getTag();
+//                SLog.info("checkable %s  %s",status.isCheckable(),status.isChecked());
                 status.changeCheckStatus(!status.isChecked(), BaseStatus.PHRASE_TARGET);
                 updateTotalData();
             }
