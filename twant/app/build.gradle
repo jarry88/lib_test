@@ -239,7 +239,7 @@ dependencies {
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.kunminx.linkage:linkage-recyclerview:1.9.2'
 
-    implementation(name: 'taifung-release-1.8.5', ext: 'aar')
+    implementation(name: 'taifung-release-1.8.5-androidx', ext: 'aar')
 
     implementation(name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
     implementation(name: 'mzbanner-release', ext: 'aar')
