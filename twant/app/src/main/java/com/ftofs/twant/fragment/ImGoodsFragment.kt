@@ -1,0 +1,64 @@
+package com.ftofs.twant.fragment
+
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import com.ftofs.twant.BR
+import com.ftofs.twant.R
+import com.ftofs.twant.databinding.ImGoodsLayoutBinding
+import com.ftofs.twant.databinding.ZoneGoodsListItemBinding
+import com.ftofs.twant.entity.Goods
+import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.ftofs.twant.kotlin.ImGoodsViewModel
+import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
+import com.ftofs.twant.widget.ScaledButton
+
+class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
+    override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
+        return R.layout.im_goods_layout
+    }
+
+    override fun initVariableId(): Int {
+        return BR.viewModel
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(): ImGoodsFragment {
+            return ImGoodsFragment()
+        }
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    override fun initParam() {
+        //获取列表传入的实体
+        super.initParam()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+    }
+    val adapter=object :DataBoundAdapter<Goods, ZoneGoodsListItemBinding>(){
+        override val layoutId: Int
+            get() = R.layout.zone_goods_list_item
+
+        override fun initView(binding: ZoneGoodsListItemBinding, item: Goods) {
+            binding.tvGoodsName.text =item.goodsName
+        }
+
+    }
+    override fun initData() {
+        binding.rlTitleContainer.findViewById<TextView>(R.id.tv_title).text="商品"
+        binding.rlTitleContainer.findViewById<ScaledButton>(R.id.btn_back).setOnClickListener { hideSoftInputPop() }
+        binding.rvRightList.adapter=adapter
+
+        viewModel.getImGoodsSearch()
+    }
+
+    override fun onBackPressedSupport(): Boolean {
+        hideSoftInputPop()
+        return true
+    }
+}

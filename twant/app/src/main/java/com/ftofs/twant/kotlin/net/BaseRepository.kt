@@ -44,5 +44,4 @@ open class BaseRepository {
         }
     }
 
-
 }

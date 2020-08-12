@@ -7,22 +7,32 @@
     <data>
         <variable
             name="viewModel"
-            type="com.ftofs.twant.kotlin.LinkageContainerViewModel2" />
-        <variable
-            name="adapter"
-            type="com.ftofs.twant.kotlin.BuyerGoodsListAdapter" />
+            type="com.ftofs.twant.kotlin.ImGoodsViewModel" />
         <variable
             name="categoryAdapter"
             type="com.ftofs.twant.adapter.ZoneCategoryListAdapter" />
+
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/tw_white">
 
+        <include
+            layout="@layout/rl_title_wight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/rl_title_container" />
+        <LinearLayout
+            android:id="@+id/ll_container"
+            app:layout_constraintTop_toBottomOf="@+id/rl_title_container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="horizontal"
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
+            android:background="@color/tw_white">
             <androidx.recyclerview.widget.RecyclerView
                 android:visibility="gone"
                 android:id="@+id/recyclerView2"
@@ -31,39 +41,36 @@
                 android:layout_height="match_parent"
                 tools:listitem="@layout/store_category_list_item"
                 binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageButton"/>
+                />
 
             <androidx.recyclerview.widget.RecyclerView
 
                 android:id="@+id/rv_zone_category"
                 android:layout_width="wrap_content"
                 android:minWidth="@dimen/dp_90"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:adapter="@{categoryAdapter}"
                 tools:listitem="@layout/store_category_list_item"
                 binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageButton"/>
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/refreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/refreshLayout" >
+                android:layout_height="wrap_content">
+
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_right_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageButton"
                     app:layout_constraintVertical_bias="0.65"
-                    android:id="@+id/rv_right_list"
-                    app:adapter="@{adapter}"
-                    tools:listitem="@layout/zone_goods_list_item"
-                    binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                    binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/zone_goods_list_item" />
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
