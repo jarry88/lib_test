@@ -87,6 +87,7 @@ class CheckPhoneView @JvmOverloads constructor(
      * 有异常返回true
      */
     fun checkError():Pair<Boolean,String>{
+        SLog.info(  "isRight %s,msg %s",isRight,msg)
         return Pair(isRight,msg)
     }
     fun getPhone():String{

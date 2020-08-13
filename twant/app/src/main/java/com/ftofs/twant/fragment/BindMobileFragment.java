@@ -207,7 +207,7 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
                 SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
                 if (mobileZoneList.size() > 0) {
                     etMobileView.setMobileList(mobileZoneList);
-                    tvAreaName.setText(mobileZoneList.get(0).areaName);
+                    onSelected(null,0,null);
                 }
             }
         });
@@ -429,9 +429,9 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("selectedMobileZoneIndex[%d], id[%d]", selectedMobileZoneIndex, id);
-        if (this.selectedMobileZoneIndex == id) {
-            return;
-        }
+//        if (this.selectedMobileZoneIndex == id) {
+//            return;
+//        }
 
         this.selectedMobileZoneIndex = id;
         etMobileView.setZoneIndex(id);
