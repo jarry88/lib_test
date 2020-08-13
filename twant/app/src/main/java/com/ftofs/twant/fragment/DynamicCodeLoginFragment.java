@@ -211,6 +211,8 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
             MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
 
             kotlin.Pair<Boolean, String> pair = etMobileView.checkError();
+            SLog.info("Pair[%s]", pair.toString());
+
             if (!pair.component1()) {
                 ToastUtil.error(_mActivity, pair.component2());
                 return;
