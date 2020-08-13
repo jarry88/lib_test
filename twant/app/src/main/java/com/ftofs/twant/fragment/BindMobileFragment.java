@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -79,6 +80,8 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
     EditText etSmsCode;
 
     boolean canSendSMS = true;
+    boolean checkAgreeState;
+    ImageView imgCheckAgree;
 
     /**
      * 構造方法
@@ -159,6 +162,11 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
+
+        Util.setOnClickListener(view, R.id.btn_view_tos, this);
+        Util.setOnClickListener(view, R.id.btn_view_private_terms, this);
+        imgCheckAgree = view.findViewById(R.id.img_check);
+        imgCheckAgree.setOnClickListener(this);
 
         refreshCaptcha();
         getMobileZoneList();
@@ -302,6 +310,20 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
                             PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
+        } else if (id == R.id.btn_view_tos || id == R.id.btn_view_private_terms) {
+            int articleId;
+            String title;
+            if (id == R.id.btn_view_tos) {
+                articleId = H5GameFragment.ARTICLE_ID_TERMS_OF_SERVICE;
+                title = getString(R.string.text_service_contract);
+            } else {
+                articleId = H5GameFragment.ARTICLE_ID_TERMS_OF_PRIVATE;
+                title = "私隱條款";
+            }
+            Util.startFragment(H5GameFragment.newInstance(articleId, title));
+        } else if (id == R.id.img_check) {
+            checkAgreeState = !checkAgreeState;
+            Glide.with(_mActivity).load(checkAgreeState ? R.drawable.icon_checked : R.drawable.icon_unchecked).centerCrop().into(imgCheckAgree);
         }
     }
 
@@ -323,6 +345,12 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
             ToastUtil.error(_mActivity, getString(R.string.input_sms_code_hint));
             return;
         }
+
+        if (!checkAgreeState) {
+            ToastUtil.error(_mActivity, "請閲讀并同意《服務協議》與《私隱條款》");
+            return;
+        }
+
         EasyJSONObject params;
         if (bindType == BIND_TYPE_WEIXIN) {
             params = EasyJSONObject.generate(

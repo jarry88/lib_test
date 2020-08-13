@@ -49,6 +49,7 @@ import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.fragment.BargainDetailFragment;
+import com.ftofs.twant.fragment.BindMobileFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.HomeFragment;
@@ -505,26 +506,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                         }
                                     });
                                 } else if (position == 10) { // 測試2
-                                    List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
-                                    SoldOutGoodsItem item = new SoldOutGoodsItem();
-                                    item.goodsImage = "https://img.twant.com/image/eb/eb/ebeb877bc950904818b8207d5187f340.jpg";
-                                    item.goodsName = "日式單根睫毛嫁接";
-                                    item.buyNum = 20;
-                                    item.reasonDesc = "xxxxxx";
-                                    soldOutGoodsItemList.add(item);
-
-                                    item = new SoldOutGoodsItem();
-                                    item.goodsImage = "https://img.twant.com/image/3a/4f/3a4f369428ded32c1b108d7355accb4e.jpg";
-                                    item.goodsName = "日式單根睫毛嫁接sdfafasfsafsadfasdf";
-                                    item.buyNum = 22;
-                                    item.reasonDesc = "uuuuuuuu";
-                                    soldOutGoodsItemList.add(item);
-
-                                    new XPopup.Builder(MainActivity.this)
-                                            // 如果不加这个，评论弹窗会移动到软键盘上面
-                                            .moveUpToKeyboard(false)
-                                            .asCustom(new SoldOutPopup(MainActivity.this, soldOutGoodsItemList, false, null))
-                                            .show();
+                                    Util.startFragment(BindMobileFragment.newInstance("XXX", "YYY"));
                                 }
                             }
                         })
