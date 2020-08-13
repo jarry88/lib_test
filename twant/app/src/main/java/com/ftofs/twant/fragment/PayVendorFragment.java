@@ -473,10 +473,10 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     doWalletPay();
                     break;
                 case PayCardItem.PAY_TYPE_TAIFUNG:
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                        ToastUtil.error(_mActivity, "大豐銀行電子支付暫未支持Android 10");
-                        return;
-                    }
+//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+//                        ToastUtil.error(_mActivity, "大豐銀行電子支付暫未支持Android 10");
+//                        return;
+//                    }
                     doTaiFungPay();
                     break;
                 case PayCardItem.PAY_TYPE_WEIXING:
