@@ -1144,6 +1144,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
     private void showSoldOutPopup() {
         new XPopup.Builder(_mActivity)
+                .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
+                .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
                 .asCustom(new SoldOutPopup(_mActivity, soldOutGoodsItemList, totalGoodsCount > soldOutGoodsItemList.size(), this))
@@ -1502,6 +1504,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      *          second -- 失敗時的錯誤消息
      */
     private CalcFreightResult calcFreight(EasyJSONObject address) {
+        SLog.info("___calcFreight");
         if (address == null && mAddrItem == null) {
             return new CalcFreightResult(false, "收貨地址不能為空");
         }
@@ -1539,7 +1542,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 int storeId = store.getInt("storeId");
                 double freightAmount =  store.getDouble("freightAmount");
                 EasyJSONArray buyGoodsItemVoList= store.getSafeArray("buyGoodsItemVoList");
-                for (MultiItemEntity multiItemEntity : confirmOrderItemList) {
+                for (int i = 0; i < confirmOrderItemList.size(); i++) {
+                    MultiItemEntity multiItemEntity = confirmOrderItemList.get(i);
                     if (multiItemEntity.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
                         ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) multiItemEntity;
                         if (storeItem.storeId == storeId) {
@@ -1892,7 +1896,13 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             return null;
         }
         SLog.info("__size[%d]", size);
-        return (ConfirmOrderSummaryItem) confirmOrderItemList.get(size - 1);
+        try {
+            return (ConfirmOrderSummaryItem) confirmOrderItemList.get(size - 1);
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            return null;
+        }
+
     }
 
     /**
