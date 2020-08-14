@@ -30,7 +30,7 @@
 
         <ImageView
             android:id="@+id/btn_publish_want_post"
-            android:layout_width="@dimen/dp_60"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="6dp"

@@ -915,19 +915,21 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 tvStorePhone.setText(storeVo.getChainPhone());
                                 tvTakeAddr.setText(storeVo.getChainAreaInfo()+storeVo.getChainAddress());
                                 tvStoreTransport.setText(chainTrafficLine);
-                                String weekDayRange = storeVo.getWeekDayStart() + "至" + storeVo.getWeekDayEnd();
+                                String weekDayRange = storeVo.getWeekDayStart() + " 至 " + storeVo.getWeekDayEnd();
                                 String weekDayRangeTime = weekDayStartTime + "-" + weekDayEndTime;
-                                String restDayRange = storeVo.getRestDayStart() + "至" + storeVo.getRestDayEnd();
+                                String restDayRange = storeVo.getRestDayStart() + " 至 " + storeVo.getRestDayEnd();
                                 String restDayRangeTime = restDayStartTime + "-" + restDayEndTime;
                                 if (StringUtil.isEmpty(storeVo.getWeekDayStart())) {
-                                    tvBusinessTimeWeekend.setVisibility(View.GONE);
+                                    tvBusinessTimeWorkingDay.setVisibility(View.GONE);
                                     tvBusinessTimeWorkingDay.setText(weekDayRangeTime);
                                 } else {
                                     tvBusinessTimeWorkingDay.setText(weekDayRange + "   " + weekDayRangeTime);
                                 }
-
+//                                ToastUtil.success(_mActivity,restDayRange.concat(restDayRangeTime));
                                 if (StringUtil.isEmpty(storeVo.getRestDayStart())) {
                                     tvBusinessTimeWeekend.setVisibility(View.GONE);
+                                    tvBusinessTimeWeekend.setText(restDayRangeTime);
+
                                 } else {
                                     tvBusinessTimeWeekend.setText(restDayRange + "   " + restDayRangeTime);
                                 }
