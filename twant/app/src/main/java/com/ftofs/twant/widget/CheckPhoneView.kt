@@ -22,9 +22,9 @@ const val errorValidTip="此號碼無法用於進行註冊或登入"
 const val LandIndex=2//内地
 val regex= listOf(
         "",
-        "^[569][0-9]{0,7}$", // 香港
-        "^1[0-9]{0,10}$",    // 大陸
-        "^6[0-9]{0,7}$"   // 澳門
+        "^[569][0-9]{7}$", // 香港
+        "^1[0-9]{10}$",    // 大陸
+        "^6[0-9]{7}$"   // 澳門
 )
 val isValidRegex ="^1(([7][0,1])|([6][2,5,7])|[3][4][9])[0-9]{0,10}$"
 //3、虛擬運營商號段：
@@ -110,27 +110,25 @@ class CheckPhoneView @JvmOverloads constructor(
             }else{
                 val matchResult=Pattern.compile(regex[zoneIndex]).matcher(text).matches()//首先匹配基本规则
                 if (matchResult) {
-                    if(zoneIndex==LandIndex){
-                        if(Pattern.compile(isValidRegex).matcher(text).matches()){
-                            msg= errorValidTip
-                            isRight=false
+                    if (zoneIndex == LandIndex) {
+                        if (Pattern.compile(isValidRegex).matcher(text).matches()) {
+                            msg = errorValidTip
+                            isRight = false
                         }
+                    }
                 }else{
-                        msg = text_invalid_mobile.format(areaArray[zoneIndex])
-                        isRight=false
-                    }
+                    msg = text_invalid_mobile.format(areaArray[zoneIndex])
+                    isRight=false
                 }
-
-                llErrorContainer?.apply {
-                    if(!isRight) {
-                        this.visibility=View.VISIBLE
-                        errorText?.text=msg
-
-                    }
-                    else this.visibility=View.GONE
-                }
-
              }
+            llErrorContainer?.apply {
+                if(!isRight) {
+                    this.visibility=View.VISIBLE
+                    errorText?.text=msg
+
+                }
+                else this.visibility=View.GONE
+            }
 
         }
     }
