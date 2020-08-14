@@ -1414,27 +1414,29 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                         store
                      */
                     String commandType = responseObj.getSafeString("datas.commandType");
+                    int commandTypeInt = NewWordPopup.COMMAND_TYPE_UNKNOWN;
                     SLog.info("commandType[%s]", commandType);
-                    if ("goods".equals(commandType) || "discount".equals(commandType) || "group".equals(commandType)
-                            || "seckill".equals(commandType) || "bargain".equals(commandType)) { // 跳轉到商品詳情頁
-                        int commonId = responseObj.getInt("datas.goodsCommon.commonId");
-                        SLog.info("commonId[%d]", commonId);
+                    if ("goods".equals(commandType) || "discount".equals(commandType) || "group".equals(commandType) ||
+                            "seckill".equals(commandType) || "bargain".equals(commandType)) { // 商品类
+                        commandTypeInt = NewWordPopup.COMMAND_TYPE_GOODS;
+                    } else if ("shoppingZone".equals(commandType)) {  // 购物卖场
+                        commandTypeInt = NewWordPopup.COMMAND_TYPE_SHOPPING;
+                    } else if ("store".equals(commandType)) {  // 店铺类
+                        commandTypeInt = NewWordPopup.COMMAND_TYPE_STORE;
+                    }
 
-                        // 跳轉到商品詳情頁後，清空剪貼板
-                        ClipboardUtils.copyText(MainActivity.this, "");
-
-                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                        return;
-                    } else if ("shoppingZone".equals(commandType)) {
+                    if (commandTypeInt == NewWordPopup.COMMAND_TYPE_STORE || commandTypeInt == NewWordPopup.COMMAND_TYPE_GOODS ||
+                            commandTypeInt == NewWordPopup.COMMAND_TYPE_SHOPPING) {
                         new XPopup.Builder(MainActivity.this)
                                 .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
                                 .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(false)
-                                .asCustom(new NewWordPopup(MainActivity.this, responseObj.getSafeObject("datas")))
+                                .asCustom(new NewWordPopup(MainActivity.this, commandType, commandTypeInt, responseObj.getSafeObject("datas")))
                                 .show();
                         return;
                     }
+
 
                     EasyJSONObject couponData = responseObj.getSafeObject("datas");
                     showCouponWordDialog(word, couponData);
