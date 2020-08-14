@@ -1382,6 +1382,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(MainActivity.this, e);
             }
 
@@ -1391,8 +1392,11 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
+
+                    ClipboardUtils.copyText(MainActivity.this, ""); // 清空剪貼板
 
                     /*
                     主要根據commandType判斷彈框顯示的數據

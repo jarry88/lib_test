@@ -203,7 +203,7 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
                     );
 
                     // 點擊領取按鈕，清空剪貼板
-                    ClipboardUtils.copyText(context, "");
+                    // ClipboardUtils.copyText(context, "");
 
                     if (!ToastUtil.isError(responseObj)) { // 領取成功
                         new XPopup.Builder(context)

@@ -152,10 +152,10 @@ public class NewWordPopup extends CenterPopupView implements View.OnClickListene
             } else if (commandTypeInt == COMMAND_TYPE_GOODS) {
                 Util.startFragment(GoodsDetailFragment.newInstance(extra.optInt("goodsCommon.commonId"), extra.optInt("goodsCommon.goodsId")));
             }
-            ClipboardUtils.copyText(context, ""); // 清空剪貼板
+            // ClipboardUtils.copyText(context, ""); // 清空剪貼板
             dismiss();
         } else if (id == R.id.btn_close) {
-            ClipboardUtils.copyText(context, ""); // 清空剪貼板
+            // ClipboardUtils.copyText(context, ""); // 清空剪貼板
             dismiss();
         }
     }
