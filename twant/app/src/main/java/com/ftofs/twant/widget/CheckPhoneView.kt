@@ -109,12 +109,14 @@ class CheckPhoneView @JvmOverloads constructor(
                 msg="网络异常"
             }else{
                 val matchResult=Pattern.compile(regex[zoneIndex]).matcher(text).matches()//首先匹配基本规则
-                if (!matchResult) {
-                    msg = text_invalid_mobile.format(areaArray[zoneIndex])
-                    isRight=false
-                }else if(zoneIndex==LandIndex){
-                    if(Pattern.compile(isValidRegex).matcher(text).matches()){
-                        msg= errorValidTip
+                if (matchResult) {
+                    if(zoneIndex==LandIndex){
+                        if(Pattern.compile(isValidRegex).matcher(text).matches()){
+                            msg= errorValidTip
+                            isRight=false
+                        }
+                }else{
+                        msg = text_invalid_mobile.format(areaArray[zoneIndex])
                         isRight=false
                     }
                 }

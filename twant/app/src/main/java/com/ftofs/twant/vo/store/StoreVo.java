@@ -247,6 +247,8 @@ public class StoreVo {
         storeVo.setStoreName(jsonObject.getSafeString("storeName"));
         storeVo.setChainPhone(jsonObject.getSafeString("chainPhone"));
         storeVo.setWeekDayStart(jsonObject.getSafeString("weekDayStart"));
+        storeVo.setRestDayEnd(jsonObject.getSafeString("restDayEnd"));
+        storeVo.setRestDayStart(jsonObject.getSafeString("restDayStart"));
         storeVo.setWeekDayEnd(jsonObject.getSafeString("weekDayEnd"));
         storeVo.setChainAddress(jsonObject.getSafeString("address"));
         storeVo.setChainAreaInfo(jsonObject.getSafeString("areaInfo"));
