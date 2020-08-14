@@ -1807,6 +1807,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Api.postUI(path, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(path, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
                 loadingPopup.dismiss();
             }
@@ -1819,6 +1820,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(path, params.toString(), responseStr, "");
                     return;
                 }
 
