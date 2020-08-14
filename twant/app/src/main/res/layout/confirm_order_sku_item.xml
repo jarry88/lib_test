@@ -93,7 +93,7 @@
                 android:id="@+id/tv_activity_label"
                 android:layout_width="75dp"
                 android:layout_height="wrap_content"
-                android:text="不参加优惠"
+                android:text="不參加優惠"
                 android:textSize="12sp"
                 android:textColor="@color/tw_red"
                 android:visibility="gone"
