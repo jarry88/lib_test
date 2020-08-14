@@ -41,7 +41,7 @@ public class LogUtil {
                 "exception_message", exceptionMessage
         );
         SLog.info("request[%s]", request);
-        Api.postIO("http://108.61.246.21/twant_log_tracker/api.php", request, new Callback() {
+        Api.postIO("http://108.61.246.21/twant_log_tracker/", request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 SLog.info("Error!uploadAppLog failed, message[%s]", e.getMessage());

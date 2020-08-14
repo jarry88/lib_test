@@ -27,6 +27,7 @@ import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Guid;
 import com.ftofs.twant.util.ImageProcess;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -188,6 +189,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -197,6 +199,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(context, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 

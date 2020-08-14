@@ -66,6 +66,7 @@ import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
@@ -1330,6 +1331,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -1340,6 +1342,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -1804,6 +1807,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Api.postUI(path, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(path, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
                 loadingPopup.dismiss();
             }
@@ -1816,6 +1820,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(path, params.toString(), responseStr, "");
                     return;
                 }
 

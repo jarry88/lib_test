@@ -27,6 +27,7 @@ import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.CareerItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -145,12 +146,14 @@ public class MemberResumeFragment extends BaseFragment implements View.OnClickLi
 
     private void loadCareer(View v) {
         String token = User.getToken();
+        String url = Api.PATH_CAREER_DETAIL;
         EasyJSONObject params=EasyJSONObject.generate("token",token);
         SLog.info("params[%s]", params);
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
-        Api.postUI(Api.PATH_CAREER_DETAIL, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity,e);
             }
@@ -162,6 +165,10 @@ public class MemberResumeFragment extends BaseFragment implements View.OnClickLi
                     loadingPopup.dismiss();
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
                     EasyJSONObject career = responseObj.getSafeObject("datas.career");
                     EasyJSONArray experienceJsonList = responseObj.getSafeArray("datas.experienceList");
                     initExperienceListView(_mActivity,getView(),experienceJsonList,true);
@@ -408,14 +415,16 @@ public class MemberResumeFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
+        String url = Api.PATH_MEMBER_RESUME;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token);
 
         SLog.info("params[%s]", params);
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
-        Api.postUI(Api.PATH_MEMBER_RESUME, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity,e);
             }
@@ -428,6 +437,7 @@ public class MemberResumeFragment extends BaseFragment implements View.OnClickLi
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     EasyJSONObject resumeInfo = responseObj.getSafeObject("datas.resumeInfo");
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
                     String avatar = resumeInfo.getSafeString("avatar");
@@ -568,11 +578,13 @@ public class MemberResumeFragment extends BaseFragment implements View.OnClickLi
 
     private void setShowPersonalInfo() {
         sbState=sbShowPersonalInfo.isChecked()?1:0;
+        String url = Api.PATH_RESUME_OPEN;
         EasyJSONObject params=EasyJSONObject.generate("token",User.getToken(),"state",sbState);
         SLog.info("params[%s]",params.toString());
-        Api.postUI(Api.PATH_RESUME_OPEN, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity,e);
                 sbState=1-sbState;
                 sbShowPersonalInfo.setChecked(sbState==1);
@@ -584,6 +596,7 @@ public class MemberResumeFragment extends BaseFragment implements View.OnClickLi
                     SLog.info("responseStr[%s][%s]",responseStr,sbShowPersonalInfo.isChecked());
                     EasyJSONObject responseObj=EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         sbState=1-sbState;
                         sbShowPersonalInfo.setChecked(sbState==1);
                         return;

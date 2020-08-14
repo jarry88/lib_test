@@ -19,6 +19,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.EditTextUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -191,16 +192,18 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
                 return;
             }
 
+            String url = Api.PATH_SAVE_REAL_NAME_INFO;
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "consigneeName", name,
                     "idCartNumber", idNum
             );
 
-            SLog.info("url[%s], params[%s]", Api.PATH_SAVE_REAL_NAME_INFO, params);
-            Api.postUI(Api.PATH_SAVE_REAL_NAME_INFO, params, new UICallback() {
+            SLog.info("url[%s], params[%s]", url, params);
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(context, e);
                 }
 
@@ -211,6 +214,7 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(context, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 

@@ -28,6 +28,7 @@ import com.ftofs.twant.entity.Footprint;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -269,11 +270,13 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
             return;
         }
 
+        String url = Api.PATH_WALLET_INFO;
         EasyJSONObject params = EasyJSONObject.generate("token", token);
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_WALLET_INFO, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -284,6 +287,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -314,12 +318,14 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
             return;
         }
 
+        String url = Api.PATH_GUESS_YOUR_LIKE;
         EasyJSONObject params = EasyJSONObject.generate("token", token);
 
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_GUESS_YOUR_LIKE, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -329,6 +335,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 
@@ -383,12 +390,14 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
             return;
         }
 
+        String url = Api.PATH_ORDER_COUNT;
         EasyJSONObject params = EasyJSONObject.generate("token", token);
 
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_ORDER_COUNT, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -398,6 +407,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 

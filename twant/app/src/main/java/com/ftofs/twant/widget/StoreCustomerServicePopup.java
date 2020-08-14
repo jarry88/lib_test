@@ -21,6 +21,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -125,6 +126,7 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
         Api.getUI(path, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(path, "", "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -137,6 +139,7 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(path, "", responseStr, "");
                         return;
                     }
 

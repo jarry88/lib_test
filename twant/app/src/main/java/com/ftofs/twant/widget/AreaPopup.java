@@ -20,6 +20,7 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.Area;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -222,18 +223,19 @@ addressAreaInfo String 地区全名
         }
         final String addressAreaInfo = addressAreaInfoTmp;
 
+        String url = Api.PATH_SET_MEMBER_ADDRESS;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "addressProvinceId", addressProvinceId,
                 "addressCityId", addressCityId,
                 "addressAreaId", addressAreaId,
                 "addressAreaInfo", addressAreaInfo);
-
         SLog.info("params[%s]", params.toString());
 
-        Api.postUI(Api.PATH_SET_MEMBER_ADDRESS, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -244,6 +246,7 @@ addressAreaInfo String 地区全名
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -258,12 +261,14 @@ addressAreaInfo String 地区全名
     }
 
     private void loadAreaData(int areaId) {
+        String url = Api.PATH_AREA_LIST;
         SLog.info("loadAreaData, areaId[%d]", areaId);
         EasyJSONObject params = EasyJSONObject.generate(
                 "areaId", areaId);
-        Api.getUI(Api.PATH_AREA_LIST, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -272,8 +277,7 @@ addressAreaInfo String 地区全名
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
-
-
+                // 不上報錯誤日誌，因為用了錯誤狀態作為查詢下級的終止條件
                 try {
                     if (ToastUtil.isError(responseObj)) {
                         int code = responseObj.getInt("code");

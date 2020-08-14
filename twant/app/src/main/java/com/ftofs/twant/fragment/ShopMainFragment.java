@@ -35,6 +35,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -268,6 +269,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         Api.getUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -277,6 +279,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, "", responseStr, "");
                     return;
                 }
 
@@ -659,6 +662,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         Api.getUI(path, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(path, "", "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -669,6 +673,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(path, "", responseStr, "");
                         return;
                     }
 

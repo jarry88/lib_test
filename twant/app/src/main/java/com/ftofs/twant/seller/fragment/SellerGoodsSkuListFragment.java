@@ -18,6 +18,7 @@ import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerGoodsSkuListAdapter;
 import com.ftofs.twant.seller.entity.SellerSkuListItem;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -74,14 +75,17 @@ public class SellerGoodsSkuListFragment extends BaseFragment implements View.OnC
         if (StringUtil.isEmpty(token)) {
             return;
         }
+
+        String url = Api.PATH_SELLER_GOODS_SKU_LIST;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "commonId", commonId);
 
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_SELLER_GOODS_SKU_LIST, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -91,6 +95,7 @@ public class SellerGoodsSkuListFragment extends BaseFragment implements View.OnC
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 

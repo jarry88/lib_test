@@ -34,12 +34,14 @@ public class ApiUtil {
      */
     public static void deleteComment(Context _mActivity, int commentId, SimpleCallback updateUI)  {
         try {
+            String url = Api.PATH_COMMENT_REMOVE;
             EasyJSONObject params = EasyJSONObject.generate();
             params.set("token", User.getToken());
             params.set("commentId",commentId);
-            Api.postUI(Api.PATH_COMMENT_REMOVE, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -48,6 +50,10 @@ public class ApiUtil {
                     try{
                         SLog.info("responseStr[%s]",responseStr);
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                            return;
+                        }
                         updateUI.onSimpleCall(responseObj);
                     }catch (Exception e){
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -79,9 +85,11 @@ public class ApiUtil {
             params.set("token", token);
             params.set("imName", memberName);
             SLog.info("params[%s]",params.toString());
-            Api.getUI(Api.PATH_IM_INFO, params, new UICallback() {
+            String url = Api.PATH_IM_INFO;
+            Api.getUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -91,6 +99,7 @@ public class ApiUtil {
                         SLog.info("responseStr[%s]", responseStr);
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             SLog.info("獲取身份信息失敗");
                             return;
                         }
@@ -136,11 +145,11 @@ public class ApiUtil {
                 return;
             }
             params.set("token", User.getToken());
-
-
-            Api.getUI(Api.PATH_WANT_POST_ISSUE_VALIDATE, params, new UICallback() {
+            String url = Api.PATH_WANT_POST_ISSUE_VALIDATE;
+            Api.getUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(context, e);
                 }
 
@@ -148,8 +157,9 @@ public class ApiUtil {
                 public void onResponse(Call call, String responseStr) throws IOException {
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if(ToastUtil.checkError(context, responseObj)){
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
-                    };
+                    }
                     try{
 
                         SLog.info("responseStr[%s]",responseStr);

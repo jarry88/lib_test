@@ -49,6 +49,7 @@ import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.fragment.BargainDetailFragment;
+import com.ftofs.twant.fragment.BindMobileFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.HomeFragment;
@@ -86,6 +87,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.util.Vendor;
 import com.ftofs.twant.widget.AppUpdatePopup;
 import com.ftofs.twant.widget.CouponWordDialog;
+import com.ftofs.twant.widget.HwLoadingPopup;
+import com.ftofs.twant.widget.NewWordPopup;
 import com.ftofs.twant.widget.RealNameInstructionPopup;
 import com.ftofs.twant.widget.SoldOutPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
@@ -503,26 +506,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                         }
                                     });
                                 } else if (position == 10) { // 測試2
-                                    List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
-                                    SoldOutGoodsItem item = new SoldOutGoodsItem();
-                                    item.goodsImage = "https://img.twant.com/image/eb/eb/ebeb877bc950904818b8207d5187f340.jpg";
-                                    item.goodsName = "日式單根睫毛嫁接";
-                                    item.buyNum = 20;
-                                    item.reasonDesc = "xxxxxx";
-                                    soldOutGoodsItemList.add(item);
-
-                                    item = new SoldOutGoodsItem();
-                                    item.goodsImage = "https://img.twant.com/image/3a/4f/3a4f369428ded32c1b108d7355accb4e.jpg";
-                                    item.goodsName = "日式單根睫毛嫁接sdfafasfsafsadfasdf";
-                                    item.buyNum = 22;
-                                    item.reasonDesc = "uuuuuuuu";
-                                    soldOutGoodsItemList.add(item);
-
-                                    new XPopup.Builder(MainActivity.this)
-                                            // 如果不加这个，评论弹窗会移动到软键盘上面
-                                            .moveUpToKeyboard(false)
-                                            .asCustom(new SoldOutPopup(MainActivity.this, soldOutGoodsItemList, false, null))
-                                            .show();
+                                    Util.startFragment(BindMobileFragment.newInstance("XXX", "YYY"));
                                 }
                             }
                         })
@@ -1398,6 +1382,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(MainActivity.this, e);
             }
 
@@ -1407,36 +1392,55 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
+
+                    ClipboardUtils.copyText(MainActivity.this, ""); // 清空剪貼板
 
                     /*
-                    根據commandType判斷彈框顯示的數據
+                    主要根據commandType判斷彈框顯示的數據
+                        商品commandType：
+                        goods 普通商品口令
+                        discount 折扣口令
+                        group 拼團口令
+                        seckill 秒殺口令
+                        bargain 砍價口令
 
-                    商品commandType： 這種類型跳轉到商品詳情頁
-                    goods 普通商品口令
-                    discount 折扣口令
-                    group 拼團口令
-                    seckill 秒殺口令
-                    bargain 砍價口令
+                        優惠券commandType：
+                        coupon 平台券口令
+                        voucher 店鋪券口令
 
-                    優惠券commandType： 這種類型顯示優惠券彈窗
-                    coupon 平台券口令
-                    voucher 店鋪券口令
+                        購物專場commandType:
+                        shoppingZone
+
+                        店鋪分享commandType:
+                        store
                      */
                     String commandType = responseObj.getSafeString("datas.commandType");
+                    int commandTypeInt = NewWordPopup.COMMAND_TYPE_UNKNOWN;
                     SLog.info("commandType[%s]", commandType);
-                    if ("goods".equals(commandType) || "discount".equals(commandType) || "group".equals(commandType)
-                            || "seckill".equals(commandType) || "bargain".equals(commandType)) { // 跳轉到商品詳情頁
-                        int commonId = responseObj.getInt("datas.goodsCommon.commonId");
-                        SLog.info("commonId[%d]", commonId);
+                    if ("goods".equals(commandType) || "discount".equals(commandType) || "group".equals(commandType) ||
+                            "seckill".equals(commandType) || "bargain".equals(commandType)) { // 商品类
+                        commandTypeInt = NewWordPopup.COMMAND_TYPE_GOODS;
+                    } else if ("shoppingZone".equals(commandType)) {  // 购物卖场
+                        commandTypeInt = NewWordPopup.COMMAND_TYPE_SHOPPING;
+                    } else if ("store".equals(commandType)) {  // 店铺类
+                        commandTypeInt = NewWordPopup.COMMAND_TYPE_STORE;
+                    }
 
-                        // 跳轉到商品詳情頁後，清空剪貼板
-                        ClipboardUtils.copyText(MainActivity.this, "");
-
-                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                    if (commandTypeInt == NewWordPopup.COMMAND_TYPE_STORE || commandTypeInt == NewWordPopup.COMMAND_TYPE_GOODS ||
+                            commandTypeInt == NewWordPopup.COMMAND_TYPE_SHOPPING) {
+                        new XPopup.Builder(MainActivity.this)
+                                .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
+                                .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
+                                // 如果不加这个，评论弹窗会移动到软键盘上面
+                                .moveUpToKeyboard(false)
+                                .asCustom(new NewWordPopup(MainActivity.this, commandType, commandTypeInt, responseObj.getSafeObject("datas")))
+                                .show();
                         return;
                     }
+
 
                     EasyJSONObject couponData = responseObj.getSafeObject("datas");
                     showCouponWordDialog(word, couponData);

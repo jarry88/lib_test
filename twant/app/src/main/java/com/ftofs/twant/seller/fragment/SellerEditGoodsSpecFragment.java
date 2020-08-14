@@ -31,6 +31,7 @@ import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -284,15 +285,17 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
             return;
         }
 
+        String url = Api.PATH_SELLER_GET_SKU_INFO;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "commonId", commonId
         );
 
-        SLog.info("url[%s], params[%s]", Api.PATH_SELLER_GET_SKU_INFO, params);
-        Api.postUI(Api.PATH_SELLER_GET_SKU_INFO, params, new UICallback() {
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -303,6 +306,7 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -370,14 +374,16 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
             return;
         }
 
+        String url = Api.PATH_SELLER_SPEC_LIST;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token
         );
 
-        SLog.info("url[%s], params[%s]", Api.PATH_SELLER_SPEC_LIST, params);
-        Api.postUI(Api.PATH_SELLER_SPEC_LIST, params, new UICallback() {
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -388,6 +394,7 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -492,6 +499,7 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
             Api.postJsonUi(url, params.toString(), new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -502,6 +510,7 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
 
                     try {
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 

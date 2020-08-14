@@ -37,6 +37,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.HawkUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -209,16 +210,15 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             String code = (String) message.data;
             SLog.info("code[%s]", code);
 
+            String url = Api.PATH_WX_LOGIN_STEP1;
             EasyJSONObject params = EasyJSONObject.generate(
                     "code", code, "clientType", Constant.CLIENT_TYPE_ANDROID);
 
             SLog.info("params[%s]", params);
-            if (true) {
-                // return;
-            }
-            Api.postUI(Api.PATH_WX_LOGIN_STEP1, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -229,6 +229,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 
@@ -303,6 +304,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -312,6 +314,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                     SLog.info("responseStr[%s]", responseStr);
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
                     EasyJSONArray list = responseObj.getSafeArray("ParsedResults");
                     String text = "";
                     for (Object object : list) {
@@ -379,6 +385,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
     public void doFacebookLogin(String accessToken, String userId) {
         SLog.info("doFacebookLogin...");
+        String url = Api.PATH_FACEBOOK_LOGIN;
         EasyJSONObject params = EasyJSONObject.generate(
                 "accessToken", accessToken,
                 "userId", userId,
@@ -386,9 +393,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         );
 
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_FACEBOOK_LOGIN, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -398,6 +406,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 

@@ -1,5 +1,7 @@
 package com.ftofs.twant.entity.cart;
 
+import com.ftofs.twant.log.SLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,18 +34,52 @@ public class SpuStatus extends BaseStatus {
             parent.changeCheckStatus(checked, PHRASE_BUBBLE);
         } else if (phrase == PHRASE_BUBBLE) {
             // 如果是冒泡階段，要所有子項目都選中了，才選中自己
+            //除了，无货不能被选中的
             boolean allChecked = true;
             for (SkuStatus skuStatus : skuStatusList) {
-                if (!skuStatus.isChecked()) {
-                    allChecked = false;
+                if (skuStatus.isCheckable()) {
+
+                    if (!skuStatus.isChecked()) {
+                        allChecked = false;
+                    }
                 }
+
             }
 
             super.changeCheckStatus(allChecked, PHRASE_BUBBLE);
             parent.changeCheckStatus(allChecked, PHRASE_BUBBLE);
         }
     }
+    @Override
+    public void changeCheckableStatus(boolean checkable, int phrase) {
+        super.changeCheckableStatus(checkable, phrase);
+        SLog.info("sss %s",checkable);
+        if (phrase == PHRASE_BUBBLE) {
+            // 如果是冒泡階段，要所有子項目都選中了，才選中自己
+            if (skuStatusList.size() == 0) {
+                super.setCheckable(checkable);
+                return;
+            }
+            boolean allCantCheckable = true;
 
+            for (SkuStatus skuStatus : skuStatusList) {
+                if (skuStatus.isCheckable()) {
+                    allCantCheckable = false;
+                }
+
+            }
+            SLog.info("allCantCheckable %s",allCantCheckable);
+
+            super.setCheckable(!allCantCheckable);
+            parent.changeCheckableStatus(!allCantCheckable,phrase);
+
+        } else {
+            //向下传播
+            for (SkuStatus spuStatus : skuStatusList) {
+                spuStatus.changeCheckableStatus(checkable, PHRASE_TARGET);
+            }
+        }
+    }
     public int getCount() {
         return count;
     }

@@ -20,6 +20,7 @@ import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -134,6 +135,7 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
 
             String fullMobile = mobileZone.areaCode + mobile;
 
+            String url = Api.PATH_ARRIVAL_NOTICE;
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "commonId", commonId,
@@ -141,9 +143,10 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
                     "mobile", fullMobile);
 
             SLog.info("params[%s]", params);
-            Api.postUI(Api.PATH_ARRIVAL_NOTICE, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -154,6 +157,7 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 

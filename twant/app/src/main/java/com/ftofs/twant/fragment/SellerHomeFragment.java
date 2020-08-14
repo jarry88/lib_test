@@ -32,6 +32,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.fragment.SellerGoodsListFragment;
 import com.ftofs.twant.seller.fragment.SellerOrderListFragment;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -397,9 +398,13 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             }
 
             int setStoreState=1-storeState;
-            Api.postUI(Api.PATH_SELLER_ISOPEN, EasyJSONObject.generate("token", token, "state", setStoreState), new UICallback() {
+
+            String url = Api.PATH_SELLER_ISOPEN;
+            EasyJSONObject params = EasyJSONObject.generate("token", token, "state", setStoreState);
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     updateSwitchButton();
                     ToastUtil.showNetworkError(_mActivity,e);
                 }
@@ -409,6 +414,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity,responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         updateSwitchButton();
                         return;
                     }
@@ -450,9 +456,12 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         if (StringUtil.isEmpty(token)) {
             return;
         }
-        Api.getUI(Api.PATH_SELLER_INDEX, EasyJSONObject.generate("token", token), new UICallback() {
+        String url = Api.PATH_SELLER_INDEX;
+        EasyJSONObject params = EasyJSONObject.generate("token", token);
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -461,6 +470,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                 SLog.info("responsetr[%s]", responseStr);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
                 updateView(responseObj);

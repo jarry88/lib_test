@@ -19,6 +19,7 @@ import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -206,6 +207,7 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -218,6 +220,7 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     EasyJSONObject data = responseObj.getObject("datas");
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         hideSoftInput();
                         return;
                     }
@@ -245,6 +248,7 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
@@ -257,6 +261,7 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

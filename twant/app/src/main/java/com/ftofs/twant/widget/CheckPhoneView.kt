@@ -22,9 +22,9 @@ const val errorValidTip="此號碼無法用於進行註冊或登入"
 const val LandIndex=2//内地
 val regex= listOf(
         "",
-        "^[569][0-9]{0,7}$", // 香港
-        "^1[0-9]{0,10}$",    // 大陸
-        "^6[0-9]{0,7}$"   // 澳門
+        "^[569][0-9]{7}$", // 香港
+        "^1[0-9]{10}$",    // 大陸
+        "^6[0-9]{7}$"   // 澳門
 )
 val isValidRegex ="^1(([7][0,1])|([6][2,5,7])|[3][4][9])[0-9]{0,10}$"
 //3、虛擬運營商號段：
@@ -61,7 +61,7 @@ class CheckPhoneView @JvmOverloads constructor(
     }
     private var errorText:TextView?=null
     private var llErrorContainer:LinearLayout?=null
-    var isError = false
+    var isRight = false //默认为异常
     var msg = context.getString(R.string.input_mobile_hint)
 
 
@@ -82,8 +82,13 @@ class CheckPhoneView @JvmOverloads constructor(
         zoneIndex=mobileList[index].areaId
         etMobile.text=etMobile.text
     }
+
+    /**
+     * 有异常返回true
+     */
     fun checkError():Pair<Boolean,String>{
-        return Pair(isError,msg)
+        SLog.info(  "isRight %s,msg %s",isRight,msg)
+        return Pair(isRight,msg)
     }
     fun getPhone():String{
         etMobile.text?:return ""
@@ -95,35 +100,35 @@ class CheckPhoneView @JvmOverloads constructor(
     private fun initTextChangedListener(){
         etMobile.doAfterTextChanged { text->
             SLog.info(regex[zoneIndex]+areaArray[zoneIndex]+text)
-
+            isRight=true
             if(text==null||text.isEmpty()){
-                llErrorContainer?.visibility= View.GONE
-                isError=false
+                isRight=false
                 msg=context.getString(R.string.input_mobile_hint)
-
-                return@doAfterTextChanged
             }else if(mobileList==null||mobileList.size<zoneIndex){
-                llErrorContainer?.visibility= View.GONE
-                return@doAfterTextChanged
+                isRight=false
+                msg="网络异常"
             }else{
-                isError=!Pattern.compile(regex[zoneIndex]).matcher(text).matches()
-                if (isError) {
-                    msg = text_invalid_mobile.format(areaArray[zoneIndex])
-                }else if(zoneIndex==LandIndex){
-                    isError= Pattern.compile(isValidRegex).matcher(text).matches()
-                    if(isError){
-                        msg= errorValidTip
+                val matchResult=Pattern.compile(regex[zoneIndex]).matcher(text).matches()//首先匹配基本规则
+                if (matchResult) {
+                    if (zoneIndex == LandIndex) {
+                        if (Pattern.compile(isValidRegex).matcher(text).matches()) {
+                            msg = errorValidTip
+                            isRight = false
+                        }
                     }
-                }
-
-                if (isError) {
-                    errorText?.text=msg
-                    llErrorContainer?.visibility = View.VISIBLE
-                } else {
-                    llErrorContainer?.visibility = View.GONE
-                    isError=true
+                }else{
+                    msg = text_invalid_mobile.format(areaArray[zoneIndex])
+                    isRight=false
                 }
              }
+            llErrorContainer?.apply {
+                if(!isRight) {
+                    this.visibility=View.VISIBLE
+                    errorText?.text=msg
+
+                }
+                else this.visibility=View.GONE
+            }
 
         }
     }

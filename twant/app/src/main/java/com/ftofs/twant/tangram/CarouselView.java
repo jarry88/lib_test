@@ -18,6 +18,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
@@ -103,9 +104,11 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
      */
     private void loadCarousel() {
         SLog.info("___loadCarousel");
-        Api.getUI(Api.PATH_HOME_INDEX, null, new UICallback() {
+        String url = Api.PATH_HOME_INDEX;
+        Api.getUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
                 ToastUtil.showNetworkError(getContext(), e);
             }
 
@@ -116,6 +119,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
 
                 try {
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(url, "", responseStr, "");
                         return;
                     }
 

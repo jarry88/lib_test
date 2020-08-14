@@ -22,6 +22,7 @@ import com.ftofs.twant.entity.BargainItem;
 import com.ftofs.twant.entity.MyFriendListItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -83,11 +84,7 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
                 if (bargainItem.itemType == Constant.ITEM_TYPE_BANNER) {
                     return;
                 }
-                if (bargainItem.bargainState == Constant.BARGAIN_STATE_NOT_STARTED) {
-                    ToastUtil.error(_mActivity, "砍價活動未開始");
-                } else if (bargainItem.bargainState == Constant.BARGAIN_STATE_ONGOING) {
-                    Util.startFragment(GoodsDetailFragment.newInstance(bargainItem.commonId, bargainItem.goodsId, bargainItem.bargainId));
-                }
+                Util.startFragment(GoodsDetailFragment.newInstance(bargainItem.commonId, bargainItem.goodsId, bargainItem.bargainId));
             }
         });
 
@@ -117,6 +114,7 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
                 adapter.loadMoreFail();
             }
@@ -129,6 +127,7 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         adapter.loadMoreFail();
                         return;
                     }

@@ -36,6 +36,7 @@ import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.SloganView;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -301,14 +302,16 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_PAYMENT_PRICE;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "payId", payId);
 
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_PAYMENT_PRICE, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -320,6 +323,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -373,12 +377,14 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_WALLET_INFO;
         EasyJSONObject params = EasyJSONObject.generate("token", token);
         SLog.info("params[%s]", params);
 
-        Api.getUI(Api.PATH_WALLET_INFO, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -389,6 +395,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -466,10 +473,10 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     doWalletPay();
                     break;
                 case PayCardItem.PAY_TYPE_TAIFUNG:
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                        ToastUtil.error(_mActivity, "大豐銀行電子支付暫未支持Android 10");
-                        return;
-                    }
+//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+//                        ToastUtil.error(_mActivity, "大豐銀行電子支付暫未支持Android 10");
+//                        return;
+//                    }
                     doTaiFungPay();
                     break;
                 case PayCardItem.PAY_TYPE_WEIXING:
@@ -507,14 +514,16 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_MPAY;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "payId", payId);
 
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_MPAY, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -525,6 +534,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -550,14 +560,16 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_TAIFUNG_PAY;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "payId", payId);
 
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_TAIFUNG_PAY, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -569,6 +581,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -628,14 +641,16 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_WXPAY;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "payId", payId);
 
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_WXPAY, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -647,6 +662,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -697,14 +713,16 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_ALIPAY;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "payId", payId);
 
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_ALIPAY, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -716,6 +734,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -749,14 +768,16 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_ALIPAY_HK;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "payId", payId);
 
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_ALIPAY_HK, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -768,6 +789,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

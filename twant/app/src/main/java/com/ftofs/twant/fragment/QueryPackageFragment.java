@@ -20,6 +20,7 @@ import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.PackageItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ClipboardUtils;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -163,10 +164,12 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
             }
         }
 
+        String url = Api.PATH_SEARCH_LOGISTICS;
         SLog.info("params[%s]", params.toString());
-        Api.getUI(Api.PATH_SEARCH_LOGISTICS, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
@@ -179,6 +182,7 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

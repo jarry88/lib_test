@@ -20,6 +20,7 @@ import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -141,9 +142,11 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
      * 加載【熱門搜索】
      */
     private void loadHotKeyword() {
-        Api.getUI(Api.PATH_HOT_KEYWORD, null, new UICallback() {
+        String url = Api.PATH_HOT_KEYWORD;
+        Api.getUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -152,6 +155,7 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
                 try {
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(url, "", responseStr, "");
                         return;
                     }
 
