@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
@@ -43,7 +44,10 @@ public class ImageListAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         bigImageView.setImageLoaderCallback(new ImageLoader.Callback() {
             @Override
             public void onCacheHit(int imageType, File image) {
-                bigImageView.getSSIV().setOrientation(ORIENTATION_USE_EXIF);
+                SubsamplingScaleImageView subsamplingScaleImageView = bigImageView.getSSIV();
+                if (subsamplingScaleImageView != null) {
+                    subsamplingScaleImageView.setOrientation(ORIENTATION_USE_EXIF);
+                }
             }
 
             @Override
