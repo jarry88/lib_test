@@ -56,6 +56,7 @@ import com.ftofs.twant.vo.member.MemberVo;
 import com.ftofs.twant.widget.BottomConfirmPopup;
 import com.ftofs.twant.widget.QuickClickButton;
 import com.ftofs.twant.widget.SharePopup;
+import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -620,6 +621,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     public void onSupportVisible() {
         super.onSupportVisible();
 
+        Util.switchTranslucentMode(_mActivity, true);
+
         updateMainSelectedFragment(MainFragment.MY_FRAGMENT);
 
         int userId = User.getUserId();
@@ -658,6 +661,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+
+        Util.switchTranslucentMode(_mActivity, false);
     }
 
     private void switchThumbState(int position) {

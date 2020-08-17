@@ -252,19 +252,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         EventBus.getDefault().register(this);
 
         initTangram();
-
-        StatusBarUtil.setColor(this, Color.WHITE, 0);  // 设置状态栏为白色
-        StatusBarUtil.setLightMode(this);
-
-        int statusBarHeight = QMUIStatusBarHelper.getStatusbarHeight(this);
-        SLog.info("statusBarHeight[%d]", statusBarHeight);
-        /*
-        修复问题
-        https://github.com/laobie/StatusBarUtil/issues/291
-        setDarkMode 和 setLightMode 会使 布局向上偏移，设置fitsSystemWindows会使Edittextview长按上下文菜单边距失效
-         */
-        View contentView = findViewById(android.R.id.content);
-        contentView.setPadding(0, statusBarHeight, 0, 0);
+        Util.switchTranslucentMode(this, false);
 
         // 監聽DecorView的變化
         View activityRoot = getWindow().getDecorView();

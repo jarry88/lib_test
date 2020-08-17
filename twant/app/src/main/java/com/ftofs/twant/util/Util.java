@@ -72,9 +72,11 @@ import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.widget.TwLoadingPopup;
+import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.orhanobut.hawk.Hawk;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 
@@ -1530,6 +1532,29 @@ public class Util {
                 }
             }
         });
+    }
+
+
+    public static void switchTranslucentMode(Activity activity, boolean isImageMode) {
+        View contentView = activity.findViewById(android.R.id.content);
+        if (isImageMode) {
+            contentView.setPadding(0, 0, 0, 0);
+            StatusBarUtil.setTranslucentForImageViewInFragment(activity, null);
+            StatusBarUtil.setTranslucentForImageView(activity, 0, null);
+        } else {
+            StatusBarUtil.setColor(activity, Color.WHITE, 0);  // 设置状态栏为白色
+            StatusBarUtil.setLightMode(activity);
+
+            int statusBarHeight = QMUIStatusBarHelper.getStatusbarHeight(activity);
+            SLog.info("statusBarHeight[%d]", statusBarHeight);
+            /*
+            修复问题
+            https://github.com/laobie/StatusBarUtil/issues/291
+            setDarkMode 和 setLightMode 会使 布局向上偏移，设置fitsSystemWindows会使Edittextview长按上下文菜单边距失效
+             */
+            contentView.setPadding(0, statusBarHeight, 0, 0);
+        }
+
     }
 }
 
