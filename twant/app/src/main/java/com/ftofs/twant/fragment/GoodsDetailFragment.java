@@ -1929,7 +1929,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     tvCurrentSpecs.setText(Util.formatSpecString(specPairList));
 
                     String goodsSpecValues = goodsDetail.getSafeString("goodsSpecValues");
-                    EasyJSONArray goodsSpecValueArr = (EasyJSONArray) EasyJSONArray.parse(goodsSpecValues);
+                    EasyJSONArray goodsSpecValueArr = EasyJSONArray.parse(goodsSpecValues);
                     for (Object object : goodsSpecValueArr) {
                         EasyJSONObject mapItem = (EasyJSONObject) object;
                         SLog.info("kkkkey[%s], vvvalue[%s]", mapItem.getSafeString("specValueIds"), mapItem.getInt("goodsId"));
