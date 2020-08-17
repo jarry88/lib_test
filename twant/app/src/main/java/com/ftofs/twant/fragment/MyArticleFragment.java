@@ -22,6 +22,7 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.NoticeItem;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -112,15 +113,17 @@ public class MyArticleFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_POST_LIST;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "page", page,
                 "memberName", memberName);
 
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_POST_LIST, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
                 adapter.loadMoreFail();
             }
@@ -132,6 +135,7 @@ public class MyArticleFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         adapter.loadMoreFail();
                         return;
                     }

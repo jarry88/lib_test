@@ -24,6 +24,7 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -115,13 +116,15 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
             return;
         }
 
+        String url = Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token
         );
 
-        Api.getUI(Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -132,6 +135,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

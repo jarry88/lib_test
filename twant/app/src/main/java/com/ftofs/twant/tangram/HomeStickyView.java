@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.ftofs.twant.BlankFragment;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
@@ -24,6 +25,8 @@ import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.GroupInfoListFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
+import com.ftofs.twant.fragment.LabFragment;
+import com.ftofs.twant.fragment.LinkageContainerFragment2;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
@@ -145,19 +148,13 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         } else if (id == R.id.ll_search_box) {
             Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
         } else if (id == R.id.btn_category_store) {
-            /*
             Util.startFragment(SearchResultFragment.newInstance(SearchType.STORE.name(),
                     EasyJSONObject.generate("keyword", "").toString()));
-
-             */
-            Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
+            // Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
         } else if (id == R.id.btn_category_goods) {
-            /*
             Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
                     EasyJSONObject.generate("keyword", "").toString()));
-
-             */
-            Util.startFragment(CategoryFragment.newInstance(SearchType.GOODS, null));
+            // Util.startFragment(CategoryFragment.newInstance(SearchType.GOODS, null));
         } else if (id == R.id.btn_category_brand) {
             SearchPostParams searchPostParams = new SearchPostParams();
             searchPostParams.keyword = "";
@@ -166,10 +163,10 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-//            Util.startFragment(LinkageContainerFragment.Companion.newInstance(20));
-            // Util.startFragment(LabFragment.newInstance());
+//            Util.startFragment(new BlankFragment());//纯kotlin 用法
+             Util.startFragment(LabFragment.newInstance());//配置参数用kotlin 生成，调用用java
             // Util.startFragment(GoodsDetailFragment.newInstance(4195, 6957, 1));
-            Util.startFragment(GroupInfoListFragment.newInstance());
+//            Util.startFragment(LabFragment.newInstance());
 //            Util.startFragment(GoodsDetailFragment.newInstance(4195, 6957, 1));
         }
     }
@@ -248,9 +245,9 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             case "shoppingZone":
                 //購物新專場
                 int zoneId = Integer.parseInt(stickyCellData.appIndexNavigationLinkValue);
-                if (Config.DEVELOPER_MODE) {
-                    zoneId=20;
-                }
+//                if (Config.DEVELOPER_MODE) {
+//                    zoneId=20;
+//                }
                 Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId));
                 break;
             case "wantPost":

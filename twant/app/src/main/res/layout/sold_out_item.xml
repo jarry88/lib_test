@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="18dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="60dp">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/goods_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:riv_corner_radius="2dp"
+                android:src="@drawable/cs_avatar_160">
+            </com.makeramen.roundedimageview.RoundedImageView>
+            <RelativeLayout
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="#A30E0E0E">
+                </de.hdodenhof.circleimageview.CircleImageView>
+
+                <View
+                    android:id="@+id/vw_separator"
+                    android:layout_width="40dp"
+                    android:layout_height="0.5dp"
+                    android:background="@android:color/white"
+                    android:layout_centerInParent="true">
+                </View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@id/vw_separator"
+                    android:text="售罄"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white">
+                </TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/vw_separator"
+                    android:text="Sold out"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white">
+                </TextView>
+
+            </RelativeLayout>
+
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp">
+            <TextView
+                android:id="@+id/tv_goods_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="#666"
+                android:text="小米有品 AMIRO化妆镜 高清日光镜系列 带灯台式便携美妆镜随身便携梳妆小米有品 AMIRO化妆镜 高清日光镜系列 带灯台式便携美妆镜随身便携梳妆小米有品 AMIRO化妆镜 高清日光镜系列 带灯台式便携美妆镜随身便携梳妆"
+                android:maxLines="2"
+                android:ellipsize="end">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_buy_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="x1"
+                android:textSize="12sp"
+                android:textColor="#666">
+            </TextView>
+        </RelativeLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_reason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="原因：該地區不支持配送"
+        android:textSize="12sp"
+        android:textColor="@color/tw_red">
+
+    </TextView>
+</LinearLayout>

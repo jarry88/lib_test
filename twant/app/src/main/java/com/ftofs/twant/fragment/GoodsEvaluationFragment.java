@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -63,6 +64,25 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
     RecyclerView rvEvaluationList;
     GoodsEvaluationAdapter adapter;
 
+
+
+    /**
+     * 批量評論是否展開狀態
+     */
+    public static final int QUICK_COMMENT_COUNT = 3;
+    TextView[] tvQuickCommentArr = new TextView[QUICK_COMMENT_COUNT];
+    ImageView[] imgQuickCommentArr = new ImageView[QUICK_COMMENT_COUNT];
+    boolean quickCommentContainerExpanded = false;
+    ImageView imgQuickCommentButton;
+    View llQuickCommentContainer;
+    int selectedQuickCommentIndex = -1;  // 當前選中哪條批量評論，從0開始，-1表示未選中
+    String[] quickCommentArr = new String[] {
+            "產品包裝完好，物流送貨很及時。", "產品性價比高，商家態度很nice。", "產品不錯，下次還會再買。"
+    };
+
+    int twMediumGrey;
+    int twBlack;
+
     public static GoodsEvaluationFragment newInstance(int ordersId, int storeId, String storeName, List<EvaluationGoodsItem> evaluationGoodsItemList) {
         Bundle args = new Bundle();
 
@@ -94,9 +114,32 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
         rlButtonContainer = view.findViewById(R.id.rl_button_container);
         btnAddImage = view.findViewById(R.id.btn_add_image);
 
+        imgQuickCommentButton = view.findViewById(R.id.img_quick_comment_button);
+        llQuickCommentContainer = view.findViewById(R.id.ll_quick_comment_container);
+
+        tvQuickCommentArr[0] = view.findViewById(R.id.tv_quick_comment_0);
+        tvQuickCommentArr[1] = view.findViewById(R.id.tv_quick_comment_1);
+        tvQuickCommentArr[2] = view.findViewById(R.id.tv_quick_comment_2);
+
+        for (int i = 0; i < QUICK_COMMENT_COUNT; i++) {
+            tvQuickCommentArr[i].setText(quickCommentArr[i]);
+        }
+
+        imgQuickCommentArr[0] = view.findViewById(R.id.img_quick_comment_0);
+        imgQuickCommentArr[1] = view.findViewById(R.id.img_quick_comment_1);
+        imgQuickCommentArr[2] = view.findViewById(R.id.img_quick_comment_2);
+
+        Util.setOnClickListener(view, R.id.btn_quick_comment_0, this);
+        Util.setOnClickListener(view, R.id.btn_quick_comment_1, this);
+        Util.setOnClickListener(view, R.id.btn_quick_comment_2, this);
+
+        twMediumGrey = getResources().getColor(R.color.tw_medium_grey, null);
+        twBlack = getResources().getColor(R.color.tw_black, null);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
+
+        Util.setOnClickListener(view, R.id.btn_switch_quick_comment, this);
 
         rvEvaluationList = view.findViewById(R.id.rv_evaluation_list);
         adapter = new GoodsEvaluationAdapter(R.layout.goods_evaluation_item, storeId, storeName, evaluationGoodsItemList);
@@ -130,9 +173,46 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
             case R.id.btn_commit:
                 commitComment();
                 break;
+            case R.id.btn_switch_quick_comment:
+                quickCommentContainerExpanded = !quickCommentContainerExpanded;
+                llQuickCommentContainer.setVisibility(quickCommentContainerExpanded ? View.VISIBLE : View.GONE);
+                imgQuickCommentButton.setImageResource(quickCommentContainerExpanded ? R.drawable.icon_collapse_20 : R.drawable.icon_expand_20);
+                break;
+            case R.id.btn_quick_comment_0:
+                selectQuickComment(0);
+                break;
+            case R.id.btn_quick_comment_1:
+                selectQuickComment(1);
+                break;
+            case R.id.btn_quick_comment_2:
+                selectQuickComment(2);
+                break;
             default:
                 break;
         }
+    }
+
+    private void selectQuickComment(int index) {
+        for (EvaluationGoodsItem item : evaluationGoodsItemList) {
+            item.content = quickCommentArr[index];
+        }
+        adapter.notifyDataSetChanged();
+
+        if (selectedQuickCommentIndex == index) {
+            return;
+        }
+
+        // 取消上一個選中狀態
+        if (selectedQuickCommentIndex != -1) {
+            tvQuickCommentArr[selectedQuickCommentIndex].setTextColor(twMediumGrey);
+            imgQuickCommentArr[selectedQuickCommentIndex].setVisibility(View.GONE);
+        }
+
+        selectedQuickCommentIndex = index;
+
+        // 設置當前選中狀態
+        tvQuickCommentArr[selectedQuickCommentIndex].setTextColor(twBlack);
+        imgQuickCommentArr[selectedQuickCommentIndex].setVisibility(View.VISIBLE);
     }
 
     private void commitComment() {

@@ -43,6 +43,7 @@ public class StoreVoucherVo {
      * 是否在使用
      */
     public boolean isInUse;
+    public String storeAvatar;
 
     @Override
     public String toString() {

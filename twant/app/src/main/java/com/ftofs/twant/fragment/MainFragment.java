@@ -180,6 +180,9 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     }
 
     public void showHideFragment(int index) {
+        if (!isAdded()) {
+            return;
+        }
         showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
 
         // 切換未選中圖標

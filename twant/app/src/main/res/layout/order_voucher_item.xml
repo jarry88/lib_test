@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/toolbar_margin_left"
-    android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:layout_marginStart="@dimen/toolbar_margin_left"
+    android:layout_marginEnd="@dimen/toolbar_margin_right"
     android:layout_marginTop="15dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,12 +29,30 @@
                 android:id="@+id/tv_limit_amount_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="19dp"
-                android:layout_alignParentBottom="true"
+                android:layout_above="@+id/tv_usage_desc"
                 android:layout_centerHorizontal="true"
                 android:textSize="15sp"
                 android:textColor="#fff"
                 android:text="滿100減10"
+                android:layout_marginBottom="9dp"
+
+                />
+            <TextView
+                android:id="@+id/tv_usage_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingLeft="13.5dp"
+                android:paddingRight="13.5dp"
+                android:text="店舖專用"
+                android:textColor="@color/tw_yellow"
+                android:background="@android:color/white"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+
+
                 />
         </RelativeLayout>
         <RelativeLayout
@@ -45,21 +63,30 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/img_coupon_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/app_logo"
+                    />
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
                     <TextView
                         android:id="@+id/tv_store_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="11dp"
-                        android:layout_centerVertical="true"
                         android:text="CORRIZI旗艦店"
-                        android:textSize="16sp"
                         android:textColor="@color/tw_black"
-                        />
+                        android:textSize="16sp"
+                        android:visibility="visible" />
                     <!--
                     <TextView
                         android:id="@+id/btn_receive_voucher_now"
@@ -81,9 +108,9 @@
                     android:id="@+id/tv_usable_client_type_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="11dp"
-                    android:layout_marginTop="12dp"
-                    android:text=""
+                    android:layout_marginTop="2dp"
+                    android:text="s"
+                    android:visibility="gone"
                     android:textSize="13sp"
                     android:textColor="#FF676666"
                     />
@@ -91,7 +118,7 @@
                     android:id="@+id/tv_valid_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="11dp"
+                    android:layout_marginStart="11dp"
                     android:layout_marginTop="5dp"
                     android:text="有效期: 2018.12.20 - 2019.1.20"
                     android:textSize="13sp"

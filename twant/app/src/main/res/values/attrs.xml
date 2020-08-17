@@ -99,4 +99,11 @@
     <declare-styleable name="SoftToolPaneLayout">
         <attr name="stpl_tool_pane"></attr>
     </declare-styleable>
+    <declare-styleable name="SettingCheckPhoneView">
+        <attr name="zoneType" format="enum">
+            <enum name="mac" value="3"/>
+            <enum name="land" value="2"/>
+            <enum name="hongkong" value="1"/>
+        </attr>
+    </declare-styleable>
 </resources>

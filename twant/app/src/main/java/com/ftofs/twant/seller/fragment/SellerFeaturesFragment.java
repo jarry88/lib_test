@@ -24,6 +24,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerFeaturesGoodsAdapter;
 import com.ftofs.twant.seller.api.SellerApi;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -133,14 +134,16 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
                 array.append(commonId);
                 // 发送同步请求
                 try {
+                    String url = Api.REMOVE_FEATURES_GOODS;
                      EasyJSONObject params =EasyJSONObject.generate(
                              "token", User.getToken(),
                                 "commonId", commonId);
 //                    params.set("commonId[]", commonId);
                       SLog.info("params[%s]", params);
-                      Api.postUI(Api.REMOVE_FEATURES_GOODS, params, new UICallback() {
+                      Api.postUI(url, params, new UICallback() {
                          @Override
                          public void onFailure(Call call, IOException e) {
+                             LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                              ToastUtil.showNetworkError(_mActivity, e);
                          }
 
@@ -151,6 +154,7 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
 
                                  EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                                  if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                     LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                                      return;
                                  }
                                  goodsCommonList.remove(position);
@@ -195,11 +199,13 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
     }
 
     private void loadDate() {
+        String url = SellerApi.PATH_SELLER_GOODS_FEATURES_LIST;
          EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
           SLog.info("params[%s]", params);
-          Api.getUI(SellerApi.PATH_SELLER_GOODS_FEATURES_LIST, params, new UICallback() {
+          Api.getUI(url, params, new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
+                 LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                  ToastUtil.showNetworkError(_mActivity, e);
              }
 
@@ -210,6 +216,7 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
 
                      EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                      if (ToastUtil.checkError(_mActivity, responseObj)) {
+                         LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                          return;
                      }
                      updateView(responseObj);

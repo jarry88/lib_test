@@ -64,6 +64,10 @@ public class SLog {
      * 打印当前调用栈
      */
     public static void bt() {
+        if (!Config.SLOGENABLE) {
+            return;
+        }
+
         // 生成时间戳
         // 设置日期格式： 2019-04-26 16:28:39.772
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");

@@ -1042,10 +1042,12 @@ public class Util {
                 "clientType", Constant.CLIENT_TYPE_ANDROID);
         SLog.info("buyData[%s]", buyData.toString());
 
+        String url = Api.PATH_ADD_CART;
         SLog.info("params[%s]", params.toString());
-        Api.postUI(Api.PATH_ADD_CART, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -1054,6 +1056,7 @@ public class Util {
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(context, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 
@@ -1074,6 +1077,7 @@ public class Util {
             return;
         }
 
+        String url = Api.PATH_EDIT_CART;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "cartId",cartId,
@@ -1081,9 +1085,10 @@ public class Util {
                 "clientType", Constant.CLIENT_TYPE_ANDROID);
 
         SLog.info("params[%s]", params.toString());
-        Api.postUI(Api.PATH_EDIT_CART, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -1092,6 +1097,7 @@ public class Util {
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(context, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 
@@ -1515,10 +1521,12 @@ public class Util {
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
-        SLog.info("url[%s], params[%s]", Api.PATH_STORE_PROMOTION_STATS, params);
-        Api.postUI(Api.PATH_STORE_PROMOTION_STATS, params, new UICallback() {
+        String url = Api.PATH_STORE_PROMOTION_STATS;
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -1527,6 +1535,7 @@ public class Util {
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(context, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     SLog.info("Error!PATH_STORE_PROMOTION_STATS failed");
                     return;
                 }

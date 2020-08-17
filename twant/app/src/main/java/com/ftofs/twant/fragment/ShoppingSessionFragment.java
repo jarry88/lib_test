@@ -33,6 +33,7 @@ import com.ftofs.twant.entity.ElemeGroupedItem;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -247,13 +248,12 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
      * 加載購物專場數據
      */
     private void loadSessionData() {
-
-
-
+        String url = Api.PATH_SHOP_SESSION;
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
-        Api.getUI(Api.PATH_SHOP_SESSION, null, new UICallback() {
+        Api.getUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity,e);
                 loadingPopup.dismiss();
             }
@@ -264,6 +264,7 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
                 SLog.info("responseStr[%s]",responseStr);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, "", responseStr, "");
                     return;
                 }
                 try {

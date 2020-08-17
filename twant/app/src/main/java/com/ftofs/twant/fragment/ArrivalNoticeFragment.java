@@ -3,6 +3,8 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -110,6 +113,10 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
                 return;
             }
 
+            if (mobileZoneList == null || selectedMobileZoneIndex >= mobileZoneList.size()) {
+                return;
+            }
+
             MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
             String mobile = etMobile.getText().toString().trim();
 
@@ -128,6 +135,7 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
 
             String fullMobile = mobileZone.areaCode + mobile;
 
+            String url = Api.PATH_ARRIVAL_NOTICE;
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "commonId", commonId,
@@ -135,9 +143,10 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
                     "mobile", fullMobile);
 
             SLog.info("params[%s]", params);
-            Api.postUI(Api.PATH_ARRIVAL_NOTICE, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -148,13 +157,14 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 
                         ToastUtil.success(_mActivity, "設置成功");
                         hideSoftInputPop();
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });

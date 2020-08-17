@@ -18,6 +18,7 @@ import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.GroupListItem;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
@@ -87,13 +88,15 @@ public class ViewMoreGroupPopup extends CenterPopupView implements View.OnClickL
         });
         rvList.setAdapter(adapter);
 
+        String url = Api.PATH_GROUP_LIST;
         EasyJSONObject params = EasyJSONObject.generate(
                 "commonId", commonId
         );
-        SLog.info("url[%s], params[%s]", Api.PATH_GROUP_LIST, params);
-        Api.getUI(Api.PATH_GROUP_LIST, params, new UICallback() {
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -103,6 +106,7 @@ public class ViewMoreGroupPopup extends CenterPopupView implements View.OnClickL
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

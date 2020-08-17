@@ -23,6 +23,7 @@ import com.ftofs.twant.entity.PaySuccessStoreInfoItem;
 import com.ftofs.twant.entity.PaySuccessSummaryItem;
 import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -179,14 +180,16 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
             return;
         }
 
+        String url = Api.PATH_MPAY;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "payId", payId
         );
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_MPAY, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -197,6 +200,7 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -237,14 +241,16 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
         if (StringUtil.isEmpty(token)) {
             return;
         }
+        String url = Api.PATH_BUY_ORDERS;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "payId", payId
         );
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_BUY_ORDERS, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -256,6 +262,7 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

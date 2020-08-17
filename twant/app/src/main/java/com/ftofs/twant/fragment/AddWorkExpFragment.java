@@ -20,6 +20,7 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.CareerItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -158,11 +159,13 @@ public class AddWorkExpFragment extends BaseFragment implements View.OnClickList
                     .show();
         }
         if (id == R.id.btn_delete) {
+            String url = Api.PATH_EXPERIENCE_DELETE;
             EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "workId", workId);
             SLog.info("params[%s]",params);
-            Api.postUI(Api.PATH_EXPERIENCE_DELETE, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity,e);
                 }
 
@@ -171,7 +174,7 @@ public class AddWorkExpFragment extends BaseFragment implements View.OnClickList
                     SLog.info("responstr[%s]",responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        SLog.info("異常");
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
                     ToastUtil.success(_mActivity,"刪除成功");
@@ -186,7 +189,7 @@ public class AddWorkExpFragment extends BaseFragment implements View.OnClickList
     }
 
     private void saveWorkDate() {
-
+        String url = Api.PATH_EXPERIENCE_EDIT;
         EasyJSONObject params=EasyJSONObject.generate(
                 "token", User.getToken(),
                 "companyName",edCompanyName.getText(),//  公司名稱
@@ -203,9 +206,10 @@ public class AddWorkExpFragment extends BaseFragment implements View.OnClickList
             }
         }
         SLog.info("params[%s]",params);
-        Api.postUI(Api.PATH_EXPERIENCE_EDIT, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity,e);
             }
 
@@ -215,7 +219,7 @@ public class AddWorkExpFragment extends BaseFragment implements View.OnClickList
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if(ToastUtil.checkError(_mActivity, responseObj)){
-                        SLog.info("異常");
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
                    // workId = responseObj.getInt("datas.workId");

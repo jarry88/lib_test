@@ -806,11 +806,21 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     }
 
                     commentItem.isLike = 1 - commentItem.isLike;
-                    commentItem.commentLike = responseObj.getInt("datas.likeCount");
+                    // 本地更新點贊數
+                    int newLikeCount = commentItem.commentLike;
+                    if (commentItem.isLike == Constant.TRUE_INT) {
+                        newLikeCount++;
+                    } else {
+                        newLikeCount--;
+                        if (newLikeCount < 0) {
+                            newLikeCount = 0;
+                        }
+                    }
+                    commentItem.commentLike = newLikeCount;
 
                     adapter.notifyItemChanged(position);
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

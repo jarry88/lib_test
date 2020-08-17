@@ -171,6 +171,8 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 TextView tvSkuPrice = skuItemView.findViewById(R.id.tv_sku_price);
                 tvSkuPrice.setText(StringUtil.formatPrice(context, confirmOrderSkuItem.skuPrice, 0,2));
 
+                TextView tvActivityLabel = skuItemView.findViewById(R.id.tv_activity_label);
+                tvActivityLabel.setVisibility(confirmOrderSkuItem.joinBigSale==0?View.VISIBLE:View.GONE);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, Util.dip2px(context, 15), 0, 0);
 

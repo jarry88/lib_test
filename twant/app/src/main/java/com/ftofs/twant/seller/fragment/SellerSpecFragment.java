@@ -27,6 +27,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerSpecListAdapter;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecListItem;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -139,6 +140,7 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
         Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -149,6 +151,7 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -182,14 +185,16 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
             return;
         }
 
+        String url = Api.PATH_SELLER_SPEC_LIST;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token
         );
 
-        SLog.info("url[%s], params[%s]", Api.PATH_SELLER_SPEC_LIST, params);
-        Api.postUI(Api.PATH_SELLER_SPEC_LIST, params, new UICallback() {
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -200,6 +205,7 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

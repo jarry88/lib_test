@@ -25,6 +25,8 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
+import org.litepal.util.Const;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -148,11 +150,19 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
                         // 状态 0表示未使用 1表示已用 2表示作废
                         int couponState = voucher.getInt("couponState");
+                        int couponExpiredState = voucher.getInt("couponExpiredState");//1表示已过期 ，未使用已过期则等于作废
 
                         // 轉換一下
                         int state;
                         if (couponState == 0) {
-                            state = Constant.COUPON_STATE_UNRECEIVED;
+                            if (couponExpiredState == Constant.TRUE_INT) {
+                                //未使用已过期则等于作废
+                                state = Constant.COUPON_STATE_DISCARDED;
+
+                            } else {
+
+                                state = Constant.COUPON_STATE_UNRECEIVED;
+                            }
                         } else if (couponState == 1) {
                             state = Constant.COUPON_STATE_USED;
                         } else {
@@ -171,7 +181,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 voucher.getSafeString("useEndTimeText"),
                                 state
                         );
-                        if (couponState == 0) {
+                        if (state == Constant.COUPON_STATE_UNRECEIVED) {
                             availableVoucherList.add(storeVoucher);
                         } else {
                             unavailableVoucherList.add(storeVoucher);

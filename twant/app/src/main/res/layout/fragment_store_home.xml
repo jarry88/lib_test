@@ -463,18 +463,41 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:src="@drawable/icon_mobile" />
-
-                    <TextView
-                        android:id="@+id/tv_phone_number"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/icon_mobile"
-                        android:textColor="@color/tw_text_dark"
-                        android:textSize="14sp"
-                        android:text="-"
-                        />
+
+                        android:layout_toEndOf="@id/icon_mobile">
+
+                        <TextView
+                            android:id="@+id/tv_phone_number"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:lines="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:textColor="@color/tw_text_dark"
+                            android:textSize="14sp"
+                            android:text="-"
+                            />
+                        <TextView
+                            android:id="@+id/btn_shop_call"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/icon_shop_map"
+                            android:layout_marginStart="@dimen/dp_28"
+                            android:lines="1"
+                            android:paddingStart="8dp"
+                            android:paddingTop="3dp"
+                            android:paddingEnd="9dp"
+                            android:paddingBottom="3dp"
+                            android:text="@string/text_call"
+                            android:textColor="@color/tw_blue"
+                            android:textSize="12sp"
+                            android:visibility="visible"
+                            />
+                    </LinearLayout>
                 </RelativeLayout>
 
                 <RelativeLayout

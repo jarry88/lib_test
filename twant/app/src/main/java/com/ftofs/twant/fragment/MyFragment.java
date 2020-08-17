@@ -432,8 +432,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    if (ToastUtil.checkError(_mActivity, responseObj,"没有更多数据了")) {
                         hasMore = false;
+                        if (currPage > 1) {
+                            currPage--;
+                        }
+                        memberPostListAdapter.loadMoreEnd();
                         return;
                     }
                     if(!userDataLoaded) {

@@ -27,6 +27,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_mobile_zone_container"
+        android:visibility="gone"
         >
         <LinearLayout
             android:id="@+id/ll_container_mobile"
@@ -90,6 +91,13 @@
                 />
         </LinearLayout>
     </RelativeLayout>
+    <com.ftofs.twant.widget.CheckPhoneView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_mobile_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_mobile_zone_container"/>
 
     <!-- 驗證碼 -->
     <RelativeLayout
@@ -100,7 +108,7 @@
         android:layout_marginEnd="@dimen/toolbar_margin_right"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rl_mobile_container"
+        app:layout_constraintTop_toBottomOf="@id/et_mobile_view"
         android:background="@drawable/border_type_d">
         <ImageView
             android:layout_width="wrap_content"
@@ -124,7 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/btn_refresh_captcha"
-            android:layout_marginStart="41dp"
+            android:layout_marginStart="40dp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="41dp"
             android:background="@null"
@@ -164,8 +172,8 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentEnd="true"
             android:gravity="center"
             android:background="#F6F6F6"
             android:textColor="@color/tw_black"
@@ -179,8 +187,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="41dp"
-            android:layout_toLeftOf="@id/btn_get_sms_code"
+            android:layout_marginStart="28dp"
+            android:layout_toStartOf="@id/btn_get_sms_code"
             android:background="@null"
             android:textColor="@color/tw_black"
             android:textColorHint="@color/tw_grey"

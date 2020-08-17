@@ -25,6 +25,7 @@ import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -269,10 +270,12 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                 }
             }
 
-            SLog.info("url[%s], params[%s]", Api.PATH_MOBILE_REGISTER, params);
-            Api.postUI(Api.PATH_MOBILE_REGISTER, params, new UICallback() {
+            String url = Api.PATH_MOBILE_REGISTER;
+            SLog.info("url[%s], params[%s]", url, params);
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                     btnRegister.setBackgroundResource(R.drawable.grey_button);
                 }
@@ -282,6 +285,11 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                     SLog.info("responseStr[%s]", responseStr);
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
+
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {

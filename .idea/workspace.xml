@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="996b5036-3ce8-4cad-a582-a0618565805b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/twant/app/src/main/java/com/ftofs/twant/fragment/LinkageContainerFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/twant/app/src/main/java/com/ftofs/twant/fragment/LinkageContainerFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/twant/app/src/main/java/com/ftofs/twant/tangram/HomeStickyView.java" beforeDir="false" afterPath="$PROJECT_DIR$/twant/app/src/main/java/com/ftofs/twant/tangram/HomeStickyView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/twant/app/src/main/res/layout/linkage_container_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/twant/app/src/main/res/layout/linkage_container_layout.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/twant/build/kotlin/sessions/kotlin-compiler-8563714473129982652.salive" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/twant/app/src/main/res/layout/order_voucher_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/twant/app/src/main/res/layout/order_voucher_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/twant/app/src/main/res/layout/voucher_popup.xml" beforeDir="false" afterPath="$PROJECT_DIR$/twant/app/src/main/res/layout/voucher_popup.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,9 +40,9 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1594706594451">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1597018942470">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1594706594451" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1597018942470" />
   </component>
 </project>

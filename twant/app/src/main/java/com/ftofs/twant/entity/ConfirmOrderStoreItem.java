@@ -22,20 +22,14 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
     }
 
     public ConfirmOrderStoreItem(int storeId, String storeName, double buyItemAmount, double freightAmount,
-                                 int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
+                                 int itemCount, int voucherCount, int voucherId, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
                                  double conformTemplatePrice) {
-        this.storeId = storeId;
-        this.storeName = storeName;
-        this.buyItemAmount = buyItemAmount;
-        this.freightAmount = freightAmount;
-        this.itemCount = itemCount;
-        this.voucherCount = voucherCount;
-        this.confirmOrderSkuItemList = confirmOrderSkuItemList;
-        this.conformTemplatePrice = conformTemplatePrice;
+        this(storeId, storeName, buyItemAmount, freightAmount, itemCount, voucherCount, voucherId, confirmOrderSkuItemList, conformTemplatePrice, 0);
+        this.tariffEnable = Constant.FALSE_INT;
     }
 
     public ConfirmOrderStoreItem(int storeId, String storeName, double buyItemAmount, double freightAmount,
-                                 int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
+                                 int itemCount, int voucherCount, int voucherId, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
                                  double conformTemplatePrice,double taxAmount) {
         this.storeId = storeId;
         this.storeName = storeName;
@@ -43,6 +37,7 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
         this.freightAmount = freightAmount;
         this.itemCount = itemCount;
         this.voucherCount = voucherCount;
+        this.voucherId = voucherId;
         this.confirmOrderSkuItemList = confirmOrderSkuItemList;
         this.conformTemplatePrice = conformTemplatePrice;
         this.tariffEnable = Constant.TRUE_INT;

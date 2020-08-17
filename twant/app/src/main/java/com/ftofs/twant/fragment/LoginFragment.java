@@ -37,6 +37,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.HawkUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -73,7 +74,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     CallbackManager callbackManager;
     private int tabClickCount;
     private long lastClickStamp;
-    private boolean showlist;
     private boolean byWebView;
     TabLayout tabLayout;
     private String mAPiKey="1ac840e10b88957";
@@ -144,12 +144,12 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             public void onPageSelected(int position) {
                 SLog.info( "page %d" ,position);
                 try {
-                    Editable editable1 = ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.getText();
-                    Editable editable = ((PasswordLoginFragment) fragmentList.get(0)).etMobile.getText();
+                    String editable1 = ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobileView.getPhone();
+                    String editable = ((PasswordLoginFragment) fragmentList.get(0)).etMobileView.getPhone();
                     if (position == 1) {
-                        ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.setText(editable);
+                        ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobileView.setPhone(editable);
                     } else {
-                        ((PasswordLoginFragment) fragmentList.get(0)).etMobile.setText(editable1);
+                        ((PasswordLoginFragment) fragmentList.get(0)).etMobileView.setPhone(editable1);
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -210,16 +210,15 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             String code = (String) message.data;
             SLog.info("code[%s]", code);
 
+            String url = Api.PATH_WX_LOGIN_STEP1;
             EasyJSONObject params = EasyJSONObject.generate(
                     "code", code, "clientType", Constant.CLIENT_TYPE_ANDROID);
 
             SLog.info("params[%s]", params);
-            if (true) {
-                // return;
-            }
-            Api.postUI(Api.PATH_WX_LOGIN_STEP1, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
@@ -230,6 +229,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 
@@ -263,87 +263,34 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             hideSoftInputPop();
         } else if (id == R.id.btn_register) {
             Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_USER_REGISTER, false));
-        } else if (!showlist&&id == R.id.btn_test) {
+        } else if (id == R.id.btn_test) {
             if (tabClickCount > 5) {
-                showlist = true;
-                String[] data = {"取消","prod/線上" , "29", "229", "28","驗收/F3","日誌開關","test","captra"};
-                XPopup.Builder builder = new XPopup.Builder(_mActivity);
-                builder.dismissOnTouchOutside(false);
-                builder.asCenterList("切換環境:", data, (position, text) -> {
-                    SLog.info("position[%d], text[%s]", position, text);
-                    if (position == 0) {
-                    } else if (position == 1) {
-                        Config.changeEnvironment(Config.ENV_PROD);
-                        exit();
-                    } else if (position == 2) {
-                        Config.changeEnvironment(Config.ENV_29);
-                        exit();
-                    } else if (position == 3) {
-                        Config.changeEnvironment(Config.ENV_229);
-                        exit();
-                    }else if(position==4){
-                        Config.changeEnvironment(Config.ENV_28);
-                        exit();
-                    } else if(position==5){
-                        Config.changeEnvironment(Config.ENV_F3);
-                        ToastUtil.success(_mActivity,"切換f3環境，重啓應用");
-                        exit();
-                    } else if (position == 6) {
-                        if (Config.SLOGENABLE) {
-                            ToastUtil.success(getContext(), "日誌輸出已開啟");
-                        } else {
-                            ToastUtil.success(getContext(), "打開日誌輸出");
-                            Config.SLOGENABLE = true;
-                        }
-                    } else if (position == 7) {
-                        Util.startFragment(TestFragment.newInstance());
-                    }else if (position == 8) {
-                       TaskObserver task= new TaskObserver() {
-                            @Override
-                            public void onMessage() {
-                                if (message == null) {
-                                    return;
-                                }
-                                String str = message.toString();
-                                StringBuffer stringBuffer = new StringBuffer();
-                                stringBuffer.append("https://test.weshare.team/attachment/")
-                                        .append(str.charAt(str.length() - 1))
-                                        .append("/")
-                                        .append(str.charAt(str.length() - 2))
-                                        .append("/")
-                                        .append(str.charAt(str.length() - 3))
-                                        .append("/")
-                                        .append(str)
-                                        .append(".jpg");
-                                String url = stringBuffer.toString();
-                                SLog.info("url[%s]",url);
-                                setCaptcha(url);
-                            }
-                        };
-//                        ((PasswordLoginFragment) fragmentList.get(0)).getUrl(task);
-
-                    }else {
-                        Util.startFragment(DebugFragment.newInstance());
-                    }
-                    showlist = false;
-                }).show();
+                ((MainActivity) _mActivity).showDebugIcon();
                 tabClickCount = 0;
                 return;
             }
+
             long currClickStamp = System.currentTimeMillis();
             if (currClickStamp - lastClickStamp < 1100) {
                 tabClickCount++;
-
             } else {
                 tabClickCount = 0;
             }
             lastClickStamp = currClickStamp;
-
-
         } else if (id == R.id.login_tab_layout) {
             SLog.info("here225");
         }
     }
+
+    private void showDebugIcon() {
+        ((MainActivity) _mActivity).showDebugIcon();
+    }
+
+
+    private void showDebugPopup() {
+        ((MainActivity) _mActivity).hideDebugIcon();
+    }
+
 
     private void setCaptcha(String imageUrl) {
         String url = "https://api.ocr.space/parse/image";
@@ -357,6 +304,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -366,6 +314,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                     SLog.info("responseStr[%s]", responseStr);
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
                     EasyJSONArray list = responseObj.getSafeArray("ParsedResults");
                     String text = "";
                     for (Object object : list) {
@@ -376,7 +328,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                     if (!StringUtil.isEmpty(text)) {
                         ((PasswordLoginFragment) fragmentList.get(0)).etCaptcha.setText(text);
                         ((PasswordLoginFragment) fragmentList.get(0)).etPassword.setText("qwer1234");
-                        ((PasswordLoginFragment) fragmentList.get(0)).etMobile.setText("69000001");
+                        ((PasswordLoginFragment) fragmentList.get(0)).etMobileView.setPhone("69000001");
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -433,6 +385,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
     public void doFacebookLogin(String accessToken, String userId) {
         SLog.info("doFacebookLogin...");
+        String url = Api.PATH_FACEBOOK_LOGIN;
         EasyJSONObject params = EasyJSONObject.generate(
                 "accessToken", accessToken,
                 "userId", userId,
@@ -440,9 +393,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         );
 
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_FACEBOOK_LOGIN, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -452,6 +406,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 

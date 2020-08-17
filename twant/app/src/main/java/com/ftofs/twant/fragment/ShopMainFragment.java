@@ -35,6 +35,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -261,12 +262,14 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         simpleTabManager.add(view.findViewById(R.id.stb_want_see));
 
         showGoodsFragment(false);
+        showBtnCart(true);
 
         String url = Api.PATH_STORE_NAVIGATION + "/" + storeId;
         SLog.info("url[%s]", url);
         Api.getUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -276,6 +279,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, "", responseStr, "");
                     return;
                 }
 
@@ -346,19 +350,22 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
      * @param show
      */
     private void showGoodsFragment(boolean show) {
+        showBtnCart(show);
         if (show) {
             tvShopTitle.setVisibility(View.GONE);
             btnCustomer.setVisibility(View.VISIBLE);
-            btnCart.setVisibility(View.VISIBLE);
             btnComment.setVisibility(View.GONE);
             btnSearch.setVisibility(View.GONE);
             llTabButtonContainer.setVisibility(View.VISIBLE);
         } else {
             tvShopTitle.setVisibility(View.VISIBLE);
-            btnCart.setVisibility(View.GONE);
             btnComment.setVisibility(View.VISIBLE);
             llTabButtonContainer.setVisibility(View.GONE);
         }
+    }
+
+    private void showBtnCart(boolean show) {
+        btnCart.setVisibility(show?View.VISIBLE:View.GONE);
     }
 
     @Override
@@ -489,7 +496,10 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         if (index == COMMODITY_FRAGMENT) { // 如果切換到產品Tab，頂部工具欄隱藏分隔線
             toolbar.setBackgroundColor(getResources().getColor(android.R.color.white, null));
             showGoodsFragment(true);
-        } else { // 如果切換到其它Tab，恢復背景
+        } if(index==HOME_FRAGMENT){
+            showGoodsFragment(false);
+            showBtnCart(true);
+        } else{ // 如果切換到其它Tab，恢復背景
             toolbar.setBackgroundResource(R.drawable.border_type_d);
             showGoodsFragment(false);
         }
@@ -652,6 +662,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         Api.getUI(path, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(path, "", "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -662,6 +673,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(path, "", responseStr, "");
                         return;
                     }
 

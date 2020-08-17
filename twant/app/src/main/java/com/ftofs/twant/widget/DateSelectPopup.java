@@ -17,6 +17,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -188,12 +189,14 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
         }
 
         final String birthday = String.format("%04d-%02d-%02d 00:00:00", year, month, day);
+        String url = Api.PATH_SET_BIRTHDAY;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "birthday", birthday);
-        Api.postUI(Api.PATH_SET_BIRTHDAY, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(getContext(), e);
             }
 
@@ -204,6 +207,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

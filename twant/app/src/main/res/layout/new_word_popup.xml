@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+    <LinearLayout
+        android:id="@+id/ll_main_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <LinearLayout
+            android:id="@+id/ll_store_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/image_view"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:riv_corner_radius="4dp">
+            </com.makeramen.roundedimageview.RoundedImageView>
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                android:singleLine="true"
+                android:ellipsize="end">
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_goods_container"
+            android:layout_width="196dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/goods_image"
+                android:layout_width="196dp"
+                android:layout_height="196dp"
+                app:riv_corner_radius="4dp">
+            </com.makeramen.roundedimageview.RoundedImageView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/tv_goods_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_red"
+                    android:textSize="24sp"
+                    android:text="$345">
+                </TextView>
+
+                <LinearLayout
+                    android:id="@+id/ll_original_price_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="原價：$"
+                        android:textSize="11sp"
+                        android:textColor="#7E7E7E">
+                    </TextView>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp">
+                        <TextView
+                            android:id="@+id/tv_original_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:text="520"
+                            android:textSize="11sp"
+                            android:textColor="#7E7E7E">
+                        </TextView>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0.5dp"
+                            app:layout_constraintLeft_toLeftOf="@id/tv_original_price"
+                            app:layout_constraintRight_toRightOf="@id/tv_original_price"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:background="#7E7E7E">
+
+                        </View>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_goods_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                android:text="沙發床兩用可折疊經濟型網紅…"
+                android:singleLine="true"
+                android:ellipsize="end">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_goods_jingle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="两用可折叠经济型网红款"
+                android:textColor="#666"
+                android:textSize="13sp">
+
+            </TextView>
+        </LinearLayout>
+        
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="231dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="20dp"
+            android:text="查看詳情"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:background="@drawable/blue_button_210_39">
+
+        </TextView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_close_activity_popup">
+        </ImageView>
+    </FrameLayout>
+
+
+</LinearLayout>
+

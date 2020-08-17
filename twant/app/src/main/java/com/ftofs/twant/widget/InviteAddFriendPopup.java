@@ -11,6 +11,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -76,6 +77,8 @@ public class InviteAddFriendPopup extends BottomPopupView implements View.OnClic
             if (StringUtil.isEmpty(token)) {
                 return;
             }
+
+            String url = Api.PATH_ADD_FRIEND_APPLICATION;
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "toMember", memberName,
@@ -83,9 +86,10 @@ public class InviteAddFriendPopup extends BottomPopupView implements View.OnClic
             );
 
             SLog.info("params[%s]", params.toString());
-            Api.postUI(Api.PATH_ADD_FRIEND_APPLICATION, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(context, e);
                 }
 
@@ -96,6 +100,7 @@ public class InviteAddFriendPopup extends BottomPopupView implements View.OnClic
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(context, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 

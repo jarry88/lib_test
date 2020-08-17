@@ -41,6 +41,7 @@ import com.ftofs.twant.seller.entity.TwDate;
 import com.ftofs.twant.seller.widget.CalendarPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -275,6 +276,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
@@ -287,6 +289,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 

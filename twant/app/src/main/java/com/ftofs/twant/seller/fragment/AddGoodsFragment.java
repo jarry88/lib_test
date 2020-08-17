@@ -56,6 +56,7 @@ import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -691,14 +692,13 @@ public class AddGoodsFragment extends BaseFragment
     }
 
     private void loadGoodsCountry(View view) {
-//        if (Config.DEVELOPER_MODE) {
-//            return;
-//        }
-        EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
+        String url = Api.PATH_SELLER_QUERY_COUNTRY_ALL;
+         EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
          SLog.info("params[%s]", params);
-         Api.getUI(Api.PATH_SELLER_QUERY_COUNTRY_ALL, params, new UICallback() {
+         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
         
@@ -709,6 +709,7 @@ public class AddGoodsFragment extends BaseFragment
         
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
                     EasyJSONArray countryList = responseObj.getArray("datas.countryList");
@@ -742,6 +743,7 @@ public class AddGoodsFragment extends BaseFragment
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -754,6 +756,7 @@ public class AddGoodsFragment extends BaseFragment
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     EasyJSONObject data = responseObj.getObject("datas");
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         hideSoftInput();
                         return;
                     }
@@ -1456,6 +1459,7 @@ public class AddGoodsFragment extends BaseFragment
           Api.postJsonUi(url, publishGoodsInfo.toString() ,new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
+                 LogUtil.uploadAppLog(url, publishGoodsInfo.toString(), "", e.getMessage());
                  ToastUtil.showNetworkError(_mActivity, e);
              }
 
@@ -1465,6 +1469,7 @@ public class AddGoodsFragment extends BaseFragment
                      SLog.info("responseStr[%s]", responseStr);
                      EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                      if (ToastUtil.checkError(_mActivity, responseObj)) {
+                         LogUtil.uploadAppLog(url, publishGoodsInfo.toString(), responseStr, "");
                          return;
                      }
                      ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
@@ -1622,11 +1627,13 @@ public class AddGoodsFragment extends BaseFragment
         tvLogo.setText("");
         logoIndex = 0;
         brandId = 0;
+        String url = Api.PATH_SELLER_QUERY_BIND_BRANDS;
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "categoryId", categoryId);
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_SELLER_QUERY_BIND_BRANDS, params, new UICallback() {
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -1638,6 +1645,7 @@ public class AddGoodsFragment extends BaseFragment
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
                     EasyJSONArray brandList = responseObj.getArray("datas.brandList");

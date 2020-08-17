@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -36,6 +37,7 @@ import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.SloganView;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -46,6 +48,7 @@ import com.ftofs.twant.widget.CartCrossBorderPopup;
 import com.ftofs.twant.widget.RealNameInstructionPopup;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -68,6 +71,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 import static android.view.View.VISIBLE;
+import static com.ftofs.twant.entity.cart.BaseStatus.PHRASE_BUBBLE;
 
 
 /**
@@ -223,14 +227,16 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
+        String url = Api.PATH_CART_LIST;
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "clientType", Constant.CLIENT_TYPE_ANDROID);
 
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_CART_LIST, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
                 loadingPopup.dismiss();
             }
@@ -244,6 +250,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                     return;
                 }
 
@@ -396,12 +403,26 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                 int goodsStatus = cartSkuVo.getInt("goodsStatus");
                                 int onlineStorage = cartSkuVo.getInt("onlineStorage");
                                 ImageView maskImage = cartSpuItem.findViewById(R.id.mask_image);
+
                                 if (goodsStatus == 0) { // 產品下架
                                     Glide.with(_mActivity).load(R.drawable.icon_take_off).into(maskImage);
+//                                    btnCheckSpu.setEnabled(false);
+                                    ((SpuStatus)btnCheckSpu.getTag()).changeCheckableStatus(false,PHRASE_BUBBLE);
+                                    btnCheckSpu.setIconResource(R.drawable.icon_disable_check);
                                 } else if (onlineStorage == 0) { // 售罄
                                     Glide.with(_mActivity).load(R.drawable.icon_no_storage).into(maskImage);
+//                                    btnCheckSpu.setEnabled(false);
+                                    ((SpuStatus)btnCheckSpu.getTag()).changeCheckableStatus(false,PHRASE_BUBBLE);
+
+
+                                    btnCheckSpu.setIconResource(R.drawable.icon_disable_check);
                                 }else if (onlineStorage <= 2) { // 庫存緊張
+                                    ((SpuStatus)btnCheckSpu.getTag()).changeCheckableStatus(true,PHRASE_BUBBLE);
+
                                     Glide.with(_mActivity).load(R.drawable.icon_less_storage).into(maskImage);
+                                }else {
+                                    ((SpuStatus)btnCheckSpu.getTag()).changeCheckableStatus(true,PHRASE_BUBBLE);
+
                                 }
 
                                 if (spuCount == cartSpuVoList.length()-1&&spuCount>0) {
@@ -469,7 +490,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                 @Override
                                 public void onDismiss() {
                                 }
-                            }).asCustom(new TwConfirmPopup(_mActivity, "每次交易總金額不的超過￥20,000，請調整購物數量再提交", null, new OnConfirmCallback() {
+                            }).asCustom(new TwConfirmPopup(_mActivity, "每次交易總金額不得超過$20,000，請調整購物數量再提交", null, new OnConfirmCallback() {
                         @Override
                         public void onYes() {
                             SLog.info("onYes");
@@ -604,22 +625,21 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                 return;
             }
 
+            String url = Api.PATH_DELETE_CART;
             EasyJSONObject params = EasyJSONObject.generate("token", token, "cartId", cartId.toString());
             SLog.info("params[%s]", params);
-            Api.postUI(Api.PATH_DELETE_CART, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
-                    if (StringUtil.isEmpty(responseStr)) {
-                        return;
-                    }
-
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
 
@@ -643,6 +663,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
             btnEdit.setText(getResources().getString(R.string.text_finish));
             btnEdit.setTextColor(getResources().getColor(R.color.tw_red, null));
+            totalStatus.resetCheckable();
             mode = Constant.MODE_EDIT;
         } else {
             btnDelete.setVisibility(View.GONE);
@@ -651,6 +672,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
             btnEdit.setText(getResources().getString(R.string.text_edit));
             btnEdit.setTextColor(getResources().getColor(R.color.tw_black, null));
             mode = Constant.MODE_VIEW;
+            reloadList();
+            totalStatus.changeCheckStatus(false, BaseStatus.PHRASE_TARGET);
         }
     }
 
@@ -675,6 +698,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
             public void onClick(View v) {
                 ScaledButton btnCheck = (ScaledButton) v;
                 BaseStatus status = (BaseStatus) btnCheck.getTag();
+//                SLog.info("checkable %s  %s",status.isCheckable(),status.isChecked());
                 status.changeCheckStatus(!status.isChecked(), BaseStatus.PHRASE_TARGET);
                 updateTotalData();
             }

@@ -29,6 +29,7 @@ import com.ftofs.twant.entity.MyFollowGoodsItem;
 import com.ftofs.twant.entity.MyLikeStoreItem;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -243,13 +244,15 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                 return;
             }
 
+            String url = Api.PATH_MY_LIKE_STORE;
             EasyJSONObject params = EasyJSONObject.generate("memberName", memberName, "token", token);
 
             final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
-            Api.postUI(Api.PATH_MY_LIKE_STORE, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                     loadingPopup.dismiss();
                 }
@@ -262,6 +265,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 
@@ -304,14 +308,15 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                 return;
             }
 
+            String url = Api.PATH_MY_LIKE_GOODS;
             EasyJSONObject params = EasyJSONObject.generate("memberName", memberName, "token", token);
-
             final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
             SLog.info("params[%s]", params);
-            Api.postUI(Api.PATH_MY_LIKE_GOODS, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                     loadingPopup.dismiss();
                 }
@@ -324,6 +329,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 
@@ -377,14 +383,15 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                 return;
             }
 
+            String url = Api.PATH_MY_LIKE_POST;
             EasyJSONObject params = EasyJSONObject.generate("memberName", memberName, "token", token);
-
             final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
             SLog.info("params[%s]", params);
-            Api.postUI(Api.PATH_MY_LIKE_POST, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                     ToastUtil.showNetworkError(_mActivity, e);
                     loadingPopup.dismiss();
                 }
@@ -397,6 +404,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
 
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 

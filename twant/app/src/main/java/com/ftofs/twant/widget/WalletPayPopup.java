@@ -10,6 +10,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -175,15 +176,17 @@ public class WalletPayPopup extends FullScreenPopupView implements View.OnClickL
         String password = "" + passwordArr[0] + passwordArr[1] + passwordArr[2] + passwordArr[3] + passwordArr[4] + passwordArr[5];
         SLog.info("doPay, password[%s]", password);
 
+        String url = Api.PATH_WALLET_PAY;
         EasyJSONObject params = EasyJSONObject.generate(
                 "payId", payId,
                 "payPwd", password,
                 "token", token);
         SLog.info("params[%s]", params);
 
-        Api.postUI(Api.PATH_WALLET_PAY, params, new UICallback() {
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
 
@@ -194,6 +197,7 @@ public class WalletPayPopup extends FullScreenPopupView implements View.OnClickL
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         // 支付失敗，清空密碼輸入
                         SLog.info("__f支付失敗");
                         passwordDigitCount = 0;
