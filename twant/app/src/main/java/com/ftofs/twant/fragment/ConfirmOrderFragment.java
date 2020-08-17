@@ -1211,7 +1211,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * 更新商店優惠數據和商店購買金額
      */
     private void updateStoreAmount() {
-        for (MultiItemEntity entity : confirmOrderItemList) {
+
+        for (int i = 0; i < confirmOrderItemList.size(); i++) {
+            MultiItemEntity entity = confirmOrderItemList.get(i);
             if (!(entity instanceof ConfirmOrderStoreItem)) {
                 continue;
             }
