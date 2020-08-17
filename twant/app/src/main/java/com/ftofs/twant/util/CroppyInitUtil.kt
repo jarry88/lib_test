@@ -12,51 +12,48 @@ import com.lyrebirdstudio.croppylib.main.CroppyTheme
 import com.lyrebirdstudio.croppylib.main.StorageType
 import com.lyrebirdstudio.croppylib.util.file.FileCreator
 import com.lyrebirdstudio.croppylib.util.file.FileOperationRequest
+import java.io.File
 
-fun croppyExampleParams(context:Context,requestCode:Int,uri: Uri): CropRequest {
+fun File.toUri(): Uri = Uri.fromFile(this)
+//Saves to external and return uri
 
-    //Saves to external and return uri
-    val externalCropRequest = CropRequest.Auto(
-            sourceUri = uri,
-            requestCode = requestCode
-    )
+fun externalCropRequest  (context:Context,requestCode:Int,uri: Uri) = CropRequest.Auto(
+        sourceUri = uri,
+        requestCode = requestCode
+)
+//Saves to cache and return uri
 
-    //Saves to cache and return uri
-    val cacheCropRequest = CropRequest.Auto(
-            sourceUri = uri,
-            requestCode = requestCode,
-            storageType = StorageType.CACHE
-    )
+fun cacheCropRequest  (context:Context,requestCode:Int,uri: Uri) = CropRequest.Auto(
+        sourceUri = uri,
+        requestCode = requestCode,
+        storageType = StorageType.CACHE
+)
+fun manualCropRequest  (context:Context,requestCode:Int,uri: Uri) = CropRequest.Manual(
+        sourceUri = uri,
+        // Save to given destination uri.
 
-    // Save to given destination uri.
-    val destinationUri =
-            FileCreator
-                    .createFile(FileOperationRequest.createRandom(), context)
-                    .toUri()
+        destinationUri = FileCreator
+                .createFile(FileOperationRequest.createRandom(), context)
+                .toUri(),
+        requestCode = requestCode
+)
+fun excludeAspectRatiosCropRequest (context:Context,requestCode:Int,uri: Uri) = CropRequest.Manual(
+        sourceUri = uri,
+        // Save to given destination uri.
 
-    val manualCropRequest = CropRequest.Manual(
-            sourceUri = uri,
-            destinationUri = destinationUri,
-            requestCode = requestCode
-    )
+        destinationUri = FileCreator
+                .createFile(FileOperationRequest.createRandom(), context)
+                .toUri(),
+        requestCode = requestCode,
+        croppyTheme = CroppyTheme(R.color.blue)
+)
+fun themeCropRequest(context:Context,requestCode:Int,uri: Uri) = CropRequest.Manual(
+        sourceUri = uri,
+        // Save to given destination uri.
 
-    val excludeAspectRatiosCropRequest = CropRequest.Manual(
-            sourceUri = uri,
-            destinationUri = destinationUri,
-            requestCode = requestCode,
-            excludedAspectRatios = arrayListOf(AspectRatio.ASPECT_FREE)
-    )
-
-    val themeCropRequest = CropRequest.Manual(
-            sourceUri = uri,
-            destinationUri = destinationUri,
-            requestCode = requestCode,
-            croppyTheme = CroppyTheme(R.color.blue)
-    )
-    return CropRequest.Manual(
-            sourceUri = uri,
-            destinationUri = destinationUri,
-            requestCode = requestCode,
-            croppyTheme = CroppyTheme(R.color.blue)
-    )
-}
+        destinationUri = FileCreator
+                .createFile(FileOperationRequest.createRandom(), context)
+                .toUri(),
+        requestCode = requestCode,
+        croppyTheme = CroppyTheme(R.color.blue)
+)

@@ -26,10 +26,16 @@ import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.CheckPhoneView;
 import com.ftofs.twant.widget.NineLuckPan;
 
+import com.lyrebirdstudio.aspectratiorecyclerviewlib.aspectratio.model.AspectRatio;
 import com.lyrebirdstudio.croppylib.Croppy;
 import com.lyrebirdstudio.croppylib.main.CropRequest;
+import com.lyrebirdstudio.croppylib.main.CroppyTheme;
+import com.lyrebirdstudio.croppylib.main.StorageType;
+import com.lyrebirdstudio.croppylib.util.file.FileCreator;
+import com.lyrebirdstudio.croppylib.util.file.FileOperationRequest;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 /**
  * 實驗性Fragment
@@ -40,6 +46,11 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
     private static final int RC_CROP_IMAGE = 2;
     private NineLuckPan luckpan;
     private AppCompatImageView imageViewCropped;
+    private CropRequest.Manual themeCropRequest;
+    private CropRequest.Manual excludeAspectRatiosCropRequest;
+    private CropRequest.Manual manualCropRequest;
+    private CropRequest.Auto cacheCropRequest;
+    private CropRequest.Auto externalCropRequest;
 
     public static LabFragment newInstance() {
         LabFragment fragment = new LabFragment();
@@ -61,7 +72,11 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
 
         Util.setOnClickListener(view, R.id.btn_test1, this);
         Util.setOnClickListener(view, R.id.btn_test2, this);
-        Util.setOnClickListener(view, R.id.btn_croppy, this);
+        Util.setOnClickListener(view, R.id.btn_themeCropRequest, this);
+        Util.setOnClickListener(view, R.id.btn_cacheCropRequest, this);
+        Util.setOnClickListener(view, R.id.btn_excludeAspectRatiosCropRequest, this);
+        Util.setOnClickListener(view, R.id.btn_manualCropRequest, this);
+        Util.setOnClickListener(view, R.id.btn_externalCropRequest, this);
 
         luckpan = view.findViewById(R.id.luckpan);
         imageViewCropped = view.findViewById(R.id.imageViewCropped);
@@ -71,10 +86,67 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
                 Toast.makeText(_mActivity, "位置："+position+"提示信息："+msg, Toast.LENGTH_SHORT).show();
             }
         });
-
+        productRequest();
         View vw = view.findViewById(R.id.vw);
         vw.setBackground(BackgroundDrawable.create(Color.CYAN, Util.dip2px(_mActivity, 8)));
         CheckPhoneView checkPhoneView = view.findViewById(R.id.check_phone);
+    }
+
+    private void productRequest() {
+        Uri uri= new Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(getResources().getResourcePackageName(R.drawable.aa))
+                .appendPath(getResources().getResourceTypeName(R.drawable.aa))
+                .appendPath(getResources().getResourceEntryName(R.drawable.aa))
+                .build();
+        Uri destinationUri = CroppyInitUtilKt.toUri(FileCreator.INSTANCE
+                .createFile(FileOperationRequest.Companion.createRandom(), _mActivity));
+        //下面是調用kotlin的方法生成
+//        CropRequest cacheCropRequest=CroppyInitUtilKt.cacheCropRequest(_mActivity, Constant.RC_CROP_IMAGE,uri);
+//        CropRequest externalCropRequest=CroppyInitUtilKt.externalCropRequest(_mActivity, Constant.RC_CROP_IMAGE,uri);
+//        CropRequest manualCropRequest=CroppyInitUtilKt.manualCropRequest(_mActivity, Constant.RC_CROP_IMAGE,uri);
+//        CropRequest excludeAspectRatiosCropRequest=CroppyInitUtilKt.excludeAspectRatiosCropRequest(_mActivity, Constant.RC_CROP_IMAGE,uri);
+//        CropRequest themeCropRequest=CroppyInitUtilKt.themeCropRequest(_mActivity, Constant.RC_CROP_IMAGE,uri);
+        //下面是用java形式調用
+        cacheCropRequest = new CropRequest.Auto(
+                uri,
+                Constant.RC_CROP_IMAGE,
+                StorageType.CACHE,
+                new ArrayList<AspectRatio>(),
+                new CroppyTheme(R.color.blue)
+        );
+        externalCropRequest = new CropRequest.Auto(
+                uri,
+                Constant.RC_CROP_IMAGE,
+                StorageType.EXTERNAL,
+                new ArrayList<AspectRatio>(),
+
+                new CroppyTheme(R.color.blue)
+        );
+        manualCropRequest = new CropRequest.Manual(
+                uri,
+                destinationUri,
+                Constant.RC_CROP_IMAGE,
+                new ArrayList<AspectRatio>(),
+
+                new CroppyTheme(R.color.blue)
+        );
+         excludeAspectRatiosCropRequest = new CropRequest.Manual(
+                uri,
+                destinationUri,
+                Constant.RC_CROP_IMAGE,
+                 new ArrayList<AspectRatio>(),
+
+                 new CroppyTheme(R.color.blue)
+        );
+        themeCropRequest=new CropRequest.Manual(
+                uri,
+                destinationUri,
+                RC_CROP_IMAGE,
+                new ArrayList<AspectRatio>(),
+
+                new CroppyTheme(R.color.blue)
+        );
     }
 
     @Override
@@ -87,21 +159,32 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         } else if (id == R.id.btn_test2) {
             ToastUtil.info(_mActivity, "way2");
             RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);
-        }else if (id == R.id.btn_croppy) {
-            ToastUtil.info(_mActivity, "croppy");
-            startCroppy();
+        }else if (id == R.id.btn_themeCropRequest) {
+            ToastUtil.info(_mActivity, "btn_themeCropRequest");
+            Croppy.INSTANCE.start(getActivity(), themeCropRequest);
+        }else if (id == R.id.btn_cacheCropRequest) {
+            ToastUtil.info(_mActivity, "cacheCropRequest");
+            Croppy.INSTANCE.start(getActivity(), cacheCropRequest);
+
+        }else if (id == R.id.btn_externalCropRequest) {
+
+            ToastUtil.info(_mActivity, "externalCropRequest");
+            Croppy.INSTANCE.start(getActivity(), externalCropRequest);
+
+        }else if (id == R.id.btn_manualCropRequest) {
+            ToastUtil.info(_mActivity, "manualCropRequest");
+            Croppy.INSTANCE.start(getActivity(), manualCropRequest);
+
+        }else if (id == R.id.btn_excludeAspectRatiosCropRequest) {
+            ToastUtil.info(_mActivity, "excludeAspectRatiosCropRequest");
+            Croppy.INSTANCE.start(getActivity(), excludeAspectRatiosCropRequest);
+
         }
     }
 
     private void startCroppy() {
-        Uri uri= new Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(getResources().getResourcePackageName(R.drawable.aa))
-                .appendPath(getResources().getResourceTypeName(R.drawable.aa))
-                .appendPath(getResources().getResourceEntryName(R.drawable.aa))
-                .build();
-        CropRequest request=CroppyInitUtilKt.croppyExampleParams(_mActivity, Constant.RC_CROP_IMAGE,uri);
-        Croppy.INSTANCE.start(getActivity(), request);
+
+        Croppy.INSTANCE.start(getActivity(), themeCropRequest);
     }
 
     @Override
