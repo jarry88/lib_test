@@ -3,6 +3,7 @@ package com.ftofs.twant.activity;
 import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
@@ -85,6 +86,7 @@ import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
 import com.orhanobut.hawk.Hawk;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tmall.wireless.tangram.TangramBuilder;
 import com.tmall.wireless.tangram.TangramEngine;
@@ -251,13 +253,18 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         initTangram();
 
-        int color = getResources().getColor(R.color.tw_blue, null);
+        StatusBarUtil.setColor(this, Color.WHITE, 0);  // 设置状态栏为白色
+        StatusBarUtil.setLightMode(this);
+
+        int statusBarHeight = QMUIStatusBarHelper.getStatusbarHeight(this);
+        SLog.info("statusBarHeight[%d]", statusBarHeight);
         /*
-        改變狀態欄顏色，在錘子手機中，狀態欄有一種灰色蒙板的感覺，在紅米手機中沒有
+        修复问题
+        https://github.com/laobie/StatusBarUtil/issues/291
+        setDarkMode 和 setLightMode 会使 布局向上偏移，设置fitsSystemWindows会使Edittextview长按上下文菜单边距失效
          */
-        StatusBarUtil.setColor(this, color, 0);
-        // StatusBarUtil.setTranslucent(this);
-        // StatusBarUtil.setTransparent(this);
+        View contentView = findViewById(android.R.id.content);
+        contentView.setPadding(0, statusBarHeight, 0, 0);
 
         // 監聽DecorView的變化
         View activityRoot = getWindow().getDecorView();
