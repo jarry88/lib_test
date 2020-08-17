@@ -94,7 +94,6 @@
     <string name="text_work_experience">工作經歷</string>
     <string name="text_work_experience_init">當前工作經歷為空</string>
 
-    
 
     <string name="text_takewant_introduction">想要城Takewant介紹</string>
     <string name="text_check_update">檢測更新</string>
@@ -823,4 +822,6 @@
     <string name="text_store_phone">商家電話</string>
     <string name="text_store_transport">交通方式</string>
     <string name="text_take_addr">提貨地址</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

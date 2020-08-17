@@ -15,19 +15,31 @@
         android:id="@+id/btn_test2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="test2">
+        android:text="test2"/>
+    <Button
+        android:id="@+id/btn_croppy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="croppy">
     </Button>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewCropped"
+        android:layout_width="match_parent"
+        android:layout_marginTop="24dp"
+        android:layout_height="match_parent"/>
     <com.ftofs.twant.widget.CheckPhoneView
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/check_phone"/>
     <View
         android:id="@+id/vw"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="2dp"
         android:layout_margin="15dp">
     </View>
     <com.ftofs.twant.widget.NineLuckPan
+        android:visibility="gone"
         android:id="@+id/luckpan"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

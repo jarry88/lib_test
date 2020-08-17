@@ -1223,6 +1223,13 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         super.onActivityResult(requestCode, resultCode, data);
 
         SLog.info("__requestCode[%d], resultCode[%d]", requestCode, resultCode);
+        if (requestCode == RequestCode.RC_CROP_IMAGE.ordinal()) {
+            if(data!=null){
+                SLog.info("TEST Croppy Data:[%s]",data.toString());
+            }
+//                binding.imageViewCropped.setImageURI(it)
+
+        }
         if (requestCode == RequestCode.REQUEST_INSTALL_APP_PERMISSION.ordinal()) { // 不用判斷resultCode，因為有時候是按返回鍵的
             SLog.info("here_0");
             installUpdate(updateApkPath);
