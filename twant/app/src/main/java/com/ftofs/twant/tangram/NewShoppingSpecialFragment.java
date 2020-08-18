@@ -469,11 +469,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
         } else if (id == R.id.btn_goto_top) {
             containerView.scrollTo(0,0);
-//            if (hasGoodsCategory == 1) {
-//                shoppingLinkageFragment.scrollToTop();
-//            } else if(withoutCategoryFragment!=null){
-//                withoutCategoryFragment.scrollToTop();
-//            }
             if (linkageGoodsFragment2 != null) {
                 linkageGoodsFragment2.scrollToTop();
             }
