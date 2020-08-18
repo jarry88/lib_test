@@ -1769,7 +1769,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
-        SLog.info("PopupType[%s],id[%s],extra[%s]",type,id,extra.toString());
+//        SLog.info("PopupType[%s],id[%s],extra[%s]",type,id,extra);
         if (type == PopupType.PAY_WAY) {
             selectedPayWayIndex = id;
             payWay = (int) extra;
