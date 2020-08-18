@@ -43,6 +43,7 @@ import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.ListUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
@@ -608,6 +609,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 Util.dialPhone(_mActivity, storePhone);
                 break;
             case R.id.btn_advisory_service:
+                if (ListUtil.isEmpty(orderDetailGoodsItemList)) {
+                    return;
+                }
                 GoodsInfo goodsInfo = new GoodsInfo();
                 goodsInfo.commonId = orderDetailGoodsItemList.get(0).commonId;
                 goodsInfo.goodsName = orderDetailGoodsItemList.get(0).goodsName;
