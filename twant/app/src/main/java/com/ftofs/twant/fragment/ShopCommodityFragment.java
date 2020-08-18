@@ -124,6 +124,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     private int lastVisibleItemPosition;
     private int firstVisibleItemPosition;
     private boolean categoryToNext;
+    private int currStoreLabelId;
 
     /**
      * 新建一個實例
@@ -427,7 +428,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             }
         }, rvGoodsList);
 
-        rvGoodsList.setAdapter(shopGoodsGridAdapter);
+        rvGoodsList.setAdapter(currentViewStyle==VIEW_STYLE_LIST?shopGoodsListAdapter:shopGoodsGridAdapter);
         rvGoodsList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
@@ -571,11 +572,12 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
         storeCategoryListAdapter.setPrevSelectedItemIndex(position);
         title =String.format("%s(%d)",storeLabel.getStoreLabelName(),storeLabel.getGoodsCount());
-        loadCategoryGoods(storeLabel.getStoreLabelId());
+        currStoreLabelId = storeLabel.getStoreLabelId();
+        loadCategoryGoods(currStoreLabelId);
     }
 
     private void clearAdapter() {
-        if (currAnimIndex == VIEW_STYLE_GRID) {
+        if (currentViewStyle == VIEW_STYLE_LIST) {
             goodsList.clear();
             if (shopGoodsGridAdapter != null) {
                 shopGoodsListAdapter.notifyDataSetChanged();
@@ -671,20 +673,22 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         }
 
                         EasyJSONArray goodsArray = responseObj.getSafeArray("datas.goodsCommonList");
+//                        goodsList.clear();
                         for (Object object : goodsArray) {
                             EasyJSONObject goodsObject = (EasyJSONObject) object;
-
-                            int id = goodsObject.getInt("commonId");
-                            // 產品圖片
-                            String goodsImageUrl = goodsObject.getSafeString("imageSrc");
-                            // 產品名稱
-                            String goodsName = goodsObject.getSafeString("goodsName");
-                            // 賣點
-                            String jingle = goodsObject.getSafeString("jingle");
-                            // 獲取價格
-                            double price = Util.getSpuPrice(goodsObject);
-
-                            Goods goods = new Goods(id, goodsImageUrl, goodsName, jingle, price);
+//
+//                            int id = goodsObject.getInt("commonId");
+//                            // 產品圖片
+//                            String goodsImageUrl = goodsObject.getSafeString("imageSrc");
+//                            // 產品名稱
+//                            String goodsName = goodsObject.getSafeString("goodsName");
+//                            // 賣點
+//                            String jingle = goodsObject.getSafeString("jingle");
+//                            // 獲取價格
+//                            double price = Util.getSpuPrice(goodsObject);
+//
+//                            Goods goods = new Goods(id, goodsImageUrl, goodsName, jingle, price);
+                            Goods goods = Goods.parse(goodsObject);
                             goodsList.add(goods);
 
                             if (currGoodsPair == null) {
@@ -1005,8 +1009,10 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
             rvGoodsList.setAdapter(shopGoodsListAdapter);
         }
-
         currentViewStyle = 1 - currentViewStyle;
+        loadCategoryGoods(currStoreLabelId);
+
+
     }
 
     private void showSpecSelectPopup(int commonId) {
