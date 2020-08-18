@@ -21,13 +21,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:visibility="gone">
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/image_view"
+            android:visibility="visible">
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                app:riv_corner_radius="4dp">
-            </com.makeramen.roundedimageview.RoundedImageView>
+                android:layout_height="wrap_content">
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:riv_corner_radius="4dp"
+                    app:layout_constraintDimensionRatio="2:1">
+                </com.makeramen.roundedimageview.RoundedImageView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TextView
                 android:id="@+id/tv_desc"
                 android:layout_width="match_parent"
@@ -45,7 +52,8 @@
             android:id="@+id/ll_goods_container"
             android:layout_width="196dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/goods_image"
                 android:layout_width="196dp"
@@ -148,7 +156,6 @@
             android:textSize="16sp"
             android:gravity="center"
             android:background="@drawable/blue_button_210_39">
-
         </TextView>
     </LinearLayout>
 
@@ -164,7 +171,4 @@
             android:src="@drawable/icon_close_activity_popup">
         </ImageView>
     </FrameLayout>
-
-
 </LinearLayout>
-
