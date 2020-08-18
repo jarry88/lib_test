@@ -16,12 +16,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="test2"/>
-    <Button
-        android:id="@+id/btn_croppy"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="croppy">
-    </Button>
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_themeCropRequest"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="themeCropRequest">
+        </Button>
+        <Button
+            android:id="@+id/btn_cacheCropRequest"
+
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="btn_cacheCropRequest">
+        </Button>
+        <Button
+            android:id="@+id/btn_excludeAspectRatiosCropRequest"
+
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="excludeAspectRatiosCropRequest">
+        </Button>
+        <Button
+            android:id="@+id/btn_manualCropRequest"
+
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="manualCropRequest">
+        </Button>
+        <Button
+            android:id="@+id/btn_externalCropRequest"
+
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="externalCropRequest">
+        </Button>
+    </LinearLayout>
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewCropped"
         android:layout_width="match_parent"
