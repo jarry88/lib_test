@@ -375,7 +375,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             SLog.info("list有%d条",chatMessageList.size());
 
             EMClient.getInstance().chatManager().asyncFetchHistoryMessage(conversation.conversationId(), conversation.getType(), pagesize-dbCount,messageId, new EMValueCallBack<EMCursorResult<EMMessage>>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
+//                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onSuccess(EMCursorResult<EMMessage> emMessageEMCursorResult) {
 
@@ -398,12 +398,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                                 continue;
                             }
                             SLog.info("messageId[%s] messageBody[%s],messageTime[%s]",emMessage.getMsgId(),emMessage.getBody(),emMessage.getMsgTime());
-                            if (chatMessageList.stream().filter(item -> item.messageId == emMessage.getMsgId()
-                            ).collect(Collectors.toList()).size() == 0) {
-//                                chatMessageList.add(i,emMessageToChatMessage(emMessage));
+                            ArrayList<ChatMessage> filterList = new ArrayList<>();
+                            for (ChatMessage chatMessage : chatMessageList) {
+                                if (chatMessage.messageId == emMessage.getMsgId()) {
+                                    filterList.add(chatMessage);
+                                }
+                            }
+                            if (filterList.size() == 0) {
                                 SLog.info("添加了一条 %s",emMessage.getBody());
                                 dbItem.allEMMessage.add(i++, emMessage);
                             }
+                            //旧版 使用stream留的写法
+//                            if (chatMessageList.stream().filter(item -> item.messageId == emMessage.getMsgId()
+//                            ).collect(Collectors.toList()).size() == 0) {
+////                                chatMessageList.add(i,emMessageToChatMessage(emMessage));
+//                                SLog.info("添加了一条 %s",emMessage.getBody());
+//                                dbItem.allEMMessage.add(i++, emMessage);
+//                            }
                         }
 
                         dbItem.save();
