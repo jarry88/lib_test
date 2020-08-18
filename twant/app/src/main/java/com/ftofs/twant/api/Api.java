@@ -1579,6 +1579,14 @@ public class Api {
      */
     public static final String PATH_GROUP_GOODS_LIST = "/group/list";
 
+    /**
+     * 食在澳門核銷驗證
+     */
+    public static final String PATH_IFOODMACAU_VERIFY = "/member/orders/ifoodmacau/verify";
+    /**
+     * 食在澳門核銷商品列表
+     */
+    public static final String PATH_IFOODMACAU_GOODS_LIST = "/member/orders/ifoodmacau/goods/list";
 
     /**
      * 發送Http請求

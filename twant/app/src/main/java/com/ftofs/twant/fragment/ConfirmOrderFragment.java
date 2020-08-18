@@ -1079,7 +1079,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 //                    name = "想要優品店";
 //                }
                 if (Config.USE_DEVELOPER_TEST_DATA) {
-                    name = "想要優品店";
+                    name = "想要科技有限公司";
                 }
 
                 if (name.equals(storeName)) {

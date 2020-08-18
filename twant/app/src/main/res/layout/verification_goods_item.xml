@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="com.ftofs.twant.kotlin.util.ConverterUtil"/>
+        <import type="android.view.View"/>
+        <variable
+            name="vo"
+            type="com.ftofs.twant.vo.orders.OrdersGoodsVo"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/ll_swipe_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:orientation="horizontal"
+            android:background="@android:color/white">
+
+            <ImageView
+                android:id="@+id/goods_image"
+                app:imageUrl="@{vo.imageSrc}"
+                android:layout_width="100dp"
+                android:layout_height="100dp">
+
+            </ImageView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp_2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_virtual_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:layout_marginEnd="8dp"
+
+                        android:text="零售"
+                        android:textColor="#5AA1D8"
+                        android:textSize="12sp"
+                        android:background="@drawable/seller_goods_type_indicator_bg">
+                    </TextView>
+                    <!--                            android:visibility="@{vo.isCommend==1?0:2}"-->
+
+                    <TextView
+                        android:id="@+id/tv_cross_border_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:text="跨城購"
+                        android:textColor="#5AA1D8"
+                        android:textSize="12sp"
+                        android:background="@drawable/seller_goods_type_indicator_bg">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/tv_goods_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:textSize="15sp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:text="@{vo.goodsName}">
+
+                    </TextView>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+                    <TextView
+                        android:id="@+id/tv_spu_id"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/tw_text_dark"
+                        android:textSize="13sp">
+                    </TextView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp">
+                    <TextView
+                        android:id="@+id/tv_total_stock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+                    <view
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/btn_cancel_after_verification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:text="@string/text_cancel_after_verification"
+                        android:textSize="15sp"
+                        android:textColor="@color/white"
+                        android:background="@drawable/blue_button"
+
+                        />
+
+                    <ImageView
+                        android:id="@+id/btn_more"
+                        android:layout_width="@dimen/dp_40"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:scaleType="fitXY"
+                        android:textColor="@color/tw_text_dark"
+                        android:textSize="13sp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_swipe_right_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <LinearLayout
+                android:id="@+id/btn_switch_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <RelativeLayout
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_switch_seller_goods_status_bg">
+                    <ImageView
+                        android:id="@+id/icon_switch_status"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_file_upload_blue_24dp"
+                        />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_switch_status_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="上架"
+                    android:textColor="@color/tw_blue"
+                    android:textSize="12sp">
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

@@ -7,6 +7,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -14,6 +16,8 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
+
+import org.litepal.util.Const;
 
 /**
  * 訂單列表里面的訂單項
@@ -78,7 +82,15 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
         if (itemData.showMemberReceive) {
             itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
         } else {
-            itemView.findViewById(R.id.btn_have_received).setVisibility(View.GONE);
+            if (Config.USE_DEVELOPER_TEST_DATA && "想要科技有限公司".equals(itemData.storeName)) {
+                itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
+
+            } else if (Constant.WANT_EAT.equals(itemData.storeName)) {
+                itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
+
+            } else {
+                itemView.findViewById(R.id.btn_have_received).setVisibility(View.GONE);
+            }
         }
 
         LinearLayout llSkuItemContainer = itemView.findViewById(R.id.ll_sku_item_container);
