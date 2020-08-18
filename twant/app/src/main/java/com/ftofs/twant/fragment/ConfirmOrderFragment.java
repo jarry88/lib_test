@@ -472,7 +472,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                      */
                     EasyJSONObject store = EasyJSONObject.generate(
                             "storeId", storeItem.storeId,
-                            "storeName", storeItem.storeId,
+                            "storeName", storeItem.storeName,
                             "shipTimeType", summaryItem.shipTimeType);
 
                     // 看是否要conformId
@@ -1080,6 +1080,13 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     storeItem.voucherName = formatVoucherName(maxAmountStoreVoucherVo);
                 }
                 confirmOrderItemList.add(storeItem);
+                //判斷店鋪暱稱為  想要食  ，只能允許自提取貨（由前端寫死）
+                if (Constant.WANT_EAT.equals(storeName)) {
+                    payWay = Constant.PAY_WAY_FETCH;
+                    payWayItemList.remove(0);//移除在线支付选项
+                    payWayItemList.get(0).isSelected = true;
+                    onSelected(PopupType.PAY_WAY,0,Constant.PAY_WAY_FETCH);
+                }
 
                 commitStoreList.append(EasyJSONObject.generate(
                         "storeId", storeId,
