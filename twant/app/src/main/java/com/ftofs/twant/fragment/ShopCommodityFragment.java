@@ -125,6 +125,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     private int firstVisibleItemPosition;
     private boolean categoryToNext;
     private int currStoreLabelId;
+    private StoreLabel currStoreLabel;
 
     /**
      * 新建一個實例
@@ -572,8 +573,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
         storeCategoryListAdapter.setPrevSelectedItemIndex(position);
         title =String.format("%s(%d)",storeLabel.getStoreLabelName(),storeLabel.getGoodsCount());
-        currStoreLabelId = storeLabel.getStoreLabelId();
-        loadCategoryGoods(currStoreLabelId);
+        currStoreLabel = storeLabel;
+        loadCategoryGoods(currStoreLabel.getStoreLabelId());
     }
 
     private void clearAdapter() {
@@ -1010,7 +1011,12 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             rvGoodsList.setAdapter(shopGoodsListAdapter);
         }
         currentViewStyle = 1 - currentViewStyle;
-        loadCategoryGoods(currStoreLabelId);
+        if (currStoreLabel != null) {
+
+            title =String.format("%s(%d)",currStoreLabel.getStoreLabelName(),currStoreLabel.getGoodsCount());
+            loadCategoryGoods(currStoreLabel.getStoreLabelId());
+
+        }
 
 
     }

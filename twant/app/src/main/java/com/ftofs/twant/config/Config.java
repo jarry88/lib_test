@@ -107,6 +107,7 @@ public class Config {
      * 定位数据有效时间(毫秒)
      */
     public static final int LOCATION_EXPIRE = 300 * 1000;
+    public static boolean USE_DEVELOPER_TEST_DATA;
 
 
     public static void changeEnvironment(int env) {

@@ -442,7 +442,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     public void showDebugPopup() {
         new XPopup.Builder(this)
 //                        .maxWidth(600)
-                .asCenterList("請選擇操作", new String[]{"隱藏浮動按鈕", "prod/線上，並重啟", "29，並重啟", "229，並重啟", "28，並重啟", "驗收/F3，並重啟", "打開日誌", "重啟", "顯示Fragment棧", "測試1", "測試2"},
+                .asCenterList("請選擇操作", new String[]{"隱藏浮動按鈕", "prod/線上，並重啟", "29，並重啟", "229，並重啟", "28，並重啟", "驗收/F3，並重啟", "打開日誌", "重啟", "顯示Fragment棧", "測試1", "測試2","開發寫死的數據:"+String.valueOf(Config.USE_DEVELOPER_TEST_DATA)},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {
@@ -507,6 +507,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                     });
                                 } else if (position == 10) { // 測試2
                                     Util.startFragment(BindMobileFragment.newInstance("XXX", "YYY"));
+                                }else if (position == 11) { // 開發寫死的數值通道開關
+                                    Config.USE_DEVELOPER_TEST_DATA = !Config.USE_DEVELOPER_TEST_DATA;
+                                    ToastUtil.success(getApplicationContext(),Config.USE_DEVELOPER_TEST_DATA?"使用寫死的數據":"使用服務器數據");
                                 }
                             }
                         })
