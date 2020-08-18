@@ -116,7 +116,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
     public static final int VIEW_STYLE_LIST = 0;  // 以列表形式查看
     public static final int VIEW_STYLE_GRID = 1;  // 以網格形式查看
-    int currentViewStyle = VIEW_STYLE_GRID;
+    int currentViewStyle = VIEW_STYLE_LIST;
     private String title;
     private boolean isSlidingUpward;
     private SwipeRefreshLayout swipeRefreshLayout;
