@@ -12,9 +12,18 @@ import android.widget.Button
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
+import com.ftofs.twant.databinding.VerificationGoodsItemBinding
+import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.fragment.BaseFragment
+import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
+import com.ftofs.twant.kotlin.OrderGoodsVoListAdapter
+import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.vo.orders.OrdersGoodsVo
+import com.ftofs.twant.widget.VerificationPopup
 import com.google.android.material.button.MaterialButton
+import com.lxj.xpopup.XPopup
 import com.lyrebirdstudio.aspectratiorecyclerviewlib.aspectratio.model.AspectRatio
 import com.lyrebirdstudio.croppylib.Croppy
 import com.lyrebirdstudio.croppylib.main.CropRequest
@@ -40,6 +49,9 @@ class BlankFragment : BaseFragment() {
     private val  imageViewCropped by lazy {
         view?.findViewById<AppCompatImageView>(R.id.imageViewCropped)
     }
+    private val  rvList by lazy {
+        view?.findViewById<RecyclerView>(R.id.rv_list)
+    }
     private val  buttonChoose by lazy {
         view?.findViewById<Button>(R.id.buttonChoose)
     }
@@ -55,6 +67,7 @@ class BlankFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_blank, container, false)
     }
 
@@ -81,9 +94,29 @@ class BlankFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        buttonChoose?.setOnClickListener{
+        buttonChoose?.setOnClickListener {
             startCroppy()
         }
+//        val  adapter =object : DataBoundAdapter<OrdersGoodsVo, VerificationGoodsItemBinding>(){
+//            override val layoutId: Int
+//                get() = R.layout.verification_goods_item
+//
+//            override fun initView(binding: VerificationGoodsItemBinding, item: OrdersGoodsVo) {
+//                SLog.info("暫時這裏也不用幹啥")
+//                binding.vo=item
+////                binding.btnCancelAfterVerification.setOnClickListener{
+////                    XPopup.Builder(context).setPopupCallback(proXcallback()).asCustom(
+////                            VerificationPopup(context)
+////                    ).show()
+////                }
+//            }
+//
+//
+//        }
+        val  adapter =OrderGoodsVoListAdapter()
+        rvList?.adapter=adapter
+        adapter.addAll(listOf(OrdersGoodsVo()),false)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -146,6 +179,11 @@ class BlankFragment : BaseFragment() {
         )
 
         activity?.let { Croppy.start(it, themeCropRequest) }
+    }
+
+    override fun onBackPressedSupport(): Boolean {
+        hideSoftInputPop()
+        return true
     }
 
 }

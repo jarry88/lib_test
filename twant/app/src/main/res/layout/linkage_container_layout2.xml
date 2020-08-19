@@ -66,7 +66,8 @@
                     android:id="@+id/rv_right_list"
                     app:adapter="@{adapter}"
                     tools:listitem="@layout/zone_goods_list_item"
-                    binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                    binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    />
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

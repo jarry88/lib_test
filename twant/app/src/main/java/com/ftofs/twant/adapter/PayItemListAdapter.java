@@ -32,9 +32,12 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.orders.OrdersGoodsVo;
 import com.ftofs.twant.widget.CancelAfterVerificationListPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
+import com.ftofs.twant.widget.VerificationPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+
+import org.litepal.util.Const;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -144,6 +147,8 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
                                 if (Config.USE_DEVELOPER_TEST_DATA) {
 //                                    cancelAfterVerification(orderItem);
                                     loadGoodsList(orderItem);
+                                } else if (Constant.WANT_EAT.equals(orderItem.storeName)) {
+                                    loadGoodsList(orderItem);
                                 } else {
                                     orderFragment.confirmReceive(orderItem.orderId);
                                 }
@@ -241,21 +246,30 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
                    List<OrdersGoodsVo> list = new ArrayList<>();
                    for (Object object : ordersGoodsVoList) {
                        list.add(OrdersGoodsVo.parse((EasyJSONObject) object));
-                       new XPopup.Builder(context)
-//                         .dismissOnTouchOutside(false)
-                               // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                               .setPopupCallback(new XPopupCallback() {
-                                   @Override
-                                   public void onShow() {
-                                   }
-
-                                   @Override
-                                   public void onDismiss() {
-                                   }
-                               }).asCustom(CancelAfterVerificationListPopup.Companion.newInstance(context, list))
-                               .show();
                    }
+                   if (list.isEmpty()) {
+                       //todo異常情況處理
+//                       ToastUtil.error(context,);
+                       return;
+                   }
+                   boolean directVerification=false;
+                   if (list.size() == 1 && list.get(0).getIfoodmacauCount() == 1) {
+                       directVerification = true;
+                   }
+                   new XPopup.Builder(context)
+//                         .dismissOnTouchOutside(false)
+                           // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                           .setPopupCallback(new XPopupCallback() {
+                               @Override
+                               public void onShow() {
+                               }
+
+                               @Override
+                               public void onDismiss() {
+                               }
+                           }).asCustom(directVerification? new VerificationPopup(context,list.get(0)):CancelAfterVerificationListPopup.Companion.newInstance(context, list))
+                           .show();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }

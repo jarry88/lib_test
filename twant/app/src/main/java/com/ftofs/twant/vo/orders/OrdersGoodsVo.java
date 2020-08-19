@@ -563,10 +563,15 @@ public class OrdersGoodsVo {
         vo.memberId = object.getInt("memberId");
         vo.ifoodmacauCount = object.getInt("ifoodmacauCount");
         vo.goodsName = object.getSafeString("goodsName");
+        vo.goodsFullSpecs = object.getSafeString("goodsFullSpecs");
         vo.goodsPrice = BigDecimal.valueOf(object.getDouble("goodsPrice"));
         vo.goodsPayAmount = BigDecimal.valueOf(object.getDouble("goodsPayAmount"));
         vo.goodsImage = object.getSafeString("goodsImage");
         vo.imageSrc = object.getSafeString("imageSrc");
         return vo;
+    }
+
+    public int getIfoodmacauCount() {
+        return ifoodmacauCount;
     }
 }

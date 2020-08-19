@@ -163,8 +163,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
-//            Util.startFragment(new BlankFragment());//纯kotlin 用法
-             Util.startFragment(LabFragment.newInstance());//配置参数用kotlin 生成，调用用java
+            Util.startFragment(new BlankFragment());//纯kotlin 用法
+//             Util.startFragment(LabFragment.newInstance());//配置参数用kotlin 生成，调用用java
             // Util.startFragment(GoodsDetailFragment.newInstance(4195, 6957, 1));
 //            Util.startFragment(LabFragment.newInstance());
 //            Util.startFragment(GoodsDetailFragment.newInstance(4195, 6957, 1));

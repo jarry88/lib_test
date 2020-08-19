@@ -53,6 +53,14 @@ interface DemoApiService {
     //  获取购物专场商店数据
     @GET("shoppingzone/store/{zoneId}")
     suspend fun getShoppingZoneStore(@Path("zoneId")zoneId: Int, @Query("page")page:Int): TwantResponse<ZoneInfo>
+    //  想要食核銷接口
+    @POST("member/orders/ifoodmacau/verify")
+//    token: String?, ordersId: Int, goodsId: Int, count: Int, verificationCode: String
+    suspend fun getIfoodmacauVerify(@Query("token")token:String,
+                                    @Query("verificationCode")verificationCode:String?,
+                                    @Query("ordersId")ordersId:Int,
+                                    @Query("goodsId")goodsId:Int,
+                                    @Query("count")count:Int): TwantResponse<Any>
 
 //@Field
 }

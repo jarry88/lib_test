@@ -1322,23 +1322,24 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
             if (payWayItemListHasPayway( Constant.PAY_WAY_ONLINE)) {
                 payWayItemList.remove(0);
-            }
-            // 如果原先選的是【在線支付】，則默認選中【到店自提】
-            if (payWay == Constant.PAY_WAY_ONLINE) {
-                ConfirmOrderSummaryItem summaryItem = getSummaryItem();
-                if (summaryItem == null) {
-                    return;
-                }
-                onlineItem.isSelected = false;
-                payWayItemList.get(0).isSelected = true;
-                payWay = Constant.PAY_WAY_FETCH;
-                selectedPayWayIndex = 0;
+                // 如果原先選的是【在線支付】，則默認選中【到店自提】
+                if (payWay == Constant.PAY_WAY_ONLINE) {
+                    ConfirmOrderSummaryItem summaryItem = getSummaryItem();
+                    if (summaryItem == null) {
+                        return;
+                    }
+                    onlineItem.isSelected = false;
+                    payWayItemList.get(0).isSelected = true;
+                    payWay = Constant.PAY_WAY_FETCH;
+                    selectedPayWayIndex = 0;
 
-                summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
-                summaryItem.payWayIndex = payWay;
-                SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
-                updateFreight = true;
+                    summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
+                    summaryItem.payWayIndex = payWay;
+                    SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
+                    updateFreight = true;
+                }
             }
+
             }
         if (mAddrItem != null && mAddrItem.areaIdList!=null
                 && mAddrItem.areaIdList.size() > 0
@@ -1541,7 +1542,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         updateStoreAmount();
         // 更新每家商店的運費
         updateStoreFreightAmount();
-        if (onlyFetch) {
+        if (onlyFetch&&payWayItemListHasPayway( Constant.PAY_WAY_ONLINE)) {
             checkPayWay();
         }
 

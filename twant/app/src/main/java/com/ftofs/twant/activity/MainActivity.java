@@ -371,6 +371,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             dp18 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, getResources().getDisplayMetrics());
             stackView.setLayoutParams(getDebugIconLayoutParams(true));
             content.addView(stackView);
+            Config.USE_DEVELOPER_TEST_DATA = Hawk.get(SPField.USE_DEVELOPER_TEST_DATA, false);
             stackView.setOnTouchListener(new StackViewTouchListener(stackView, dp18 / 4));
             stackView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -510,6 +511,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                 }else if (position == 11) { // 開發寫死的數值通道開關
                                     Config.USE_DEVELOPER_TEST_DATA = !Config.USE_DEVELOPER_TEST_DATA;
                                     ToastUtil.success(getApplicationContext(),Config.USE_DEVELOPER_TEST_DATA?"使用寫死的數據":"使用服務器數據");
+                                    Hawk.put(SPField.USE_DEVELOPER_TEST_DATA, Config.USE_DEVELOPER_TEST_DATA);
                                 }
                             }
                         })
