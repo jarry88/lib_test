@@ -269,9 +269,9 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
 
                                @Override
                                public void onDismiss() {
-
+                                   orderFragment.outReloadData();
                                }
-                           }).asCustom(directVerification? new VerificationPopup(context,list.get(0),1):CancelAfterVerificationListPopup.Companion.newInstance(context, list))
+                           }).asCustom(directVerification? new VerificationPopup(context,list.get(0),1):new CancelAfterVerificationListPopup(context, list,item))
                            .show();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
