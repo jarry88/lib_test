@@ -1105,7 +1105,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                SLog.info("observable.threadId[%s]", Thread.currentThread().getId());
+                SLog.info("observable.threadId[%s]", Thread.currentThread().getId(),mAddrItem.toString());
+                if (mAddrItem != null) {
+                    SLog.info("observable.threadId[%s],mAddress[%s]", Thread.currentThread().getId(), mAddrItem.address);
+                } else {
+                    SLog.info(",mAddress为空");
+                }
 
                 CalcFreightResult result = calcFreight(null);
 

@@ -79,20 +79,8 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
                 }
                 try {
                     val message= responseObj.getSafeString("datas.message")
-//                    val ordersGoodsVoList = responseObj.getSafeArray("datas.ordersGoodsVoList")
-//                    val list: MutableList<OrdersGoodsVo> = ArrayList<OrdersGoodsVo>()
-//                    for (`object` in ordersGoodsVoList) {
-//                        list.add(OrdersGoodsVo.parse(`object` as EasyJSONObject))
-//                    }
-//                    if (list.isEmpty()) {
-//                        //todo異常情況處理
-                       ToastUtil.success(context,message);
-                        dismiss()
-//                        return
-//                    } else {
-////                        adapter.clear()
-//                        SLog.info("重新加载数据")
-//                    }
+                    ToastUtil.success(context,message);
+                    dismiss()
                 } catch (e: Exception) {
                     SLog.info("Error!message[%s], trace[%s]", e.message, Log.getStackTraceString(e))
                     dismiss()
