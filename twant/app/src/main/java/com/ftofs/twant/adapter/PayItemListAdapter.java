@@ -129,37 +129,39 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
                         Util.startFragment(GoodsEvaluationFragment.newInstance(orderItem.orderId, 0, orderItem.storeName, evaluationGoodsItemList));
                     } else if (id == R.id.btn_have_received) {
                         SLog.info("btn_have_received");
-                        new XPopup.Builder(context)
-//                         .dismissOnTouchOutside(false)
-                                // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                                .setPopupCallback(new XPopupCallback() {
-                                    @Override
-                                    public void onShow() {
-                                    }
-                                    @Override
-                                    public void onDismiss() {
-                                    }
-                                }).asCustom(new TwConfirmPopup(context, "確認收貨嗎?", null, new OnConfirmCallback() {
-                            @Override
-                            public void onYes() {
-                                SLog.info("onYes");
-                                if (Config.USE_DEVELOPER_TEST_DATA) {
+                        if (Config.USE_DEVELOPER_TEST_DATA) {
 //                                    cancelAfterVerification(orderItem);
-                                    loadGoodsList(orderItem);
-                                } else if (Constant.WANT_EAT.equals(orderItem.storeName)) {
-                                    loadGoodsList(orderItem);
-                                } else {
+                            loadGoodsList(orderItem);
+                        } else if (Constant.WANT_EAT.equals(orderItem.storeName)) {
+                            loadGoodsList(orderItem);
+                        } else {
+                            new XPopup.Builder(context)
+//                         .dismissOnTouchOutside(false)
+                                    // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                                    .setPopupCallback(new XPopupCallback() {
+                                        @Override
+                                        public void onShow() {
+                                        }
+                                        @Override
+                                        public void onDismiss() {
+                                        }
+                                    }).asCustom(new TwConfirmPopup(context, "確認收貨嗎?", null, new OnConfirmCallback() {
+                                @Override
+                                public void onYes() {
+                                    SLog.info("onYes");
+
                                     orderFragment.confirmReceive(orderItem.orderId);
                                 }
-                            }
 
-                            @Override
-                            public void onNo() {
+                                @Override
+                                public void onNo() {
 
-                            }
-                        }))
-                                .show();
+                                }
+                            }))
+                                    .show();
+                        }
+
                     }
                 }
             });
@@ -267,8 +269,9 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
 
                                @Override
                                public void onDismiss() {
+
                                }
-                           }).asCustom(directVerification? new VerificationPopup(context,list.get(0)):CancelAfterVerificationListPopup.Companion.newInstance(context, list))
+                           }).asCustom(directVerification? new VerificationPopup(context,list.get(0),1):CancelAfterVerificationListPopup.Companion.newInstance(context, list))
                            .show();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

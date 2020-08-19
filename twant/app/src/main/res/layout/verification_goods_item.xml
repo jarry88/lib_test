@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/dp_10">
+        android:padding="6dp">
         <LinearLayout
             android:id="@+id/ll_swipe_content"
             android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                         android:textSize="14sp"
                         android:maxLines="2"
                         android:ellipsize="end"
-                        android:text="@{vo.goodsFullSpecs}">
+                        android:text="@{vo.goodsName}">
 
                     </TextView>
                 </LinearLayout>
@@ -81,7 +81,7 @@
                         android:layout_weight="1"
                         android:layout_height="1dp"
                         />
-                    <com.ftofs.twant.widget.CartAdjustButton
+                    <com.ftofs.twant.widget.AdjustButton
                         android:id="@+id/ab_quantity"
                         android:layout_width="92dp"
                         android:layout_height="25dp"

@@ -37,6 +37,7 @@
             android:layout_height="@dimen/dp_38"
             android:textSize="13sp"
             android:hint="請輸入核銷碼"
+            android:id="@+id/et_verification"
             android:background="@drawable/edit_text_bg"
             android:layout_marginStart="@dimen/dp_38"
             android:padding="@dimen/dp_10"
