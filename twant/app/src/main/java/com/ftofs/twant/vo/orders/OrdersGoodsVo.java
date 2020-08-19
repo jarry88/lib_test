@@ -557,6 +557,7 @@ public class OrdersGoodsVo {
         OrdersGoodsVo vo = new OrdersGoodsVo();
         vo.ordersGoodsId = object.getInt("ordersGoodsId");
         vo.goodsId = object.getInt("goodsId");
+        vo.ordersId = object.getInt("ordersId");
         vo.commonId = object.getInt("commonId");
         vo.goodsType = object.getInt("goodsType");
         vo.storeId = object.getInt("storeId");

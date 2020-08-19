@@ -54,13 +54,18 @@ interface DemoApiService {
     @GET("shoppingzone/store/{zoneId}")
     suspend fun getShoppingZoneStore(@Path("zoneId")zoneId: Int, @Query("page")page:Int): TwantResponse<ZoneInfo>
     //  想要食核銷接口
+    //    token: String?, ordersId: Int, goodsId: Int, count: Int, verificationCode: String
+
+    @FormUrlEncoded
     @POST("member/orders/ifoodmacau/verify")
-//    token: String?, ordersId: Int, goodsId: Int, count: Int, verificationCode: String
-    suspend fun getIfoodmacauVerify(@Query("token")token:String,
-                                    @Query("verificationCode")verificationCode:String?,
-                                    @Query("ordersId")ordersId:Int,
-                                    @Query("goodsId")goodsId:Int,
-                                    @Query("count")count:Int): TwantResponse<Any>
+    suspend fun getIfoodmacauVerify(@Field("token")token:String,
+                                    @Field("verificationCode")verificationCode:String?,
+                                    @Field("ordersId")ordersId:Int,
+                                    @Field("goodsId")goodsId:Int,
+                                    @Field("count")count:Int): TwantResponse<Any>
+//    @FormUrlEncoded
+    @POST("member/orders/ifoodmacau/verify")
+    suspend fun getIfoodtest(@Body body: RequestBody): TwantResponse<Any>
 
 //@Field
 }

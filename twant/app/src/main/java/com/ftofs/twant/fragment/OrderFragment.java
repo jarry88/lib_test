@@ -704,6 +704,15 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         }
         loadOrderData(orderStatus, currPage + 1);
     }
+
+    public void outReloadData() {
+        rvOrderList.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                reloadData();
+            }
+        },500);
+    }
 }
 
 

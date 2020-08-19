@@ -1084,6 +1084,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                 if (name.equals(storeName)) {
                     onlyFetch = true;
+                    currPaymentTypeCode = Constant.PAYMENT_TYPE_CODE_CHAIN;
                 }
 
                 commitStoreList.append(EasyJSONObject.generate(
@@ -1485,15 +1486,17 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     SLog.info("xxyy");
                     // 第2步：計算運費
                     // 收集地址信息
-                    EasyJSONObject address = responseObj.getObject("datas.address");
-                    if (address != null) { // 如果没有地址信息或【门店自提】方式，都不用做第2步
-                        CalcFreightResult result = calcFreight(address);
-                        if (!result.success) {
-                            // 如果計算運費失敗，返回錯誤消息
-                            if (!StringUtil.isEmpty(result.errorMessage)) {
-                                return result.errorMessage;
-                            } else { // 如果錯誤消息為空，顯示【計算運費失敗】
-                                return "計算運費失敗";
+                    if (currPaymentTypeCode!=Constant.PAYMENT_TYPE_CODE_CHAIN) {
+                        EasyJSONObject address = responseObj.getObject("datas.address");
+                        if (address != null) { // 如果没有地址信息或【门店自提】方式，都不用做第2步
+                            CalcFreightResult result = calcFreight(address);
+                            if (!result.success) {
+                                // 如果計算運費失敗，返回錯誤消息
+                                if (!StringUtil.isEmpty(result.errorMessage)) {
+                                    return result.errorMessage;
+                                } else { // 如果錯誤消息為空，顯示【計算運費失敗】
+                                    return "計算運費失敗";
+                                }
                             }
                         }
                     }
@@ -1542,6 +1545,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         updateStoreAmount();
         // 更新每家商店的運費
         updateStoreFreightAmount();
+
+        //这里注释掉也一样会弹 部分产品售罄弹窗
         if (onlyFetch&&payWayItemListHasPayway( Constant.PAY_WAY_ONLINE)) {
             checkPayWay();
         }
@@ -1860,7 +1865,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         boolean isSoldOut = false;
                         int goodsId = buyDataItem.getInt("goodsId");
                         for (SoldOutGoodsItem soldOutGoodsItem : soldOutGoodsItemList) {
-                            SLog.info("goodsId[%d], soldOutGoodsItem.goodsId[%d]", goodsId, soldOutGoodsItem.goodsId);
+//                            SLog.info("goodsId[%d], soldOutGoodsItem.goodsId[%d]", goodsId, soldOutGoodsItem.goodsId);
                             int cartId;
                             if (isFromCart == Constant.TRUE_INT) {
                                 Integer result = goodsIdToCartId.get(soldOutGoodsItem.goodsId);

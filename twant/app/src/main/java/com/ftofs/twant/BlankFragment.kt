@@ -97,25 +97,9 @@ class BlankFragment : BaseFragment() {
         buttonChoose?.setOnClickListener {
             startCroppy()
         }
-//        val  adapter =object : DataBoundAdapter<OrdersGoodsVo, VerificationGoodsItemBinding>(){
-//            override val layoutId: Int
-//                get() = R.layout.verification_goods_item
-//
-//            override fun initView(binding: VerificationGoodsItemBinding, item: OrdersGoodsVo) {
-//                SLog.info("暫時這裏也不用幹啥")
-//                binding.vo=item
-////                binding.btnCancelAfterVerification.setOnClickListener{
-////                    XPopup.Builder(context).setPopupCallback(proXcallback()).asCustom(
-////                            VerificationPopup(context)
-////                    ).show()
-////                }
-//            }
-//
-//
-//        }
-        val  adapter =OrderGoodsVoListAdapter()
-        rvList?.adapter=adapter
-        adapter.addAll(listOf(OrdersGoodsVo()),false)
+//        val  adapter =OrderGoodsVoListAdapter()
+//        rvList?.adapter=adapter
+//        adapter.addAll(listOf(OrdersGoodsVo()),false)
 
     }
 
