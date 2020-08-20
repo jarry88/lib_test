@@ -46,7 +46,7 @@ public class Config {
      * 日誌開關
      */
 
-    public static boolean SLOGENABLE = true;
+    public static boolean SLOGENABLE = false;
 
     public static String OSS_BASE_URL = DEVELOPER_MODE ?
             "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com"
@@ -91,8 +91,8 @@ public class Config {
     /**
      * Bugly
      */
-    // public static String BUGLY_KEY = "222fdc9738";
-    public static String BUGLY_KEY = "";
+    public static String BUGLY_KEY = "222fdc9738";
+    // public static String BUGLY_KEY = "";
 
     public static final String YOUTUBE_DEVELOPER_KEY = "takewant";
 

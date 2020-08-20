@@ -22,7 +22,7 @@ android {
         targetSdkVersion 29
 
 
-        versionCode 187
+        versionCode 189
 
         versionName "1.2.6.00"
 
