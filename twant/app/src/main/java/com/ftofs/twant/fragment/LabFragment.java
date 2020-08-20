@@ -17,6 +17,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.kotlin.net.BaseRepository;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.CroppyInitUtilKt;
 import com.ftofs.twant.util.RestartApp;
@@ -77,6 +78,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_excludeAspectRatiosCropRequest, this);
         Util.setOnClickListener(view, R.id.btn_manualCropRequest, this);
         Util.setOnClickListener(view, R.id.btn_externalCropRequest, this);
+        Util.setOnClickListener(view, R.id.btn_post1, this);
 
         luckpan = view.findViewById(R.id.luckpan);
         imageViewCropped = view.findViewById(R.id.imageViewCropped);
@@ -156,6 +158,9 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         if (id == R.id.btn_test1) {
             ToastUtil.info(_mActivity, "way1");
             RestartApp.restartThroughIntentCompatMakeRestartActivityTask(_mActivity);
+        }else if (id == R.id.btn_post1) {
+            ToastUtil.info(_mActivity, "btn_post1");
+
         } else if (id == R.id.btn_test2) {
             ToastUtil.info(_mActivity, "way2");
             RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);
@@ -207,4 +212,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         hideSoftInputPop();
         return true;
     }
+}
+class api extends BaseRepository{
+
 }

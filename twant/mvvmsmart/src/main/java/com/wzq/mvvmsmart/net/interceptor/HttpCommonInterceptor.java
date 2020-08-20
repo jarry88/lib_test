@@ -53,7 +53,7 @@ public class HttpCommonInterceptor implements Interceptor {
         if (BuildConfig.DEBUG) {
             ResponseBody responseBody = response.body();
             KLog.INSTANCE.e(TAG, "网络请求--#" + response.request().url());
-            KLog.INSTANCE.e(TAG, "网络请求--参数#" + responseBody.toString());
+//            KLog.INSTANCE.e(TAG, "网络请求--参数#" + responseBody.source());
             BufferedSource source = responseBody.source();
             Buffer buffer = source.buffer();
             MediaType contentType = responseBody.contentType();

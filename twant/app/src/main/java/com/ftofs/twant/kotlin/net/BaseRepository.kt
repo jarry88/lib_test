@@ -43,5 +43,9 @@ open class BaseRepository {
             }
         }
     }
+    open suspend fun <T : Any> simpleGet(response: TwantResponse<T>, successBlock: (suspend CoroutineScope.() -> Unit)? = null,
+                                          errorBlock: (suspend CoroutineScope.() -> Unit)? = null): Result<T> {
+        return safeApiCall(call = {executeResponse(response)})
+    }
 
 }

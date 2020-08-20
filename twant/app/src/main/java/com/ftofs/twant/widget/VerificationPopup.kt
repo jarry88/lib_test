@@ -18,6 +18,7 @@ import androidx.lifecycle.viewModelScope
 import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.twant.api.Api
 import com.ftofs.twant.api.UICallback
+import com.ftofs.twant.kotlin.bean.TwantResponse
 import com.ftofs.twant.util.Util
 import com.wzq.mvvmsmart.net.net_utils.GsonUtil
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +39,9 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
     override fun getImplLayoutId(): Int {
         return R.layout.popup_cancel_after_verfication
     }
-
+    val res by lazy {
+        object :BaseRepository(){}
+    }
     val editText by lazy {
         findViewById<EditText>(R.id.et_verification)
     }
@@ -47,8 +50,14 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
         val btnOk=findViewById<TextView>(R.id.btn_ok)
         btnOk.setOnClickListener{
             goVerify()
+//            res.run {
+//                launch {
+//                   val  result=simpleGet(api.testPost1(User.getToken()))
+//                }
+//            }
         }
     }
+    //旧 网络接口调用方法
     fun goVerifyOldType(){
         val token = User.getToken()
         val verification =editText.text?.toString()
@@ -95,65 +104,33 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
         val verification= editText.text.toString()
         val api=object :BaseRepository(){
             suspend fun getIfoodmacauVerify(ordersId: Int, goodsId: Int, count: Int, verificationCode: String?): Result<ZoneInfo> {
-                return safeApiCall(call = {
-                    executeResponse(
-                            api.getIfoodtest(
-                                RequestBody.create(
-                                        MediaType.parse("application/json; charset=utf-8"),
-                                        GsonUtil.bean2String(
-                                                mapOf(
-                                                        "token" to token,
-                                                        "ordersId" to ordersId,
-                                                        "goodsId" to  goodsId,
-                                                        "count" to count,
-                                                        "verificationCode" to verificationCode
-                                                )
-                                        )
-                                )
-                            )
-                    )
-                    }
-                )
+                return safeApiCall(call = { executeResponse(api.getIfoodmacauVerify( token,verificationCode,  ordersId,goodsId,count))})
+
             }
+        fun printResult(){
+            launch {
+                SLog.info("token $token ordersId ${orderItem.ordersId},goodsId${orderItem.goodsId},count$count,verification$verification")
 
+                val result =getIfoodmacauVerify(orderItem.ordersId,orderItem.goodsId,count,verification)
+                when (result){
+                    is Result.Success ->ToastUtil.error(context,result.datas.message)
 
-            private suspend fun requestIfoodmacauVerify(ordersId: Int, goodsId: Int, count: Int, verificationCode: String?): Result<ZoneInfo> =
-//                    executeResponse(api.getIfoodmacauVerify(token,verificationCode,goodsId,count,ordersId))
-                    executeResponse(api.getIfoodtest(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), GsonUtil.bean2String(mapOf(
-                            "token" to token,
-                            "ordersId" to ordersId,
-                            "goodsId" to  goodsId,
-                            "count" to count,
-                            "verificationCode" to verificationCode
-
-                    )))))
-            fun printResult(){
-                launch {
-                    SLog.info("token $token ordersId ${orderItem.ordersId},goodsId${orderItem.goodsId},count$count,verification$verification")
-
-                    val result =getIfoodmacauVerify(orderItem.ordersId,orderItem.goodsId,count,verification)
-                    when (result){
-                        is Result.Success -> SLog.info("加載数据完成")
-                        is Result.DataError -> {//val error= EasyJSONObject.parse<String>()
+                    is Result.DataError -> {//val error= EasyJSONObject.parse<String>()
 //                            SLog.info(error.toString())
-                            SLog.info(result.datas.error)
-                            ToastUtil.error(context,result.datas.error)
-                        }
-                        is Result.Error -> SLog.info("加載核銷數據異常")
+                        SLog.info(result.datas.error)
+                        ToastUtil.error(context,result.datas.error)
                     }
-                    dismiss()
+                    is Result.Error -> ToastUtil.error(context,"核销失败")
                 }
-
+                dismiss()
             }
+
         }
+        }
+
+
         api.printResult()
-    }
-    fun goVerifyTest(){
-        val retrofit = Retrofit.Builder()
-                .baseUrl(RetrofitClient.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                .build()
+
     }
 
     override fun onDismiss() {

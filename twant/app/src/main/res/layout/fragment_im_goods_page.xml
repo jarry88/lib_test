@@ -59,7 +59,6 @@
                     android:layout_centerVertical="true"
                     android:textSize="14sp"
                     android:hint="@string/text_search_goods"
-                    android:text="@{viewModel.showSearch?View.VISIBLE:View.GONE}"
                     />
             </RelativeLayout>
         </RelativeLayout>

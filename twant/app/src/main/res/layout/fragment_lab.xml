@@ -61,6 +61,18 @@
             android:text="externalCropRequest">
         </Button>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_post1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="btn_post1">
+        </Button>
+    </LinearLayout>
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewCropped"
         android:layout_width="match_parent"

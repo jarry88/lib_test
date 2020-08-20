@@ -23,9 +23,10 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/rl_title_container" />
+        <!--            style="@style/Widget.MaterialComponents.TabLayout.Colored"-->
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
-            style="@style/Widget.MaterialComponents.TabLayout.Colored"
             android:background="@drawable/border_type_d"
 
             android:layout_width="match_parent"

@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
@@ -22,7 +20,7 @@ import com.ftofs.twant.widget.ScaledButton
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
-    private  val pageList = arrayListOf<ImGoodsListPage>()
+    private val pageList = arrayListOf<ImGoodsListPage>()
     private val  tabTextList = arrayOf(
             "推薦商品","最近瀏覽","我的關注","購物袋","本店商品"
     )
@@ -53,6 +51,30 @@ class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewMo
         }
     }
 
+    val adapter by lazy {
+        object :DataBoundAdapter<Goods, ZoneGoodsListItemBinding>(){
+            override val layoutId: Int
+                get() = R.layout.zone_goods_list_item
+
+            override fun initView(binding: ZoneGoodsListItemBinding, item: Goods) {
+                binding.tvGoodsName.text =item.goodsName
+            }
+
+        }
+    }
+    private val fragmentStateAdapter by lazy {
+        object :FragmentStateAdapter(this){
+            val NUM_PAGES= tabTextList.size
+            override fun getItemCount(): Int {
+                return NUM_PAGES
+            }
+
+            override fun createFragment(position: Int): Fragment {
+                return pageList[position]
+            }
+
+        }
+    }
     @SuppressLint("SourceLockedOrientationActivity")
     override fun initParam() {
         //获取列表传入的实体
@@ -60,18 +82,12 @@ class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewMo
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
     }
-    val adapter=object :DataBoundAdapter<Goods, ZoneGoodsListItemBinding>(){
-        override val layoutId: Int
-            get() = R.layout.zone_goods_list_item
-
-        override fun initView(binding: ZoneGoodsListItemBinding, item: Goods) {
-            binding.tvGoodsName.text =item.goodsName
-        }
-
-    }
     override fun initData() {
+        binding.viewModel=viewModel
+        tabTextList.forEach { pageList.add(ImGoodsListPage(it)) }
         binding.rlTitleContainer.findViewById<TextView>(R.id.tv_title).text="商品"
         binding.rlTitleContainer.findViewById<ScaledButton>(R.id.btn_back).setOnClickListener { hideSoftInputPop() }
+        binding.viewPager.adapter =fragmentStateAdapter
         TabLayoutMediator(binding.tabs,binding.viewPager){tab, position ->
             tab.text = tabTextList[position]
         }.attach()

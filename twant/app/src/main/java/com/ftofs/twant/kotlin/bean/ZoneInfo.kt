@@ -19,5 +19,6 @@ data class ZoneInfo(
         var zoneStoreList: ArrayList<StoreItem>?,
         var zoneVo:ZoneVO,
         val error:String,
+        val message:String,
         val checkedCategory:String
 ): Serializable
