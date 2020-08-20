@@ -52,7 +52,7 @@ override val layoutId: Int
         }
         val spuStatus=SpuStatus()
         spuStatus.goodsId=item.goodsId
-        binding.abQuantity.setMinValue(1, null);  // 調節數量不能小于1
+        binding.abQuantity.setMinValue(0, null);  // 調節數量不能小于1
         binding.abQuantity.setMaxValue(item.ifoodmacauCount,null)
         binding.abQuantity.setSpuStatus(spuStatus)
         binding.abQuantity.value=item.ifoodmacauCount

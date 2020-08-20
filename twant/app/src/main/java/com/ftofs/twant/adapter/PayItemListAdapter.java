@@ -254,10 +254,6 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
 //                       ToastUtil.error(context,);
                        return;
                    }
-                   boolean directVerification=false;
-                   if (list.size() == 1 && list.get(0).getIfoodmacauCount() == 1) {
-                       directVerification = true;
-                   }
                    new XPopup.Builder(context)
 //                         .dismissOnTouchOutside(false)
                            // 设置弹窗显示和隐藏的回调监听
@@ -271,7 +267,7 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
                                public void onDismiss() {
                                    orderFragment.outReloadData();
                                }
-                           }).asCustom(directVerification? new VerificationPopup(context,list.get(0),1):new CancelAfterVerificationListPopup(context, list,item))
+                           }).asCustom(new CancelAfterVerificationListPopup(context, list,item))
                            .show();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

@@ -106,7 +106,9 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
                         dismiss()
                         return
                     } else {
+//                        val filterlist=list.filter { it.ifoodmacauCount>0 }
 //                        adapter.clear()
+
                         adapter.addAll(list,true)
                         SLog.info("重新加载数据")
                     }

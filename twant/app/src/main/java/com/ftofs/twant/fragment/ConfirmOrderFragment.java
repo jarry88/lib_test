@@ -1105,7 +1105,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                SLog.info("observable.threadId[%s]", Thread.currentThread().getId());
+                SLog.info("observable.threadId[%s]", Thread.currentThread().getId(),mAddrItem.toString());
+                if (mAddrItem != null) {
+                    SLog.info("observable.threadId[%s],mAddress[%s]", Thread.currentThread().getId(), mAddrItem.address);
+                } else {
+                    SLog.info(",mAddress为空");
+                }
 
                 CalcFreightResult result = calcFreight(null);
 
@@ -1486,7 +1491,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     SLog.info("xxyy");
                     // 第2步：計算運費
                     // 收集地址信息
-                    if (currPaymentTypeCode!=Constant.PAYMENT_TYPE_CODE_CHAIN) {
+//                    if (currPaymentTypeCode != Constant.PAYMENT_TYPE_CODE_CHAIN) {
                         EasyJSONObject address = responseObj.getObject("datas.address");
                         if (address != null) { // 如果没有地址信息或【门店自提】方式，都不用做第2步
                             CalcFreightResult result = calcFreight(address);
@@ -1499,7 +1504,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                 }
                             }
                         }
-                    }
+//                    } else {
+//                        showSelfFetchInfo();
+//                    }
                     SLog.info("xxyy");
                     // 第3步(請求參數與第2步相同) 計算最終結果
                     calcAmount();
@@ -1852,6 +1859,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 SLog.info("all_sold_out");
                 hideSoftInputPop();
             } else { // 如果部分售罄，刪除售罄的商品
+                if(currPaymentTypeCode==Constant.PAYMENT_TYPE_CODE_CHAIN){
+                    SLog.info("后面要重构，参考ios 到店自提及想要食逻辑");
+                    hideSoftInputPop();
+                    return;
+                }
                 SLog.info("partial_sold_out");
                 try {
                     // 過濾售罄的商品
