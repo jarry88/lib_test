@@ -8,6 +8,7 @@ import com.huawei.updatesdk.fileprovider.UpdateSdkFileProvider;
  */
 public class Constant {
     public static final String CLIENT_TYPE_ANDROID = "android";
+    public static final String WANT_EAT = "想要食";
 
     /**
      * 【镇店之宝】无限循环的最大值
@@ -331,6 +332,7 @@ public class Constant {
      */
     public static final int GOODS_STATUS_OFF_SHELF = 0;  // 下架
     public static final int GOODS_STATUS_ON_SHELF = 1;   // 在售(即上架)
+    public static final int RC_CROP_IMAGE = 102;
     public static int SELLER_REFUND=1;//退款
     public static int SELLER_RETURN=2;//退貨
 

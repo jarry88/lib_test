@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.ftofs.twant.BlankFragment;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
@@ -160,9 +161,14 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.PROD) {
                 return;
             }
+<<<<<<< HEAD
             SLog.info("进入测试页ImGoodsFragment ");
             Util.startFragment(ImGoodsFragment.newInstance());
             // Util.startFragment(LabFragment.newInstance());
+=======
+            Util.startFragment(new BlankFragment());//纯kotlin 用法
+//             Util.startFragment(LabFragment.newInstance());//配置参数用kotlin 生成，调用用java
+>>>>>>> master
             // Util.startFragment(GoodsDetailFragment.newInstance(4195, 6957, 1));
 //            Util.startFragment(LabFragment.newInstance());
 //            Util.startFragment(GoodsDetailFragment.newInstance(4195, 6957, 1));
@@ -243,9 +249,9 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             case "shoppingZone":
                 //購物新專場
                 int zoneId = Integer.parseInt(stickyCellData.appIndexNavigationLinkValue);
-                if (Config.DEVELOPER_MODE) {
-                    zoneId=20;
-                }
+//                if (Config.DEVELOPER_MODE) {
+//                    zoneId=20;
+//                }
                 Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId));
                 break;
             case "wantPost":

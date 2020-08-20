@@ -21,7 +21,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
 
-        versionCode 182
+        versionCode 187
 
         versionName "1.2.6.00"
 
@@ -125,6 +125,7 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.41'
     implementation 'org.litepal.android:java:3.0.0'
 
+    implementation 'com.github.lyrebirdstudio:Croppy:0.2'
     //    implementation 'com.github.pinguo-zhouwei:MZBannerView:v2.0.2'
     implementation 'com.nex3z:flow-layout:1.2.4'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
@@ -135,6 +136,7 @@ dependencies {
 
     // 新增
     implementation 'com.github.bumptech.glide:annotations:4.9.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // 新增
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'

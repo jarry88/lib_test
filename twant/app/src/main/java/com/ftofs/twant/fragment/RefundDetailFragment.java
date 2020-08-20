@@ -216,7 +216,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                 params.set("complainId", refundId);
             }
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
 

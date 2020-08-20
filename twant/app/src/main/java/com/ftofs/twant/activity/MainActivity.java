@@ -371,6 +371,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             dp18 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, getResources().getDisplayMetrics());
             stackView.setLayoutParams(getDebugIconLayoutParams(true));
             content.addView(stackView);
+            Config.USE_DEVELOPER_TEST_DATA = Hawk.get(SPField.USE_DEVELOPER_TEST_DATA, false);
             stackView.setOnTouchListener(new StackViewTouchListener(stackView, dp18 / 4));
             stackView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -442,7 +443,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     public void showDebugPopup() {
         new XPopup.Builder(this)
 //                        .maxWidth(600)
-                .asCenterList("請選擇操作", new String[]{"隱藏浮動按鈕", "prod/線上，並重啟", "29，並重啟", "229，並重啟", "28，並重啟", "驗收/F3，並重啟", "打開日誌", "重啟", "顯示Fragment棧", "測試1", "測試2"},
+                .asCenterList("請選擇操作", new String[]{"隱藏浮動按鈕", "prod/線上，並重啟", "29，並重啟", "229，並重啟", "28，並重啟", "驗收/F3，並重啟", "打開日誌", "重啟", "顯示Fragment棧", "測試1", "測試2","開發寫死的數據:"+String.valueOf(Config.USE_DEVELOPER_TEST_DATA)},
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {
@@ -507,6 +508,10 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                     });
                                 } else if (position == 10) { // 測試2
                                     Util.startFragment(BindMobileFragment.newInstance("XXX", "YYY"));
+                                }else if (position == 11) { // 開發寫死的數值通道開關
+                                    Config.USE_DEVELOPER_TEST_DATA = !Config.USE_DEVELOPER_TEST_DATA;
+                                    ToastUtil.success(getApplicationContext(),Config.USE_DEVELOPER_TEST_DATA?"使用寫死的數據":"使用服務器數據");
+                                    Hawk.put(SPField.USE_DEVELOPER_TEST_DATA, Config.USE_DEVELOPER_TEST_DATA);
                                 }
                             }
                         })
@@ -1223,6 +1228,13 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         super.onActivityResult(requestCode, resultCode, data);
 
         SLog.info("__requestCode[%d], resultCode[%d]", requestCode, resultCode);
+        if (requestCode == RequestCode.RC_CROP_IMAGE.ordinal()) {
+            if(data!=null){
+                SLog.info("TEST Croppy Data:[%s]",data.toString());
+            }
+//                binding.imageViewCropped.setImageURI(it)
+
+        }
         if (requestCode == RequestCode.REQUEST_INSTALL_APP_PERMISSION.ordinal()) { // 不用判斷resultCode，因為有時候是按返回鍵的
             SLog.info("here_0");
             installUpdate(updateApkPath);
@@ -1342,7 +1354,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     // 获取复制、剪切的文本内容
                     CharSequence content =
                             mClipboardManager.getPrimaryClip().getItemAt(0).getText();
-                    if (content == null) {
+                    if (content == null || content.length() < 1) {
                         return;
                     }
                     SLog.info("复制、剪切的内容为[%s]", content);

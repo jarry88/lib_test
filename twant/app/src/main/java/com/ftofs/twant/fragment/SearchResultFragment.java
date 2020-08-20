@@ -936,6 +936,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 String className = store.getSafeString("className");
                                 String mainBusiness = store.getSafeString("storeZy");
                                 String storeFigureImage = store.getSafeString("storeFigureImage");
+                                SLog.info("name[%s],storeFigureImage[%s]",storeName,storeFigureImage);
                                 float distance = Float.valueOf(store.getSafeString("distance"));
                                 String shopDay = store.getSafeString("shopDay");
                                 int likeCount = store.getInt("likeCount");

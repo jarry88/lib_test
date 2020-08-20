@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -62,6 +63,14 @@ public class NewWordPopup extends CenterPopupView implements View.OnClickListene
         super.onCreate();
 
         ImageView imageView = findViewById(R.id.image_view);
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) imageView.getLayoutParams();
+        if (commandTypeInt == COMMAND_TYPE_SHOPPING) {
+            layoutParams.dimensionRatio = "2:1";  // 如果是购物卖场，图片比例为2:1
+        } else if (commandTypeInt == COMMAND_TYPE_STORE) {
+            layoutParams.dimensionRatio = "125:75";  // 如果是店铺，图片比例为125:75
+        }
+
+
         TextView tvDesc = findViewById(R.id.tv_desc);
         LinearLayout llMainContentContainer = findViewById(R.id.ll_main_content_container);
         llMainContentContainer.setBackground(BackgroundDrawable.create(Color.WHITE, Util.dip2px(context, 8)));
@@ -97,7 +106,7 @@ public class NewWordPopup extends CenterPopupView implements View.OnClickListene
             if ("goods".equals(commandType)) { // 如果是普通商品，没有折扣，则隐藏原价
                 findViewById(R.id.ll_original_price_container).setVisibility(GONE);
             } else { // 如果是活动商品，则设置原价
-                double originalPrice = extra.optDouble("appPriceMax");
+                double originalPrice = Double.parseDouble(extra.optString("appPriceMax"));
                 TextView tvOriginalPrice = findViewById(R.id.tv_original_price);
                 tvOriginalPrice.setText(StringUtil.formatFloat(originalPrice));
             }

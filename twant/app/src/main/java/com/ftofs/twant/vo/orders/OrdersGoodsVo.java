@@ -1,9 +1,13 @@
 package com.ftofs.twant.vo.orders;
 
+import com.ftofs.twant.domain.orders.Orders;
+
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
@@ -182,6 +186,7 @@ public class OrdersGoodsVo {
      * 是否可以查看退货(该字段不存到搜索引擎里)
      */
     private int showViewReturn = 0;
+    private int ifoodmacauCount=0;
 
     public int getOrdersGoodsId() {
         return ordersGoodsId;
@@ -547,5 +552,27 @@ public class OrdersGoodsVo {
                 ", showViewRefund=" + showViewRefund +
                 ", showViewReturn=" + showViewReturn +
                 '}';
+    }
+    public static OrdersGoodsVo parse(EasyJSONObject object) throws Exception{
+        OrdersGoodsVo vo = new OrdersGoodsVo();
+        vo.ordersGoodsId = object.getInt("ordersGoodsId");
+        vo.goodsId = object.getInt("goodsId");
+        vo.ordersId = object.getInt("ordersId");
+        vo.commonId = object.getInt("commonId");
+        vo.goodsType = object.getInt("goodsType");
+        vo.storeId = object.getInt("storeId");
+        vo.memberId = object.getInt("memberId");
+        vo.ifoodmacauCount = object.getInt("ifoodmacauCount");
+        vo.goodsName = object.getSafeString("goodsName");
+        vo.goodsFullSpecs = object.getSafeString("goodsFullSpecs");
+        vo.goodsPrice = BigDecimal.valueOf(object.getDouble("goodsPrice"));
+        vo.goodsPayAmount = BigDecimal.valueOf(object.getDouble("goodsPayAmount"));
+        vo.goodsImage = object.getSafeString("goodsImage");
+        vo.imageSrc = object.getSafeString("imageSrc");
+        return vo;
+    }
+
+    public int getIfoodmacauCount() {
+        return ifoodmacauCount;
     }
 }

@@ -159,4 +159,6 @@ public enum RequestCode {
      * 用戶登錄
      */
     USER_LOGIN,
+
+    RC_CROP_IMAGE
 }

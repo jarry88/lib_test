@@ -1,9 +1,0 @@
-diff a/twant/app/src/main/java/com/ftofs/twant/fragment/ConfirmOrderFragment.java b/twant/app/src/main/java/com/ftofs/twant/fragment/ConfirmOrderFragment.java	(rejected hunks)
-@@ -182,6 +182,7 @@
- 
-     List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
-     int totalGoodsCount;
-+    private List<StoreVoucher> platformVoucherList=new ArrayList<>();
- 
-     /**
-      * 創建確認訂單的實例

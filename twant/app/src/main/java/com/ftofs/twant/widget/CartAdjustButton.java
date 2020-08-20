@@ -27,6 +27,9 @@ public class CartAdjustButton extends AdjustButton {
 
     @Override
     public void changeValue(final int delta) {
+        if (spuStatus == null) {
+            return;
+        }
         int buyNum = spuStatus.getCount()+delta;
         SLog.info("value[%d], delta[%d],buyNum[%d]", this.value, delta,buyNum);
 

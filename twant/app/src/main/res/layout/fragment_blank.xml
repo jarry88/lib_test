@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="adapter"
+            type="com.ftofs.twant.kotlin.adapter.DataBoundAdapter" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:background="#212121">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewCropped"
+            android:layout_width="match_parent"
+            android:layout_marginTop="24dp"
+            android:layout_centerInParent="true"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/buttonChoose"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list"
+            android:background="@color/tw_white"
+            android:layout_width="match_parent"
+            android:layout_marginTop="24dp"
+            android:layout_centerInParent="true"
+            android:layout_height="match_parent"
+            app:adapter="@{adapter}"
+            android:layout_above="@+id/buttonChoose"
+            binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <Button
+            android:id="@+id/buttonChoose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="24dp"
+            android:text="Start Cropping" />
+
+    </RelativeLayout>
+</layout>

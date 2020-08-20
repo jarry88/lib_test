@@ -757,7 +757,7 @@ public class AddGoodsFragment extends BaseFragment
                     EasyJSONObject data = responseObj.getObject("datas");
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
-                        hideSoftInput();
+                        hideSoftInputPop();
                         return;
                     }
                     updateView(data);

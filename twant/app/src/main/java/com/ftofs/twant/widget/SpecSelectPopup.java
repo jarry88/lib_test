@@ -105,6 +105,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
     int goId; // 開團Id 0: 表示自己開團  -1: 表示無效
 
+    int noSpecGoodsId = 0; // 无规格的商品的goodsId, 只有一个goodsId
+
     public SpecSelectPopup(@NonNull Context context, int action, int commonId, List<Spec> specList,
                            Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
                            int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy,
@@ -578,7 +580,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         Integer goodsId = specValueIdMap.get(specValueIds);
         if (goodsId == null) {
             SLog.info("goodsId[%d]", goodsId);
-            return 0;
+            return noSpecGoodsId;
         }
         return goodsId;
     }
@@ -593,10 +595,20 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     private void updateCurrGoodsId(int goodsId) {
         // 更新圖片的顯示
         goodsInfo = goodsInfoMap.get(goodsId);
-        if (goodsInfo == null) {
+        if (goodsInfo == null) { // 如果商品没有规格，会来到这里
             SLog.info("Error!找不到goodsId:" + goodsId);
-            ToastUtil.error(context, "Error!找不到goodsId:" + goodsId);
-            return;
+
+            for (Map.Entry<Integer, GoodsInfo> entry : goodsInfoMap.entrySet()) {
+                goodsId = entry.getKey();
+                noSpecGoodsId = goodsId;
+                SLog.info("goodsId[%d]", goodsId);
+                goodsInfo = goodsInfoMap.get(goodsId);
+            }
+
+            if (goodsInfo == null) {
+                ToastUtil.error(context, "Error!找不到goodsId:" + goodsId);
+                return;
+            }
         }
 
         String imageSrc = goodsInfo.imageSrc;
