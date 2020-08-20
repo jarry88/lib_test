@@ -1336,13 +1336,15 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     }
                     onlineItem.isSelected = false;
                     payWayItemList.get(0).isSelected = true;
-                    payWay = Constant.PAY_WAY_FETCH;
-                    selectedPayWayIndex = 0;
+//                    payWay = Constant.PAY_WAY_FETCH;
+//                    selectedPayWayIndex = 0;
 
                     summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
                     summaryItem.payWayIndex = payWay;
                     SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
-                    updateFreight = true;
+                    //到店自提不用显示邮费
+                    updateFreight = false;
+                    onSelected(PopupType.PAY_WAY,0,Constant.PAY_WAY_FETCH);
                 }
             }
 
