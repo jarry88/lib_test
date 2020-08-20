@@ -38,6 +38,7 @@ public class HttpCommonInterceptor implements Interceptor {
     private static final String VERSIONCODE = BaseCommonUtils.getVersionCode() + "";
     private static final String IMEI = BaseCommonUtils.getIMEI();
     private static final String MAC = BaseCommonUtils.getMAC();
+//    private static final String WINDOWS = BaseCommonUtils.get();
     private static final String iccid = BaseCommonUtils.getSim(Utils.getApp());
 
     @Override
@@ -52,6 +53,7 @@ public class HttpCommonInterceptor implements Interceptor {
         if (BuildConfig.DEBUG) {
             ResponseBody responseBody = response.body();
             KLog.INSTANCE.e(TAG, "网络请求--#" + response.request().url());
+            KLog.INSTANCE.e(TAG, "网络请求--参数#" + responseBody.toString());
             BufferedSource source = responseBody.source();
             Buffer buffer = source.buffer();
             MediaType contentType = responseBody.contentType();

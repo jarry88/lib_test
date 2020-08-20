@@ -27,6 +27,8 @@ import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.util.ArrayList
 
@@ -44,7 +46,7 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
         super.onCreate()
         val btnOk=findViewById<TextView>(R.id.btn_ok)
         btnOk.setOnClickListener{
-            goVerifyOldType()
+            goVerify()
         }
     }
     fun goVerifyOldType(){
@@ -92,12 +94,30 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
         val token =User.getToken()
         val verification= editText.text.toString()
         val api=object :BaseRepository(){
-            suspend fun getIfoodmacauVerify(ordersId: Int, goodsId: Int, count: Int, verificationCode: String?): Result<Any> {
-                return safeApiCall(call = {requestIfoodmacauVerify(ordersId,goodsId,count,verificationCode)})
+            suspend fun getIfoodmacauVerify(ordersId: Int, goodsId: Int, count: Int, verificationCode: String?): Result<ZoneInfo> {
+                return safeApiCall(call = {
+                    executeResponse(
+                            api.getIfoodtest(
+                                RequestBody.create(
+                                        MediaType.parse("application/json; charset=utf-8"),
+                                        GsonUtil.bean2String(
+                                                mapOf(
+                                                        "token" to token,
+                                                        "ordersId" to ordersId,
+                                                        "goodsId" to  goodsId,
+                                                        "count" to count,
+                                                        "verificationCode" to verificationCode
+                                                )
+                                        )
+                                )
+                            )
+                    )
+                    }
+                )
             }
 
 
-            private suspend fun requestIfoodmacauVerify(ordersId: Int, goodsId: Int, count: Int, verificationCode: String?): Result<Any> =
+            private suspend fun requestIfoodmacauVerify(ordersId: Int, goodsId: Int, count: Int, verificationCode: String?): Result<ZoneInfo> =
 //                    executeResponse(api.getIfoodmacauVerify(token,verificationCode,goodsId,count,ordersId))
                     executeResponse(api.getIfoodtest(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), GsonUtil.bean2String(mapOf(
                             "token" to token,
@@ -116,8 +136,8 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
                         is Result.Success -> SLog.info("加載数据完成")
                         is Result.DataError -> {//val error= EasyJSONObject.parse<String>()
 //                            SLog.info(error.toString())
-                            SLog.info(result.datas.toString())
-                            ToastUtil.error(context,"核销失败")
+                            SLog.info(result.datas.error)
+                            ToastUtil.error(context,result.datas.error)
                         }
                         is Result.Error -> SLog.info("加載核銷數據異常")
                     }
@@ -127,6 +147,13 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
             }
         }
         api.printResult()
+    }
+    fun goVerifyTest(){
+        val retrofit = Retrofit.Builder()
+                .baseUrl(RetrofitClient.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                .build()
     }
 
     override fun onDismiss() {

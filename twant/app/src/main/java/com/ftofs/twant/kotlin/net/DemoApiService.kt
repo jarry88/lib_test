@@ -65,7 +65,7 @@ interface DemoApiService {
                                     @Field("count")count:Int): TwantResponse<Any>
 //    @FormUrlEncoded
     @POST("member/orders/ifoodmacau/verify")
-    suspend fun getIfoodtest(@Body body: RequestBody): TwantResponse<Any>
+    suspend fun getIfoodtest(@Body body: RequestBody): TwantResponse<ZoneInfo>
 
 //@Field
 }
