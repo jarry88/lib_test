@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.ftofs.twant.domain.store.Seller
-import com.ftofs.twant.kotlin.vo.PageVO
+import com.ftofs.twant.kotlin.vo.PageEntity
 import com.ftofs.twant.kotlin.vo.SellerPageVO
 
 open class BaseViewModel : ViewModel() {
@@ -41,7 +40,7 @@ open class BaseViewModel : ViewModel() {
     /**
      * 处理分页数据
      */
-    fun <T> mapPage(source: LiveData<ApiResponse<PageVO>>): LiveData<PageVO> {
+    fun <T> mapPage(source: LiveData<ApiResponse<PageEntity>>): LiveData<PageEntity> {
         return Transformations.map(source) {
             refreshing.value = false
             moreLoading.value = false

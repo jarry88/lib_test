@@ -38,6 +38,12 @@
             app:adapter="@{adapter}"
             binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fl_my_container"
+            android:background="@color/tw_black"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </layout>

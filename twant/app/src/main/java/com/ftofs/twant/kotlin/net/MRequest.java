@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 
 import com.ftofs.twant.entity.SellerGoodsItem;
 import com.ftofs.twant.kotlin.bean.NewsData;
-import com.ftofs.twant.kotlin.vo.PageVO;
-import com.ftofs.twant.kotlin.vo.SellerGoodsVO;
 import com.ftofs.twant.kotlin.vo.SellerPageVO;
 import com.wzq.mvvmsmart.net.base.BaseRequest;
 import com.wzq.mvvmsmart.net.base.BaseResponse;

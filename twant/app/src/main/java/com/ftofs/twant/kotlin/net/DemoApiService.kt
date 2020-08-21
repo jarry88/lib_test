@@ -3,6 +3,7 @@ package com.ftofs.twant.kotlin.net
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.CategoryItem
 import com.ftofs.twant.kotlin.ZoneCategory
+import com.ftofs.twant.kotlin.bean.ImGoodsSearch
 import com.ftofs.twant.kotlin.bean.NewsData
 import com.ftofs.twant.kotlin.bean.TwantResponse
 import com.ftofs.twant.kotlin.bean.ZoneInfo
@@ -65,7 +66,13 @@ interface DemoApiService {
 //    @FormUrlEncoded
     @POST("member/orders/ifoodmacau/verify")
     suspend fun getIfoodtest(@Body body: RequestBody): TwantResponse<ZoneInfo>
+    @POST("member/im/goods/search")
+    suspend fun getImGoodsSearch(@Query("token") token:String,@QueryMap queryParams: Map<String, String>): TwantResponse<ImGoodsSearch>
 
+
+
+
+    //post接口测试用
     @POST("member/resume/info")
     suspend fun testPost(@Body body: RequestBody): TwantResponse<ZoneInfo>
     @POST("member/resume/info")

@@ -16,25 +16,18 @@ import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.ImGoodsViewModel
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
+import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
+import com.ftofs.twant.widget.CancelAfterVerificationListPopup
 import com.ftofs.twant.widget.ScaledButton
+import com.ftofs.twant.widget.TestCenterPopup
 import com.google.android.material.tabs.TabLayoutMediator
+import com.lxj.xpopup.XPopup
 
 class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
     private val pageList = arrayListOf<ImGoodsListPage>()
-    private val  tabTextList = arrayOf(
-            "推薦商品","最近瀏覽","我的關注","購物袋","本店商品"
-    )
-    private val pageAdapter by lazy {
-        object :FragmentStateAdapter(this){
-            override fun getItemCount(): Int {
-                TODO("Not yet implemented")
-            }
-
-            override fun createFragment(position: Int): Fragment {
-                TODO("Not yet implemented")
-            }
-
-        }
+    private val tabTextList = enumValues<ImGoodsEnum>()
+    private val tvTitle by lazy {
+        binding.rlTitleContainer.findViewById<TextView>(R.id.tv_title)
     }
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.im_goods_layout
@@ -64,7 +57,7 @@ class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewMo
     }
     private val fragmentStateAdapter by lazy {
         object :FragmentStateAdapter(this){
-            val NUM_PAGES= tabTextList.size
+            val NUM_PAGES= pageList.size
             override fun getItemCount(): Int {
                 return NUM_PAGES
             }
@@ -85,16 +78,19 @@ class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewMo
     override fun initData() {
         binding.viewModel=viewModel
         tabTextList.forEach { pageList.add(ImGoodsListPage(it)) }
-        binding.rlTitleContainer.findViewById<TextView>(R.id.tv_title).text="商品"
+        tvTitle.text="商品"
+        tvTitle.setOnClickListener{
+            XPopup.Builder(context).asCustom(TestCenterPopup(context!!) ).show()
+        }
+        binding.rlTitleContainer
         binding.rlTitleContainer.findViewById<ScaledButton>(R.id.btn_back).setOnClickListener { hideSoftInputPop() }
         binding.viewPager.adapter =fragmentStateAdapter
         TabLayoutMediator(binding.tabs,binding.viewPager){tab, position ->
-            tab.text = tabTextList[position]
+            tab.text = tabTextList[position].title
         }.attach()
 
         binding.rvRightList.adapter=adapter
 
-        viewModel.getImGoodsSearch()
     }
 
     override fun onBackPressedSupport(): Boolean {

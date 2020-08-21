@@ -16,6 +16,7 @@
         <!-- 工具欄 -->
         <RelativeLayout
             android:id="@+id/tool_bar"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_height"
             android:layout_marginEnd="@dimen/toolbar_margin_right"
@@ -23,20 +24,12 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             >
-            <com.ftofs.twant.widget.ScaledButton
-                android:id="@+id/btn_back"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
-                android:layout_marginStart="7dp"
-                android:layout_centerVertical="true"
-                app:icon_src="@drawable/icon_back"
-                />
 
             <RelativeLayout
-                android:id="@+id/btn_search_goods"
+                android:id="@+id/rl_search_goods"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:layout_marginStart="44dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginEnd="15dp"
                 android:layout_centerVertical="true"
                 android:background="@drawable/search_container_bg">
@@ -86,7 +79,8 @@
 
             <androidx.recyclerview.widget.RecyclerView
 
-                android:id="@+id/rv_zone_category"
+                android:id="@+id/rv_store_label"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:minWidth="@dimen/dp_90"
                 android:layout_height="wrap_content"

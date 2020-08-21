@@ -28,7 +28,7 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
 
     private  var orderList: MutableList<OrdersGoodsVo>?=null
     private  var order: OrderItem?=null
-    private val  adapter by lazy {
+    private  val adapter by lazy {
         OrderGoodsVoListAdapter(this)
     }
 
