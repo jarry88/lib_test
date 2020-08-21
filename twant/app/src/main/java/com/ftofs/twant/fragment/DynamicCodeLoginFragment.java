@@ -219,7 +219,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
             }
 
 
-            String mobile=pair.component2();
+            String mobile = etMobileView.getPhone();
             String fullMobile = mobileZone.areaCode + "," + mobile;
             String captchaText = etCaptcha.getText().toString().trim();
             SLog.info("captchaText[%s]", captchaText);
