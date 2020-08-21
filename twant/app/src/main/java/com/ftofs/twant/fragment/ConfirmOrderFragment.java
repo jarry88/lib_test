@@ -175,7 +175,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
     int totalGoodsCount; // 商品總數
     // Map<Integer, Integer> cartIdToGoodsId = new HashMap<>();
-    Map<Integer, Integer> goodsIdToCartId = new HashMap<>();
+    Map<Integer, Integer> goodsIdToCartId = new HashMap<>(); // goodsId => cartId 之間的映射關係
     private boolean onlyFetch;
 
     /**
@@ -330,55 +330,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     public boolean onBackPressedSupport() {
         popWithOutRefresh();
         return true;
-    }
-
-    private void determineShowRealNamePopup() {
-        SLog.info("determineShowRealNamePopup");
-        String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
-
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token
-        );
-
-        SLog.info("path[%s], params[%s]", Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params);
-        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
-        Api.getUI(Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                loadingPopup.dismiss();
-                ToastUtil.showNetworkError(_mActivity, e);
-            }
-
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                loadingPopup.dismiss();
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
-
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        return;
-                    }
-
-                    int isShowAuth = responseObj.getInt("datas.isShowAuth");
-                    if (isShowAuth == Constant.TRUE_INT) {
-                        SLog.info("determineShowRealNamePopup");
-                        new XPopup.Builder(_mActivity)
-                                // 如果不加这个，评论弹窗会移动到软键盘上面
-                                .moveUpToKeyboard(true)
-                                .asCustom(new RealNamePopup(_mActivity, mAddrItem.realName))
-                                .show();
-                    } else {
-
-                    }
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                }
-            }
-        });
     }
 
 
