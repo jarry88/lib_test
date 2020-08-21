@@ -3,6 +3,7 @@ package com.ftofs.twant.activity;
 import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
@@ -101,6 +102,7 @@ import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
 import com.orhanobut.hawk.Hawk;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tmall.wireless.tangram.TangramBuilder;
 import com.tmall.wireless.tangram.TangramEngine;
@@ -271,14 +273,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         EventBus.getDefault().register(this);
 
         initTangram();
-
-        int color = getResources().getColor(R.color.tw_blue, null);
-        /*
-        改變狀態欄顏色，在錘子手機中，狀態欄有一種灰色蒙板的感覺，在紅米手機中沒有
-         */
-        StatusBarUtil.setColor(this, color, 0);
-        // StatusBarUtil.setTranslucent(this);
-        // StatusBarUtil.setTransparent(this);
+        Util.switchTranslucentMode(this, false);
 
         // 監聽DecorView的變化
         View activityRoot = getWindow().getDecorView();
