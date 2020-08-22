@@ -63,12 +63,10 @@ interface DemoApiService {
                                     @Query("ordersId")ordersId:Int,
                                     @Query("goodsId")goodsId:Int,
                                     @Query("count")count:Int): TwantResponse<ZoneInfo>
-//    @FormUrlEncoded
-    @POST("member/orders/ifoodmacau/verify")
-    suspend fun getIfoodtest(@Body body: RequestBody): TwantResponse<ZoneInfo>
+//    @FormUrlEncoded  表单用注释
     @POST("member/im/goods/search")
-    suspend fun getImGoodsSearch(@Query("token") token:String,@QueryMap queryParams: Map<String, String>): TwantResponse<ImGoodsSearch>
-
+    suspend fun getImGoodsSearch(@QueryMap queryParams: Map<String, String?>): TwantResponse<ImGoodsSearch>
+//    @Query("token") token:String,
 
 
 

@@ -1,6 +1,9 @@
 package com.ftofs.twant.domain.store;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.constant.Constant;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +12,7 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 
-public class StoreLabel implements Serializable {
+public class StoreLabel implements Serializable,MultiItemEntity {
     /**
      * 店内產品分类编号
      */
@@ -60,6 +63,7 @@ public class StoreLabel implements Serializable {
      */
     private List<StoreLabel> storeLabelList;
     private int depth =1;
+    private int itemType=0;
 
     public static StoreLabel parse(EasyJSONObject label)throws Exception {
         StoreLabel storeLabel = new StoreLabel();
@@ -120,7 +124,9 @@ public class StoreLabel implements Serializable {
     public void setStoreId(int storeId) {
         this.storeId = storeId;
     }
-
+/**
+   1 是 折叠
+ */
     public int getIsFold() {
         return isFold;
     }
@@ -188,5 +194,11 @@ public class StoreLabel implements Serializable {
 
     public int getAreaDeep() {
         return depth;
+    }
+
+
+    @Override
+    public int getItemType() {
+        return itemType;
     }
 }

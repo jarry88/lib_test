@@ -12,7 +12,7 @@ import kotlin.collections.ArrayList
 data class ImGoodsSearch(
         var goodsList:ArrayList<Goods>?,
         var storeLabelList: ArrayList<StoreLabel>?,
-        var pageEntity: PageEntity
-//        val error:String,
+        var pageEntity: PageEntity,
+        val error:String
 //        val message:String,
 ): Serializable

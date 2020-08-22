@@ -88,6 +88,7 @@ class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewMo
         TabLayoutMediator(binding.tabs,binding.viewPager){tab, position ->
             tab.text = tabTextList[position].title
         }.attach()
+//        binding.tabs.setSelectedTabIndicator(R.drawable.tab_indicator)
 
         binding.rvRightList.adapter=adapter
 

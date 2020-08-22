@@ -8,8 +8,4 @@ enum class ImGoodsEnum(val title:String,val searchType:String) {
     FAVORITE("我的關注","recommend"),
     CART("購物袋","recommend"),
     OWNER("本店商品","owner");
-
-    fun toMap(): Map<String, Any?> {
-        return mapOf(this::title.name to title,this::searchType.name to searchType)
-    }
 }

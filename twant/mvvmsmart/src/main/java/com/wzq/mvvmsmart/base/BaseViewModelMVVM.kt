@@ -4,11 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import com.wzq.mvvmsmart.event.StateLiveData
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 
 open class BaseViewModelMVVM(application: Application) : AndroidViewModel(application), IBaseViewModelMVVM, Consumer<Disposable?> {
+    var stateLiveData: StateLiveData<Any> = StateLiveData()
+    fun getStateLiveData(): MutableLiveData<Any> {
+        return stateLiveData
+    }
     //管理RxJava，主要针对RxJava异步操作造成的内存泄漏
     private var mCompositeDisposable: CompositeDisposable?
     private fun addSubscribe(disposable: Disposable?) {
