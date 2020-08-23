@@ -8,15 +8,15 @@ import com.ftofs.twant.kotlin.base.BaseViewModel
 import com.ftofs.twant.kotlin.net.Result
 import com.ftofs.twant.log.SLog
 import com.wzq.mvvmsmart.utils.ToastUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 
-class LinkageShoppingListModel(application:Application) :BaseViewModel(application){
+class LinkageShoppingListModel(application:Application) :BaseViewModel(application),CoroutineScope by MainScope(){
     var viewModel: LinkageModel = LinkageModel()
-    private val _uiState = MutableLiveData<LinkageUiModel>()
+//    private val _uiState = MutableLiveData<LinkageUiModel>()
+    //後面要學封裝UI狀態
+    var isRefresh: Boolean=false
+
 
     val liveData: MutableLiveData<ArrayList<SellerGoodsItem>> by lazy {
         MutableLiveData<ArrayList<SellerGoodsItem>>()
@@ -32,7 +32,7 @@ class LinkageShoppingListModel(application:Application) :BaseViewModel(applicati
 
 
     fun doGetStoreItems(zoneId: Int) {
-        MainScope().launch (Dispatchers.Default){
+        launch (Dispatchers.Default){
             withContext(Dispatchers.Main){
                 val result=viewModel.getZoneStoreList(zoneId,pageNum)
                 if (result is Result.Success) {
@@ -86,4 +86,9 @@ class LinkageShoppingListModel(application:Application) :BaseViewModel(applicati
             val showWebSites: List<SellerGoodsItem>?,
             val showHotSearch: List<SellerGoodsItem>?
     )
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cancel()
+    }
 }

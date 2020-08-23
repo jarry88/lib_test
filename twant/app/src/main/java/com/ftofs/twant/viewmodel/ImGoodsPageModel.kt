@@ -16,6 +16,7 @@ import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.vo.goods.GoodsVo
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
+import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.android.synthetic.main.date_picker_view.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +26,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.random.Random
 
 class ImGoodsPageModel(application: Application) :BaseViewModelMVVM(application) {
-    val showSearch by lazy {
+    var pageNum:Int=1
+    var hasMore:Boolean=false
+    var isRefresh: Boolean=false
+
+    private val showSearch by lazy {
         MutableLiveData<Boolean>()
     }
     val goodsList by lazy {
@@ -54,15 +59,12 @@ class ImGoodsPageModel(application: Application) :BaseViewModelMVVM(application)
         MutableLiveData<String>()
     }
     var labelId=0
-    var page=1
+
     val net by lazy { object :BaseRepository(){} }
 
 
     fun getImGoodsSearch(lableId:String?=null,keyword:String?=null) {
-        val token = User.getToken()
-        token ?: return
 
-        SLog.info("${searchType.value}:请求数据")
         targetName.value ="u_007615414781"
         val queryParams = mapOf(
                 User.getTokenPair(),
@@ -72,17 +74,18 @@ class ImGoodsPageModel(application: Application) :BaseViewModelMVVM(application)
         lableId?.apply { queryParams.plus("lableId" to this) }
         keyword?.apply { queryParams.plus("keyword" to this) }
 //        queryParams.forEach{a,b ->SLog.info("$a,$b")}
+        SLog.info("${searchType.value}:请求数据  参数[${queryParams}]")
 
         viewModelScope.launch(Dispatchers.Default) {
             withContext(Dispatchers.Main){
                 try {
-//                    val result=net.run { simpleGet(api.getImGoodsSearch(queryParams)) }
-                    val result=net.run { simpleGet(api.getImGoodsSearch(queryParams)) }
-                    when(result){
+                    when(val result=net.run { simpleGet(api.getImGoodsSearch(queryParams)) }){
                         is Result.Success -> {
                             goodsList.value=result.datas.goodsList
-//                        result.datas.storeLabelList?.run {storeLabelList.value=this}
+                            result.datas.storeLabelList?.run {storeLabelList.value=this}
+                            hasMore=result.datas.pageEntity.hasMore
                             stateLiveData.postSuccess()
+
                         }
                         is Result.DataError ->  {
                             errorMessage=result.datas.error
@@ -97,6 +100,16 @@ class ImGoodsPageModel(application: Application) :BaseViewModelMVVM(application)
                 }
 
             }
+        }
+    }
+    private fun nullDeal() {
+        if (pageNum <= 1) {
+            //表示執行下拉刷新
+            stateLiveData.postNoData()
+        }else{
+            stateLiveData.postNoMoreData()
+            pageNum--
+            ToastUtils.showShort("沒有更多數據了")
         }
     }
 }

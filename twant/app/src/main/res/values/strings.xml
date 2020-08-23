@@ -828,4 +828,13 @@
     <string name="text_cancel_after_verification_code">核銷碼</string>
     <string name="text_verification_limit">限購 張</string>
     <string name="text_avaliable">可使用</string>
+    <string name="jiazhaoshibai">加載失敗</string>
+    <string name="jiazhaiwancheng">加載完成</string>
+    <string name="zhengzaijiazhai">正在加載</string>
+    <string name="zhengzaishuaxin">正在刷新</string>
+    <string name="shifangshuaxin">釋放刷新</string>
+    <string name="shuanxinwancheng">刷新完成</string>
+    <string name="shuaxinshibai">刷新失敗</string>
+    <string name="shifanglijijiazhai">釋放立即加載</string>
+    <string name="shangcigengxin">上次更新</string>
 </resources>

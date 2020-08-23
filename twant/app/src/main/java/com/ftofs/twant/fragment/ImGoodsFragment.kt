@@ -17,6 +17,7 @@ import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.ImGoodsViewModel
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
+import com.ftofs.twant.log.SLog
 import com.ftofs.twant.widget.CancelAfterVerificationListPopup
 import com.ftofs.twant.widget.ScaledButton
 import com.ftofs.twant.widget.TestCenterPopup
@@ -25,7 +26,9 @@ import com.lxj.xpopup.XPopup
 
 class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
     private val pageList = arrayListOf<ImGoodsListPage>()
-    private val tabTextList = enumValues<ImGoodsEnum>()
+    private val tabTextList by lazy {
+        enumValues<ImGoodsEnum>().apply { forEach { SLog.info(it.toString()) } }
+    }
     private val tvTitle by lazy {
         binding.rlTitleContainer.findViewById<TextView>(R.id.tv_title)
     }

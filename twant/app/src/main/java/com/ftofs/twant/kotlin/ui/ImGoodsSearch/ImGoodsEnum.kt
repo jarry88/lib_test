@@ -5,7 +5,7 @@ enum class ImGoodsEnum(val title:String,val searchType:String) {
 
     RECOMMEND("推薦商品","recommend"),
     HISTORY("最近瀏覽","history"),
-    FAVORITE("我的關注","recommend"),
-    CART("購物袋","recommend"),
+    FAVORITE("我的關注","favorite"),
+    CART("購物袋","cart"),
     OWNER("本店商品","owner");
 }
