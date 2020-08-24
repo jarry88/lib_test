@@ -77,9 +77,7 @@
             android:id="@+id/ll_container"
             app:layout_constraintTop_toBottomOf="@+id/tool_bar"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="@dimen/length_15dp"
             android:layout_marginEnd="@dimen/length_15dp"
-            android:layout_marginBottom="@dimen/length_15dp"
 
             android:orientation="horizontal"
 
