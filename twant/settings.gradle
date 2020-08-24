@@ -1,4 +1,3 @@
 rootProject.name='twant'
 include ':app'
-include ':mvvmsmart'
 

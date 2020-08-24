@@ -106,7 +106,6 @@ android {
 }
 
 dependencies {
-    api project(':mvvmsmart')     //MVVMSmart
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
@@ -246,6 +245,7 @@ dependencies {
     implementation(name: 'taifung-release-1.8.5-androidx', ext: 'aar')
 
     implementation(name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
+    implementation(name: 'mvvmsmart-release_v1.0.0', ext: 'aar')
     implementation(name: 'mzbanner-release', ext: 'aar')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.core:core-ktx:+'
@@ -283,6 +283,12 @@ dependencies {
 
     kapt rootProject.ext.dependencies["glide-compiler"]  //  Glide
     kapt rootProject.ext.dependencies["room-compiler"]  //  Glide
+
+    //mvvm 模塊依賴
+    api rootProject.ext.dependencies["liveEventBus"]
+    api rootProject.ext.dependencies["converter-gson"]
+    api rootProject.ext.dependencies["MMKV"]
+
 
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'io.github.iamyours:router-api:1.0.1'
