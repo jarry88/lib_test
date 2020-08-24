@@ -300,4 +300,7 @@ dependencies {
 }
 repositories {
     mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
 }
