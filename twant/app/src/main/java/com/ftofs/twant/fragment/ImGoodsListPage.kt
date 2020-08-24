@@ -2,36 +2,34 @@ package com.ftofs.twant.fragment
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import cn.snailpad.easyjson.EasyJSONObject
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
+import com.ftofs.twant.constant.PopupType
 import com.ftofs.twant.databinding.FragmentImGoodsPageBinding
 import com.ftofs.twant.databinding.ImGoodsListItemBinding
-import com.ftofs.twant.databinding.ZoneGoodsListItemBindingImpl
 import com.ftofs.twant.domain.store.StoreLabel
 import com.ftofs.twant.entity.Goods
-import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
-import com.ftofs.twant.kotlin.LinkageShoppingListModel
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.viewmodel.ImGoodsPageModel
-import com.lyrebirdstudio.croppylib.util.extensions.visible
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.LoadingUtil
 
-class ImGoodsListPage(val type: ImGoodsEnum) :BaseTwantFragmentMVVM<FragmentImGoodsPageBinding, ImGoodsPageModel>(){
+class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseTwantFragmentMVVM<FragmentImGoodsPageBinding, ImGoodsPageModel>(){
 
     private var loadingUtil: LoadingUtil? = null
     private var oldCategoryIndex=0
@@ -50,6 +48,14 @@ class ImGoodsListPage(val type: ImGoodsEnum) :BaseTwantFragmentMVVM<FragmentImGo
 
             override fun initView(binding: ImGoodsListItemBinding, item: Goods) {
                 binding.vo=item
+                binding.root.setOnClickListener {
+                    parent.sendGoods.onSelected(PopupType.IM_CHAT_SEND_GOODS,0,EasyJSONObject.generate(
+                            "goodsName", item.goodsName,
+                            "commonId", item.commonId,
+                            "goodsImage", item.goodsImage
+                    ))
+                    parent.hideSoftInputPop()
+                }
             }
 
 
@@ -85,7 +91,10 @@ class ImGoodsListPage(val type: ImGoodsEnum) :BaseTwantFragmentMVVM<FragmentImGo
                             }.apply {
                                 setOnClickListener{
                                     if (oldCategoryIndex != adapterPosition) {
-                                        item.apply { isFold=1-isFold }
+                                        item.apply {
+                                            isFold=1-isFold
+                                            viewModel.selectLabelId.postValue(item.storeLabelId)
+                                        }
                                         notifyItemChanged(adapterPosition)
                                         if(oldCategoryIndex in 0 ..data.size)
                                             data[oldCategoryIndex].apply {
@@ -112,7 +121,7 @@ class ImGoodsListPage(val type: ImGoodsEnum) :BaseTwantFragmentMVVM<FragmentImGo
         when (type) {
             ImGoodsEnum.RECOMMEND ,ImGoodsEnum.OWNER->{
                 binding.toolBar.visibility= View.VISIBLE
-                binding.rvStoreLabel.visibility=View.VISIBLE
+//                binding.rvStoreLabel.visibility=View.VISIBLE
             }
             else -> SLog.info(type.searchType)
         }
@@ -120,11 +129,40 @@ class ImGoodsListPage(val type: ImGoodsEnum) :BaseTwantFragmentMVVM<FragmentImGo
         binding.rvGoodsList.adapter =goodsAdapter
         goodsAdapter.showEmptyView(true)
         binding.rvStoreLabel.adapter=labelAdapter
+
+        binding.refreshLayout.setOnRefreshListener {
+            viewModel.getImGoodsSearch()
+        }
+        binding.refreshLayout.setOnLoadMoreListener {
+            viewModel.apply {
+                getImGoodsSearch(selectLabelId.value?.toString(),keyword.value,false)
+            }
+        }
+        binding.etKeyword.apply {
+            setOnEditorActionListener { _, actionId, _ ->
+                if ((actionId == EditorInfo.IME_ACTION_SEARCH) or (actionId == EditorInfo.IME_ACTION_UNSPECIFIED) or (0 == KeyEvent.KEYCODE_ENTER )) {
+                    val search =text?.toString()?.trim()
+                    if (notEmptyString(search)) viewModel.keyword.postValue(search)
+                    else ToastUtil.success(context,"請輸入" + getString(R.string.input_order_search_hint))
+                }
+                return@setOnEditorActionListener true
+
+            }
+        }
+    }
+
+    private fun notEmptyString(text: String?): Boolean {
+        text?.run { return length>0 }
+                ?:return false
     }
 
     override fun initViewObservable() {
 //        viewModel.showSearch.observe(this, Observer {if (it) binding.toolBar.visibility =})
         viewModel.searchType.observe(this, Observer { viewModel.getImGoodsSearch() })
+        viewModel.selectLabelId.observe(this, Observer { viewModel.getImGoodsSearch(labelId = it.toString()) })
+        viewModel.keyword.observe(this, Observer { viewModel.apply {
+            getImGoodsSearch(keyword =it)
+        } })
         viewModel.goodsList.observe(this, Observer {
             goodsAdapter.addAll(it,viewModel.isRefresh) })
         viewModel.storeLabelList.observe(this, Observer {
@@ -132,7 +170,10 @@ class ImGoodsListPage(val type: ImGoodsEnum) :BaseTwantFragmentMVVM<FragmentImGo
                 if (isNotEmpty()) {
                     labelAdapter.setNewData(this)
                 }
-                binding.rvStoreLabel.VorG(isNotEmpty())
+//                when (type) {
+//                    ImGoodsEnum.RECOMMEND ,ImGoodsEnum.OWNER->{binding.rvStoreLabel.VorG(isNotEmpty()) }
+//                    else ->{}
+//                }
             }
              })
 
@@ -174,6 +215,7 @@ class ImGoodsListPage(val type: ImGoodsEnum) :BaseTwantFragmentMVVM<FragmentImGo
 
     override fun onSupportVisible() {
         super.onSupportVisible()
+        viewModel.targetName.value=parent.targetName
         viewModel.searchType.postValue(type.searchType)
     }
 }

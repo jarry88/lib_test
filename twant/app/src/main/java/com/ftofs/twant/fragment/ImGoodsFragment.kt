@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -13,24 +14,21 @@ import com.ftofs.twant.R
 import com.ftofs.twant.databinding.ImGoodsLayoutBinding
 import com.ftofs.twant.databinding.ZoneGoodsListItemBinding
 import com.ftofs.twant.entity.Goods
+import com.ftofs.twant.interfaces.OnSelectedListener
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.ImGoodsViewModel
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
 import com.ftofs.twant.log.SLog
-import com.ftofs.twant.widget.CancelAfterVerificationListPopup
 import com.ftofs.twant.widget.ScaledButton
 import com.ftofs.twant.widget.TestCenterPopup
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lxj.xpopup.XPopup
 
-class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
+class ImGoodsFragment(val targetName:String,val sendGoods: OnSelectedListener):BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
     private val pageList = arrayListOf<ImGoodsListPage>()
     private val tabTextList by lazy {
         enumValues<ImGoodsEnum>().apply { forEach { SLog.info(it.toString()) } }
-    }
-    private val tvTitle by lazy {
-        binding.rlTitleContainer.findViewById<TextView>(R.id.tv_title)
     }
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.im_goods_layout
@@ -42,8 +40,8 @@ class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewMo
 
     companion object {
         @JvmStatic
-        fun newInstance(): ImGoodsFragment {
-            return ImGoodsFragment()
+        fun newInstance(targetName: String,sendGoods: OnSelectedListener): ImGoodsFragment {
+            return ImGoodsFragment(targetName,sendGoods )
         }
     }
 
@@ -80,13 +78,14 @@ class ImGoodsFragment:BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewMo
     }
     override fun initData() {
         binding.viewModel=viewModel
-        tabTextList.forEach { pageList.add(ImGoodsListPage(it)) }
-        tvTitle.text="商品"
-        tvTitle.setOnClickListener{
-            XPopup.Builder(context).asCustom(TestCenterPopup(context!!) ).show()
+        tabTextList.forEach { pageList.add(ImGoodsListPage(it,this)) }
+        binding.rlTitleContainer.tvTitle.apply {
+            text="商品"
+            setOnClickListener{
+                XPopup.Builder(context).asCustom(TestCenterPopup(context!!) ).show()
+            }
         }
-        binding.rlTitleContainer
-        binding.rlTitleContainer.findViewById<ScaledButton>(R.id.btn_back).setOnClickListener { hideSoftInputPop() }
+        binding.rlTitleContainer.btnBack.setOnClickListener { hideSoftInputPop() }
         binding.viewPager.adapter =fragmentStateAdapter
         TabLayoutMediator(binding.tabs,binding.viewPager){tab, position ->
             tab.text = tabTextList[position].title

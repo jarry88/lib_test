@@ -55,10 +55,8 @@ public class HttpCommonInterceptor implements Interceptor {
             KLog.INSTANCE.e(TAG, "网络请求--#" + response.request().url());
 //            KLog.INSTANCE.e(TAG, "网络请求--参数#" + responseBody.source());
             BufferedSource source = responseBody.source();
-            KLog.INSTANCE.json(TAG, "58");  // Warn级别查看 带格式的json
 
             Buffer buffer = source.buffer();
-            KLog.INSTANCE.json(TAG, "61");  // Warn级别查看 带格式的json
 
             MediaType contentType = responseBody.contentType();
             Charset charset = contentType != null ? contentType.charset(Charset.forName("UTF-8")) : Charset.forName("UTF-8");

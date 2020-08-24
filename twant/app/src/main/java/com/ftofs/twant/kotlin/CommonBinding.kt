@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.ftofs.twant.R
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.StringUtil
+import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.Util
 
 
@@ -26,6 +27,12 @@ import com.ftofs.twant.util.Util
 fun loadImageUrl(v: ImageView, url: String?) {
     url?.run {
         Glide.with(v).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(v)
+    }
+}
+@BindingAdapter(value = ["timeStamp"])
+fun setTimeStamp(v: TextView, timeStamp: Long?) {
+    timeStamp?.let {
+        v.text= Time.fromMillisUnixtime(timeStamp,"Y-m-d H:i:s")
     }
 }
 @BindingAdapter(value = ["price"])

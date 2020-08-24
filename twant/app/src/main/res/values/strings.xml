@@ -836,5 +836,5 @@
     <string name="shuanxinwancheng">刷新完成</string>
     <string name="shuaxinshibai">刷新失敗</string>
     <string name="shifanglijijiazhai">釋放立即加載</string>
-    <string name="shangcigengxin">上次更新</string>
+    <string name="shangcigengxin">上次更新 M-d HH:mm</string>
 </resources>

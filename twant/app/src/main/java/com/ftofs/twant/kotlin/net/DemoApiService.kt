@@ -66,6 +66,8 @@ interface DemoApiService {
 //    @FormUrlEncoded  表单用注释
     @POST("member/im/goods/search")
     suspend fun getImGoodsSearch(@QueryMap queryParams: Map<String, String?>): TwantResponse<ImGoodsSearch>
+    @GET("member/im/orders/list")
+    suspend fun getImOrdersSearch(@QueryMap queryParams: Map<String, String?>): TwantResponse<ImGoodsSearch>
 //    @Query("token") token:String,
 
 

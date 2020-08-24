@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.wzq.mvvmsmart.widget.EmptyViewHelper
+import java.lang.Exception
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> : Fragment(), IBaseViewMVVM {
@@ -54,6 +55,7 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> : F
     /**
      * 注入绑定
      */
+    @Suppress("UNCHECKED_CAST") //忽略類型轉化異常
     private fun initViewDataBinding() {
         viewModelId = initVariableId()
         val modelClass: Class<VM>
@@ -150,8 +152,11 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> : F
     override fun onContentReload() {}
     override fun onDestroyView() {
         super.onDestroyView()
-        if (binding != null) {
+        try {
+            //防止爲空
             binding.unbind()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

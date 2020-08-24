@@ -1,5 +1,7 @@
 package com.ftofs.twant.entity;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 
 /**
@@ -9,13 +11,16 @@ import androidx.annotation.NonNull;
 public class ImStoreOrderItem {
     public int ordersId;
     public String ordersSn;
-    public String goodsImage;
+    public String goodsImg;
     public String goodsName;
+    public double ordersAmount;
+    public String  createTime;//下單時間
 
+    @SuppressLint("DefaultLocale")
     @NonNull
     @Override
     public String toString() {
         return String.format("ordersId[%d], ordersSn[%s], goodsImage[%s], goodsName[%s]",
-                ordersId, ordersSn, goodsImage, goodsName);
+                ordersId, ordersSn, goodsImg, goodsName);
     }
 }

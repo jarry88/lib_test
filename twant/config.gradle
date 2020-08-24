@@ -37,7 +37,11 @@ ext {
             "rxandroid"                    : "io.reactivex.rxjava2:rxandroid:2.0.1",
             //glide图片加载
             "glide"                        : "com.github.bumptech.glide:glide:4.9.0",
+
+            //kapt 三兄弟
             "glide-compiler"               : "com.github.bumptech.glide:compiler:4.9.0",
+            "room-compiler"               : "androidx.room:room-compiler:2.2.5",
+            "permissionsdispatcher-processor"            : "com.github.hotchemi:permissionsdispatcher-processor:3.1.0",
             //json解析
             "gson"                         : "com.google.code.gson:gson:2.8.5",
 
