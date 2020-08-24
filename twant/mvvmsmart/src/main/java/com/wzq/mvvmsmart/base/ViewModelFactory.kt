@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider.NewInstanceFactory
 import java.lang.reflect.InvocationTargetException
 
 class ViewModelFactory private constructor(private val mApplication: Application) : NewInstanceFactory() {
+    @Suppress("UNCHECKED_CAST") //忽略類型轉化異常
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(BaseViewModelMVVM::class.java)) {
             BaseViewModelMVVM(mApplication) as T

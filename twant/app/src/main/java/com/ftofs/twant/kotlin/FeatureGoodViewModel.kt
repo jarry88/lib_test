@@ -23,6 +23,7 @@ class FeatureGoodViewModel(application: Application) : BaseViewModel(application
     }
     /**
      * 网络请求方法，在ViewModel中调用Model层，通过Okhttp+Retrofit+RxJava发起请求
+     * 改一下 去掉Rxjava
      */
     fun doGetFeaturesGoodsList() {
         //可以调用addSubscribe()添加Disposable，请求与View周期同步

@@ -847,18 +847,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                 break;
             case R.id.btn_send_goods:
-                new XPopup.Builder(_mActivity)
-                        // 如果不加这个，评论弹窗会移动到软键盘上面
-                        .moveUpToKeyboard(false)
-                        .asCustom(new ImStoreGoodsPopup(_mActivity, storeId, yourMemberName, "", this))
-                        .show();
+//                new XPopup.Builder(_mActivity)
+//                        // 如果不加这个，评论弹窗会移动到软键盘上面
+//                        .moveUpToKeyboard(false)
+//                        .asCustom(new ImStoreGoodsPopup(_mActivity, storeId, yourMemberName, "", this))
+//                        .show();
+                Util.startFragment(ImGoodsFragment.newInstance(yourMemberName,this));
                 break;
             case R.id.btn_send_order:
-                new XPopup.Builder(_mActivity)
-                        // 如果不加这个，评论弹窗会移动到软键盘上面
-                        .moveUpToKeyboard(false)
-                        .asCustom(new ImStoreOrderPopup(_mActivity, storeId, yourMemberName,this))
-                        .show();
+//                new XPopup.Builder(_mActivity)
+//                        // 如果不加这个，评论弹窗会移动到软键盘上面
+//                        .moveUpToKeyboard(false)
+//                        .asCustom(new ImStoreOrderPopup(_mActivity, storeId, yourMemberName,this))
+//                        .show();
+                Util.startFragment(new ImOrdersFragment(yourMemberName,this));
+
                 break;
             case R.id.btn_send_enc:
                 new XPopup.Builder(_mActivity)
@@ -1253,7 +1256,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 content = EasyJSONObject.generate(
                         "ordersId", String.valueOf(imStoreOrderItem.ordersId),
                         "ordersSn", imStoreOrderItem.ordersSn,
-                        "goodsImage", imStoreOrderItem.goodsImage,
+                        "goodsImage", imStoreOrderItem.goodsImg,
                         "goodsName", imStoreOrderItem.goodsName
                 ).toString();
             } else if (CUSTOM_MESSAGE_TYPE_ENC.equals(messageType)) {
@@ -1274,7 +1277,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                 message.setAttribute("ordersId", String.valueOf(imStoreOrderItem.ordersId));
                 message.setAttribute("ordersSn", imStoreOrderItem.ordersSn);
-                message.setAttribute("goodsImage", imStoreOrderItem.goodsImage);
+                message.setAttribute("goodsImage", imStoreOrderItem.goodsImg);
                 message.setAttribute("goodsName", imStoreOrderItem.goodsName);
                 pushContent = ChatConversation.LAST_MESSAGE_DESC_ORDERS;
 
@@ -1312,7 +1315,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         } else if (CUSTOM_MESSAGE_TYPE_ORDERS.equals(messageType)) {
                             ImStoreOrderItem imStoreOrderItem = (ImStoreOrderItem) extra;
                             Api.imSendMessage(yourMemberName, messageType, message.getMsgId(), message.getBody().toString(),
-                                    null, null, 0, imStoreOrderItem.goodsName, imStoreOrderItem.goodsImage, imStoreOrderItem.ordersId, imStoreOrderItem.ordersSn);
+                                    null, null, 0, imStoreOrderItem.goodsName, imStoreOrderItem.goodsImg, imStoreOrderItem.ordersId, imStoreOrderItem.ordersSn);
                         } else if (CUSTOM_MESSAGE_TYPE_ENC.equals(messageType)) {
                             Api.imSendMessage(yourMemberName, messageType, message.getMsgId(), message.ext().toString(),
                                     null, null, 0, null, null, 0, null);
@@ -1350,7 +1353,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                 chatMessage.content = EasyJSONObject.generate(
                         "ordersId", imStoreOrderItem.ordersId, "ordersSn", imStoreOrderItem.ordersSn,
-                        "goodsImage", imStoreOrderItem.goodsImage, "goodsName", imStoreOrderItem.goodsName).toString();
+                        "goodsImage", imStoreOrderItem.goodsImg, "goodsName", imStoreOrderItem.goodsName).toString();
             } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ENC) {
                 chatMessage.trueName = myTrueName;
             }

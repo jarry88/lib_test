@@ -45,7 +45,7 @@ abstract class ProgressCallBack<T>(lifecycleOwner: LifecycleOwner?, // 本地文
                 `is`?.close()
                 fos?.close()
             } catch (e: IOException) {
-                Log.e("saveFile", e.message)
+                Log.e("saveFile", e.message.toString())
             }
         }
     }

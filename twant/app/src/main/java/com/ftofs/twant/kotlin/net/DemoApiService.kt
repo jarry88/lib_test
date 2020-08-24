@@ -3,6 +3,7 @@ package com.ftofs.twant.kotlin.net
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.CategoryItem
 import com.ftofs.twant.kotlin.ZoneCategory
+import com.ftofs.twant.kotlin.bean.ImGoodsSearch
 import com.ftofs.twant.kotlin.bean.NewsData
 import com.ftofs.twant.kotlin.bean.TwantResponse
 import com.ftofs.twant.kotlin.bean.ZoneInfo
@@ -56,16 +57,25 @@ interface DemoApiService {
     //  想要食核銷接口
     //    token: String?, ordersId: Int, goodsId: Int, count: Int, verificationCode: String
 
-    @FormUrlEncoded
     @POST("member/orders/ifoodmacau/verify")
-    suspend fun getIfoodmacauVerify(@Field("token")token:String,
-                                    @Field("verificationCode")verificationCode:String?,
-                                    @Field("ordersId")ordersId:Int,
-                                    @Field("goodsId")goodsId:Int,
-                                    @Field("count")count:Int): TwantResponse<Any>
-//    @FormUrlEncoded
-    @POST("member/orders/ifoodmacau/verify")
-    suspend fun getIfoodtest(@Body body: RequestBody): TwantResponse<Any>
+    suspend fun getIfoodmacauVerify(@Query("token")token:String,
+                                    @Query("verificationCode")verificationCode:String?,
+                                    @Query("ordersId")ordersId:Int,
+                                    @Query("goodsId")goodsId:Int,
+                                    @Query("count")count:Int): TwantResponse<ZoneInfo>
+//    @FormUrlEncoded  表单用注释
+    @POST("member/im/goods/search")
+    suspend fun getImGoodsSearch(@QueryMap queryParams: Map<String, String?>): TwantResponse<ImGoodsSearch>
+    @GET("member/im/orders/list")
+    suspend fun getImOrdersSearch(@QueryMap queryParams: Map<String, String?>): TwantResponse<ImGoodsSearch>
+//    @Query("token") token:String,
 
+
+
+    //post接口测试用
+    @POST("member/resume/info")
+    suspend fun testPost(@Body body: RequestBody): TwantResponse<ZoneInfo>
+    @POST("member/resume/info")
+    suspend fun testPost1(@Query("token") token: String): TwantResponse<ZoneInfo>
 //@Field
 }

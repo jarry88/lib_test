@@ -28,7 +28,7 @@ public class ImStoreOrderListAdapter extends BaseQuickAdapter<ImStoreOrderItem, 
     protected void convert(BaseViewHolder helper, ImStoreOrderItem item) {
         ImageView goodsImage = helper.getView(R.id.goods_image);
 
-        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.goodsImage)).centerCrop().into(goodsImage);
+        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.goodsImg)).centerCrop().into(goodsImage);
 
         String orderNum = mContext.getString(R.string.text_order) + ": " + item.ordersSn;
         helper.setText(R.id.tv_order_num, orderNum);

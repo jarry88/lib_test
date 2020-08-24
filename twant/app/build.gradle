@@ -110,7 +110,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    api rootProject.ext.dependencies["design"] // 刷新框架
+
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.github.yalantis:ucrop:2.2.4'
@@ -130,16 +131,16 @@ dependencies {
     implementation 'com.nex3z:flow-layout:1.2.4'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
+    api rootProject.ext.dependencies["glide"]
+    api rootProject.ext.dependencies["glide:okhttp3-integration"]
 
     // 新增
-    implementation 'com.github.bumptech.glide:annotations:4.9.0'
+    kapt rootProject.ext.dependencies["glide-compiler"]
+    // 新增
+    api rootProject.ext.dependencies["glide:annotations"]
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    // 新增
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.alibaba.android:tangram:3.3.6@aar'
 
     // we added rxjava in latest version, so need compile rxjava
@@ -220,7 +221,7 @@ dependencies {
 
     //4，permissionsdispatcher权限
     implementation 'com.github.hotchemi:permissionsdispatcher:3.1.0'
-    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
+    kapt rootProject.ext.dependencies["permissionsdispatcher-processor"]
     implementation 'com.muddzdev:styleabletoast:2.2.0'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.github.JuHonggang:ShadowDrawable:0.1'
@@ -278,9 +279,11 @@ dependencies {
     api rootProject.ext.dependencies["rxandroid"]
     api rootProject.ext.dependencies["adapter-rxjava2"]
     api rootProject.ext.dependencies["room-runtime"]
-    api rootProject.ext.dependencies["treerecyclerview"]
-    kapt "android.arch.persistence.room:compiler:2.2.3"     // java
-    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
+
+    kapt rootProject.ext.dependencies["glide-compiler"]  //  Glide
+    kapt rootProject.ext.dependencies["room-compiler"]  //  Glide
+
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'io.github.iamyours:router-api:1.0.1'
     implementation 'com.qmuiteam:qmui:2.0.0-alpha10'

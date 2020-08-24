@@ -2,10 +2,8 @@ package com.ftofs.twant.kotlin
 
 import androidx.lifecycle.LiveData
 import com.ftofs.twant.config.Config
-import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.adapter.LiveDataCallAdapterFactory
 import com.ftofs.twant.kotlin.vo.BannerVO
-import com.ftofs.twant.kotlin.vo.PageVO
 import com.ftofs.twant.kotlin.vo.SellerGoodsVO
 import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.ftofs.twant.log.SLog
@@ -16,7 +14,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.*
 import java.util.concurrent.TimeUnit
