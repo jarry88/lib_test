@@ -60,6 +60,8 @@ import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
+import com.ftofs.twant.fragment.SecKillFragment;
+import com.ftofs.twant.fragment.SecKillGoodsListFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.handler.StackViewTouchListener;
 import com.ftofs.twant.interfaces.CommonCallback;
@@ -502,7 +504,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                         }
                                     });
                                 } else if (position == 10) { // 測試2
-                                    Util.startFragment(BindMobileFragment.newInstance("XXX", "YYY"));
+                                    Util.startFragment(SecKillFragment.newInstance());
                                 }else if (position == 11) { // 開發寫死的數值通道開關
                                     Config.USE_DEVELOPER_TEST_DATA = !Config.USE_DEVELOPER_TEST_DATA;
                                     ToastUtil.success(getApplicationContext(),Config.USE_DEVELOPER_TEST_DATA?"使用寫死的數據":"使用服務器數據");

@@ -1,6 +1,7 @@
 package com.ftofs.twant.util;
 
 import com.ftofs.twant.entity.TimeInfo;
+import com.ftofs.twant.log.SLog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -108,6 +109,25 @@ public class Time {
         d = d % 3600;
         timeInfo.minute = d / 60;
         timeInfo.second = d % 60;
+
+        return timeInfo;
+    }
+
+    public static TimeInfo countDownDiff(long from, long to) {
+        if (from > to) {
+            return null;
+        }
+
+        long d = to - from;
+        int dint = (int) (d / 1000);
+        SLog.info("dint[%d]", dint);
+        TimeInfo timeInfo = new TimeInfo();
+
+        timeInfo.hour = dint / 3600;
+        dint = dint % 3600;
+        timeInfo.minute = dint / 60;
+        timeInfo.second = dint % 60;
+        SLog.info("hour[%d], minute[%d], second[%d]", timeInfo.hour, timeInfo.minute, timeInfo.second);
 
         return timeInfo;
     }

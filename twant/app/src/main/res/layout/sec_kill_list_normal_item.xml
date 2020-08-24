@@ -234,7 +234,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:src="@drawable/pink_button_80_24"
-                        app:tint="@color/tw_red">
+                        android:tint="@color/tw_red">
 
                     </ImageView>
                     <!-- 按鈕文字 -->

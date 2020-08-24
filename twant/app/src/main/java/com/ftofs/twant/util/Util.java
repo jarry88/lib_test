@@ -1544,6 +1544,11 @@ public class Util {
     }
 
 
+    /**
+     * 是切換到白色頂部工具欄還是圖片背景的工具欄
+     * @param activity
+     * @param isImageMode
+     */
     public static void switchTranslucentMode(Activity activity, boolean isImageMode) {
         View contentView = activity.findViewById(android.R.id.content);
         if (isImageMode) {

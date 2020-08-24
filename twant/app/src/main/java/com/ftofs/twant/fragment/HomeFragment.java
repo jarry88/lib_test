@@ -27,6 +27,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -143,9 +144,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 加載輪播圖片
      */
     private void loadCarousel() {
-        Api.getUI(Api.PATH_HOME_INDEX, null, new UICallback() {
+        String url = Api.PATH_HOME_INDEX;
+        Api.getUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -159,6 +162,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                 try {
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, "", responseStr, "");
                         return;
                     }
 
