@@ -48,7 +48,6 @@ class TestCenterPopup(context: Context):CenterPopupView(context), View.OnClickLi
         val fllayout=findViewById<FrameLayout>(R.id.fl_my_container)
         rvList.visibility=View.GONE
         fllayout.visibility=View.VISIBLE
-        val vg=fllayout.getChildAt(0) as ViewGroup
 //        vg.addView(object :View(context){
 //            var mDrawable: Drawable? = null
 //

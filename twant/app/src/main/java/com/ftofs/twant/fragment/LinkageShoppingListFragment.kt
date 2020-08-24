@@ -153,7 +153,7 @@ class LinkageShoppingListFragment : BaseTwantFragmentMVVM<SimpleRvListBinding, L
 
         }
         //上拉加载更多
-        binding.refreshLayout.setOnLoadMoreListener { refreshLayout: RefreshLayout? ->
+        binding.refreshLayout.setOnLoadMoreListener { _: RefreshLayout? ->
             //            loadMoreTestData();   // 模拟加载更多数据
             if (viewModel.hasMore) {
                 viewModel.pageNum++//請求到數據后，如果獲得list為空，會在vm中將pagenum-1
