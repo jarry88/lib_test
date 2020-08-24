@@ -112,7 +112,7 @@ dependencies {
     api rootProject.ext.dependencies["design"] // 刷新框架
 
     implementation 'com.github.clans:fab:1.6.4'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    api rootProject.ext.dependencies["constraint-layout"]
     implementation 'com.github.yalantis:ucrop:2.2.4'
     implementation 'com.lxj:xpopup:1.7.1'
     implementation 'com.isseiaoki:simplecropview:1.1.8'
@@ -245,7 +245,6 @@ dependencies {
     implementation(name: 'taifung-release-1.8.5-androidx', ext: 'aar')
 
     implementation(name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
-    implementation(name: 'mvvmsmart-release_v1.0.0', ext: 'aar')
     implementation(name: 'mzbanner-release', ext: 'aar')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.core:core-ktx:+'
@@ -272,8 +271,17 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     // retrofit 有mvvm依赖提供
 
-    def lifecycle_version = "2.2.0"
+    def lifecycle_version = "2.2.0"//安卓x的使用方法
+    implementation 'androidx.fragment:fragment-ktx:1.2.5'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+// Annotation processor
+//    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    // alternately - if using Java8, use the following instead of lifecycle-compiler
+
+//    api rootProject.ext.dependencies["lifecycle-extensions"]
+//    api rootProject.ext.dependencies["lifecycle-compiler"]
     api rootProject.ext.dependencies["smartRefreshLayout"] // 刷新框架
 
     api rootProject.ext.dependencies["rxjava"] // rxjava2
@@ -300,7 +308,4 @@ dependencies {
 }
 repositories {
     mavenCentral()
-    flatDir {
-        dirs 'libs'
-    }
 }
