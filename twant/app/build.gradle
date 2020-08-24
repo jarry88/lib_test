@@ -275,9 +275,11 @@ dependencies {
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     api rootProject.ext.dependencies["smartRefreshLayout"] // 刷新框架
+
     api rootProject.ext.dependencies["rxjava"] // rxjava2
-    api rootProject.ext.dependencies["rxandroid"]
     api rootProject.ext.dependencies["adapter-rxjava2"]
+    api rootProject.ext.dependencies["rxandroid"]
+
     api rootProject.ext.dependencies["room-runtime"]
     api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
 
@@ -288,6 +290,7 @@ dependencies {
     api rootProject.ext.dependencies["liveEventBus"]
     api rootProject.ext.dependencies["converter-gson"]
     api rootProject.ext.dependencies["MMKV"]
+    api rootProject.ext.dependencies["cat"]
 
 
     implementation 'com.kaopiz:kprogresshud:1.2.0'

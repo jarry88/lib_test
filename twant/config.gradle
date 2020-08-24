@@ -12,6 +12,7 @@ ext {
 
     //依赖第三方配置
     dependencies = [
+            //谷歌官方桶
             "appcompat"                    : "androidx.appcompat:appcompat:1.0.0",
             "appdesign"                    : "com.google.android.material:material:1.2.0",
             "support-annotations"          : "androidx.annotation:annotation:1.0.0",
@@ -28,8 +29,12 @@ ext {
             "retrofit"                     : "com.squareup.retrofit2:retrofit:2.6.0",
             "room-runtime"                 : "androidx.room:room-runtime:2.2.5",
 
+
+            //第三方插件
 //            "okio"                    : "com.squareup.okio:okio:2.2.2",
 //            "converter-scalars"       : "com.squareup.retrofit2:converter-scalars:2.4.0",
+            "cat"                          :'cat.ereza:customactivityoncrash:2.3.0' ,// 崩溃捕获和重启框架
+
             "converter-gson"               : "com.squareup.retrofit2:converter-gson:2.6.0",
             "adapter-rxjava2"              : "com.squareup.retrofit2:adapter-rxjava2:2.6.0",
             //rxjavab
@@ -46,7 +51,6 @@ ext {
             "permissionsdispatcher-processor"            : "com.github.hotchemi:permissionsdispatcher-processor:3.1.0",
             //json解析
             "gson"                         : "com.google.code.gson:gson:2.8.5",
-
             //Google AAC
             "lifecycle-extensions"         : "android.arch.lifecycle:extensions:1.1.1",
             "lifecycle-compiler"           : "android.arch.lifecycle:compiler:1.1.1",
