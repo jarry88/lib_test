@@ -39,7 +39,9 @@
 
     <uses-permission android:name="COM.MACAUPASS.RECHARGEEASY.PERMISSION.CALL" />
 
-
+<!--    <uses-library android:name="android.test.base"/>-->
+<!--    <uses-library android:name="android.test.mock"/>-->
+<!--    <uses-library android:name="android.test.runner"/>-->
     <application
         android:name=".TwantApplication"
         android:allowBackup="true"
