@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewParent
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -30,26 +31,15 @@ import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.LoadingUtil
 import java.util.*
 
-class LinkageShoppingListFragment : BaseTwantFragmentMVVM<SimpleRvListBinding, LinkageShoppingListModel>() {
+class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecialFragment): BaseTwantFragmentMVVM<SimpleRvListBinding, LinkageShoppingListModel>() {
 
     //    private var parent by lazy { arguments?.get("parent") }
-    private lateinit var mAdapter: ShoppingStoreListAdapter
-    lateinit var parent: NewShoppingSpecialFragment
+    private val mAdapter by lazy {
+        ShoppingStoreListAdapter(R.layout.shopping_store_view, arrayListOf())
+    }
 
     private var loadingUtil: LoadingUtil? = null
-    private val zoneId by lazy { arguments?.getInt("zoneId") }
 
-    companion object {
-        fun newInstance(zoneId: Int,p:NewShoppingSpecialFragment): LinkageShoppingListFragment {
-            val args = Bundle()
-            val fragment = LinkageShoppingListFragment()
-            args.putInt("zoneId", zoneId)
-            fragment.parent=p
-//            args.put("parent",parent)
-            fragment.arguments = args
-            return fragment
-        }
-    }
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun initParam() {
@@ -72,37 +62,38 @@ class LinkageShoppingListFragment : BaseTwantFragmentMVVM<SimpleRvListBinding, L
     }
 
     override fun initData() {
-//        ToastUtils.showShort(parentFragment.getText(R.id.tvTitle))
         initRecyclerView()
-        zoneId?.let { viewModel.doGetStoreItems(it) } //请求网络数据
+        zoneId.let { viewModel.doGetStoreItems(it) } //请求网络数据
     }
 
     private fun initRecyclerView() {
-        val item = StoreItem()
-        mAdapter = ShoppingStoreListAdapter(R.layout.shopping_store_view, arrayListOf())
         binding.adapter = mAdapter
 
-        mAdapter.setOnItemChildClickListener(BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>?, view1: View, position: Int ->
+        mAdapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>?, view1: View, position: Int ->
             val id = view1.id
             if (id == R.id.goods_image_left_container || id == R.id.goods_image_middle_container || id == R.id.goods_image_right_container) {
-                var storeItem = adapter?.data?.get(position) as StoreItem
+                val storeItem = adapter?.data?.get(position) as StoreItem?:null
                 storeItem?.let {
-                    it.zoneGoodsVoList?.let {
+                    it.zoneGoodsVoList?.run {
 
-                        val commonId: Int = if (id == R.id.goods_image_middle_container) {
-                            it.get(0).commonId
-                        } else if (id == R.id.goods_image_left_container) {
-                            it.get(1).commonId
-                        } else {
-                            it.get(2).commonId
+                        val commonId: Int = when (id) {
+                            R.id.goods_image_middle_container -> {
+                                get(0).commonId
+                            }
+                            R.id.goods_image_left_container -> {
+                                get(1).commonId
+                            }
+                            else -> {
+                                get(2).commonId
+                            }
                         }
                         Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0))
                     }
                 }
             }
-        })
-        mAdapter.setOnItemClickListener { adapter, view1, position ->
-            val store = adapter.data.get(position) as StoreItem
+        }
+        mAdapter.setOnItemClickListener { adapter, _, position ->
+            val store = adapter.data[position] as StoreItem
 
             if (Config.PROD) {
                 val analyticsDataMap = HashMap<String, Any>()
@@ -112,7 +103,7 @@ class LinkageShoppingListFragment : BaseTwantFragmentMVVM<SimpleRvListBinding, L
             Util.startFragment(ShopMainFragment.newInstance(store.storeId))
         }
 
-        parent?.let {
+        parent.let {
             binding.rvSimple.isNestedScrollingEnabled = false
             binding.rvSimple.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -146,9 +137,9 @@ class LinkageShoppingListFragment : BaseTwantFragmentMVVM<SimpleRvListBinding, L
         })
         binding.refreshLayout.setOnRefreshListener {
             viewModel.pageNum = 1
-            zoneId?.let {
+            zoneId.let {
                 viewModel.doGetStoreItems(it)
-            } ?: binding.refreshLayout.finishRefresh()
+            }
             binding.rvSimple.scrollToPosition(0)
 
         }
@@ -157,7 +148,7 @@ class LinkageShoppingListFragment : BaseTwantFragmentMVVM<SimpleRvListBinding, L
             //            loadMoreTestData();   // 模拟加载更多数据
             if (viewModel.hasMore) {
                 viewModel.pageNum++//請求到數據后，如果獲得list為空，會在vm中將pagenum-1
-                zoneId?.let { viewModel.doGetStoreItems(it) }
+                zoneId.let { viewModel.doGetStoreItems(it) }
             } else {
                 viewModel.stateLiveData.postNoMoreData()
             }
