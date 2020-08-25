@@ -6,9 +6,7 @@ import com.ftofs.twant.kotlin.adapter.LiveDataCallAdapterFactory
 import com.ftofs.twant.kotlin.vo.BannerVO
 import com.ftofs.twant.kotlin.vo.SellerGoodsVO
 import com.ftofs.twant.kotlin.vo.SellerPageVO
-import com.ftofs.twant.log.SLog
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,11 +22,11 @@ interface KotlinInterfaceApi {
             val clientBuilder = OkHttpClient.Builder()
                     .connectTimeout(60, TimeUnit.SECONDS)
 //            if (BuildConfig.DEBUG) {
-                val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
-                    SLog.info("下一页网络日志", "Message:$message")
-                })
-                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-                clientBuilder.addInterceptor(loggingInterceptor)
+//                val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
+//                    SLog.info("下一页网络日志", "Message:$message")
+//                })
+//                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+//                clientBuilder.addInterceptor(loggingInterceptor)
 ////            }
             return Retrofit.Builder()
                     .baseUrl(Config.API_BASE_URL+"/")

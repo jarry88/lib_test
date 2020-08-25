@@ -32,6 +32,9 @@ android {
         }
 
         resConfigs "zh", "en"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+
     }
     flavorDimensions "channel"
     productFlavors {
@@ -85,6 +88,8 @@ android {
         main {
             jniLibs.srcDirs = ['libs']
         }
+        androidTest.setRoot('src/test')
+
     }
 
     repositories {
@@ -102,24 +107,85 @@ android {
     buildFeatures{
         dataBinding = true
     }
+//3.4 以後版本自動開了 然後加上這個，不然 sync 抓下來的 Robolectric 的 Resources 會抓舊的，Test Log 會說該 resource 已被 deprecate 了…
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+    useLibrary 'android.test.runner'
+
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
 
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    api rootProject.ext.dependencies["design"] // 刷新框架
+    api rootProject.ext.dependencies["appcompat"] //
+    api rootProject.ext.dependencies["design"] //
+    api rootProject.ext.dependencies["recyclerview"] //
+    api rootProject.ext.dependencies["constraint-layout"]
+    //android 測試桶
+    testImplementation  rootProject.ext.dependencies["robolectric"] // 測試框架
+    // Required for local unit tests (JUnit 4 framework)
+    testImplementation 'junit:junit:4.13'
+    // Required for instrumented tests
+    // Optional -- Robolectric environment
+    testImplementation 'androidx.test:core:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.ext:truth:1.2.0'
+    androidTestImplementation 'com.google.truth:truth:0.42'
+    // Optional -- Hamcrest library
+    androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
+    // Optional -- UI testing with Espresso
+    // Espresso dependencies
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
+    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.2.0'
+
+    // The following Espresso dependency can be either "implementation"
+    // or "androidTestImplementation", depending on whether you want the
+    // dependency to appear on your APK's compile classpath or the test APK
+    // classpath.
+    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
+    // Optional -- UI testing with UI Automator
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+//    // Optional -- Mockito framework
+//    testImplementation 'org.mockito:mockito-core:2.27.0'
+    //
+
+    implementation 'com.kunminx.linkage:linkage-recyclerview:2.0.2'
+    //jetpack
+    implementation 'androidx.core:core-ktx:1.3.1'
+
+    api rootProject.ext.dependencies["room-runtime"]
+    kapt rootProject.ext.dependencies["room-compiler"]  //  room
+
+    api rootProject.ext.dependencies["fragment-ktx"]
+    api rootProject.ext.dependencies["lifecycle-runtime-ktx"]
+    api rootProject.ext.dependencies["lifecycle-viewmodel-ktx"]
+    api rootProject.ext.dependencies["lifecycle-livedata-ktx"]
+    api rootProject.ext.dependencies["lifecycle-common-java8"]
+    //jetpack 全家桶裝填完畢
+    //3.9.0版本是使用Java写的，从4.0.0后改用的Kotlin写的
+    api rootProject.ext.dependencies["okhttp"] //
+    api rootProject.ext.dependencies["logging-interceptor"] //
 
     implementation 'com.github.clans:fab:1.6.4'
-    api rootProject.ext.dependencies["constraint-layout"]
     implementation 'com.github.yalantis:ucrop:2.2.4'
     implementation 'com.lxj:xpopup:1.7.1'
     implementation 'com.isseiaoki:simplecropview:1.1.8'
     implementation 'me.yokeyword:fragmentationx:1.0.2'
     implementation 'me.yokeyword:eventbus-activity-scope:1.1.0'
     implementation 'org.greenrobot:eventbus:3.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.6'
     implementation 'com.orhanobut:hawk:2.0.1'
     implementation 'cn.snailpad:EasyJSON:1.0.26'
     implementation 'com.alibaba:fastjson:1.2.41'
@@ -128,7 +194,7 @@ dependencies {
     implementation 'com.github.lyrebirdstudio:Croppy:0.2'
     //    implementation 'com.github.pinguo-zhouwei:MZBannerView:v2.0.2'
     implementation 'com.nex3z:flow-layout:1.2.4'
-    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.0' //後面可以考慮移除
     implementation 'com.makeramen:roundedimageview:2.3.0'
     api rootProject.ext.dependencies["glide"]
     api rootProject.ext.dependencies["glide:okhttp3-integration"]
@@ -235,19 +301,17 @@ dependencies {
     //PushSDK
     implementation 'com.umeng.umsdk:push:6.0.1'
     implementation 'com.umeng.umsdk:analytics:8.0.0'
-    implementation 'com.romandanylyk:pageindicatorview:1.0.2@aar'
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
+    implementation 'com.romandanylyk:pageindicatorview:1.0.2@aar'
 
     //smartTabLayout
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
-    implementation 'com.kunminx.linkage:linkage-recyclerview:1.9.2'
 
     implementation(name: 'taifung-release-1.8.5-androidx', ext: 'aar')
 
     implementation(name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
     implementation(name: 'mzbanner-release', ext: 'aar')
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.core:core-ktx:+'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.mikhaellopez:circleview:1.3.2'
@@ -267,15 +331,10 @@ dependencies {
     // rxandroid
 
 //添加HttpLoggingInterceptor进行调试
-//3.9.0版本是使用Java写的，从4.0.0后改用的Kotlin写的
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
     // retrofit 有mvvm依赖提供
 
-    def lifecycle_version = "2.2.0"//安卓x的使用方法
-    implementation 'androidx.fragment:fragment-ktx:1.2.5'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
 // Annotation processor
 //    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     // alternately - if using Java8, use the following instead of lifecycle-compiler
@@ -289,11 +348,9 @@ dependencies {
     api rootProject.ext.dependencies["rxandroid"]
 
     api rootProject.ext.dependencies["room-runtime"]
-//    api rootProject.ext.dependencies["baseRecyclerViewAdapterHelper"]
-    api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
+    api rootProject.ext.dependencies["baseRecyclerViewAdapterHelper"]
+//    api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
 
-    kapt rootProject.ext.dependencies["glide-compiler"]  //  Glide
-    kapt rootProject.ext.dependencies["room-compiler"]  //  Glide
 
     //mvvm 模塊依賴
     api rootProject.ext.dependencies["liveEventBus"]

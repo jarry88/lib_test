@@ -113,7 +113,7 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
             viewModel.doGetFeaturesGoodsList()
         }
         //上拉加载更多
-        binding.refreshLayout.setOnLoadMoreListener { refreshLayout: RefreshLayout? ->
+        binding.refreshLayout.setOnLoadMoreListener {
             viewModel.pageNum++
             //            loadMoreTestData();   // 模拟加载更多数据
             viewModel.doGetFeaturesGoodsList()

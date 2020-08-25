@@ -87,7 +87,7 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
         }
     }
 
-    fun delayClick(item:Int, subIndex:Int) {
+    fun delayClick(item:Int) {
         viewModelScope.launch {
             delay(150)
             currCategoryIndex.value=item//添加默认列表Id

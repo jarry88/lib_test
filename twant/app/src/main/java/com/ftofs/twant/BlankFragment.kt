@@ -185,37 +185,37 @@ class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
                 .appendPath(resources.getResourceEntryName(R.drawable.aa))
                 .build()
 
-        //Saves to external and return uri
-        val externalCropRequest = CropRequest.Auto(
-                sourceUri = uri,
-                requestCode = RC_CROP_IMAGE
-        )
-
-        //Saves to cache and return uri
-        val cacheCropRequest = CropRequest.Auto(
-                sourceUri = uri,
-                requestCode = RC_CROP_IMAGE,
-                storageType = StorageType.CACHE
-        )
+//        //Saves to external and return uri
+//        val externalCropRequest = CropRequest.Auto(
+//                sourceUri = uri,
+//                requestCode = RC_CROP_IMAGE
+//        )
+//
+//        //Saves to cache and return uri
+//        val cacheCropRequest = CropRequest.Auto(
+//                sourceUri = uri,
+//                requestCode = RC_CROP_IMAGE,
+//                storageType = StorageType.CACHE
+//        )
 
         // Save to given destination uri.
         val destinationUri =
                 FileCreator
                         .createFile(FileOperationRequest.createRandom(), _mActivity)
                         .toUri()
-
-        val manualCropRequest = CropRequest.Manual(
-                sourceUri = uri,
-                destinationUri = destinationUri,
-                requestCode = RC_CROP_IMAGE
-        )
-
-        val excludeAspectRatiosCropRequest = CropRequest.Manual(
-                sourceUri = uri,
-                destinationUri = destinationUri,
-                requestCode = RC_CROP_IMAGE,
-                excludedAspectRatios = arrayListOf(AspectRatio.ASPECT_FREE)
-        )
+//
+//        val manualCropRequest = CropRequest.Manual(
+//                sourceUri = uri,
+//                destinationUri = destinationUri,
+//                requestCode = RC_CROP_IMAGE
+//        )
+//
+//        val excludeAspectRatiosCropRequest = CropRequest.Manual(
+//                sourceUri = uri,
+//                destinationUri = destinationUri,
+//                requestCode = RC_CROP_IMAGE,
+//                excludedAspectRatios = arrayListOf(AspectRatio.ASPECT_FREE)
+//        )
 
         val themeCropRequest = CropRequest.Manual(
                 sourceUri = uri,

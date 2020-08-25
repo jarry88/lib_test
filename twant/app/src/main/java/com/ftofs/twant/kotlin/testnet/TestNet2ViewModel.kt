@@ -114,7 +114,6 @@ class TestNet2ViewModel(application: Application) : BaseViewModel(application) {
                 .compose(RxUtil.exceptionTransformer()) // 网络错误的异常转换, 这里可以换成自己的ExceptionHandle
                 .doOnSubscribe(this@TestNet2ViewModel) //  请求与ViewModel周期同步
                 .doOnSubscribe {
-                    d ->
                     stateLiveData.postLoading()
                 }
                 .doFinally { stateLiveData.postIdle() }
@@ -130,16 +129,11 @@ class TestNet2ViewModel(application: Application) : BaseViewModel(application) {
                             val goodsList = baseResponse.datas.goodsList
 
                             //自定义处理
-                            if (goodsList != null) {
-                                if (goodsList.size > 0) {
-                                    liveData.postValue(goodsList)
-                                } else {
-                                    //    showShortToast("没有更多数据了")
-                                    KLog.e("请求到数据students.size" + goodsList.size)
-                                }
+                            if (goodsList.size > 0) {
+                                liveData.postValue(goodsList)
                             } else {
-                                KLog.e("数据返回null")
-                                stateLiveData.postError()
+                                //    showShortToast("没有更多数据了")
+                                KLog.e("请求到数据students.size" + goodsList.size)
                             }
                         } else {
                             //code错误时也可以定义Observable回调到View层去处理
