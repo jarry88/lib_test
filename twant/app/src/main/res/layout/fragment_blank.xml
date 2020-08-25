@@ -20,7 +20,7 @@
             android:layout_marginTop="24dp"
             android:layout_centerInParent="true"
             android:layout_height="match_parent"
-            android:layout_above="@+id/buttonChoose"/>
+            android:layout_above="@+id/ll_container"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_list"
@@ -30,16 +30,37 @@
             android:layout_centerInParent="true"
             android:layout_height="match_parent"
             app:adapter="@{adapter}"
-            android:layout_above="@+id/buttonChoose"
+            android:layout_above="@+id/ll_container"
             binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-        <Button
-            android:id="@+id/buttonChoose"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/ll_container"
             android:layout_alignParentBottom="true"
-            android:layout_margin="24dp"
-            android:text="Start Cropping" />
+            >
+
+            <Button
+                android:id="@+id/buttonChoose"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:text="Start Cropping" />
+            <Button
+                android:id="@+id/btn_post"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:text="btn_post" />
+            <Button
+                android:id="@+id/btn_post1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:text="btn_post1" />
+        </LinearLayout>
 
     </RelativeLayout>
 </layout>

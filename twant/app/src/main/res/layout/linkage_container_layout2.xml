@@ -14,9 +14,6 @@
         <variable
             name="categoryAdapter"
             type="com.ftofs.twant.adapter.ZoneCategoryListAdapter" />
-        <variable
-            name="treeAdapter"
-            type="com.baozi.treerecyclerview.adpater.TreeRecyclerAdapter" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -32,7 +29,6 @@
                 android:layout_width="wrap_content"
                 android:minWidth="90dp"
                 android:layout_height="match_parent"
-                app:adapter="@{treeAdapter}"
                 tools:listitem="@layout/store_category_list_item"
                 binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"

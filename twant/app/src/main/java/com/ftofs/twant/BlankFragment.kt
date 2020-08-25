@@ -13,13 +13,19 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.ftofs.twant.databinding.FragmentBlankBinding
 import com.ftofs.twant.databinding.VerificationGoodsItemBinding
 import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.fragment.BaseFragment
 import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
 import com.ftofs.twant.kotlin.OrderGoodsVoListAdapter
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
+import com.ftofs.twant.kotlin.bean.ZoneInfo
+import com.ftofs.twant.kotlin.net.BaseRepository
+import com.ftofs.twant.kotlin.net.Result
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.util.ToastUtil
+import com.ftofs.twant.util.User
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
 import com.ftofs.twant.widget.VerificationPopup
 import com.google.android.material.button.MaterialButton
@@ -31,6 +37,14 @@ import com.lyrebirdstudio.croppylib.main.CroppyTheme
 import com.lyrebirdstudio.croppylib.main.StorageType
 import com.lyrebirdstudio.croppylib.util.file.FileCreator
 import com.lyrebirdstudio.croppylib.util.file.FileOperationRequest
+import com.wzq.mvvmsmart.net.net_utils.GsonUtil
+import kotlinx.android.synthetic.main.fragment_blank.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.RequestBody
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,7 +56,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [BlankFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BlankFragment : BaseFragment() {
+class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -55,6 +69,12 @@ class BlankFragment : BaseFragment() {
     private val  buttonChoose by lazy {
         view?.findViewById<Button>(R.id.buttonChoose)
     }
+    private val  buttonPost by lazy {
+        view?.findViewById<Button>(R.id.btn_post)
+    }
+    private val  buttonPost1 by lazy {
+        view?.findViewById<Button>(R.id.btn_post1)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -64,13 +84,15 @@ class BlankFragment : BaseFragment() {
 
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_blank, container, false)
     }
-
+    val net by lazy {
+        object :BaseRepository(){}
+    }
 
     companion object {
         /**
@@ -97,6 +119,46 @@ class BlankFragment : BaseFragment() {
         buttonChoose?.setOnClickListener {
             startCroppy()
         }
+        buttonPost1?.setOnClickListener {
+            net.run {
+                launch {
+                    val result=simpleGet(api.testPost1(User.getToken()))
+                    when(result){
+                        is Result.Success -> ToastUtil.error(context,result.datas.message)
+                        is Result.DataError -> ToastUtil.error(context,result.datas.error)
+                        is Result.Error -> SLog.info(result.exception.toString())
+                    }
+                }
+            }
+        }
+        buttonPost?.setOnClickListener{
+            val token = User.getToken()
+
+            val api=object :BaseRepository(){
+                suspend fun testPost(): com.ftofs.twant.kotlin.net.Result<ZoneInfo> {
+                    return safeApiCall(call = {
+                        executeResponse(
+//                                api.testPost(
+//                                        RequestBody.create(
+//                                                MediaType.parse("application/json; charset=utf-8"),
+//                                                GsonUtil.bean2String(
+//                                                        mapOf(
+//                                                                "token" to token
+//                                                        )
+//                                                )
+//                                        )
+//                                )
+                                        api.testPost1(token)
+                        )
+                    }
+                    )
+                }
+            }
+            launch {
+                api.testPost()
+            }
+        }
+
 //        val  adapter =OrderGoodsVoListAdapter()
 //        rvList?.adapter=adapter
 //        adapter.addAll(listOf(OrdersGoodsVo()),false)
@@ -170,4 +232,8 @@ class BlankFragment : BaseFragment() {
         return true
     }
 
+    override fun onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu()
+        cancel()
+    }
 }

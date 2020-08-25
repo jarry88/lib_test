@@ -82,12 +82,12 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
         if (itemData.showMemberReceive) {
             itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
         } else {
-            if (Config.USE_DEVELOPER_TEST_DATA && "想要科技有限公司".equals(itemData.storeName)) {
-                itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
-
-            } else if (Constant.WANT_EAT.equals(itemData.storeName)) {
-                itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
-
+            if (Config.USE_DEVELOPER_TEST_DATA && "想要科技有限公司".equals(itemData.storeName)||
+                    Constant.WANT_EAT.equals(itemData.storeName)) {
+                
+                if ("pay".equals(itemData.ordersState)) {
+                    itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
+                }
             } else {
                 itemView.findViewById(R.id.btn_have_received).setVisibility(View.GONE);
             }

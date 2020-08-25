@@ -382,7 +382,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
                     titleList.add(storeTabTitle);
                 tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
-                storeListFragment = LinkageShoppingListFragment.Companion.newInstance(zoneId, this);
+                storeListFragment = new LinkageShoppingListFragment(zoneId, this);
                 fragmentList.add(storeListFragment);
             }
             //刷新UI的邏輯

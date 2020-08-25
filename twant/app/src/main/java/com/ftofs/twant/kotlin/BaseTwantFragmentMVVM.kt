@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ftofs.twant.fragment.BaseFragment
-import com.ftofs.twant.log.SLog
-import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.base.IBaseViewMVVM
 import com.wzq.mvvmsmart.widget.EmptyViewHelper

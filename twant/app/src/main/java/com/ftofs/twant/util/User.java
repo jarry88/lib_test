@@ -13,7 +13,10 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.orhanobut.hawk.Hawk;
 
+import org.jetbrains.annotations.NotNull;
+
 import cn.snailpad.easyjson.EasyJSONObject;
+import kotlin.Pair;
 
 /**
  * 用戶相關工具類
@@ -145,4 +148,8 @@ public class User {
         SqliteUtil.imLogin();
     }
 
+    @NotNull
+    public static Pair<String, String> getTokenPair() {
+        return new Pair("token",getToken());
+    }
 }

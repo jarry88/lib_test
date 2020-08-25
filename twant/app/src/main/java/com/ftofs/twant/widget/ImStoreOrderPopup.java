@@ -123,7 +123,7 @@ public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickLi
 
                         imStoreOrderItem.ordersId = item.getInt("ordersId");
                         imStoreOrderItem.ordersSn = String.valueOf(item.getLong("ordersSn"));
-                        imStoreOrderItem.goodsImage = item.getSafeString("goodsImg");
+                        imStoreOrderItem.goodsImg = item.getSafeString("goodsImg");
                         imStoreOrderItem.goodsName = item.getSafeString("goodsName");
 
                         imStoreOrderItemList.add(imStoreOrderItem);

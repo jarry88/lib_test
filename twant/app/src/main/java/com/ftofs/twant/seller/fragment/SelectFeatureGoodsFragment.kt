@@ -93,7 +93,7 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
 //                sellerGoodsListAdapter.data.clear() // 请求多页数据后再请求第1页,先删除之前数据
                 if (goodsList.isEmpty()) {
                     //  第一页无数据,就显示默认页
-                    showEmptyLayout(binding.refreshLayout, this@SelectFeatureGoodsFragment.resources.getString(R.string.tip_a_page_no_data), R.mipmap.ic_launcher_mvvmsmart, false)
+                    showEmptyLayout(binding.refreshLayout, this@SelectFeatureGoodsFragment.resources.getString(R.string.no_data_hint), R.drawable.ic_placeholder_no_data, false)
                 } else {
                     showNormalLayout(binding.refreshLayout)
                     sellerGoodsListAdapter.addAll(goodsList,true)

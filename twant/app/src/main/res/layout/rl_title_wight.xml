@@ -1,61 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 工具欄 -->
     <RelativeLayout
-        android:id="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:background="@drawable/border_type_d"
-        >
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <com.ftofs.twant.widget.ScaledButton
-            android:id="@+id/btn_back"
-            android:layout_width="31dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="7dp"
-            android:layout_centerVertical="true"
-            app:icon_src="@drawable/icon_back"
-            />
+        <!-- 工具欄 -->
+        <RelativeLayout
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@drawable/border_type_d"
+            >
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="@dimen/dp_40"
-            android:layout_marginEnd="@dimen/dp_40"
-            android:singleLine="true"
-            android:textSize="18sp"
-            android:textColor="@color/tw_black"
-            />
+            <com.ftofs.twant.widget.ScaledButton
+                android:id="@+id/btn_back"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="7dp"
+                android:layout_centerVertical="true"
+                app:icon_src="@drawable/icon_back"
+                />
 
-        <com.ftofs.twant.widget.ScaledButton
-            android:id="@+id/btn_menu"
-            android:layout_width="31dp"
-            android:layout_height="31dp"
-            android:layout_marginEnd="7dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            app:icon_src="@drawable/icon_shop_menu"
-            android:visibility="gone"/>
-        <TextView
-        android:id="@+id/btn_ok"
-        android:layout_width="51dp"
-        android:layout_height="25dp"
-        android:layout_marginEnd="@dimen/toolbar_margin_right"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:gravity="center"
-        android:text="@string/text_save"
-        android:textSize="14sp"
-        android:textColor="@android:color/white"
-        android:background="@drawable/micro_blue_button"
-            android:visibility="gone"
-        />
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/dp_40"
+                android:layout_marginEnd="@dimen/dp_40"
+                android:singleLine="true"
+                android:textSize="18sp"
+                android:textColor="@color/tw_black"
+                />
+
+            <com.ftofs.twant.widget.ScaledButton
+                android:id="@+id/btn_menu"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_marginEnd="7dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:icon_src="@drawable/icon_shop_menu"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/btn_ok"
+                android:layout_width="51dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="@dimen/toolbar_margin_right"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/text_save"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/micro_blue_button"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+        <!--  END OF 工具欄 -->
     </RelativeLayout>
-    <!--  END OF 工具欄 -->
-</RelativeLayout>
+</layout>
