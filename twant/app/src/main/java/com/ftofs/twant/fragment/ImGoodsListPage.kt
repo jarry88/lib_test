@@ -83,19 +83,19 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                             setGone(R.id.vw_selected_indicator,item.isFold!=1)
                             itemView.apply {
                                 if(item.isFold==1){
-                                    collapse(adapterPosition)
+                                    collapse(absoluteAdapterPosition)
                                 }else{
-                                    oldCategoryIndex=adapterPosition
-                                    expand(adapterPosition)
+                                    oldCategoryIndex=absoluteAdapterPosition
+                                    expand(absoluteAdapterPosition)
                                 }
                             }.apply {
                                 setOnClickListener{
-                                    if (oldCategoryIndex != adapterPosition) {
+                                    if (oldCategoryIndex != absoluteAdapterPosition) {
                                         item.apply {
                                             isFold=1-isFold
                                             viewModel.selectLabelId.postValue(item.storeLabelId)
                                         }
-                                        notifyItemChanged(adapterPosition)
+                                        notifyItemChanged(absoluteAdapterPosition)
                                         if(oldCategoryIndex in 0 ..data.size)
                                             data[oldCategoryIndex].apply {
                                                 isFold=1-isFold
