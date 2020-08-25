@@ -953,7 +953,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
      * @param showResult 是否顯示結果信息
      */
     public void checkUpdate(boolean showResult) {
-        EasyJSONObject params = EasyJSONObject.generate("channel", BuildConfig.FLAVOR);
+        EasyJSONObject params = EasyJSONObject.generate(
+                "channel", BuildConfig.FLAVOR,
+                "version", BuildConfig.VERSION_NAME);
         SLog.info("params[%s]", params);
 
         String url = Api.PATH_CHANNEL_UPDATE;
