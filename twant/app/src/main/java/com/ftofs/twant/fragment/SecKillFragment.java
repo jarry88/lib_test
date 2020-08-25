@@ -29,6 +29,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.SecKillLabel;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +93,16 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
         tvCountDownSecond = view.findViewById(R.id.tv_count_down_second);
         tvCountDownSecond.setBackground(countDownDrawable);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
+
 
     @Override
     public void onSupportVisible() {
@@ -250,8 +262,6 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
             SLog.info("btn_more");
         }
     }
-
-
 
     @Override
     public boolean onBackPressedSupport() {

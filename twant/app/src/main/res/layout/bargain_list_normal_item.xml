@@ -53,7 +53,7 @@
                     android:id="@+id/tv_goods_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="历任国家计委投资司处长，国家开发银行综合计划局副局长，国家开发投资公司综合计划部主任"
+                    android:text=""
                     android:textSize="14sp"
                     android:textColor="@color/tw_black"
                     android:singleLine="true"

@@ -120,14 +120,14 @@ public class Time {
 
         long d = to - from;
         int dint = (int) (d / 1000);
-        SLog.info("dint[%d]", dint);
+        // SLog.info("dint[%d]", dint);
         TimeInfo timeInfo = new TimeInfo();
 
         timeInfo.hour = dint / 3600;
         dint = dint % 3600;
         timeInfo.minute = dint / 60;
         timeInfo.second = dint % 60;
-        SLog.info("hour[%d], minute[%d], second[%d]", timeInfo.hour, timeInfo.minute, timeInfo.second);
+        // SLog.info("hour[%d], minute[%d], second[%d]", timeInfo.hour, timeInfo.minute, timeInfo.second);
 
         return timeInfo;
     }

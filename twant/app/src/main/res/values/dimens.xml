@@ -15,4 +15,7 @@
 
     <!-- Sku瀏覽規格描述項控件的寬度 -->
     <dimen name="sku_spec_item_width">280dp</dimen>
+
+    <!-- 秒杀进度条的宽度 -->
+    <dimen name="sec_kill_progress_bar_width">118dp</dimen>
 </resources>

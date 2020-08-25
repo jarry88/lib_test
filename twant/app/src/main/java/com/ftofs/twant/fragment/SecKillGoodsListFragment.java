@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -74,6 +75,8 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
         rvList.setAdapter(adapter);
+
+        loadData(currPage + 1);
     }
 
     private void loadData(int page) {
@@ -83,6 +86,7 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
         );
 
         String url = Api.PATH_SEC_KILL_GOODS_LIST;
+        SLog.info("url[%s], params[%s]", url, params);
         Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -112,6 +116,22 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
                     if (!hasMore) {
                         adapter.loadMoreEnd();
                         adapter.setEnableLoadMore(false);
+                    }
+
+                    EasyJSONArray goodsCommonList = responseObj.getSafeArray("datas.seckillGoodsCommonList");
+                    for (Object object : goodsCommonList) {
+                        EasyJSONObject goodsCommon = (EasyJSONObject) object;
+
+                        SecKillGoodsListItem item = new SecKillGoodsListItem();
+                        item.commonId = goodsCommon.optInt("commonId");
+                        item.goodsName = goodsCommon.optString("goodsName");
+                        item.imageSrc = goodsCommon.optString("imageSrc");
+                        item.scheduleState = goodsCommon.optInt("scheduleState");
+                        item.scheduleStateText = goodsCommon.optString("scheduleStateText");
+                        item.originalPrice = goodsCommon.optDouble("goodsPrice");
+                        item.secKillPrice = goodsCommon.optDouble("seckillGoodsPrice");
+
+                        goodsItemList.add(item);
                     }
 
                     adapter.loadMoreComplete();
