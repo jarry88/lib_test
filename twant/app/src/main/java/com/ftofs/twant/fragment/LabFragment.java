@@ -13,10 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.databinding.DataBindingUtil;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.databinding.FragmentLabBinding;
 import com.ftofs.twant.kotlin.net.BaseRepository;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.CroppyInitUtilKt;
@@ -60,11 +62,9 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_lab, container, false);
-        return view;
+    protected int simpleBind(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return R.layout.fragment_lab;
     }
 
     @Override
@@ -212,7 +212,4 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         hideSoftInputPop();
         return true;
     }
-}
-class api extends BaseRepository{
-
 }

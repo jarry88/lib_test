@@ -72,6 +72,7 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
         RecyclerView rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         adapter = new SecKillGoodsListAdapter(_mActivity, R.layout.sec_kill_list_normal_item, goodsItemList);
+//        adapter.setMLoadMoreModule$com_github_CymChad_brvah(true);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
         rvList.setAdapter(adapter);

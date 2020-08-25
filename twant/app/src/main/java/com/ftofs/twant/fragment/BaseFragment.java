@@ -3,12 +3,15 @@ package com.ftofs.twant.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
-import com.ftofs.twant.activity.CustomCaptureActivity;
 import com.ftofs.twant.activity.TwantCaptureActivity;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.interfaces.CommonCallback;
@@ -16,7 +19,6 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.ToastUtil;
-import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import me.yokeyword.fragmentation.SupportFragment;
@@ -27,6 +29,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  */
 public abstract class BaseFragment extends SupportFragment {
     protected Context _mContext;
+    protected ViewDataBinding simpleBind;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -39,6 +42,20 @@ public abstract class BaseFragment extends SupportFragment {
             }
         });
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        simpleBind=
+                DataBindingUtil.inflate(inflater, simpleBind(inflater, container, savedInstanceState), container, false);
+            simpleBind.setLifecycleOwner(this);
+        return simpleBind.getRoot();
+    }
+
+    protected  int simpleBind(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        return 0;
+    };
 
     /**
      * 調起掃描二維碼的Activity

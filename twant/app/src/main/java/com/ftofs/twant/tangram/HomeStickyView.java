@@ -25,6 +25,7 @@ import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.ImGoodsFragment;
+import com.ftofs.twant.fragment.LabFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
@@ -162,9 +163,9 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                 return;
             }
             SLog.info("进入测试页ImGoodsFragment ");
-            Util.startFragment(new BlankFragment());
+//            Util.startFragment(new BlankFragment());
 //            Util.startFragment( ImGoodsFragment.newInstance("u_007615414781"),null);
-            // Util.startFragment(LabFragment.newInstance());
+             Util.startFragment(LabFragment.newInstance());
             // Util.startFragment(GoodsDetailFragment.newInstance(4195, 6957, 1));
 //            Util.startFragment(LabFragment.newInstance());
 //            Util.startFragment(GoodsDetailFragment.newInstance(4195, 6957, 1));

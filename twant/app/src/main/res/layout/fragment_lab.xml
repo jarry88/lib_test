@@ -1,98 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
-    android:orientation="vertical">
-    <Button
-        android:id="@+id/btn_test1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="test1">
-    </Button>
-    <Button
-        android:id="@+id/btn_test2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="test2"/>
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@android:color/white"
+        android:orientation="vertical">
         <Button
-            android:id="@+id/btn_themeCropRequest"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/btn_test1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="themeCropRequest">
+            android:text="test1">
         </Button>
         <Button
-            android:id="@+id/btn_cacheCropRequest"
+            android:id="@+id/btn_test2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="test2"/>
 
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="btn_cacheCropRequest">
-        </Button>
-        <Button
-            android:id="@+id/btn_excludeAspectRatiosCropRequest"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_themeCropRequest"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="themeCropRequest">
+            </Button>
+            <Button
+                android:id="@+id/btn_cacheCropRequest"
 
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="excludeAspectRatiosCropRequest">
-        </Button>
-        <Button
-            android:id="@+id/btn_manualCropRequest"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="btn_cacheCropRequest">
+            </Button>
+            <Button
+                android:id="@+id/btn_excludeAspectRatiosCropRequest"
 
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="manualCropRequest">
-        </Button>
-        <Button
-            android:id="@+id/btn_externalCropRequest"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="excludeAspectRatiosCropRequest"
+                radius="@{10f}">
+            </Button>
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="@dimen/dp_150"
+                android:background="@color/tw_black"
+                app:radius="@{15f}"/>
+            <Button
+                android:id="@+id/btn_manualCropRequest"
 
-            android:layout_width="0dp"
-            android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="manualCropRequest">
+            </Button>
+            <Button
+                android:id="@+id/btn_externalCropRequest"
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="externalCropRequest">
+            </Button>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="externalCropRequest">
-        </Button>
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_post1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="btn_post1">
+            </Button>
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewCropped"
+            android:layout_width="match_parent"
+            android:layout_marginTop="24dp"
+            android:layout_height="match_parent"/>
+        <com.ftofs.twant.widget.CheckPhoneView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/check_phone"/>
+        <View
+            android:id="@+id/vw"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="15dp">
+        </View>
+        <com.ftofs.twant.widget.NineLuckPan
+            android:visibility="gone"
+            android:id="@+id/luckpan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.ftofs.twant.widget.NineLuckPan>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/btn_post1"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="btn_post1">
-        </Button>
-    </LinearLayout>
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageViewCropped"
-        android:layout_width="match_parent"
-        android:layout_marginTop="24dp"
-        android:layout_height="match_parent"/>
-    <com.ftofs.twant.widget.CheckPhoneView
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/check_phone"/>
-    <View
-        android:id="@+id/vw"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_margin="15dp">
-    </View>
-    <com.ftofs.twant.widget.NineLuckPan
-        android:visibility="gone"
-        android:id="@+id/luckpan"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.ftofs.twant.widget.NineLuckPan>
-</LinearLayout>
+</layout>
