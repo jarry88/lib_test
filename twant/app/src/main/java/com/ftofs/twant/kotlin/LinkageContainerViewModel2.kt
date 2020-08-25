@@ -75,7 +75,7 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                         }
                         categoryData.value = it
 
-                        delayClick(a,b)
+                        delayClick(a)
                         stateLiveData.postIdle()
 
                     }

@@ -263,7 +263,7 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
                     } else {
                         ToastUtils.showShort("點了$preSelectionIndex+1")
                         binding.refreshLayout.finishLoadMore()
-                        viewModel.delayClick(preSelectionIndex+1,0)
+                        viewModel.delayClick(preSelectionIndex+1)
                     }
                 }
     }
