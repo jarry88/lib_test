@@ -45,7 +45,7 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> :
     }
 
     override fun getItemCount(): Int {
-        val count = mData.size ?:0
+        val count = mData.size
         return if (count == 0 && showEmptyView) {
             1
         }else count

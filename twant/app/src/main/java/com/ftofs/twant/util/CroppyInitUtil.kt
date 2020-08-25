@@ -17,43 +17,43 @@ import java.io.File
 fun File.toUri(): Uri = Uri.fromFile(this)
 //Saves to external and return uri
 
-fun externalCropRequest  (context:Context,requestCode:Int,uri: Uri) = CropRequest.Auto(
-        sourceUri = uri,
-        requestCode = requestCode
-)
-//Saves to cache and return uri
-
-fun cacheCropRequest  (context:Context,requestCode:Int,uri: Uri) = CropRequest.Auto(
-        sourceUri = uri,
-        requestCode = requestCode,
-        storageType = StorageType.CACHE
-)
-fun manualCropRequest  (context:Context,requestCode:Int,uri: Uri) = CropRequest.Manual(
-        sourceUri = uri,
-        // Save to given destination uri.
-
-        destinationUri = FileCreator
-                .createFile(FileOperationRequest.createRandom(), context)
-                .toUri(),
-        requestCode = requestCode
-)
-fun excludeAspectRatiosCropRequest (context:Context,requestCode:Int,uri: Uri) = CropRequest.Manual(
-        sourceUri = uri,
-        // Save to given destination uri.
-
-        destinationUri = FileCreator
-                .createFile(FileOperationRequest.createRandom(), context)
-                .toUri(),
-        requestCode = requestCode,
-        croppyTheme = CroppyTheme(R.color.blue)
-)
-fun themeCropRequest(context:Context,requestCode:Int,uri: Uri) = CropRequest.Manual(
-        sourceUri = uri,
-        // Save to given destination uri.
-
-        destinationUri = FileCreator
-                .createFile(FileOperationRequest.createRandom(), context)
-                .toUri(),
-        requestCode = requestCode,
-        croppyTheme = CroppyTheme(R.color.blue)
-)
+//fun externalCropRequest  (context:Context,requestCode:Int,uri: Uri) = CropRequest.Auto(
+//        sourceUri = uri,
+//        requestCode = requestCode
+//)
+////Saves to cache and return uri
+//
+//fun cacheCropRequest  (context:Context,requestCode:Int,uri: Uri) = CropRequest.Auto(
+//        sourceUri = uri,
+//        requestCode = requestCode,
+//        storageType = StorageType.CACHE
+//)
+//fun manualCropRequest  (context:Context,requestCode:Int,uri: Uri) = CropRequest.Manual(
+//        sourceUri = uri,
+//        // Save to given destination uri.
+//
+//        destinationUri = FileCreator
+//                .createFile(FileOperationRequest.createRandom(), context)
+//                .toUri(),
+//        requestCode = requestCode
+//)
+//fun excludeAspectRatiosCropRequest (context:Context,requestCode:Int,uri: Uri) = CropRequest.Manual(
+//        sourceUri = uri,
+//        // Save to given destination uri.
+//
+//        destinationUri = FileCreator
+//                .createFile(FileOperationRequest.createRandom(), context)
+//                .toUri(),
+//        requestCode = requestCode,
+//        croppyTheme = CroppyTheme(R.color.blue)
+//)
+//fun themeCropRequest(context:Context,requestCode:Int,uri: Uri) = CropRequest.Manual(
+//        sourceUri = uri,
+//        // Save to given destination uri.
+//
+//        destinationUri = FileCreator
+//                .createFile(FileOperationRequest.createRandom(), context)
+//                .toUri(),
+//        requestCode = requestCode,
+//        croppyTheme = CroppyTheme(R.color.blue)
+//)
