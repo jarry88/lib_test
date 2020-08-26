@@ -1,24 +1,26 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.ViewDataBinding;
+import androidx.databinding.DataBindingUtil;
 
-import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.databinding.SecKillListNormalItemBinding;
 import com.ftofs.twant.entity.SecKillGoodsListItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
-//如果用到layout binding的場景 ，BaseBindAdapter替換為BaseBindAdapter，BaseViewHolder 替換為ViewDataBinding
-public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListItem, ViewDataBinding> {
+//如果用到layout binding的場景 ，BaseBindAdapter替換為BaseBindAdapter，BaseViewHolder 替換為相應的binding文件
+public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListItem,SecKillListNormalItemBinding> {
     Context context;
 
 
@@ -28,25 +30,13 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
         this.context = context;
     }
 
-//    @NonNull
-//    @Override
-//    public SecKillListNormalItemBinding onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        return DataBindingUtil.inflate(
-//                LayoutInflater.from(parent.getContext()),
-//                mLayoutResId,
-//                parent,
-//                false
-//        );
-//    }
-
     @Override
-    protected void convert(@NonNull BaseBindViewHolder<ViewDataBinding> helper, SecKillGoodsListItem item) {
-//          這樣用也行
-        // SecKillListNormalItemBinding secKillListNormalItemBinding = (SecKillListNormalItemBinding) helper.binding;
-        // secKillListNormalItemBinding.tvSecKillPrice.setText("sssss");
-        SLog.info("XXXXXXXXXXXXXXXXYY");
-        ImageView goodsImage = helper.getView(R.id.goods_image);
-        Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(goodsImage);
+    protected void convert(@NotNull BoundViewHolder<? extends SecKillListNormalItemBinding> helper, SecKillGoodsListItem item) {
+        //這樣用也行
+//        helper.setText(R.id.tv_goods_name, "sdf");
+//        helper.getBinding().btnVersatile.setOnClickListener(null);
+//        initView(helper.getBinding(),item);
+
 
 
         // item.goodsStorage = 223;
@@ -66,6 +56,19 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
 //                .setText(R.id.tv_original_price, StringUtil.formatPrice(context, item.originalPrice, 0))
                 .setText(R.id.tv_current_progress_desc, progress + "%");
     }
+
+    @Override
+    public void initView(@NotNull SecKillListNormalItemBinding binding, SecKillGoodsListItem item) {
+        binding.tvSecKillPrice.setText("sss");
+    }
+    //          這樣用也行
+//        helper.binding.tvSecKillPrice.setText("33333");
+//        ImageView goodsImage = helper.getView(R.id.goods_image);
+//        Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(goodsImage);
+//
+
+
+
 
 
 }

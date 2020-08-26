@@ -104,7 +104,7 @@ class CheckPhoneView @JvmOverloads constructor(
             if(text==null||text.isEmpty()){
                 isRight=false
                 msg=context.getString(R.string.input_mobile_hint)
-            }else if(mobileList==null||mobileList.size<zoneIndex){
+            }else if(mobileList.size<zoneIndex){
                 isRight=false
                 msg="网络异常"
             }else{

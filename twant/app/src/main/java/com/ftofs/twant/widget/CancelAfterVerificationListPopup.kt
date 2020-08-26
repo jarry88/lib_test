@@ -34,8 +34,6 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
 
     companion object{
         fun newInstance(context: Context, datas: MutableList<OrdersGoodsVo>):CancelAfterVerificationListPopup {
-            val args = Bundle()
-
             val popupView =CancelAfterVerificationListPopup(context)
             popupView.orderList=datas
             return popupView

@@ -1,4 +1,3 @@
-include ':mvvm_v1.01'
 rootProject.name='twant'
 include ':app'
 

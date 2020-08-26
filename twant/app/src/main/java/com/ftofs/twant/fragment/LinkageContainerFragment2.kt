@@ -93,9 +93,9 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
 
         }))
         binding.categoryAdapter = mCategoryAdapter
-        mCategoryAdapter.setOnItemClickListener { adapter, view, position ->
+        mCategoryAdapter.setOnItemClickListener { adapter, _, position ->
             val a =adapter.getItem(position) as ZoneCategory
-            val prevSelectedItemIndex: Int = mCategoryAdapter.getPrevSelectedItemIndex()
+            val prevSelectedItemIndex: Int = mCategoryAdapter.prevSelectedItemIndex
 //            ToastUtils.showShort("点击了${a.categoryName}前一个$prevSelectedItemIndex")
             if (prevSelectedItemIndex == position) {
                 binding.rvRightList.scrollToPosition(0)
@@ -263,7 +263,7 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
                     } else {
                         ToastUtils.showShort("點了$preSelectionIndex+1")
                         binding.refreshLayout.finishLoadMore()
-                        viewModel.delayClick(preSelectionIndex+1,0)
+                        viewModel.delayClick(preSelectionIndex+1)
                     }
                 }
     }

@@ -1,7 +1,6 @@
 package com.ftofs.twant.kotlin
 
 import android.util.Log
-import androidx.appcompat.widget.DrawableUtils
 import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.twant.R
 import com.ftofs.twant.api.Api
@@ -24,7 +23,6 @@ import java.io.IOException
  * date   : 2020/07/09 11:34
  */
 class SellerGoodsListAdapter: DataBoundAdapter<SellerGoodsItem, SellerGoodsItemUnswipeBinding>() {
-//        helper.setText(R.id.iv2, item.news_title)
 override val layoutId: Int
     get() = R.layout.seller_goods_item_unswipe
 
@@ -66,7 +64,7 @@ override val layoutId: Int
                             }
 
                         }
-                        notifyItemChanged(getData().indexOf(item))
+                        getData()?.indexOf(item)?.let { it1 -> notifyItemChanged(it1) }
                         ToastUtil.success(context,responseObj.getSafeString("datas.success"))
                     } catch (e: Exception) {
                         SLog.info("Error!message[%s], trace[%s]", e.message, Log.getStackTraceString(e))

@@ -164,7 +164,7 @@ public class ZoneCategoryListAdapter extends BaseQuickAdapter<ZoneCategory, Base
     /**
      * 設置上一次選中的菜單item的索引
      * @param index
-     * @deprecated 记录上次选中的item索引 并且清空subitem选中状态
+     *  记录上次选中的item索引 并且清空subitem选中状态
      */
     public void setPrevSelectedItemIndex(int index) {
         if (prevSelectedItemIndex != -1) {

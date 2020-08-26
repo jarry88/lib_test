@@ -29,7 +29,7 @@ class TestNetFragment : BaseTwantFragmentMVVM<FragmentTestNetBinding, TestNetVie
 
     override fun initViewObservable() {
         super.initViewObservable()
-        binding.button.setOnClickListener { v: View? ->
+        binding.button.setOnClickListener { _: View? ->
             KLog.e("发起请求")
             viewModel.doPostServerNews() // 请求网络数据;
         }
