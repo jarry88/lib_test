@@ -126,6 +126,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     private boolean categoryToNext;
     private int currStoreLabelId;
     private StoreLabel currStoreLabel;
+    private SimpleTabManager simpleTabManager;
+    private boolean videoLoaded;
 
     /**
      * 新建一個實例
@@ -151,6 +153,34 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shop_commodity, container, false);
         return view;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        hideSoftInput();
+
+        if (!videoLoaded) {
+            loadVideoCover(currPage + 1);
+        }
+        loadShopCategoryData();
+        if (paramsOriginal.exists("sort")) {
+            String sort = null;
+            try {
+                sort = paramsOriginal.getSafeString("sort");
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+
+            if ("new_desc".equals(sort)) {  // 最新產品
+                simpleTabManager.performClick(2);
+            } else if ("sale_desc".equals(sort)) { // 商店熱賣
+                simpleTabManager.performClick(1);
+            }
+        } else {
+            loadStoreGoods(paramsOriginal, EasyJSONObject.generate("sort", "default_desc"), 1);
+        }
+
     }
 
     @Override
@@ -192,7 +222,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         layoutParams.width = screenWidth;
         llPage2.setLayoutParams(layoutParams);
 
-        SimpleTabManager simpleTabManager = new SimpleTabManager(0) {
+        simpleTabManager  = new SimpleTabManager(0) {
             @Override
             public void onClick(View v) {
                 boolean isRepeat = onSelect(v);
@@ -458,22 +488,6 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             }
         });
 
-        if (paramsOriginal.exists("sort")) {
-            String sort = null;
-            try {
-                sort = paramsOriginal.getSafeString("sort");
-            } catch (Exception e) {
-                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-            }
-
-            if ("new_desc".equals(sort)) {  // 最新產品
-                simpleTabManager.performClick(2);
-            } else if ("sale_desc".equals(sort)) { // 商店熱賣
-                simpleTabManager.performClick(1);
-            }
-        } else {
-            loadStoreGoods(paramsOriginal, EasyJSONObject.generate("sort", "default_desc"), 1);
-        }
 
         RecyclerView rvVideoList = view.findViewById(R.id.rv_video_list);
         rvVideoList.setLayoutManager(new LinearLayoutManager(_mActivity));
@@ -499,6 +513,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 loadVideoCover(currPage + 1);
             }
         }, rvVideoList);
+
         videoListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -523,8 +538,6 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         });
         rvCategoryList.setAdapter(storeCategoryListAdapter);
 
-        loadVideoCover(currPage + 1);
-        loadShopCategoryData();
 
         btnChangeViewStyle = view.findViewById(R.id.btn_change_view_style);
         btnChangeViewStyle.setOnClickListener(this);
@@ -792,7 +805,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-
+                shopStoreLabelList.clear();
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
@@ -943,6 +956,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
                     SLog.info("videoItemList.size[%d]", videoItemList.size());
                     videoListAdapter.setNewData(videoItemList);
+                    videoLoaded = true;
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
