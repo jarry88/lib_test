@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.databinding.SecKillListNormalItemBinding;
 import com.ftofs.twant.entity.SecKillGoodsListItem;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
@@ -41,14 +42,15 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
     @Override
     protected void convert(@NonNull BaseBindViewHolder<ViewDataBinding> helper, SecKillGoodsListItem item) {
 //          這樣用也行
-        SecKillListNormalItemBinding secKillListNormalItemBinding = (SecKillListNormalItemBinding) helper.binding;
-        secKillListNormalItemBinding.tvSecKillPrice.setText("sssss");
-
+        // SecKillListNormalItemBinding secKillListNormalItemBinding = (SecKillListNormalItemBinding) helper.binding;
+        // secKillListNormalItemBinding.tvSecKillPrice.setText("sssss");
+        SLog.info("XXXXXXXXXXXXXXXXYY");
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(goodsImage);
 
-        item.goodsStorage = 223;
-        item.goodsSaleNum = 162;
+
+        // item.goodsStorage = 223;
+        // item.goodsSaleNum = 162;
         // 绘制销售进度
         float totalProgressBarWidth = context.getResources().getDimension(R.dimen.sec_kill_progress_bar_width);
         View currentProgress = helper.getView(R.id.current_progress);
