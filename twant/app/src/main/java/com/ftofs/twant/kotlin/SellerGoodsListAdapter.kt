@@ -27,8 +27,7 @@ override val layoutId: Int
     get() = R.layout.seller_goods_item_unswipe
 
     override fun initView(binding: SellerGoodsItemUnswipeBinding, item: SellerGoodsItem) {
-        // TODO: 2020/7/3
-        //这里有问题
+
         binding.vo = item
         binding.btnMore.setOnClickListener{
             var params = EasyJSONObject.generate("token", User.getToken(), "commonId", item.commonId)
