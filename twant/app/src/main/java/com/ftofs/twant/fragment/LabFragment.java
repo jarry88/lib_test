@@ -70,6 +70,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        FragmentLabBinding fragmentLabBinding = (FragmentLabBinding) simpleBind;
 
         Util.setOnClickListener(view, R.id.btn_test1, this);
         Util.setOnClickListener(view, R.id.btn_test2, this);

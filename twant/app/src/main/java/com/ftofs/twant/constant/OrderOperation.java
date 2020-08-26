@@ -17,4 +17,8 @@ public enum OrderOperation {
      * 再次購買
      */
     ORDER_OPERATION_TYPE_BUY_AGAIN,
+    /**
+     * 選擇取消訂單原因
+     */
+    ORDER_OPERATION_TYPE_SELECT_CANCEL_REASON,
 }

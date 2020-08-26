@@ -13,6 +13,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.databinding.SecKillListNormalItemBinding;
 import com.ftofs.twant.entity.SecKillGoodsListItem;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,8 +38,9 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
 //        initView(helper.getBinding(),item);
 
 
-        item.goodsStorage = 223;
-        item.goodsSaleNum = 162;
+
+        // item.goodsStorage = 223;
+        // item.goodsSaleNum = 162;
         // 绘制销售进度
         float totalProgressBarWidth = context.getResources().getDimension(R.dimen.sec_kill_progress_bar_width);
         View currentProgress = helper.getView(R.id.current_progress);
