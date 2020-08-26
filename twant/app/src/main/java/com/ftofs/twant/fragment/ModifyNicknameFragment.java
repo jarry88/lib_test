@@ -173,7 +173,6 @@ public class ModifyNicknameFragment extends BaseFragment implements View.OnClick
                             setFragmentResult(RESULT_OK, args);
                         }
 
-                        ToastUtil.success(_mActivity,"修改成功");
 
 
                         ToastUtil.success(_mActivity, "修改暱稱成功");
