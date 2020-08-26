@@ -29,13 +29,17 @@ import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.OrderSkuItem;
 import com.ftofs.twant.entity.PayItem;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.fragment.SellerGoodsListPageFragment;
+import com.ftofs.twant.seller.widget.SellerOperationPopup;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.CustomerLinearLayoutManager;
 import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.CancelOrderReasonPopup;
 import com.ftofs.twant.widget.TwTabButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -58,7 +62,7 @@ import okhttp3.Call;
  * @author zwm
  */
 public class OrderFragment extends BaseFragment implements View.OnClickListener,
-        TwTabButton.TtbOnSelectListener, BaseQuickAdapter.RequestLoadMoreListener {
+        TwTabButton.TtbOnSelectListener, BaseQuickAdapter.RequestLoadMoreListener, SimpleCallback {
     /**
      * 用途：訂單列表
      */
@@ -102,6 +106,9 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     TextView tvToBeCommentedCount;
 
     EditText etKeyword;
+
+    EasyJSONObject ordersCancelReason;
+    String selectedReasonId; // 當前選中的退貨原因Id
 
     public static OrderFragment newInstance(int orderStatus, int usage) {
         Bundle args = new Bundle();
@@ -404,6 +411,10 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                         SLog.info("PAGE[%d]", page);
                         if (page == 1) {  // 如果是第1頁，清空原有數據
                             payItemList.clear();
+
+                            if (orderStatus == Constant.ORDER_STATUS_TO_BE_PAID) {
+                                ordersCancelReason = responseObj.getSafeObject("datas.ordersCancelReason");
+                            }
                         }
                         EasyJSONArray ordersPayVoList = responseObj.getSafeArray("datas.ordersPayVoList");
                         for (Object object : ordersPayVoList) { // PayObject
@@ -432,6 +443,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                                 EasyJSONObject ordersVo = (EasyJSONObject) object2;
 
                                 int ordersId = ordersVo.getInt("ordersId");
+                                long orderSN = ordersVo.optLong("ordersSn");
                                 String ordersStateName = ordersVo.getSafeString("ordersStateName");
                                 String storeName = ordersVo.getSafeString("storeName");
                                 float freightAmount = (float) ordersVo.getDouble("freightAmount");
@@ -480,7 +492,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
 
 
-                                OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount,
+                                OrderItem orderItem = new OrderItem(ordersId, String.valueOf(orderSN), storeName, ordersStateName, freightAmount, ordersAmount,
                                         showMemberCancel == 1, showMemberBuyAgain == 1, showShipSearch == 1,
                                         showEvaluation == 1, showMemberReceive == 1, orderSkuItemList, giftItemList);
 
@@ -510,7 +522,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                 }
             });
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -586,6 +598,17 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         super.onSupportInvisible();
     }
 
+    public void showCancelReasonPopup(int orderId, String orderSN) {
+        if (ordersCancelReason == null) {
+            return;
+        }
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new CancelOrderReasonPopup(_mActivity, orderId, orderSN, ordersCancelReason, this))
+                .show();
+    }
+
     public void orderOperation(OrderOperation operationType, int ordersId) {
         try {
             String token = User.getToken();
@@ -600,6 +623,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
             String path;
             if (operationType == OrderOperation.ORDER_OPERATION_TYPE_CANCEL) {
                 path = Api.PATH_CANCEL_ORDER;
+                params.set("cancelReason", selectedReasonId);  // 添加取消订单的原因
             } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
                 path = Api.PATH_DELETE_ORDER;
             } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN) {
@@ -609,6 +633,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                 return;
             }
             SLog.info("params[%s]", params);
+
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -688,7 +713,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                         }
                     }, 1500);
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -712,6 +737,19 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                 reloadData();
             }
         },500);
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        if (data instanceof EasyJSONObject) {
+            EasyJSONObject dataObj = (EasyJSONObject) data;
+            int action = dataObj.optInt("action");
+            if (action == SimpleCallback.ACTION_SELECT_CANCEL_ORDER_REASON) {
+                selectedReasonId = dataObj.optString("reason_id");
+                int orderId = dataObj.optInt("order_id");
+                orderOperation(OrderOperation.ORDER_OPERATION_TYPE_CANCEL, orderId);
+            }
+        }
     }
 }
 

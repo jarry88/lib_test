@@ -8,7 +8,12 @@ public interface SimpleCallback {
     /**
      * 選擇圖片
      */
-    public static final int ACTION_SELECT_IMAGE = 1;
+    int ACTION_SELECT_IMAGE = 1;
+
+    /**
+     * 選擇取消訂單的原因
+     */
+    int ACTION_SELECT_CANCEL_ORDER_REASON = 2;
 
 
     void onSimpleCall(Object data);

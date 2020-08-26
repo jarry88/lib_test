@@ -86,31 +86,7 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
 
                     if (id == R.id.btn_cancel_order) {
                         SLog.info("btn_cancel_order");
-                        String confirmText = "確定要取消訂單嗎?";
-                        new XPopup.Builder(context)
-//                         .dismissOnTouchOutside(false)
-                                // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                                .setPopupCallback(new XPopupCallback() {
-                                    @Override
-                                    public void onShow() {
-                                    }
-                                    @Override
-                                    public void onDismiss() {
-                                    }
-                                }).asCustom(new TwConfirmPopup(context, confirmText, null, new OnConfirmCallback() {
-                            @Override
-                            public void onYes() {
-                                SLog.info("onYes");
-                                orderFragment.orderOperation(OrderOperation.ORDER_OPERATION_TYPE_CANCEL, orderItem.orderId);
-                            }
-
-                            @Override
-                            public void onNo() {
-                                SLog.info("onNo");
-                            }
-                        }))
-                                .show();
+                        orderFragment.showCancelReasonPopup(orderItem.orderId, orderItem.orderSN);
                     } else if (id == R.id.btn_buy_again) {
                         SLog.info("btn_buy_again");
                         orderFragment.orderOperation(OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN, orderItem.orderId);

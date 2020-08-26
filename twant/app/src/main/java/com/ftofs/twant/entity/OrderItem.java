@@ -8,11 +8,12 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 public class OrderItem {
-    public OrderItem(int orderId, String storeName, String ordersStateName, double freightAmount,
+    public OrderItem(int orderId, String orderSN, String storeName, String ordersStateName, double freightAmount,
                      double ordersAmount, boolean showMemberCancel, boolean showMemberBuyAgain,
                      boolean showShipSearch, boolean showEvaluation, boolean showMemberReceive,
                      List<OrderSkuItem> orderSkuItemList, List<GiftItem> giftItemList) {
         this.orderId = orderId;
+        this.orderSN = orderSN;
         this.storeName = storeName;
         this.ordersState = Constant.SERVER_ORDERS_STATE_UNINITIALIZED;
         this.ordersStateName = ordersStateName;
@@ -28,6 +29,7 @@ public class OrderItem {
     }
 
     public int orderId;
+    public String orderSN;
     public String storeName;
     public int ordersState; // 服務器端定義的訂單狀態
     public String ordersStateName;
