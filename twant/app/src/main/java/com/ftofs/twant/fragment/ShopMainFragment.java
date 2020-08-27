@@ -45,11 +45,10 @@ import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.WhiteDropdownMenu;
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.material.tabs.TabLayout;
 import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
@@ -143,6 +142,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private ImageView btnCart;
     private ImageView btnComment;
     RelativeLayout tool;
+    private int initNavigationItemSize;
+    private boolean navigationInfoLoaded;
 
     /**
      * 打開店鋪首頁，並切換到指定的Tab
@@ -221,7 +222,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             }
         }));
         initCustomerList(view);
-        loadCustomerData(getContext());
+//        loadCustomerData(getContext());
 
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
@@ -263,18 +264,28 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         showGoodsFragment(false);
         showBtnCart(true);
+        initStoreNavigationInfo();
+
+    }
+
+    private void loadStoreNavigationInfo() {
 
         String url = Api.PATH_STORE_NAVIGATION + "/" + storeId;
         SLog.info("url[%s]", url);
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
+
         Api.getUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingPopup.dismiss();
                 LogUtil.uploadAppLog(url, "", "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
+
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
@@ -289,12 +300,15 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                         StoreNavigationItem item = (StoreNavigationItem) EasyJSONBase.jsonDecode(StoreNavigationItem.class, object.toString());
                         storeNavigationItemList.add(item);
                     }
+                    navigationInfoLoaded = true;
+//                    if (selectedFragmentIndex == MORE_FRAGMENT) {
+                        showMorePopup();
+//                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
-        setStoreNavigationItem();
     }
 
     @Override
@@ -327,7 +341,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
      * 初始化【更多】菜單按鈕
      *
      */
-    private void setStoreNavigationItem() {
+    private void initStoreNavigationInfo() {
         // 添加兩個固定在頂部的菜單
         StoreNavigationItem storeNavigationItem = new StoreNavigationItem();
         storeNavigationItem.id = -1;
@@ -343,6 +357,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         storeNavigationItem.id = -3;
         storeNavigationItem.title = "相關文章";
         storeNavigationItemList.add(storeNavigationItem);
+        initNavigationItemSize = storeNavigationItemList.size();
     }
 
     /**
@@ -413,7 +428,11 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         } else if (id == R.id.btn_search||id==R.id.btn_search_round) {
             start(ShopSearchFragment.newInstance(storeId, null));
         } else if(id==R.id.btn_customer){
-            customerListShow();
+            if (customerListLoaded) {
+                customerListShow();
+            } else {
+                loadCustomerData(getContext());
+            }
         } else if(id==R.id.btn_comment){
             int userId = User.getUserId();
             if (userId == 0) {
@@ -505,21 +524,12 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         }
 
         if (index == MORE_FRAGMENT) {
-            ImageView imgIcon = bottomBarIcons[MORE_FRAGMENT];
-
-            new XPopup.Builder(_mActivity)
-                    .offsetX(-Util.dip2px(_mActivity, 45))
-                    .offsetY(-Util.dip2px(_mActivity, 6))
-//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
-                    .hasShadowBg(false) // 去掉半透明背景
-                    .atView(imgIcon)
-                    .asCustom(new WhiteDropdownMenu(_mActivity, storeId, storeFigure, storeNavigationItemList, this))
-                    .show();
-            if (selectedFragmentIndex == HOME_FRAGMENT) {
-                toolbar.setBackgroundResource(R.drawable.white_border_type_d);
+            if (navigationInfoLoaded) {
+                //已經加載過了不用再加載
+                showMorePopup();
+            } else {
+                loadStoreNavigationInfo();
             }
-
-            tmpSwitchSelectedIcon(false);
             return;
         }
 
@@ -550,6 +560,25 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         SLog.info("index[%d], selectedFragmentIndex[%d]", index, selectedFragmentIndex);
         showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
         selectedFragmentIndex = index;
+    }
+
+    private void showMorePopup() {
+        ImageView imgIcon = bottomBarIcons[MORE_FRAGMENT];
+
+        new XPopup.Builder(_mActivity)
+                .offsetX(-Util.dip2px(_mActivity, 45))
+                .offsetY(-Util.dip2px(_mActivity, 6))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖.hasShadowBg(false) // 去掉半透明背景
+                .hasShadowBg(false)
+                .atView(imgIcon)
+                .asCustom(new WhiteDropdownMenu(_mActivity, storeId, storeFigure, storeNavigationItemList, this))
+                .show();
+
+        if (selectedFragmentIndex == HOME_FRAGMENT) {
+            toolbar.setBackgroundResource(R.drawable.white_border_type_d);
+        }
+
+        tmpSwitchSelectedIcon(false);
     }
 
 
@@ -658,10 +687,12 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private void loadCustomerData(Context context) {
         String path = Api.PATH_STORE_CUSTOMER_SERVICE + "/" + storeId;
         SLog.info("path[%s]", path);
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
         Api.getUI(path, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingPopup.dismiss();
                 LogUtil.uploadAppLog(path, "", "", e.getMessage());
                 ToastUtil.showNetworkError(context, e);
             }
@@ -669,6 +700,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
+                    loadingPopup.dismiss();
+
                     SLog.info("responseStr[%s]", responseStr);
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
@@ -741,6 +774,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                                 });
                     }
                     customerListLoaded=true;
+                    customerListShow();
 
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

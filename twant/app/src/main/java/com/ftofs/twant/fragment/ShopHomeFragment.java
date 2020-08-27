@@ -997,53 +997,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     }
 
 
-    private void loadStoreHrPost(){
-        try{
-            String path = Api.PATH_STORE_HRPOST+"/"+parentFragment.getStoreId();
-            EasyJSONObject parse = EasyJSONObject.generate();
-            Api.getUI(path, parse, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    ToastUtil.showNetworkError(_mActivity,e);
-                }
-
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    try {
-                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                        EasyJSONArray hrPostList = responseObj.getSafeArray("datas.hrPostList");
-                        if (hrPostList != null && hrPostList.length() > 0) {
-                            SLog.info("hrPostList.length[%d]", hrPostList.length());
-                            int index = 0;
-                            for (Object object : hrPostList) {
-                                EasyJSONObject hrPost = (EasyJSONObject) object;
-
-                                WantedPostItem item = new WantedPostItem();
-                                item.postId = hrPost.getInt("postId");
-                                item.postTitle = hrPost.getSafeString("postTitle");
-                                item.postType = hrPost.getSafeString("postType");
-                                item.postArea = hrPost.getSafeString("postArea");
-                                item.salaryType = hrPost.getSafeString("salaryType");
-                                item.salaryRange = hrPost.getSafeString("salaryRange");
-                                item.currency = hrPost.getSafeString("currency");
-                                item.postDescription = hrPost.getSafeString("postDescription");
-                                item.mailbox = hrPost.getSafeString("mailbox");
-                                item.isFavor = hrPost.getInt("isFavor");
-
-                                wantedPostItemList.add(item);
-                                index++;
-                            }
-                        }
-                    }catch (Exception e){
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                    }
-                }
-            });
-        } catch (Exception e){
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
-    }
-
     @Override
     public void onClick(View v) {
         int id = v.getId();

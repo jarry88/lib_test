@@ -145,6 +145,11 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
         tvEmptyHint.setText("暂时还没有说说哦~");
         adapter.setEmptyView(emptyView);
         rvCommentList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
         loadCommentData(currPage);
     }
 

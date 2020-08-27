@@ -38,6 +38,7 @@ public class ShopRecruitmentFragment extends BaseFragment {
     ShopMainFragment parentFragment;
 
     List<WantedPostItem> wantedPostItemList = new ArrayList<>();
+    private boolean dataLoaded;
 
     public static ShopRecruitmentFragment newInstance() {
         Bundle args = new Bundle();
@@ -80,9 +81,15 @@ public class ShopRecruitmentFragment extends BaseFragment {
 
         rvList.setAdapter(storeJobAdapter);
 
-        loadData();
     }
 
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (!dataLoaded) {
+            loadData();
+        }
+    }
 
     private void loadData(){
         try{
@@ -122,6 +129,7 @@ public class ShopRecruitmentFragment extends BaseFragment {
                             }
                             SLog.info("wantedPostItemList.size[%d]", wantedPostItemList.size());
                             storeJobAdapter.setNewData(wantedPostItemList);
+                            dataLoaded = true;
                         }
                     }catch (Exception e){
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

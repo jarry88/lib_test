@@ -159,7 +159,6 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
-        // loadStoreActivityData();
     }
 
 
