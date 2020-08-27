@@ -985,21 +985,22 @@ public class StringUtil {
     }
 
 
-    public static int safeInt(Object goodsModel) {
-
-        if (goodsModel == null) {
-            return 5;
-        } else {
-            return (int)goodsModel;
-        }
-    }
-
+    /**
+     * 詢價涉及頁面：首頁banner ，搜索結果列表頁，想要貼發表選擇商品頁，貼文詳情頁,店鋪首頁
+     * @param goods
+     * @return
+     * @throws Exception
+     */
     public static int safeModel(EasyJSONObject goods) throws Exception {
         String key = "goodsModel";
         if (goods.exists(key)) {
             return goods.getInt(key);
         } else {
-            return (int) (4.6+Math.random());
+            SLog.info("警告！！！！！ 後端 沒有提供 goodsModel信息");
+            if (Util.inDev()) {
+                return (int) (4.6+Math.random());
+            }
+            return 0;
         }
     }
 }

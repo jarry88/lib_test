@@ -3,7 +3,6 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,12 +11,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.FeaturesGoodsAdapter;
@@ -27,12 +24,10 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.entity.StoreGoodsPair;
-import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.Time;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.LockableNestedScrollView;
-import com.tencent.bugly.Bugly;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -41,7 +36,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
@@ -236,25 +230,24 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
             for (Object object : newGoodsVoList) {
                 EasyJSONObject easyJSONObject = (EasyJSONObject) object;
 
-                StoreGoodsItem storeGoodsItem = new StoreGoodsItem();
                 try {
-                    storeGoodsItem.commonId = easyJSONObject.getInt("commonId");
-                    storeGoodsItem.imageSrc = easyJSONObject.getSafeString("imageSrc");
-                    storeGoodsItem.goodsName = easyJSONObject.getSafeString("goodsName");
-                    storeGoodsItem.jingle = easyJSONObject.getSafeString("jingle");
+                    StoreGoodsItem storeGoodsItem = StoreGoodsItem.parse(easyJSONObject);
+
+
+                    storeGoodsItem.price = Util.getSpuPrice(easyJSONObject);
+                    if (index % 2 == 0) {
+                        storeGoodsPair = new StoreGoodsPair(StoreGoodsPair.TYPE_NEW);
+                        storeNewInItemList.add(storeGoodsPair);
+
+                        storeGoodsPair.leftItem = storeGoodsItem;
+                    } else {
+                        storeGoodsPair.rightItem = storeGoodsItem;
+                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
-                storeGoodsItem.price = Util.getSpuPrice(easyJSONObject);
 
-                if (index % 2 == 0) {
-                    storeGoodsPair = new StoreGoodsPair(StoreGoodsPair.TYPE_NEW);
-                    storeNewInItemList.add(storeGoodsPair);
 
-                    storeGoodsPair.leftItem = storeGoodsItem;
-                } else {
-                    storeGoodsPair.rightItem = storeGoodsItem;
-                }
 
                 ++index;
             }
@@ -292,25 +285,23 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
         for (Object object : hotGoodsVoList) {
             EasyJSONObject easyJSONObject = (EasyJSONObject) object;
 
-            StoreGoodsItem storeGoodsItem = new StoreGoodsItem();
             try {
-                storeGoodsItem.commonId = easyJSONObject.getInt("commonId");
-                storeGoodsItem.imageSrc = easyJSONObject.getSafeString("imageSrc");
-                storeGoodsItem.goodsName = easyJSONObject.getSafeString("goodsName");
-                storeGoodsItem.jingle = easyJSONObject.getSafeString("jingle");
+                StoreGoodsItem storeGoodsItem = StoreGoodsItem.parse(easyJSONObject);
+
                 storeGoodsItem.price = Util.getSpuPrice(easyJSONObject);
+                if (index % 2 == 0) {
+                    storeGoodsPair = new StoreGoodsPair(StoreGoodsPair.TYPE_HOT);
+                    storeHotItemList.add(storeGoodsPair);
+
+                    storeGoodsPair.leftItem = storeGoodsItem;
+                } else {
+                    storeGoodsPair.rightItem = storeGoodsItem;
+                }
             } catch (Exception e) {
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
 
-            if (index % 2 == 0) {
-                storeGoodsPair = new StoreGoodsPair(StoreGoodsPair.TYPE_HOT);
-                storeHotItemList.add(storeGoodsPair);
 
-                storeGoodsPair.leftItem = storeGoodsItem;
-            } else {
-                storeGoodsPair.rightItem = storeGoodsItem;
-            }
 
             ++index;
         }

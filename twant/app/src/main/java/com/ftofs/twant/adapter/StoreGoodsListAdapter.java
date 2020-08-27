@@ -11,6 +11,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
+import com.ftofs.twant.util.Util;
 
 public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
     /**
@@ -31,10 +32,14 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
         if (itemData.leftItem != null) {
             setText(itemView, R.id.tv_left_goods_name, itemData.leftItem.goodsName);
             setText(itemView, R.id.tv_left_goods_jingle, itemData.leftItem.jingle);
-            setText(itemView, R.id.tv_left_price, StringUtil.formatPrice(context, itemData.leftItem.price, 0,false));
 
             TextView leftPrice = itemView.findViewById(R.id.tv_left_price);
-            UiUtil.toPriceUI(leftPrice,12);
+            if (Util.noPrice(itemData.leftItem.goodsModel)) {
+                UiUtil.toConsultUI(leftPrice);
+            }else{
+                setText(itemView, R.id.tv_left_price, StringUtil.formatPrice(context, itemData.leftItem.price, 0,false));
+                UiUtil.toPriceUI(leftPrice,12);
+            }
             ImageView leftGoodsImage = itemView.findViewById(R.id.left_goods_image);
             Glide.with(context).load(itemData.leftItem.imageSrc).fitCenter().into(leftGoodsImage);
 
@@ -51,10 +56,14 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
         if (itemData.rightItem != null) {
             setText(itemView, R.id.tv_right_goods_name, itemData.rightItem.goodsName);
             setText(itemView, R.id.tv_right_goods_jingle, itemData.rightItem.jingle);
-            setText(itemView, R.id.tv_right_price, StringUtil.formatPrice(context, itemData.rightItem.price, 0,false));
 
             TextView rightPrice = itemView.findViewById(R.id.tv_right_price);
-            UiUtil.toPriceUI(rightPrice,12);
+            if (Util.noPrice(itemData.rightItem.goodsModel)) {
+                UiUtil.toConsultUI(rightPrice);
+            } else {
+                setText(itemView, R.id.tv_right_price, StringUtil.formatPrice(context, itemData.rightItem.price, 0,false));
+                UiUtil.toPriceUI(rightPrice,12);
+            }
             ImageView rightGoodsImage = itemView.findViewById(R.id.right_goods_image);
             Glide.with(context).load(itemData.rightItem.imageSrc).fitCenter().into(rightGoodsImage);
 

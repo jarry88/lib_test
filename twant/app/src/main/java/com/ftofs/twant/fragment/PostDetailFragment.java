@@ -614,7 +614,8 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                         String imageUrl = wantPostGoodsVo.getSafeString("goodsImage");
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(imageUrl)).centerCrop().into(postGoodsImage);
                         float goodsPrice = (float) wantPostGoodsVo.getDouble("goodsPrice");
-                        tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
+                        boolean noPrice = StringUtil.safeModel(wantPostGoodsVo) == Constant.GOODS_TYPE_CONSULT;
+                        tvGoodsPrice.setText(noPrice?"詢價":StringUtil.formatPrice(_mActivity, goodsPrice, 0));
 
                         llPostGoodsContainer.setVisibility(View.VISIBLE);
                     } else {

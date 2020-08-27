@@ -93,10 +93,13 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
         holder.tvGoodsName.setText(item.name);
         holder.tvGoodsJingle.setText(item.jingle);
         holder.tvGoodsPrice.setText(StringUtil.formatPrice(context, item.price, 1,false));
-        UiUtil.toPriceUI(holder.tvGoodsPrice,12);
-
-        holder.swPrice.setVisibility(item.showDiscount?View.VISIBLE:View.GONE);
-        holder.swPrice.setDiscountInfo(context, item.getDiscount(), item.getOriginal());
+        if (Util.noPrice(item.goodsModel)) {
+            UiUtil.toConsultUI(holder.tvGoodsPrice);
+        } else {
+            UiUtil.toPriceUI(holder.tvGoodsPrice,12);
+            holder.swPrice.setVisibility(item.showDiscount?View.VISIBLE:View.GONE);
+            holder.swPrice.setDiscountInfo(context, item.getDiscount(), item.getOriginal());
+        }
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

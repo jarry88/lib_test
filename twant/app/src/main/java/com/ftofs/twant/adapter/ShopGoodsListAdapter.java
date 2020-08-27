@@ -71,7 +71,11 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 helper.setText(R.id.tv_goods_name, goods.name);
                 helper.setText(R.id.tv_goods_comment, goods.jingle);
                 TextView tvPrice = helper.getView(R.id.tv_goods_price);
-                tvPrice.setText(StringUtil.formatPrice(context,  goods.price, 1,false));
+                if (Util.noPrice(goods.goodsModel)) {
+                    UiUtil.toConsultUI(tvPrice);
+                } else {
+                    tvPrice.setText(StringUtil.formatPrice(context,  goods.price, 1,false));
+                }
 
                 tvPrice.setTypeface(typeFace);
                 UiUtil.toPriceUI(tvPrice,12);
@@ -89,7 +93,11 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 ImageView goodsImage = helper.getView(R.id.img_goods);
                 Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_goods_name, goods.name);
-                helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context,  goods.price, 1,false));
+                if (Util.noPrice(goods.goodsModel)) {
+                    helper.setText(R.id.tv_goods_price_left, "詢價");
+                } else {
+                    helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context,  goods.price, 1,false));
+                }
             }
 
         } else if (itemViewType == Constant.ITEM_TYPE_LOAD_END_HINT){
