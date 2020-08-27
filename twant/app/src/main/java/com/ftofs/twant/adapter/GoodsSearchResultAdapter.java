@@ -19,6 +19,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
+import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SlantedWidget;
 
@@ -89,12 +90,11 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     tvGoodsJingleLeft.setVisibility(View.VISIBLE);
                 }
 
-                boolean noPrice = item.left.goodsModel== Constant.GOODS_TYPE_CONSULT;
                 TextView leftTextView = helper.getView(R.id.tv_goods_price_left);
-                if (noPrice) {
+                if (Util.noPrice(item.left.goodsModel)) {
                     UiUtil.toConsultUI(leftTextView);
                 } else {
-                    leftTextView.setText(StringUtil.formatPrice(context, item.right.price, 1,false));
+                    leftTextView.setText(StringUtil.formatPrice(context, item.left.price, 1,false));
                     UiUtil.toPriceUI(leftTextView,0);
                 }
 
@@ -142,13 +142,13 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     tvGoodsJingleRight.setText(item.right.jingle);
                     tvGoodsJingleRight.setVisibility(View.VISIBLE);
                 }
-                boolean noPrice = item.right.goodsModel== Constant.GOODS_TYPE_CONSULT;
+
                 TextView priceRight = helper.getView(R.id.tv_goods_price_right);
-                if (noPrice) {
+                if (Util.noPrice(item.right.goodsModel)) {
                     UiUtil.toConsultUI(priceRight);
                 } else {
-                    priceRight.setText(StringUtil.formatPrice(context, item.right.price, 1,false));
-                    UiUtil.toPriceUI(priceRight,0);
+                    priceRight.setText(StringUtil.formatPrice(context, item.right.price, 1, false));
+                    UiUtil.toPriceUI(priceRight, 0);
                 }
 
                 helper.setGone(R.id.tv_freight_free_right, item.right.isFreightFree)

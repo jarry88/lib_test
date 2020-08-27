@@ -2007,6 +2007,8 @@
                     <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="39dp"
+                        android:id="@+id/fl_add_to_cart_bg"
+
                         android:layout_weight="1">
                         <ImageView
                             android:id="@+id/btn_add_to_cart_bg"
@@ -2036,6 +2038,21 @@
                         android:textSize="14sp"
                         android:textColor="#FFF"
                         android:text="@string/text_want_to_buy"
+                        />
+
+                    <TextView
+                        android:id="@+id/btn_consult"
+                        android:layout_width="@dimen/dp_120"
+                        android:layout_height="39dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:background="@drawable/blue_button_106_39"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:textColor="#FFF"
+                        android:text="@string/text_want_to_consult"
+                        android:visibility="gone"
                         />
                 </LinearLayout>
                 <!-- END OF 有庫存時顯示這個 -->

@@ -841,4 +841,5 @@
     <string name="text_type_consult">咨詢型</string>
     <string name="text_type_virtual">虛擬型</string>
     <string name="text_consult">詢價</string>
+    <string name="text_want_to_consult">想要咨詢</string>
 </resources>

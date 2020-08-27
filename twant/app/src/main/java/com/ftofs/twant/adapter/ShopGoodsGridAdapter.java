@@ -2,6 +2,8 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
+
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,12 +49,15 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 helper.setText(R.id.tv_left_goods_name, leftGoods.name);
                 TextView leftPrice=helper.getView(R.id.tv_left_goods_price);
                 if (Util.noPrice(leftGoods.goodsModel)) {
+                    helper.getView(R.id.btn_add_to_cart_left).setVisibility(View.GONE);
                     UiUtil.toConsultUI(leftPrice);
                 } else {
+                    helper.getView(R.id.btn_add_to_cart_left).setVisibility(View.VISIBLE);
                     leftPrice.setText(StringUtil.formatPrice(context,  leftGoods.price, 1,false));
                     UiUtil.toPriceUI(leftPrice,12);
+
                 }
-                helper.addOnClickListener(R.id.img_left_goods, R.id.btn_add_to_cart_left);
+                helper.addOnClickListener(R.id.img_left_goods,R.id.btn_add_to_cart_left);
             }
             if (goodsPair.rightGoods != null) {
                 Goods rightGoods = goodsPair.rightGoods;
@@ -61,8 +66,10 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 TextView rightPrice = helper.getView(R.id.tv_right_goods_price);
                 if (Util.noPrice(rightGoods.goodsModel)) {
                     UiUtil.toConsultUI(rightPrice);
+                    helper.getView(R.id.btn_add_to_cart_right).setVisibility(View.GONE);
                 } else {
                     rightPrice.setText( StringUtil.formatPrice(context, rightGoods.price, 1,false));
+                    helper.getView(R.id.btn_add_to_cart_right).setVisibility(View.VISIBLE);
 
                     UiUtil.toPriceUI(rightPrice,12);
                 }
@@ -71,7 +78,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 helper.setGone(R.id.img_right_goods, true)
                         .setVisible(R.id.ll_right_goods_container, true);
 
-                helper.addOnClickListener(R.id.img_right_goods, R.id.btn_add_to_cart_right);
+                helper.addOnClickListener(R.id.btn_add_to_cart_right,R.id.btn_add_to_cart_right);
             } else {
                 helper.setGone(R.id.img_right_goods, false)
                         .setVisible(R.id.ll_right_goods_container, false);
