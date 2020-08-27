@@ -512,7 +512,8 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
             try {
                 ((TextView) holder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
                 ((TextView) holder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
-                ((TextView) holder.getView(R.id.tv_goods_price)).setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
+
+                ((TextView) holder.getView(R.id.tv_goods_price)).setText(StringUtil.formatPrice(mContext, Double.parseDouble(item.info.getCost().substring(1)), 0, true));
                 holder.getView(R.id.sw_price).setVisibility(item.info.show?View.VISIBLE:View.GONE);
                 ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext,item.info.getDiscount(),item.info.getOriginal());
                 ImageView imageView =  holder.getView(R.id.iv_goods_img);

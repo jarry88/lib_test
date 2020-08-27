@@ -88,11 +88,16 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     tvGoodsJingleLeft.setText(item.left.jingle);
                     tvGoodsJingleLeft.setVisibility(View.VISIBLE);
                 }
-                TextView priceLeft = helper.getView(R.id.tv_goods_price_left);
-                priceLeft.setText(StringUtil.formatPrice(context, item.left.price, 1,false));
-                UiUtil.toPriceUI(priceLeft,0);
+
+                boolean noPrice = item.left.goodsModel== Constant.GOODS_TYPE_CONSULT;
                 TextView leftTextView = helper.getView(R.id.tv_goods_price_left);
-                UiUtil.toPriceUI(leftTextView,0);
+                if (noPrice) {
+                    UiUtil.toConsultUI(leftTextView);
+                } else {
+                    leftTextView.setText(StringUtil.formatPrice(context, item.right.price, 1,false));
+                    UiUtil.toPriceUI(leftTextView,0);
+                }
+
 
                 helper.setGone(R.id.tv_freight_free_left, item.left.isFreightFree)
                         .setGone(R.id.tv_gift_left, item.left.hasGift);
@@ -137,10 +142,14 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     tvGoodsJingleRight.setText(item.right.jingle);
                     tvGoodsJingleRight.setVisibility(View.VISIBLE);
                 }
-                helper.setText(R.id.tv_goods_price_right, StringUtil.formatPrice(context, item.right.price, 1,false));
+                boolean noPrice = item.right.goodsModel== Constant.GOODS_TYPE_CONSULT;
                 TextView priceRight = helper.getView(R.id.tv_goods_price_right);
-                priceRight.setText(StringUtil.formatPrice(context, item.right.price, 1,false));
-                UiUtil.toPriceUI(priceRight,0);
+                if (noPrice) {
+                    UiUtil.toConsultUI(priceRight);
+                } else {
+                    priceRight.setText(StringUtil.formatPrice(context, item.right.price, 1,false));
+                    UiUtil.toPriceUI(priceRight,0);
+                }
 
                 helper.setGone(R.id.tv_freight_free_right, item.right.isFreightFree)
                         .setGone(R.id.tv_gift_right, item.right.hasGift);

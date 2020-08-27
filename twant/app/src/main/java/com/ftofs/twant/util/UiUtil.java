@@ -180,4 +180,8 @@ public class UiUtil {
 //        drawable.add;
         return null;
     }
+
+    public static void toConsultUI(TextView textView) {
+        textView.setText("詢價");
+    }
 }

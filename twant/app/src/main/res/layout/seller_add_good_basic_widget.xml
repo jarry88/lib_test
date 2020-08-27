@@ -90,7 +90,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sp_14"
-                        android:text="零售型"/>
+                        android:text="@string/text_type_retail"/>
                 </LinearLayout>
                 <LinearLayout
 
@@ -117,6 +117,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
                     <com.ftofs.twant.widget.ScaledButton
                         app:icon_src="@drawable/icon_image_un_select"
@@ -129,7 +130,27 @@
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sp_14"
 
-                        android:text="虛擬型"/>
+                        android:text="@string/text_type_virtual"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_consult_container"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_height="wrap_content">
+                    <com.ftofs.twant.widget.ScaledButton
+                        app:icon_src="@drawable/icon_image_un_select"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sb_consult" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp_14"
+
+                        android:text="@string/text_type_consult"/>
                 </LinearLayout>
 
             </LinearLayout>

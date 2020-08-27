@@ -738,6 +738,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 goodsSearchItem.extendPrice0 = extendPrice0;
                                 goodsSearchItem.batchPrice0 = batchPrice0;
                                 goodsSearchItem.showDiscountLabel = showDiscountLabel;
+                                goodsSearchItem.goodsModel = StringUtil.safeModel(goods);
 
 
                                 int isPinkage = goods.getInt("isPinkage");

@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -981,5 +982,24 @@ public class StringUtil {
         }
 
         return result.toString();
+    }
+
+
+    public static int safeInt(Object goodsModel) {
+
+        if (goodsModel == null) {
+            return 5;
+        } else {
+            return (int)goodsModel;
+        }
+    }
+
+    public static int safeModel(EasyJSONObject goods) throws Exception {
+        String key = "goodsModel";
+        if (goods.exists(key)) {
+            return goods.getInt(key);
+        } else {
+            return (int) (4.6+Math.random());
+        }
     }
 }

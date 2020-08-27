@@ -49,7 +49,8 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
         layoutParams.width = currentProgressBarWidth;
         currentProgress.setLayoutParams(layoutParams);
 
-        int progress = 100 * item.goodsSaleNum / item.goodsStorage;
+//        int progress = 100 * item.goodsSaleNum / item.goodsStorage;
+        int progress = 50;
         helper.setText(R.id.tv_goods_name, item.goodsName)
                 .setText(R.id.tv_remain_goods_count, String.format("剩餘%d件", item.goodsStorage - item.goodsSaleNum))
                 .setText(R.id.tv_sec_kill_price, StringUtil.formatPrice(context, item.secKillPrice, 0))

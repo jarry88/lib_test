@@ -36,6 +36,7 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
@@ -53,6 +54,7 @@ import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
@@ -341,7 +343,11 @@ public class AddPostFragment extends BaseFragment implements
 
                     Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImage)).centerCrop().into(postGoodsImage);
                     tvPostGoodsName.setText(goodsName);
-                    tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 1, true));
+                    if (shareData.getInt("goodsModel") == Constant.GOODS_TYPE_CONSULT) {
+                        UiUtil.toConsultUI(tvGoodsPrice);
+                    } else {
+                        tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 1, true));
+                    }
 
                     // 如果是分享商品，則隱藏刪除按鈕
                     btnDeletePostGoods.setVisibility(View.GONE);

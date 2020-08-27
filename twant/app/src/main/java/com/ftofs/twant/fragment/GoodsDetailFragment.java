@@ -337,6 +337,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvBargainRemainHour;
     TextView tvBargainRemainMinute;
     TextView tvBargainRemainSecond;
+    private int goodsModel;
 
     @Override
     public void onSimpleCall(Object data) {
@@ -1056,7 +1057,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
                             jingle, goodsImageUrl, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
                             "commonId", commonId, "goodsName", goodsName,
-                            "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice)))
+                            "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice,"goodsModel",goodsModel)))
                     .show();
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1605,6 +1606,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 .setText(String.format("已有%d人參與", bargainMemberCount));
 
                         storeId = goodsCommon.getInt("storeId");
+                        goodsModel = goodsCommon.getInt("goodsModel");
 
                         if (goodsCommon.exists("detailVideo")) {
                             String detailVideoUrl = goodsCommon.getSafeString("detailVideo");

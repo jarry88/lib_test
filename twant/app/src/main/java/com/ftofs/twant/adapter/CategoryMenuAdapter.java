@@ -77,7 +77,7 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
         holder.tvCategoryNameChinese.setText(categoryMenu.categoryNameChinese);
         if (categoryType == Constant.CATEGORY_TYPE_SHOP) {
             holder.tvCategoryNameEnglish.setText(categoryMenu.categoryNameEnglish);
-            SLog.info("id %d,name %s",categoryMenu.categoryId,categoryMenu.categoryNameChinese);
+//            SLog.info("id %d,name %s",categoryMenu.categoryId,categoryMenu.categoryNameChinese);
             if (categoryMenu.categoryId == 75) {
                 holder.ivCategoryIcon.setVisibility(View.VISIBLE);
                 holder.tvCategoryNameEnglish.setVisibility(View.GONE);

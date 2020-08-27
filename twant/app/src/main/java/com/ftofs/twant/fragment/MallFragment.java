@@ -360,6 +360,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                                 goodsLiteVo.getSafeString("jingle"),
                                 Util.getSpuPrice(goodsLiteVo),
                                 goodsLiteVo.getSafeString("adminCountry.nationalFlag"));
+                        item.goodsModel = goodsLiteVo.getInt("goodsModel");
 
                         if (pair == null) {
                             pair = new GoodsSearchItemPair(Constant.ITEM_TYPE_NORMAL);
