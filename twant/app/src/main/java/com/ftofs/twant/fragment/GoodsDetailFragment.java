@@ -1864,11 +1864,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     StringBuffer discountDes = new StringBuffer("限時");
                     discountDes.append(String.format("%.2f", promotionDiscountRate)).append("折");
                     tvPromotionDiscountRate.setText(discountDes.toString());
-                    EasyJSONObject goodsCountry =responseObj.getObject("datas.goodsCountry");
-                    if (goodsCountry != null) {
-                        String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(goodsCountry.getSafeString("nationalFlag"));
-                        Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);
-                        tvGoodsCountryName.setText(goodsCountry.getSafeString("countryCn"));
+                    if (responseObj.exists("datas.goodsCountry")) {
+                        SLog.info("XXYYZZ");
+                        EasyJSONObject goodsCountry =responseObj.getObject("datas.goodsCountry");
+                        SLog.info("goodsCountry[%s]", goodsCountry);
+                        if (goodsCountry != null) {
+                            SLog.info("XXYYZZ");
+                            String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(goodsCountry.getSafeString("nationalFlag"));
+                            Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);
+                            tvGoodsCountryName.setText(goodsCountry.getSafeString("countryCn"));
+                        }
                     }
 
 
