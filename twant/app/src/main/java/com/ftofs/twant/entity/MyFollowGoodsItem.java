@@ -12,4 +12,5 @@ public class MyFollowGoodsItem extends MyFollowItem{
     public int goodsFavorite;
     public String storeAvatarUrl;
     public int likeCount;
+    public int goodsModel;
 }

@@ -52,6 +52,8 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
         layoutParams.width = currentProgressBarWidth;
         currentProgress.setLayoutParams(layoutParams);
 
+//        int progress = 100 * item.goodsSaleNum / item.goodsStorage;
+        int progress = 50;
         int progress = 0;
         if (item.goodsStorage > 0) { // 预防除0的异常
             progress = 100 * item.goodsSaleNum / item.goodsStorage;

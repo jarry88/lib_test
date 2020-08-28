@@ -3,6 +3,7 @@ package com.ftofs.twant.entity;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -24,7 +25,7 @@ public class Goods implements MultiItemEntity {
     public int appUsable;
     public int promotionType = Constant.PROMOTION_TYPE_NONE;
     public int goodsClick;
-
+    public int goodsModel;
 
     private int itemType;
     public int id;
@@ -121,6 +122,7 @@ public class Goods implements MultiItemEntity {
         if (goods.exists("tariffEnable")) {
             goods1.tariffEnable = goods.getInt("tariffEnable");
         }
+        goods1.goodsModel = StringUtil.safeModel(goods);
         return goods1 ;
     }
 

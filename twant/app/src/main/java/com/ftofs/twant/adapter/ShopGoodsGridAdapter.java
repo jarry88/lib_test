@@ -2,6 +2,8 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
+
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.GoodsPair;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
+import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
@@ -45,23 +48,37 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 Glide.with(context).load(leftGoods.imageUrl).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_left_goods_name, leftGoods.name);
                 TextView leftPrice=helper.getView(R.id.tv_left_goods_price);
-                leftPrice.setText(StringUtil.formatPrice(context,  leftGoods.price, 1,false));
-                UiUtil.toPriceUI(leftPrice,12);
-                helper.addOnClickListener(R.id.img_left_goods, R.id.btn_add_to_cart_left);
+                if (Util.noPrice(leftGoods.goodsModel)) {
+                    helper.getView(R.id.btn_add_to_cart_left).setVisibility(View.GONE);
+                    UiUtil.toConsultUI(leftPrice);
+                } else {
+                    helper.getView(R.id.btn_add_to_cart_left).setVisibility(View.VISIBLE);
+                    leftPrice.setText(StringUtil.formatPrice(context,  leftGoods.price, 1,false));
+                    UiUtil.toPriceUI(leftPrice,12);
+
+                }
+                helper.addOnClickListener(R.id.img_left_goods,R.id.btn_add_to_cart_left);
             }
             if (goodsPair.rightGoods != null) {
                 Goods rightGoods = goodsPair.rightGoods;
                 ImageView goodsImage = helper.getView(R.id.img_right_goods);
                 Glide.with(context).load(rightGoods.imageUrl).fitCenter().into(goodsImage);
-                helper.setText(R.id.tv_right_goods_name, rightGoods.name);
                 TextView rightPrice = helper.getView(R.id.tv_right_goods_price);
-                rightPrice.setText( StringUtil.formatPrice(context, rightGoods.price, 1,false));
-                UiUtil.toPriceUI(rightPrice,12);
+                if (Util.noPrice(rightGoods.goodsModel)) {
+                    UiUtil.toConsultUI(rightPrice);
+                    helper.getView(R.id.btn_add_to_cart_right).setVisibility(View.GONE);
+                } else {
+                    rightPrice.setText( StringUtil.formatPrice(context, rightGoods.price, 1,false));
+                    helper.getView(R.id.btn_add_to_cart_right).setVisibility(View.VISIBLE);
+
+                    UiUtil.toPriceUI(rightPrice,12);
+                }
+                helper.setText(R.id.tv_right_goods_name, rightGoods.name);
 
                 helper.setGone(R.id.img_right_goods, true)
                         .setVisible(R.id.ll_right_goods_container, true);
 
-                helper.addOnClickListener(R.id.img_right_goods, R.id.btn_add_to_cart_right);
+                helper.addOnClickListener(R.id.btn_add_to_cart_right,R.id.btn_add_to_cart_right);
             } else {
                 helper.setGone(R.id.img_right_goods, false)
                         .setVisible(R.id.ll_right_goods_container, false);

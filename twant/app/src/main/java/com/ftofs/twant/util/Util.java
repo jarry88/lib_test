@@ -80,6 +80,7 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 
+import org.litepal.util.Const;
 import org.urllib.Query;
 import org.urllib.Urls;
 
@@ -1569,6 +1570,18 @@ public class Util {
             contentView.setPadding(0, statusBarHeight, 0, 0);
         }
 
+    }
+
+    /**
+     * 當前環境是否可以使用寫死的數據
+     * @return
+     */
+    public static boolean inDev() {
+        return Config.DEVELOPER_MODE && Config.USE_DEVELOPER_TEST_DATA;
+    }
+
+    public static boolean noPrice(int goodsModel) {
+        return goodsModel == Constant.GOODS_TYPE_CONSULT;
     }
 }
 

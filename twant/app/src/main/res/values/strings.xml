@@ -837,4 +837,9 @@
     <string name="shuaxinshibai">刷新失敗</string>
     <string name="shifanglijijiazhai">釋放立即加載</string>
     <string name="shangcigengxin">上次更新 M-d HH:mm</string>
+    <string name="text_type_retail">零售型</string>
+    <string name="text_type_consult">咨詢型</string>
+    <string name="text_type_virtual">虛擬型</string>
+    <string name="text_consult">詢價</string>
+    <string name="text_want_to_consult">想要咨詢</string>
 </resources>

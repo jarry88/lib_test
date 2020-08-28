@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -331,6 +332,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int goId2 = Constant.INVALID_GO_ID;
 
     TextView btnBuy;
+    TextView btnConsult;
     TextView btnAddToCart;
     ImageView btnAddToCartBg;
 
@@ -338,6 +340,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvBargainRemainHour;
     TextView tvBargainRemainMinute;
     TextView tvBargainRemainSecond;
+    private int goodsModel;
+    private FrameLayout flAddToCart;
 
     TextView tvSecKillRemainHour;
     TextView tvSecKillRemainMinute;
@@ -620,6 +624,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_menu, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
         btnAddToCart = view.findViewById(R.id.btn_add_to_cart);
+        flAddToCart = view.findViewById(R.id.fl_add_to_cart_bg);
         btnAddToCart.setOnClickListener(this);
         if (bargainId != Constant.INVALID_BARGAIN_ID) {
             btnAddToCart.setText("原價購買");
@@ -634,7 +639,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_comment, this);
         Util.setOnClickListener(view, R.id.tv_goods_name, this);
         btnBuy = view.findViewById(R.id.btn_buy);
+        btnConsult = view.findViewById(R.id.btn_consult);
         btnBuy.setOnClickListener(this);
+        btnConsult.setOnClickListener(this);
         if (bargainId != Constant.INVALID_BARGAIN_ID) {
             btnBuy.setText("砍一刀");
         }
@@ -941,6 +948,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_select_spec:
                 if (bargainId != Constant.INVALID_BARGAIN_ID) { // 如果是砍價，不讓選擇規格
+
+                    return;
+                }
+                if (Util.noPrice(goodsModel)) {//如果是詢價也不讓選規格
                     return;
                 }
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
@@ -1003,6 +1014,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 Util.startFragment(CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS));
                 break;
             case R.id.btn_bargain_customer_service:
+            case R.id.btn_consult:
             case R.id.btn_bottom_bar_customer_service:
                 showStoreCustomerService();
                 break;
@@ -1065,7 +1077,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
                             jingle, goodsImageUrl, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
                             "commonId", commonId, "goodsName", goodsName,
-                            "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice)))
+                            "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice,"goodsModel",goodsModel)))
                     .show();
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1876,8 +1888,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
                     }
 
-                    goodsPrice = Util.getSpuPrice(goodsDetail);
-                    UiUtil.toPriceUI(tvGoodsPrice,0);
+                    goodsModel = StringUtil.safeModel(goodsDetail);
+                    if (Util.noPrice(goodsModel)) {
+                        UiUtil.toConsultUI(tvGoodsPrice);
+                        flAddToCart.setVisibility(GONE);
+                        btnBuy.setVisibility(GONE);
+                        btnConsult.setVisibility(VISIBLE);
+
+                    } else {
+                        goodsPrice = Util.getSpuPrice(goodsDetail);
+                        UiUtil.toPriceUI(tvGoodsPrice,0);
+                    }
 
                     // 是否点赞
                     isLike = goodsDetail.getInt("isLike");
@@ -2755,7 +2776,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      */
     private void showPriceTag(GoodsInfo goodsInfo) {
         SLog.info("promotionType[%d], promotionCountDownTime[%d]", promotionType, promotionCountDownTime);
-        if (promotionType == Constant.PROMOTION_TYPE_NONE || promotionCountDownTime == 0) {
+        if (Util.noPrice(goodsModel)) {
+            UiUtil.toConsultUI(tvGoodsPrice);
+            rlPriceTag.setVisibility(VISIBLE);
+        }
+        else if (promotionType == Constant.PROMOTION_TYPE_NONE || promotionCountDownTime == 0) {
             tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
             rlPriceTag.setVisibility(VISIBLE);
         } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {

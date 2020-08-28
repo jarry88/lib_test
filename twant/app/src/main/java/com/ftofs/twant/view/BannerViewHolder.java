@@ -9,10 +9,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.RoundedDataImageView;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -94,7 +96,13 @@ public class BannerViewHolder implements MZViewHolder<WebSliderItem> {
                     }
                     Glide.with(context).load(goodsImage).centerCrop().into(goodsImageArr[i]);
                     goodsImageArr[i].setCustomData(commonId);
-                    goodsPriceArr[i].setText(StringUtil.formatPrice(context, price, 0,false));
+
+                    boolean noPrice = StringUtil.safeModel(goods)== Constant.GOODS_TYPE_CONSULT;
+                    if (noPrice) {
+                        UiUtil.toConsultUI(goodsPriceArr[i]);
+                    } else {
+                        goodsPriceArr[i].setText(StringUtil.formatPrice(context,price,0,false ));
+                    }
                     goodsPriceArr[i].setVisibility(View.VISIBLE);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

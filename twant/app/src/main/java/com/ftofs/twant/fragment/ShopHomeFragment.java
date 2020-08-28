@@ -601,7 +601,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     continue;
                                 }
                                 currGalleryImageList.add(object2.toString());
-                                SLog.info("加一");
                             }
 //                                                        ToastUtil.error(_mActivity, String.valueOf(currGalleryImageList.size()));
 

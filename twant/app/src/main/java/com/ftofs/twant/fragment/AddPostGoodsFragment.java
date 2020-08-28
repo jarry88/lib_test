@@ -20,6 +20,7 @@ import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -209,6 +210,7 @@ public class AddPostGoodsFragment extends BaseFragment implements View.OnClickLi
                         } else {
                             goods.imageUrl = easyJSONObject.getSafeString("goodsImage");
                         }
+                        goods.goodsModel = StringUtil.safeModel(easyJSONObject);
 
                         goodsList.add(goods);
                     }

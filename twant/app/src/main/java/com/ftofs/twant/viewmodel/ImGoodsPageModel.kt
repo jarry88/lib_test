@@ -92,6 +92,7 @@ class ImGoodsPageModel(application: Application) :BaseViewModelMVVM(application)
                             result.datas.storeLabelList?.run {storeLabelList.value=this}
                             hasMore=result.datas.pageEntity.hasMore
                             stateLiveData.postSuccess()
+                            stateLiveData.postValueAndSuccess(hasMore)
 
                         }
                         is Result.DataError ->  {

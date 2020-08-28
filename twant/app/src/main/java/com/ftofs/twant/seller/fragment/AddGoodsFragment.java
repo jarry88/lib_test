@@ -175,6 +175,8 @@ public class AddGoodsFragment extends BaseFragment
     private boolean isBiginDate;
     private LinearLayout llNoticeContainer;
     private EditText etLimitBuy;
+    private int businessType;//經營模式 1資訊模式(只允許發佈資訊類商品) 2交易模式(可發佈所有類型商品)
+    private final int TYPE_CONSULT=5 ;//咨詢
 
     public static AddGoodsFragment newInstance() {
 
@@ -425,8 +427,15 @@ public class AddGoodsFragment extends BaseFragment
         });
         llInstancePublish.performClick();
         sbJoinActivity = view.findViewById(R.id.sb_join_activity);
-        sbJoinActivity.setChecked(true);//默认参与活动
+        Boolean clickAble = goodsModal != TYPE_CONSULT;
+        sbJoinActivity.setChecked(clickAble);//默认参与活动
+        sbJoinActivity.setOnClickListener(v->{
+            if (goodsModal == TYPE_CONSULT) {
+                sbJoinActivity.setChecked(false);
+            }
+        });
         initTimePicker();
+
         return view;
     }
     private String getTime(Date date) {//可根据需要自行截取数据显示
@@ -618,17 +627,22 @@ public class AddGoodsFragment extends BaseFragment
         ScaledButton sbRetail = view.findViewById(R.id.sb_retail);
         ScaledButton sbVirtual = view.findViewById(R.id.sb_virtual);
         ScaledButton sbAcross = view.findViewById(R.id.sb_across);
+        ScaledButton sbConsult = view.findViewById(R.id.sb_consult);
+        view.findViewById(R.id.ll_consult_container).setVisibility(View.VISIBLE);
         sbRetail.setButtonCheckedBlue();
         sbVirtual.setButtonCheckedBlue();
         sbAcross.setButtonCheckedBlue();
+        sbConsult.setButtonCheckedBlue();
         sbRetail.setOnClickListener(v -> {
             sbRetail.setChecked(!sbRetail.isChecked());
             if (sbRetail.isChecked()) {
                 goodsModal = 0;
                 sbVirtual.setChecked(false);
                 sbAcross.setChecked(false);
+                sbConsult.setChecked(false);
+
             } else {
-                if (sbVirtual.isChecked() || sbAcross.isChecked()) {
+                if (sbVirtual.isChecked() || sbAcross.isChecked()||sbConsult.isChecked()) {
 
                 } else {
                     goodsModal = -1;
@@ -641,8 +655,10 @@ public class AddGoodsFragment extends BaseFragment
                 goodsModal = 2;
                 sbRetail.setChecked(false);
                 sbAcross.setChecked(false);
+                sbConsult.setChecked(false);
+
             }else {
-                if (sbRetail.isChecked() || sbAcross.isChecked()) {
+                if (sbRetail.isChecked() || sbAcross.isChecked()||sbConsult.isChecked()) {
                 } else {
                     goodsModal = -1;
                 }
@@ -656,16 +672,37 @@ public class AddGoodsFragment extends BaseFragment
 
                 sbRetail.setChecked(false);
                 sbVirtual.setChecked(false);
+                sbConsult.setChecked(false);
             }else {
-                if (sbRetail.isChecked() || sbVirtual.isChecked()) {
+                if (sbRetail.isChecked() || sbVirtual.isChecked()||sbConsult.isChecked()) {
                 } else {
                     goodsModal = -1;
                 }
             }
         });
+        sbConsult.setOnClickListener(v->{
+            sbConsult.setChecked(!sbConsult.isChecked());
+            if( sbConsult.isChecked()){
+                goodsModal = TYPE_CONSULT;
+                if (sbJoinActivity != null&&sbJoinActivity.isChecked()) {
+                    sbJoinActivity.setChecked(false);
+                }
+                if (sbRetail.isChecked()) {
+                    sbRetail.setChecked(false);
+                }
+                if (sbAcross.isChecked()) {
+                    sbAcross.setChecked(false);
+                }
+                if (sbVirtual.isChecked()) {
+                    sbVirtual.setChecked(false);
+                }
+            }
+
+        });
         sbRetail.performClick();
         return view;
     }
+
 
     private View primaryView() {
 
@@ -771,12 +808,14 @@ public class AddGoodsFragment extends BaseFragment
 
     private void updateView(EasyJSONObject data) throws Exception {
         allowTariff = data.getInt("allowTariff");//1是0否允許發佈跨城購商品
+        businessType  = data.getInt("businessType");//經營模式 1資訊模式(只允許發佈資訊類商品) 2交易模式(可發佈所有類型商品)
         specMax = data.getInt("specMax");//允許添加的最大規格數量
         int specValueMax = data.getInt("specValueMax");//允許添加的最大規格數量值
         EasyJSONArray formatBottomList = data.getArray("formatBottomList");//底部關聯版式列表
         EasyJSONArray formatTopList = data.getArray("formatTopList");//頂部關聯版式列表
         EasyJSONArray countryList = data.getArray("countyrList");//品牌所在地列表
         EasyJSONArray specListArr = data.getArray("specList");//規格列表
+
 
         // 處理規格列表
         for (Object object : specListArr) {

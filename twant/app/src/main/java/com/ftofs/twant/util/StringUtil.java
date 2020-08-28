@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -981,5 +982,26 @@ public class StringUtil {
         }
 
         return result.toString();
+    }
+
+
+    /**
+     * 詢價涉及頁面：首頁banner ，搜索結果列表頁，想要貼發表選擇商品頁，貼文詳情頁,店鋪首頁,店鋪產品頁，我的關注頁
+     * 商品詳情頁規格
+     * @param goods
+     * @return
+     * @throws Exception
+     */
+    public static int safeModel(EasyJSONObject goods) throws Exception {
+        String key = "goodsModel";
+        if (goods.exists(key)) {
+            return goods.getInt(key);
+        } else {
+            SLog.info("警告！！！！！ 後端 沒有提供 goodsModel信息");
+            if (Util.inDev()) {
+                return (int) (4.6+Math.random());
+            }
+            return 0;
+        }
     }
 }

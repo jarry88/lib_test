@@ -783,6 +783,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                             good.jingle = goodsCommon.getSafeString("jingle");
                             good.goodsFavorite = goodsCommon.getInt("goodsFavorite");
                             good.price = Util.getSpuPrice(goodsCommon);
+                            good.goodsModel = StringUtil.safeModel(goods);
                             SLog.info("goodsCommon[%s]",goodsCommon.toString());
                             //String nationalFlag = StringUtil.normalizeImageUrl(goodsCommon.getString("adminCountry.nationalFlag"));
 

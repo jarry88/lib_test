@@ -66,30 +66,49 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                     Color.parseColor("#19000000"), Util.dip2px(mContext, 3), 0, 0);
             if (isShopping) {
                 helper.addOnClickListener(R.id.iv_goods_add);
+
                 RoundedImageView goodsImage = helper.getView(R.id.img_goods_item);
                 Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_goods_name, goods.name);
                 helper.setText(R.id.tv_goods_comment, goods.jingle);
                 TextView tvPrice = helper.getView(R.id.tv_goods_price);
-                tvPrice.setText(StringUtil.formatPrice(context,  goods.price, 1,false));
+                if (Util.noPrice(goods.goodsModel)) {
+                    UiUtil.toConsultUI(tvPrice);
+                    helper.getView(R.id.iv_goods_add).setVisibility(View.GONE);
+                } else {
+                    helper.getView(R.id.iv_goods_add).setVisibility(View.VISIBLE);
 
-                tvPrice.setTypeface(typeFace);
-                UiUtil.toPriceUI(tvPrice,12);
-                if (goods.showDiscount) {
-                    TextView tvOriginalPrice=helper.getView(R.id.tv_goods_original_price);
-                    tvOriginalPrice.setVisibility(View.VISIBLE);
-                    tvOriginalPrice.setText(StringUtil.formatPrice(mContext,goods.getOriginal(), 0, true));
-                    tvOriginalPrice.setTypeface(typeFace);
-                // 原價顯示刪除線
-                    tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                    tvPrice.setText(StringUtil.formatPrice(context,  goods.price, 1,false));
+
+                    tvPrice.setTypeface(typeFace);
+                    UiUtil.toPriceUI(tvPrice,12);
+                    if (goods.showDiscount) {
+                        TextView tvOriginalPrice=helper.getView(R.id.tv_goods_original_price);
+                        tvOriginalPrice.setVisibility(View.VISIBLE);
+                        tvOriginalPrice.setText(StringUtil.formatPrice(mContext,goods.getOriginal(), 0, true));
+                        tvOriginalPrice.setTypeface(typeFace);
+                        // 原價顯示刪除線
+                        tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    }
                 }
+
+
 //
             } else {
-                helper.addOnClickListener(R.id.btn_add_to_cart);
                 ImageView goodsImage = helper.getView(R.id.img_goods);
                 Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_goods_name, goods.name);
-                helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context,  goods.price, 1,false));
+                if (Util.noPrice(goods.goodsModel)) {
+                    helper.getView(R.id.btn_add_to_cart).setVisibility(View.GONE);
+                    helper.setText(R.id.tv_goods_price_left, "詢價");
+                } else {
+                    helper.getView(R.id.btn_add_to_cart).setVisibility(View.VISIBLE);
+
+                    helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context,  goods.price, 1,false));
+                    helper.addOnClickListener(R.id.btn_add_to_cart);
+
+                }
             }
 
         } else if (itemViewType == Constant.ITEM_TYPE_LOAD_END_HINT){
