@@ -22,12 +22,6 @@ import java.util.List;
 public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListItem,SecKillListNormalItemBinding> {
     Context context;
 
-    public void setClickListener(BaseQuickAdapter.OnItemClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    private BaseQuickAdapter.OnItemClickListener clickListener;
-
 
     public SecKillGoodsListAdapter(Context context, int layoutResId, @Nullable List<SecKillGoodsListItem> data) {
         super(layoutResId, data);

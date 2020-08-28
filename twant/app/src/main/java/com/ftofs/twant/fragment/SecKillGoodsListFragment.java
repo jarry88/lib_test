@@ -20,6 +20,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.SecKillGoodsListItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -78,9 +79,24 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SecKillGoodsListItem item = goodsItemList.get(position);
                 SLog.info("seckillCommonId[%d], seckillGoodsId[%d]", item.seckillCommonId, item.seckillGoodsId);
-
                 Util.startFragment(GoodsDetailFragment.newInstance(item.seckillCommonId, item.seckillGoodsId));
             }
+        });
+
+        adapter.setChildListRes(R.id.goods_image,R.id.tv_versatile_text);
+        adapter.setOnItemChildClickListener((a,v,p)->{
+            int id = v.getId();
+            if (id == R.id.goods_image) {
+                SLog.info("5555");
+
+                ToastUtil.success(_mActivity,"sss");
+            }
+            if (id == R.id.tv_versatile_text) {
+                SLog.info("5555");
+
+                ToastUtil.success(_mActivity,"s00000s");
+            }
+            SLog.info("s211");
         });
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
