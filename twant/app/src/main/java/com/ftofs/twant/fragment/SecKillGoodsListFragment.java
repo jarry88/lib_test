@@ -82,6 +82,7 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
                 SecKillGoodsListItem item = goodsItemList.get(position);
                 SLog.info("seckillCommonId[%d], seckillGoodsId[%d]", item.seckillCommonId, item.seckillGoodsId);
                 Util.startFragment(GoodsDetailFragment.newInstance(item.commonId,0));
+                Util.startFragment(GoodsDetailFragment.newInstance(item.seckillCommonId, item.seckillGoodsId));
             }
         });
 
