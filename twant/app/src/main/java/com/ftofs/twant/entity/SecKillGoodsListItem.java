@@ -1,6 +1,8 @@
 package com.ftofs.twant.entity;
 
 public class SecKillGoodsListItem {
+    public int seckillCommonId;
+    public int seckillGoodsId;
     public int commonId;
     public String goodsName;
     public String imageSrc;
