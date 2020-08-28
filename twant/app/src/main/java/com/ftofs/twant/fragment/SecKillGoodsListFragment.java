@@ -73,6 +73,13 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         adapter = new SecKillGoodsListAdapter(_mActivity, R.layout.sec_kill_list_normal_item, goodsItemList);
 //        adapter.setMLoadMoreModule$com_github_CymChad_brvah(true);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SecKillGoodsListItem item = goodsItemList.get(position);
+                SLog.info("seckillCommonId[%d], seckillGoodsId[%d]", item.seckillCommonId, item.seckillGoodsId);
+            }
+        });
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
         rvList.setAdapter(adapter);
@@ -124,6 +131,8 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
                         EasyJSONObject goodsCommon = (EasyJSONObject) object;
 
                         SecKillGoodsListItem item = new SecKillGoodsListItem();
+                        item.seckillCommonId = goodsCommon.optInt("seckillCommonId");
+                        item.seckillGoodsId = goodsCommon.optInt("seckillGoodsId");
                         item.commonId = goodsCommon.optInt("commonId");
                         item.goodsName = goodsCommon.optString("goodsName");
                         item.imageSrc = goodsCommon.optString("imageSrc");

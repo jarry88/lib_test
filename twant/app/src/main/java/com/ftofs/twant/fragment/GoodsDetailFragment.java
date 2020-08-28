@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -338,6 +339,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvBargainRemainMinute;
     TextView tvBargainRemainSecond;
 
+    TextView tvSecKillRemainHour;
+    TextView tvSecKillRemainMinute;
+    TextView tvSecKillRemainSecond;
+
     @Override
     public void onSimpleCall(Object data) {
         try {
@@ -535,6 +540,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvBargainRemainHour = view.findViewById(R.id.tv_bargain_remain_hour);
         tvBargainRemainMinute = view.findViewById(R.id.tv_bargain_remain_minute);
         tvBargainRemainSecond = view.findViewById(R.id.tv_bargain_remain_second);
+
+        tvSecKillRemainHour = view.findViewById(R.id.tv_sec_kill_remain_hour);
+        tvSecKillRemainMinute = view.findViewById(R.id.tv_sec_kill_remain_minute);
+        tvSecKillRemainSecond = view.findViewById(R.id.tv_sec_kill_remain_second);
 
         btnArrivalNotice = view.findViewById(R.id.btn_arrival_notice);
         btnArrivalNotice.setOnClickListener(this);
@@ -1258,7 +1267,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                     textView.setWidth(Util.dip2px(_mActivity, 20));
                                     textView.setGravity(Gravity.CENTER);
                                     textView.setText("領");
-                                    textView.setTextColor(getResources().getColor(android.R.color.white, null));
+                                    textView.setTextColor(Color.WHITE);
                                     textView.setTextSize(12);
                                     textView.setBackgroundResource(R.color.tw_yellow);
                                     TextView tvVoucher = new TextView(_mActivity);
@@ -2387,7 +2396,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private void setGoodsStatus(int status) {
         goodsStatus = status;
         if (goodsStatus == 0) {
-            getView().findViewById(R.id.ll_goods_take_off).setVisibility(VISIBLE);
+            View contentView = getView();
+            if (contentView == null) {
+                return;
+            }
+            contentView.findViewById(R.id.ll_goods_take_off).setVisibility(VISIBLE);
             btnBuy.setBackgroundResource(R.drawable.icon_take_off_buy);
             btnAddToCartBg.setImageResource(R.drawable.icon_take_off_cart);
         }
@@ -2594,6 +2607,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                         timeInfoGroup.hour, timeInfoGroup.minute, timeInfoGroup.second, timeInfoGroup.milliSecond / 100));
                             }
                         }
+                    }
+                } else if (promotionType == Constant.PROMOTION_TYPE_SEC_KILL) {
+                    if (timeInfo != null) {
+                        tvSecKillRemainHour.setText(String.format("%02d", timeInfo.hour));
+                        tvSecKillRemainMinute.setText(String.format("%02d", timeInfo.minute));
+                        tvSecKillRemainSecond.setText(String.format("%02d", timeInfo.second));
                     }
                 } else if (promotionType == Constant.PROMOTION_TYPE_BARGAIN) {
                     if (timeInfo != null) {

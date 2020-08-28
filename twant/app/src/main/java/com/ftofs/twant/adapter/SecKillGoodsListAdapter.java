@@ -4,11 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.databinding.SecKillListNormalItemBinding;
@@ -37,7 +39,8 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
 //        helper.getBinding().btnVersatile.setOnClickListener(null);
 //        initView(helper.getBinding(),item);
 
-
+        ImageView goodsImage = helper.getView(R.id.goods_image);
+        Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(goodsImage);
 
         // item.goodsStorage = 223;
         // item.goodsSaleNum = 162;
@@ -54,16 +57,17 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
             progress = 100 * item.goodsSaleNum / item.goodsStorage;
         }
 
+        SLog.info("item.secKillPrice[%s]", item.secKillPrice);
         helper.setText(R.id.tv_goods_name, item.goodsName)
                 .setText(R.id.tv_remain_goods_count, String.format("剩餘%d件", item.goodsStorage - item.goodsSaleNum))
                 .setText(R.id.tv_sec_kill_price, StringUtil.formatPrice(context, item.secKillPrice, 0))
-//                .setText(R.id.tv_original_price, StringUtil.formatPrice(context, item.originalPrice, 0))
+                .setText(R.id.tv_original_price, StringUtil.formatPrice(context, item.originalPrice, 0))
                 .setText(R.id.tv_current_progress_desc, progress + "%");
     }
 
     @Override
     public void initView(@NotNull SecKillListNormalItemBinding binding, SecKillGoodsListItem item) {
-        binding.tvSecKillPrice.setText("sss");
+        // binding.tvSecKillPrice.setText("sss");
     }
     //          這樣用也行
 //        helper.binding.tvSecKillPrice.setText("33333");
