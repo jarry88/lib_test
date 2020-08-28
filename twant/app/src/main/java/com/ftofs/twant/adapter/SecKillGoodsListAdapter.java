@@ -41,9 +41,6 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
 //        helper.getBinding().btnVersatile.setOnClickListener(null);
 //        initView(helper.getBinding(),item);
         super.convert(helper,item);
-        int position = helper.getAbsoluteAdapterPosition();
-        position -= getHeaderLayoutCount();
-        setOnItemClick(helper.getBinding().getRoot(),position);
 
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(goodsImage);
