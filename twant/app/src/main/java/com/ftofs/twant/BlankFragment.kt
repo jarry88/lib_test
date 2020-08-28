@@ -64,9 +64,9 @@ class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
     private val  imageViewCropped by lazy {
         view?.findViewById<AppCompatImageView>(R.id.imageViewCropped)
     }
-    private val viewModel by lazy {
-        BlackViewModel()
-    }
+//    private val viewModel by lazy {
+//        BlackViewModel()
+//    }
     private val  rvList by lazy {
         view?.findViewById<RecyclerView>(R.id.rv_list)
     }

@@ -80,6 +80,13 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
                 SLog.info("seckillCommonId[%d], seckillGoodsId[%d]", item.seckillCommonId, item.seckillGoodsId);
             }
         });
+        adapter.setClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SecKillGoodsListItem item = goodsItemList.get(position);
+                SLog.info("seckillCommonId[%d], seckillGoodsId[%d]", item.seckillCommonId, item.seckillGoodsId);
+            }
+        });
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
         rvList.setAdapter(adapter);
