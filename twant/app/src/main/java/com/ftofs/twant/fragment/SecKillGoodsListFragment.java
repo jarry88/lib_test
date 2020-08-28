@@ -18,6 +18,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SecKillGoodsListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.SecKillGoodsListItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.SloganView;
@@ -77,8 +78,10 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.bt();
                 SecKillGoodsListItem item = goodsItemList.get(position);
                 SLog.info("seckillCommonId[%d], seckillGoodsId[%d]", item.seckillCommonId, item.seckillGoodsId);
+                Util.startFragment(GoodsDetailFragment.newInstance(item.commonId,0));
             }
         });
 
