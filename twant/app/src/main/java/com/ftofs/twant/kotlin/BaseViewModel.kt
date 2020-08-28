@@ -9,15 +9,15 @@ import com.ftofs.twant.kotlin.vo.SellerPageVO
 
 open class BaseViewModel : ViewModel() {
 
-    val refreshTrigger = MutableLiveData<Boolean>()
-    val loading = MutableLiveData<Boolean>()
+    private val refreshTrigger = MutableLiveData<Boolean>()
+    private val loading = MutableLiveData<Boolean>()
     protected val api = KotlinInterfaceApi.get()
 
     protected val page = MutableLiveData<Int>()
-    val refreshing = MutableLiveData<Boolean>()
-    val moreLoading = MutableLiveData<Boolean>()
+    private val refreshing = MutableLiveData<Boolean>()
+    private val moreLoading = MutableLiveData<Boolean>()
     val hasMore = MutableLiveData<Boolean>()
-    val autoRefresh = MutableLiveData<Boolean>()//SmartRefreshLayout自动刷新标记
+    private val autoRefresh = MutableLiveData<Boolean>()//SmartRefreshLayout自动刷新标记
 
     fun loadMore() {
         page.value = (page.value ?: 0) + 1

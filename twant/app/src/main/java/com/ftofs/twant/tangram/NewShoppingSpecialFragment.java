@@ -287,7 +287,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
         } else {
             try {
-                java.lang.reflect.Field fieldView= tab.getClass().getDeclaredField("mView");
+                java.lang.reflect.Field fieldView= tab.getClass().getDeclaredField("view");
                 fieldView.setAccessible(true);
                 View view= (View) fieldView.get(tab);
                 java.lang.reflect.Field fieldTxt= view.getClass().getDeclaredField("mTextView");

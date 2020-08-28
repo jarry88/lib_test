@@ -17,6 +17,7 @@ import com.ftofs.twant.databinding.FragmentBlankBinding
 import com.ftofs.twant.databinding.VerificationGoodsItemBinding
 import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.fragment.BaseFragment
+import com.ftofs.twant.kotlin.BlackViewModel
 import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
 import com.ftofs.twant.kotlin.OrderGoodsVoListAdapter
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
@@ -63,6 +64,9 @@ class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
     private val  imageViewCropped by lazy {
         view?.findViewById<AppCompatImageView>(R.id.imageViewCropped)
     }
+    private val viewModel by lazy {
+        BlackViewModel()
+    }
     private val  rvList by lazy {
         view?.findViewById<RecyclerView>(R.id.rv_list)
     }
@@ -85,10 +89,8 @@ class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank, container, false)
+    override fun simpleBind(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
+        return R.layout.fragment_blank
     }
     val net by lazy {
         object :BaseRepository(){}
