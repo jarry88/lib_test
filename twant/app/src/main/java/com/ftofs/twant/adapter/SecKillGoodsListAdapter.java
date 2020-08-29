@@ -40,6 +40,7 @@ public class SecKillGoodsListAdapter extends BaseBindAdapter<SecKillGoodsListIte
 //        helper.setText(R.id.tv_goods_name, "sdf");
 //        helper.getBinding().btnVersatile.setOnClickListener(null);
 //        initView(helper.getBinding(),item);
+
         super.convert(helper,item);
 
         ImageView goodsImage = helper.getView(R.id.goods_image);

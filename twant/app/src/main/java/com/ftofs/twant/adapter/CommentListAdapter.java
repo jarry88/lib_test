@@ -94,12 +94,34 @@ public class CommentListAdapter extends BaseMultiItemQuickAdapter<CommentItem, B
 
 
         if (item.commentType == Constant.COMMENT_TYPE_TEXT || StringUtil.isEmpty(item.imageUrl)) {
-            helper.setGone(R.id.image_view, false);
+//            helper.setGone(R.id.image_view, false);
+            helper.setGone(R.id.cl_first_line, false);
         } else {
-            ImageView imageView = helper.getView(R.id.image_view);
-            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.imageUrl)).centerCrop().into(imageView);
-            helper.setVisible(R.id.image_view, true);
-            helper.addOnClickListener(R.id.image_view);
+            helper.setGone(R.id.cl_first_line, true);
+
+            ImageView imageView1 = helper.getView(R.id.image_view);
+            ImageView imageView2 = helper.getView(R.id.img_comment2);
+            ImageView imageView3 = helper.getView(R.id.img_comment3);
+
+            if (item.images.length >0) {
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.images[0])).centerCrop().into(imageView1);
+                helper.addOnClickListener(R.id.image_view);
+                helper.addOnClickListener(R.id.image_view);
+            }
+            if (item.images.length > 1) {
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.images[1])).centerCrop().into(imageView2);
+                helper.addOnClickListener(R.id.img_comment2);
+                imageView2.setVisibility(View.VISIBLE);
+            } else {
+                imageView2.setVisibility(View.GONE);
+            }
+            if (item.images.length > 2) {
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.images[2])).centerCrop().into(imageView3);
+                imageView3.setVisibility(View.VISIBLE);
+            } else {
+                imageView2.setVisibility(View.GONE);
+            }
+//            ImageView imageView1 = helper.getView(R.id.img_comment1);
         }
 
         ImageView iconThumb = helper.getView(R.id.icon_thumb);

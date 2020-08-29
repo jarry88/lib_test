@@ -38,36 +38,18 @@ abstract class BaseBindAdapter<T, D : ViewDataBinding>(val layoutResId: Int, dat
 
 
     private fun bindClickListener(holder: BoundViewHolder<D>) {
-        holder.let {
-            onItemClickListener?.let {
-                holder.itemView.setOnClickListener{
-                    var position=holder.absoluteAdapterPosition
-                    if(position==RecyclerView.NO_POSITION){
-                        return@setOnClickListener
-                    }
-                    position -=headerLayoutCount
-                    setOnItemClick(it,position)
-                }
-            }
+
+        onItemClickListener?.let {a->
+            holder.itemView.isClickable = false
+            holder.itemView
+            holder.itemView.setOnClickListener{a.onItemClick(null,it,holder.absoluteAdapterPosition) }
+//            holder.itemView.isClickable=true
+
         }
         childList?.forEach{
             holder.binding.root.findViewById<View>(it).setOnClickListener { onItemChildClickListener?.onItemChildClick(null,it,holder.absoluteAdapterPosition) }
         }
-    }
-
-    private fun bindViewClickListener(baseViewHolder: BaseViewHolder?) {
-        baseViewHolder?.let {
-            onItemClickListener?.let {
-                baseViewHolder.itemView.setOnClickListener{
-                    var position = baseViewHolder.adapterPosition
-                    if (position == RecyclerView.NO_POSITION) {
-                        return@setOnClickListener
-                    }
-                    position -= headerLayoutCount
-                    setOnItemClick(it, position)
-                }
-            }
-        }
+        SLog.info("完成點擊初始化")
     }
 
     /**
@@ -82,6 +64,5 @@ abstract class BaseBindAdapter<T, D : ViewDataBinding>(val layoutResId: Int, dat
     }
 
     open fun initView(binding: D, item: T){
-
     }
 }

@@ -258,12 +258,14 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                             if (item.commentType != Constant.COMMENT_TYPE_TEXT) {
                                 EasyJSONArray images = comment.getSafeArray("images");
                                 if (images != null) {
+                                    imageList.clear();
                                     for (Object object2 : images) {
                                         EasyJSONObject image = (EasyJSONObject) object2;
                                         item.imageUrl = image.getSafeString("imageUrl");
                                         rvPositionToImageIndexMap.put(commentItemList.size(), imageList.size());
-                                        imageList.add(StringUtil.normalizeImageUrl(item.imageUrl));
+                                        imageList.add(item.imageUrl);
                                     }
+                                    item.images = imageList.toArray(new String[imageList.size()]);
                                 }
                             }
 
