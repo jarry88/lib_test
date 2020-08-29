@@ -16,6 +16,7 @@ import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.interfaces.CommonCallback;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PermissionUtil;
@@ -25,6 +26,8 @@ import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 import com.orhanobut.hawk.Hawk;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * App升級彈窗
@@ -48,8 +51,13 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
      * apk包的下載地址
      */
     String appUrl;
+    /**
+     * 彈窗關閉時的回調
+     */
+    SimpleCallback dismissCallback;
 
-    public AppUpdatePopup(@NonNull Activity activity, String version, String versionDesc, boolean isForceUpdate, String appUrl) {
+    public AppUpdatePopup(@NonNull Activity activity, String version, String versionDesc, boolean isForceUpdate,
+                          String appUrl, SimpleCallback dismissCallback) {
         super(activity);
 
         this.activity = activity;
@@ -57,6 +65,7 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
         this.versionDesc = versionDesc;
         this.isForceUpdate = isForceUpdate;
         this.appUrl = appUrl;
+        this.dismissCallback = dismissCallback;
     }
 
     @Override
@@ -92,7 +101,13 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
     //完全消失执行
     @Override
     protected void onDismiss() {
+        SLog.info("AppUpdatePopup::onDismiss()");
         Hawk.delete(SPField.FIELD_APP_UPDATE_POPUP_SHOWN_TIMESTAMP);
+        if (dismissCallback != null) {
+            dismissCallback.onSimpleCall(EasyJSONObject.generate(
+                    "action", SimpleCallback.ACTION_CLOSE_APP_UPDATE_POPUP
+            ));
+        }
     }
 
     @Override

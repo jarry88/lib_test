@@ -83,6 +83,7 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
             }
         });
 
+        /*
         adapter.setChildListRes(R.id.goods_image,R.id.tv_versatile_text);
         adapter.setOnItemChildClickListener((a,v,p)->{
             int id = v.getId();
@@ -98,6 +99,7 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
             }
             SLog.info("s211");
         });
+         */
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
         rvList.setAdapter(adapter);
