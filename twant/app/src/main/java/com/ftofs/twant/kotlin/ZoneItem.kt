@@ -9,7 +9,7 @@ data class ZoneItem(val zoneId:Int,val zoneName:String,val webLogo:String,val ap
             return ZoneItem(easyJSONObject.getInt("zoneId")
                     ,easyJSONObject.getSafeString("zoneName")
                     ,easyJSONObject.getSafeString("webLogo")
-                    ,easyJSONObject.getSafeString("appLoge"))
+                    ,easyJSONObject.getSafeString("appLogo"))
         }
     }
 }

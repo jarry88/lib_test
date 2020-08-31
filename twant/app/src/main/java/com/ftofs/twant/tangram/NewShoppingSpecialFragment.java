@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -111,6 +112,8 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     private LinearLayout llBanner;
     private LinkageContainerFragment2 linkageGoodsFragment2;
     private int zoneState=1;//專場狀態 0關閉 1開啟 2停用
+    private ConstraintLayout rLcontainer;
+    private LinearLayout appBackground;
 
     public static NewShoppingSpecialFragment newInstance(int zoneId) {
         Bundle args = new Bundle();
@@ -146,6 +149,8 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         tvZoneName = view.findViewById(R.id.tv_zone_name);
         rlToolBar = view.findViewById(R.id.tool_bar);
         llBanner = view.findViewById(R.id.ll_banner_container);
+        rLcontainer = view.findViewById(R.id.rl_container);
+        appBackground = view.findViewById(R.id.app_background);
         Util.setOnClickListener(view,R.id.btn_back,this);
         Util.setOnClickListener(view,R.id.btn_goto_top,this);
         Util.setOnClickListener(view,R.id.btn_goto_cart,this);
@@ -346,34 +351,40 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     }
     private void updateView(EasyJSONObject responseObj) {
         try {
-            EasyJSONObject zoneVo = responseObj.getObject("datas.zoneVo");
-            hasGoodsCategory = zoneVo.getInt("hasGoodsCategory");
-            zoneState  = zoneVo.getInt("zoneState ");
-            if (Util.inDev()) {
-                ToastUtil.success(_mActivity,"在使用寫死的數據");
-                zoneState = 2;
-            }
+
+            zoneState  = responseObj.getInt("datas.zoneState ");
             if(zoneState==Constant.ZONE_CLOSE_TYPE||zoneState==Constant.ZONE_STOP_TYPE){
+                tvZoneName.setText("活動專場");
                 llFloatButtonContainer.setVisibility(View.GONE);
-                rvList.setVisibility(View.VISIBLE);
+                rLcontainer.setVisibility(View.VISIBLE);
                 containerView.setVisibility(View.GONE);
+                appBackground.setBackgroundColor(getResources().getColor(R.color.tw_yellow));
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
-                ZoneAdapter zoneAdapter = new ZoneAdapter(R.layout.zone_goods_list_item);
+                ZoneAdapter zoneAdapter = new ZoneAdapter(R.layout.layout_zone_item);
+                zoneAdapter.showHeadView(true);
+                zoneAdapter.showFootView(true);
+//                zoneAdapter.showFootView(true);
                 rvList.setLayoutManager(linearLayoutManager);
                 rvList.setAdapter(zoneAdapter);
-                EasyJSONArray zoneList = responseObj.getSafeArray("datas.zoneList");
                 List<ZoneItem> list = new ArrayList<>();
-                for (Object object : zoneList) {
-                    list.add(ZoneItem.parase((EasyJSONObject) object));
-                }
-                if (Util.inDev()) {
-                    list.add(new ZoneItem(20, "", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
-                    list.add(new ZoneItem(5, "s", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
+//                list.add(new ZoneItem(-1, "", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
 
+                if (responseObj.exists("datas.zoneList")) {
+                    EasyJSONArray zoneList = responseObj.getSafeArray("datas.zoneList");
+                    for (Object object : zoneList) {
+                        list.add(ZoneItem.parase((EasyJSONObject) object));
+                    }
+                } else if(Util.inDev()){
+                    list.add(new ZoneItem(5, "這是在安卓段寫死的測試數據", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
                 }
+
                 zoneAdapter.addAll(list,true);
                 return;
             }
+
+
+            EasyJSONObject zoneVo = responseObj.getObject("datas.zoneVo");
+            hasGoodsCategory = zoneVo.getInt("hasGoodsCategory");
             zoneId = zoneVo.getInt("zoneId");
             //第一階段無用
 //            zoneState = zoneVo.getInt("zoneState");

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="vo"
             type="com.ftofs.twant.kotlin.ZoneItem" />
     </data>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/ll_banner_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,36 +30,64 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintDimensionRatio="351:175"
+                android:id="@+id/image_zone"
                 imageUrl="@{vo.appLoge}">
             </ImageView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/empty_view"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone">
+                <ImageView
+                    android:layout_width="112dp"
+                    android:layout_height="112dp"
+                    android:src="@drawable/ic_placeholder_no_data"
+                    android:layout_marginTop="@dimen/dp_20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="抱歉，該活動已下架，歡迎查看更多主題活動~"/>
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <LinearLayout
-            android:background="@color/white"
+            android:id="@+id/ll_container"
+            visible="@{vo.zoneId&lt;0?0:1"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
-            visible ="@{``.equals(vo.zoneName)?0:1"
-            android:id="@+id/ll_container">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@{vo.zoneName}"
-                android:textSize="@dimen/sp_14"
+            android:background="@color/white">
 
-                android:layout_marginStart="@dimen/margin12"
-                android:layout_marginEnd="@dimen/margin12"
-                android:layout_marginTop="@dimen/margin8"
-                android:layout_marginBottom="@dimen/margin8"
-                android:textColor="@color/tw_black"/>
             <TextView
-                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin12"
+                android:layout_marginTop="@dimen/margin8"
+
+                android:layout_marginEnd="@dimen/margin12"
+                android:layout_marginBottom="@dimen/margin8"
+                android:text="@{vo.zoneName}"
+                android:textColor="@color/tw_black"
+                android:textSize="@dimen/sp_14" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/btn_go_zone"
                 android:layout_width="@dimen/dp_64"
-                android:layout_height="@dimen/dp_20"
+                android:layout_height="22dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/dp_15"
                 android:background="@drawable/blue_button"
                 android:gravity="center"
                 android:text="進入專場"
-                android:textSize="11sp"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
 </layout>
