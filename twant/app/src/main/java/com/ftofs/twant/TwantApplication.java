@@ -154,10 +154,12 @@ public class TwantApplication extends Application {
         instance = this;
 
         //Bugly异常处理
-        //双重保险，开发模式时不上传
-        if (!Config.DEVELOPER_MODE) {
-            SLog.info("initBugly");
+        if (!Config.DEVELOPER_MODE){
+            SLog.info("initReleaseBugly");
             CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
+        } else {
+            SLog.info("initDebugBugly");
+            CrashReport.initCrashReport(getApplicationContext(), Config.DEBUG_BUGLY_KEY, Config.DEVELOPER_MODE);
         }
 
         // 添加全局異常處理

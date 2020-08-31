@@ -17,6 +17,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
@@ -37,6 +39,8 @@ import com.ftofs.twant.fragment.LinkageShoppingListFragment;
 import com.ftofs.twant.fragment.SecondFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialLinkageFragment;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
+import com.ftofs.twant.kotlin.ZoneAdapter;
+import com.ftofs.twant.kotlin.ZoneItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.LogUtil;
@@ -81,6 +85,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     View containerView;
     int containerHeight;
     TabLayout tabLayout;
+    RecyclerView rvList;
     int tabHeight;
 
     FirstFragment firstFragment;
@@ -105,6 +110,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     private boolean showTab=true;
     private LinearLayout llBanner;
     private LinkageContainerFragment2 linkageGoodsFragment2;
+    private int zoneState=1;//專場狀態 0關閉 1開啟 2停用
 
     public static NewShoppingSpecialFragment newInstance(int zoneId) {
         Bundle args = new Bundle();
@@ -150,6 +156,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         tabLayout = view.findViewById(R.id.tab_layout);
         viewPager = view.findViewById(R.id.viewpager);
         vwAnchor = view.findViewById(R.id.vw_anchor);
+        rvList = view.findViewById(R.id.rv_other_zone_list);
 
         bannerView = view.findViewById(R.id.banner_view);
         initBanner();
@@ -326,7 +333,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                 loadingPopup.dismiss();
                 SLog.info("responseStr[%s]",responseStr);
 
-                //測試數據
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     LogUtil.uploadAppLog(path, "", responseStr, "");
@@ -342,6 +348,32 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         try {
             EasyJSONObject zoneVo = responseObj.getObject("datas.zoneVo");
             hasGoodsCategory = zoneVo.getInt("hasGoodsCategory");
+            zoneState  = zoneVo.getInt("zoneState ");
+            if (Util.inDev()) {
+                ToastUtil.success(_mActivity,"在使用寫死的數據");
+                zoneState = 2;
+            }
+            if(zoneState==Constant.ZONE_CLOSE_TYPE||zoneState==Constant.ZONE_STOP_TYPE){
+                llFloatButtonContainer.setVisibility(View.GONE);
+                rvList.setVisibility(View.VISIBLE);
+                containerView.setVisibility(View.GONE);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
+                ZoneAdapter zoneAdapter = new ZoneAdapter(R.layout.zone_goods_list_item);
+                rvList.setLayoutManager(linearLayoutManager);
+                rvList.setAdapter(zoneAdapter);
+                EasyJSONArray zoneList = responseObj.getSafeArray("datas.zoneList");
+                List<ZoneItem> list = new ArrayList<>();
+                for (Object object : zoneList) {
+                    list.add(ZoneItem.parase((EasyJSONObject) object));
+                }
+                if (Util.inDev()) {
+                    list.add(new ZoneItem(20, "", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
+                    list.add(new ZoneItem(5, "s", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
+
+                }
+                zoneAdapter.addAll(list,true);
+                return;
+            }
             zoneId = zoneVo.getInt("zoneId");
             //第一階段無用
 //            zoneState = zoneVo.getInt("zoneState");

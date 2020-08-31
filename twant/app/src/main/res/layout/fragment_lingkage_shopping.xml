@@ -30,6 +30,12 @@
             android:textColor="@color/tw_white"
             android:text=""/>
     </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv_other_zone_list"
+        android:visibility="gone"/>
     <!-- END OF 工具欄 -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/container_view"
@@ -80,7 +86,6 @@
                     </RelativeLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
-
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"

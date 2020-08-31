@@ -68,6 +68,7 @@ android {
             }
             zipAlignEnabled true
             signingConfig signingConfigs.release
+//            buildConfigField("Boolean","DEBUG","\"js$suffix\"")
         }
         debug {
             ext.enableCrashlytics = false //加快開發環境編譯速度
