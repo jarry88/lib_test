@@ -482,29 +482,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                 } else if (position == 8) {
                                     MainActivity.this.getSupportDelegate().showFragmentStackHierarchyView();
                                 } else if (position == 9) { // 測試1
-                                    String url = Api.PATH_POST_THUMB;
-                                    EasyJSONObject params = EasyJSONObject.generate(
-                                            "a", "11111",
-                                            "b", 222
-                                    );
-                                    Api.postUI(url, null, new UICallback() {
-                                        @Override
-                                        public void onFailure(Call call, IOException e) {
-                                            LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
-                                            ToastUtil.showNetworkError(MainActivity.this, e);
-                                        }
-
-                                        @Override
-                                        public void onResponse(Call call, String responseStr) throws IOException {
-                                            SLog.info("responseStr[%s]", responseStr);
-                                            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-
-                                            if (ToastUtil.checkError(MainActivity.this, responseObj)) {
-                                                LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
-                                                return;
-                                            }
-                                        }
-                                    });
+                                    Hawk.delete(SPField.FIELD_APP_UPDATE_POPUP_SHOWN_DATE);
                                 } else if (position == 10) { // 測試2
                                     Util.startFragment(SecKillFragment.newInstance());
                                 }else if (position == 11) { // 開發寫死的數值通道開關
