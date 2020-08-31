@@ -119,6 +119,11 @@ public class SPField {
     public static final String FIELD_SOFT_INPUT_HEIGHT = "soft_input_height";
 
     /**
+     * 頂部狀態欄的高度
+     */
+    public static final String FIELD_STATUS_BAR_HEIGHT = "status_bar_height";
+
+    /**
      * 最近一次應用內複製到剪貼板的時間戳
      */
     public static final String FIELD_IN_APP_COPY_TIMESTAMP = "in_app_copy_timestamp";
