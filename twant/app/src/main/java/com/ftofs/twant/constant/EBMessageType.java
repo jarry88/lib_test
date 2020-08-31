@@ -124,6 +124,11 @@ public enum EBMessageType {
      * 【賣家】刷新訂單列表
      */
     MESSAGE_SELLER_RELOAD_ORDER_LIST,
+
+    /**
+     * (關閉了APP升級彈窗後)可以顯示其它類型的彈窗
+     */
+    MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP,
 }
 
 

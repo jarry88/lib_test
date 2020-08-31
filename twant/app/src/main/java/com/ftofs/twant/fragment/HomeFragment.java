@@ -19,8 +19,11 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
+import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.log.SLog;
@@ -40,6 +43,9 @@ import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
 import com.tmall.wireless.tangram.structure.BaseCell;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -90,6 +96,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         Util.setOnClickListener(view, R.id.btn_test, this);
         // view.findViewById(R.id.btn_test).setVisibility(Config.PROD?View.GONE:View.VISIBLE);
@@ -132,10 +140,19 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         loadNewArrivals();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP) {
+            showPopupAd();
+        }
+    }
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
+        EventBus.getDefault().unregister(this);
         tangramEngine.unbindView();
     }
 
@@ -293,6 +310,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void showPopupAd() {
+        MainActivity mainActivity = (MainActivity) _mActivity;
+        if (!mainActivity.canShowOtherPopup) {
+            return;
+        }
         SLog.info("___here");
         long now = System.currentTimeMillis();
         // 每次resume時都顯示一次

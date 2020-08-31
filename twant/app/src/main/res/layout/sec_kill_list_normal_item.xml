@@ -143,6 +143,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
                         android:text="$121.00"
                         android:textColor="#A2A1A1"
                         android:textSize="11sp">

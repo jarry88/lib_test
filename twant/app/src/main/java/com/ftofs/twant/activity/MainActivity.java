@@ -61,6 +61,7 @@ import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.handler.StackViewTouchListener;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.CarouselView;
 import com.ftofs.twant.tangram.HomeStickyView;
@@ -133,9 +134,21 @@ import okhttp3.Response;
  * 主Activity
  * @author zwm
  */
-public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
+public class MainActivity extends BaseActivity implements MPaySdkInterfaces, SimpleCallback {
     long lastBackPressedTime;
 
+    /*
+    需求
+    http://ftofs.zentaopm.com/story-view-1050.html
+    1、進入首頁後進行升級及彈窗的提醒；
+    2、升級提醒與首頁彈窗同時存在時，優先顯示升級提示，非強制更新狀態下，用戶關閉升級彈窗後 再進行 首頁彈窗廣告的顯示；
+     */
+    /**
+    是否能顯示其它彈窗: 在檢測新版本接口返回的情況下，
+     1、如果不需要顯示升級彈窗，立即設置canShowOtherPopup為true
+     2、如果要顯示升級彈窗，等升級彈窗關閉後才設置canShowOtherPopup為true
+     */
+    public boolean canShowOtherPopup = false;
     AppUpdatePopup appUpdatePopup;
 
     TangramEngine engine;
@@ -948,9 +961,6 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         SLog.info("params[%s]", params);
 
         String url = Api.PATH_CHANNEL_UPDATE;
-        if (Config.DEVELOPER_MODE) {
-            // url = "https://zhouweiming.cn/tmp/3.json";
-        }
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -990,21 +1000,24 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     int result = Util.versionCompare(currentVersion, newestVersion);
                     SLog.info("result[%d]", result);
 
+                    if (Config.USE_DEVELOPER_TEST_DATA) {
+                        result = -1;
+                    }
+
                     if (result >= 0) {
                         if (showResult) {
                             ToastUtil.info(MainActivity.this, getString(R.string.text_latest_version_message));
                         }
 
+                        // 檢測完版本更新後，如果不需要顯示升級彈窗，將canShowOtherPopup設置為true
+                        canShowOtherPopup = true;
                         return;
                     }
 
                     // 當前的版本是舊版本
                     boolean isDismissOnBackPressed = true;
                     boolean isDismissOnTouchOutside = true;
-                    boolean isForceUpdate = false;
-                    if (datas.exists("isForceUpdate")) {
-                        isForceUpdate = (datas.getInt("isForceUpdate") != Constant.FALSE_INT);
-                    }
+                    boolean isForceUpdate = (datas.optInt("isForceUpdate") != Constant.FALSE_INT);
 
                     String versionDesc = datas.getSafeString("remarks");
                     String appUrl = datas.getSafeString("appUrl");
@@ -1029,7 +1042,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                 .dismissOnTouchOutside(isDismissOnTouchOutside) // 点击外部是否关闭弹窗，默认为true
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(false)
-                                .asCustom(new AppUpdatePopup(MainActivity.this, newestVersion, versionDesc, isForceUpdate, appUrl));
+                                .asCustom(new AppUpdatePopup(MainActivity.this, newestVersion, versionDesc, isForceUpdate, appUrl, MainActivity.this));
                     }
                     SLog.info("isDismiss[%s]", appUpdatePopup.isDismiss());
                     if (appUpdatePopup.isDismiss()) {
@@ -1478,5 +1491,17 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 couponWordDialog.setData(word, extraData);
             }
         }, 500);
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        if (data instanceof EasyJSONObject) {
+            EasyJSONObject dataObj = (EasyJSONObject) data;
+            int action = dataObj.optInt("action");
+            if (action == SimpleCallback.ACTION_CLOSE_APP_UPDATE_POPUP) {
+                canShowOtherPopup = true;
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP, null);
+            }
+        }
     }
 }

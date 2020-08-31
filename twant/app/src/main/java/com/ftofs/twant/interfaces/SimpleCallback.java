@@ -15,6 +15,11 @@ public interface SimpleCallback {
      */
     int ACTION_SELECT_CANCEL_ORDER_REASON = 2;
 
+    /**
+     * 關閉APP升級彈窗
+     */
+    int ACTION_CLOSE_APP_UPDATE_POPUP = 3;
+
 
     void onSimpleCall(Object data);
 }
