@@ -347,6 +347,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvSecKillRemainMinute;
     TextView tvSecKillRemainSecond;
 
+    View flSecKillLabel;
+    View rlSecKillContainer;
+    TextView tvSecKillPrice;
+    TextView tvSecKillOriginalPrice;
+
     @Override
     public void onSimpleCall(Object data) {
         try {
@@ -548,6 +553,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvSecKillRemainHour = view.findViewById(R.id.tv_sec_kill_remain_hour);
         tvSecKillRemainMinute = view.findViewById(R.id.tv_sec_kill_remain_minute);
         tvSecKillRemainSecond = view.findViewById(R.id.tv_sec_kill_remain_second);
+        flSecKillLabel = view.findViewById(R.id.fl_sec_kill_label);
+        rlSecKillContainer = view.findViewById(R.id.rl_sec_kill_container);
+        tvSecKillPrice = view.findViewById(R.id.tv_sec_kill_price);
+        tvSecKillOriginalPrice = view.findViewById(R.id.tv_sec_kill_original_price);
 
         btnArrivalNotice = view.findViewById(R.id.btn_arrival_notice);
         btnArrivalNotice.setOnClickListener(this);
@@ -2240,6 +2249,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             goodsInfo.groupDiscountAmount = goodsInfo.appPrice0 - goodsInfo.groupPrice;
                         }
 
+                        // 是否為秒殺
+                        goodsInfo.isSeckill = goodsInfoVo.optInt("isSeckill");
+
                         goodsInfoMap.put(goodsId, goodsInfo);
 
                         SkuGalleryItem skuGalleryItem = new SkuGalleryItem(
@@ -2565,6 +2577,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    private void showHideSecKillView(boolean show) {
+        if (show) {
+            flSecKillLabel.setVisibility(VISIBLE);
+            rlSecKillContainer.setVisibility(VISIBLE);
+        } else {
+            flSecKillLabel.setVisibility(GONE);
+            rlSecKillContainer.setVisibility(GONE);
+        }
+    }
+
     /**
      * 啟動倒數計算
      */
@@ -2760,6 +2782,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         } else {
             showHideGroupBuyView(false);
         }
+
+        showHideSecKillView(goodsInfo.isSeckill == Constant.TRUE_INT);
+        if (goodsInfo.isSeckill == Constant.TRUE_INT) {
+            tvSecKillPrice.setText(StringUtil.formatFloat(goodsInfo.appPrice0));
+            tvSecKillOriginalPrice.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
+        }
+
 
         // 看是否有現貨，如果沒有，則顯示到貨通知
         int finalStorage = goodsInfo.getFinalStorage();

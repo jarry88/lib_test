@@ -26,6 +26,7 @@ public class GoodsInfo {
     public int promotionType;//活动类型（0-没有参加活动 ，1限时折扣, 2全款预售，3定金预售）
     public int appUsable =0;//1:正在進行折扣活動，
     public int isGroup; // 該SKU是否參與團購
+    public int isSeckill; // 该SKU是否为秒杀商品
 
     /**
      * 獲取最終庫存(產品的庫存減去預留庫存)

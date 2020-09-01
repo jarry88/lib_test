@@ -4,6 +4,7 @@ public class SecKillGoodsListItem {
     public int seckillCommonId;
     public int seckillGoodsId;
     public int commonId;
+    public int goodsId;
     public String goodsName;
     public String imageSrc;
     public int scheduleState;
