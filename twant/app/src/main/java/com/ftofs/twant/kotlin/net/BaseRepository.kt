@@ -18,7 +18,7 @@ open class BaseRepository {
 //    suspend fun <T : Any> apiCall(call: suspend () -> WanResponse<T>): WanResponse<T> {
 //        return call.invoke()
 //    }
-    val api=MRequest.getInstance().service
+    val api by lazy { MRequest.getInstance().service }
     suspend fun <T : Any> safeApiCall(call: suspend () -> Result<T>, errorMessage: String="网络错误"): Result<T> {
         return try {
             call()

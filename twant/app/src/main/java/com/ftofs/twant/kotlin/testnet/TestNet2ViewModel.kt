@@ -95,7 +95,7 @@ class TestNet2ViewModel(application: Application) : BaseViewModel(application) {
 
     }
     fun getTestData() {
-        launch({},{},stateLiveData)
+//        launch({},{},stateLiveData)
     }
     fun doScope(){
         viewModelScope.launch (Dispatchers.Default){

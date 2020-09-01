@@ -180,4 +180,5 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
         emptyViewHelper?.loadPlaceLayout(target, text, imgId, reload)
     }
 
+
 }
