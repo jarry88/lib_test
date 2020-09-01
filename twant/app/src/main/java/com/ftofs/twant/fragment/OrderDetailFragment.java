@@ -454,6 +454,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             "action", Constant.ACTION_COMPLAIN,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
+                } else if (id == R.id.btn_view_complaint) {
+                    SLog.info("查看投訴");
+                    Util.startFragment(RefundDetailFragment.newInstance(item.ordersId, EasyJSONObject.generate(
+                            "action", Constant.ACTION_COMPLAIN,
+                            "ordersId", item.ordersId,
+                            "ordersGoodsId", item.ordersGoodsId).toString()));
                 }
             }
         });
