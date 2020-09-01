@@ -997,7 +997,7 @@ public class StringUtil {
         if (goods.exists(key)) {
             return goods.getInt(key);
         } else {
-            SLog.info("警告！！！！！ 後端 沒有提供 goodsModel信息");
+//            SLog.info("警告！！！！！ 後端 沒有提供 goodsModel信息");
             if (Util.inDev()) {
                 return (int) (4.6+Math.random());
             }

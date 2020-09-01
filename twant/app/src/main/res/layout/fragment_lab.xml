@@ -80,6 +80,10 @@
                 android:text="btn_post1">
             </Button>
         </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rv_list"/>
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageViewCropped"
             android:layout_width="match_parent"

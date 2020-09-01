@@ -14,11 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.TestAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.databinding.FragmentLabBinding;
+import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.kotlin.net.BaseRepository;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.CroppyInitUtilKt;
@@ -27,6 +31,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.CheckPhoneView;
+import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.NineLuckPan;
 
 import com.lyrebirdstudio.aspectratiorecyclerviewlib.aspectratio.model.AspectRatio;
@@ -39,6 +44,7 @@ import com.lyrebirdstudio.croppylib.util.file.FileOperationRequest;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 實驗性Fragment
@@ -54,6 +60,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
     private CropRequest.Manual manualCropRequest;
     private CropRequest.Auto cacheCropRequest;
     private CropRequest.Auto externalCropRequest;
+    private RecyclerView recyclerView;
 
     public static LabFragment newInstance() {
         LabFragment fragment = new LabFragment();
@@ -81,6 +88,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_externalCropRequest, this);
         Util.setOnClickListener(view, R.id.btn_post1, this);
 
+        recyclerView = view.findViewById(R.id.rv_list);
         luckpan = view.findViewById(R.id.luckpan);
         imageViewCropped = view.findViewById(R.id.imageViewCropped);
         luckpan.setOnLuckPanAnimEndListener(new NineLuckPan.OnLuckPanAnimEndListener() {
@@ -93,6 +101,29 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         View vw = view.findViewById(R.id.vw);
         vw.setBackground(BackgroundDrawable.create(Color.CYAN, Util.dip2px(_mActivity, 8)));
         CheckPhoneView checkPhoneView = view.findViewById(R.id.check_phone);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(_mActivity, 3);
+        TestBindAdapter adapter = new TestBindAdapter();
+        List<CategoryCommodity> list = new ArrayList<>();
+        list.add(new CategoryCommodity(10, "sdf",   "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/24/3e/243ec09e3c46e872517fa020b65f9ed4.png"));
+        list.add(new CategoryCommodity(112, "a", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/24/3e/243ec09e3c46e872517fa020b65f9ed4.png"));
+        list.add(new CategoryCommodity(143, "b", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/24/3e/243ec09e3c46e872517fa020b65f9ed4.png"));
+        list.add(new CategoryCommodity(14, "c", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/24/3e/243ec09e3c46e872517fa020b65f9ed4.png"));
+        list.add(new CategoryCommodity(20, "m",   "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/24/3e/243ec09e3c46e872517fa020b65f9ed4.png"));
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == 0) {
+                    return 3;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        adapter.showHeadView(true);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setAdapter(adapter);
+        adapter.addAll(list,true);
     }
 
     private void productRequest() {

@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -28,6 +30,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.tmall.wireless.vaf.expr.engine.data.StrValue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
     RecyclerView rvCommodityList;
     List<CategoryCommodityRow> categoryCommodityRowList = new ArrayList<>();
     CategoryCommodityAdapter categoryCommodityAdapter;
+    CategoryCommodityKotlinAdapter mAdapter;
 
     HashMap<Integer, CategoryCommodityList> categoryCommodityListMap = new HashMap<>();
 
@@ -60,6 +64,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
     int menuShrunkWidth;
     int menuExpandedWidth;
     int contentWidth;
+    private Boolean dataLoaded=false;
 
     public static CategoryCommodityFragment newInstance() {
         Bundle args = new Bundle();
@@ -128,6 +133,10 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
         LinearLayoutManager layoutManagerCommodity = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvCommodityList.setLayoutManager(layoutManagerCommodity);
         categoryCommodityAdapter = new CategoryCommodityAdapter(_mActivity, R.layout.category_commodity_row, categoryCommodityRowList);
+        categoryCommodityAdapter.addHeaderView(getLayoutInflater().inflate(R.layout.category_head_item,null));
+        mAdapter = new CategoryCommodityKotlinAdapter();
+        mAdapter.showHeadView(true);
+//        mAdapter.onItemClick
         categoryCommodityAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -156,11 +165,32 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                 EasyJSONObject.generate("cat", String.valueOf(categoryCommodity.categoryId)).toString()));
             }
         });
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(_mActivity, 3);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == 0) {
+                    return 3;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        rvCommodityList.setLayoutManager(gridLayoutManager);
+//        rvCommodityList.setLayoutManager(new LinearLayoutManager(_mActivity));
+//        rvCommodityList.setLayoutManager(new LinearLayoutManager(_mContext));
+        rvCommodityList.setAdapter(mAdapter);
+//        rvCommodityList.setAdapter(categoryCommodityAdapter);
 
+    }
 
-        rvCommodityList.setAdapter(categoryCommodityAdapter);
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (!dataLoaded) {
+            loadCategoryMenuData();
+        }
 
-        loadCategoryMenuData();
     }
 
     /**
@@ -258,7 +288,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                     }
 
                     categoryCommodityMenuAdapter.setNewData(categoryMenuList);
-
+                    dataLoaded = true;
                     loadCategoryCommodityData(defaultCategoryId);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -269,7 +299,6 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
 
     private void loadCategoryCommodityData(int categoryId) {
         // TODO: 2019/5/6 優化
-        SLog.info("categoryId[%d]", categoryId);
         CategoryCommodityList item = categoryCommodityListMap.get(categoryId);
 
         if (item == null) {
@@ -277,8 +306,31 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
         } else {
             categoryCommodityRowList = item.list;
         }
+        List<CategoryCommodity> list = new ArrayList<>();
+        for (CategoryCommodityRow categoryCommodityRow : item.list) {
+            for (CategoryCommodity categoryCommodity : categoryCommodityRow.categoryCommodityList) {
+                SLog.info(categoryCommodity.imageUrl);
+                list.add(categoryCommodity);
+            }
+        }
+//        View view = getLayoutInflater().inflate(R.layout.category_head_item, null);
+        String menu=" ";
+        for (CategoryMenu categoryMenu : categoryMenuList) {
+            if (categoryMenu.selected) {
+                menu = categoryMenu.categoryNameChinese;
+                break;
+            }
+        }
+        SLog.info("list[%s],categoryId[%d],size[%s],menu[%s]",list.size(), categoryId,item.list.size(),menu);
+//        ((TextView) view.findViewById(R.id.header_title)).setText(menu);
+//        categoryCommodityAdapter.removeAllHeaderView();
+//        categoryCommodityAdapter.setHeaderView(view);
+        ((TextView)categoryCommodityAdapter.getHeaderLayout().findViewById(R.id.header_title)).setText(menu);
+//        categoryCommodityAdapter.addHeaderView(view);
 
-        categoryCommodityAdapter.setNewData(categoryCommodityRowList);
+//        categoryCommodityAdapter.setNewData(categoryCommodityRowList);
+        mAdapter.setMHeadText(menu);
+        mAdapter.addAll(list,true);
     }
 
 

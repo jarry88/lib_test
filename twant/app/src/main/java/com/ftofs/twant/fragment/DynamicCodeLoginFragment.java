@@ -198,8 +198,11 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
             if (Config.PROD) {
                 MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.FACEBOOK_LOGIN);
             }
-
-            ((LoginFragment) commonCallback).facebookLogin();
+//            LoginFragment loginFragment = (LoginFragment) commonCallback;
+//            if (loginFragment != null) {
+//                loginFragment.facebookLogin();
+//            }
+           ((LoginFragment) commonCallback).facebookLogin();
         } else if (id == R.id.btn_get_sms_code) {
             if (!canSendSMS) {
                 return;

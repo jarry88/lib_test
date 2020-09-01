@@ -141,7 +141,7 @@
                         android:layout_alignBottom="@id/ll_post_info_container"
                         android:translationY="10dp"
                         android:src="@drawable/yellow_want_to_true"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         />
                 </RelativeLayout>
 

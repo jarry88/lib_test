@@ -26,6 +26,7 @@ import com.ftofs.twant.util.Util
 @BindingAdapter(value = ["imageUrl"])
 fun loadImageUrl(v: ImageView, url: String?) {
     url?.run {
+        SLog.info("url $url")
         Glide.with(v).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(v)
     }
 }
