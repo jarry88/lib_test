@@ -1560,7 +1560,7 @@ public class Util {
             StatusBarUtil.setColor(activity, Color.WHITE, 0);  // 设置状态栏为白色
             StatusBarUtil.setLightMode(activity);
 
-            int statusBarHeight = QMUIStatusBarHelper.getStatusbarHeight(activity);
+            int statusBarHeight = getStatusbarHeight(activity);
             SLog.info("statusBarHeight[%d]", statusBarHeight);
             /*
             修复问题
@@ -1570,6 +1570,22 @@ public class Util {
             contentView.setPadding(0, statusBarHeight, 0, 0);
         }
 
+    }
+
+    public static int getStatusbarHeight(Context context) {
+        int height = Hawk.get(SPField.FIELD_STATUS_BAR_HEIGHT, 0);
+
+        if (height > 0) {
+            SLog.info("status_bar_height[%d]", height);
+            return height;
+        }
+
+        // 如果在Hawk中沒有保存，則查詢statusBar的高度
+        height = QMUIStatusBarHelper.getStatusbarHeight(context);
+        if (height > 0) {
+            Hawk.put(SPField.FIELD_STATUS_BAR_HEIGHT, height);
+        }
+        return 0;
     }
 
     /**
