@@ -1,5 +1,6 @@
 package com.ftofs.twant.kotlin.net
 
+import com.ftofs.twant.entity.CategoryCommodity
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.CategoryItem
 import com.ftofs.twant.kotlin.ZoneCategory
@@ -68,6 +69,9 @@ interface DemoApiService {
     suspend fun getImGoodsSearch(@QueryMap queryParams: Map<String, String?>): TwantResponse<ImGoodsSearch>
     @GET("member/im/orders/list")
     suspend fun getImOrdersSearch(@QueryMap queryParams: Map<String, String?>): TwantResponse<ImGoodsSearch>
+    //新版三级分类商品种类信息
+    @GET("app/home/goods_class_nav/v2")
+    suspend fun getGoodsClassNavV2(): TwantResponse<List<CategoryCommodity>>
 //    @Query("token") token:String,
 
 

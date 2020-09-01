@@ -8,14 +8,15 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.fastloan.app.ui.adapter.DataBoundViewHolder
 import com.ftofs.twant.R
-import com.ftofs.twant.log.SLog
 
-abstract class DataBoundAdapter<T, V : ViewDataBinding> :
+abstract class DataBoundAdapter<T, V : ViewDataBinding> (
+        open val headId:Int=R.layout.category_head_item,
+        private val footId:Int=R.layout.rl_foot_item,
+        private val emptyId:Int=R.layout.ic_placeholder_no_data
+) :
     RecyclerView.Adapter<DataBoundViewHolder<V>>() {
     abstract val layoutId: Int
-    private val headId =R.layout.close_zone_top_item
-    private val emptyId= R.layout.ic_placeholder_no_data
-    private val footId= R.layout.rl_foot_item
+
     protected val mData = ArrayList<T>()
     lateinit var context:Context
     private val headType=4
@@ -49,14 +50,17 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> :
                             false
                     )
             )
-            headType ->return DataBoundViewHolder(
-                    DataBindingUtil.inflate(
-                            LayoutInflater.from(parent.context),
-                            headId,
-                            parent,
-                            false
-                    )
-            )
+            headType -> {
+                return DataBoundViewHolder(
+                        DataBindingUtil.inflate(
+                                LayoutInflater.from(parent.context),
+                                headId,
+                                parent,
+                                false
+                        )
+                )
+
+            }
             else -> return DataBoundViewHolder(
                     DataBindingUtil.inflate(
                             LayoutInflater.from(parent.context),
@@ -86,21 +90,24 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> :
         holder: DataBoundViewHolder<V>,
         position: Int
     ) {
-        if (!isEmptyPosition(position)&&!isFootPosition(position)&&!isHeadPosition(position)) {
+        if (isHeadPosition(position)) {
+            initHeadView(holder.binding)
+        }else
+        if (!isEmptyPosition(position)&&!isFootPosition(position)) {
             initView(holder.binding, mData[if(showHeadView)position-1 else position])
         }
         holder.binding.executePendingBindings()//必须调用，否则闪屏
 
     }
 
+    open fun initHeadView(binding: ViewDataBinding) {}
+
     private fun isFootPosition(position: Int): Boolean {
         return   (position==itemCount-1)and showFootView
     }
 
     private fun isHeadPosition(position: Int): Boolean {
-        val result = (position==0)and showHeadView
-        SLog.info(result.toString() +"  $itemCount  $showHeadView" )
-        return  result
+        return (position==0)and showHeadView
     }
 
     abstract fun initView(binding: V, item: T)

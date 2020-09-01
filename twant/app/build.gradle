@@ -377,10 +377,12 @@ dependencies {
     //mvvm 模塊依賴
     api rootProject.ext.dependencies["liveEventBus"]
     api rootProject.ext.dependencies["converter-gson"]
-    api rootProject.ext.dependencies["MMKV"]
     api rootProject.ext.dependencies["cat"]
-
-
+//
+//    api rootProject.ext.dependencies["MMKV"]
+//
+//    implementation 'com.tencent:mmkv:1.0.23'
+    implementation 'com.tencent:mmkv-static:1.1.1'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'io.github.iamyours:router-api:1.0.1'
     implementation 'com.qmuiteam:qmui:2.0.0-alpha10'

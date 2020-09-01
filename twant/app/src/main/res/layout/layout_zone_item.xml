@@ -33,24 +33,6 @@
                 android:id="@+id/image_zone"
                 imageUrl="@{vo.appLoge}">
             </ImageView>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/empty_view"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:visibility="gone">
-                <ImageView
-                    android:layout_width="112dp"
-                    android:layout_height="112dp"
-                    android:src="@drawable/ic_placeholder_no_data"
-                    android:layout_marginTop="@dimen/dp_20"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:text="抱歉，該活動已下架，歡迎查看更多主題活動~"/>
-            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout

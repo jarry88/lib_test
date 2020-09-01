@@ -378,6 +378,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 //                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onSuccess(EMCursorResult<EMMessage> emMessageEMCursorResult) {
+                    swipeRefreshLayout.setRefreshing(false);
 
 //                    SLog.info("异步获取成功,获取条数 %d",conversation.getAllMessages().size());
                     List<EMMessage> messages = emMessageEMCursorResult.getData();

@@ -1,28 +1,19 @@
 package com.ftofs.twant.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
-import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.ftofs.twant.domain.store.StoreLabel
 import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.kotlin.net.BaseRepository
 import com.ftofs.twant.kotlin.net.Result
-import com.ftofs.twant.kotlin.net.TwantService
 import com.ftofs.twant.log.SLog
-import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
-import com.ftofs.twant.vo.goods.GoodsVo
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.utils.ToastUtils
-import kotlinx.android.synthetic.main.date_picker_view.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.random.Random
 
 class ImGoodsPageModel(application: Application) :BaseViewModelMVVM(application) {
