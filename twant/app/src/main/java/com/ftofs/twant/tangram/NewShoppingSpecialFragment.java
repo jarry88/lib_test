@@ -16,7 +16,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
@@ -37,6 +40,8 @@ import com.ftofs.twant.fragment.LinkageShoppingListFragment;
 import com.ftofs.twant.fragment.SecondFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialLinkageFragment;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
+import com.ftofs.twant.kotlin.ZoneAdapter;
+import com.ftofs.twant.kotlin.ZoneItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.LogUtil;
@@ -81,6 +86,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     View containerView;
     int containerHeight;
     TabLayout tabLayout;
+    RecyclerView rvList;
     int tabHeight;
 
     FirstFragment firstFragment;
@@ -105,6 +111,9 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     private boolean showTab=true;
     private LinearLayout llBanner;
     private LinkageContainerFragment2 linkageGoodsFragment2;
+    private int zoneState=1;//專場狀態 0關閉 1開啟 2停用
+    private ConstraintLayout rLcontainer;
+    private LinearLayout appBackground;
 
     public static NewShoppingSpecialFragment newInstance(int zoneId) {
         Bundle args = new Bundle();
@@ -140,6 +149,8 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         tvZoneName = view.findViewById(R.id.tv_zone_name);
         rlToolBar = view.findViewById(R.id.tool_bar);
         llBanner = view.findViewById(R.id.ll_banner_container);
+        rLcontainer = view.findViewById(R.id.rl_container);
+        appBackground = view.findViewById(R.id.app_background);
         Util.setOnClickListener(view,R.id.btn_back,this);
         Util.setOnClickListener(view,R.id.btn_goto_top,this);
         Util.setOnClickListener(view,R.id.btn_goto_cart,this);
@@ -150,6 +161,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         tabLayout = view.findViewById(R.id.tab_layout);
         viewPager = view.findViewById(R.id.viewpager);
         vwAnchor = view.findViewById(R.id.vw_anchor);
+        rvList = view.findViewById(R.id.rv_other_zone_list);
 
         bannerView = view.findViewById(R.id.banner_view);
         initBanner();
@@ -326,7 +338,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                 loadingPopup.dismiss();
                 SLog.info("responseStr[%s]",responseStr);
 
-                //測試數據
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     LogUtil.uploadAppLog(path, "", responseStr, "");
@@ -340,6 +351,38 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     }
     private void updateView(EasyJSONObject responseObj) {
         try {
+
+            zoneState  = responseObj.getInt("datas.zoneState ");
+            if(zoneState==Constant.ZONE_CLOSE_TYPE||zoneState==Constant.ZONE_STOP_TYPE){
+                tvZoneName.setText("活動專場");
+                llFloatButtonContainer.setVisibility(View.GONE);
+                rLcontainer.setVisibility(View.VISIBLE);
+                containerView.setVisibility(View.GONE);
+                appBackground.setBackgroundColor(getResources().getColor(R.color.tw_yellow));
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
+                ZoneAdapter zoneAdapter = new ZoneAdapter(R.layout.layout_zone_item);
+                zoneAdapter.showHeadView(true);
+                zoneAdapter.showFootView(true);
+//                zoneAdapter.showFootView(true);
+                rvList.setLayoutManager(linearLayoutManager);
+                rvList.setAdapter(zoneAdapter);
+                List<ZoneItem> list = new ArrayList<>();
+//                list.add(new ZoneItem(-1, "", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
+
+                if (responseObj.exists("datas.zoneList")) {
+                    EasyJSONArray zoneList = responseObj.getSafeArray("datas.zoneList");
+                    for (Object object : zoneList) {
+                        list.add(ZoneItem.parase((EasyJSONObject) object));
+                    }
+                } else if(Util.inDev()){
+                    list.add(new ZoneItem(5, "這是在安卓段寫死的測試數據", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
+                }
+
+                zoneAdapter.addAll(list,true);
+                return;
+            }
+
+
             EasyJSONObject zoneVo = responseObj.getObject("datas.zoneVo");
             hasGoodsCategory = zoneVo.getInt("hasGoodsCategory");
             zoneId = zoneVo.getInt("zoneId");

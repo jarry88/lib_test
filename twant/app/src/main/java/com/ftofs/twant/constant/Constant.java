@@ -25,6 +25,15 @@ public class Constant {
     public static final int CATEGORY_TYPE_COMMODITY = 2;
     // 品牌分類
     public static final int CATEGORY_TYPE_BRAND = 3;
+    /**
+     * 活動專場狀態
+     */
+    // 商店分類
+    public static final int ZONE_OPEN_TYPE = 1;
+    // 產品分類
+    public static final int ZONE_CLOSE_TYPE = 0;
+    // 品牌分類
+    public static final int ZONE_STOP_TYPE = 2;
 
 
 

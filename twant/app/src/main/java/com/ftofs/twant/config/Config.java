@@ -92,6 +92,9 @@ public class Config {
      * Bugly
      */
     public static String BUGLY_KEY = "222fdc9738";
+    public static String DEBUG_BUGLY_KEY = "81d118aa23";
+//    debugBugly key
+//    baf724b9-4394-4b2b-82a5-c279e9d3a13a
     // public static String BUGLY_KEY = "";
 
     public static final String YOUTUBE_DEVELOPER_KEY = "takewant";
