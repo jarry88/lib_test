@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -83,9 +84,9 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
             itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
         } else {
             if (Config.USE_DEVELOPER_TEST_DATA && "想要科技有限公司".equals(itemData.storeName)||
-                    Constant.WANT_EAT.equals(itemData.storeName)) {
+                    Constant.WANT_EAT_ID==itemData.storeId) {
                 
-                if ("pay".equals(itemData.ordersState)) {
+                if (OrderState.TO_BE_RECEIVE==itemData.ordersState) {
                     itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
                 }
             } else {
