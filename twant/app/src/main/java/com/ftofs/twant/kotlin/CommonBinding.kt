@@ -17,10 +17,13 @@ import androidx.databinding.BindingAdapter
 import anet.channel.util.Utils
 import com.bumptech.glide.Glide
 import com.ftofs.twant.R
+import com.ftofs.twant.constant.Constant
+import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.Util
+import org.litepal.util.Const
 
 
 @BindingAdapter(value = ["imageUrl"])
@@ -40,6 +43,14 @@ fun setTimeStamp(v: TextView, timeStamp: Long?) {
 fun setTextPrice(v: TextView, price: Double) {
     price.run {
         v.text= StringUtil.formatPrice( null,price, 0, 2)
+    }
+}
+@BindingAdapter(value = ["priceModel"])
+fun setTextPriceWithModel(v: TextView, vo: Goods) {
+    if (vo.goodsModel != Constant.GOODS_TYPE_CONSULT) {
+        setTextPrice(v, vo.appPriceMin)
+    } else {
+        v.text="詢價"
     }
 }
 @BindingAdapter(value = ["showOringial"])

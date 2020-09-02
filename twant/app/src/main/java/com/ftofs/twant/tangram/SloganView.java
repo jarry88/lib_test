@@ -21,6 +21,7 @@ import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.fragment.BargainListFragment;
 import com.ftofs.twant.fragment.GroupInfoListFragment;
+import com.ftofs.twant.fragment.SecKillFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
@@ -43,6 +44,7 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
     private  ConstraintLayout clGroup;
     private  ConstraintLayout clBargain;
     private boolean themeLoaded =false;
+    private ConstraintLayout clSecKillEntrance;
 
     public SloganView(Context context) {
         this(context, null);
@@ -74,10 +76,13 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
         clSecondLine = contentView.findViewById(R.id.cl_second_line);
         clGroup = contentView.findViewById(R.id.cl_group_entrance);
         clBargain = contentView.findViewById(R.id.cl_bargain_entrance);
+        clSecKillEntrance = contentView.findViewById(R.id.cl_sec_kill_entrance);
         ImageView imgGroup = clGroup.findViewById(R.id.img_group_entrance);
         imgGroup.setOnClickListener(v -> Util.startFragment(GroupInfoListFragment.newInstance()));
         ImageView imgBargain = clBargain.findViewById(R.id.img_bargain_entrance);
         imgBargain.setOnClickListener(v -> Util.startFragment(BargainListFragment.newInstance()));
+        ImageView imgSecKill = clSecKillEntrance.findViewById(R.id.img_sec_kill_entrance);
+        imgBargain.setOnClickListener(v -> Util.startFragment(SecKillFragment.newInstance()));
         addView(contentView);
     }
 
