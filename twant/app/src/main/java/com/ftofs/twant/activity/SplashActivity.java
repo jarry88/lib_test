@@ -262,6 +262,8 @@ public class SplashActivity extends BaseActivity {
         super.onResume();
 
         Util.enterFullScreen(this);
+
+        Util.getStatusbarHeight(this); // 为了初始化一下状态栏高度的保存
     }
 
     /**

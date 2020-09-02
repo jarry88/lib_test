@@ -173,8 +173,8 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void loadData() {
-        // String url = Api.PATH_SEC_KILL_GOODS_LIST;
-        String url = "https://test.weshare.team/tmp/test.json";
+        String url = Api.PATH_SEC_KILL;
+        // String url = "https://test.weshare.team/tmp/test.json";
         Api.postUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -232,6 +232,10 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                         titleList.add(schedule.optString("scheduleName"));
                         fragmentList.add(SecKillGoodsListFragment.newInstance(schedule.optInt("scheduleId")));
                         secKillCount++;
+
+                        if (secKillCount >= 6) {
+                            break;
+                        }
                     }
 
                     // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，

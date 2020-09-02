@@ -22,9 +22,9 @@ android {
         targetSdkVersion 29
 
 
-        versionCode 190
+        versionCode 191
 
-        versionName "1.2.6.01"
+        versionName "1.2.7.00"
 
         ndk {
             //设置支持的SO库架构

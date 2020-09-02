@@ -78,11 +78,10 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                SLog.bt();
                 SecKillGoodsListItem item = goodsItemList.get(position);
                 SLog.info("seckillCommonId[%d], seckillGoodsId[%d]", item.seckillCommonId, item.seckillGoodsId);
-                Util.startFragment(GoodsDetailFragment.newInstance(item.commonId,0));
-                Util.startFragment(GoodsDetailFragment.newInstance(item.seckillCommonId, item.seckillGoodsId));
+                Util.startFragment(GoodsDetailFragment.newInstance(item.commonId, item.goodsId));
+                // Util.startFragment(GoodsDetailFragment.newInstance(item.seckillCommonId, item.seckillGoodsId));
             }
         });
 
@@ -157,6 +156,7 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
                         item.seckillCommonId = goodsCommon.optInt("seckillCommonId");
                         item.seckillGoodsId = goodsCommon.optInt("seckillGoodsId");
                         item.commonId = goodsCommon.optInt("commonId");
+                        item.goodsId = goodsCommon.optInt("goodsId");
                         item.goodsName = goodsCommon.optString("goodsName");
                         item.imageSrc = goodsCommon.optString("imageSrc");
                         item.scheduleState = goodsCommon.optInt("scheduleState");
