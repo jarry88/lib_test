@@ -1015,6 +1015,10 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                     }
 
                     if (appUpdatePopup == null) {
+                        if ("debug".equals(BuildConfig.BUILD_TYPE)) {
+                            isDismissOnBackPressed = true;
+                            ToastUtil.success(MainActivity.this,"注意，實際是不能關閉彈窗的，因爲是dubug包所以開了回退關閉的後門");
+                        }
                         appUpdatePopup = (AppUpdatePopup) new XPopup.Builder(MainActivity.this)
                                 .dismissOnBackPressed(isDismissOnBackPressed) // 按返回键是否关闭弹窗，默认为true
                                 .dismissOnTouchOutside(isDismissOnTouchOutside) // 点击外部是否关闭弹窗，默认为true

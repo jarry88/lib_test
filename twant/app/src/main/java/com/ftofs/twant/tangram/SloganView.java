@@ -82,7 +82,7 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
         ImageView imgBargain = clBargain.findViewById(R.id.img_bargain_entrance);
         imgBargain.setOnClickListener(v -> Util.startFragment(BargainListFragment.newInstance()));
         ImageView imgSecKill = clSecKillEntrance.findViewById(R.id.img_sec_kill_entrance);
-        imgBargain.setOnClickListener(v -> Util.startFragment(SecKillFragment.newInstance()));
+        imgSecKill.setOnClickListener(v -> Util.startFragment(SecKillFragment.newInstance()));
         addView(contentView);
     }
 
