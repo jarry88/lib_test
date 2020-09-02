@@ -18,28 +18,29 @@
         android:orientation="vertical">
         <TextView
             android:id="@+id/tv_title"
-            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginStart="14dp"
             android:layout_marginTop="@dimen/margin8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_14"
             android:textColor="@color/tw_black"
             android:textStyle="bold"
-            android:layout_marginBottom="-10dp"
             android:text="@{vo.categoryName ,default =``}"/>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                visible="@{vo.categoryList.size()>0?1:0}"
-                binding:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                binding:spanCount="3"
-                app:adapter="@{adapter}"
-                tools:listitem="@layout/simple_good_display_item"
-                android:background="@drawable/category_group_bg"
-                android:paddingTop="@dimen/dp_20"
-                android:paddingBottom="@dimen/dp_20"/>
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:layout_marginTop="-5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            visible="@{vo.categoryList.size()>0?1:0}"
+            binding:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            binding:spanCount="3"
+            app:adapter="@{adapter}"
+            tools:listitem="@layout/simple_good_display_item"
+            android:background="@drawable/category_group_bg"
+            android:paddingTop="@dimen/dp_20"
+            android:paddingBottom="@dimen/permission_dp_35"/>
     </LinearLayout>
 </layout>

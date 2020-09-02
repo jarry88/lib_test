@@ -3,7 +3,6 @@ package com.ftofs.twant.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.lifecycle.Observer
 import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.twant.BR
@@ -19,17 +18,20 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.vo.CategoryNavVo
+import com.lxj.xpopup.core.BasePopupView
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.LoadingUtil
-import kotlin.math.roundToInt
 
 //
 //private val Int.toPx: Int
 //    get() {return U}
 
 class CategoryCommodityKotlinFragment:BaseTwantFragmentMVVM<PageCategoryCommodityBinding, CategoryCommodityViewModel>() {
-    private var loadingUtil: LoadingUtil? = null
+    private var loadingUtil:LoadingUtil?=null
+    private val loadPopup by lazy {
+        Util.createLoadingPopup(context)
+    }
 
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return  R.layout.page_category_commodity
@@ -122,6 +124,7 @@ class CategoryCommodityKotlinFragment:BaseTwantFragmentMVVM<PageCategoryCommodit
     }
 
     override fun onSupportVisible() {
+        loadPopup.show()
         viewModel.getCategoryData()
     }
 
@@ -140,19 +143,32 @@ class CategoryCommodityKotlinFragment:BaseTwantFragmentMVVM<PageCategoryCommodit
             when(it){
                 StateLiveData.StateEnum.Loading -> {
 //                    loadingUtil?.showLoading("加载中..")
+                    loadPopup.show()
+
+
                     KLog.e("请求数据中--显示loading")
                 }
                 StateLiveData.StateEnum.Success -> {
+                    loadPopup.dismiss()
                     KLog.e("数据获取成功--关闭loading")
                 }
                 StateLiveData.StateEnum.Idle -> {
+                    loadPopup.dismiss()
+
+
                     KLog.e("空闲状态--关闭loading")
 //                    loadingUtil?.hideLoading()
                 }
                 StateLiveData.StateEnum.NoData -> {
+                    loadPopup.dismiss()
+
+
                     KLog.e("空闲状态--关闭loading")
                 }
                 else -> {
+                    loadPopup.dismiss()
+
+
                     KLog.e("其他状态--关闭loading")
 //                    loadingUtil?.hideLoading()
                 }

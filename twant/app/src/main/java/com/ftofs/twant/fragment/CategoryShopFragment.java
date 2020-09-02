@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -78,6 +79,8 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
         rvShopList = view.findViewById(R.id.rv_shop_list);
         LinearLayoutManager layoutManagerShop = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvShopList.setLayoutManager(layoutManagerShop);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(_mActivity, 2);
+        rvShopList.setLayoutManager(gridLayoutManager);
         categoryShopAdapter = new CategoryShopAdapter(_mActivity, R.layout.category_shop_item, categoryShopList);
         categoryShopAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

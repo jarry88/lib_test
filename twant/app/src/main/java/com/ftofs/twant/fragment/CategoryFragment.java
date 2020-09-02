@@ -29,6 +29,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.SearchHistoryItem;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.interfaces.SimpleCallback;
@@ -167,7 +168,6 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(TAB_INDEX_GOODS);
 
         llSearchHistoryContainer = view.findViewById(R.id.ll_search_history_container);
 

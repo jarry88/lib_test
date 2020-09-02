@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
-            android:background="@drawable/right_separator_box_white"
+            android:background="@color/tw_grey_F3F3"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -22,13 +22,9 @@
             android:id="@+id/rv_commodity_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginEnd="3dp"
             android:minWidth="100dp"
             android:background="@android:color/white"
             />
-        <androidx.recyclerview.widget.RecyclerView
-            android:visibility="gone"
-            android:layout_width="@dimen/dp_200"
-            android:layout_height="match_parent"
-            android:id="@+id/rv_list"/>
     </LinearLayout>
 </layout>
