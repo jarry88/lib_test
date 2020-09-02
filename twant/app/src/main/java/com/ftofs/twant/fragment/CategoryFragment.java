@@ -167,6 +167,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(TAB_INDEX_GOODS);
 
         llSearchHistoryContainer = view.findViewById(R.id.ll_search_history_container);
 

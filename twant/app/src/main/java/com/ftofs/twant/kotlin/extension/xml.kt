@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.ftofs.twant.util.StringUtil
+import com.ftofs.twant.vo.CategoryNavVo
 import com.google.android.material.tabs.TabLayout
 import com.wzq.mvvmsmart.utils.KLog
 
@@ -21,6 +22,11 @@ fun setImgUrl(view: ImageView, url: String) {
 fun setViewVisible(view: View, visible: Int) {
     if(visible==1) view.visibility=View.VISIBLE
     else view.visibility=View.GONE
+}
+@BindingAdapter("invisible")
+fun setInViewVisible(view: View, visible: Int) {
+    if(visible==1) view.visibility=View.INVISIBLE
+    else view.visibility=View.VISIBLE
 }
 
 //@BindingAdapter("android:paddingLeft")

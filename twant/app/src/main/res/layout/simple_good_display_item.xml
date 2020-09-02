@@ -4,7 +4,7 @@
     <data>
         <variable
             name="vo"
-            type="com.ftofs.twant.entity.CategoryCommodity" />
+            type="com.ftofs.twant.vo.CategoryNavVo" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical" android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:scaleType="fitXY"
             android:layout_margin="5dp"
             android:id="@+id/image_good"
-            imageUrl="@{vo.imageUrl}"
+            imageUrl="@{vo.appImageUrl}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

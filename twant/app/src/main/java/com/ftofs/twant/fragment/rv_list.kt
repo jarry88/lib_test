@@ -12,7 +12,7 @@ class TestBindAdapter():DataBoundAdapter<CategoryCommodity,SimpleGoodDisplayItem
         get() = R.layout.simple_good_display_item
 
     override fun initView(binding: SimpleGoodDisplayItemBinding, item: CategoryCommodity) {
-        binding.vo=item
+//        binding.vo=item
     }
 
     override fun initHeadView(binding: ViewDataBinding) {

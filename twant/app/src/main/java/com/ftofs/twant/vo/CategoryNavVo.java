@@ -154,6 +154,8 @@ public class CategoryNavVo {
         this.category = category;
     }
 
+    public int isFold = 1;
+
     @Override
     public String toString() {
         return "CategoryNavVo{" +
