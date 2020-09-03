@@ -24,6 +24,8 @@ import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
+import internal.org.java_websocket.WebSocket;
+
 /**
  * 會話列表Adapter
  *
@@ -80,6 +82,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         //此处已经按身份区分并返回头像
         String avatarUrl = chatConversation.friendInfo.getRoleAvatar();
 
+        helper.setGone(R.id.img_role_logo, chatConversation.friendInfo.memberRole== 0);
         if (StringUtil.isEmpty(avatarUrl)) {
             if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
                 Glide.with(mContext).load(R.drawable.icon_twant_loge).centerCrop().into(imgAvatar);

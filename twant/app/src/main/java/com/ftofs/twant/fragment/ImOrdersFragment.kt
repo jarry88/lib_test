@@ -20,6 +20,8 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.viewmodel.ImOrdersPageModel
+import com.wzq.mvvmsmart.event.StateLiveData
+import com.wzq.mvvmsmart.utils.KLog
 import kotlin.math.absoluteValue
 
 class ImOrdersFragment(val imName: String, val sendOrder: OnSelectedListener) :BaseTwantFragmentMVVM<ImOrdersLayoutBinding, ImOrdersPageModel>() {
@@ -77,6 +79,42 @@ class ImOrdersFragment(val imName: String, val sendOrder: OnSelectedListener) :B
             mAdapter.addAll(it,viewModel.isRefresh)
         })
         viewModel.keyword.observe(this, Observer { viewModel.getImOrdersSearch(it) })
+
+        viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
+            when (it) {
+                StateLiveData.StateEnum.Loading -> {
+//                    binding.orderPage.refreshLayout.id
+                    KLog.e("请求数据中--显示loading")
+                }
+                StateLiveData.StateEnum.Error -> {
+                    binding.orderPage.refreshLayout.finishRefresh()
+                    binding.orderPage.refreshLayout.finishLoadMore()
+                    ToastUtil.error(context,viewModel.errorMessage)
+                    KLog.e("请求数据中--显示loading")
+                }
+                StateLiveData.StateEnum.Success -> {
+                    binding.orderPage.refreshLayout.finishRefresh()
+                    binding.orderPage.refreshLayout.finishLoadMore()
+                    KLog.e("数据获取成功--关闭loading")
+                }
+                StateLiveData.StateEnum.Idle -> {
+                    KLog.e("空闲状态--关闭loading")
+//                    binding.refreshLayout.finishRefresh()
+//                    binding.refreshLayout.finishLoadMore()
+//                    loadingUtil?.hideLoading()
+                }
+                StateLiveData.StateEnum.NoData -> {
+                    KLog.e("空闲状态--关闭loading")
+                    binding.orderPage.refreshLayout.finishRefresh()
+                    binding.orderPage.refreshLayout.finishLoadMore()
+                }
+                else -> {
+                    KLog.e("其他状态--关闭loading")
+                    binding.orderPage.refreshLayout.finishRefresh()
+                    binding.orderPage.refreshLayout.finishLoadMore()
+                }
+            }
+        })
     }
 
     override fun onSupportVisible() {

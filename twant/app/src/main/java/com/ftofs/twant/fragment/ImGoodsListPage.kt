@@ -203,6 +203,12 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                     loadingUtil?.showLoading("加载中..")
                     KLog.e("请求数据中--显示loading")
                 }
+                StateLiveData.StateEnum.Error -> {
+                    binding.refreshLayout.finishRefresh()
+                    binding.refreshLayout.finishLoadMore()
+                    ToastUtil.error(context,viewModel.errorMessage)
+                    KLog.e("请求数据中--显示loading")
+                }
                 StateLiveData.StateEnum.Success -> {
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()

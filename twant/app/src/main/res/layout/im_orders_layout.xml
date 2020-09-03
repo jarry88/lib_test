@@ -26,10 +26,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintVertical_weight="1"
-            android:background="@color/tw_white"
-            android:paddingTop="@dimen/dp_12"
+            android:background="@color/tw_grey_F3F3"
+            android:layout_marginTop="@dimen/dp_12"
             >
             <include
+
                 android:id="@+id/order_page"
                 layout="@layout/fragment_im_goods_page"
                 android:layout_width="match_parent"

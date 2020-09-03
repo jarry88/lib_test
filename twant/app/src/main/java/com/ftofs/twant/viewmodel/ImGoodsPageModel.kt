@@ -81,9 +81,9 @@ class ImGoodsPageModel(application: Application) :BaseViewModelMVVM(application)
                             if(!isRefresh and !result.datas.goodsList.isNullOrEmpty() )pageNum++
                             goodsList.value=result.datas.goodsList
                             result.datas.storeLabelList?.run {storeLabelList.value=this}
-                            hasMore=result.datas.pageEntity.hasMore
+//                            hasMore=result.datas.pageEntity.hasMore
                             stateLiveData.postSuccess()
-                            stateLiveData.postValueAndSuccess(hasMore)
+//                            stateLiveData.postValueAndSuccess(hasMore)
 
                         }
                         is Result.DataError ->  {

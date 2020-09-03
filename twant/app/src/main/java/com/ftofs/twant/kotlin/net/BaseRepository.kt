@@ -35,7 +35,7 @@ open class BaseRepository {
             if (response.code == -1) {
                 errorBlock?.let { it() }
                 Result.Error(IOException(response.message))
-            }else if(response.code==400){
+            }else if(response.code==400 or 401){
                 Result.DataError(response.datas)
             } else {
                 successBlock?.let { it() }
