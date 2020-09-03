@@ -358,7 +358,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                 llFloatButtonContainer.setVisibility(View.GONE);
                 rLcontainer.setVisibility(View.VISIBLE);
                 containerView.setVisibility(View.GONE);
-                appBackground.setBackgroundColor(getResources().getColor(R.color.tw_yellow));
+                rlToolBar.setBackgroundColor(getResources().getColor(R.color.tw_yellow));
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
                 ZoneAdapter zoneAdapter = new ZoneAdapter(R.layout.layout_zone_item,R.layout.close_zone_top_item);
                 zoneAdapter.showHeadView(true);

@@ -9,7 +9,6 @@
     <!-- 工具欄 -->
     <RelativeLayout
         android:id="@+id/tool_bar"
-        android:background="@color/tw_yellow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         >
@@ -36,7 +35,7 @@
         android:layout_below="@id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
         <LinearLayout
             android:id="@+id/app_background"
             android:layout_width="match_parent"
@@ -46,7 +45,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintDimensionRatio="351:200"
             android:orientation="vertical"
-            android:background="@color/tw_yellow">
+            android:background="@color/tw_yellow"
+            >
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

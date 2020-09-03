@@ -134,6 +134,7 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
         when (type) {
             ImGoodsEnum.RECOMMEND ,ImGoodsEnum.OWNER->{
                 binding.toolBar.visibility= View.VISIBLE
+                binding.btnClearAll.setOnClickListener { binding.etKeyword.text?.clear() }
 //                binding.rvStoreLabel.visibility=View.VISIBLE
             }
             else -> SLog.info(type.searchType)
@@ -179,7 +180,10 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
             getImGoodsSearch(keyword =it)
         } })
         viewModel.goodsList.observe(this, Observer {
-            goodsAdapter.addAll(it,viewModel.isRefresh) })
+            if (!it.isNullOrEmpty()) {
+                goodsAdapter.addAll(it,viewModel.isRefresh)
+            }
+            })
         viewModel.storeLabelList.observe(this, Observer {
             it.apply {
                 if (isNotEmpty()) {
