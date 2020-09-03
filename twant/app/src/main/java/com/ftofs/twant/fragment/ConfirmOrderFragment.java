@@ -185,7 +185,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * @param isGroup 是否為團購  1 -- 是   0 -- 否
      * @return
      */
-    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup, int goId, int bargainOpenId) {
+    private static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup, int goId, int bargainOpenId) {
         SLog.info("ConfirmOrderFragment.newInstance: isFromCart[%d], buyData[%s], isGroup[%d], goId[%d], bargainOpenId[%d]",
                 isFromCart, buyData, isGroup, goId, bargainOpenId);
 
@@ -204,7 +204,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     }
 
 
-    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData) {
+    private static ConfirmOrderFragment newInstance(int isFromCart, String buyData) {
         return newInstance(isFromCart, buyData, Constant.FALSE_INT, Constant.INVALID_GO_ID, Constant.INVALID_BARGAIN_OPEN_ID);
     }
 
