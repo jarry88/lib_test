@@ -351,7 +351,7 @@ dependencies {
     //華爲包
 //    implementation 'com.umeng.umsdk:huawei-basetb:2.6.3.306'
 //    implementation 'com.umeng.umsdk:huawei-pushtb:2.6.3.306'
-    implementation 'com.umeng.umsdk:huawei-umengaccs:1.2.4'
+//    implementation 'com.umeng.umsdk:huawei-umengaccs:1.2.4'
 
 //    implementation 'com.umeng.umsdk:analytics:8.0.0'
     implementation 'com.kyleduo.switchbutton:library:2.0.0'

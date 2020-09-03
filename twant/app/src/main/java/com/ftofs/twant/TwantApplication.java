@@ -87,7 +87,6 @@ import com.wzq.mvvmsmart.utils.Tasks;
 
 
 //import org.android.agoo.huawei.HuaWeiRegister;
-import org.android.agoo.huawei.HuaWeiRegister;
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
 
@@ -523,7 +522,7 @@ public class TwantApplication extends Application {
 
         SLog.info("mPushAgent.register");
         if (Vendor.VENDOR_HUAWEI == Vendor.getVendorType()) {
-            HuaWeiRegister.register(this);
+//            HuaWeiRegister.register(this);
             SLog.info("VENDOR_HUAWEI.register");
 
         }
