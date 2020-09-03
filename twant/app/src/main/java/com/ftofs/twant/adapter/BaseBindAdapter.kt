@@ -3,15 +3,10 @@ package com.ftofs.twant.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
-import com.ftofs.twant.R
 import com.ftofs.twant.log.SLog
-import kotlinx.android.synthetic.main.sec_kill_list_normal_item.view.*
 
 abstract class BaseBindAdapter<T, D : ViewDataBinding>(val layoutResId: Int, data: List<T>) : BaseQuickAdapter<T, BoundViewHolder<D>>(layoutResId, data) {
 
@@ -38,16 +33,15 @@ abstract class BaseBindAdapter<T, D : ViewDataBinding>(val layoutResId: Int, dat
 
 
     private fun bindClickListener(holder: BoundViewHolder<D>) {
-
         onItemClickListener?.let {a->
             holder.itemView.isClickable = false
             holder.itemView
-            holder.itemView.setOnClickListener{a.onItemClick(null,it,holder.absoluteAdapterPosition) }
+            holder.itemView.setOnClickListener{a.onItemClick(null,it,holder.adapterPosition) }
 //            holder.itemView.isClickable=true
 
         }
         childList?.forEach{
-            holder.binding.root.findViewById<View>(it).setOnClickListener { onItemChildClickListener?.onItemChildClick(null,it,holder.absoluteAdapterPosition) }
+            holder.binding.root.findViewById<View>(it).setOnClickListener { onItemChildClickListener?.onItemChildClick(null,it,holder.adapterPosition) }
         }
         SLog.info("完成點擊初始化")
     }

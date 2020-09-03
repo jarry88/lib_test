@@ -42,7 +42,7 @@ public class SecKillZoneListAdapter extends BaseQuickAdapter<SecKillZoneItem, Ba
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, SecKillZoneItem item) {
-        int position = helper.getAbsoluteAdapterPosition();
+        int position = helper.getAdapterPosition();
         boolean selected = (position == selectedIndex); // 是否選中狀態
         SLog.info("position[%d], selected", position, selected);
 

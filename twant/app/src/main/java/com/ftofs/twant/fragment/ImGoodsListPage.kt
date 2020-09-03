@@ -92,6 +92,7 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                             setTextColor(R.id.tv_category_name,if(item.isFold==1) Color.BLACK else context?.resources?.getColor(R.color.blue)?:Color.BLUE)
                             setGone(R.id.vw_selected_indicator,item.isFold!=1)
                             itemView.apply {
+                                val absoluteAdapterPosition =adapterPosition
                                 if(item.isFold==1){
                                     collapse(absoluteAdapterPosition)
                                 }else{
@@ -100,6 +101,8 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                                 }
                             }.apply {
                                 setOnClickListener{
+                                    val absoluteAdapterPosition =adapterPosition
+
                                     if (oldCategoryIndex != absoluteAdapterPosition) {
                                         item.apply {
                                             isFold=1-isFold
