@@ -57,109 +57,12 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_schedule_label_container"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_schedule_label_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:orientation="horizontal">
-            <!--
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12:00"
-                    android:textSize="16sp"
-                    android:textColor="#FFE6C0">
-                </TextView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="已開搶"
-                    android:textSize="12sp"
-                    android:textColor="#FFE6C0">
-
-                </TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12:00"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold">
-                </TextView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="已開搶"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold">
-
-                </TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12:00"
-                    android:textSize="16sp"
-                    android:textColor="#FFE6C0">
-                </TextView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="已開搶"
-                    android:textSize="12sp"
-                    android:textColor="#FFE6C0">
-
-                </TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12:00"
-                    android:textSize="16sp"
-                    android:textColor="#FFE6C0">
-                </TextView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="已開搶"
-                    android:textSize="12sp"
-                    android:textColor="#FFE6C0">
-
-                </TextView>
-            </LinearLayout>
-            -->
-        </LinearLayout>
+            android:layout_marginTop="13dp">
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
 
