@@ -186,25 +186,17 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
                     }
                 }else if(size==2||size==4) {
                     SLog.info("slogan 2,4");
-//
-//                    clFirst.setVisibility(View.GONE);
-//                    clSecondLine.setVisibility(View.GONE);
+
+                    clFirst.setVisibility(View.GONE);
+                    clSecondLine.setVisibility(View.GONE);
                     if (size == 4) {
-                        if (clSecondLine.getVisibility() != VISIBLE) {
-                            clSecondLine.setVisibility(View.VISIBLE);
-                        }
+                        clSecondLine.setVisibility(View.VISIBLE);
                         Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(2).appLogo)).centerCrop().into(thirdImage);
                         thirdImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(2).zoneId)));
                         Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(3).appLogo)).centerCrop().into(fourthImage);
                         fourthImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(3).zoneId)));
-                    }else {
-                        clSecondLine.setVisibility(View.GONE);
                     }
-                    if (clFirstLine.getVisibility() != VISIBLE) {
-                        clFirstLine.setVisibility(View.VISIBLE);
-                    }
-                    SLog.info("第一行可见");
-
+                    clFirstLine.setVisibility(View.VISIBLE);
                     Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(0).appLogo)).centerCrop().into(firstImage);
                     firstImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(0).zoneId)));
                     Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(1).appLogo)).centerCrop().into(secondImage);
