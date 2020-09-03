@@ -42,6 +42,7 @@ import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Vendor;
 import com.ftofs.twant.vo.member.MemberVo;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
@@ -84,6 +85,9 @@ import com.wzq.mvvmsmart.net.net_utils.Utils;
 import com.wzq.mvvmsmart.utils.KLog;
 import com.wzq.mvvmsmart.utils.Tasks;
 
+
+//import org.android.agoo.huawei.HuaWeiRegister;
+import org.android.agoo.huawei.HuaWeiRegister;
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
 
@@ -420,7 +424,7 @@ public class TwantApplication extends Application {
         }
         // 在此处调用基础组件包提供的初始化函数 相应信息可在应用管理 -> 应用信息 中找到 http://message.umeng.com/list/apps
         // 参数一：当前上下文context；
-        // 参数二：应用申请的Appkey（需替换）；
+        // 参数二：应用申请的Appkey（需替换
         // 参数三：渠道名称；
         // 参数四：设备类型，必须参数，传参数为UMConfigure.DEVICE_TYPE_PHONE则表示手机；传参数为UMConfigure.DEVICE_TYPE_BOX则表示盒子；默认为手机；
         // 参数五：Push推送业务的secret 填充Umeng Message Secret对应信息（需替换）
@@ -518,6 +522,11 @@ public class TwantApplication extends Application {
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
 
         SLog.info("mPushAgent.register");
+        if (Vendor.VENDOR_HUAWEI == Vendor.getVendorType()) {
+            HuaWeiRegister.register(this);
+            SLog.info("VENDOR_HUAWEI.register");
+
+        }
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
             @Override

@@ -65,13 +65,6 @@ import java.util.Map;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-import static com.umeng.analytics.pro.k.a.c;
-import static com.umeng.analytics.pro.k.a.e;
-import static com.umeng.analytics.pro.k.a.f;
-import static com.umeng.analytics.pro.k.a.i;
-import static com.umeng.analytics.pro.k.a.r;
-import static com.umeng.analytics.pro.k.a.t;
-import static com.umeng.analytics.pro.k.a.v;
 
 /**
  * 選擇支付商

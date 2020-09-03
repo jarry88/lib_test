@@ -89,7 +89,7 @@ public class WhiteDropdownMenu extends AttachPopupView {
 
     @Override
     protected void onDismiss() {
-        super.onDismiss();
+//        super.onDismiss();
 
         if (onDismissCallback != null) {
             onDismissCallback.onSimpleCall(btnId);

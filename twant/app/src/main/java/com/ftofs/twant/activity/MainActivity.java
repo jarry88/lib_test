@@ -88,6 +88,7 @@ import com.ftofs.twant.widget.AppUpdatePopup;
 import com.ftofs.twant.widget.CouponWordDialog;
 import com.ftofs.twant.widget.NewWordPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
+//import com.huawei.hms.aaid.HmsInstanceId;
 import com.huawei.hms.aaid.HmsInstanceId;
 import com.hyphenate.chat.EMClient;
 import com.lxj.xpopup.XPopup;
@@ -496,6 +497,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
     }
 
     private void updateDeviceToken() {
+        SLog.info("开始请求华为token");
         // 請求華爲token
         if (Vendor.VENDOR_HUAWEI != Vendor.getVendorType()) {
             return;
@@ -746,7 +748,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
         SLog.info("oncreat进入replyIntent方法");
         Bundle bundle = getIntent().getExtras();
         if (bundle==null) {
-            SLog.info("没拿到");
+            SLog.info("没拿到启动参数");
         } else {
             String HxId = bundle.getString(Constant.MSG_NOTIFY_HXID);
             if (StringUtil.isEmpty(HxId)) {

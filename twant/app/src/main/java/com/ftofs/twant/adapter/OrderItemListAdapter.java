@@ -85,9 +85,11 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
         } else {
             if (Config.USE_DEVELOPER_TEST_DATA && "想要科技有限公司".equals(itemData.storeName)||
                     Constant.WANT_EAT_ID==itemData.storeId) {
-                
-                if (OrderState.TO_BE_RECEIVE==itemData.ordersState) {
+
+                if (OrderState.TO_BE_SEND == itemData.ordersState) {
                     itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
+                } else {
+                    itemView.findViewById(R.id.btn_have_received).setVisibility(View.GONE);
                 }
             } else {
                 itemView.findViewById(R.id.btn_have_received).setVisibility(View.GONE);

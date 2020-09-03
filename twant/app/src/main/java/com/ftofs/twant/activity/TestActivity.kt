@@ -5,8 +5,9 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ftofs.twant.R
+import com.umeng.message.UmengNotifyClickActivity
 
-class TestActivity : AppCompatActivity() {
+class TestActivity : UmengNotifyClickActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

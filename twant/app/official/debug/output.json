@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.ftofs.twant",
+  "variantName": "officialDebug",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "properties": [],
+      "versionCode": 191,
+      "versionName": "191",
+      "enabled": true,
+      "outputFile": "twant_12700_build191_official.apk"
+    }
+  ]
+}

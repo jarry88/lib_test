@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ftofs.twant">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,6 +11,12 @@
     <!-- BUGLY 需要的權限 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 友盟 需要的權限 -->
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_ADDED" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_CHANGED" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_INSTALL" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REPLACED" />
+<!--    <uses-permission android:name="android.permission.GET_TASKS" />-->
     <uses-permission android:name="android.permission.READ_LOGS" /> <!-- 高德地圖需要的權限 -->
     <!-- 允许程序设置内置sd卡的写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 允许程序读写手机状态和身份 -->
@@ -45,13 +52,18 @@
     <application
         android:name=".TwantApplication"
         android:allowBackup="true"
+        tools:node="merge"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:requestLegacyExternalStorage ="true">
+        android:requestLegacyExternalStorage ="true"
+        tools:replace="android:allowBackup">
+        <meta-data
+            android:name="push_kit_auto_init_enabled"
+            android:value="true"/>
         <!-- 暫時默認寫死為正式環境，smart框架請求數據時會用這個判斷環境 -->
         <meta-data
             android:name="ENVIRONMENT"
@@ -60,11 +72,14 @@
         <meta-data
             android:name="CHANGEENVIRONMENTENABLE"
             android:value="true" />
-        <activity android:name=".activity.YoutubeActivity"/>
+        <activity android:name=".activity.YoutubeActivity"
+            />
         <activity android:name=".activity.TwantCaptureActivity"/>
         <activity android:name=".activity.AppGuideActivity" />
-        <activity android:name=".activity.TestActivity" >
-
+        <activity android:name=".activity.TestActivity"
+            android:launchMode="singleTask"
+            android:exported="true"
+            >
         </activity>
         <activity
             android:name=".activity.SplashActivity"
@@ -228,25 +243,155 @@
             android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- 声明SDK所需的receiver -->
-        <service
-            android:name=".TwantHmsMessageService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.huawei.push.action.MESSAGING_EVENT" /><!-- 集成華爲推送所需的receiver -->
-            </intent-filter>
-        </service>
+        <!--        <service-->
+<!--            android:name=".TwantHmsMessageService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />&lt;!&ndash; 集成華爲推送所需的receiver &ndash;&gt;-->
+<!--            </intent-filter>-->
+<!--        </service>-->
         <!--华为 HMS Config-->
         <!--华为开发者后台创建的应用的 APP ID-->
         <meta-data
             android:name="com.huawei.hms.client.appid"
-            android:value="@string/huawei_app_id" />
+            android:value="appid=101831773" />
         <!--华为推送广播接收器，可以直接使用环信 sdk 封装好的，也可以继承自环信重写，如果继承自环信，实现 onToken 方法时必须要调用 super 方法-->
         <!-- 接入HMSSDK 需要注册的provider，authorities 一定不能与其他应用一样，所以这边 com.hyphenate.chatuidemo 要替换上您应用的包名-->
+        <!-- 以下为基本配置信息，需要自行添加至您的AndroidManifest文件中 start-->
+        <service
+            android:name="com.taobao.accs.ChannelService"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.SERVICE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.ELECTION" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.taobao.accs.data.MsgDistributeService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.RECEIVE" />
+            </intent-filter>
+        </service>
+        <receiver
+            android:name="com.taobao.accs.EventReceiver"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.taobao.accs.ServiceReceiver"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.COMMAND" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.START_FROM_AGOO" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.taobao.accs.internal.AccsJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":channel"/>
+        <service
+            android:name="com.taobao.accs.ChannelService$KernelService"
+            android:process=":channel" />
+        <service
+            android:name="org.android.agoo.accs.AgooService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.umeng.message.UmengIntentService"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="org.agoo.android.intent.action.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.umeng.message.XiaomiIntentService"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="org.agoo.android.intent.action.RECEIVE" />
+            </intent-filter>
+        </service>
+        <receiver
+            android:name="com.taobao.agoo.AgooCommondReceiver"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="${applicationId}.intent.action.COMMAND" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.umeng.message.UmengMessageIntentReceiverService"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="org.android.agoo.client.MessageReceiverService" />
+            </intent-filter>
+        </service>
+        <receiver
+            android:name="com.umeng.message.NotificationProxyBroadcastReceiver"
+            android:exported="false" />
+        <service
+            android:name="com.umeng.message.UmengMessageCallbackHandlerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.umeng.messge.registercallback.action" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.umeng.message.enablecallback.action" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.umeng.message.disablecallback.action" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.umeng.message.message.handler.action" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.umeng.message.message.sendmessage.action" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.umeng.message.UmengDownloadResourceService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false" />
         <provider
-            android:name="com.huawei.updatesdk.fileprovider.UpdateSdkFileProvider"
-            android:authorities="com.ftofs.twant.fileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true"/>
+            android:name="com.umeng.message.provider.MessageProvider"
+            android:authorities="${applicationId}.umeng.message"
+            android:exported="false">
+            <grant-uri-permission android:pathPattern=".*" />
+        </provider>
+        <!-- 以下为基本配置信息，需要自行添加至您的AndroidManifest文件中 end-->
+<!--        <provider-->
+<!--            android:name="com.huawei.updatesdk.fileprovider.UpdateSdkFileProvider"-->
+<!--            android:authorities="com.ftofs.twant.fileProvider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true"/>-->
         <receiver android:name=".util.EMHWPushReceiver">
             <intent-filter>
                 <!-- 必须,用于接收 TOKEN -->

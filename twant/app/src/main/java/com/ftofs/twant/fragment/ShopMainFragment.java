@@ -49,6 +49,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+import com.lxj.xpopup.enums.PopupAnimation;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
@@ -144,6 +145,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     RelativeLayout tool;
     private int initNavigationItemSize;
     private boolean navigationInfoLoaded;
+    private BasePopupView xPopup;
 
     /**
      * 打開店鋪首頁，並切換到指定的Tab
@@ -564,16 +566,17 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
     private void showMorePopup() {
         ImageView imgIcon = bottomBarIcons[MORE_FRAGMENT];
-
-        new XPopup.Builder(_mActivity)
+        xPopup=new XPopup.Builder(getContext())
                 .offsetX(-Util.dip2px(_mActivity, 45))
                 .offsetY(-Util.dip2px(_mActivity, 6))
 //                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖.hasShadowBg(false) // 去掉半透明背景
                 .hasShadowBg(false)
+                .popupAnimation(PopupAnimation.ScaleAlphaFromCenter)
                 .atView(imgIcon)
-                .asCustom(new WhiteDropdownMenu(_mActivity, storeId, storeFigure, storeNavigationItemList, this))
-                .show();
+                .asCustom(new WhiteDropdownMenu(_mActivity, storeId, storeFigure, storeNavigationItemList, this));
 
+//                .show();
+        xPopup.show();
         if (selectedFragmentIndex == HOME_FRAGMENT) {
             toolbar.setBackgroundResource(R.drawable.white_border_type_d);
         }
@@ -628,6 +631,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onSimpleCall(Object data) {
+        if (xPopup != null) {
+            xPopup.dismiss();
+        }
         int btnId = (int) data;
         if (btnId == -1) { // 切換到商店想看視頻
             onBottomBarClick(COMMODITY_FRAGMENT);
