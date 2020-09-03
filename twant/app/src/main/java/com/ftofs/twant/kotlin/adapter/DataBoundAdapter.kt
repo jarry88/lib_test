@@ -2,12 +2,15 @@ package com.ftofs.twant.kotlin.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.fastloan.app.ui.adapter.DataBoundViewHolder
 import com.ftofs.twant.R
+import com.ftofs.twant.adapter.ViewGroupAdapter
+import com.ftofs.twant.interfaces.OnItemClickListener
 
 abstract class DataBoundAdapter<T, V : ViewDataBinding> (
         open val headId:Int=R.layout.category_head_item,
@@ -61,14 +64,13 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> (
                 )
 
             }
-            else -> return DataBoundViewHolder(
-                    DataBindingUtil.inflate(
-                            LayoutInflater.from(parent.context),
-                            layoutId,
-                            parent,
-                            false
-                    )
-            )
+            else ->
+                return DataBoundViewHolder(DataBindingUtil.inflate(
+                                LayoutInflater.from(parent.context),
+                                layoutId,
+                                parent,
+                                false
+                        ))
         }
 
     }
@@ -94,11 +96,15 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> (
             initHeadView(holder.binding)
         }else
         if (!isEmptyPosition(position)&&!isFootPosition(position)) {
-            initView(holder.binding, mData[if(showHeadView)position-1 else position])
+            val realPosition=if(showHeadView)position-1 else position
+            initView(holder.binding, mData[realPosition])
+//            onItemClickListener?.let { holder.binding.root.apply {setOnClickListener { _->it.onClick(realPosition,this) }  } }
+
         }
         holder.binding.executePendingBindings()//必须调用，否则闪屏
 
     }
+
 
     open fun initHeadView(binding: ViewDataBinding) {}
 
@@ -149,6 +155,8 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> (
     override fun getItemViewType(position: Int): Int {
         return if(isEmptyPosition(position)) emptyType else if(isFootPosition(position))footType else if(isHeadPosition(position)) headType else itemType
     }
+
+    var onItemClickListener: OnItemClickListener?=null
 
 
 }

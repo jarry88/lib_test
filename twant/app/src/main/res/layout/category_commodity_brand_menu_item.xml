@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp">
-    <TextView
-        android:id="@+id/vw_indicator"
-        android:layout_width="3dp"
-        android:layout_height="29dp"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/category_menu_indicator_bg"
-        android:layout_centerVertical="true"
-        />
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="vo"
+            type="com.ftofs.twant.vo.CategoryNavVo" />
 
-
-    <TextView
-        android:id="@+id/tv_category_name_chinese"
-        android:layout_width="match_parent"
+    </data>
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="5dp"
-        android:gravity="center"
-        android:text=""
-        android:textSize="16sp"
-        android:textColor="@color/tw_black"
-        android:singleLine="true"
-        android:ellipsize="end"
-        />
-</RelativeLayout>
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@{vo.isFold==1?@color/tw_slight_grey:@color/tw_white}">
+
+        <TextView
+            android:id="@+id/tv_category_name_chinese"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center"
+            android:text="@{vo.categoryName}"
+            android:textSize="16sp"
+            android:textColor="@{vo.isFold==1?@color/tw_black:@color/tw_blue}"
+            android:singleLine="true"
+            android:ellipsize="end"
+            />
+    </RelativeLayout>
+</layout>
 

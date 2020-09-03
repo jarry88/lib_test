@@ -288,6 +288,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                     }
 
                     categoryCommodityMenuAdapter.setNewData(categoryMenuList);
+//                    categoryCommodityAdapter.getViewByPosition(1,1).per
                     dataLoaded = true;
                     loadCategoryCommodityData(defaultCategoryId);
                 } catch (Exception e) {
@@ -330,7 +331,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
 
 //        categoryCommodityAdapter.setNewData(categoryCommodityRowList);
         mAdapter.setMHeadText(menu);
-        mAdapter.addAll(list,true);
+//        mAdapter.addAll(list,true);
     }
 
 

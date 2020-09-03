@@ -386,4 +386,5 @@ public class Constant {
     public static final int BARGAIN_STATE_ONGOING = 1;
     public static final int BARGAIN_STATE_FINISHED = 2;
     public static final int BARGAIN_STATE_CLOSED = 3;
+    public static int WANT_EAT_ID=1575;
 }

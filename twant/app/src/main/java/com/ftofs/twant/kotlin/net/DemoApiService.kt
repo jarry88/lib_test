@@ -9,6 +9,7 @@ import com.ftofs.twant.kotlin.bean.NewsData
 import com.ftofs.twant.kotlin.bean.TwantResponse
 import com.ftofs.twant.kotlin.bean.ZoneInfo
 import com.ftofs.twant.kotlin.vo.SellerPageVO
+import com.ftofs.twant.vo.CategoryNavVo
 import com.wzq.mvvmsmart.net.base.BaseResponse
 import io.reactivex.Observable
 import okhttp3.RequestBody
@@ -71,7 +72,7 @@ interface DemoApiService {
     suspend fun getImOrdersSearch(@QueryMap queryParams: Map<String, String?>): TwantResponse<ImGoodsSearch>
     //新版三级分类商品种类信息
     @GET("app/home/goods_class_nav/v2")
-    suspend fun getGoodsClassNavV2(): TwantResponse<List<CategoryCommodity>>
+    suspend fun getGoodsClassNavV2(): TwantResponse<CategoryNavVoInfo>
 //    @Query("token") token:String,
 
 

@@ -8,6 +8,8 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 public class OrderItem {
+    public int storeId;
+
     public OrderItem(int orderId, String orderSN, String storeName, String ordersStateName, double freightAmount,
                      double ordersAmount, boolean showMemberCancel, boolean showMemberBuyAgain,
                      boolean showShipSearch, boolean showEvaluation, boolean showMemberReceive,

@@ -30,6 +30,8 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
 
     private int twBlue;
     private int twBlack;
+    private int twGray;
+    private int twWhite;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCategoryIcon;
@@ -54,6 +56,8 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
 
         twBlue = context.getResources().getColor(R.color.tw_blue, null);
         twBlack = context.getResources().getColor(R.color.tw_black, null);
+        twGray = context.getResources().getColor(R.color.tw_grey_F3F3, null);
+        twWhite = context.getResources().getColor(R.color.tw_white, null);
     }
 
     @Override
@@ -122,12 +126,15 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
             if (categoryType == Constant.CATEGORY_TYPE_SHOP) {
                 holder.tvCategoryNameEnglish.setTextColor(twBlue);
             }
+            holder.itemView.setBackgroundColor(twWhite);
         } else {
             holder.vwIndicator.setVisibility(View.INVISIBLE);
             holder.tvCategoryNameChinese.setTextColor(twBlack);
             if (categoryType == Constant.CATEGORY_TYPE_SHOP) {
                 holder.tvCategoryNameEnglish.setTextColor(twBlack);
             }
+            holder.itemView.setBackgroundColor(twGray);
+
         }
     }
 }

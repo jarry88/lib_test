@@ -4,25 +4,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="12dp"
-    android:layout_marginStart="12dp"
-    android:layout_marginEnd="12dp"
+    android:layout_marginStart="6dp"
+    android:layout_marginEnd="4dp"
     android:orientation="vertical">
-    <View
-        android:id="@+id/img_cover_bg1"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="#E6E6E6"
-        android:layout_marginStart="@dimen/margin12"
-        android:layout_marginEnd="@dimen/margin12"
-        />
-    <View
-        android:id="@+id/img_cover_bg2"
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:background="#CFCFCF"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
-        />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,27 +15,32 @@
             android:id="@+id/img_cover"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:riv_corner_radius="@dimen/dp_2"
+            android:src="@drawable/default_store_avatar"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="16:9"
+            />
+
+
+        <com.ftofs.twant.widget.StoreDesktop
+            android:layout_width="match_parent"
+            android:layout_marginTop="-6dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/img_cover"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.ftofs.twant.widget.StoreDesktop
-        android:layout_width="match_parent"
-        android:layout_height="11dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:visibility="gone"
-        />
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="31dp"
+        android:layout_height="32dp"
         android:paddingLeft="13dp"
-        android:paddingRight="13dp"
         android:paddingBottom="8dp"
         android:paddingTop="1dp"
         android:background="@drawable/new_arrivals_pane_bg">
@@ -60,26 +49,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
+            android:layout_marginStart="@dimen/dp_12"
             android:textStyle="bold"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:text="1"
+            android:singleLine="true"
             android:textColor="#525556"
             android:layout_marginEnd="@dimen/margin8"
             />
         <LinearLayout
+            android:background="@drawable/left_f3_circle"
+            android:paddingStart="@dimen/margin8"
             android:id="@+id/tv_category_name_english"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/tv_shop_parent_name"
+            android:layout_alignParentEnd="true"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_shop_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#525556"
-                android:textSize="12sp"
+                android:textColor="#666666"
+                android:textSize="11sp"
+                android:text="10"
+                android:singleLine="true"
                 />
             <TextView
                 android:visibility="gone"

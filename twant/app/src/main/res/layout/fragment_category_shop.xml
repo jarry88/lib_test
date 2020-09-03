@@ -9,16 +9,16 @@
         android:id="@+id/rv_category_menu"
         android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/right_separator_box_white"
+        android:layout_alignParentStart="true"
+        android:background="@color/tw_grey_F3F3"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_shop_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@id/rv_category_menu"
-        android:layout_alignParentRight="true"
+        android:layout_toEndOf="@id/rv_category_menu"
+        android:layout_alignParentEnd="true"
         android:background="@android:color/white"
         />
 </RelativeLayout>

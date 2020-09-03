@@ -26,6 +26,7 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.ToastUtil
+import com.ftofs.twant.util.Util
 import com.ftofs.twant.viewmodel.ImGoodsPageModel
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
@@ -51,6 +52,9 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                 get() = R.layout.im_goods_list_item
 
             override fun initView(binding: ImGoodsListItemBinding, item: Goods) {
+                if (Util.inDev()) {
+                    item.goodsModel=5
+                }
                 binding.vo=item
                 binding.root.setOnClickListener {
                     parent.sendGoods.onSelected(PopupType.IM_CHAT_SEND_GOODS,0,EasyJSONObject.generate(
@@ -60,6 +64,8 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                     ))
                     parent.hideSoftInputPop()
                 }
+                binding.tvGoodsPrice.text = "询价"
+
             }
 
 

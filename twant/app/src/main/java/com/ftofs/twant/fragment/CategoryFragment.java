@@ -29,6 +29,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.SearchHistoryItem;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.interfaces.SimpleCallback;

@@ -7,13 +7,14 @@ import com.ftofs.twant.databinding.SimpleGoodDisplayItemBinding
 import com.ftofs.twant.entity.CategoryCommodity
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.vo.CategoryNavVo
 
 //SimpleGoodDisplayItemBinding
-class CategoryCommodityKotlinAdapter() :DataBoundAdapter<CategoryCommodity,SimpleGoodDisplayItemBinding> (){
+class CategoryCommodityKotlinAdapter() :DataBoundAdapter<CategoryNavVo,SimpleGoodDisplayItemBinding> (){
 
     var mHeadText=""
 
-    override fun initView(binding: SimpleGoodDisplayItemBinding, item: CategoryCommodity) {
+    override fun initView(binding: SimpleGoodDisplayItemBinding, item: CategoryNavVo) {
         binding.vo=item
     }
 

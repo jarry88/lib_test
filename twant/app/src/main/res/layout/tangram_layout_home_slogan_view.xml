@@ -351,7 +351,7 @@
                         android:src="@drawable/img_group_entrance"
                         android:tooltipText="團購"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintDimensionRatio="174:86"
+                        app:layout_constraintDimensionRatio="113:86"
                         android:id="@+id/img_group_entrance"
                         android:scaleType="centerCrop"
 
@@ -374,11 +374,34 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:scaleType="centerCrop"
-                    app:layout_constraintDimensionRatio="174:86"
+                    app:layout_constraintDimensionRatio="113:86"
                     android:src="@drawable/img_bargain_entrance"
 
 
                     android:id="@+id/img_bargain_entrance"
+                    android:layout_marginStart="@dimen/dp_4"
+                    />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_sec_kill_entrance"
+
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:tooltipText="秒殺"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintDimensionRatio="113:86"
+                    android:src="@drawable/img_sec_kill_entrance"
+
+
+                    android:id="@+id/img_sec_kill_entrance"
                     android:layout_marginStart="@dimen/dp_4"
                     />
                 </androidx.constraintlayout.widget.ConstraintLayout>

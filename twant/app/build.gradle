@@ -386,6 +386,7 @@ dependencies {
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'io.github.iamyours:router-api:1.0.1'
     implementation 'com.qmuiteam:qmui:2.0.0-alpha10'
+    implementation 'com.github.angcyo:DslAdapter:2.5.1'
 
 }
 repositories {
