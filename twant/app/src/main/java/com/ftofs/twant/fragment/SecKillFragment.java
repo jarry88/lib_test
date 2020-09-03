@@ -13,12 +13,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.adapter.SecKillZoneListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.entity.SecKillGoodsListItem;
+import com.ftofs.twant.entity.SecKillZoneItem;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
@@ -28,8 +34,6 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.SecKillLabel;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +48,9 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
     private List<Fragment> fragmentList = new ArrayList<>();
 
     boolean isDataLoaded = false;
-    LinearLayout llScheduleLabelContainer;
+    RecyclerView rvScheduleLabelList;
+    SecKillZoneListAdapter secKillZoneListAdapter;
+    List<SecKillZoneItem> secKillZoneItemList = new ArrayList<>();
 
     TextView tvCountDownHour;
     TextView tvCountDownMinute;
@@ -55,7 +61,6 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
 
     List<Long> endTimeList = new ArrayList<>();  // 活動結束的時間戳
 
-    SecKillLabel prevLabel; // 上一次選中的Label
     ViewPager viewPager;
 
     public static SecKillFragment newInstance() {
@@ -82,7 +87,24 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
         Util.setOnClickListener(view, R.id.btn_category, this);
         Util.setOnClickListener(view, R.id.btn_more, this);
 
-        llScheduleLabelContainer = view.findViewById(R.id.ll_schedule_label_container);
+        rvScheduleLabelList = view.findViewById(R.id.rv_schedule_label_list);
+        rvScheduleLabelList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
+        secKillZoneListAdapter = new SecKillZoneListAdapter(_mActivity, R.layout.sec_kill_label, secKillZoneItemList);
+        secKillZoneListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("position[%d], currIndex[%d]", position, currentIndex);
+
+                secKillZoneListAdapter.setSelectedIndex(position);
+                if (currentIndex >= 0) { // 取消上一項的選中狀態
+                    secKillZoneListAdapter.notifyItemChanged(currentIndex);
+                }
+                secKillZoneListAdapter.notifyItemChanged(position);
+
+                selectSecKill(position);
+            }
+        });
+        rvScheduleLabelList.setAdapter(secKillZoneListAdapter);
 
         int twYellow = getResources().getColor(R.color.tw_yellow, null);
         Drawable countDownDrawable = BackgroundDrawable.create(twYellow, Util.dip2px(_mActivity, 2));
@@ -138,12 +160,6 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
         long endTime = endTimeList.get(index);
         long remainTime = endTime - now;
 
-        if (prevLabel != null) {
-            prevLabel.setLabelSelected(false);
-        }
-        SecKillLabel currLabel = (SecKillLabel) llScheduleLabelContainer.getChildAt(index);
-        currLabel.setLabelSelected(true);
-        prevLabel = currLabel;
         viewPager.setCurrentItem(index);
 
         if (remainTime <= 0) {  // 如果已經開始，則不需要倒計時
@@ -212,31 +228,21 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                         Jarbon jarbon = Jarbon.parse(endTime);
                         endTimeList.add(jarbon.getTimestampMillis());
 
-                        SecKillLabel label = new SecKillLabel(_mActivity);
-                        label.setTag(R.id.data_index, secKillCount);
-                        label.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                int index = (int) v.getTag(R.id.data_index);
-                                SLog.info("index[%d]", index);
-                                selectSecKill(index);
-                            }
-                        });
+                        SecKillZoneItem item = new SecKillZoneItem();
+                        item.scheduleId = scheduleId;
+                        item.startTime = startTime;
+                        item.statusText = scheduleStateText;
 
-                        label.setData(scheduleId, startTime, scheduleStateText);
-
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        layoutParams.weight = 1;
-                        llScheduleLabelContainer.addView(label, layoutParams);
+                        secKillZoneItemList.add(item);
 
                         titleList.add(schedule.optString("scheduleName"));
-                        fragmentList.add(SecKillGoodsListFragment.newInstance(schedule.optInt("scheduleId")));
+                        fragmentList.add(SecKillGoodsListFragment.newInstance(scheduleId));
                         secKillCount++;
-
-                        if (secKillCount >= 6) {
-                            break;
-                        }
                     }
+                    if (secKillZoneItemList.size() > 0) {
+                        secKillZoneListAdapter.setSelectedIndex(0);
+                    }
+                    secKillZoneListAdapter.setNewData(secKillZoneItemList);
 
                     // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
                     // ViewPager中Fragment不回調onCreateView的問題
