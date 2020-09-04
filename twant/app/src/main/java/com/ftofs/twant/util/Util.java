@@ -1566,6 +1566,12 @@ public class Util {
             修复问题
             https://github.com/laobie/StatusBarUtil/issues/291
             setDarkMode 和 setLightMode 会使 布局向上偏移，设置fitsSystemWindows会使Edittextview长按上下文菜单边距失效
+
+            参考：
+            StatusBarUtils实现沉浸式状态栏适配（第一种实现方式）   https://www.jianshu.com/p/fbbaa493633f
+            StatusBarUtils沉浸式状态栏适配（第二种实现方式）  https://www.jianshu.com/p/a8bf1aeb04f5
+            fitsSystemWindows之大坑  https://www.jianshu.com/p/9c6cde59575e
+            该使用 fitsSystemWindows 了！ http://blog.chengyunfeng.com/?p=905#ixzz6X4W3W7xU
              */
             contentView.setPadding(0, statusBarHeight, 0, 0);
         }
