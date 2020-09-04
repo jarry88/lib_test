@@ -46,6 +46,7 @@ import me.yokeyword.fragmentation.SupportActivity;
 import okhttp3.Call;
 
 public class MemberResumeFragment extends BaseFragment implements View.OnClickListener {
+    public JobInfoFragment parent;
     private ImageView imgAvatar;
     SwitchButton sbShowPersonalInfo;
     TextView tvResumeKeyword;
@@ -620,7 +621,11 @@ public class MemberResumeFragment extends BaseFragment implements View.OnClickLi
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
+//        Util.popToMainFragment(getActivity());
         hideSoftInputPop();
+        if (parent != null) {
+            parent.onBackPressedSupport();
+        }
         return true;
     }
 

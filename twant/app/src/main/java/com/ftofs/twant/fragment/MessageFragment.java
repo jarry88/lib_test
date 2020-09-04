@@ -397,8 +397,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                if (friendInfo.storeId != PLATFORM_CUSTOM_STORE_ID&&!StringUtil.isEmpty(friendInfo.nickname)) {
                     //如果不是平臺客服鏈接
                    chatConversationList.add(chatConversation);
-               }else{
-
                }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

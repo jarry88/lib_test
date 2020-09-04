@@ -82,7 +82,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     float lastX = 0;
     float lastY = 0;
     boolean isUp;
-    
+
     StoreCategoryListAdapter storeCategoryListAdapter;
 
     List<Goods> goodsList = new ArrayList<>();  // 每行顯示一個產品
