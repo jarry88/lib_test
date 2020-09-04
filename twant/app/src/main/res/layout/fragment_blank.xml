@@ -4,9 +4,6 @@
     xmlns:binding="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable
-            name="adapter"
-            type="com.ftofs.twant.kotlin.adapter.DataBoundAdapter" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,12 +25,11 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_list"
-                android:background="@color/tw_white"
+                android:background="@color/tw_grey"
                 android:layout_width="match_parent"
                 android:layout_marginTop="24dp"
                 android:layout_centerInParent="true"
                 android:layout_height="match_parent"
-                app:adapter="@{adapter}"
                 android:layout_above="@+id/ll_container"
                 binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -199,9 +201,13 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
 
     private void loadMyResume() {
         myResumeFragment = MemberResumeFragment.newInstance();
+        myResumeFragment.parent = this;
         myResumeFragment.setHeadViewGone=true;
         myResumeLoaded = true;
-        getFragmentManager().beginTransaction().replace(R.id.ll_my_resume_container, myResumeFragment).commit();
+        FragmentManager manager = getChildFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.ll_my_resume_container, myResumeFragment).commit();
+
 
     }
 
@@ -406,6 +412,9 @@ public class JobInfoFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public boolean onBackPressedSupport() {
+
+        SLog.info("Jobinfo回退");
+
         hideSoftInputPop();
         return true;
     }

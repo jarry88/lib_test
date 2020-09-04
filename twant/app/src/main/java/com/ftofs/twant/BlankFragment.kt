@@ -12,12 +12,17 @@ import android.widget.Button
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.fastloan.app.ui.adapter.DataBoundViewHolder
 import com.ftofs.twant.databinding.FragmentBlankBinding
 import com.ftofs.twant.databinding.VerificationGoodsItemBinding
 import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.fragment.BaseFragment
 import com.ftofs.twant.kotlin.BlackViewModel
+import com.ftofs.twant.kotlin.BlankAdapter
 import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
 import com.ftofs.twant.kotlin.OrderGoodsVoListAdapter
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
@@ -25,6 +30,7 @@ import com.ftofs.twant.kotlin.bean.ZoneInfo
 import com.ftofs.twant.kotlin.net.BaseRepository
 import com.ftofs.twant.kotlin.net.Result
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
@@ -46,6 +52,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import java.util.*
+import kotlin.concurrent.timerTask
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -88,7 +96,16 @@ class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
 
     }
 
+    val adapter by  lazy { BlankAdapter()
 
+//        override fun onBindViewHolder(holder: DataBoundViewHolder<VerificationGoodsItemBinding>, position: Int, payloads: MutableList<Any>) {
+//            holder.da
+//        }
+//
+//        open fun getItem(position: Int) {
+//            return mDiffer.
+//        }
+    }
     override fun simpleBind(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.fragment_blank
     }
@@ -118,48 +135,98 @@ class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        buttonChoose?.setOnClickListener {
-            startCroppy()
+        val list = listOf(
+                OrdersGoodsVo().apply { goodsName="3"
+                    imageSrc="image/67/8d/678d4bc4271b8472660b0de98299e976.jpg"
+                },
+                OrdersGoodsVo().apply { goodsName="3"
+                    imageSrc="image/67/8d/678d4bc4271b8472660b0de98299e976.jpg"
+                },OrdersGoodsVo().apply { goodsName="3"
+            imageSrc="image/67/8d/678d4bc4271b8472660b0de98299e976.jpg"
+        },OrdersGoodsVo(),OrdersGoodsVo()
+                ,OrdersGoodsVo(),OrdersGoodsVo().apply { goodsName="3"
+            imageSrc="image/67/8d/678d4bc4271b8472660b0de98299e976.jpg"
+        },OrdersGoodsVo().apply { goodsName="3"
+            imageSrc="image/67/8d/678d4bc4271b8472660b0de98299e976.jpg"
         }
-        buttonPost1?.setOnClickListener {
-            net.run {
-                launch {
-                    val result=simpleGet(api.testPost1(User.getToken()))
-                    when(result){
-                        is Result.Success -> ToastUtil.error(context,result.datas.message)
-                        is Result.DataError -> ToastUtil.error(context,result.datas.error)
-                        is Result.Error -> SLog.info(result.exception.toString())
-                    }
-                }
-            }
+        )
+        rvList?.adapter=adapter
+        SLog.info("绑定资源股")
+
+        var current =list.size-1
+        fun h(action: ()->Unit){
+            Timer().schedule(timerTask {
+                val a = listOf(
+                        OrdersGoodsVo().apply { goodsName="3"
+                            imageSrc="image/67/8d/678d4bc4271b8472660b0de98299e976.jpg"
+                        },
+                        OrdersGoodsVo().apply { goodsName="33333"
+                            imageSrc="image/67/8d/678d4bc4271b8472660b0de98299e976.jpg"
+                        },OrdersGoodsVo().apply { goodsName="3"
+                    imageSrc="image/67/8d/678d4bc4271b8472660b0de98299e976.jpg"
+                },OrdersGoodsVo(),OrdersGoodsVo())
+                adapter.submitList(a)
+                action()
+            },1200)
         }
         buttonPost?.setOnClickListener{
-            val token = User.getToken()
-
-            val api=object :BaseRepository(){
-                suspend fun testPost(): com.ftofs.twant.kotlin.net.Result<ZoneInfo> {
-                    return safeApiCall(call = {
-                        executeResponse(
-//                                api.testPost(
-//                                        RequestBody.create(
-//                                                MediaType.parse("application/json; charset=utf-8"),
-//                                                GsonUtil.bean2String(
-//                                                        mapOf(
-//                                                                "token" to token
-//                                                        )
-//                                                )
-//                                        )
-//                                )
-                                        api.testPost1(token)
-                        )
-                    }
-                    )
-                }
-            }
-            launch {
-                api.testPost()
-            }
+            SLog.info( "执行$current")
+            h{current--}
         }
+//        h {h{h{h{current--}}}}
+        list[0].goodsName="sdfdf"
+        list[1].goodsName="11"
+        list[2].goodsName="2222"
+        list[3].goodsName="3333"
+        list[4].goodsName="44444"
+
+        adapter.submitList(list)
+//        adapter.addAll(list,true)
+
+
+
+//        buttonChoose?.setOnClickListener {
+//            startCroppy()
+//        }
+//        buttonPost1?.setOnClickListener {
+//            net.run {
+//                launch {
+//                    val result=simpleGet(api.testPost1(User.getToken()))
+//                    when(result){
+//                        is Result.Success -> ToastUtil.error(context,result.datas.message)
+//                        is Result.DataError -> ToastUtil.error(context,result.datas.error)
+//                        is Result.Error -> SLog.info(result.exception.toString())
+//                    }
+//                }
+//            }
+//        }
+//        buttonPost?.setOnClickListener{
+//            val token = User.getToken()
+//
+//            val api=object :BaseRepository(){
+//                suspend fun testPost(): com.ftofs.twant.kotlin.net.Result<ZoneInfo> {
+//                    return safeApiCall(call = {
+//                        executeResponse(
+////                                api.testPost(
+////                                        RequestBody.create(
+////                                                MediaType.parse("application/json; charset=utf-8"),
+////                                                GsonUtil.bean2String(
+////                                                        mapOf(
+////                                                                "token" to token
+////                                                        )
+////                                                )
+////                                        )
+////                                )
+//                                        api.testPost1(token)
+//                        )
+//                    }
+//                    )
+//                }
+//            }
+//            launch {
+//                api.testPost()
+//            }
+//        }
 
 //        val  adapter =OrderGoodsVoListAdapter()
 //        rvList?.adapter=adapter

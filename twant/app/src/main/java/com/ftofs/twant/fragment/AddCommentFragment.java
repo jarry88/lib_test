@@ -64,6 +64,7 @@ import okhttp3.Call;
  * 發表評論Fragment 
  * @author zwm
  */
+//Android-基於中秋活動的想要圈優化
 public class AddCommentFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
     RelativeLayout commentImageContainer;
 
