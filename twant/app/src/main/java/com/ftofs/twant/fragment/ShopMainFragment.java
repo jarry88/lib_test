@@ -367,6 +367,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
      * @param show
      */
     private void showGoodsFragment(boolean show) {
+        SLog.bt();
+        SLog.info("顯示鏟平頁 %s",show);
         showBtnCart(show);
         if (show) {
             tvShopTitle.setVisibility(View.GONE);
@@ -383,6 +385,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
     private void showBtnCart(boolean show) {
         btnCart.setVisibility(show?View.VISIBLE:View.GONE);
+    }
+    private void showBtnComment(boolean show) {
+        btnComment.setVisibility(show?View.VISIBLE:View.GONE);
     }
 
     @Override
@@ -506,34 +511,34 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             return;
         }
 
-        if (index == ACTIVITY_FRAGMENT) {
+
+        if (index == COMMODITY_FRAGMENT) { // 如果切換到產品Tab，頂部工具欄隱藏分隔線
+            toolbar.setBackgroundColor(getResources().getColor(android.R.color.white, null));
+            showGoodsFragment(true);
+            showBtnComment(false);
+
+        }else if(index == ACTIVITY_FRAGMENT) {
             // 如果是點擊【商店活動】的按鈕，檢查用戶是否已經登錄,未登录时允许查看
 //            if (!User.isLogin()) {
 //                Util.showLoginFragment();
 //                return;
 //            }
-        }
-
-        if (index == COMMODITY_FRAGMENT) { // 如果切換到產品Tab，頂部工具欄隱藏分隔線
-            toolbar.setBackgroundColor(getResources().getColor(android.R.color.white, null));
-            showGoodsFragment(true);
-        } if(index==HOME_FRAGMENT){
+        }else if(index==HOME_FRAGMENT){
             showGoodsFragment(false);
             showBtnCart(true);
-        } else{ // 如果切換到其它Tab，恢復背景
-            toolbar.setBackgroundResource(R.drawable.border_type_d);
-            showGoodsFragment(false);
-        }
-
-        if (index == MORE_FRAGMENT) {
+        } else if(index == MORE_FRAGMENT) {
             if (navigationInfoLoaded) {
                 //已經加載過了不用再加載
                 showMorePopup();
             } else {
                 loadStoreNavigationInfo();
             }
-            return;
+//            return;
+        }else{ // 如果切換到其它Tab，恢復背景
+            toolbar.setBackgroundResource(R.drawable.border_type_d);
+            showGoodsFragment(false);
         }
+
 
         // 切換底部工具欄圖標的選中狀態
         if (selectedFragmentIndex != HOME_FRAGMENT) {
