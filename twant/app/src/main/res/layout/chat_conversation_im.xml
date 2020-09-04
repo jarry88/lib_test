@@ -28,6 +28,15 @@
                 app:civ_border_color="@color/tw_light_grey_EDED"
 
                 />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_role_logo"
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                android:layout_alignBottom="@id/img_avatar"
+                android:layout_alignEnd="@id/img_avatar"
+                android:src="@drawable/img_customer_logo"
+
+                />
             <TextView
                 android:id="@+id/tv_unread_count"
                 android:layout_width="wrap_content"

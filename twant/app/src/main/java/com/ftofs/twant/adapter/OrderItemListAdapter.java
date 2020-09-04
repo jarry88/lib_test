@@ -83,7 +83,7 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
         if (itemData.showMemberReceive) {
             itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
         } else {
-            if (Config.USE_DEVELOPER_TEST_DATA && "想要科技有限公司".equals(itemData.storeName)||
+            if (Config.USE_DEVELOPER_TEST_DATA && 397==itemData.storeId||
                     Constant.WANT_EAT_ID==itemData.storeId) {
 
                 if (OrderState.TO_BE_SEND == itemData.ordersState) {
