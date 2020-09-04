@@ -64,12 +64,15 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sec_kill_goods_list, container, false);
+        SLog.info("onCreateView[%d]", scheduleId);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        SLog.info("onViewCreated[%d]", scheduleId);
 
         RecyclerView rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
@@ -106,6 +109,7 @@ public class SecKillGoodsListFragment extends BaseFragment implements BaseQuickA
         adapter.setOnLoadMoreListener(this, rvList);
         rvList.setAdapter(adapter);
 
+        currPage = 0;  // ViewPager銷毀Fragment，再重建時，會調用onViewCreated()方法
         loadData(currPage + 1);
     }
 
