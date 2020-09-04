@@ -57,7 +57,7 @@ class ImOrdersFragment(val imName: String, val sendOrder: OnSelectedListener) :B
             onBackPressedSupport()
         }
         binding.orderPage.rvGoodsList.adapter=mAdapter
-        binding.orderPage.toolBar.visibility= View.VISIBLE
+        binding.orderPage.toolBar.visibility= View.GONE
         binding.orderPage.etKeyword.apply {
             setOnEditorActionListener { _, actionId, _ ->
                 if ((actionId == EditorInfo.IME_ACTION_SEARCH) or (actionId == EditorInfo.IME_ACTION_UNSPECIFIED) or (0 == KeyEvent.KEYCODE_ENTER )) {
