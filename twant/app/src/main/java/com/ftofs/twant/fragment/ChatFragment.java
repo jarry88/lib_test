@@ -185,6 +185,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private int pagesize=20;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    View mainActivityContentView;
+
     public static ChatFragment newInstance(EMConversation conversation, FriendInfo friendInfo) {
         Bundle args = new Bundle();
 
@@ -208,6 +210,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         super.onViewCreated(view, savedInstanceState);
 
         EventBus.getDefault().register(this);
+
+        mainActivityContentView = _mActivity.findViewById(android.R.id.content);
 
         // 檢查imToken是否已經過期
         long imTokenExpire = Hawk.get(SPField.FIELD_IM_TOKEN_EXPIRE, 0L);
@@ -1530,6 +1534,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         super.onSupportVisible();
         ((MainActivity) getActivity()).setCurrChatMemberName(yourMemberName);
         ((MainActivity) getActivity()).setMessageFragmentsActivity(true);
+
+        // 因为设置了fitsSystemWindows，需要将padding设置为0
+        mainActivityContentView.setPadding(0, 0, 0, 0);
     }
 
     @Override
@@ -1538,6 +1545,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         ((MainActivity) getActivity()).setCurrChatMemberName(null);
         ((MainActivity) getActivity()).setMessageFragmentsActivity(false);
 
+        // 因为其它页面没有设置fitsSystemWindows，将padding恢复为状态栏高度
+        int statusBarHeight = Util.getStatusbarHeight(_mActivity);
+        SLog.info("statusBarHeight[%d]", statusBarHeight);
+        mainActivityContentView.setPadding(0, statusBarHeight, 0, 0);
     }
 
     @Override
