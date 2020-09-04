@@ -1599,6 +1599,21 @@ public class Util {
     public static boolean noPrice(int goodsModel) {
         return goodsModel == Constant.GOODS_TYPE_CONSULT;
     }
+
+    public static String getStackTraceString(Throwable e) {
+        StringBuilder sb = new StringBuilder("\n****************TRACE****************");
+
+        StackTraceElement[] elements = e.getStackTrace();
+        for (int i = 0; i < elements.length; ++i) {
+            StackTraceElement element = elements[i];
+            sb.append("\n\tat ");
+            sb.append(element);
+        }
+
+        sb.append("\n################TRACE################");
+
+        return sb.toString();
+    }
 }
 
 

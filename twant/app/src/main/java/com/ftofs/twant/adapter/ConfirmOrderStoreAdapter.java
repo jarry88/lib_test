@@ -108,6 +108,8 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             } else {
                 helper.setVisible(R.id.rl_tax_container, true);
             }
+
+            SLog.info("realFreightAmount[%s], finalPayAmount[%s]", realFreightAmount, finalPayAmount);
             helper.setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, realFreightAmount, 0,2))
                 .setText(R.id.tv_store_discount, discountAmountText)
