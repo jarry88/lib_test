@@ -31,6 +31,7 @@ import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.entity.SpecValue;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ConfirmOrderFragment;
+import com.ftofs.twant.fragment.NewConfirmOrderFragment;
 import com.ftofs.twant.fragment.ViewPagerFragment;
 import com.ftofs.twant.fragment.SkuImageFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
@@ -498,7 +499,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         EasyJSONArray easyJSONArray = EasyJSONArray.generate(buyItem);
 
         SLog.info("groupBuyMode[%s]", groupBuyMode);
-        Util.startFragment(ConfirmOrderFragment.newInstance(0, easyJSONArray.toString(), groupBuyMode ? Constant.TRUE_INT : Constant.FALSE_INT,
+        Util.startFragment(NewConfirmOrderFragment.newInstance(0, easyJSONArray.toString(), groupBuyMode ? Constant.TRUE_INT : Constant.FALSE_INT,
                 goId, Constant.INVALID_BARGAIN_OPEN_ID));
     }
 

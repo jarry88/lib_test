@@ -238,7 +238,7 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
                 EasyJSONArray easyJSONArray = EasyJSONArray.generate(buyItem);
                 String buyData = easyJSONArray.toString();
                 SLog.info("buyData[%s]", buyData);
-                Util.startFragment(ConfirmOrderFragment.newInstance(Constant.FALSE_INT, buyData, Constant.FALSE_INT, Constant.INVALID_GO_ID, openId));
+                Util.startFragment(NewConfirmOrderFragment.newInstance(Constant.FALSE_INT, buyData, Constant.FALSE_INT, Constant.INVALID_GO_ID, openId));
             }
         } else if (id == R.id.btn_view_bargain_instruction) {
             Util.startFragment(H5GameFragment.newInstance(Config.MOBILE_WEB_BASE_URL + Constant.BARGAIN_INSTRUCTION_URL, null));

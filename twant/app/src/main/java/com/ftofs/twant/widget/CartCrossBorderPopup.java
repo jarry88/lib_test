@@ -16,6 +16,7 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.CartCrossBorderItem;
 import com.ftofs.twant.entity.CrossBorderStoreInfo;
 import com.ftofs.twant.fragment.ConfirmOrderFragment;
+import com.ftofs.twant.fragment.NewConfirmOrderFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
@@ -154,7 +155,7 @@ public class CartCrossBorderPopup extends CenterPopupView implements View.OnClic
             SLog.info("crossBorderStoreInfo[%s]", crossBorderStoreInfo);
             if (crossBorderStoreInfo != null && crossBorderStoreInfo.buyData != null) {
                 SLog.info("crossBorderStoreInfo.buyData[%s]", crossBorderStoreInfo.buyData);
-                Util.startFragment(ConfirmOrderFragment.newInstance(1, crossBorderStoreInfo.buyData.toString()));
+                Util.startFragment(NewConfirmOrderFragment.newInstance(1, crossBorderStoreInfo.buyData.toString()));
             }
 
             dismiss();
