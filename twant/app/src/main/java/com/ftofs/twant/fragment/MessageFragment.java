@@ -869,7 +869,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     }
 //                    adapter.setNewData(chatConversationList);
 //                    adapter.submitList(chatConversationList);
-                    adapter.notifyDataSetChanged();
+                    adapter.submitList(chatConversationList);
 //                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

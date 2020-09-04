@@ -1,10 +1,12 @@
 package com.ftofs.twant.adapter;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
@@ -22,6 +24,7 @@ import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import internal.org.java_websocket.WebSocket;
@@ -34,7 +37,22 @@ import internal.org.java_websocket.WebSocket;
 public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, BaseViewHolder> {
     Jarbon now;
     private DiffUtil.ItemCallback<ChatConversation> diffCallback = new DiffCallBack();
-    private AsyncListDiffer<ChatConversation> chatConversationAsyncListDiffer=new AsyncListDiffer<ChatConversation>(this,diffCallback);
+    private DiffUtil.ItemCallback<ChatConversation> callback = new DiffUtil.ItemCallback<ChatConversation>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull ChatConversation oldItem, @NonNull ChatConversation newItem) {
+            boolean b=TextUtils.equals(oldItem.friendInfo.memberName, newItem.friendInfo.memberName);
+            SLog.info("name%s,%s,b %s",newItem.friendInfo.memberName,newItem.lastMessage,b);
+            return b;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull ChatConversation oldItem, @NonNull ChatConversation newItem) {
+            SLog.info("name%s,%s,",newItem.friendInfo.memberName,newItem.lastMessage);
+
+            return TextUtils.equals(oldItem.lastMessage,newItem.lastMessage);
+        }
+    };
+    private final AsyncListDiffer<ChatConversation> chatConversationAsyncListDiffer=new AsyncListDiffer<ChatConversation>(this,callback);
 
 
     /**
@@ -56,13 +74,18 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         return chatConversationAsyncListDiffer.getCurrentList().size();
     }
     public void submitList(List<ChatConversation> data) {
-        chatConversationAsyncListDiffer.submitList(data);
+        List<ChatConversation> newList= new ArrayList<>();
+        newList.addAll(data);
+        chatConversationAsyncListDiffer.submitList(newList);
     }
     public ChatConversation getItem(int position) {
         return chatConversationAsyncListDiffer.getCurrentList().get(position);
     }
+
     @Override
-    protected void convert(BaseViewHolder helper, ChatConversation chatConversation) {
+    public void onBindViewHolder(BaseViewHolder helper, int position) {
+        ChatConversation chatConversation = getItem(position);
+        SLog.info("刷新第%s",position);
         LinearLayout linearLayout = helper.getView(R.id.ll_message_item_container);
         if (chatConversation != null) {
             linearLayout.getLayoutParams().height = Util.dip2px(mContext,80);
@@ -82,7 +105,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         //此处已经按身份区分并返回头像
         String avatarUrl = chatConversation.friendInfo.getRoleAvatar();
 
-        helper.setGone(R.id.img_role_logo, chatConversation.friendInfo.memberRole== 0);
+        helper.setGone(R.id.img_role_logo, chatConversation.friendInfo.role!=0);
         if (StringUtil.isEmpty(avatarUrl)) {
             if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
                 Glide.with(mContext).load(R.drawable.icon_twant_loge).centerCrop().into(imgAvatar);
@@ -97,7 +120,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
             helper.setGone(R.id.tv_group_name, true);
             helper.setText(R.id.tv_group_name, chatConversation.friendInfo.groupName);
         }
-            helper.setText(R.id.tv_nickname, chatConversation.friendInfo.getName());
+        helper.setText(R.id.tv_nickname, chatConversation.friendInfo.getName());
         TextView tvLastMessage = helper.getView(R.id.tv_last_message);
         if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
             tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_IMAGE);
@@ -141,7 +164,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         LinearLayout llMessageItemContainer = helper.getView(R.id.ll_message_item_container);
         llMessageItemContainer.setVisibility(View.VISIBLE);
         int itemCount = getItemCount();
-        int position = helper.getAdapterPosition();
+//        int position = helper.getAdapterPosition();
         if (position == itemCount - 1) {
             llMessageItemContainer.setBackground(null);
         }
@@ -159,5 +182,9 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
             llMessageItemContainer.setBackgroundResource(R.drawable.border_type_d);
         }
     }
+
+    @Override
+    protected void convert(BaseViewHolder helper, ChatConversation chatConversation) {}
+
 
 }
