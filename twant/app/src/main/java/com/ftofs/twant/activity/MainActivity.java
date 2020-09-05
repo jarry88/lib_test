@@ -483,6 +483,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                 } else if (position == 8) {
                                     MainActivity.this.getSupportDelegate().showFragmentStackHierarchyView();
                                 } else if (position == 9) { // 測試1
+                                    canShowOtherPopup = false;
                                     Hawk.delete(SPField.FIELD_APP_UPDATE_POPUP_SHOWN_DATE);
                                 } else if (position == 10) { // 測試2
                                     Util.startFragment(SecKillFragment.newInstance());
@@ -945,6 +946,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(MainActivity.this, e);
+                notifyCanShowOtherPopup();
             }
 
             @Override
@@ -954,6 +956,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(MainActivity.this, responseObj)) {
+                        notifyCanShowOtherPopup();
                         return;
                     }
 
@@ -964,6 +967,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                         if (showResult) {
                             ToastUtil.info(MainActivity.this, getString(R.string.text_latest_version_message));
                         }
+                        notifyCanShowOtherPopup();
                         return;
                     }
 
@@ -972,6 +976,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                     // 最新版本
                     String newestVersion = datas.getSafeString("version");
                     if (StringUtil.isEmpty(newestVersion)) {
+                        notifyCanShowOtherPopup();
                         return;
                     }
 
@@ -990,7 +995,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                         }
 
                         // 檢測完版本更新後，如果不需要顯示升級彈窗，將canShowOtherPopup設置為true
-                        canShowOtherPopup = true;
+                        notifyCanShowOtherPopup();
                         return;
                     }
 
@@ -1013,6 +1018,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                     String appUpdatePopupShownDate = Hawk.get(SPField.FIELD_APP_UPDATE_POPUP_SHOWN_DATE);
                     if (!showResult && !isForceUpdate && today.equals(appUpdatePopupShownDate)) { // 如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示
                         SLog.info("如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示");
+                        notifyCanShowOtherPopup();
                         return;
                     }
 
@@ -1483,9 +1489,13 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
             EasyJSONObject dataObj = (EasyJSONObject) data;
             int action = dataObj.optInt("action");
             if (action == SimpleCallback.ACTION_CLOSE_APP_UPDATE_POPUP) {
-                canShowOtherPopup = true;
-                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP, null);
+                notifyCanShowOtherPopup();
             }
         }
+    }
+
+    private void notifyCanShowOtherPopup() {
+        canShowOtherPopup = true;
+        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP, null);
     }
 }
