@@ -24,7 +24,7 @@ import com.lxj.xpopup.util.XPopupUtils
 import kotlinx.coroutines.*
 
 @SuppressLint("ViewConstructor")
-class MoonVoucherListPopup(context: Context, private val voucherList:List<StoreVoucher>):CenterPopupView(context),CoroutineScope by MainScope(){
+class MoonVoucherListPopup(context: Context, private val voucherList: MutableList<out StoreVoucher>, val zoneId: String):CenterPopupView(context),CoroutineScope by MainScope(){
     val repository by lazy { BaseRepository() }
     val adapter =object :DataBoundAdapter<StoreVoucher,MoonVoucherListItemBinding>(){
         override val layoutId: Int
@@ -37,7 +37,7 @@ class MoonVoucherListPopup(context: Context, private val voucherList:List<StoreV
                     XPopup.Builder(context).asCustom(TwConfirmPopup(context,"領取成功","前往【想要中秋】月餅優惠專場",object:OnConfirmCallback{
                         override fun onYes() {
                             dismiss()
-                            Util.startFragment(NewShoppingSpecialFragment.newInstance(20))
+                            Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId.toInt()))
                         }
 
                         override fun onNo() {

@@ -37,6 +37,7 @@ import com.ftofs.twant.constant.UnicodeEmoji;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.CommentReplyItem;
 import com.ftofs.twant.entity.EmojiPage;
+import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.UnicodeEmojiItem;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
@@ -46,6 +47,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SmoothInputLayout;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,6 +58,7 @@ import java.util.Map;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
+import me.yokeyword.fragmentation.ISupportFragment;
 import okhttp3.Call;
 
 /**
@@ -72,12 +75,20 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     Map<Integer, Integer> rvPositionToImageIndexMap = new HashMap<>();
     List<String> imageList = new ArrayList<>();
     private View llEmojiPane;
+    private int chanel=Constant.COMMENT_CHANNEL_STORE;
+    private String authorName;
+
+    public static CommentDetailFragment newInstance(CommentItem commentItem, int commentChannelPost,String name) {
+        CommentDetailFragment fragment = newInstance(commentItem);
+        fragment.chanel = commentChannelPost;
+        fragment.authorName = name;
+        return fragment;
+    }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
         if (!User.isLogin()) {
-
             popLogined=false;
         }
     }
@@ -357,6 +368,13 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 if (commentItem.relatePostId > 0) {
                     params.set("relatePostId", commentItem.relatePostId);
                 }
+                if (chanel == Constant.COMMENT_CHANNEL_POST) {
+                    if (Util.inDev()) {
+                        params.set("postCreateBy", "u_001315344758");
+                    } else if (authorName != null) {
+                        params.set("postCreateBy", authorName);
+                    }
+                }
             } catch (Exception e) {
 
             }
@@ -416,6 +434,18 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         silMainContainer.closeInputPane();
 
                         quoteReply.isQuoteReply = false;
+                        if (chanel == Constant.COMMENT_CHANNEL_POST && responseObj.exists("datas.voucherList")) {
+                            ArrayList<StoreVoucher> voucherList = new ArrayList<>();
+                            for (Object o : responseObj.getSafeArray("datas.voucherList")) {
+                                EasyJSONObject voucher = (EasyJSONObject) o;
+                                voucherList.add(StoreVoucher.parse(voucher));
+                            }
+                            String zoneId = responseObj.getSafeString("datas.zoneId");
+                            new XPopup.Builder(_mActivity)
+                                    .moveUpToKeyboard(false)
+                                    .asCustom(new MoonVoucherListPopup(_mActivity,voucherList,zoneId))
+                                    .show();
+                        }
                     } catch (Exception e) {
                         SLog.info("Error!%s", e);
                     }

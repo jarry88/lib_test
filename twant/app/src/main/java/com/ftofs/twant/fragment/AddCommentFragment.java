@@ -363,6 +363,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                             voucherList.add(StoreVoucher.parse(voucher));
                         }
                         bundle.putParcelableArrayList("voucherList",voucherList);
+                        bundle.putString("zoneId",responseObj.getSafeString("datas.zoneId"));
                     }
                     setFragmentResult(RESULT_OK, bundle);
 

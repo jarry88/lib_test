@@ -63,7 +63,7 @@
             <ImageView
                 android:layout_width="70.5dp"
                 android:layout_height="64dp"
-                android:src="@{vo.memberIsReceive==0?@drawable/moon_voucher_get:@drawable/moon_voucher_unreceived,default=@drawable/moon_voucher_unreceived}" />
+                android:src="@{vo.memberIsReceive==1?@drawable/moon_voucher_get:@drawable/moon_voucher_unreceived,default=@drawable/moon_voucher_unreceived}" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -186,7 +186,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onClick(ViewGroupAdapter adapter, View view, int position) {
                 CommentItem commentItem = commentItemList.get(position);
-                start(CommentDetailFragment.newInstance(commentItem));
+                start(CommentDetailFragment.newInstance(commentItem,Constant.COMMENT_CHANNEL_POST,authorMemberName));
             }
         });
         adapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
@@ -205,7 +205,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     start(MemberInfoFragment.newInstance(commentItem.memberName));
                 } else if (id == R.id.btn_reply) {
                     SLog.info("id[%d]", id);
-                    start(CommentDetailFragment.newInstance(commentItem));
+                    start(CommentDetailFragment.newInstance(commentItem,Constant.COMMENT_CHANNEL_POST,authorMemberName));
                 } else if (id == R.id.btn_thumb) {
                     switchThumbState(position);
                 } else if (id == R.id.btn_make_true) {
@@ -842,11 +842,11 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         if (requestCode == RequestCode.ADD_COMMENT.ordinal()) {
             SLog.info("HERE");
             if (data.get("voucherList") != null) {
-
+                String zoneId=data.getString("zoneId");
                 ArrayList<StoreVoucher> vouchers = data.getParcelableArrayList("voucherList");
                 new XPopup.Builder(_mActivity)
                         .moveUpToKeyboard(false)
-                        .asCustom(new MoonVoucherListPopup(_mActivity,vouchers))
+                        .asCustom(new MoonVoucherListPopup(_mActivity,vouchers,zoneId))
                         .show();
             }
 
