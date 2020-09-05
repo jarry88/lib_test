@@ -74,7 +74,9 @@ interface DemoApiService {
     @GET("app/home/goods_class_nav/v2")
     suspend fun getGoodsClassNavV2(): TwantResponse<CategoryNavVoInfo>
 //    @Query("token") token:String,
-
+    @POST("member/voucher/command/receive")
+    suspend fun getVoucherCommandReceive(@Query("token")token:String,
+                                         @Query("templateId")templateId:String?):TwantResponse<CommonInfo>
 
 
     //post接口测试用
@@ -82,5 +84,6 @@ interface DemoApiService {
     suspend fun testPost(@Body body: RequestBody): TwantResponse<ZoneInfo>
     @POST("member/resume/info")
     suspend fun testPost1(@Query("token") token: String): TwantResponse<ZoneInfo>
+
 //@Field
 }

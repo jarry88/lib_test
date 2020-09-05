@@ -25,8 +25,10 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.domain.promotion.Voucher;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
@@ -34,6 +36,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.vo.promotion.VoucherVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.DataImageView;
 import com.ftofs.twant.widget.SharePopup;
@@ -281,7 +284,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 start(LoginFragment.newInstance());
                 return;
             }
-            startForResult(AddCommentFragment.newInstance(postId, Constant.COMMENT_CHANNEL_POST), RequestCode.ADD_COMMENT.ordinal());
+            startForResult(AddCommentFragment.newInstance(postId, Constant.COMMENT_CHANNEL_POST,authorMemberName), RequestCode.ADD_COMMENT.ordinal());
         } else if (id == R.id.btn_thumb) {
             if (!User.isLogin()) {
                 start(LoginFragment.newInstance());
@@ -836,9 +839,16 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         if (resultCode != RESULT_OK) {
             return;
         }
-        SLog.info("HERE");
         if (requestCode == RequestCode.ADD_COMMENT.ordinal()) {
             SLog.info("HERE");
+            if (data.get("voucherList") != null) {
+
+                ArrayList<StoreVoucher> vouchers = data.getParcelableArrayList("voucherList");
+                new XPopup.Builder(_mActivity)
+                        .moveUpToKeyboard(false)
+                        .asCustom(new MoonVoucherListPopup(_mActivity,vouchers))
+                        .show();
+            }
 
             tvPostTitle.postDelayed(new Runnable() {
                 @Override

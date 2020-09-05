@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.twant.R
@@ -47,7 +48,6 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
 
     override fun onCreate() {
         super.onCreate()
-
 
         val rvList=findViewById<RecyclerView>(R.id.rv_verification_list)
         rvList.adapter=adapter

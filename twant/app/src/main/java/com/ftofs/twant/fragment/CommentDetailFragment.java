@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.app.Instrumentation;
+import android.app.assist.AssistStructure;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.method.LinkMovementMethod;
@@ -61,7 +62,7 @@ import okhttp3.Call;
  * 評論詳情Fragment
  * @author zwm
  */
-public class CommentDetailFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, SimpleCallback {
+public class CommentDetailFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, SimpleCallback , SmoothInputLayout.OnVisibilityChangeListener{
     CommentItem commentItem;
     private boolean popLogined=false;
 
@@ -70,6 +71,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     // 评论的RecyclerView与图片索引的映射关系
     Map<Integer, Integer> rvPositionToImageIndexMap = new HashMap<>();
     List<String> imageList = new ArrayList<>();
+    private View llEmojiPane;
 
     @Override
     public void onSupportVisible() {
@@ -166,7 +168,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         replyCommentId = commentItem.commentId;
 
         silMainContainer = view.findViewById(R.id.sil_main_container);
-
+        llEmojiPane = view.findViewById(R.id.ll_emoji_pane);
+        silMainContainer.setOnVisibilityChangeListener(this);
         imgCommenterAvatar = view.findViewById(R.id.img_commenter_avatar);
         imgCommenterAvatar.setOnClickListener(this);
         tvCommenterNickname = view.findViewById(R.id.tv_commenter_nickname);
@@ -715,6 +718,14 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             }
 
             emojiPageList.add(emojiPage);
+        }
+    }
+    @Override
+    public void onVisibilityChange(int visibility) {
+        if (visibility == View.GONE) {
+            btnEmoji.setSelected(false);
+        } else {
+            btnEmoji.setSelected(llEmojiPane.getVisibility() == View.VISIBLE);
         }
     }
 }

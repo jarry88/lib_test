@@ -19,6 +19,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.interfaces.DiffCallBack;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
@@ -41,15 +42,15 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         @Override
         public boolean areItemsTheSame(@NonNull ChatConversation oldItem, @NonNull ChatConversation newItem) {
             boolean b=TextUtils.equals(oldItem.friendInfo.memberName, newItem.friendInfo.memberName);
-            SLog.info("name%s,%s,b %s",newItem.friendInfo.memberName,newItem.lastMessage,b);
+//            SLog.info("name%s,%s,b %s",newItem.friendInfo.memberName,newItem.lastMessage,b);
             return b;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull ChatConversation oldItem, @NonNull ChatConversation newItem) {
-            SLog.info("name%s,%s,",newItem.friendInfo.memberName,newItem.lastMessage);
+//            SLog.info("name%s,%s,",newItem.friendInfo.memberName,newItem.lastMessage);
 
-            return TextUtils.equals(oldItem.lastMessage,newItem.lastMessage);
+            return TextUtils.equals(oldItem.lastMessage,newItem.lastMessage)&&oldItem.timestamp==newItem.timestamp;
         }
     };
     private final AsyncListDiffer<ChatConversation> chatConversationAsyncListDiffer=new AsyncListDiffer<ChatConversation>(this,callback);
@@ -85,7 +86,6 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
     @Override
     public void onBindViewHolder(BaseViewHolder helper, int position) {
         ChatConversation chatConversation = getItem(position);
-        SLog.info("刷新第%s",position);
         LinearLayout linearLayout = helper.getView(R.id.ll_message_item_container);
         if (chatConversation != null) {
             linearLayout.getLayoutParams().height = Util.dip2px(mContext,80);
@@ -136,8 +136,9 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
             tvLastMessage.setText("");
         }
 
-
-        helper.setText(R.id.tv_message_time, Jarbon.formatMessageTime(chatConversation.timestamp));
+        String data = Jarbon.formatMessageTime(chatConversation.timestamp);
+        SLog.info("naem [%s],data[%s]",chatConversation.friendInfo.nickname,chatConversation.timestamp);
+        helper.setText(R.id.tv_message_time,data );
         if (chatConversation.isDoNotDisturb) {
             helper.setGone(R.id.icon_do_not_disturb, true);
             helper.setGone(R.id.tv_unread_count, false);
