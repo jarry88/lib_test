@@ -343,6 +343,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private int goodsModel;
     private FrameLayout flAddToCart;
 
+    TextView tvSecKillRemainDay;
     TextView tvSecKillRemainHour;
     TextView tvSecKillRemainMinute;
     TextView tvSecKillRemainSecond;
@@ -550,6 +551,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvBargainRemainMinute = view.findViewById(R.id.tv_bargain_remain_minute);
         tvBargainRemainSecond = view.findViewById(R.id.tv_bargain_remain_second);
 
+        tvSecKillRemainDay = view.findViewById(R.id.tv_sec_kill_remain_day);
         tvSecKillRemainHour = view.findViewById(R.id.tv_sec_kill_remain_hour);
         tvSecKillRemainMinute = view.findViewById(R.id.tv_sec_kill_remain_minute);
         tvSecKillRemainSecond = view.findViewById(R.id.tv_sec_kill_remain_second);
@@ -2174,7 +2176,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             }
 
                             startCountDown();
-                        } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) { // 限時折扣
+                        } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT ||  // 限時折扣
+                                promotionType == Constant.PROMOTION_TYPE_SEC_KILL // 秒殺
+                        ) {
                             startCountDown();
                         }
                     }
@@ -2250,7 +2254,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
 
                         // 是否為秒殺
-                        goodsInfo.isSeckill = goodsInfoVo.optInt("isSeckill");
+                        if (goodsInfoVo.optInt("isSeckill") == Constant.TRUE_INT &&
+                                promotionCountDownTime > 0) {
+                            goodsInfo.isSeckill = Constant.TRUE_INT;
+                        }
 
                         goodsInfoMap.put(goodsId, goodsInfo);
 
@@ -2591,13 +2598,20 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      * 啟動倒數計算
      */
     private void startCountDown() {
-        long endTime;
+        long currTimeMillis = System.currentTimeMillis();
+        long countDownTime = 0;  // 倒数目标时间的时间戳（毫秒）
         if (COUNT_DOWN_TYPE_BEGIN.equals(promotionCountDownTimeType)) { // 活动未开始，与开始时间对比
-            endTime = promotionStartTime;
+            countDownTime = promotionStartTime;
         } else { // 活动已开始，与结束时间对比
-            endTime = promotionEndTime;
+            countDownTime = promotionEndTime;
         }
-        long remainTime = endTime - System.currentTimeMillis(); // 離結束還剩下多少毫秒
+
+        if (promotionType == Constant.PROMOTION_TYPE_SEC_KILL) { // 秒殺
+            countDownTime = promotionCountDownTime * 1000 + currTimeMillis; // 乘以1000，秒 -》 毫秒
+        }
+        
+        long endTime = countDownTime;
+        long remainTime = endTime - currTimeMillis; // 離結束還剩下多少毫秒
         SLog.info("endTime[%s], remainTime[%s]", endTime, remainTime);
 
         stopCountDown();  // 先停止上一次倒數
@@ -2658,6 +2672,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
                 } else if (promotionType == Constant.PROMOTION_TYPE_SEC_KILL) {
                     if (timeInfo != null) {
+                        tvSecKillRemainDay.setText(String.format("%d天", timeInfo.day));
                         tvSecKillRemainHour.setText(String.format("%02d", timeInfo.hour));
                         tvSecKillRemainMinute.setText(String.format("%02d", timeInfo.minute));
                         tvSecKillRemainSecond.setText(String.format("%02d", timeInfo.second));
