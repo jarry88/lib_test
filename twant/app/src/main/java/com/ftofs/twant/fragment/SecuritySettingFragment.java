@@ -71,6 +71,15 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
     CallbackManager callbackManager;
     List<String> permissions;  // Facebook 權限
 
+    // 各種綁定狀態的提示文本
+    public static final String HINT_WEIXIN_AUTHORIZED = "已綁定，您可以通過微信登入想要城";
+    public static final String HINT_WEIXIN_NOT_AUTHORIZED = "綁定後可通過微信授權登入";
+    public static final String HINT_FACEBOOK_AUTHORIZED = "已綁定，您可以通過Facebook登入想要城";
+    public static final String HINT_FACEBOOK_NOT_AUTHORIZED = "綁定後可通過Facebook授權登入";
+
+    TextView tvWeixinBindingStatusHint;
+    TextView tvFacebookBindingStatusHint;
+
     public static SecuritySettingFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -101,6 +110,9 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_login_password, this);
         Util.setOnClickListener(view, R.id.btn_change_mobile, this);
         Util.setOnClickListener(view, R.id.btn_payment_password, this);
+
+        tvWeixinBindingStatusHint = view.findViewById(R.id.tv_weixin_binding_status_hint);
+        tvFacebookBindingStatusHint = view.findViewById(R.id.tv_facebook_binding_status_hint);
 
         Util.setOnClickListener(view, R.id.btn_logout, this);
 
@@ -238,11 +250,7 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
             public void onNo() {
                 SLog.info("onNo");
                 // 如果選No，恢復原先狀態
-                if (snsType == SNS_TYPE_WEIXIN) {
-                    sbBindWeixin.setCheckedNoEvent(true);
-                } else {
-                    sbBindFacebook.setCheckedNoEvent(true);
-                }
+                setSwitchButtonStatus(snsType, true);
             }
         })).show();
     }
@@ -264,19 +272,19 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
-                sbBindFacebook.setCheckedNoEvent(false);
+                setSwitchButtonStatus(SNS_TYPE_FACEBOOK, false);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                sbBindFacebook.setCheckedNoEvent(false);
+                setSwitchButtonStatus(SNS_TYPE_FACEBOOK, false);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
 
-                sbBindFacebook.setCheckedNoEvent(true);
+                setSwitchButtonStatus(SNS_TYPE_FACEBOOK, true);
                 Hawk.put(SPField.FIELD_FB_BINDING_STATUS, Constant.TRUE_INT);
                 ToastUtil.success(_mActivity, "綁定Facebook成功");
             }
@@ -305,19 +313,19 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
-                sbBindFacebook.setCheckedNoEvent(true);
+                setSwitchButtonStatus(SNS_TYPE_FACEBOOK, true);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                sbBindFacebook.setCheckedNoEvent(true);
+                setSwitchButtonStatus(SNS_TYPE_FACEBOOK, true);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
 
-                sbBindFacebook.setCheckedNoEvent(false);
+                setSwitchButtonStatus(SNS_TYPE_FACEBOOK, false);
                 Hawk.put(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
                 ToastUtil.success(_mActivity, "解綁Facebook成功");
             }
@@ -359,19 +367,19 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
                     String weixinUserInfo = responseObj.getSafeString("datas.memberInfo.weixinUserInfo");
                     if(weixinUserInfo.length() > 0){
                         wxBindingStatus = Constant.TRUE_INT;
-                        sbBindWeixin.setCheckedNoEvent(true);
+                        setSwitchButtonStatus(SNS_TYPE_WEIXIN, true);
                     }else {
                         wxBindingStatus = Constant.FALSE_INT;
-                        sbBindWeixin.setCheckedNoEvent(false);
+                        setSwitchButtonStatus(SNS_TYPE_WEIXIN, false);
                     }
                     SLog.info("wxBindingStatus[%d]", wxBindingStatus);
 
                     fbBindingStatus = Hawk.get(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
                     SLog.info("fbBindingStatus[%d]", fbBindingStatus);
                     if(fbBindingStatus == Constant.TRUE_INT){
-                        sbBindFacebook.setCheckedNoEvent(true);
+                        setSwitchButtonStatus(SNS_TYPE_FACEBOOK, true);
                     }else {
-                        sbBindFacebook.setCheckedNoEvent(false);
+                        setSwitchButtonStatus(SNS_TYPE_FACEBOOK, false);
                     }
                     SLog.info("fbBindingStatus[%d]", fbBindingStatus);
 
@@ -427,9 +435,9 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
                 ToastUtil.showNetworkError(_mActivity, e);
                 // 失敗，則恢復回原狀態
                 if (actionType == ACTION_TYPE_UNBIND) {
-                    sbBindWeixin.setCheckedNoEvent(true);
+                    setSwitchButtonStatus(SNS_TYPE_WEIXIN, true);
                 } else {
-                    sbBindWeixin.setCheckedNoEvent(false);
+                    setSwitchButtonStatus(SNS_TYPE_WEIXIN, false);
                 }
             }
 
@@ -442,9 +450,9 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         // 失敗，則恢復回原狀態
                         if (actionType == ACTION_TYPE_UNBIND) {
-                            sbBindWeixin.setCheckedNoEvent(true);
+                            setSwitchButtonStatus(SNS_TYPE_WEIXIN, true);
                         } else {
-                            sbBindWeixin.setCheckedNoEvent(false);
+                            setSwitchButtonStatus(SNS_TYPE_WEIXIN, false);
                         }
                         return;
                     }
@@ -452,7 +460,7 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
                     if (responseObj.exists("datas.bind")) {
                         boolean bind = responseObj.getBoolean("datas.bind");
                         if (!bind) {
-                            sbBindWeixin.setCheckedNoEvent(false);
+                            setSwitchButtonStatus(SNS_TYPE_WEIXIN, false);
                             ToastUtil.success(_mActivity,responseObj.getSafeString("datas.message"));
                             return;
                         }
@@ -462,11 +470,11 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
                     // 成功
                     if (actionType == ACTION_TYPE_UNBIND) {
                         //ToastUtil.success(_mActivity,responseObj.getString());
-                        sbBindWeixin.setCheckedNoEvent(false);
+                        setSwitchButtonStatus(SNS_TYPE_WEIXIN, false);
                         ToastUtil.success(_mActivity,"解綁成功");
                         wxBindingStatus = Constant.FALSE_INT;
                     } else {
-                        sbBindWeixin.setCheckedNoEvent(true);
+                        setSwitchButtonStatus(SNS_TYPE_WEIXIN, true);
                         ToastUtil.success(_mActivity,"綁定成功");
                         wxBindingStatus = Constant.TRUE_INT;
                     }
@@ -505,17 +513,20 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
-        /*
-        bindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, 0);
-        SLog.info("bindingStatus[%d]", bindingStatus);
-        sbBindWeixin.setCheckedNoEvent(bindingStatus == 1);
-
-         */
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+    }
+
+    private void setSwitchButtonStatus(int snsType, boolean checked) {
+        if (snsType == SNS_TYPE_WEIXIN) {
+            sbBindWeixin.setCheckedNoEvent(checked);
+            tvWeixinBindingStatusHint.setText(checked ? HINT_WEIXIN_AUTHORIZED : HINT_WEIXIN_NOT_AUTHORIZED);
+        } else if (snsType == SNS_TYPE_FACEBOOK) {
+            sbBindFacebook.setCheckedNoEvent(checked);
+            tvFacebookBindingStatusHint.setText(checked ? HINT_FACEBOOK_AUTHORIZED : HINT_FACEBOOK_NOT_AUTHORIZED);
+        }
     }
 }

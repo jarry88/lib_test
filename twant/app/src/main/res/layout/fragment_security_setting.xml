@@ -246,6 +246,7 @@
                 android:textSize="16sp"
                 />
             <TextView
+                android:id="@+id/tv_weixin_binding_status_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="綁定後可通過微信授權登入"
@@ -291,6 +292,7 @@
                 android:textSize="16sp"
                 />
             <TextView
+                android:id="@+id/tv_facebook_binding_status_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="綁定後可通過Facebook授權登入"
