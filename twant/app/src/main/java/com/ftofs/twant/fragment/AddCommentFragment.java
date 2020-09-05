@@ -35,6 +35,7 @@ import com.ftofs.twant.constant.UnicodeEmoji;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
+import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.UnicodeEmojiItem;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
@@ -94,8 +95,13 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
     private static final int BTN_EMOJI_USAGE_SOFT_INPUT = 1;
     ImageView btnInsertPostEmoji;
     int usageBtnEmoji = BTN_EMOJI_USAGE_EMOJI; // btnEmoji的用途 0 -- 顯示表情圖標 1 -- 顯示軟鍵盤圖標
+    private String authorName;//中球优惠券活动要用
 
     public static AddCommentFragment newInstance(int bindId, int commentChannel) {
+        return newInstance(bindId,commentChannel,null);
+    }
+
+    public static AddCommentFragment newInstance(int bindId, int commentChannel, String name) {
         SLog.info("onClickhere2");
         Bundle args = new Bundle();
 
@@ -103,8 +109,8 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         args.putInt("commentChannel", commentChannel);
 
         AddCommentFragment fragment = new AddCommentFragment();
+        fragment.authorName = name;
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -281,7 +287,14 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
             }
             if (commentChannel == Constant.COMMENT_CHANNEL_POST) {
                 params.set("relatePostId", bindId);
+                if (Util.inDev()) {
+                    params.set("postCreateBy", "u_001315344758");
+                } else if (authorName != null) {
+                    params.set("postCreateBy", authorName);
+
+                }
             }
+
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -342,6 +355,16 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                     ToastUtil.success(_mActivity, "發表成功");
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("commentItem", commentItem);
+//                    如果有优惠券，则带回上一级页面
+                    if (responseObj.exists("datas.voucherList")) {
+                        ArrayList<StoreVoucher> voucherList = new ArrayList<>();
+                        for (Object o : responseObj.getSafeArray("datas.voucherList")) {
+                            EasyJSONObject voucher = (EasyJSONObject) o;
+                            voucherList.add(StoreVoucher.parse(voucher));
+                        }
+                        bundle.putParcelableArrayList("voucherList",voucherList);
+                        bundle.putString("zoneId",responseObj.getSafeString("datas.zoneId"));
+                    }
                     setFragmentResult(RESULT_OK, bundle);
 
                     hideSoftInputPop();

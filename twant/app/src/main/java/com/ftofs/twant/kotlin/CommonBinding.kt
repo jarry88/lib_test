@@ -33,6 +33,19 @@ fun loadImageUrl(v: ImageView, url: String?) {
         Glide.with(v).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(v)
     }
 }
+@BindingAdapter(value = ["delayBackgroud"])
+fun setDelayBackground(v: View, bg: Drawable?) {
+    bg?.run {
+        v.apply {
+            layoutParams.apply {
+                width=width
+                height=height
+            }
+            background=bg
+        }
+    }
+}
+
 @BindingAdapter(value = ["timeStamp"])
 fun setTimeStamp(v: TextView, timeStamp: Long?) {
     timeStamp?.let {

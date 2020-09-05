@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="vo"
+            type="com.ftofs.twant.entity.StoreVoucher" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="230dp"
+            android:layout_height="62dp"
+            android:background="@drawable/moon_voucher_item_bg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/img_store_avatar"
+                    imageUrl="@{vo.storeAvatar}"
+                    android:layout_width="37dp"
+                    android:layout_height="37dp"
+                    android:layout_marginStart="14dp"
+                    android:src="@drawable/default_store_avatar" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_toEndOf="@id/img_store_avatar"
+                    android:lines="1"
+                    android:text="@{vo.templateTitle}"
+                    android:textColor="@color/tw_black"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/tv_title"
+                    android:layout_alignBottom="@id/img_store_avatar"
+                    android:layout_marginStart="14dp"
+                    android:layout_toEndOf="@id/img_store_avatar"
+                    android:lines="1"
+                    android:text="@{vo.limitAmountText}"
+                    android:textColor="@color/tw_red"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="70.5dp"
+                android:layout_height="64dp"
+                android:src="@{vo.memberIsReceive==1?@drawable/moon_voucher_get:@drawable/moon_voucher_unreceived,default=@drawable/moon_voucher_unreceived}" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

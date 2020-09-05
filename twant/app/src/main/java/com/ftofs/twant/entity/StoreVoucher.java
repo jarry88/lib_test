@@ -1,9 +1,17 @@
 package com.ftofs.twant.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 
-public class StoreVoucher {
+import cn.snailpad.easyjson.EasyJSONObject;
+
+public class StoreVoucher implements Parcelable {
+    public int memberIsReceive;//會員又沒有領取 0是未領取,中秋活動
+    public String templateTitle;
+
     public StoreVoucher(int storeId, int templateId, String storeName, String storeAvatar, int templatePrice, String limitAmountText,
                         String usableClientTypeText, String useStartTime, String useEndTime,
                         int state) {
@@ -34,6 +42,71 @@ public class StoreVoucher {
      */
     public int state;
     public String searchSn;
+
+    protected StoreVoucher(Parcel in) {
+        memberIsReceive = in.readInt();
+        storeId = in.readInt();
+        templateId = in.readInt();
+        storeName = in.readString();
+        storeAvatar = in.readString();
+        templatePrice = in.readInt();
+        limitAmountText = in.readString();
+        usableClientTypeText = in.readString();
+        useStartTime = in.readString();
+        useEndTime = in.readString();
+        state = in.readInt();
+        searchSn = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(memberIsReceive);
+        dest.writeInt(storeId);
+        dest.writeInt(templateId);
+        dest.writeString(storeName);
+        dest.writeString(storeAvatar);
+        dest.writeInt(templatePrice);
+        dest.writeString(limitAmountText);
+        dest.writeString(usableClientTypeText);
+        dest.writeString(useStartTime);
+        dest.writeString(useEndTime);
+        dest.writeInt(state);
+        dest.writeString(searchSn);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<StoreVoucher> CREATOR = new Creator<StoreVoucher>() {
+        @Override
+        public StoreVoucher createFromParcel(Parcel in) {
+            return new StoreVoucher(in);
+        }
+
+        @Override
+        public StoreVoucher[] newArray(int size) {
+            return new StoreVoucher[size];
+        }
+    };
+
+    public static StoreVoucher parse(EasyJSONObject voucher) throws Exception{
+        StoreVoucher voucher1=new StoreVoucher(
+                voucher.getInt("storeId"),
+                voucher.getInt("templateId"),
+                voucher.getSafeString("storeName"),
+                voucher.getSafeString("storeAvatar"),
+                voucher.getInt("templatePrice"),
+                voucher.getSafeString("limitAmountText"),
+                voucher.getSafeString("usableClientTypeText"),
+                voucher.getSafeString("useStartTime"),
+                voucher.getSafeString("useEndTime"),
+                voucher.getInt("withoutState"));//領完未領完
+        voucher1.memberIsReceive = voucher.getInt("memberIsReceive");
+        voucher1.templateTitle = voucher.getSafeString("templateTitle");
+        return voucher1;
+    }
 
     /**
      * 優惠券是否可用

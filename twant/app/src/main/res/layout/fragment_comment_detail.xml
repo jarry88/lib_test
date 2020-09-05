@@ -22,6 +22,7 @@
             android:layout_width="31dp"
             android:layout_height="31dp"
             android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             />

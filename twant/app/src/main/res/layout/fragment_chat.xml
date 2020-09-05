@@ -113,8 +113,8 @@
                 android:id="@+id/btn_tool"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingLeft="7.5dp"
-                android:paddingRight="15dp">
+                android:paddingStart="7.5dp"
+                android:paddingEnd="15dp">
 
                 <ImageView
                     android:id="@+id/icon_circle_add"

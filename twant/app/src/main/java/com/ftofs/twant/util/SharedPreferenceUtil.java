@@ -7,6 +7,7 @@ import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
 import com.orhanobut.hawk.Hawk;
+import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
 
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -35,7 +36,9 @@ public class SharedPreferenceUtil {
             SLog.info("FIELD_USER_ID[%s]", responseObj.getSafeString("datas.memberToken"));
             Hawk.put(SPField.FIELD_USER_ID, responseObj.getInt("datas.memberId"));
             SLog.info("FIELD_USER_ID[%d]", responseObj.getInt("datas.memberId"));
-            Hawk.put(SPField.FIELD_TOKEN, responseObj.getSafeString("datas.token"));
+            String token = responseObj.getSafeString("datas.token");
+            Hawk.put(SPField.FIELD_TOKEN,token );
+            MmkvUtils.putStringValue("accessToken",token);
             SLog.info("FIELD_TOKEN[%s]", responseObj.getSafeString("datas.token"));
             String nickName = "";
             String avatarUrl = "";

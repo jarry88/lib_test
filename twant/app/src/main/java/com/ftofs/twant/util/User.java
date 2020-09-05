@@ -12,6 +12,7 @@ import com.ftofs.twant.log.SLog;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.orhanobut.hawk.Hawk;
+import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,6 +46,8 @@ public class User {
 
         if (userId > 0 && !StringUtil.isEmpty(token) &&
                 now - lastLoginTime < Config.LOGIN_VALID_TIME && !StringUtil.isEmpty(memberName)) {
+            MmkvUtils.putStringValue("accessToken",token);
+
             // SLog.info("用戶已登錄, token[%s]", token);
             return userId;
         }
