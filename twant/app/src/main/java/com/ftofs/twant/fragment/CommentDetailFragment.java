@@ -71,6 +71,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     Map<Integer, Integer> rvPositionToImageIndexMap = new HashMap<>();
     List<String> imageList = new ArrayList<>();
 
+    View mainActivityContentView;
+
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
@@ -78,6 +80,19 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
             popLogined=false;
         }
+
+        // 因为设置了fitsSystemWindows，需要将padding设置为0
+        mainActivityContentView.setPadding(0, 0, 0, 0);
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+
+        // 因为其它页面没有设置fitsSystemWindows，将padding恢复为状态栏高度
+        int statusBarHeight = Util.getStatusbarHeight(_mActivity);
+        SLog.info("statusBarHeight[%d]", statusBarHeight);
+        mainActivityContentView.setPadding(0, statusBarHeight, 0, 0);
     }
 
     @Override
@@ -156,6 +171,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mainActivityContentView = _mActivity.findViewById(android.R.id.content);
 
         SLog.info("3進入評論詳情頁");
         Bundle args = getArguments();
