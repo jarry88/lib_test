@@ -87,6 +87,7 @@ import com.wzq.mvvmsmart.utils.Tasks;
 
 
 //import org.android.agoo.huawei.HuaWeiRegister;
+import org.android.agoo.huawei.HuaWeiRegister;
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
 
@@ -522,8 +523,8 @@ public class TwantApplication extends Application {
 
         SLog.info("mPushAgent.register");
         if (Vendor.VENDOR_HUAWEI == Vendor.getVendorType()) {
-//            HuaWeiRegister.register(this);
-            SLog.info("VENDOR_HUAWEI.register");
+            HuaWeiRegister.register(this);
+//            SLog.info("VENDOR_HUAWEI.register");
 
         }
         //注册推送服务，每次调用register方法都会回调该接口
