@@ -143,11 +143,6 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
     List<PayWayItem> payWayItemList = new ArrayList<>(); // 支付方式列表
     List<ListPopupItem> shippingItemList = new ArrayList<>(); // 物流方式列表
 
-    // 當前支付方式
-    int payWay = Constant.PAY_WAY_ONLINE;
-    // 當前選中的支付方式索引
-    int selectedPayWayIndex = 0;
-
     AddrItem mAddrItem;  // 當前選中的地址
 
     TextView tvReceiverName; // 收貨人姓名
@@ -170,8 +165,12 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
     String currencyTypeSign;
     int totalItemCount; // 整個訂單的總件數： 如果sku1有2件，sku2有3件，那么總件數就是5
     String textConfirmOrderTotalItemCount;
+
     // 整數類型的payWay與字符串類型的PaymentTypeCode之間的映射關係
     Map<Integer, String> paymentTypeCodeMap = new HashMap<>();
+    // 字符串類型的PaymentTypeCode與整數類型的payWay之間的映射關係
+    Map<String, Integer> reversePaymentTypeCodeMap = new HashMap<>();
+
 
     boolean isFirstShowSelfFetchInfo = true; // 是否首次顯示門店自提信息，如果是，則自動填充默認地址信息
     EditText etSelfFetchNickname; // 門店自提姓名
@@ -205,9 +204,10 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
     List<StoreVoucherVo> platformCouponList = new ArrayList<>();
     private int tariffTotalEnable; // 是否需要加上跨城購稅費的總價
 
-    PayWayItem specialItem;  // 只有選擇的收貨人信息是澳門地區才會顯示貨到付款這種交易方式，空地址、香港和內地的地址均不顯示；
-    PayWayItem onlineItem;  // 只有選擇的收貨人信息是澳門地區才會顯示貨到付款這種交易方式，空地址、香港和內地的地址均不顯示；
-    PayWayItem fetchItem;  // 到店自提；
+    PayWayItem onlineItem;    // 在線支付
+    PayWayItem fetchItem;     // 到店自提，想要食業務，只能選擇到店自提
+    PayWayItem specialItem;   // 只有選擇的收貨人信息是澳門地區才會顯示貨到付款這種交易方式，空地址、香港和內地的地址均不顯示；
+
 
     // 售罄商品列表
     List<SoldOutGoodsItem> soldOutGoodsItemList = new ArrayList<>();
@@ -264,13 +264,14 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
         paymentTypeCodeMap.put(Constant.PAY_WAY_ONLINE, Constant.PAYMENT_TYPE_CODE_ONLINE);
         paymentTypeCodeMap.put(Constant.PAY_WAY_DELIVERY, Constant.PAYMENT_TYPE_CODE_OFFLINE);
         paymentTypeCodeMap.put(Constant.PAY_WAY_FETCH, Constant.PAYMENT_TYPE_CODE_CHAIN);
+        reversePaymentTypeCodeMap.put(Constant.PAYMENT_TYPE_CODE_ONLINE, Constant.PAY_WAY_ONLINE);
+        reversePaymentTypeCodeMap.put(Constant.PAYMENT_TYPE_CODE_OFFLINE, Constant.PAY_WAY_DELIVERY);
+        reversePaymentTypeCodeMap.put(Constant.PAYMENT_TYPE_CODE_CHAIN, Constant.PAY_WAY_FETCH);
 
         // 初始化支付方式數據
         onlineItem = new PayWayItem(Constant.PAY_WAY_ONLINE, "物流配送", "在線付款後物流送貨", true, R.drawable.pay_way_online_selected, R.drawable.pay_way_online_unselected);
         fetchItem = new PayWayItem(Constant.PAY_WAY_FETCH, "到店自提", "在線付款後門店取貨", false, R.drawable.pay_way_fetch_selected, R.drawable.pay_way_fetch_unselected);
-        payWayItemList.add(fetchItem);
         specialItem = new PayWayItem(Constant.PAY_WAY_DELIVERY, "貨到付款", "先送貨再線下付款", false, R.drawable.pay_way_delivery_selected, R.drawable.pay_way_delivery_unselected);
-
 
         tvReceiverName = view.findViewById(R.id.tv_receiver_name);
         tvMobile = view.findViewById(R.id.tv_mobile);
@@ -316,7 +317,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                             // 如有只有【到店自提】，不讓選擇
                             break;
                         }
-                        payWayPopup();
+                        showPayWayPopup();
                         break;
                     case R.id.ll_store_info_container:
                         storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
@@ -369,9 +370,61 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
 
 
     /**
+     * 獲取可顯示的支付方式的列表
+     * @return
+     */
+    private List<PayWayItem> getPayWayList() {
+        List<PayWayItem> list = new ArrayList<>();
+
+        SLog.info("onlyFetch[%s]", onlyFetch);
+        if (onlyFetch) { // 想食業務，只支持門店自提，不支持切換收貨方式
+            return list;
+        }
+
+        list.add(onlineItem);
+        list.add(fetchItem);
+
+        // 只有選擇的收貨人信息是澳門地區才會顯示貨到付款這種交易方式，空地址、香港和內地的地址均不顯示
+        boolean isMacao = false;
+        if (mAddrItem != null && mAddrItem.areaIdList != null &&
+            mAddrItem.areaIdList.size() > 0 && mAddrItem.areaIdList.get(0) == Constant.DISTRICT_ID_MACAO) {
+            isMacao = true;
+        }
+        if (isMacao && isGroup == Constant.FALSE_INT) { // 在澳門收貨，並且不是團購，才顯示【貨到付款】
+            list.add(specialItem);
+        }
+
+        return list;
+    }
+
+
+    /**
      * 顯示支付方式彈窗
      */
-    private void payWayPopup() {
+    private void showPayWayPopup() {
+        if (onlyFetch) {
+            return;
+        }
+
+        payWayItemList = getPayWayList();
+        int selectedPayWayIndex = 0;
+
+        // 當前選中的支付方式
+        Integer payWay = reversePaymentTypeCodeMap.get(currPaymentTypeCode);
+        if (payWay == null) {
+            return;
+        }
+
+        for (int i = 0; i < payWayItemList.size(); i++) {
+            PayWayItem payWayItem = payWayItemList.get(i);
+            if (payWayItem.payWay == payWay) {
+                selectedPayWayIndex = i;
+                payWayItem.isSelected = true;
+            } else {
+                payWayItem.isSelected = false;
+            }
+        }
+
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
@@ -987,7 +1040,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 SLog.info("onComplete, threadId[%s], soldOutGoodsItemList.size[%d]", Thread.currentThread().getId(), soldOutGoodsItemList.size());
                 dismissLoadingPopup();
 
-                if (payWay == Constant.PAY_WAY_FETCH || onlyFetch) { // 門店自提
+                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(currPaymentTypeCode) || onlyFetch) { // 門店自提
                     showSelfFetchInfo();
                 }
 
@@ -1075,20 +1128,12 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
 
             // 添加上汇总项目
             ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
-
-//            currPaymentTypeCode = Constant.PAYMENT_TYPE_CODE_CHAIN;
-//            payWay = Constant.PAY_WAY_ONLINE;
-            SLog.info("__TEST_onlyFetch[%s]", onlyFetch);
             if (onlyFetch) {
-                payWay = Constant.PAY_WAY_FETCH;
-                SLog.info("__TEST_paymentTypeCodeMap[%s]", paymentTypeCodeMap.get(payWay));
-                currPaymentTypeCode = paymentTypeCodeMap.get(payWay);
-//                confirmOrderSummaryItem.paymentTypeCode=
+                currPaymentTypeCode = Constant.PAYMENT_TYPE_CODE_CHAIN;
             }
             confirmOrderSummaryItem.paymentTypeCode = currPaymentTypeCode;
+            SLog.info("__TEST_onlyFetch[%s], currPaymentTypeCode[%s]", onlyFetch, currPaymentTypeCode);
             confirmOrderItemList.add(confirmOrderSummaryItem);
-
-
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             return;
@@ -1214,7 +1259,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                     if (item.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
                         ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) item;
                         if (storeItem.storeId == storeId) {
-                            if (payWay == Constant.PAY_WAY_ONLINE) {
+                            if (currPaymentTypeCode.equals(Constant.PAYMENT_TYPE_CODE_ONLINE)) {
                                 storeItem.taxAmount = tariffTotalAmount;
                             } else { // 門店自提和貨到付款，稅費設置為0
                                 storeItem.taxAmount = 0;
@@ -1450,28 +1495,26 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
     public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("PopupType[%s], id[%s], extra[%s]", type, id, extra);
         if (type == PopupType.PAY_WAY) {
-            selectedPayWayIndex = id;
-            payWay = (int) extra;
-            SLog.info("selectedPayWayIndex[%d], payWay[%d]", selectedPayWayIndex, payWay);
+            int payWay = (int) extra;
+            SLog.info("payWay[%d]", payWay);
             ConfirmOrderSummaryItem summaryItem = getSummaryItem();
             if (summaryItem == null) {
                 return;
             }
-            summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
-            currPaymentTypeCode = summaryItem.paymentTypeCode;
-            SLog.info("currPaymentTypeCode[%s]", currPaymentTypeCode);
-            summaryItem.payWayIndex = payWay;
-            SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
+
+            currPaymentTypeCode = paymentTypeCodeMap.get(payWay);
+            summaryItem.paymentTypeCode = currPaymentTypeCode;
+            SLog.info("currPaymentTypeCode[%s], position[%d]", currPaymentTypeCode, confirmOrderItemList.size() - 1);
             adapter.notifyItemChanged(confirmOrderItemList.size() - 1);
             totalPrice = summaryItem.calcTotalPrice();
             tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0));
-            if (payWay == Constant.PAY_WAY_FETCH||onlyFetch) { // 門店自提
+            if (payWay == Constant.PAY_WAY_FETCH || onlyFetch) { // 門店自提
                 showSelfFetchInfo();
             } else { // 在線支付 或 貨到付款
                 llSelfFetchInfoContainer.setVisibility(View.GONE);
                 updateAddrView();
             }
-            adapter.setPayWayIndex(payWay);
+            adapter.setPayWay(payWay);
             adapter.notifyDataSetChanged();
 
             if (payWay != Constant.PAY_WAY_FETCH) {

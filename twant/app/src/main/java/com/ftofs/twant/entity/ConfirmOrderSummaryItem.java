@@ -26,8 +26,6 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
     public int platformCouponCount;  // 平台券數量
     public String platformCouponStatus;  // 當前平台券的狀態描述，比如【可用XX張】、【$10元無門檻券】
 
-    public int payWayIndex = 0;
-
     @Override
     public int getItemType() {
         return Constant.ITEM_VIEW_TYPE_SUMMARY;
@@ -38,12 +36,12 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
      * @return
      */
     public double calcTotalPrice() {
-        // 總金額 + 總運費 - 商店折扣 - 平臺折扣
+        // 最終付款額 = 總金額 + 總運費 - 商店折扣 - 平臺折扣 + 總稅費
         SLog.info("totalAmount[%s], storeDiscount[%s], totalTaxAmount[%s]", totalAmount, storeDiscount, totalTaxAmount);
-        double result = totalAmount - storeDiscount - platformDiscount+totalTaxAmount;
-        //2是門店自提現在
-        SLog.info("payWayIndex[%d]", payWayIndex);
-        if (payWayIndex != Constant.PAY_WAY_FETCH) { // 不是門店自提才加上運費
+        double result = totalAmount - storeDiscount - platformDiscount + totalTaxAmount;
+
+        SLog.info("paymentTypeCode[%s]", paymentTypeCode);
+        if (!Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) { // 不是門店自提才加上運費
             SLog.info("here");
             result += totalFreight;
         }
