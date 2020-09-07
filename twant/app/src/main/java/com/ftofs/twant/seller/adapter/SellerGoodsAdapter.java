@@ -41,12 +41,14 @@ public class SellerGoodsAdapter extends BaseQuickAdapter<SellerGoodsItem, BaseVi
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageName)).centerCrop().into(goodsImage);
         String priceRange;
-        if (Math.abs(item.appPriceMin - item.batchPrice0) < 0.000001d) { // 如果只有1個價格
+        if (item.goodsModal == Constant.GOODS_TYPE_CONSULT) {
+            priceRange = "詢價";
+        } else if (Math.abs(item.appPriceMin - item.batchPrice0) < 0.000001d) { // 如果只有1個價格
             priceRange = item.appPriceMin + " MOP";
         } else { // 各個SKU有不同的價格，則要顯示價格範圍
             priceRange = String.format("%s MOP - %s MOP", StringUtil.formatFloat(item.appPriceMin), StringUtil.formatFloat(item.batchPrice0));
         }
-
+        
 
         helper.addOnClickListener(R.id.btn_view_all_sku, R.id.btn_more, R.id.ll_swipe_content, R.id.btn_switch_status);
 

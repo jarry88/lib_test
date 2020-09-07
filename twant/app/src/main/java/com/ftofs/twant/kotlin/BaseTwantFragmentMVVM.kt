@@ -90,7 +90,7 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
      * @return 布局layout的id
      */
     abstract fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int
-    open fun initToolbar() {}
+
 
     /**
      * 初始化ViewModel的id
@@ -98,6 +98,8 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
      * @return BR的id
      */
     abstract fun initVariableId(): Int
+    open fun initToolbar() {}
+
 
     /**
      * 初始化ViewModel

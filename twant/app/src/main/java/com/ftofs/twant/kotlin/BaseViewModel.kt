@@ -7,6 +7,10 @@ import androidx.lifecycle.ViewModel
 import com.ftofs.twant.kotlin.vo.PageEntity
 import com.ftofs.twant.kotlin.vo.SellerPageVO
 
+/**
+ * @dep
+ */
+@Deprecated("前期過度階段參考代碼，不建議使用，後面會移除")
 open class BaseViewModel : ViewModel() {
 
     private val refreshTrigger = MutableLiveData<Boolean>()

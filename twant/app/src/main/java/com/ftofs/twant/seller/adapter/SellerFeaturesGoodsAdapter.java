@@ -38,7 +38,13 @@ public class SellerFeaturesGoodsAdapter extends BaseQuickAdapter<Goods,BaseViewH
     protected void convert(BaseViewHolder helper, Goods item) {
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageUrl)).centerCrop().into(goodsImage);
-        String priceRange = String.format("%s MOP - %s MOP", StringUtil.formatFloat(item.price), StringUtil.formatFloat(item.getOriginal()));
+        String priceRange;
+        if (item.goodsModal == Constant.GOODS_TYPE_CONSULT) {
+            priceRange = "詢價";
+        } else {
+             priceRange = String.format("%s MOP - %s MOP", StringUtil.formatFloat(item.price), StringUtil.formatFloat(item.getOriginal()));
+
+        }
 
         helper.addOnClickListener(R.id.btn_view_all_sku, R.id.btn_more, R.id.ll_swipe_content, R.id.btn_switch_status);
 

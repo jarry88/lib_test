@@ -19,6 +19,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/icon_takewant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -27,11 +28,12 @@
             </ImageView>
             <LinearLayout
                 android:id="@+id/ll_search_box"
-                android:layout_width="0dp"
                 android:layout_height="35dp"
-                android:layout_marginLeft="13dp"
-                android:layout_toRightOf="@id/icon_takewant"
-                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_toEndOf="@id/icon_takewant"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/btn_random_friend"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
@@ -40,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:src="@drawable/icon_search_home"
+                    android:src="@drawable/home_search"
                     />
                 <TextView
                     android:layout_width="0dp"
@@ -51,6 +53,57 @@
                     android:textSize="16sp"
                     android:textColor="@color/tw_grey"
                     />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_random_friend"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_random_friend_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/circle_red_bubble_bg"
+                    android:gravity="center"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:text="123333"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    android:translationX="-4dp"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/ll_random_friend"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/tw_category_icon_bg_new"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_emoji_people_24"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="城友"
+                        android:textColor="@android:color/black"
+                        android:textSize="7sp" />
+                </LinearLayout>
+
             </LinearLayout>
         </RelativeLayout>
 

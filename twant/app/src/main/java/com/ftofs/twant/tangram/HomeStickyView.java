@@ -80,6 +80,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         contentView.findViewById(R.id.btn_category_goods).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_brand).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_friend).setOnClickListener(this);
+        contentView.findViewById(R.id.btn_random_friend).setOnClickListener(this);
         contentView.findViewById(R.id.icon_takewant).setOnClickListener(this);
 
         tvStoreCount = contentView.findViewById(R.id.tv_store_count);
@@ -173,6 +174,10 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             searchPostParams.keyword = "";
             MainFragment mainFragment = MainFragment.getInstance();
             mainFragment.showHideFragment(MainFragment.MESSAGE_FRAGMENT);
+
+        }else if (id == R.id.btn_random_friend) {
+            Util.startFragment(new RandomFriendListFragment());
+//            Util.startFragment(new Test2Fragment());
 
         } else if (id == R.id.icon_takewant) {
             if (Config.PROD) {

@@ -189,8 +189,13 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
 
                     SLog.info("tariffEnable__[%d]", tariffEnable);
                     contentView.findViewById(R.id.cross_border_indicator).setVisibility(tariffEnable == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
+                    String priceRange;
+                    if (StringUtil.safeModel(goodsVo) == Constant.GOODS_TYPE_CONSULT) {
+                        priceRange = "詢價";
+                    } else {
 
-                    String priceRange = String.format("%s MOP - %s MOP", StringUtil.formatFloat(goodsVo.getDouble("appPriceMin")), StringUtil.formatFloat(goodsVo.getDouble("batchPrice0")));
+                     priceRange= String.format("%s MOP - %s MOP", StringUtil.formatFloat(goodsVo.getDouble("appPriceMin")), StringUtil.formatFloat(goodsVo.getDouble("batchPrice0")));
+                    }
                     ((TextView) contentView.findViewById(R.id.tv_price_range)).setText(priceRange);
 
                     ((TextView) contentView.findViewById(R.id.tv_total_stock)).setText("總庫存: " + goodsVo.getInt("totalStorage"));
