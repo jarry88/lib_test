@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.ftofs.twant.R
 import com.ftofs.twant.api.Api
 import com.ftofs.twant.api.UICallback
+import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.databinding.SellerGoodsItemUnswipeBinding
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.KotlinInterfaceApi
@@ -21,6 +22,7 @@ import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
 import okhttp3.Call
+import java.io.Console
 import java.io.IOException
 
 class FeatureGoodAdapter : DataBoundAdapter<SellerGoodsVO, SellerGoodsItemUnswipeBinding>() {
@@ -31,6 +33,9 @@ class FeatureGoodAdapter : DataBoundAdapter<SellerGoodsVO, SellerGoodsItemUnswip
 
     override fun initView(binding: SellerGoodsItemUnswipeBinding, item: SellerGoodsVO) {
         binding.vo = SellerGoodsItem()
+        if (item.goodsModal == Constant.GOODS_TYPE_CONSULT) {
+            binding.tvPriceRange.text = "詢價"
+        }
         binding.btnMore.setOnClickListener{
                     var params = EasyJSONObject.generate("token", User.getToken(), "commonId", item.commonId)
                     val loadingPopup = Util.createLoadingPopup(context).show()

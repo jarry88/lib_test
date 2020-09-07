@@ -343,7 +343,7 @@ public class AddPostFragment extends BaseFragment implements
 
                     Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImage)).centerCrop().into(postGoodsImage);
                     tvPostGoodsName.setText(goodsName);
-                    if (shareData.getInt("goodsModel") == Constant.GOODS_TYPE_CONSULT) {
+                    if (StringUtil.safeModel(shareData) == Constant.GOODS_TYPE_CONSULT) {
                         UiUtil.toConsultUI(tvGoodsPrice);
                     } else {
                         tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 1, true));

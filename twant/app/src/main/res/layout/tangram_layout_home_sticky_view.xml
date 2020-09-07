@@ -27,13 +27,13 @@
                 android:src="@drawable/icon_takewant">
             </ImageView>
             <LinearLayout
-                android:layout_alignParentRight="true"
-
                 android:id="@+id/ll_search_box"
-                android:layout_width="0dp"
                 android:layout_height="35dp"
+                android:layout_width="wrap_content"
                 android:layout_marginStart="13dp"
                 android:layout_toEndOf="@id/icon_takewant"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/btn_random_friend"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:src="@drawable/icon_search_home"
+                    android:src="@drawable/home_search"
                     />
                 <TextView
                     android:layout_width="0dp"

@@ -176,7 +176,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             mainFragment.showHideFragment(MainFragment.MESSAGE_FRAGMENT);
 
         }else if (id == R.id.btn_random_friend) {
-            Util.startFragment(RandomFriendListFragment.());
+            Util.startFragment(new RandomFriendListFragment());
+//            Util.startFragment(new Test2Fragment());
 
         } else if (id == R.id.icon_takewant) {
             if (Config.PROD) {

@@ -19,6 +19,7 @@ public class SellerGoodsItem implements Parcelable {
     public int goodsSaleNum;
     public int isVirtual;
     public int appUsable;
+    public int goodsModal;
     public int goodsState;
     public int tariffEnable;
     public int isCommend;//是否為鎮店之寶 默認0 2-鎮店之寶

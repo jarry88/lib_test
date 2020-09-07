@@ -2,6 +2,7 @@ package com.ftofs.twant.kotlin.vo
 
 data class SellerGoodsVO (
         var commonId: Int ,
+        var goodsModal: Int ,
         var goodsName: String ,
         var imageName: String,
         var goodsSpecNames: String,

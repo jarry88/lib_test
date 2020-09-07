@@ -85,18 +85,19 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
     override fun initParam() {}
 
     /**
-     * 初始化ViewModel的id
-     *
-     * @return BR的id
-     */
-    abstract fun initVariableId(): Int
-
-    /**
      * 初始化根布局
      *
      * @return 布局layout的id
      */
     abstract fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int
+
+
+    /**
+     * 初始化ViewModel的id
+     *
+     * @return BR的id
+     */
+    abstract fun initVariableId(): Int
     open fun initToolbar() {}
 
 
