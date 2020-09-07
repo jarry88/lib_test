@@ -40,10 +40,10 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
     Context context;
     String timesSign;
     List<ListPopupItem> shippingTimeDescList;  // 配送時間描述列表
-    int payWayIndex = 0;
+    int payWay = Constant.PAY_WAY_ONLINE;
 
-    public void setPayWayIndex(int payWayIndex) {
-        this.payWayIndex = payWayIndex;
+    public void setPayWay(int payWay) {
+        this.payWay = payWay;
     }
 
     public ConfirmOrderStoreAdapter(Context context, List<ListPopupItem> shippingTimeDescList, @Nullable List<MultiItemEntity> data) {
@@ -90,7 +90,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             //每家商店小計金額
             double realFreightAmount = item.freightAmount;
             //
-            if (payWayIndex == Constant.PAY_WAY_FETCH) {  // 如果是門店自提，則不算運費
+            if (payWay == Constant.PAY_WAY_FETCH) {  // 如果是門店自提，則不算運費
                 realFreightAmount = 0;
             }
             // float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;

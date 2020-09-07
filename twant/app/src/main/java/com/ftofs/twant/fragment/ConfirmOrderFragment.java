@@ -1285,7 +1285,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 //                    selectedPayWayIndex = 0;
 
                     summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
-                    summaryItem.payWayIndex = payWay;
+                    // summaryItem.payWayIndex = payWay;
                     SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
                     //到店自提不用显示邮费
                     updateFreight = false;
@@ -1321,7 +1321,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 selectedPayWayIndex = 0;
 
                 summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
-                summaryItem.payWayIndex = payWay;
+                // summaryItem.payWayIndex = payWay;
                 SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
                 updateFreight = true;
             }
@@ -1745,7 +1745,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
             currPaymentTypeCode = summaryItem.paymentTypeCode;
             SLog.info("currPaymentTypeCode[%s]", currPaymentTypeCode);
-            summaryItem.payWayIndex = payWay;
+            // summaryItem.payWayIndex = payWay;
             SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
             adapter.notifyItemChanged(confirmOrderItemList.size() - 1);
             totalPrice = summaryItem.calcTotalPrice();
@@ -1756,7 +1756,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 llSelfFetchInfoContainer.setVisibility(View.GONE);
                 updateAddrView();
             }
-            adapter.setPayWayIndex(payWay);
+            adapter.setPayWay(payWay);
             adapter.notifyDataSetChanged();
 //            loadOrderData();
             if (payWay != Constant.PAY_WAY_FETCH) { // 【門店自提】不用計算運費
