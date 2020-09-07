@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.ftofs.twant.R
@@ -25,6 +26,9 @@ import kotlinx.coroutines.*
 
 @SuppressLint("ViewConstructor")
 class MoonVoucherListPopup(context: Context, private val voucherList: MutableList<out StoreVoucher>, val zoneId: String):CenterPopupView(context),CoroutineScope by MainScope(){
+    override fun getImplLayoutId(): Int {
+        return R.layout.popup_moon_voucher_list
+    }
     val repository by lazy { BaseRepository() }
     val adapter =object :DataBoundAdapter<StoreVoucher,MoonVoucherListItemBinding>(){
         override val layoutId: Int
@@ -83,13 +87,12 @@ class MoonVoucherListPopup(context: Context, private val voucherList: MutableLis
                 }
             }
             adapter.addAll(it,true) }
+        close.setOnClickListener { dismiss() }
 
     }
+
     val rvList: RecyclerView by lazy { findViewById<RecyclerView>(R.id.rv_list) }
-
-    override fun getImplLayoutId(): Int {
-        return R.layout.popup_moon_voucher_list
-    }
+    val close:ImageView by lazy { findViewById<ImageView>(R.id.btn_close) }
     override fun getMaxWidth(): Int {
         return (XPopupUtils.getWindowWidth(context) * 0.85f).toInt()
     }

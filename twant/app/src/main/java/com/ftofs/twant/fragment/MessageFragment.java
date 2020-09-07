@@ -407,13 +407,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             updateConversationInfo();
             SLog.info("updateSize[%s]",updateConversationList.size());
             displayUnreadCount();
-            if (chatConversationList.size() > 2) {
-                //在結尾添加一個空白item
-                chatConversationList.add(null);
-            }
-//            chatConversationList.add(null);
-
-//            adapter.setNewData(chatConversationList);
             adapter.submitList(chatConversationList);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -519,9 +512,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
                     // 消息排序
                     comO1O2();
-
-
-//                    adapter.setNewData(chatConversationList);
                     adapter.submitList(chatConversationList);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -770,6 +760,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     EasyJSONArray conversationList = responseObj.getArray("datas.conversationList");
                     int oldCount = chatConversationList.size();
                     if (conversationList != null && conversationList.length() > 0) {
+
                         for (Object object : conversationList) {
                             EasyJSONObject conversation = (EasyJSONObject) object;
                             FriendInfo friendInfo = FriendInfo.parse(conversation);
@@ -787,10 +778,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
 //                            SLog.info("messageFragment [%s]",messageContent);
                             String sendTime =conversation.getSafeString("sendTime");
-                            int i = 0;
+
 
                             //需要新增列表item
-
+                            int i = 0;
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
                                 i++;
@@ -799,32 +790,33 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 }
 
 
-                                if (chatConversation.friendInfo != null&&friendInfo!=null) {
-                                    if (TextUtils.equals(chatConversation.friendInfo.memberName,friendInfo.memberName)&&friendInfo.memberName!=null) {
+                                if (chatConversationList.get(i).friendInfo != null&&friendInfo!=null) {
+                                    if (TextUtils.equals(chatConversationList.get(i).friendInfo.memberName,friendInfo.memberName)&&friendInfo.memberName!=null) {
                                         has = true;
+                                        chatConversationList.get(i).friendInfo = friendInfo;
+                                        chatConversationList.get(i).sendTime = sendTime;
                                         int timestamp = Jarbon.parse(sendTime).getTimestamp();
-                                        chatConversation.friendInfo = friendInfo;
                                         if (StringUtil.isEmpty(chatConversation.lastMessage)) {
-                                            chatConversation.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
-                                            chatConversation.lastMessage = "txt::" + messageContent + ":";
-                                            chatConversation.timestamp = timestamp;
+                                            chatConversationList.get(i).lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
+                                            chatConversationList.get(i).lastMessage = "txt::" + messageContent + ":";
+                                            chatConversationList.get(i).timestamp = timestamp;
                                         }
-                                        else if (chatConversation.timestamp<timestamp&&System.currentTimeMillis()/1000-timestamp>30000000) {//安卓自己定義了150天
-                                                chatConversation.timestamp = timestamp;
-//                                                SLog.info("db[%s]timestamp[%s],", System.currentTimeMillis()/1000, timestamp);
+                                        else if (chatConversationList.get(i).timestamp<timestamp&&System.currentTimeMillis()/1000-timestamp>30000000) {//安卓自己定義了150天
+                                            chatConversationList.get(i).timestamp = timestamp;
 
                                         }
-                                        SLog.info("第[%s]dbtime[%s]sendtimestamp[%s],sendtime[%s],%s,", i,chatConversation.timestamp, timestamp,sendTime,System.currentTimeMillis()/1000-timestamp>30000000);
+                                        SLog.info("第[%s]dbtime[%s]sendtimestamp[%s],sendtime[%s],%s,", i,chatConversationList.get(i).timestamp, timestamp,sendTime,System.currentTimeMillis()/1000-timestamp>30000000);
                                         break;
                                     }
                                 }
                             }
 
-                            if (!has) {
+                            if (!has) {//新增item
+                                SLog.info("新增CHATitem");
                                 ChatConversation newChat = new ChatConversation();
                                 int time =Jarbon.parse(sendTime).getTimestamp();
                                 newChat.friendInfo = friendInfo;
-                                SLog.info("messageFragment [%s]","1");
+//                                SLog.info("messageFragment [%s]","1");
 
                                 newChat.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                 newChat.lastMessage = "txt::"+messageContent+":";
@@ -854,7 +846,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             }
                         }
                     }
-//                    adapter.setNewData(chatConversationList);
 //                    adapter.submitList(chatConversationList);
                     adapter.submitList(chatConversationList);
 //                    }

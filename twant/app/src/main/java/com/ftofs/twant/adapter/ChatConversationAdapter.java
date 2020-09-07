@@ -37,12 +37,10 @@ import internal.org.java_websocket.WebSocket;
  */
 public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, BaseViewHolder> {
     Jarbon now;
-    private DiffUtil.ItemCallback<ChatConversation> diffCallback = new DiffCallBack();
     private DiffUtil.ItemCallback<ChatConversation> callback = new DiffUtil.ItemCallback<ChatConversation>() {
         @Override
         public boolean areItemsTheSame(@NonNull ChatConversation oldItem, @NonNull ChatConversation newItem) {
             boolean b=TextUtils.equals(oldItem.friendInfo.memberName, newItem.friendInfo.memberName);
-//            SLog.info("name%s,%s,b %s",newItem.friendInfo.memberName,newItem.lastMessage,b);
             return b;
         }
 
@@ -50,11 +48,16 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         public boolean areContentsTheSame(@NonNull ChatConversation oldItem, @NonNull ChatConversation newItem) {
 //            SLog.info("name%s,%s,",newItem.friendInfo.memberName,newItem.lastMessage);
 
-            return TextUtils.equals(oldItem.lastMessage,newItem.lastMessage)&&oldItem.timestamp==newItem.timestamp;
+            return TextUtils.equals(oldItem.lastMessage,newItem.lastMessage)&&TextUtils.equals(oldItem.sendTime,newItem.sendTime);
         }
     };
     private final AsyncListDiffer<ChatConversation> chatConversationAsyncListDiffer=new AsyncListDiffer<ChatConversation>(this,callback);
 
+    @NonNull
+    @Override
+    public List<ChatConversation> getData() {
+        return chatConversationAsyncListDiffer.getCurrentList();
+    }
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -79,6 +82,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         newList.addAll(data);
         chatConversationAsyncListDiffer.submitList(newList);
     }
+
     public ChatConversation getItem(int position) {
         return chatConversationAsyncListDiffer.getCurrentList().get(position);
     }
@@ -86,21 +90,11 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
     @Override
     public void onBindViewHolder(BaseViewHolder helper, int position) {
         ChatConversation chatConversation = getItem(position);
-        LinearLayout linearLayout = helper.getView(R.id.ll_message_item_container);
-        if (chatConversation != null) {
-            linearLayout.getLayoutParams().height = Util.dip2px(mContext,80);
-            linearLayout.setVisibility(View.VISIBLE);
-        } else {//本意是在列表的結尾加一條空白數據 避免底部條遮擋
-            linearLayout.getLayoutParams().height = Util.dip2px(mContext, 30);
-            linearLayout.setVisibility(View.INVISIBLE);
-            return;
-        }
-        if (helper.getAdapterPosition() == getData().size() - 1) {
-            helper.getView(R.id.chat_bottom).setVisibility(View.VISIBLE);
-        } else {
-            helper.getView(R.id.chat_bottom).setVisibility(View.GONE);
 
-        }
+        String data =  Jarbon.parse(chatConversation.sendTime).getMessageTime();
+        SLog.info("顯示 name [%s],data[%s]",chatConversation.friendInfo.nickname,data);
+        helper.setText(R.id.tv_message_time,data );
+
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
         //此处已经按身份区分并返回头像
         String avatarUrl = chatConversation.friendInfo.getRoleAvatar();
@@ -135,10 +129,6 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         } else {
             tvLastMessage.setText("");
         }
-
-        String data = Jarbon.formatMessageTime(chatConversation.timestamp);
-        SLog.info("naem [%s],data[%s]",chatConversation.friendInfo.nickname,chatConversation.timestamp);
-        helper.setText(R.id.tv_message_time,data );
         if (chatConversation.isDoNotDisturb) {
             helper.setGone(R.id.icon_do_not_disturb, true);
             helper.setGone(R.id.tv_unread_count, false);

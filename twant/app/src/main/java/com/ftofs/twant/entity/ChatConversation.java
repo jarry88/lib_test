@@ -12,6 +12,7 @@ public class ChatConversation {
     public static final String LAST_MESSAGE_DESC_ORDERS = "[訂單]";
     public static final String LAST_MESSAGE_DESC_GOODS = "[產品]";
     public static final String LAST_MESSAGE_DESC_ENC = "[電子名片]";
+    public String sendTime="";
 
     public ChatConversation() {
         this.friendInfo = new FriendInfo();

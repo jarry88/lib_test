@@ -993,11 +993,11 @@ public class StringUtil {
      * @throws Exception
      */
     public static int safeModel(EasyJSONObject goods) throws Exception {
-        String key = "goodsModel";
+        String key = "goodsModal";
         if (goods.exists(key)) {
             return goods.getInt(key);
         } else {
-//            SLog.info("警告！！！！！ 後端 沒有提供 goodsModel信息");
+            SLog.info("警告！！！！！ 後端 沒有提供 goodsModel信息");
             if (Util.inDev()) {
                 return (int) (4.6+Math.random());
             }

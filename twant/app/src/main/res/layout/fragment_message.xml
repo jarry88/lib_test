@@ -320,6 +320,7 @@
         android:orientation="vertical"
         android:background="@color/tw_white">
         <com.ftofs.twant.widget.MaxHeightRecyclerView
+            android:paddingBottom="@dimen/toolbar_height"
             android:id="@+id/rv_chat_conversation_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

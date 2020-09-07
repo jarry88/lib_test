@@ -1025,17 +1025,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 }
                 confirmOrderItemList.add(storeItem);
                 //判斷店鋪暱稱為  想要食  ，只能允許自提取貨（由前端寫死）
-                String name = Constant.WANT_EAT;
-//                if (Config.DEVELOPER_MODE) {
-//                    name = "想要優品店";
-//                }
-                if (Config.USE_DEVELOPER_TEST_DATA) {
-                    name = "想要科技有限公司";
-                }
-
-                if (name.equals(storeName)) {
+                SLog.info("%s,%s",Config.DEVELOPER_MODE,storeId);
+                if (Config.DEVELOPER_MODE&&storeId==424||storeId==Constant.WANT_EAT_ID) {
                     onlyFetch = true;
                     currPaymentTypeCode = Constant.PAYMENT_TYPE_CODE_CHAIN;
+                    SLog.info("onlyFetch");
                 }
 
                 commitStoreList.append(EasyJSONObject.generate(
