@@ -34,6 +34,7 @@ public class PostItem extends MyFollowItem implements MultiItemEntity {
     public String goodsName;//產品名稱
     public String goodsimage;//產品圖片
     public String goodsPrice;
+    public int goodsModal;//模式
     public int commonId;
 
     public String deadline;

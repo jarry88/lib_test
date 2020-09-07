@@ -230,7 +230,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             Util.setOnClickListener(view, id, this);
         }
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < bottomBarButtonIds.length; i++) {
             if (i == HOME_FRAGMENT) {
                 continue;
             }
@@ -533,7 +533,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             } else {
                 loadStoreNavigationInfo();
             }
-//            return;
+            return;
         }else{ // 如果切換到其它Tab，恢復背景
             toolbar.setBackgroundResource(R.drawable.border_type_d);
             showGoodsFragment(false);

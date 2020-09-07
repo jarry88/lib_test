@@ -375,6 +375,7 @@ public class TestFriendFragment extends BaseFragment implements View.OnClickList
                             postItem.goodsPrice = Double.toString(goods.getDouble("appPrice0"));
                             postItem.goodsimage = goods.getSafeString("imageName");
                             postItem.commonId = goods.getInt("commonId");
+                            postItem.goodsModal = StringUtil.safeModel(goods);
                         }else{
                             postItem.coverImage = wantPostVo.getSafeString("coverImage");
                             postItem.title = wantPostVo.getSafeString("postCategory") + " | " + wantPostVo.getSafeString("title");
