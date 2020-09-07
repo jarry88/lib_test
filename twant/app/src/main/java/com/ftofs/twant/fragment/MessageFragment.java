@@ -805,9 +805,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                         }
                                         SLog.info("第[%s]dbtime[%s]sendtimestamp[%s],sendtime[%s],%s,", i, chatConversation.timestamp, timestamp, sendTime, System.currentTimeMillis() / 1000 - timestamp > 30000000);
                                         break;
-                                    } else {
-                                        SLog.info("%s,%s",i,chatConversation.timestamp<1);
-
                                     }
                                 }
                                 i++;
@@ -850,12 +847,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                         }
                     }
 //                    adapter.submitList(chatConversationList);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-//                chatConversationList.sort((o1, o2) -> comO1O2(o1,o2));
-
-                        comO1O2();
-                    }
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                        comO1O2();
+//                    }
                     adapter.submitList(chatConversationList);
 //                    }
                 } catch (Exception e) {
