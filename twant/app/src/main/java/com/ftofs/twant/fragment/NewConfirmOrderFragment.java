@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -508,7 +509,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
 
                     String realName = etSelfFetchNickname.getText().toString().trim();
                     if (StringUtil.isEmpty(realName)) {
-                        ToastUtil.error(_mActivity, getString(R.string.input_self_take_nickname_hint));
+                         ToastUtil.error(_mActivity, getString(R.string.input_self_take_nickname_hint));
                         return null;
                     }
 
@@ -859,6 +860,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
         if (isFirstShowSelfFetchInfo) {  // 首次顯示自提信息
             if (mAddrItem != null) {
                 etSelfFetchNickname.setText(mAddrItem.realName);
+//                etSelfFetchNickname.addTextChangedListener();
 
                 // 設置不帶區號的手機號
                 String shortMobile = mAddrItem.mobPhone;
@@ -1065,7 +1067,18 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
 
             // 添加上汇总项目
             ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
+
+//            currPaymentTypeCode = Constant.PAYMENT_TYPE_CODE_CHAIN;
+//            payWay = Constant.PAY_WAY_ONLINE;
+            SLog.info("__TEST_onlyFetch[%s]", onlyFetch);
+            if (onlyFetch) {
+                payWay = Constant.PAY_WAY_FETCH;
+                SLog.info("__TEST_paymentTypeCodeMap[%s]", paymentTypeCodeMap.get(payWay));
+                confirmOrderSummaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
+            }
             confirmOrderItemList.add(confirmOrderSummaryItem);
+
+
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             return;
@@ -1403,7 +1416,15 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 //判斷店鋪暱稱為  想要食  ，只能允許自提取貨（由前端寫死）,
                 if (Config.DEVELOPER_MODE && storeId == 424 || storeId == Constant.WANT_EAT_ID) {
                     onlyFetch = true;
-                    onSelected(PopupType.PAY_WAY, payWayItemList.indexOf(fetchItem), fetchItem.payWay);
+
+//                    new Handler().postDelayed(() -> {
+//
+//                        /**
+//                         * 延时执行的代码
+//                         */
+//                        onSelected(PopupType.PAY_WAY, payWayItemList.indexOf(fetchItem), fetchItem.payWay);
+//                    },100); // 延时0.1秒，等待加载mainfragment
+
                 }
 
                 commitStoreList.append(EasyJSONObject.generate(
@@ -1431,7 +1452,6 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             if (summaryItem == null) {
                 return;
             }
-
             summaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
             currPaymentTypeCode = summaryItem.paymentTypeCode;
             SLog.info("currPaymentTypeCode[%s]", currPaymentTypeCode);
@@ -1598,6 +1618,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
      * @return
      */
     private ConfirmOrderSummaryItem getSummaryItem() {
+        SLog.bt();
         int size = confirmOrderItemList.size();
         if (size < 1) {
             return null;
