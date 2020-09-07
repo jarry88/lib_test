@@ -1032,7 +1032,7 @@ public class AddGoodsFragment extends BaseFragment
                 }
 
                 if (Config.USE_DEVELOPER_TEST_DATA) {
-                    // break;
+                    break;
                 }
                 vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 1);
 
@@ -1047,7 +1047,7 @@ public class AddGoodsFragment extends BaseFragment
                             specValueIdStringList,
                             specValueIdStringMap,
                             null,
-                            colorImageMap));
+                            colorImageMap, true));
 
                     return;
                 }

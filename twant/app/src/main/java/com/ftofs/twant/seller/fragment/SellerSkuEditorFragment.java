@@ -69,7 +69,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
 
     HwLoadingPopup loadingPopup;
     private boolean loaded;
-
+    boolean isConsult;
 
     public static SellerSkuEditorFragment newInstance(
             EditorResultInterface editorResultInterface,
@@ -77,7 +77,18 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
             Map<String, SellerSpecPermutation> specValueIdStringMap,
             SellerSpecMapItem colorSpecMapItem,  // 颜色规格，如果没选颜色时，则为null
             Map<Integer, List<SellerGoodsPicVo>> colorImageMap  // 对应的图片对象的列表
-            ) {
+    ) {
+        return newInstance(editorResultInterface, specValueIdStringList, specValueIdStringMap, colorSpecMapItem, colorImageMap, false);
+    }
+
+
+    public static SellerSkuEditorFragment newInstance(
+            EditorResultInterface editorResultInterface,
+            List<String> specValueIdStringList,
+            Map<String, SellerSpecPermutation> specValueIdStringMap,
+            SellerSpecMapItem colorSpecMapItem,  // 颜色规格，如果没选颜色时，则为null
+            Map<Integer, List<SellerGoodsPicVo>> colorImageMap,  // 对应的图片对象的列表
+            boolean isConsult) {
         Bundle args = new Bundle();
 
         SellerSkuEditorFragment fragment = new SellerSkuEditorFragment();
@@ -87,6 +98,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         fragment.specValueIdStringMap = specValueIdStringMap;
         fragment.colorSpecMapItem = colorSpecMapItem;
         fragment.colorImageMap = colorImageMap;
+        fragment.isConsult = isConsult;
 
         return fragment;
     }
@@ -146,6 +158,10 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabsFromPagerAdapter(adapter);
+
+        if (isConsult) { // 如果是諮詢型商品，默認切換到[SKU圖片]Tab
+            viewPager.setCurrentItem(1);
+        }
     }
 
 
