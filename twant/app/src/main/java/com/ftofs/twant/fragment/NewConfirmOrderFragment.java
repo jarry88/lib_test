@@ -312,8 +312,8 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                         shippingTimePopup(position);
                         break;
                     case R.id.btn_change_pay_way:
-                        if (onlyFetch = true) {
-//                            onSelected(PopupType.PAY_WAY, payWayItemList.indexOf(fetchItem), fetchItem.payWay);
+                        if (onlyFetch) {
+                            // 如有只有【到店自提】，不讓選擇
                             break;
                         }
                         payWayPopup();
@@ -987,6 +987,10 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 SLog.info("onComplete, threadId[%s], soldOutGoodsItemList.size[%d]", Thread.currentThread().getId(), soldOutGoodsItemList.size());
                 dismissLoadingPopup();
 
+                if (payWay == Constant.PAY_WAY_FETCH || onlyFetch) { // 門店自提
+                    showSelfFetchInfo();
+                }
+
                 if (startStep == STEP_DISPLAY) { // 如果是從第1步開始加載，更新收貨地址的顯示
                     updateAddrView();
                 }
@@ -1426,15 +1430,6 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 //判斷店鋪暱稱為  想要食  ，只能允許自提取貨（由前端寫死）,
                 if (Config.DEVELOPER_MODE && storeId == 424 || storeId == Constant.WANT_EAT_ID) {
                     onlyFetch = true;
-
-//                    new Handler().postDelayed(() -> {
-//
-//                        /**
-//                         * 延时执行的代码
-//                         */
-//                        onSelected(PopupType.PAY_WAY, payWayItemList.indexOf(fetchItem), fetchItem.payWay);
-//                    },100); // 延时0.1秒，等待加载mainfragment
-
                 }
 
                 commitStoreList.append(EasyJSONObject.generate(

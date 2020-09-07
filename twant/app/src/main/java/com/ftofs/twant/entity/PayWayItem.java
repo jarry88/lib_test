@@ -7,8 +7,8 @@ package com.ftofs.twant.entity;
  */
 public class PayWayItem {
     public int payWay;  // 取值： Constant.PAY_WAY_ONLINE、Constant.PAY_WAY_DELIVERY、Constant.PAY_WAY_FETCH
-    public String payWayName; // 支付方式名稱
-    public String payWayDesc; // 支付方式描述
+    public String payWayName; // 支付方式名稱（中文）
+    public String payWayDesc; // 支付方式描述（中文）
     public boolean isSelected; // 當前是否選中狀態
 
     public int selectedIconResId; // 選中狀態的圖標資源Id
