@@ -91,9 +91,8 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
     public void onBindViewHolder(BaseViewHolder helper, int position) {
         ChatConversation chatConversation = getItem(position);
 
-        String data =  Jarbon.parse(chatConversation.sendTime).getMessageTime();
-        SLog.info("顯示 name [%s],data[%s]",chatConversation.friendInfo.nickname,data);
-        helper.setText(R.id.tv_message_time,data );
+        SLog.info("顯示 name [%s],data[%s]",chatConversation.friendInfo.memberName,chatConversation.messageTime);
+        helper.setText(R.id.tv_message_time,chatConversation.messageTime );
 
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
         //此处已经按身份区分并返回头像
@@ -162,7 +161,6 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         else if(chatConversation.isPlatformCustomer){
             SLog.info("客服類型item");
             if (position == 0) {
-
                 helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_light_grey_EDED));
             } else {
                 llMessageItemContainer.setVisibility(View.INVISIBLE);

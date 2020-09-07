@@ -447,6 +447,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                                 String ordersStateName = ordersVo.getSafeString("ordersStateName");
                                 String storeName = ordersVo.getSafeString("storeName");
                                 int storeId = ordersVo.getInt("storeId");
+                                int ordersState = ordersVo.getInt("ordersState");
                                 float freightAmount = (float) ordersVo.getDouble("freightAmount");
                                 float ordersAmount = (float) ordersVo.getDouble("ordersAmount");
 
@@ -497,6 +498,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                                         showMemberCancel == 1, showMemberBuyAgain == 1, showShipSearch == 1,
                                         showEvaluation == 1, showMemberReceive == 1, orderSkuItemList, giftItemList);
                                 orderItem.storeId = storeId;
+                                orderItem.ordersState = ordersState;
                                 payItem.orderItemList.add(orderItem);
                                 if (!showPayButton) {
                                     payItemList.add(payItem);
