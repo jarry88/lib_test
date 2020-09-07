@@ -24,8 +24,7 @@ public class Goods implements MultiItemEntity {
     public int buyNum;
     public int appUsable;
     public int promotionType = Constant.PROMOTION_TYPE_NONE;
-    public int goodsClick;
-    public int goodsModel;
+    public int goodsModal;
 
     private int itemType;
     public int id;
@@ -122,7 +121,7 @@ public class Goods implements MultiItemEntity {
         if (goods.exists("tariffEnable")) {
             goods1.tariffEnable = goods.getInt("tariffEnable");
         }
-        goods1.goodsModel = StringUtil.safeModel(goods);
+        goods1.goodsModal = StringUtil.safeModel(goods);
         return goods1 ;
     }
 

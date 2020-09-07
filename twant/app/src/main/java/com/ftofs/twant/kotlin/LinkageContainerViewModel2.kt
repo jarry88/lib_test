@@ -114,7 +114,6 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                     else pageNum++
 
                     val result = viewModel.getShoppingZoneGoods(it, pageNum)
-                    SLog.info(result.toString())
                     if (result is Result.Success) {
                         val list =result.datas.zoneGoodsList
                         if (list == null || list.size == 0) {
@@ -124,6 +123,7 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                                 stateLiveData.postNoMoreData()
                             }
                         }else{
+                            list.forEach{SLog.info(it.goodsName+it.goodsModal)}
                             goodsList.value = result.datas.zoneGoodsList
                             stateLiveData.postSuccess()
 

@@ -686,7 +686,10 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         }
 
                         EasyJSONArray goodsArray = responseObj.getSafeArray("datas.goodsCommonList");
-//                        goodsList.clear();
+                        if (page == 1) {
+
+                        goodsList.clear();
+                        }
                         for (Object object : goodsArray) {
                             EasyJSONObject goodsObject = (EasyJSONObject) object;
 //

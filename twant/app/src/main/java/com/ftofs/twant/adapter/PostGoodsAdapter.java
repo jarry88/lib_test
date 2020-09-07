@@ -29,7 +29,7 @@ public class PostGoodsAdapter extends BaseQuickAdapter<Goods, BaseViewHolder> {
     protected void convert(BaseViewHolder helper, Goods item) {
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.imageUrl)).centerCrop().into(goodsImage);
-        boolean noPrice = item.goodsModel == Constant.GOODS_TYPE_CONSULT;
+        boolean noPrice = item.goodsModal == Constant.GOODS_TYPE_CONSULT;
         helper.setText(R.id.tv_goods_name, item.name)
             .setText(R.id.tv_goods_price_left, noPrice?"詢價":StringUtil.formatPrice(mContext,item.price, 0,false));
 

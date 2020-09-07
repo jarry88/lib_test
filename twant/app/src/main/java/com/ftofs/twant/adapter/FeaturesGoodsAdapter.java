@@ -19,7 +19,6 @@ import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Goods;
-import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
@@ -93,7 +92,7 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
         holder.tvGoodsName.setText(item.name);
         holder.tvGoodsJingle.setText(item.jingle);
         holder.tvGoodsPrice.setText(StringUtil.formatPrice(context, item.price, 1,false));
-        if (Util.noPrice(item.goodsModel)) {
+        if (Util.noPrice(item.goodsModal)) {
             UiUtil.toConsultUI(holder.tvGoodsPrice);
         } else {
             UiUtil.toPriceUI(holder.tvGoodsPrice,12);

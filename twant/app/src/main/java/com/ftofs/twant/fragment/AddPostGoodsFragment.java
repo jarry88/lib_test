@@ -17,7 +17,6 @@ import com.ftofs.twant.adapter.PostGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.SearchType;
-import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -25,7 +24,6 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
-import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
@@ -210,7 +208,7 @@ public class AddPostGoodsFragment extends BaseFragment implements View.OnClickLi
                         } else {
                             goods.imageUrl = easyJSONObject.getSafeString("goodsImage");
                         }
-                        goods.goodsModel = StringUtil.safeModel(easyJSONObject);
+                        goods.goodsModal = StringUtil.safeModel(easyJSONObject);
 
                         goodsList.add(goods);
                     }
