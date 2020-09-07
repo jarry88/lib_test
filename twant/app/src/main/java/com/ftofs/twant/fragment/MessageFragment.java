@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -26,17 +25,13 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
-import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.UnreadCount;
-import com.ftofs.twant.interfaces.DiffCallBack;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.FriendInfo;
-import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.BadgeUtil;
 import com.ftofs.twant.util.ChatUtil;
@@ -51,7 +46,6 @@ import com.ftofs.twant.vo.member.MemberVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.MaxHeightRecyclerView;
 import com.ftofs.twant.widget.ScaledButton;
-import com.ftofs.twant.widget.SlantedWidget;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -63,7 +57,6 @@ import com.lxj.xpopup.interfaces.XPopupCallback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.reactivestreams.Subscriber;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,16 +64,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DefaultObserver;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 
 
@@ -420,13 +407,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             updateConversationInfo();
             SLog.info("updateSize[%s]",updateConversationList.size());
             displayUnreadCount();
-            if (chatConversationList.size() > 2) {
-                //在結尾添加一個空白item
-                chatConversationList.add(null);
-            }
-//            chatConversationList.add(null);
-
-//            adapter.setNewData(chatConversationList);
             adapter.submitList(chatConversationList);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -532,9 +512,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
                     // 消息排序
                     comO1O2();
-
-
-//                    adapter.setNewData(chatConversationList);
                     adapter.submitList(chatConversationList);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -783,6 +760,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     EasyJSONArray conversationList = responseObj.getArray("datas.conversationList");
                     int oldCount = chatConversationList.size();
                     if (conversationList != null && conversationList.length() > 0) {
+
                         for (Object object : conversationList) {
                             EasyJSONObject conversation = (EasyJSONObject) object;
                             FriendInfo friendInfo = FriendInfo.parse(conversation);
@@ -800,10 +778,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
 //                            SLog.info("messageFragment [%s]",messageContent);
                             String sendTime =conversation.getSafeString("sendTime");
-                            int i = 0;
+
 
                             //需要新增列表item
-
+                            int i = 0;
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
                                 i++;
@@ -812,32 +790,33 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 }
 
 
-                                if (chatConversation.friendInfo != null&&friendInfo!=null) {
-                                    if (TextUtils.equals(chatConversation.friendInfo.memberName,friendInfo.memberName)&&friendInfo.memberName!=null) {
+                                if (chatConversationList.get(i).friendInfo != null&&friendInfo!=null) {
+                                    if (TextUtils.equals(chatConversationList.get(i).friendInfo.memberName,friendInfo.memberName)&&friendInfo.memberName!=null) {
                                         has = true;
+                                        chatConversationList.get(i).friendInfo = friendInfo;
+                                        chatConversationList.get(i).sendTime = sendTime;
                                         int timestamp = Jarbon.parse(sendTime).getTimestamp();
-                                        chatConversation.friendInfo = friendInfo;
                                         if (StringUtil.isEmpty(chatConversation.lastMessage)) {
-                                            chatConversation.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
-                                            chatConversation.lastMessage = "txt::" + messageContent + ":";
-                                            chatConversation.timestamp = timestamp;
+                                            chatConversationList.get(i).lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
+                                            chatConversationList.get(i).lastMessage = "txt::" + messageContent + ":";
+                                            chatConversationList.get(i).timestamp = timestamp;
                                         }
-                                        else if (chatConversation.timestamp<timestamp&&System.currentTimeMillis()/1000-timestamp>12960000) {//安卓自己定義了150天
-                                                chatConversation.timestamp = timestamp;
-//                                                SLog.info("db[%s]timestamp[%s],", System.currentTimeMillis()/1000, timestamp);
+                                        else if (chatConversationList.get(i).timestamp<timestamp&&System.currentTimeMillis()/1000-timestamp>30000000) {//安卓自己定義了150天
+                                            chatConversationList.get(i).timestamp = timestamp;
 
                                         }
-                                        SLog.info("第[%s]dbtime[%s]sendtimestamp[%s],sendtime[%s],%s,", i,chatConversation.timestamp, timestamp,sendTime,System.currentTimeMillis()/1000-timestamp>12960000);
+                                        SLog.info("第[%s]dbtime[%s]sendtimestamp[%s],sendtime[%s],%s,", i,chatConversationList.get(i).timestamp, timestamp,sendTime,System.currentTimeMillis()/1000-timestamp>30000000);
                                         break;
                                     }
                                 }
                             }
 
-                            if (!has) {
+                            if (!has) {//新增item
+                                SLog.info("新增CHATitem");
                                 ChatConversation newChat = new ChatConversation();
                                 int time =Jarbon.parse(sendTime).getTimestamp();
                                 newChat.friendInfo = friendInfo;
-                                SLog.info("messageFragment [%s]","1");
+//                                SLog.info("messageFragment [%s]","1");
 
                                 newChat.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                 newChat.lastMessage = "txt::"+messageContent+":";
@@ -867,7 +846,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             }
                         }
                     }
-//                    adapter.setNewData(chatConversationList);
 //                    adapter.submitList(chatConversationList);
                     adapter.submitList(chatConversationList);
 //                    }

@@ -1599,7 +1599,8 @@ public class Util {
      * @return
      */
     public static boolean inDev() {
-        return Config.DEVELOPER_MODE && Config.USE_DEVELOPER_TEST_DATA;
+        SLog.info("當前環境 %s",Config.currEnv);
+        return Config.currEnv==Config.ENV_28||Config.currEnv==Config.ENV_29;
     }
 
     public static boolean noPrice(int goodsModel) {

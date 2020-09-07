@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.app.Instrumentation;
+import android.app.assist.AssistStructure;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.method.LinkMovementMethod;
@@ -36,6 +37,7 @@ import com.ftofs.twant.constant.UnicodeEmoji;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.CommentReplyItem;
 import com.ftofs.twant.entity.EmojiPage;
+import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.UnicodeEmojiItem;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
@@ -45,6 +47,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SmoothInputLayout;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,13 +58,14 @@ import java.util.Map;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
+import me.yokeyword.fragmentation.ISupportFragment;
 import okhttp3.Call;
 
 /**
  * 評論詳情Fragment
  * @author zwm
  */
-public class CommentDetailFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, SimpleCallback {
+public class CommentDetailFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, SimpleCallback , SmoothInputLayout.OnVisibilityChangeListener{
     CommentItem commentItem;
     private boolean popLogined=false;
 
@@ -70,6 +74,16 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     // 评论的RecyclerView与图片索引的映射关系
     Map<Integer, Integer> rvPositionToImageIndexMap = new HashMap<>();
     List<String> imageList = new ArrayList<>();
+    private View llEmojiPane;
+    private int chanel=Constant.COMMENT_CHANNEL_STORE;
+    private String authorName;
+
+    public static CommentDetailFragment newInstance(CommentItem commentItem, int commentChannelPost,String name) {
+        CommentDetailFragment fragment = newInstance(commentItem);
+        fragment.chanel = commentChannelPost;
+        fragment.authorName = name;
+        return fragment;
+    }
 
     View mainActivityContentView;
 
@@ -77,7 +91,6 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     public void onSupportVisible() {
         super.onSupportVisible();
         if (!User.isLogin()) {
-
             popLogined=false;
         }
 
@@ -183,7 +196,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         replyCommentId = commentItem.commentId;
 
         silMainContainer = view.findViewById(R.id.sil_main_container);
-
+        llEmojiPane = view.findViewById(R.id.ll_emoji_pane);
+        silMainContainer.setOnVisibilityChangeListener(this);
         imgCommenterAvatar = view.findViewById(R.id.img_commenter_avatar);
         imgCommenterAvatar.setOnClickListener(this);
         tvCommenterNickname = view.findViewById(R.id.tv_commenter_nickname);
@@ -371,6 +385,13 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 if (commentItem.relatePostId > 0) {
                     params.set("relatePostId", commentItem.relatePostId);
                 }
+                if (chanel == Constant.COMMENT_CHANNEL_POST) {
+                    if (Util.inDev()) {
+                        params.set("postCreateBy", "u_001315344758");
+                    } else if (authorName != null) {
+                        params.set("postCreateBy", authorName);
+                    }
+                }
             } catch (Exception e) {
 
             }
@@ -430,6 +451,18 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         silMainContainer.closeInputPane();
 
                         quoteReply.isQuoteReply = false;
+                        if (chanel == Constant.COMMENT_CHANNEL_POST && responseObj.exists("datas.voucherList")) {
+                            ArrayList<StoreVoucher> voucherList = new ArrayList<>();
+                            for (Object o : responseObj.getSafeArray("datas.voucherList")) {
+                                EasyJSONObject voucher = (EasyJSONObject) o;
+                                voucherList.add(StoreVoucher.parse(voucher));
+                            }
+                            String zoneId = responseObj.getSafeString("datas.zoneId");
+                            new XPopup.Builder(_mActivity)
+                                    .moveUpToKeyboard(false)
+                                    .asCustom(new MoonVoucherListPopup(_mActivity,voucherList,zoneId))
+                                    .show();
+                        }
                     } catch (Exception e) {
                         SLog.info("Error!%s", e);
                     }
@@ -732,6 +765,14 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             }
 
             emojiPageList.add(emojiPage);
+        }
+    }
+    @Override
+    public void onVisibilityChange(int visibility) {
+        if (visibility == View.GONE) {
+            btnEmoji.setSelected(false);
+        } else {
+            btnEmoji.setSelected(llEmojiPane.getVisibility() == View.VISIBLE);
         }
     }
 }

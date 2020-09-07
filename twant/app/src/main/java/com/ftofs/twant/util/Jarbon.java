@@ -120,17 +120,17 @@ public class Jarbon {
         int s = 0;
         int u = 0;
         if (len >= 10) { // 至少為這種格式  2019-07-26
-            Y = Integer.valueOf(datetime.substring(0, 4));
-            m = Integer.valueOf(datetime.substring(5, 7));
-            d = Integer.valueOf(datetime.substring(8, 10));
+            Y = Integer.parseInt(datetime.substring(0, 4));
+            m = Integer.parseInt(datetime.substring(5, 7));
+            d = Integer.parseInt(datetime.substring(8, 10));
 
             if (len >= 19) { // 至少為這種格式  2019-07-26 08:15.20
-                H = Integer.valueOf(datetime.substring(11, 13));
-                i = Integer.valueOf(datetime.substring(14, 16));
-                s = Integer.valueOf(datetime.substring(17, 19));
+                H = Integer.parseInt(datetime.substring(11, 13));
+                i = Integer.parseInt(datetime.substring(14, 16));
+                s = Integer.parseInt(datetime.substring(17, 19));
 
                 if (len >= 23) { // 這種格式 2019-07-26 08:15.20.083
-                    u = Integer.valueOf(datetime.substring(20, 23));
+                    u = Integer.parseInt(datetime.substring(20, 23));
                 }
             }
         }
@@ -413,5 +413,9 @@ public class Jarbon {
             calendar.set(jarbon.getYear(), jarbon.month, jarbon.day, jarbon.hour, jarbon.minute, jarbon.second);
             return calendar;
         }
+    }
+
+    public String getMessageTime() {
+        return formatMessageTime(this.timestampMillis);
     }
 }

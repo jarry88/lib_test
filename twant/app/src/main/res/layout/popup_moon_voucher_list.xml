@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ll_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/moon_middle"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/img_top"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/rv_list"
+                android:layout_width="match_parent"
+                android:layout_height="138.5dp"
+                android:background="@drawable/moon_bottom"/>
+            <androidx.recyclerview.widget.RecyclerView
+                app:layout_constraintTop_toBottomOf="@id/img_top"
+                app:layout_constraintBottom_toTopOf="@id/img_bottom"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp_64"
+                binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/moon_voucher_list_item"
+                android:id="@+id/rv_list"/>
+            <ImageView
+                android:id="@+id/img_bottom"
+                android:layout_width="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_list"
+                android:layout_height="88.5dp"
+                android:background="@drawable/moon_bottom"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+
+            android:padding="5dp"
+            android:src="@drawable/icon_close_activity_popup"
+            android:visibility="visible"
+            />
+    </LinearLayout>
+
+</layout>

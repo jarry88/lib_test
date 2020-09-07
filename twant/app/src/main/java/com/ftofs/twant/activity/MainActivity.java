@@ -88,9 +88,6 @@ import com.ftofs.twant.widget.AppUpdatePopup;
 import com.ftofs.twant.widget.CouponWordDialog;
 import com.ftofs.twant.widget.NewWordPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
-//import com.huawei.hms.aaid.HmsInstanceId;
-import com.huawei.hms.aaid.HmsInstanceId;
-import com.hyphenate.chat.EMClient;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -503,16 +500,16 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
         if (Vendor.VENDOR_HUAWEI != Vendor.getVendorType()) {
             return;
         }
-        TwantApplication.getThreadPool().execute(() -> {
-            try{
-                String getToken = HmsInstanceId.getInstance(getBaseContext()).getToken(getString(R.string.huawei_app_id),"HCM");
-                EMClient.getInstance().sendHMSPushTokenToServer(getToken);
-                SLog.info("huaweiToken[%s]",getToken);
-                Hawk.put("HMC_TOKEN", getToken);
-            }catch (Exception e){
-                SLog.info("Error!getHuaweiToken message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-            }
-        });
+//        TwantApplication.getThreadPool().execute(() -> {
+//            try{
+//                String getToken = HmsInstanceId.getInstance(getBaseContext()).getToken(getString(R.string.huawei_app_id),"HCM");
+//                EMClient.getInstance().sendHMSPushTokenToServer(getToken);
+//                SLog.info("huaweiToken[%s]",getToken);
+//                Hawk.put("HMC_TOKEN", getToken);
+//            }catch (Exception e){
+//                SLog.info("Error!getHuaweiToken message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+//            }
+//        });
     }
 
 

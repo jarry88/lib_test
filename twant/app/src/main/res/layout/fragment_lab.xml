@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="@android:color/white"
+
+        tools:context=".activity.MainActivity"
         android:orientation="vertical">
         <Button
             android:id="@+id/btn_test1"
@@ -81,6 +84,7 @@
             </Button>
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/rv_list"/>
@@ -88,7 +92,7 @@
             android:id="@+id/imageViewCropped"
             android:layout_width="match_parent"
             android:layout_marginTop="24dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
         <com.ftofs.twant.widget.CheckPhoneView
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -97,7 +101,8 @@
         <View
             android:id="@+id/vw"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_margin="15dp">
         </View>
         <com.ftofs.twant.widget.NineLuckPan
@@ -106,5 +111,47 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </com.ftofs.twant.widget.NineLuckPan>
+        <!-- 底部工具条 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center_vertical"
+            android:background="@color/tw_slight_grey">
+            <EditText
+                android:id="@+id/et_reply_content"
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_weight="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:hint=""
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                android:background="@drawable/reply_edit_text_bg"
+                />
+
+            <ImageView
+                android:id="@+id/btn_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/icon_emoji"
+                />
+
+            <TextView
+                android:id="@+id/btn_commit"
+                android:layout_width="51dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/text_send"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:background="@drawable/micro_blue_button"
+                />
+        </LinearLayout>
     </LinearLayout>
 </layout>
