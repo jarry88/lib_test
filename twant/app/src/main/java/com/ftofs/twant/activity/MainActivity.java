@@ -1429,6 +1429,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                     } else if ("store".equals(commandType)) {  // 店铺类
                         commandTypeInt = NewWordPopup.COMMAND_TYPE_STORE;
                     }
+//                    else if("voucher".equals(commandType)){
+//                        commandTypeInt = NewWordPopup.COMMAND_TYPE_VOUCHER;
+//                    }
 
                     if (commandTypeInt == NewWordPopup.COMMAND_TYPE_STORE || commandTypeInt == NewWordPopup.COMMAND_TYPE_GOODS ||
                             commandTypeInt == NewWordPopup.COMMAND_TYPE_SHOPPING) {

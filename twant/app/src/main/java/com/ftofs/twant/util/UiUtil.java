@@ -170,16 +170,7 @@ public class UiUtil {
             }
         }
     }
-    public static Drawable tvButtonBackGround(TextView textView,int colorBg) {
-        ShapeDrawable drawable = new ShapeDrawable(new Shape() {
-            @Override
-            public void draw(Canvas canvas, Paint paint) {
 
-            }
-        });
-//        drawable.add;
-        return null;
-    }
 
     public static void toConsultUI(TextView textView) {
         textView.setText("詢價");

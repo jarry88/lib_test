@@ -50,7 +50,7 @@ public class MemberPostListAdapter extends BaseMultiItemQuickAdapter<PostItem, B
                 helper.setText(R.id.tv_store_name, itemData.storeName)
                         .setText(R.id.tv_date, itemData.createTime)
                         .setText(R.id.tv_goods_name, itemData.goodsName)
-                        .setText(R.id.tv_goods_price_left, itemData.goodsPrice);
+                        .setText(R.id.tv_goods_price_left, itemData.goodsModal==Constant.GOODS_TYPE_CONSULT?"詢價":itemData.goodsPrice);
             }
         }else{
             helper.addOnClickListener(R.id.btn_thumb, R.id.btn_fav, R.id.btn_share);

@@ -35,6 +35,7 @@ public class NewWordPopup extends CenterPopupView implements View.OnClickListene
     public static final int COMMAND_TYPE_STORE = 1; // 店铺类型口令
     public static final int COMMAND_TYPE_GOODS = 2; // 商品类型口令
     public static final int COMMAND_TYPE_SHOPPING = 3; // 购物专场类型口令
+    public static final int COMMAND_TYPE_VOUCHER = 4;
 
     Context context;
     EasyJSONObject extra;

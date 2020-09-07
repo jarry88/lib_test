@@ -236,6 +236,7 @@ public class AddPostGoodsFragment extends BaseFragment implements View.OnClickLi
         bundle.putString("goodsName", goods.name);
         bundle.putDouble("price", goods.price);
         bundle.putString("imageUrl", goods.imageUrl);
+        bundle.putInt("goodsModal", goods.goodsModal);
         setFragmentResult(RESULT_OK, bundle);
 
         hideSoftInputPop();

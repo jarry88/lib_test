@@ -28,7 +28,6 @@ import com.wzq.mvvmsmart.utils.LoadingUtil
 //    get() {return U}
 
 class CategoryCommodityKotlinFragment:BaseTwantFragmentMVVM<PageCategoryCommodityBinding, CategoryCommodityViewModel>() {
-    private var loadingUtil:LoadingUtil?=null
     private val loadPopup by lazy {
         Util.createLoadingPopup(context)
     }

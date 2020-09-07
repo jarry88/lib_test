@@ -16,6 +16,7 @@ import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.FeatureGoodViewModel
 import com.ftofs.twant.kotlin.SellerGoodsListAdapter
 import com.ftofs.twant.log.SLog
+import com.ftofs.twant.util.Util
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
@@ -28,8 +29,9 @@ import java.util.*
  */
 class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayoutBinding, FeatureGoodViewModel>(){
     private lateinit var sellerGoodsListAdapter: SellerGoodsListAdapter
-    private var goodsList: List<SellerGoodsItem> = ArrayList()
-    private var loadingUtil: LoadingUtil? = null
+    private val loadPopup by lazy {
+        Util.createLoadingPopup(context)
+    }
 
     companion object{
         fun newInstance(): SelectFeatureGoodsFragment {
@@ -66,7 +68,7 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
         }
         binding.iconAddGoods.visibility=View.GONE
         binding.tvTitle.text="選擇鎮店之寶"
-        loadingUtil = LoadingUtil(activity)
+        loadPopup.show()
         viewModel.doGetFeaturesGoodsList() //请求出售中的商品列表
         initRecyclerView()
     }
@@ -93,9 +95,9 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
 //                sellerGoodsListAdapter.data.clear() // 请求多页数据后再请求第1页,先删除之前数据
                 if (goodsList.isEmpty()) {
                     //  第一页无数据,就显示默认页
-                    showEmptyLayout(binding.refreshLayout, this@SelectFeatureGoodsFragment.resources.getString(R.string.no_data_hint), R.drawable.ic_placeholder_no_data, false)
+//                    showEmptyLayout(binding.refreshLayout, this@SelectFeatureGoodsFragment.resources.getString(R.string.no_data_hint), R.drawable.ic_placeholder_no_data, false)
                 } else {
-                    showNormalLayout(binding.refreshLayout)
+//                    showNormalLayout(binding.refreshLayout)
                     sellerGoodsListAdapter.addAll(goodsList,true)
                 }
             } else { // 不是第一页
@@ -127,7 +129,7 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
                 StateLiveData.StateEnum.Loading -> {
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.showLoading("加载中..")
+                    loadPopup.show()
                     KLog.e("请求数据中--显示loading")
                 }
                 StateLiveData.StateEnum.Success -> {
@@ -139,7 +141,7 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
                     KLog.e("空闲状态--关闭loading")
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.hideLoading()
+                    loadPopup.dismiss()
                 }
                 StateLiveData.StateEnum.NoData -> {
                     KLog.e("空闲状态--关闭loading")
@@ -151,7 +153,7 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
                     KLog.e("其他状态--关闭loading")
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.hideLoading()
+                    loadPopup.dismiss()
                 }
             }
         })
@@ -168,6 +170,6 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
 
     override fun onDestroy() {
         super.onDestroy()
-        loadingUtil?.hideLoading()
+        loadPopup.dismiss()
     }
 }

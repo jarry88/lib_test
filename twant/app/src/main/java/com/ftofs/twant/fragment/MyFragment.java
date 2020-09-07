@@ -519,6 +519,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                                 postItem.goodsPrice = StringUtil.formatPrice(_mActivity, goods.getDouble("appPrice0"), 0);
                                 postItem.goodsimage = goods.getSafeString("imageName");
                                 postItem.commonId = goods.getInt("commonId");
+                                postItem.goodsModal = StringUtil.safeModel(goods);
                             }
                         }else{
                             postItem.coverImage = wantPostVo.getSafeString("coverImage");
