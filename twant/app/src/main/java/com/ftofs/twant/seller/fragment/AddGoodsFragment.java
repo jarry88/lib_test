@@ -1030,6 +1030,10 @@ public class AddGoodsFragment extends BaseFragment
                     ToastUtil.error(_mActivity, errMsg);
                     break;
                 }
+
+                if (Config.USE_DEVELOPER_TEST_DATA) {
+                    // break;
+                }
                 vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 1);
 
                 break;
@@ -1038,6 +1042,16 @@ public class AddGoodsFragment extends BaseFragment
 
                 break;
             case R.id.btn_view_sku_detail:
+                if (goodsModal == Constant.GOODS_TYPE_CONSULT) {  // 諮詢型商品，沒有規格
+                    start(SellerSkuEditorFragment.newInstance(this,
+                            specValueIdStringList,
+                            specValueIdStringMap,
+                            null,
+                            colorImageMap));
+
+                    return;
+                }
+
                 // 查看SKU詳情
                 if (sellerSelectedSpecList.size() < 1) {
                     ToastUtil.error(_mActivity, "請先添加規格");
@@ -1102,6 +1116,11 @@ public class AddGoodsFragment extends BaseFragment
                 vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
                 break;
             case R.id.btn_add_spec:
+                if (goodsModal == Constant.GOODS_TYPE_CONSULT) {
+                    ToastUtil.error(_mActivity, "諮詢型商品不可添加規格");
+                    return;
+                }
+
                 if (sellerSpecMap.size() < 1) {
                     ToastUtil.error(_mActivity, "沒有可用的規格");
                     return;
@@ -1179,7 +1198,8 @@ public class AddGoodsFragment extends BaseFragment
     private String saveSpecInfo() {
         try {
             SLog.info("sellerSelectedSpecList.size[%d]", sellerSelectedSpecList.size());
-            if (sellerSelectedSpecList.size() < 1) {
+            if (goodsModal != Constant.GOODS_TYPE_CONSULT  // 諮詢型商品沒有規格
+                    && sellerSelectedSpecList.size() < 1) {
                 return "請添加商品規格";
             }
 
