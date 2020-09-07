@@ -79,6 +79,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         contentView.findViewById(R.id.btn_category_store).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_goods).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_brand).setOnClickListener(this);
+        contentView.findViewById(R.id.btn_category_friend).setOnClickListener(this);
         contentView.findViewById(R.id.icon_takewant).setOnClickListener(this);
 
         tvStoreCount = contentView.findViewById(R.id.tv_store_count);
@@ -118,13 +119,14 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             }
             tvFriendCount.setVisibility(VISIBLE);
 
-            vwActivityEntrancePlaceholder.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
-            btnGotoActivity.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
-            if (stickyCellData.activityEnable) {
-                Glide.with(getContext()).load(StringUtil.normalizeImageUrl(stickyCellData.appIndexNavigationImage))
-                        .into(iconActivityEntrance);
-                btnGotoActivity.setOnClickListener(this);
-            }
+//            vwActivityEntrancePlaceholder.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
+            //加入有成交后强制影藏
+//            btnGotoActivity.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
+//            if (stickyCellData.activityEnable) {
+//                Glide.with(getContext()).load(StringUtil.normalizeImageUrl(stickyCellData.appIndexNavigationImage))
+//                        .into(iconActivityEntrance);
+//                btnGotoActivity.setOnClickListener(this);
+//            }
         }
         iconTakewant.setOnClickListener(this);
     }

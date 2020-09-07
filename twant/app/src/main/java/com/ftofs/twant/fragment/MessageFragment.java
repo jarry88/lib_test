@@ -784,17 +784,16 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             int i = 0;
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
-                                i++;
                                 if (chatConversation == null) {
                                     continue;
                                 }
-
 
                                 if (chatConversationList.get(i).friendInfo != null&&friendInfo!=null) {
                                     if (TextUtils.equals(chatConversationList.get(i).friendInfo.memberName,friendInfo.memberName)&&friendInfo.memberName!=null) {
                                         has = true;
                                         chatConversationList.get(i).friendInfo = friendInfo;
                                         chatConversationList.get(i).sendTime = sendTime;
+                                        chatConversationList.get(i).messageTime = Jarbon.parse(sendTime).getMessageTime();
                                         int timestamp = Jarbon.parse(sendTime).getTimestamp();
                                         if (StringUtil.isEmpty(chatConversation.lastMessage)) {
                                             chatConversationList.get(i).lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
@@ -809,12 +808,14 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                         break;
                                     }
                                 }
+                                i++;
+
                             }
 
                             if (!has) {//新增item
                                 SLog.info("新增CHATitem");
                                 ChatConversation newChat = new ChatConversation();
-                                int time =Jarbon.parse(sendTime).getTimestamp();
+//                                int time =Jarbon.parse(sendTime).getTimestamp();
                                 newChat.friendInfo = friendInfo;
 //                                SLog.info("messageFragment [%s]","1");
 
@@ -835,13 +836,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 conversation1.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                 conversation1.storeId = friendInfo.storeId;
                                 conversation1.role = friendInfo.role;
-                                conversation1.timestamp = time;
+                                conversation1.timestamp = Jarbon.parse(sendTime).getTimestamp();
                                 conversation1.save();
 //                                newChat.timestamp = sendTime;
 
                                 Conversation.saveNewChat(newChat);
-                                SLog.info("time，[%s]",time);
-
+//                                SLog.info("time，[%s]",time);
+                                newChat.messageTime = Jarbon.parse(sendTime).getMessageTime();
                                 chatConversationList.add(newChat);
                             }
                         }
