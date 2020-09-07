@@ -18,14 +18,14 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
+
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/icon_takewant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_takewant">
-            </ImageView>
+                android:src="@drawable/icon_takewant"
+                android:visibility="gone"></ImageView>
             <LinearLayout
                 android:id="@+id/ll_search_box"
                 android:layout_height="35dp"
@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:src="@drawable/home_search"
+                    android:src="@drawable/twant_logo"
                     />
                 <TextView
                     android:layout_width="0dp"
@@ -92,7 +92,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_baseline_emoji_people_24"
+                        android:src="@drawable/icon_city_friend"
                         android:textColor="@android:color/white"
                         android:textSize="15sp" />
 

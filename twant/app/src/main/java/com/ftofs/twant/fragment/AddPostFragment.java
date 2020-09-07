@@ -751,6 +751,7 @@ public class AddPostFragment extends BaseFragment implements
             selectedGoods.name = data.getString("goodsName");
             selectedGoods.price = data.getDouble("price");
             selectedGoods.imageUrl = data.getString("imageUrl");
+            selectedGoods.goodsModal = data.getInt("goodsModal");
 
             this.goods = selectedGoods;
             goodsShown = false;
@@ -762,7 +763,11 @@ public class AddPostFragment extends BaseFragment implements
         if (!goodsShown && goods != null) {
             Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(postGoodsImage);
             tvPostGoodsName.setText(goods.name);
-            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity,  goods.price, 1));
+            if (goods.goodsModal == Constant.GOODS_TYPE_CONSULT) {
+                UiUtil.toConsultUI(tvGoodsPrice);
+            } else {
+                tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity,  goods.price, 1));
+            }
             llPostGoodsContainer.setVisibility(View.VISIBLE);
 
             goodsShown = true;

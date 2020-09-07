@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ftofs.twant.fragment.BaseFragment
+import com.ftofs.twant.log.SLog
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.base.IBaseViewMVVM
 import com.wzq.mvvmsmart.widget.EmptyViewHelper
@@ -161,8 +162,13 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
 
     protected fun showNormalLayout(view: View?) {
         if (emptyViewHelper == null) {
-            emptyViewHelper = EmptyViewHelper(activity)
-            emptyViewHelper?.setReloadCallBack(this)
+            try {
+                emptyViewHelper = EmptyViewHelper(activity)
+
+                emptyViewHelper?.setReloadCallBack(this)
+            } catch (e: Exception) {
+                SLog.info(e.toString())
+            }
         }
         emptyViewHelper?.loadNormallLayout(view)
     }
