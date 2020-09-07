@@ -147,6 +147,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
      2、如果要顯示升級彈窗，等升級彈窗關閉後才設置canShowOtherPopup為true
      */
     public boolean canShowOtherPopup = false;
+    boolean canShowOtherPopupNotified = false; // 是否已經通知能夠顯示其他彈窗，只通知1次
     AppUpdatePopup appUpdatePopup;
 
     TangramEngine engine;
@@ -1493,6 +1494,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
 
     private void notifyCanShowOtherPopup() {
         canShowOtherPopup = true;
-        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP, null);
+        if (!canShowOtherPopupNotified) {
+            canShowOtherPopupNotified = true; // 設置為已經通知過，只通知1次
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP, null);
+        }
     }
 }
