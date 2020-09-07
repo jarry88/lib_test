@@ -50,7 +50,7 @@ public class SellerFeaturesGoodsAdapter extends BaseQuickAdapter<Goods,BaseViewH
 
         helper.setText(R.id.tv_goods_name, item.name)
                 .setText(R.id.tv_spu_id, "產品SPU: " + item.id)
-                .setText(R.id.tv_virtual_indicator, item.isVirtual == Constant.TRUE_INT ? "虛擬" : "零售")
+                .setText(R.id.tv_virtual_indicator, item.goodsModal==5?"咨詢":item.isVirtual == Constant.TRUE_INT ? "虛擬" : "零售")
                 .setGone(R.id.tv_cross_border_indicator, item.tariffEnable == Constant.TRUE_INT)
                 .setText(R.id.tv_price_range, priceRange)
                 .setText(R.id.tv_total_stock, "總庫存: " + item.getGoodsStorage())

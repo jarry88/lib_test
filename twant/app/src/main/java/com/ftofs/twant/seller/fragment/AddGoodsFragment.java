@@ -699,7 +699,14 @@ public class AddGoodsFragment extends BaseFragment
             }
 
         });
-        sbRetail.performClick();
+        if (businessType == Constant.CONSULT_STORE) {
+            sbRetail.setVisibility(View.GONE);
+            sbAcross.setVisibility(View.GONE);
+            sbVirtual.setVisibility(View.GONE);
+            sbConsult.performClick();
+        } else {
+            sbRetail.performClick();
+        }
         return view;
     }
 

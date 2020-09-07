@@ -32,6 +32,7 @@ import com.ftofs.twant.adapter.EmojiPageAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.UnicodeEmoji;
 import com.ftofs.twant.entity.CommentItem;
@@ -386,10 +387,10 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                     params.set("relatePostId", commentItem.relatePostId);
                 }
                 if (chanel == Constant.COMMENT_CHANNEL_POST) {
-                    if (Util.inDev()) {
-                        params.set("postCreateBy", "u_001315344758");
-                    } else if (authorName != null) {
+                    if (authorName != null) {
                         params.set("postCreateBy", authorName);
+                    } else if(Config.USE_DEVELOPER_TEST_DATA){
+                            params.set("postCreateBy", "u_001315344758");
                     }
                 }
             } catch (Exception e) {
@@ -419,49 +420,51 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         }
 
                         ToastUtil.success(_mActivity, "回覆成功");
-
-                        EasyJSONObject wantCommentVo = responseObj.getSafeObject("datas.wantCommentVo");
-                        EasyJSONObject memberVo = wantCommentVo.getSafeObject("memberVo");
-
-                        CommentReplyItem commentReplyItem = new CommentReplyItem();
-                        commentReplyItem.memberId = memberVo.getInt("memberId");
-                        commentReplyItem.memberName = memberVo.getSafeString("memberName");
-                        commentReplyItem.commentId = wantCommentVo.getInt("commentId");
-                        commentReplyItem.avatarUrl = memberVo.getSafeString("avatar");
-                        commentReplyItem.nickname = memberVo.getSafeString("nickName");
-                        commentReplyItem.createTime = wantCommentVo.getLong("createTime");
-                        // commentReplyItem.content = wantCommentVo.getSafeString("content"); 这里获取过来的Unicode表情有问题
-                        // SLog.info("commentReplyItem.content[%s]", commentReplyItem.content);
-                        commentReplyItem.content = filteredReplyContent;
-                        SLog.info("commentReplyItem.content[%s]", commentReplyItem.content);
-                        commentReplyItem.isLike = wantCommentVo.getInt("isLike");
-                        commentReplyItem.commentLike = wantCommentVo.getInt("commentLike");
-
-                        if (quoteReply.isQuoteReply) {
-                            commentReplyItem.isQuoteReply = true;
-                            commentReplyItem.quoteNickname = quoteReply.quoteNickname;
-                            commentReplyItem.quoteContent = quoteReply.quoteContent;
-                        }
-
-                        commentReplyItemList.add(0, commentReplyItem);
-                        commentReplyListAdapter.notifyItemInserted(0);
-
-                        etReplyContent.setText("");
-                        silMainContainer.closeKeyboard(true);
-                        silMainContainer.closeInputPane();
-
-                        quoteReply.isQuoteReply = false;
+                        loadCommentDetail();
+//                        EasyJSONObject wantCommentVo = responseObj.getSafeObject("datas.wantCommentVo");
+//                        EasyJSONObject memberVo = wantCommentVo.getSafeObject("memberVo");
+//
+//                        CommentReplyItem commentReplyItem = new CommentReplyItem();
+//                        commentReplyItem.memberId = memberVo.getInt("memberId");
+//                        commentReplyItem.memberName = memberVo.getSafeString("memberName");
+//                        commentReplyItem.commentId = wantCommentVo.getInt("commentId");
+//                        commentReplyItem.avatarUrl = memberVo.getSafeString("avatar");
+//                        commentReplyItem.nickname = memberVo.getSafeString("nickName");
+//                        commentReplyItem.createTime = wantCommentVo.getLong("createTime");
+//                        // commentReplyItem.content = wantCommentVo.getSafeString("content"); 这里获取过来的Unicode表情有问题
+//                        // SLog.info("commentReplyItem.content[%s]", commentReplyItem.content);
+//                        commentReplyItem.content = filteredReplyContent;
+//                        SLog.info("commentReplyItem.content[%s]", commentReplyItem.content);
+//                        commentReplyItem.isLike = wantCommentVo.getInt("isLike");
+//                        commentReplyItem.commentLike = wantCommentVo.getInt("commentLike");
+//
+//                        if (quoteReply.isQuoteReply) {
+//                            commentReplyItem.isQuoteReply = true;
+//                            commentReplyItem.quoteNickname = quoteReply.quoteNickname;
+//                            commentReplyItem.quoteContent = quoteReply.quoteContent;
+//                        }
+//
+//                        commentReplyItemList.add(0, commentReplyItem);
+//                        commentReplyListAdapter.notifyItemInserted(0);
+//
+//                        etReplyContent.setText("");
+//                        silMainContainer.closeKeyboard(true);
+//                        silMainContainer.closeInputPane();
+//
+//                        quoteReply.isQuoteReply = false;
                         if (chanel == Constant.COMMENT_CHANNEL_POST && responseObj.exists("datas.voucherList")) {
                             ArrayList<StoreVoucher> voucherList = new ArrayList<>();
                             for (Object o : responseObj.getSafeArray("datas.voucherList")) {
                                 EasyJSONObject voucher = (EasyJSONObject) o;
                                 voucherList.add(StoreVoucher.parse(voucher));
                             }
-                            String zoneId = responseObj.getSafeString("datas.zoneId");
-                            new XPopup.Builder(_mActivity)
-                                    .moveUpToKeyboard(false)
-                                    .asCustom(new MoonVoucherListPopup(_mActivity,voucherList,zoneId))
-                                    .show();
+                            if (voucherList.size() > 0) {
+                                String zoneId = responseObj.getSafeString("datas.zoneId");
+                                new XPopup.Builder(_mActivity)
+                                        .moveUpToKeyboard(false)
+                                        .asCustom(new MoonVoucherListPopup(_mActivity,voucherList,zoneId))
+                                        .show();
+                            }
                         }
                     } catch (Exception e) {
                         SLog.info("Error!%s", e);
@@ -563,11 +566,11 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         }
 
                         updateThumbState();
-                        tvReplyCount.setText(String.format(getString(R.string.text_view_reply_count), commentItem.commentReply));
 
 
                         // 回覆列表
                         EasyJSONArray replyList = responseObj.getSafeArray("datas.replyList");
+                        commentReplyItemList.clear();
                         for (Object object : replyList) {
                             EasyJSONObject reply = (EasyJSONObject) object;
 
@@ -610,6 +613,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                             commentReplyItemList.add(item);
                         }
                         commentReplyListAdapter.setData(commentReplyItemList);
+                        tvReplyCount.setText(String.format(getString(R.string.text_view_reply_count), commentReplyItemList.size()));
+
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }

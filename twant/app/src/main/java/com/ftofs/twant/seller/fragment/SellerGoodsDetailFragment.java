@@ -214,7 +214,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
 //                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(allowTariff == Constant.TRUE_INT ?
 //                            (tariffEnable== Constant.TRUE_INT?"跨城購商品":(isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品")):
 //                            (isVirtual== Constant.TRUE_INT?"虛擬商品" : "零售商品"));
-                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(goodsModal==2 ?"跨城購商品":goodsModal== 1?"虛擬商品" : "零售商品");
+                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(goodsModal==5?"咨詢商品":goodsModal==2 ?"跨城購商品":goodsModal== 1?"虛擬商品" : "零售商品");
 
                     if (freightTemplateId > 0) {
                         ((TextView) contentView.findViewById(R.id.tv_freight)).setText("物流規則：");

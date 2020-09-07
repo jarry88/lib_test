@@ -287,11 +287,8 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
             }
             if (commentChannel == Constant.COMMENT_CHANNEL_POST) {
                 params.set("relatePostId", bindId);
-                if (Util.inDev()) {
-                    params.set("postCreateBy", "u_001315344758");
-                } else if (authorName != null) {
+                if (authorName != null&&!"".equals(authorName)) {
                     params.set("postCreateBy", authorName);
-
                 }
             }
 
@@ -357,13 +354,17 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                     bundle.putParcelable("commentItem", commentItem);
 //                    如果有优惠券，则带回上一级页面
                     if (responseObj.exists("datas.voucherList")) {
+                        EasyJSONArray array = responseObj.getSafeArray("datas.voucherList");
+
                         ArrayList<StoreVoucher> voucherList = new ArrayList<>();
-                        for (Object o : responseObj.getSafeArray("datas.voucherList")) {
+                        for (Object o : array) {
                             EasyJSONObject voucher = (EasyJSONObject) o;
                             voucherList.add(StoreVoucher.parse(voucher));
                         }
-                        bundle.putParcelableArrayList("voucherList",voucherList);
-                        bundle.putString("zoneId",responseObj.getSafeString("datas.zoneId"));
+                        if (voucherList.size() > 0) {
+                            bundle.putParcelableArrayList("voucherList",voucherList);
+                            bundle.putString("zoneId",responseObj.getSafeString("datas.zoneId"));
+                        }
                     }
                     setFragmentResult(RESULT_OK, bundle);
 
