@@ -53,6 +53,14 @@
                     android:textSize="16sp"
                     android:textColor="@color/tw_grey"
                     />
+                <ImageView
+                    android:id="@+id/btn_search"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="@dimen/dp_12"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/home_search" />
             </LinearLayout>
 
             <LinearLayout
