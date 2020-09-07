@@ -427,8 +427,7 @@ public class AddGoodsFragment extends BaseFragment
         });
         llInstancePublish.performClick();
         sbJoinActivity = view.findViewById(R.id.sb_join_activity);
-        Boolean clickAble = goodsModal != TYPE_CONSULT;
-        sbJoinActivity.setChecked(clickAble);//默认参与活动
+        sbJoinActivity.setChecked(goodsModal != TYPE_CONSULT);//默认参与活动,除了咨詢型
         sbJoinActivity.setOnClickListener(v->{
             if (goodsModal == TYPE_CONSULT) {
                 sbJoinActivity.setChecked(false);
@@ -1270,6 +1269,14 @@ public class AddGoodsFragment extends BaseFragment
                         "goodsStorage", permutation.storage,
                         "colorId", permutation.colorId,
                         "reserveStorage", permutation.reserved
+                ));
+            }
+            if (specValueIdStringList.size() == 0) {
+                goodsJsonVoList.append(EasyJSONObject.generate(
+                        "specValueIds", 0,
+                        "goodsPrice0", 0,
+                        "goodsStorage", 0,
+                        "reserveStorage", 0
                 ));
             }
             publishGoodsInfo.set("goodsJsonVoList", goodsJsonVoList);

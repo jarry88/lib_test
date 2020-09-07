@@ -353,7 +353,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("commentItem", commentItem);
 //                    如果有优惠券，则带回上一级页面
-                    if (responseObj.exists("datas.voucherList")) {
+                    if (responseObj.exists("datas.voucherList") && responseObj.exists("zoneId")) {
                         EasyJSONArray array = responseObj.getSafeArray("datas.voucherList");
 
                         ArrayList<StoreVoucher> voucherList = new ArrayList<>();
@@ -362,9 +362,11 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                             voucherList.add(StoreVoucher.parse(voucher));
                         }
                         if (voucherList.size() > 0) {
-                            bundle.putParcelableArrayList("voucherList",voucherList);
-                            bundle.putString("zoneId",responseObj.getSafeString("datas.zoneId"));
+                            bundle.putParcelableArrayList("voucherList", voucherList);
+                            bundle.putString("zoneId", responseObj.getSafeString("datas.zoneId"));
                         }
+                    } else {
+                        SLog.info("後端沒有返回活動數據");
                     }
                     setFragmentResult(RESULT_OK, bundle);
 

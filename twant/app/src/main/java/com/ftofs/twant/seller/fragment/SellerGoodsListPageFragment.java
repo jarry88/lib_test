@@ -245,7 +245,8 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                         EasyJSONArray goodsList = responseObj.getArray("datas.goodsList");
                         for (Object object : goodsList) {
                             SellerGoodsItem item = (SellerGoodsItem) EasyJSONBase.jsonDecode(SellerGoodsItem.class, object.toString());
-
+                            item.goodsModal = StringUtil.safeModel((EasyJSONObject) object);
+                            SLog.info("%s",item.goodsModal);
                             sellerGoodsItemList.add(item);
                         }
                         sellerGoodsAdapter.loadMoreComplete();
