@@ -8,9 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import cn.snailpad.easyjson.EasyJSONObject
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -32,7 +30,6 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.LoadingUtil
-import java.util.*
 
 class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseTwantFragmentMVVM<FragmentImGoodsPageBinding, ImGoodsPageModel>(){
 
@@ -53,7 +50,7 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
 
             override fun initView(binding: ImGoodsListItemBinding, item: Goods) {
                 if (Util.inDev()) {
-                    item.goodsModel=5
+                    item.goodsModal=5
                 }
                 binding.vo=item
                 binding.root.setOnClickListener {

@@ -83,10 +83,12 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
         if (itemData.showMemberReceive) {
             itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
         } else {
-            if (Util.inDev() && 424==itemData.storeId||
-                    Constant.WANT_EAT_ID==itemData.storeId) {
+            if ((Util.inDev() && 424==itemData.storeId)||
+                    (Constant.WANT_EAT_ID==itemData.storeId)) {
+                SLog.info("here-- %s",itemData.ordersState);
+                if (OrderState.TO_BE_SEND ==itemData.ordersState ) {
+                    SLog.info("here--");
 
-                if (OrderState.TO_BE_SEND == itemData.ordersState) {
                     itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
                 } else {
                     itemView.findViewById(R.id.btn_have_received).setVisibility(View.GONE);

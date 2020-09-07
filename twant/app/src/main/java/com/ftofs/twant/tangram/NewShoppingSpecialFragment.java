@@ -89,8 +89,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     RecyclerView rvList;
     int tabHeight;
 
-    FirstFragment firstFragment;
-    SecondFragment secondFragment;
     private int zoneId;
     private int zoneType;//專場類型 0通用 1店鋪 2商品
     static int DEFAULT_ZONE = 0;
@@ -104,7 +102,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     private CommonFragmentPagerAdapter adapter;
 
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
-    private long lastScrollingTimestamp;
     private boolean isScrolling;
     private long FLOAT_BUTTON_SCROLLING_EFFECT_DELAY=75;
     private LinearLayout llFloatButtonContainer;
@@ -533,13 +530,12 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     public void onCbStartNestedScroll() {
 //        SLog.info("onCbStartNestedScroll");
         isScrolling = true;
-        lastScrollingTimestamp = System.currentTimeMillis();
         hideFloatButton();
     }
 
     @Override
     public void onCbStopNestedScroll() {
-        SLog.info("onCbStopNestedScroll");
+//        SLog.info("onCbStopNestedScroll");
         isScrolling = false;
         llFloatButtonContainer.postDelayed(new Runnable() {
             @Override

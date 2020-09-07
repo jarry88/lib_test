@@ -38,7 +38,7 @@ class MoonVoucherListPopup(context: Context, private val voucherList: MutableLis
             binding.vo=item
             binding.root.setOnClickListener {
                 if (item.memberIsReceive == Constant.TRUE_INT) {
-                    XPopup.Builder(context).asCustom(TwConfirmPopup(context,"領取成功","前往【想要中秋】月餅優惠專場",object:OnConfirmCallback{
+                    XPopup.Builder(context).asCustom(TwConfirmPopup(context,"領取成功","前往「想要中秋」月餅優惠專場",object:OnConfirmCallback{
                         override fun onYes() {
                             dismiss()
                             Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId.toInt()))

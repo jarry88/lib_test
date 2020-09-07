@@ -195,7 +195,7 @@
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@id/btn_category_goods"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/btn_category_friend"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
@@ -239,6 +239,58 @@
                             android:translationX="-4dp"
                             android:visibility="gone" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_category_friend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/btn_category_brand"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <LinearLayout
+                            android:id="@+id/ll_category_friend"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="2dp"
+                            android:background="@drawable/tw_category_icon_bg_new"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="友成交"
+                                android:textColor="@android:color/white"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TRADETALK"
+                                android:textColor="@android:color/white"
+                                android:textSize="7sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_friend_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_toEndOf="@id/ll_category_post"
+                            android:background="@drawable/circle_red_bubble_bg"
+                            android:gravity="center"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:text="123333"
+                            android:textColor="@android:color/white"
+                            android:textSize="10sp"
+                            android:translationX="-4dp"
+                            android:visibility="gone" />
+                    </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
@@ -251,6 +303,7 @@
         </RelativeLayout>
     </LinearLayout>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/btn_goto_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

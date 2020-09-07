@@ -46,6 +46,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     TextView tvStoreCount;
     TextView tvGoodsCount;
     TextView tvPostCount;
+    TextView tvFriendCount;
 
     View iconTakewant;
     ImageView iconActivityEntrance;
@@ -78,11 +79,13 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         contentView.findViewById(R.id.btn_category_store).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_goods).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_brand).setOnClickListener(this);
+        contentView.findViewById(R.id.btn_category_friend).setOnClickListener(this);
         contentView.findViewById(R.id.icon_takewant).setOnClickListener(this);
 
         tvStoreCount = contentView.findViewById(R.id.tv_store_count);
         tvGoodsCount = contentView.findViewById(R.id.tv_goods_count);
         tvPostCount = contentView.findViewById(R.id.tv_post_count);
+        tvFriendCount = contentView.findViewById(R.id.tv_friend_count);
 
         iconActivityEntrance = contentView.findViewById(R.id.icon_activity_entrance);
         vwActivityEntrancePlaceholder = contentView.findViewById(R.id.vw_activity_entrance_placeholder);
@@ -109,14 +112,21 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             tvGoodsCount.setVisibility(VISIBLE);
             tvPostCount.setText(formatCount(stickyCellData.wantPostCount));
             tvPostCount.setVisibility(VISIBLE);
-
-            vwActivityEntrancePlaceholder.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
-            btnGotoActivity.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
-            if (stickyCellData.activityEnable) {
-                Glide.with(getContext()).load(StringUtil.normalizeImageUrl(stickyCellData.appIndexNavigationImage))
-                        .into(iconActivityEntrance);
-                btnGotoActivity.setOnClickListener(this);
+            if (Util.inDev()) {
+                tvFriendCount.setText("555");
+            } else {
+                tvFriendCount.setText(formatCount(stickyCellData.friendCount));
             }
+            tvFriendCount.setVisibility(VISIBLE);
+
+//            vwActivityEntrancePlaceholder.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
+            //加入有成交后强制影藏
+//            btnGotoActivity.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
+//            if (stickyCellData.activityEnable) {
+//                Glide.with(getContext()).load(StringUtil.normalizeImageUrl(stickyCellData.appIndexNavigationImage))
+//                        .into(iconActivityEntrance);
+//                btnGotoActivity.setOnClickListener(this);
+//            }
         }
         iconTakewant.setOnClickListener(this);
     }
@@ -158,6 +168,12 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             SearchPostParams searchPostParams = new SearchPostParams();
             searchPostParams.keyword = "";
             Util.startFragment(CircleFragment.newInstance(true, searchPostParams));
+        }else if (id == R.id.btn_category_friend) {
+            SearchPostParams searchPostParams = new SearchPostParams();
+            searchPostParams.keyword = "";
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.showHideFragment(MainFragment.MESSAGE_FRAGMENT);
+
         } else if (id == R.id.icon_takewant) {
             if (Config.PROD) {
                 return;

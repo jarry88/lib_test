@@ -72,7 +72,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 helper.setText(R.id.tv_goods_name, goods.name);
                 helper.setText(R.id.tv_goods_comment, goods.jingle);
                 TextView tvPrice = helper.getView(R.id.tv_goods_price);
-                if (Util.noPrice(goods.goodsModel)) {
+                if (Util.noPrice(goods.goodsModal)) {
                     UiUtil.toConsultUI(tvPrice);
                     helper.getView(R.id.iv_goods_add).setVisibility(View.GONE);
                 } else {
@@ -99,7 +99,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 ImageView goodsImage = helper.getView(R.id.img_goods);
                 Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_goods_name, goods.name);
-                if (Util.noPrice(goods.goodsModel)) {
+                if (Util.noPrice(goods.goodsModal)) {
                     helper.getView(R.id.btn_add_to_cart).setVisibility(View.GONE);
                     helper.setText(R.id.tv_goods_price_left, "詢價");
                 } else {

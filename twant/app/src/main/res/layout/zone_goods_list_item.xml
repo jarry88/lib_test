@@ -120,7 +120,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/tw_red"
                 android:textStyle="bold"
-                app:price="@{vo.appPriceMin}"
+                priceModel="@{vo}"
 
                 />
             <TextView
@@ -145,6 +145,7 @@
                 android:id="@+id/iv_goods_add"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                visible="@{vo.goodsModal==5?0:1}"
                 android:padding="1dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_blue_add"

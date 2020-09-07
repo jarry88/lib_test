@@ -5,7 +5,6 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -23,7 +22,6 @@ import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.Util
-import org.litepal.util.Const
 
 
 @BindingAdapter(value = ["imageUrl"])
@@ -60,7 +58,7 @@ fun setTextPrice(v: TextView, price: Double) {
 }
 @BindingAdapter(value = ["priceModel"])
 fun setTextPriceWithModel(v: TextView, vo: Goods) {
-    if (vo.goodsModel != Constant.GOODS_TYPE_CONSULT) {
+    if (vo.goodsModal != Constant.GOODS_TYPE_CONSULT) {
         setTextPrice(v, vo.appPriceMin)
     } else {
         v.text="詢價"

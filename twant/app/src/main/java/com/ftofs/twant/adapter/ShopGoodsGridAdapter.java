@@ -48,7 +48,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 Glide.with(context).load(leftGoods.imageUrl).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_left_goods_name, leftGoods.name);
                 TextView leftPrice=helper.getView(R.id.tv_left_goods_price);
-                if (Util.noPrice(leftGoods.goodsModel)) {
+                if (Util.noPrice(leftGoods.goodsModal)) {
                     helper.getView(R.id.btn_add_to_cart_left).setVisibility(View.GONE);
                     UiUtil.toConsultUI(leftPrice);
                 } else {
@@ -64,7 +64,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 ImageView goodsImage = helper.getView(R.id.img_right_goods);
                 Glide.with(context).load(rightGoods.imageUrl).fitCenter().into(goodsImage);
                 TextView rightPrice = helper.getView(R.id.tv_right_goods_price);
-                if (Util.noPrice(rightGoods.goodsModel)) {
+                if (Util.noPrice(rightGoods.goodsModal)) {
                     UiUtil.toConsultUI(rightPrice);
                     helper.getView(R.id.btn_add_to_cart_right).setVisibility(View.GONE);
                 } else {
