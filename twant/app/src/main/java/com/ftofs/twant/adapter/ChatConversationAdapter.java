@@ -91,7 +91,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
     public void onBindViewHolder(BaseViewHolder helper, int position) {
         ChatConversation chatConversation = getItem(position);
 
-        SLog.info("顯示 name [%s],data[%s]",chatConversation.messageTime);
+        SLog.info("顯示 name [%s],data[%s]",chatConversation.friendInfo.memberName,chatConversation.messageTime);
         helper.setText(R.id.tv_message_time,chatConversation.messageTime );
 
         ImageView imgAvatar = helper.getView(R.id.img_avatar);

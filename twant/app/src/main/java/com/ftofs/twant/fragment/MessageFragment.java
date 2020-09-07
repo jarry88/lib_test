@@ -788,24 +788,26 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                     continue;
                                 }
 
-                                if (chatConversationList.get(i).friendInfo != null&&friendInfo!=null) {
-                                    if (TextUtils.equals(chatConversationList.get(i).friendInfo.memberName,friendInfo.memberName)&&friendInfo.memberName!=null) {
+                                if (chatConversation.friendInfo != null&&friendInfo!=null) {
+                                    if (TextUtils.equals(chatConversation.friendInfo.memberName, friendInfo.memberName) && friendInfo.memberName != null) {
                                         has = true;
-                                        chatConversationList.get(i).friendInfo = friendInfo;
-                                        chatConversationList.get(i).sendTime = sendTime;
-                                        chatConversationList.get(i).messageTime = Jarbon.parse(sendTime).getMessageTime();
+                                        chatConversation.friendInfo = friendInfo;
+                                        chatConversation.sendTime = sendTime;
+                                        chatConversation.messageTime = Jarbon.parse(sendTime).getMessageTime();
                                         int timestamp = Jarbon.parse(sendTime).getTimestamp();
                                         if (StringUtil.isEmpty(chatConversation.lastMessage)) {
-                                            chatConversationList.get(i).lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
-                                            chatConversationList.get(i).lastMessage = "txt::" + messageContent + ":";
-                                            chatConversationList.get(i).timestamp = timestamp;
-                                        }
-                                        else if (chatConversationList.get(i).timestamp<timestamp&&System.currentTimeMillis()/1000-timestamp>30000000) {//安卓自己定義了150天
-                                            chatConversationList.get(i).timestamp = timestamp;
+                                            chatConversation.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
+                                            chatConversation.lastMessage = "txt::" + messageContent + ":";
+                                            chatConversation.timestamp = timestamp;
+                                        } else if (chatConversation.timestamp < timestamp && System.currentTimeMillis() / 1000 - timestamp > 30000000) {//安卓自己定義了150天
+                                            chatConversation.timestamp = timestamp;
 
                                         }
-                                        SLog.info("第[%s]dbtime[%s]sendtimestamp[%s],sendtime[%s],%s,", i,chatConversationList.get(i).timestamp, timestamp,sendTime,System.currentTimeMillis()/1000-timestamp>30000000);
+                                        SLog.info("第[%s]dbtime[%s]sendtimestamp[%s],sendtime[%s],%s,", i, chatConversation.timestamp, timestamp, sendTime, System.currentTimeMillis() / 1000 - timestamp > 30000000);
                                         break;
+                                    } else {
+                                        SLog.info("%s,%s",i,chatConversation.timestamp<1);
+
                                     }
                                 }
                                 i++;
@@ -848,6 +850,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                         }
                     }
 //                    adapter.submitList(chatConversationList);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+//                chatConversationList.sort((o1, o2) -> comO1O2(o1,o2));
+
+                        comO1O2();
+                    }
                     adapter.submitList(chatConversationList);
 //                    }
                 } catch (Exception e) {
