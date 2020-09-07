@@ -46,6 +46,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     TextView tvStoreCount;
     TextView tvGoodsCount;
     TextView tvPostCount;
+    TextView tvFriendCount;
 
     View iconTakewant;
     ImageView iconActivityEntrance;
@@ -83,6 +84,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         tvStoreCount = contentView.findViewById(R.id.tv_store_count);
         tvGoodsCount = contentView.findViewById(R.id.tv_goods_count);
         tvPostCount = contentView.findViewById(R.id.tv_post_count);
+        tvFriendCount = contentView.findViewById(R.id.tv_friend_count);
 
         iconActivityEntrance = contentView.findViewById(R.id.icon_activity_entrance);
         vwActivityEntrancePlaceholder = contentView.findViewById(R.id.vw_activity_entrance_placeholder);
@@ -109,6 +111,12 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             tvGoodsCount.setVisibility(VISIBLE);
             tvPostCount.setText(formatCount(stickyCellData.wantPostCount));
             tvPostCount.setVisibility(VISIBLE);
+            if (Util.inDev()) {
+                tvFriendCount.setText("555");
+            } else {
+                tvFriendCount.setText(formatCount(stickyCellData.friendCount));
+            }
+            tvFriendCount.setVisibility(VISIBLE);
 
             vwActivityEntrancePlaceholder.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
             btnGotoActivity.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
@@ -158,6 +166,12 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             SearchPostParams searchPostParams = new SearchPostParams();
             searchPostParams.keyword = "";
             Util.startFragment(CircleFragment.newInstance(true, searchPostParams));
+        }else if (id == R.id.btn_category_friend) {
+            SearchPostParams searchPostParams = new SearchPostParams();
+            searchPostParams.keyword = "";
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.showHideFragment(MainFragment.MESSAGE_FRAGMENT);
+
         } else if (id == R.id.icon_takewant) {
             if (Config.PROD) {
                 return;
