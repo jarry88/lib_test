@@ -42,14 +42,6 @@ interface KotlinInterfaceApi {
     /**
      * 商家商家列表选择页
      */
-    @GET("member/seller/goods/list")
-    fun sellerGoodsList(
-            @Query("token")token:String,
-            @Query("page")page:Int
-    ): LiveData<ApiResponse<SellerPageVO<SellerGoodsVO>>>
-    /**
-     * 商家商家列表选择页
-     */
     @GET("member/seller/isSeller")
     fun isSeller(
             @Query("token")token:String
