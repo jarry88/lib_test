@@ -140,7 +140,7 @@ public class AddGoodsFragment extends BaseFragment
 
     private int unityIndex;
     private String unitName;
-    private int goodsModal=-1;//銷售模式 銷售模式 0零售 1跨城購 2虛擬 【必填】
+    private int goodsModal=-1;//銷售模式 銷售模式 0零售 1跨城購 2虛擬 【必填】 5咨詢
     private int countryIndex;
     private int logoIndex;
     private boolean useFixedFreight =true;

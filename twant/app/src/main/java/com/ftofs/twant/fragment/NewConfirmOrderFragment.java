@@ -109,13 +109,14 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
 
 
     /**
-     * 參數類型，分兩種類型類型：
+     * 參數類型，分三種類型類型：
      * 第1種是：接口A用到的，叫做DISPLAY
-     * 第2種是：接口B、C、D、F用到的，叫做COMMIT，接口E用到的也可以歸為此類，只不
-     *        過是在buyData結構裏多了提貨人的（mobile和realName字段）
+     * 第2種是：接口B、C、D、F用到的，叫做CALCULATE
+     * 第3種是：接口E、F用到的，叫做COMMIT，與第2種類似，只不過是接口E在buyData結構裏多了提貨人的（mobile和realName字段）
      */
     public static final int PARAMS_TYPE_DISPLAY = 1;
-    public static final int PARAMS_TYPE_COMMIT = 2;
+    public static final int PARAMS_TYPE_CALCULATE = 2;
+    public static final int PARAMS_TYPE_COMMIT = 3;
 
     HwLoadingPopup loadingPopup;
 
@@ -169,6 +170,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
     String currencyTypeSign;
     int totalItemCount; // 整個訂單的總件數： 如果sku1有2件，sku2有3件，那么總件數就是5
     String textConfirmOrderTotalItemCount;
+    // 整數類型的payWay與字符串類型的PaymentTypeCode之間的映射關係
     Map<Integer, String> paymentTypeCodeMap = new HashMap<>();
 
     boolean isFirstShowSelfFetchInfo = true; // 是否首次顯示門店自提信息，如果是，則自動填充默認地址信息
@@ -429,12 +431,12 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             }
 
             SLog.info("paramsType[%d]", paramsType);
-            if (paramsType == PARAMS_TYPE_COMMIT) {
+            if (paramsType == PARAMS_TYPE_CALCULATE || paramsType == PARAMS_TYPE_COMMIT) {
                 ConfirmOrderSummaryItem summaryItem = getSummaryItem();
 
                 // 如果是用于提交訂單，需要從新收集最新的數據
                 EasyJSONArray storeList = EasyJSONArray.generate();
-                for (MultiItemEntity multiItemEntity:confirmOrderItemList) {
+                for (MultiItemEntity multiItemEntity : confirmOrderItemList) {
                     if (multiItemEntity.getItemType() != Constant.ITEM_VIEW_TYPE_COMMON) {
                         //防止强制轉換失敗
                         continue;
@@ -504,7 +506,9 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 commitBuyData.set("storeList", storeList);
 
                 // 如果是門店自提的話，還要自提手機號和買家姓名
-                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(summaryItem.paymentTypeCode)) {
+                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(summaryItem.paymentTypeCode) &&
+                        paramsType == PARAMS_TYPE_COMMIT // 只有在提交訂單時，才需要校驗自提人姓名和手機號
+                ) {
                     SLog.info("是門店自提");
 
                     String realName = etSelfFetchNickname.getText().toString().trim();
@@ -1074,8 +1078,10 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             if (onlyFetch) {
                 payWay = Constant.PAY_WAY_FETCH;
                 SLog.info("__TEST_paymentTypeCodeMap[%s]", paymentTypeCodeMap.get(payWay));
-                confirmOrderSummaryItem.paymentTypeCode = paymentTypeCodeMap.get(payWay);
+                currPaymentTypeCode = paymentTypeCodeMap.get(payWay);
+//                confirmOrderSummaryItem.paymentTypeCode=
             }
+            confirmOrderSummaryItem.paymentTypeCode = currPaymentTypeCode;
             confirmOrderItemList.add(confirmOrderSummaryItem);
 
 
@@ -1102,7 +1108,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
 
 
         try {
-            EasyJSONObject params = collectParams(PARAMS_TYPE_COMMIT);
+            EasyJSONObject params = collectParams(PARAMS_TYPE_CALCULATE);
             SLog.info("params[%s]", params.toString());
             String responseStr = Api.syncPost(Api.PATH_CALC_FREIGHT, params);
             // responseStr = "{\"code\":200,\"datas\":{\"isAuth\":0,\"address\":{\"addressId\":695,\"memberId\":247,\"realName\":\"周伟明\",\"areaId1\":19,\"areaId2\":292,\"areaId3\":3066,\"areaId4\":0,\"areaId\":3066,\"areaInfo\":\"广东 珠海市 香洲区\",\"address\":\"Test\",\"mobPhone\":\"13425038750\",\"mobileAreaCode\":\"0086\",\"telPhone\":\"\",\"isDefault\":0},\"freightAmount\":6.00,\"storeList\":[{\"buyGoodsItemVoList\":[{\"cartId\":3552,\"goodsId\":5197,\"commonId\":3728,\"goodsName\":\"Y&I's\",\"goodsFullSpecs\":\"顔色：白色\",\"goodsPrice\":11.90,\"imageName\":\"image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"buyNum\":1,\"itemAmount\":11.90,\"variableItemAmount\":0,\"goodsFreight\":0.00,\"goodsStorage\":8,\"categoryId\":276,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":1,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"allowSend\":0,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":276,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":11.90,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":11.90,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":11.90,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/4a/23/4a23ac7fc80daf87e9b0e86aa8c467d2.jpg\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":11.90,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":11.90,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":1,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":1,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0},{\"cartId\":3553,\"goodsId\":7190,\"commonId\":3837,\"goodsName\":\"測試_編輯商品自動加空格\",\"goodsFullSpecs\":null,\"goodsPrice\":9.00,\"imageName\":\"image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"buyNum\":1,\"itemAmount\":9.00,\"variableItemAmount\":0,\"goodsFreight\":6.00,\"goodsStorage\":8,\"categoryId\":281,\"goodsStatus\":1,\"storeId\":303,\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storageStatus\":0,\"freightTemplateId\":0,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"allowSend\":1,\"freightWeight\":1.00,\"freightVolume\":1.00,\"categoryId1\":256,\"categoryId2\":259,\"categoryId3\":281,\"isOwnShop\":0,\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":9.00,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":9.00,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":9.00,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/67/4b/674bf566b1ac28f32475ab0b866f5822.png\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionType\":0,\"promotionTypeText\":null,\"promotionTitle\":\"\",\"goodsPrice0\":9.00,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"basePrice\":9.00,\"savePrice\":0.00,\"payAmount\":0,\"book\":null,\"isGift\":0,\"giftVoList\":[],\"buyBundlingItemVoList\":null,\"bundlingId\":0,\"groupPrice\":null,\"goodsSerial\":\"111\",\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"virtualOverdueRefund\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"bargainOpenId\":0,\"couponAmount\":0,\"shopCommitmentAmount\":0,\"shopCommitmentRate\":0.0,\"downAmount\":0,\"finalAmount\":0,\"foreignTaxRate\":0.00,\"isForeign\":0,\"foreignTaxAmount\":0,\"reserveStorage\":7,\"promotionDiscountRate\":0.0,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":0,\"tariffRate\":0,\"tariffAmount\":0,\"groupId\":0}],\"storeName\":\"迪高 (DE'COR) 專業美髮用品\",\"storeId\":303,\"paymentTypeCode\":\"online\",\"isOwnShop\":0,\"receiverMessage\":null,\"invoiceTitle\":null,\"invoiceContent\":null,\"invoiceCode\":null,\"shipTimeType\":0,\"buyItemAmount\":20.90,\"buyItemExcludejoinBigSaleAmount\":20.90,\"freightAmount\":6.00,\"conform\":null,\"voucher\":null,\"couponAmount\":0.00,\"shopCommitmentAmount\":0.00,\"buyAmount0\":20.90,\"buyAmount1\":26.90,\"buyAmount2\":6.00,\"buyAmount3\":20.90,\"buyAmount4\":20.90,\"buyAmount5\":20.90,\"buyAmount6\":0,\"ordersType\":0,\"taxAmount\":0.00,\"tariffTotalAmount\":0.00,\"storeDiscountAmount\":0}]}}";
@@ -1179,7 +1185,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
      * Step 3.計算總價
      */
     private void stepCalcTotalAmount() {
-        EasyJSONObject params = collectParams(PARAMS_TYPE_COMMIT);
+        EasyJSONObject params = collectParams(PARAMS_TYPE_CALCULATE);
         if (params == null) {
             return;
         }
@@ -1240,7 +1246,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
      * 【同步】獲取平臺券數據
      */
     private void getPlatformCoupon() {
-        EasyJSONObject params = collectParams(PARAMS_TYPE_COMMIT);
+        EasyJSONObject params = collectParams(PARAMS_TYPE_CALCULATE);
         SLog.info("params[%s]", params.toString());
 
         String responseStr = Api.syncPost(Api.PATH_BUY_COUPON_LIST, params);
@@ -1283,6 +1289,10 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
     }
 
 
+    /**
+     * 遍歷並添加每家店鋪到列表中去
+     * @param responseObj
+     */
     private void traverseStore(EasyJSONObject responseObj) {
         try {
             // 獲取商店券
@@ -1618,7 +1628,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
      * @return
      */
     private ConfirmOrderSummaryItem getSummaryItem() {
-        SLog.bt();
+//        SLog.bt();
         int size = confirmOrderItemList.size();
         if (size < 1) {
             return null;

@@ -758,7 +758,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 try {
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     EasyJSONArray conversationList = responseObj.getArray("datas.conversationList");
-                    int oldCount = chatConversationList.size();
                     if (conversationList != null && conversationList.length() > 0) {
 
                         for (Object object : conversationList) {
@@ -788,8 +787,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 if (chatConversation == null) {
                                     continue;
                                 }
-
-
                                 if (chatConversationList.get(i).friendInfo != null&&friendInfo!=null) {
                                     if (TextUtils.equals(chatConversationList.get(i).friendInfo.memberName,friendInfo.memberName)&&friendInfo.memberName!=null) {
                                         has = true;
