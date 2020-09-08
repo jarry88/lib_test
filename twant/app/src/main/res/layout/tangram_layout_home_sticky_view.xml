@@ -67,7 +67,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
@@ -91,7 +91,6 @@
                     android:layout_height="wrap_content"
 
                     android:layout_marginBottom="2dp"
-                    android:background="@drawable/tw_category_icon_bg_new"
                     android:gravity="center"
                     android:orientation="horizontal">
 
