@@ -1321,10 +1321,16 @@ public class AddGoodsFragment extends BaseFragment
             }
             publishGoodsInfo.set("goodsPicVoList", goodsPicVoList);
 
-            if (specValueIdStringList.size() == 0) {
-                for(int i=0;i<goodsPicVoList.length();i++)
+            if (specValueIdStringList.size() == 0&&goodsModal==Constant.GOODS_TYPE_CONSULT) {
+//                for(int i=0;i<goodsPicVoList.length();i++)
+//                goodsJsonVoList.append(EasyJSONObject.generate(
+//                        "specValueIds", "0",
+//                        "goodsPrice0", 0,
+//                        "goodsStorage", 0,
+//                        "reserveStorage", 0
+//                ));
                 goodsJsonVoList.append(EasyJSONObject.generate(
-                        "specValueIds", 0,
+                        "specValueIds", "0",
                         "goodsPrice0", 0,
                         "goodsStorage", 0,
                         "reserveStorage", 0

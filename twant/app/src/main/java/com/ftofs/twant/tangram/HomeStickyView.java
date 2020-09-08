@@ -50,6 +50,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
 
     View iconTakewant;
     ImageView iconActivityEntrance;
+    ImageView gifSearch;
     View vwActivityEntrancePlaceholder;
     View btnGotoActivity;
 
@@ -92,6 +93,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         vwActivityEntrancePlaceholder = contentView.findViewById(R.id.vw_activity_entrance_placeholder);
         btnGotoActivity = contentView.findViewById(R.id.btn_goto_activity);
         iconTakewant = contentView.findViewById(R.id.icon_takewant);
+        gifSearch = contentView.findViewById(R.id.btn_search);
+        Glide.with(contentView).load(R.drawable.home_search).into(gifSearch);
 
         addView(contentView);
     }
