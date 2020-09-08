@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.log.SLog;
@@ -103,6 +104,12 @@ public class NewWordPopup extends CenterPopupView implements View.OnClickListene
             double goodsPrice = extra.optDouble("goodsCommon.appPrice0");
             TextView tvGoodsPrice = findViewById(R.id.tv_goods_price);
             tvGoodsPrice.setText(StringUtil.formatPrice(context, goodsPrice, 0));
+
+            int goodsModel = extra.optInt("goodsCommon.goodsModal");
+            // SLog.info("goodsModel[%d]", goodsModel);
+            if (goodsModel == Constant.GOODS_TYPE_CONSULT) { // 如果是諮詢類商品，價格顯示【詢價】
+                tvGoodsPrice.setText("詢價");
+            }
 
             if ("goods".equals(commandType)) { // 如果是普通商品，没有折扣，则隐藏原价
                 findViewById(R.id.ll_original_price_container).setVisibility(GONE);
