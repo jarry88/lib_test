@@ -87,6 +87,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     public int limitBuy;
     public  int goodsModal;//銷售模式 銷售模式 0零售 1跨城購 2虛擬
     private String freightTemplateName;
+    public int businessType;//經營模式 1資訊模式(只允許發佈資訊類商品) 2交易模式(可發佈所有類型商品)
+
 
 
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
@@ -256,6 +258,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
 
         goodsVo = responseObj.getSafeObject("datas.GoodsVo");
         allowTariff = responseObj.getInt("datas.allowTariff");
+        businessType= responseObj.getInt("datas.businessType");
         tariffEnable = goodsVo.getInt("tariffEnable");
 
         detailVideo=goodsVo.getSafeString("detailVideo");

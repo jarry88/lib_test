@@ -74,22 +74,21 @@
                     android:id="@+id/tv_random_friend_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:background="@drawable/circle_red_bubble_bg"
                     android:gravity="center"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:lines="1"
+                    android:layout_gravity="center_horizontal"
                     android:text="123333"
                     android:textColor="@android:color/white"
-                    android:textSize="10sp"
-                    android:translationX="-4dp"
+                    android:textSize="9sp"
                     android:visibility="visible" />
 
                 <LinearLayout
                     android:id="@+id/ll_random_friend"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
 
                     android:layout_marginBottom="2dp"
                     android:background="@drawable/tw_category_icon_bg_new"
@@ -97,8 +96,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/dp_12"
+                        android:layout_height="12dp"
                         android:src="@drawable/icon_city_friend"
                         android:textColor="@android:color/white"
                         android:textSize="15sp" />
@@ -107,8 +106,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="城友"
-                        android:textColor="@android:color/black"
-                        android:textSize="7sp" />
+                        android:textColor="@color/tw_blue"
+
+                        android:textSize="12sp" />
                 </LinearLayout>
 
             </LinearLayout>

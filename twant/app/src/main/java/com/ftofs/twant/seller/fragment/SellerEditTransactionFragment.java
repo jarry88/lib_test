@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
@@ -45,11 +46,20 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
     private int unityIndex;
     private TextView tvAddGoodUnit;
     private ScaledButton sbRetail;
+    private View retailContainer;
     private ScaledButton sbVirtual;
+    private View VirtualContainer;
+
     private ScaledButton sbAcross;
+    private View AcrossContainer;
+
+    private ScaledButton sbConsult;
+    private View consultContainer;
+
     private int isVirtual;
     private int tariffEnable;
     private int allowTariff;
+    private int businessType;
 
     public static SellerEditTransactionFragment newInstance(SellerGoodsDetailFragment parent) {
         SellerEditTransactionFragment fragment= new SellerEditTransactionFragment();
@@ -86,13 +96,20 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
         Util.setOnClickListener(view, R.id.tv_add_good_unit, this);
 
         sbRetail = view.findViewById(R.id.sb_retail);
+        retailContainer = view.findViewById(R.id.ll_retail);
+        AcrossContainer = view.findViewById(R.id.ll_across_container);
+        consultContainer = view.findViewById(R.id.ll_consult_container);
         sbVirtual = view.findViewById(R.id.sb_virtual);
         sbAcross = view.findViewById(R.id.sb_across);
+        sbConsult = view.findViewById(R.id.sb_consult);
+        sbConsult.setVisibility(View.VISIBLE);
         sbRetail.setButtonCheckedBlue();
         sbVirtual.setButtonCheckedBlue();
         sbAcross.setButtonCheckedBlue();
         sbRetail.setOnClickListener(v -> {
             if (!sbRetail.isChecked()) {
+                goodsModal = 0;
+
                 tariffEnable = 0;
                 isVirtual = 0;
                 updateView();
@@ -100,6 +117,8 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
         });
         sbVirtual.setOnClickListener(v -> {
             if (!sbVirtual.isChecked()) {
+                goodsModal = 0;
+
                 tariffEnable = 0;
                 isVirtual = 1;
                 updateView();
@@ -107,8 +126,16 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
         });
         sbAcross.setOnClickListener(v -> {
             if (!sbAcross.isChecked()) {
+                goodsModal = 0;
+
                 allowTariff = 1;
                 tariffEnable = 1;
+                updateView();
+            }
+        });
+        sbConsult.setOnClickListener(v->{
+            if (!sbConsult.isChecked()) {
+                goodsModal = Constant.GOODS_TYPE_CONSULT;
                 updateView();
             }
         });
@@ -135,6 +162,7 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
             commonId = parent.commonId;
             allowTariff = parent.allowTariff;
             goodsModal = parent.goodsModal;
+            businessType = parent.businessType;
             updateView();
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -143,18 +171,32 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
 
     private void updateView() {
         tvAddGoodUnit.setText(unitName);
-        if (allowTariff != 1) {
-            getView().findViewById(R.id.ll_across_container).setVisibility(View.GONE);
-            withoutTariff();
-        } else if (tariffEnable == 1) {
-            goodsModal = 2;
-            sbRetail.setChecked(false);
-            sbVirtual.setChecked(false);
-            sbAcross.setChecked(true);
+
+        if (businessType == Constant.CONSULT_STORE||goodsModal == Constant.GOODS_TYPE_CONSULT) {
+            consultContainer.setVisibility(View.VISIBLE);
+            retailContainer.setVisibility(View.GONE);
+            AcrossContainer.setVisibility(View.GONE);
+            goodsModal = Constant.GOODS_TYPE_CONSULT;            sbConsult.setChecked(true);
+            return;
+
+
         } else {
-            sbAcross.setChecked(false);
-            withoutTariff();
+            consultContainer.setVisibility(View.GONE);
         }
+            if (allowTariff != 1) {
+
+                getView().findViewById(R.id.ll_across_container).setVisibility(View.GONE);
+                withoutTariff();
+            } else if (tariffEnable == 1) {
+                goodsModal = 2;
+                sbRetail.setChecked(false);
+                sbVirtual.setChecked(false);
+                sbAcross.setChecked(true);
+            } else {
+                sbAcross.setChecked(false);
+                withoutTariff();
+            }
+
     }
 
     private void withoutTariff() {
