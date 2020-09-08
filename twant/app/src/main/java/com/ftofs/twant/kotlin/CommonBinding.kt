@@ -26,7 +26,7 @@ import com.ftofs.twant.util.Util
 
 @BindingAdapter(value = ["imageUrl"])
 fun loadImageUrl(v: ImageView, url: String?) {
-    url?.run {
+    url?.takeIf{it.isNotEmpty()}.run {
         SLog.info("url $url")
         Glide.with(v).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(v)
     }
@@ -58,10 +58,11 @@ fun setTextPrice(v: TextView, price: Double) {
 }
 @BindingAdapter(value = ["priceModel"])
 fun setTextPriceWithModel(v: TextView, vo: Goods) {
-    if (vo.goodsModal != Constant.GOODS_TYPE_CONSULT) {
-        setTextPrice(v, vo.appPriceMin)
-    } else {
+    SLog.info(vo.goodsModal.toString())
+    if (vo.goodsModal == Constant.GOODS_TYPE_CONSULT) {
         v.text="詢價"
+    } else {
+        setTextPrice(v, vo.appPriceMin)
     }
 }
 @BindingAdapter(value = ["showOringial"])
