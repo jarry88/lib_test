@@ -1296,15 +1296,6 @@ public class AddGoodsFragment extends BaseFragment
                         "reserveStorage", permutation.reserved
                 ));
             }
-            if (specValueIdStringList.size() == 0) {
-                goodsJsonVoList.append(EasyJSONObject.generate(
-                        "specValueIds", 0,
-                        "goodsPrice0", 0,
-                        "goodsStorage", 0,
-                        "reserveStorage", 0
-                ));
-            }
-            publishGoodsInfo.set("goodsJsonVoList", goodsJsonVoList);
 
 
             EasyJSONArray goodsPicVoList = EasyJSONArray.generate();
@@ -1329,6 +1320,17 @@ public class AddGoodsFragment extends BaseFragment
 
             }
             publishGoodsInfo.set("goodsPicVoList", goodsPicVoList);
+
+            if (specValueIdStringList.size() == 0) {
+                for(int i=0;i<goodsPicVoList.length();i++)
+                goodsJsonVoList.append(EasyJSONObject.generate(
+                        "specValueIds", 0,
+                        "goodsPrice0", 0,
+                        "goodsStorage", 0,
+                        "reserveStorage", 0
+                ));
+            }
+            publishGoodsInfo.set("goodsJsonVoList", goodsJsonVoList);
 
 
             // 處理商品視頻
