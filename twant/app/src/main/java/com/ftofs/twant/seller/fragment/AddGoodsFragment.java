@@ -1506,9 +1506,9 @@ public class AddGoodsFragment extends BaseFragment
             publishGoodsInfo.set("categoryId", categoryId);
             publishGoodsInfo.set("jingle", jingle);
 
-            for (int i = 1; i <= 3; i++) {
-                String keyName = String.format("categoryId%d", i++);
-                if (i - 1 < selectCategoryList.size()) {
+            for (int i = 0; i < 3; i++) {
+                String keyName = String.format("categoryId%d", (i + 1));
+                if (i < selectCategoryList.size()) {
                     Category category = selectCategoryList.get(i);
                     publishGoodsInfo.set(keyName, category.getCategoryId());
                 } else { // 固定有3個category，如果不夠，填0

@@ -410,6 +410,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         updateMainSelectedFragment(MainFragment.HOME_FRAGMENT);
 
+        SLog.info("carouselLoaded[%s]", carouselLoaded);
         // 加載輪播圖片
         if (!carouselLoaded) {
             loadCarousel();
