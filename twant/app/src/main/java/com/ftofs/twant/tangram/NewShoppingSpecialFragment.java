@@ -348,8 +348,11 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     }
     private void updateView(EasyJSONObject responseObj) {
         try {
-
-            zoneState  = responseObj.getInt("datas.zoneState ");
+            if (Config.USE_DEVELOPER_TEST_DATA) {
+                zoneState = 1;
+            } else {
+                zoneState  = responseObj.getInt("datas.zoneState ");
+            }
             if(zoneState==Constant.ZONE_CLOSE_TYPE||zoneState==Constant.ZONE_STOP_TYPE){
                 tvZoneName.setText("活動專場");
                 llFloatButtonContainer.setVisibility(View.GONE);

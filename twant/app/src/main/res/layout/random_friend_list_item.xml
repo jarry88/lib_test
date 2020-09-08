@@ -14,7 +14,6 @@
         android:layout_marginStart="@dimen/toolbar_margin_left"
         android:layout_marginEnd="@dimen/toolbar_margin_right"
         android:gravity="center_vertical"
-        android:visibility="invisible"
         android:orientation="horizontal">
         <RelativeLayout
             android:layout_width="52dp"
@@ -29,12 +28,16 @@
                 app:civ_border_color="@color/tw_light_grey_EDED"
 
                 />
-            <de.hdodenhof.circleimageview.CircleImageView
+            <TextView
                 android:id="@+id/img_role_logo"
                 android:layout_width="@dimen/dp_20"
                 android:layout_height="@dimen/dp_20"
                 android:layout_alignBottom="@id/img_avatar"
                 android:layout_alignEnd="@id/img_avatar"
+                android:text="友"
+                android:gravity="center"
+                android:background="@color/tw_red"
+                radius="4"
                 android:src="@drawable/icon_city_friend"
                 visible="@{vo.isFriend}"
 
@@ -52,6 +55,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="6sp"
                 android:text=""
+                android:visibility="gone"
                 android:background="@drawable/unread_count_bg"
                 />
         </RelativeLayout>
@@ -76,7 +80,7 @@
 
                     android:layout_marginEnd="15dp"
                     android:layout_weight="1"
-                    android:text=""
+                    android:text="@{vo.nickName}"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
                     android:singleLine="true"
@@ -84,6 +88,7 @@
                     />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/tv_message_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,6 +113,7 @@
                 android:id="@+id/tv_group_name"/>
             <!-- 下面那行 -->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -126,12 +132,6 @@
                     android:ellipsize="end"
                     />
 
-                <ImageView
-                    android:id="@+id/icon_do_not_disturb"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_do_not_disturb"
-                    />
             </LinearLayout>
         </LinearLayout>
         <de.hdodenhof.circleimageview.CircleImageView

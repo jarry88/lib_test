@@ -8,7 +8,7 @@ public class StickyCellData {
     public int goodsCommonCount; // 导航栏显示的商品数
     public int wantPostCount;    // 导航栏显示的贴文数
     public int storeCount;       // 导航栏显示的店铺数
-    public int friendCount;       // 导航栏显示的友成交数
+    public int imSessionCount;       // 导航栏显示的友成交数
 
     public boolean activityEnable;  // 是否启用导航栏上的活动按钮
     // 以下字段在activityEnable为true的时候才使用到

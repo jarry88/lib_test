@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.entity.SellerGoodsItem
@@ -123,7 +124,9 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                                 stateLiveData.postNoMoreData()
                             }
                         }else{
-                            list.forEach{SLog.info(it.goodsName+it.goodsModal)}
+                            if (Config.USE_DEVELOPER_TEST_DATA) {
+                                list.forEach{SLog.info(it.goodsName+it.jingle)}
+                            }
                             goodsList.value = result.datas.zoneGoodsList
                             stateLiveData.postSuccess()
 

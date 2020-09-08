@@ -8,7 +8,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+        <include layout="@layout/rl_title_wight"
+            android:id="@+id/rl_tools"
             android:paddingStart="@dimen/dp_12"
             android:paddingEnd="@dimen/dp_12"
             android:layout_width="match_parent"
@@ -16,19 +17,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:background="@color/tw_grey_F3F3">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_baseline_emoji_people_24"
-                android:layout_alignParentEnd="true"/>
-
-        </RelativeLayout>
+            app:layout_constraintBottom_toTopOf="@id/rv_list"
+            android:background="@color/tw_grey_F3F3"/>
         <androidx.recyclerview.widget.RecyclerView
             android:padding="@dimen/dp_12"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:id="@+id/rv_list"
+            app:layout_constraintTop_toBottomOf="@id/rl_tools"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/random_friend_list_item"/>
 
