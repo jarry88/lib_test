@@ -227,6 +227,19 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
 //                       ToastUtil.error(context,);
                        return;
                    }
+                   List<OrdersGoodsVo> filterList = new ArrayList<>();
+                   for (OrdersGoodsVo ordersGoodsVo : list) {
+                       if (ordersGoodsVo.getIfoodmacauCount() > 0) {
+                           filterList.add(ordersGoodsVo);
+                       }
+                   }
+
+                   if (filterList.size()==0) {
+                       //todo異常情況處理
+//                       ToastUtil.error(context,);
+                       return;
+                   }
+
                    new XPopup.Builder(context)
 //                         .dismissOnTouchOutside(false)
                            // 设置弹窗显示和隐藏的回调监听
@@ -240,7 +253,7 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
                                public void onDismiss() {
                                    orderFragment.outReloadData();
                                }
-                           }).asCustom(new CancelAfterVerificationListPopup(context, list,item))
+                           }).asCustom(new CancelAfterVerificationListPopup(context, filterList,item))
                            .show();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
