@@ -51,7 +51,7 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
 
         val rvList=findViewById<RecyclerView>(R.id.rv_verification_list)
         rvList.adapter=adapter
-                orderList?.let{
+        orderList?.let{
             adapter.addAll(it,true)
         }
     }
