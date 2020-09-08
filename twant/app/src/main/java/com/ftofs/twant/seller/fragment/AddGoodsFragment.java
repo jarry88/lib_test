@@ -177,6 +177,11 @@ public class AddGoodsFragment extends BaseFragment
     private EditText etLimitBuy;
     private int businessType;//經營模式 1資訊模式(只允許發佈資訊類商品) 2交易模式(可發佈所有類型商品)
     private final int TYPE_CONSULT=5 ;//咨詢
+    private View consultContainer;
+    private ScaledButton sbRetail;
+    private ScaledButton sbVirtual;
+    private ScaledButton sbAcross;
+    private ScaledButton sbConsult;
 
     public static AddGoodsFragment newInstance() {
 
@@ -381,6 +386,20 @@ public class AddGoodsFragment extends BaseFragment
 
     private View othersView() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_others_widget, vpAddGood, false);
+//        view.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+//            @Override
+//            public void onSystemUiVisibilityChange(int visibility) {
+//                if (visibility == View.VISIBLE) {
+//                    if (goodsModal == Constant.GOODS_TYPE_CONSULT) {
+//
+        consultContainer = view.findViewById(R.id.ll_consult_container);
+        if (goodsModal == Constant.GOODS_TYPE_CONSULT) {
+            consultContainer.setVisibility(View.INVISIBLE);
+        }
+//                    }
+//                }
+//            }
+//        });
         Util.setOnClickListener(view, R.id.btn_others_prev, this);
         Util.setOnClickListener(view, R.id.btn_publish_goods, this);
         ScaledButton sbInstancePublish = view.findViewById(R.id.sb_instance_publish);
@@ -623,10 +642,10 @@ public class AddGoodsFragment extends BaseFragment
         Util.setOnClickListener(view, R.id.btn_basic_next, this);
         Util.setOnClickListener(view, R.id.btn_basic_prev, this);
         Util.setOnClickListener(view, R.id.tv_add_good_unit, this);
-        ScaledButton sbRetail = view.findViewById(R.id.sb_retail);
-        ScaledButton sbVirtual = view.findViewById(R.id.sb_virtual);
-        ScaledButton sbAcross = view.findViewById(R.id.sb_across);
-        ScaledButton sbConsult = view.findViewById(R.id.sb_consult);
+         sbRetail = view.findViewById(R.id.sb_retail);
+         sbVirtual = view.findViewById(R.id.sb_virtual);
+         sbAcross = view.findViewById(R.id.sb_across);
+         sbConsult = view.findViewById(R.id.sb_consult);
         view.findViewById(R.id.ll_consult_container).setVisibility(View.VISIBLE);
         sbRetail.setButtonCheckedBlue();
         sbVirtual.setButtonCheckedBlue();
@@ -686,6 +705,9 @@ public class AddGoodsFragment extends BaseFragment
                 if (sbJoinActivity != null&&sbJoinActivity.isChecked()) {
                     sbJoinActivity.setChecked(false);
                 }
+                if (consultContainer != null) {
+                    consultContainer.setVisibility(View.INVISIBLE);
+                }
                 if (sbRetail.isChecked()) {
                     sbRetail.setChecked(false);
                 }
@@ -698,14 +720,6 @@ public class AddGoodsFragment extends BaseFragment
             }
 
         });
-        if (businessType == Constant.CONSULT_STORE) {
-            sbRetail.setVisibility(View.GONE);
-            sbAcross.setVisibility(View.GONE);
-            sbVirtual.setVisibility(View.GONE);
-            sbConsult.performClick();
-        } else {
-            sbRetail.performClick();
-        }
         return view;
     }
 
@@ -888,6 +902,18 @@ public class AddGoodsFragment extends BaseFragment
             }
             onSelected(PopupType.GOODS_UNITY,unityIndex,unitList.get(unityIndex));
         }
+
+            if (businessType == Constant.CONSULT_STORE) {
+                View view = mViews.get(BASIC_INDEX);
+                view.findViewById(R.id.ll_retail).setVisibility(View.GONE);
+                view.findViewById(R.id.ll_across_container).setVisibility(View.GONE);
+                goodsModal = Constant.GOODS_TYPE_CONSULT;
+                sbConsult.performClick();
+            } else {
+                sbRetail.performClick();
+            }
+
+
     }
 
     //    更新商品详情页数据
@@ -952,7 +978,6 @@ public class AddGoodsFragment extends BaseFragment
 
     //    更新商品规格页数据
     private void updateSpecView(EasyJSONObject data) {
-
 
     }
 
@@ -1529,9 +1554,9 @@ public class AddGoodsFragment extends BaseFragment
     private void savePublishGoodsInfo() {
         String token = User.getToken();
 //        token = "e6b1594f0ce04d7cbf01163121a44fcd";
-        SLog.info("params[%s]",publishGoodsInfo.toString());
         String url = Api.PATH_SELLER_GOODS_PUBLISH_SAVE + "?token=" + token;
-          Api.postJsonUi(url, publishGoodsInfo.toString() ,new UICallback() {
+        SLog.info("url[%s]\nparams[%s]",url,publishGoodsInfo.toString());
+        Api.postJsonUi(url, publishGoodsInfo.toString() ,new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
                  LogUtil.uploadAppLog(url, publishGoodsInfo.toString(), "", e.getMessage());

@@ -75,6 +75,7 @@ public class ToastUtil {
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
+                    error(context, errorMessage);
 
                     if (StringUtil.isEmpty(errorMessage)) {
                         return true;
