@@ -104,13 +104,8 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
                         }
                         Util.startFragment(GoodsEvaluationFragment.newInstance(orderItem.orderId, 0, orderItem.storeName, evaluationGoodsItemList));
                     } else if (id == R.id.btn_have_received) {
-                        SLog.info("btn_have_received");
-                        if (Util.inDev()&&(424==orderItem.storeId)) {
-//                                    cancelAfterVerification(orderItem);
-                            //測試環境
-                            loadGoodsList(orderItem);
-                        } else if (Constant.WANT_EAT_ID==orderItem.storeId) {
-                            //綫上環境
+                        if (Util.showWriteOffsReceiveButton(orderItem.storeId)) {
+                            //要使用核銷功能的確認收貨
                             loadGoodsList(orderItem);
                         } else {
                             new XPopup.Builder(context)

@@ -1621,6 +1621,26 @@ public class Util {
 
         return sb.toString();
     }
+
+    /**
+     *
+     * @param storeId 店鋪id
+     * @return 是否需要顯示核銷用的確認收穫按鈕
+     */
+    public static boolean showWriteOffsReceiveButton(int storeId) {
+        if (inDev()) {
+            //測試環境
+            return 424 == storeId;
+        }else {
+            //正式環境
+            for (int id : Constant.WRITE_OFFS_ID) {
+                if (id == storeId) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
 
 

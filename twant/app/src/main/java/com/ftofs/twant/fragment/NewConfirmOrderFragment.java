@@ -1472,10 +1472,8 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                     storeItem.voucherName = formatVoucherName(maxAmountStoreVoucherVo);
                 }
                 confirmOrderItemList.add(storeItem);
-                //判斷店鋪暱稱為  想要食  ，只能允許自提取貨（由前端寫死）,
-                if (Config.DEVELOPER_MODE && storeId == 424 || storeId == Constant.WANT_EAT_ID) {
-                    onlyFetch = true;
-                }
+                //判斷店鋪id為  使用核銷功能  ，只能允許自提取貨（由前端寫死）,
+                onlyFetch = Util.showWriteOffsReceiveButton(storeId);
 
                 commitStoreList.append(EasyJSONObject.generate(
                         "storeId", storeId,

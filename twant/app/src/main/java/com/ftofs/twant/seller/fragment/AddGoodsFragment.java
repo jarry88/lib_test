@@ -1384,8 +1384,10 @@ public class AddGoodsFragment extends BaseFragment
         String freightText = etFreight.getText()==null?"":etFreight.getText().toString();
         if (useFixedFreight) {
             if (StringUtil.isEmpty(freightText)) {
-                ToastUtil.error(_mActivity, "請填寫運費");
-                return false;
+                freightText = "0";
+                etFreight.setText(freightText);
+//                ToastUtil.error(_mActivity, "請填寫運費");
+//                return false;
             }
         } else {
             if (freightTemplateId <= 0) {

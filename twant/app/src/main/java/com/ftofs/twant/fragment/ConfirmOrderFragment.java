@@ -1024,9 +1024,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     storeItem.voucherName = formatVoucherName(maxAmountStoreVoucherVo);
                 }
                 confirmOrderItemList.add(storeItem);
-                //判斷店鋪暱稱為  想要食  ，只能允許自提取貨（由前端寫死）
-                SLog.info("%s,%s",Config.DEVELOPER_MODE,storeId);
-                if (Config.DEVELOPER_MODE&&storeId==424||storeId==Constant.WANT_EAT_ID) {
+                //判斷店鋪id滿足核銷條件  ，只能允許自提取貨（由前端寫死）
+                if (Util.showWriteOffsReceiveButton(storeId)) {
                     onlyFetch = true;
                     currPaymentTypeCode = Constant.PAYMENT_TYPE_CODE_CHAIN;
                     SLog.info("onlyFetch");

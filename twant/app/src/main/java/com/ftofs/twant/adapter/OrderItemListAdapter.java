@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.entity.GiftItem;
@@ -17,8 +16,6 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
-
-import org.litepal.util.Const;
 
 /**
  * 訂單列表里面的訂單項
@@ -80,22 +77,16 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
             itemView.findViewById(R.id.btn_order_comment).setVisibility(View.GONE);
         }
 
+        View btnReceive = itemView.findViewById(R.id.btn_have_received);
         if (itemData.showMemberReceive) {
-            itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
+            btnReceive.setVisibility(View.VISIBLE);
         } else {
-            if ((Util.inDev() && 424==itemData.storeId)||
-                    (Constant.WANT_EAT_ID==itemData.storeId)) {
-                SLog.info("here-- %s",itemData.ordersState);
-                if (OrderState.TO_BE_SEND ==itemData.ordersState ) {
-                    SLog.info("here--");
-
-                    itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
-                } else {
-                    itemView.findViewById(R.id.btn_have_received).setVisibility(View.GONE);
-                }
-            } else {
-                itemView.findViewById(R.id.btn_have_received).setVisibility(View.GONE);
+            boolean showButton = false;
+            if (OrderState.TO_BE_SEND ==itemData.ordersState ) {
+                //代發貨狀態
+               showButton = Util.showWriteOffsReceiveButton(itemData.storeId);
             }
+            btnReceive.setVisibility(showButton?View.VISIBLE:View.GONE);
         }
 
         LinearLayout llSkuItemContainer = itemView.findViewById(R.id.ll_sku_item_container);
