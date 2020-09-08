@@ -121,8 +121,8 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
         tvMobile.setText(mobileEncrypt);
         sbBindWeixin = view.findViewById(R.id.sb_bind_weixin);
         sbBindFacebook = view.findViewById(R.id.sb_bind_facebook);
-        wxBindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, 0);
-        fbBindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, 0);
+        wxBindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, Constant.FALSE_INT);
+        fbBindingStatus = Hawk.get(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
         loadBindStatus();//請求接口更新綁定狀態
 
         if (TwantApplication.wxApi.isWXAppInstalled()) {  // 如果微信已經安裝，則顯示綁定設置
@@ -366,23 +366,26 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
 
                     String weixinUserInfo = responseObj.getSafeString("datas.memberInfo.weixinUserInfo");
                     if(weixinUserInfo.length() > 0){
-                        wxBindingStatus = Constant.TRUE_INT;
-                        setSwitchButtonStatus(SNS_TYPE_WEIXIN, true);
-                    }else {
-                        wxBindingStatus = Constant.FALSE_INT;
-                        setSwitchButtonStatus(SNS_TYPE_WEIXIN, false);
+                        Hawk.put(SPField.FIELD_WX_BINDING_STATUS, Constant.TRUE_INT);
+                    } else {
+                        Hawk.put(SPField.FIELD_WX_BINDING_STATUS, Constant.FALSE_INT);
                     }
+
+                    wxBindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, Constant.FALSE_INT);
                     SLog.info("wxBindingStatus[%d]", wxBindingStatus);
+                    setSwitchButtonStatus(SNS_TYPE_WEIXIN, wxBindingStatus == Constant.TRUE_INT);
+
+
+                    String facebookUserInfo = responseObj.getSafeString("datas.memberInfo.facebookUserInfo");
+                    if (facebookUserInfo.length() > 0) {
+                        Hawk.put(SPField.FIELD_FB_BINDING_STATUS, Constant.TRUE_INT);
+                    } else {
+                        Hawk.put(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
+                    }
 
                     fbBindingStatus = Hawk.get(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
                     SLog.info("fbBindingStatus[%d]", fbBindingStatus);
-                    if(fbBindingStatus == Constant.TRUE_INT){
-                        setSwitchButtonStatus(SNS_TYPE_FACEBOOK, true);
-                    }else {
-                        setSwitchButtonStatus(SNS_TYPE_FACEBOOK, false);
-                    }
-                    SLog.info("fbBindingStatus[%d]", fbBindingStatus);
-
+                    setSwitchButtonStatus(SNS_TYPE_FACEBOOK, fbBindingStatus == Constant.TRUE_INT);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -513,6 +516,12 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+
+        wxBindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, Constant.FALSE_INT);
+        setSwitchButtonStatus(SNS_TYPE_WEIXIN, wxBindingStatus == Constant.TRUE_INT);
+
+        fbBindingStatus = Hawk.get(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
+        setSwitchButtonStatus(SNS_TYPE_FACEBOOK, fbBindingStatus == Constant.TRUE_INT);
     }
 
     @Override
