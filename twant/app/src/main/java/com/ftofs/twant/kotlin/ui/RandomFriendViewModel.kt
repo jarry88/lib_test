@@ -5,5 +5,11 @@ import com.ftofs.twant.kotlin.base.BaseViewModel
 
 
 class RandomFriendViewModel(application: Application) : BaseViewModel(application){
-
+    fun getMemberList(){
+//        launch(stateLiveData,
+//                {repository.run {
+//
+//                    simpleGet(api.getMemberList()) }}
+//        )
+    }
 }

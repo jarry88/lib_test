@@ -460,6 +460,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                             }
                             if (voucherList.size() > 0) {
                                 String zoneId = responseObj.getSafeString("datas.zoneId");
+                                hideSoftInput();
                                 new XPopup.Builder(_mActivity)
                                         .moveUpToKeyboard(false)
                                         .asCustom(new MoonVoucherListPopup(_mActivity,voucherList,zoneId))

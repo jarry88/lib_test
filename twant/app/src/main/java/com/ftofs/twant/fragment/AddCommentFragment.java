@@ -353,7 +353,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("commentItem", commentItem);
 //                    如果有优惠券，则带回上一级页面
-                    if (responseObj.exists("datas.voucherList") && responseObj.exists("zoneId")) {
+                    if (responseObj.exists("datas.voucherList") && responseObj.exists("datas.zoneId")) {
                         EasyJSONArray array = responseObj.getSafeArray("datas.voucherList");
 
                         ArrayList<StoreVoucher> voucherList = new ArrayList<>();

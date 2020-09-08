@@ -45,8 +45,11 @@ public class MRequest extends BaseRequest {
     private MRequest() {
         super();
         this.service = retrofit.create(DemoApiService.class);
+        retrofit.baseUrl();
     }
-
+    //下方為參考代碼，後面會逐步移除-----------------------
+    //--------------------------------
+    //-------------------------
 //    // 获取列表条目
 //    public Observable<BaseResponse<SellerGoodsItem>> demoGet(int what, int num) {
 //        Observable<BaseResponse<SellerGoodsItem>> observable = service.demoGet(num);
