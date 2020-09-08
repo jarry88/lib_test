@@ -124,8 +124,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                 tvFriendCount.setText(formatCount(stickyCellData.imSessionCount));
             }
             tvFriendCount.setVisibility(VISIBLE);
-            tvFriendCount.setText(String.valueOf(stickyCellData.memberCount));
-            tvRandomFriendCount.setText(String.valueOf(stickyCellData.imSessionCount));
+            tvRandomFriendCount.setText(String.valueOf(stickyCellData.memberCount));
+            tvFriendCount.setText(String.valueOf(stickyCellData.imSessionCount));
 
 //            vwActivityEntrancePlaceholder.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
             //加入有成交后强制影藏
