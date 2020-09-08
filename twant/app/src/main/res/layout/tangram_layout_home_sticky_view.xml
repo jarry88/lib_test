@@ -15,9 +15,7 @@
         android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/icon_takewant"
@@ -29,11 +27,11 @@
             <LinearLayout
                 android:id="@+id/ll_search_box"
                 android:layout_height="35dp"
-                android:layout_width="wrap_content"
-                android:layout_marginStart="13dp"
-                android:layout_toEndOf="@id/icon_takewant"
+                android:layout_width="0dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="72dp"
                 android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/btn_random_friend"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
@@ -64,51 +62,45 @@
 
             <LinearLayout
                 android:id="@+id/btn_random_friend"
-                android:layout_alignParentEnd="true"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
+                android:layout_marginEnd="22dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_random_friend_count"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:background="@drawable/circle_red_bubble_bg"
                     android:gravity="center"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
-                    android:text="123333"
+                    android:text="123"
                     android:textColor="@android:color/white"
-                    android:textSize="10sp"
-                    android:translationX="-4dp"
-                    android:visibility="visible" />
+                    android:textSize="9sp"
+                    />
 
                 <LinearLayout
                     android:id="@+id/ll_random_friend"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/tw_category_icon_bg_new"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
+                    android:layout_marginTop="2dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
                         android:src="@drawable/icon_city_friend"
-                        android:textColor="@android:color/white"
-                        android:textSize="15sp" />
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="1dp"
                         android:text="城友"
-                        android:textColor="@android:color/black"
-                        android:textSize="7sp" />
+                        android:textColor="@color/tw_blue"
+                        android:textSize="12sp"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
@@ -122,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="34dp"
                 android:layout_alignParentBottom="true"
-                android:tint="@color/tw_blue"
+                app:tint="@color/tw_blue"
                 android:scaleType="fitXY"
                 android:src="@drawable/home_navigation_bar_bg"
                 />
