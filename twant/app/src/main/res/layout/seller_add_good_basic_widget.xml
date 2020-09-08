@@ -155,6 +155,14 @@
                 </LinearLayout>
 
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="請選擇您的產品所屬產品類型。\n
+「零售型」適用於多規格、且有可能規格價格不一的產品，但不可設置購買數量階梯價格段。\n
+「資訊型」適用於服務資訊類的產品，僅做產品的展示，不可銷售且不展示產品價格。\n
+「跨城購」產品可配送至中國大陸，交由中國海關進行申報。\n
+根據選擇的產品類型不同，銷售規則將相應改變。"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
