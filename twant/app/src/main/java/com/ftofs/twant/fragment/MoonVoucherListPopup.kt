@@ -88,11 +88,15 @@ class MoonVoucherListPopup(context: Context, private val voucherList: MutableLis
             }
             adapter.addAll(it,true) }
         close.setOnClickListener { dismiss() }
+        gotoMoonZone.setOnClickListener { Util.startFragment(NewShoppingSpecialFragment.newInstance(Constant.MOON_ZONE_ID))
+        dismiss()
+        }
 
     }
 
     val rvList: RecyclerView by lazy { findViewById<RecyclerView>(R.id.rv_list) }
     val close:ImageView by lazy { findViewById<ImageView>(R.id.btn_close) }
+    private val gotoMoonZone:ImageView by lazy { findViewById<ImageView>(R.id.img_bottom) }
     override fun getMaxWidth(): Int {
         return (XPopupUtils.getWindowWidth(context) * 0.85f).toInt()
     }

@@ -390,4 +390,5 @@ public class Constant {
     public static int[] WRITE_OFFS_ID=new int[]{
         1575, 959,1598
     };
+    public static final int MOON_ZONE_ID=69;
 }

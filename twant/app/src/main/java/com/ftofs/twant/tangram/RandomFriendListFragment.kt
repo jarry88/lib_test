@@ -3,6 +3,7 @@ package com.ftofs.twant.tangram
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.RandomFriendListItemBinding
@@ -11,6 +12,7 @@ import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.RandomFriendViewModel
 import com.ftofs.twant.kotlin.vo.RandomMemberVo
+import com.ftofs.twant.log.SLog
 
 
 class RandomFriendListFragment:BaseTwantFragmentMVVM<RandomFriendListLayoutBinding, RandomFriendViewModel>() {
@@ -23,12 +25,6 @@ class RandomFriendListFragment:BaseTwantFragmentMVVM<RandomFriendListLayoutBindi
         return BR.viewModel
 
     }
-//    companion object{
-//        @JvmStatic
-//        fun newInstance(): RandomFriendListFragment {
-//            return RandomFriendListFragment()
-//        }
-//    }
     val mAdapter by lazy { object : DataBoundAdapter<RandomMemberVo,RandomFriendListItemBinding>(){
         override val layoutId: Int
             get() = R.layout.random_friend_list_item
@@ -40,9 +36,12 @@ class RandomFriendListFragment:BaseTwantFragmentMVVM<RandomFriendListLayoutBindi
     }}
     override fun initData() {
         binding.rvList.adapter= mAdapter
+        viewModel.getMemberList()
     }
 
     override fun initViewObservable() {
-//        viewModel.
+        viewModel.randomMemberList.observe(this, Observer {
+            SLog.info(it.size.toString())
+            mAdapter.addAll(it,true) })
     }
 }

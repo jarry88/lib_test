@@ -8,6 +8,7 @@ import com.ftofs.twant.kotlin.bean.ImGoodsSearch
 import com.ftofs.twant.kotlin.bean.NewsData
 import com.ftofs.twant.kotlin.bean.TwantResponse
 import com.ftofs.twant.kotlin.bean.ZoneInfo
+import com.ftofs.twant.kotlin.vo.RandomMemberVo
 import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.ftofs.twant.vo.CategoryNavVo
 import com.wzq.mvvmsmart.net.base.BaseResponse
@@ -77,6 +78,10 @@ interface DemoApiService {
     @POST("member/voucher/command/receive")
     suspend fun getVoucherCommandReceive(@Query("token")token:String,
                                          @Query("templateId")templateId:String?):TwantResponse<CommonInfo>
+
+//【首頁】誠友列表
+    @GET("app/home/random/member/list")
+    suspend fun getRandomMemberList(): TwantResponse<RandomFriendInfo>
 
 
     //post接口测试用
