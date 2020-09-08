@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.app.Instrumentation;
 import android.app.MediaRouteButton;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -69,6 +70,7 @@ import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -338,6 +340,39 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         bindFriendInfo();
         showGoodsAndOrder();
+        //新增有成交递增方法
+        addIMSession();
+    }
+//知会后端一声就行
+    private void addIMSession() {
+            try {
+                EasyJSONObject params = EasyJSONObject.generate();
+                String token = User.getToken();
+                if (StringUtil.isEmpty(token)) {
+                    Util.showLoginFragment();
+                    return;
+                }
+                params.set("token", token);
+                String url = Api.MEMBER_IM_SESSION_INCR;
+                Api.getUI(url, params, new UICallback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        ToastUtil.showNetworkError(_mActivity, e);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, String responseStr) throws IOException {
+                        try{
+
+                            SLog.info("responseStr[%s]",responseStr);
+                        }catch (Exception e){
+                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                        }
+                    }
+                });
+            }catch (Exception e){
+                SLog.info("Error![%s]",e);
+            }
     }
 
     private void updateMyInfo() {

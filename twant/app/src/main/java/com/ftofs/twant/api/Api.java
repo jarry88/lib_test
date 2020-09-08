@@ -1379,6 +1379,7 @@ public class Api {
      * 编辑商品
      */
     public static final String SELLER_GOODS_EDIT = "/member/seller/goods/edit";
+    public static final String MEMBER_IM_SESSION_INCR ="/member/im/session/incr" ;
     /**
      * 【商家】
      * 退貨訂單列表

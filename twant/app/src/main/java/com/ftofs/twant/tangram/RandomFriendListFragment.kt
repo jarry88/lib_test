@@ -48,7 +48,7 @@ class RandomFriendListFragment:BaseTwantFragmentMVVM<RandomFriendListLayoutBindi
 
                     Util.startFragment(ChatFragment.newInstance(conversation,friendInfo))
                 }catch (e:Exception){
-                    SLog.info(e.toString())
+                    SLog.info("%s",e.toString())
                 }
 
         }
