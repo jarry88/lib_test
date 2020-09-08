@@ -1393,6 +1393,34 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
+                        if (responseObj != null) { // 口令解析出錯也彈出提示
+                            String error = responseObj.optString("datas.error");
+                            if (!StringUtil.isEmpty(error)) {
+                                new XPopup.Builder(MainActivity.this)
+//                         .dismissOnTouchOutside(false)
+                                        // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                                        .setPopupCallback(new XPopupCallback() {
+                                            @Override
+                                            public void onShow() {
+                                            }
+                                            @Override
+                                            public void onDismiss() {
+                                            }
+                                        }).asCustom(new TwConfirmPopup(MainActivity.this, error, null, new OnConfirmCallback() {
+                                    @Override
+                                    public void onYes() {
+                                        SLog.info("onYes");
+                                        ClipboardUtils.copyText(MainActivity.this, ""); // 清空剪貼板
+                                    }
+
+                                    @Override
+                                    public void onNo() {
+                                        SLog.info("onNo");
+                                    }
+                                })).show();
+                            }
+                        }
                         LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                         return;
                     }
