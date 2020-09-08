@@ -310,6 +310,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void showPopupAd() {
+        SLog.bt();
         MainActivity mainActivity = (MainActivity) _mActivity;
         if (!mainActivity.canShowOtherPopup) {
             return;
