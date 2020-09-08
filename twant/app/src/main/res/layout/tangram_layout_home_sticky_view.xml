@@ -163,7 +163,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="想要店"
+                                android:text="要商店"
                                 android:textColor="@android:color/white"
                                 android:textSize="15sp" />
 
@@ -201,7 +201,7 @@
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@id/btn_category_store"
-                        app:layout_constraintRight_toLeftOf="@id/btn_category_brand"
+                        app:layout_constraintRight_toLeftOf="@id/btn_category_friend"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
@@ -217,7 +217,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="想要品"
+                                android:text="要產品"
                                 android:textColor="@android:color/white"
                                 android:textSize="15sp" />
 
@@ -248,18 +248,19 @@
                             />
                     </LinearLayout>
 
+
                     <LinearLayout
-                        android:id="@+id/btn_category_brand"
+                        android:id="@+id/btn_category_friend"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@id/btn_category_goods"
-                        app:layout_constraintRight_toLeftOf="@id/btn_category_friend"
+                        app:layout_constraintRight_toLeftOf="@id/btn_category_brand"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
-                            android:id="@+id/ll_category_post"
+                            android:id="@+id/ll_category_friend"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -271,20 +272,20 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="想要圈"
+                                android:text="要諮詢"
                                 android:textColor="@android:color/white"
                                 android:textSize="15sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="TAKEWANT"
+                                android:text="TRADETALK"
                                 android:textColor="@android:color/white"
                                 android:textSize="7sp" />
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/tv_post_count"
+                            android:id="@+id/tv_friend_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -301,17 +302,17 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/btn_category_friend"
+                        android:id="@+id/btn_category_brand"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/btn_category_brand"
                         app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/btn_category_friend"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
-                            android:id="@+id/ll_category_friend"
+                            android:id="@+id/ll_category_post"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -323,20 +324,20 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="友成交"
+                                android:text="要分享"
                                 android:textColor="@android:color/white"
                                 android:textSize="15sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="TRADETALK"
+                                android:text="TAKEWANT"
                                 android:textColor="@android:color/white"
                                 android:textSize="7sp" />
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/tv_friend_count"
+                            android:id="@+id/tv_post_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"

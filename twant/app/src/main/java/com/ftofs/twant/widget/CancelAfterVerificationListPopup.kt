@@ -103,12 +103,14 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
 //                       ToastUtil.error(context,);
                         dismiss()
                         return
-                    } else {
-//                        val filterlist=list.filter { it.ifoodmacauCount>0 }
-//                        adapter.clear()
-
-                        adapter.addAll(list,true)
+                    }
+                    val filterList= list.filter { it.ifoodmacauCount>0 }
+                    if (filterList.isNotEmpty()) {
+                        adapter.addAll(filterList, true)
                         SLog.info("重新加载数据")
+                    } else {
+                        dismiss()
+                        return
                     }
                 } catch (e: Exception) {
                     SLog.info("Error!message[%s], trace[%s]", e.message, Log.getStackTraceString(e))
