@@ -145,6 +145,9 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        if (businessType == 0) {
+            loadBusinessType();
+        }
         if (parent.goodsVo == null) {
             loadData();
         } else {
@@ -162,7 +165,10 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
             commonId = parent.commonId;
             allowTariff = parent.allowTariff;
             goodsModal = parent.goodsModal;
-            businessType = parent.businessType;
+            if (businessType >=0 ) {
+
+                businessType = parent.businessType;
+            }
             updateView();
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -203,6 +209,55 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
         goodsModal = isVirtual;
         sbVirtual.setChecked(isVirtual == 1);
         sbRetail.setChecked(isVirtual != 1);
+    }
+
+    private void loadBusinessType() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE ;
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "isPublish",0
+
+        );
+        SLog.info("url[%s], params[%s]", url, params);
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
+
+        loadingPopup.show();
+        Api.getUI(url, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
+                loadingPopup.dismiss();
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
+
+                    EasyJSONObject data = responseObj.getObject("datas");
+                    businessType = data.getInt("businessType");
+                    parent.businessType = businessType;
+                    updateView();
+
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     private void updateBasicView(EasyJSONObject data) throws Exception{

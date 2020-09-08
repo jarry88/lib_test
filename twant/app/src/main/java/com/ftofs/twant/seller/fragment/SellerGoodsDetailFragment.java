@@ -138,6 +138,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     public void onSupportVisible() {
         super.onSupportVisible();
         loadData();
+        loadStoreInfo();
     }
 
     private void loadData() {
@@ -195,7 +196,6 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     if (StringUtil.safeModel(goodsVo) == Constant.GOODS_TYPE_CONSULT) {
                         priceRange = "詢價";
                     } else {
-
                      priceRange= String.format("%s MOP - %s MOP", StringUtil.formatFloat(goodsVo.getDouble("appPriceMin")), StringUtil.formatFloat(goodsVo.getDouble("batchPrice0")));
                     }
                     ((TextView) contentView.findViewById(R.id.tv_price_range)).setText(priceRange);
@@ -253,12 +253,56 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
             }
         });
     }
+    private void loadStoreInfo() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE ;
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "isPublish",0
+        );
+        SLog.info("url[%s], params[%s]", url, params);
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
+
+        loadingPopup.show();
+        Api.getUI(url, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
+                loadingPopup.dismiss();
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                        return;
+                    }
+
+                    EasyJSONObject data = responseObj.getObject("datas");
+                    businessType = data.getInt("businessType");
+
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
 
     public void updateDataFromJson(EasyJSONObject responseObj) throws Exception{
 
         goodsVo = responseObj.getSafeObject("datas.GoodsVo");
         allowTariff = responseObj.getInt("datas.allowTariff");
-        businessType= responseObj.getInt("datas.businessType");
         tariffEnable = goodsVo.getInt("tariffEnable");
 
         detailVideo=goodsVo.getSafeString("detailVideo");

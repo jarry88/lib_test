@@ -30,6 +30,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -221,7 +222,6 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
         if (parent.goodsVo != null) {
             explainData();
         } else {
@@ -231,6 +231,7 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             updateLogoInfo();
         }
     }
+
 
     private void loadData() {
         String token = User.getToken();
