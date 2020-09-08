@@ -46,7 +46,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     TextView tvStoreCount;
     TextView tvGoodsCount;
     TextView tvPostCount;
-    TextView tvFriendCount;
+    TextView tvFriendCount;  // 要諮詢
+    TextView tvRandomFriendCount; // 城友
 
     View iconTakewant;
     ImageView iconActivityEntrance;
@@ -88,6 +89,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         tvGoodsCount = contentView.findViewById(R.id.tv_goods_count);
         tvPostCount = contentView.findViewById(R.id.tv_post_count);
         tvFriendCount = contentView.findViewById(R.id.tv_friend_count);
+        tvRandomFriendCount = contentView.findViewById(R.id.tv_random_friend_count);
 
         iconActivityEntrance = contentView.findViewById(R.id.icon_activity_entrance);
         vwActivityEntrancePlaceholder = contentView.findViewById(R.id.vw_activity_entrance_placeholder);
@@ -122,6 +124,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                 tvFriendCount.setText(formatCount(stickyCellData.imSessionCount));
             }
             tvFriendCount.setVisibility(VISIBLE);
+            tvFriendCount.setText(String.valueOf(stickyCellData.memberCount));
+            tvRandomFriendCount.setText(String.valueOf(stickyCellData.imSessionCount));
 
 //            vwActivityEntrancePlaceholder.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
             //加入有成交后强制影藏

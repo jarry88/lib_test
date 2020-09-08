@@ -82,7 +82,7 @@
                     android:paddingStart="4dp"
                     android:lines="1"
                     android:layout_gravity="center_horizontal"
-                    android:text="123333"
+                    android:text=""
                     android:textColor="@android:color/white"
                     android:textSize="9sp"
                     android:visibility="visible" />

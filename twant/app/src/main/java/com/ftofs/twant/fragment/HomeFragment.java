@@ -201,6 +201,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     stickyCellData.goodsCommonCount = responseObj.getInt("datas.goodsCommonCount");;
                     stickyCellData.storeCount = responseObj.getInt("datas.storeCount");
                     stickyCellData.wantPostCount = responseObj.getInt("datas.wantPostCount");
+                    stickyCellData.imSessionCount = responseObj.optInt("datas.imSessionCount");
+                    stickyCellData.memberCount = responseObj.optInt("datas.memberCount");
                     EasyJSONArray shoppingZoneList = responseObj.getArray("datas.shoppingZoneList");
                     SLog.info(shoppingZoneList.toString());
                     if (!Util.isJsonNull(shoppingZoneList)) {
