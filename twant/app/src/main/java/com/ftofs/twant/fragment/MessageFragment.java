@@ -771,6 +771,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     EasyJSONArray conversationList = responseObj.getArray("datas.conversationList");
                     if (conversationList != null && conversationList.length() > 0) {
+                        List<ChatConversation> list = new ArrayList<>();
 
                         for (Object object : conversationList) {
                             EasyJSONObject conversation = (EasyJSONObject) object;
@@ -805,17 +806,25 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                         has = true;
                                         chatConversation.friendInfo = friendInfo;
                                         chatConversation.sendTime = sendTime;
-                                        chatConversation.messageTime = Jarbon.parse(sendTime).getMessageTime();
+                                        String messageTime = Jarbon.parse(sendTime).getMessageTime();
+                                        chatConversation.messageTime = messageTime;
                                         int timestamp = Jarbon.parse(sendTime).getTimestamp();
                                         if (StringUtil.isEmpty(chatConversation.lastMessage)) {
                                             chatConversation.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                             chatConversation.lastMessage = "txt::" + messageContent + ":";
                                             chatConversation.timestamp = timestamp;
+
+
                                         } else if (chatConversation.timestamp < timestamp && System.currentTimeMillis() / 1000 - timestamp > 30000000) {//安卓自己定義了150天
                                             chatConversation.timestamp = timestamp;
 
                                         }
+
+
+//                                        chatConversation = new ChatConversation(friendInfo, messageTime);
                                         SLog.info("第[%s]dbtime[%s]sendtimestamp[%s],sendtime[%s],%s,", i, chatConversation.timestamp, timestamp, sendTime, System.currentTimeMillis() / 1000 - timestamp > 30000000);
+
+
                                         break;
                                     }
                                 }
@@ -854,15 +863,17 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 Conversation.saveNewChat(newChat);
 //                                SLog.info("time，[%s]",time);
                                 newChat.messageTime = Jarbon.parse(sendTime).getMessageTime();
+                                list.add(newChat);
                                 chatConversationList.add(newChat);
                             }
                         }
+                        adapter.submitList(chatConversationList);
+
                     }
 //                    adapter.submitList(chatConversationList);
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                        comO1O2();
 //                    }
-                    adapter.submitList(chatConversationList);
 //                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

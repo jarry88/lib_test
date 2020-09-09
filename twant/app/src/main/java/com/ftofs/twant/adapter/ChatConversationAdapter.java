@@ -47,8 +47,8 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         @Override
         public boolean areContentsTheSame(@NonNull ChatConversation oldItem, @NonNull ChatConversation newItem) {
 //            SLog.info("name%s,%s,",newItem.friendInfo.memberName,newItem.lastMessage);
-
-            return TextUtils.equals(oldItem.lastMessage,newItem.lastMessage)&&TextUtils.equals(oldItem.sendTime,newItem.sendTime);
+//TextUtils.equals(oldItem.lastMessage,newItem.lastMessage)&&
+            return TextUtils.equals(oldItem.messageTime,newItem.messageTime);
         }
     };
     private final AsyncListDiffer<ChatConversation> chatConversationAsyncListDiffer=new AsyncListDiffer<ChatConversation>(this,callback);
@@ -79,7 +79,15 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
     }
     public void submitList(List<ChatConversation> data) {
         List<ChatConversation> newList= new ArrayList<>();
-        newList.addAll(data);
+        if (data != null && data.size() > 0) {
+            for (ChatConversation chatConversation : data) {
+                SLog.info("----------------->%s, %s ", chatConversation.friendInfo.nickname, chatConversation.messageTime);
+                ChatConversation chatConversation1 = chatConversation.clone();
+                chatConversation1.messageTime = chatConversation.messageTime;
+                newList.add(chatConversation1);
+            }
+        }
+//        newList.addAll(data);
         chatConversationAsyncListDiffer.submitList(newList);
     }
 
