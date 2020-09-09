@@ -51,7 +51,7 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
             override fun initView(binding: ImGoodsListItemBinding, item: Goods) {
                 binding.vo=item
                 binding.root.setOnClickListener {
-                    parent.sendGoods.onSelected(PopupType.IM_CHAT_SEND_GOODS,0,EasyJSONObject.generate(
+                    parent.sendGoods?.onSelected(PopupType.IM_CHAT_SEND_GOODS,0,EasyJSONObject.generate(
                             "goodsName", item.goodsName,
                             "commonId", item.commonId,
                             "goodsImage", item.goodsImage
@@ -232,8 +232,10 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
 
     override fun onSupportVisible() {
         super.onSupportVisible()
-        viewModel.targetName.value=parent.targetName
-        viewModel.searchType.postValue(type.searchType)
+        parent.targetName?.let {
+            viewModel.targetName.value=it
+            viewModel.searchType.postValue(type.searchType)
+        }
     }
 }
 
@@ -242,6 +244,3 @@ private fun SmartRefreshLayout.idle() {
     finishLoadMore()
 }
 
-private fun View.VorG(bool: Boolean) {
-    visibility=if(bool)View.VISIBLE else View.GONE
-}

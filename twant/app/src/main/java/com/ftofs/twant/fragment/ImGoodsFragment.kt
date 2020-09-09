@@ -22,7 +22,7 @@ import com.ftofs.twant.widget.TestCenterPopup
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lxj.xpopup.XPopup
 
-class ImGoodsFragment(val targetName:String,val sendGoods: OnSelectedListener):BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
+class ImGoodsFragment(val targetName:String?=null,val sendGoods: OnSelectedListener?=null):BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
     private val pageList = arrayListOf<ImGoodsListPage>()
     private val tabTextList by lazy {
         enumValues<ImGoodsEnum>().apply { forEach { SLog.info(it.toString()) } }
