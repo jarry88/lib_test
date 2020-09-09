@@ -37,19 +37,8 @@ class MoonVoucherListPopup(context: Context, private val voucherList: MutableLis
         override fun initView(binding: MoonVoucherListItemBinding, item: StoreVoucher) {
             binding.vo=item
             binding.root.setOnClickListener {
-                if (item.memberIsReceive == Constant.TRUE_INT) {
-                    XPopup.Builder(context).asCustom(TwConfirmPopup(context,"領取成功","前往「想要中秋」月餅優惠專場",object:OnConfirmCallback{
-                        override fun onYes() {
-                            dismiss()
-                            Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId.toInt()))
-                        }
-
-                        override fun onNo() {
-                            dismiss()
-//                            TODO("Not yet implemented")
-                        }
-
-                    })).show()
+                if (item.memberIsReceive == Constant.TRUE_INT) {//已经领取直接跳转
+                    showToZonePopup()
                 } else {
                     launch {
                         try {
@@ -57,10 +46,10 @@ class MoonVoucherListPopup(context: Context, private val voucherList: MutableLis
                                 simpleGet(api.getVoucherCommandReceive(User.getToken(),item.templateId.toString()))
                             }){
                                is Result.Success -> {
-                                   ToastUtil.success(context,result.datas.success)
                                    getData()?.indexOf(item)?.let {
                                        item.memberIsReceive = 1
                                        notifyItemChanged(it) }
+                                   showToZonePopup()
                                }
                                is Result.DataError -> ToastUtil.error(context,result.datas.error)
                                is Result.Error -> ToastUtil.error(context,"領取失敗")
@@ -74,6 +63,22 @@ class MoonVoucherListPopup(context: Context, private val voucherList: MutableLis
             }
         }
     }
+
+    private fun showToZonePopup() {
+        XPopup.Builder(context).asCustom(TwConfirmPopup(context,"領取成功","前往「想要中秋」月餅優惠專場",object:OnConfirmCallback{
+            override fun onYes() {
+                dismiss()
+                Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId.toInt()))
+            }
+
+            override fun onNo() {
+                dismiss()
+//                            TODO("Not yet implemented")
+            }
+
+        })).show()
+    }
+
     override fun onCreate() {
         rvList.adapter=adapter
         voucherList.takeUnless { it.isNullOrEmpty() }?.let {

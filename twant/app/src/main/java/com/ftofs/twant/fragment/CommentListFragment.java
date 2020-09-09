@@ -146,9 +146,11 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SLog.info("2進入評論詳情頁");
-                CommentItem commentItem = commentItemList.get(position);
-                if (commentItem.getItemType() != Constant.ITEM_TYPE_NO_DATA) {
-                    Util.startFragment(CommentDetailFragment.newInstance(commentItem));
+                if (position < commentItemList.size()) {
+                    CommentItem commentItem = commentItemList.get(position);
+                    if (commentItem.getItemType() != Constant.ITEM_TYPE_NO_DATA) {
+                        Util.startFragment(CommentDetailFragment.newInstance(commentItem));
+                    }
                 }
             }
         });
