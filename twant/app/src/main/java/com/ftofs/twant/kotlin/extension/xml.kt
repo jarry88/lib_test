@@ -19,9 +19,11 @@ fun setImgUrl(view: ImageView, url: String) {
     Glide.with(view).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(view)
 }
 @BindingAdapter("visible")
-fun setViewVisible(view: View, visible: Int) {
-    if(visible==1) view.visibility=View.VISIBLE
-    else view.visibility=View.GONE
+fun setViewVisible(view: View, visible: Int?) {
+    visible?.let {
+        if(visible==1) view.visibility=View.VISIBLE
+        else view.visibility=View.GONE
+    }
 }
 @BindingAdapter("invisible")
 fun setInViewVisible(view: View, visible: Int) {
