@@ -151,7 +151,6 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
         startActivity(intent)
     }
 
-    override fun initViewObservable() {}
     override fun onContentReload() {}
     override fun onDestroyView() {
         super.onDestroyView()

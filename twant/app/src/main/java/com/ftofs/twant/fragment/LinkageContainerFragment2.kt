@@ -3,12 +3,10 @@ package com.ftofs.twant.fragment
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
@@ -20,15 +18,16 @@ import com.ftofs.twant.constant.PopupType
 import com.ftofs.twant.databinding.LinkageContainerLayout2Binding
 import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.interfaces.OnSelectedListener
-import com.ftofs.twant.interfaces.SimpleCallback
-import com.ftofs.twant.kotlin.*
+import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
+import com.ftofs.twant.kotlin.LinkageContainerViewModel2
+import com.ftofs.twant.kotlin.ZoneCategory
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.UiUtil
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
-import com.wzq.mvvmsmart.utils.LoadingUtil
 import com.wzq.mvvmsmart.utils.ToastUtils
 import java.util.*
 
@@ -38,7 +37,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
 
     private lateinit var mAdapter: BuyerGoodsListAdapter
     private lateinit var mCategoryAdapter: ZoneCategoryListAdapter
-    private var loadingUtil: LoadingUtil? = null
     private val  zoneId by  lazy { arguments?.getInt("zoneId") }
     companion object{
         fun newInstance(zoneId:Int,p:NewShoppingSpecialFragment): LinkageContainerFragment2 {
@@ -138,7 +136,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
         }
     }
     override fun initViewObservable() {
-        super.initViewObservable()
 
         viewModel.nestedScrollingEnable.observe(this, Observer {
             binding.rvRightList.isNestedScrollingEnabled=it
@@ -205,7 +202,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
                 StateLiveData.StateEnum.Loading -> {
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.showLoading("加载中..")
                     KLog.e("请求数据中--显示loading")
                 }
                 StateLiveData.StateEnum.Success -> {
@@ -217,7 +213,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
                     KLog.e("空闲状态--关闭loading")
 //                    binding.refreshLayout.finishRefresh()
 //                    binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.hideLoading()
                 }
                 StateLiveData.StateEnum.NoData -> {
                     KLog.e("空闲状态--关闭loading")
@@ -228,7 +223,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
                     KLog.e("其他状态--关闭loading")
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.hideLoading()
                 }
             }
         })
@@ -271,7 +265,6 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
 
     override fun onDestroy() {
         super.onDestroy()
-        loadingUtil?.hideLoading()
     }
 
     fun scrollToTop() {
