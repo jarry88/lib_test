@@ -1139,6 +1139,11 @@ public class Util {
         return isLoggedIn;
     }
 
+    /**
+     * 后面用这种方式实现全局laading效果
+     * @param context
+     * @return loading view
+     */
     public static BasePopupView createLoadingPopup(Context context) {
         return new XPopup.Builder(context)
                 .hasShadowBg(false)

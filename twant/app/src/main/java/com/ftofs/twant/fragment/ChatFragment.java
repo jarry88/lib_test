@@ -354,7 +354,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 }
                 params.set("token", token);
                 String url = Api.MEMBER_IM_SESSION_INCR;
-                Api.getUI(url, params, new UICallback() {
+                Api.postUI(url, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         ToastUtil.showNetworkError(_mActivity, e);

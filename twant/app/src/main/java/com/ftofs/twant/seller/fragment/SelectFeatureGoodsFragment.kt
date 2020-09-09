@@ -81,7 +81,6 @@ class SelectFeatureGoodsFragment : BaseTwantFragmentMVVM<SellerEditFeaturesLayou
         binding.adapter = sellerGoodsListAdapter
     }
     override fun initViewObservable() {
-        super.initViewObservable()
         viewModel.liveData.observe(this, Observer { goodsList: List<SellerGoodsItem> ->
             if (goodsList.isNotEmpty()) {
                 SLog.info("mLiveData的listBeans.size():" + goodsList.size)

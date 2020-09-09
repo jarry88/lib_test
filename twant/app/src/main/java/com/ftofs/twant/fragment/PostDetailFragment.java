@@ -840,7 +840,6 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
             return;
         }
         if (requestCode == RequestCode.ADD_COMMENT.ordinal()) {
-            SLog.info("HERE");
             if (data.get("voucherList") != null) {
                 String zoneId=data.getString("zoneId");
                 ArrayList<StoreVoucher> vouchers = data.getParcelableArrayList("voucherList");

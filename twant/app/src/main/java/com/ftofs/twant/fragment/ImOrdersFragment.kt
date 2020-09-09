@@ -74,7 +74,6 @@ class ImOrdersFragment(val imName: String, val sendOrder: OnSelectedListener) :B
     }
 
     override fun initViewObservable() {
-        super.initViewObservable()
         viewModel.ordersList.observe(this, Observer {
             mAdapter.addAll(it,viewModel.isRefresh)
         })

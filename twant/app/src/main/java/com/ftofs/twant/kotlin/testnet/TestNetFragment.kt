@@ -28,7 +28,6 @@ class TestNetFragment : BaseTwantFragmentMVVM<FragmentTestNetBinding, TestNetVie
     }
 
     override fun initViewObservable() {
-        super.initViewObservable()
         binding.button.setOnClickListener { _: View? ->
             KLog.e("发起请求")
             viewModel.doPostServerNews() // 请求网络数据;
@@ -45,7 +44,6 @@ class TestNetFragment : BaseTwantFragmentMVVM<FragmentTestNetBinding, TestNetVie
         hideSoftInputPop()
         return true
     }
-
     override fun onSupportVisible() {
         super.onSupportVisible()
 //        binding.btnToB.postDelayed({

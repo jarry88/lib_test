@@ -10,12 +10,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.ImGoodsLayoutBinding
-import com.ftofs.twant.databinding.ZoneGoodsListItemBinding
-import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.interfaces.OnSelectedListener
 import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.ImGoodsViewModel
-import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.widget.TestCenterPopup
@@ -79,6 +76,10 @@ class ImGoodsFragment(val targetName:String?=null,val sendGoods: OnSelectedListe
 //        binding.tabs.setSelectedTabIndicator(R.drawable.tab_indicator)
 
 
+    }
+
+    override fun initViewObservable() {
+//        TODO("Not yet implemented")
     }
 
 }

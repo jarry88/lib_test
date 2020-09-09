@@ -84,6 +84,8 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
     }
 
     override fun initParam() {}
+    override fun initViewObservable() {}
+
 
     /**
      * 初始化根布局
@@ -158,6 +160,7 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
             binding.unbind()
         }
     }
+
 
     protected fun showNormalLayout(view: View?) {
         if (emptyViewHelper == null) {
