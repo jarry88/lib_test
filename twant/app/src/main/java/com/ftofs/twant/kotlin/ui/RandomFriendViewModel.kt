@@ -4,8 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.ftofs.twant.kotlin.base.BaseViewModel
 import com.ftofs.twant.kotlin.vo.RandomMemberVo
-import com.ftofs.twant.log.SLog
-import com.ftofs.twant.vo.CategoryNavVo
+import com.ftofs.twant.util.User
 
 
 class RandomFriendViewModel(application: Application) : BaseViewModel(application){
@@ -14,7 +13,7 @@ class RandomFriendViewModel(application: Application) : BaseViewModel(applicatio
     fun getMemberList(){
         launch(stateLiveData,
                 {repository.run {
-                    simpleGet(api.getRandomMemberList()) }},
+                    simpleGet(api.getRandomMemberList(User.getToken())) }},
                 {
                     randomMemberList.value=it.randomMemberList
                 }

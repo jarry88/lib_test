@@ -1,22 +1,15 @@
 package com.ftofs.twant.kotlin.net
 
-import com.ftofs.twant.entity.CategoryCommodity
 import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.kotlin.CategoryItem
-import com.ftofs.twant.kotlin.ZoneCategory
 import com.ftofs.twant.kotlin.bean.ImGoodsSearch
 import com.ftofs.twant.kotlin.bean.NewsData
 import com.ftofs.twant.kotlin.bean.TwantResponse
 import com.ftofs.twant.kotlin.bean.ZoneInfo
-import com.ftofs.twant.kotlin.vo.RandomMemberVo
 import com.ftofs.twant.kotlin.vo.SellerPageVO
-import com.ftofs.twant.vo.CategoryNavVo
 import com.wzq.mvvmsmart.net.base.BaseResponse
 import io.reactivex.Observable
 import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.http.*
-import java.time.ZoneId
 import kotlin.collections.ArrayList
 
 /**
@@ -81,7 +74,7 @@ interface DemoApiService {
 
 //【首頁】誠友列表
     @GET("app/home/random/member/list")
-    suspend fun getRandomMemberList(): TwantResponse<RandomFriendInfo>
+    suspend fun getRandomMemberList(@Query("token")token:String?): TwantResponse<RandomFriendInfo>
 
 
     //post接口测试用
