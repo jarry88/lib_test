@@ -125,7 +125,7 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                             }
                         }else{
                             if (Config.USE_DEVELOPER_TEST_DATA) {
-                                list.forEach{SLog.info(it.goodsName+it.jingle)}
+                                list.forEach{SLog.info("[%s]", it.goodsName+it.jingle)}
                             }
                             goodsList.value = result.datas.zoneGoodsList
                             stateLiveData.postSuccess()

@@ -236,10 +236,17 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                         EasyJSONObject schedule = (EasyJSONObject) object;
 
                         int scheduleId = schedule.optInt("scheduleId");
+                        int scheduleState = schedule.optInt("scheduleState");
                         String startTime = schedule.optString("startTime").substring(11, 16);
                         String scheduleStateText = schedule.optString("scheduleStateText");
+                        String startTimeFull = schedule.optString("startTime");
                         String endTime = schedule.optString("endTime");
-                        Jarbon jarbon = Jarbon.parse(endTime);
+                        Jarbon jarbon;
+                        if (scheduleState == 0) { // 如果是【即將開場】，用開始時間作倒計時
+                            jarbon = Jarbon.parse(startTimeFull);
+                        } else {
+                            jarbon = Jarbon.parse(endTime);
+                        }
                         endTimeList.add(jarbon.getTimestampMillis());
 
                         SecKillZoneItem item = new SecKillZoneItem();
