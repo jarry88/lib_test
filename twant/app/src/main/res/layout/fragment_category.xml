@@ -138,7 +138,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="想要貼"
+            android:text="分享"
             android:textColor="@android:color/white"
             android:background="@color/tw_blue">
 
