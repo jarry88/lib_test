@@ -794,6 +794,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             //需要新增列表item
                             int i = 0;
                             boolean has = false;
+
                             for (ChatConversation chatConversation : chatConversationList) {
                                 if (chatConversation == null) {
                                     continue;

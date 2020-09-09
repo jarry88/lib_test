@@ -35,6 +35,7 @@ import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
@@ -199,7 +200,11 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             SearchPostParams searchPostParams = new SearchPostParams();
             searchPostParams.keyword = "";
             MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.showHideFragment(MainFragment.MESSAGE_FRAGMENT);
+            if (StringUtil.isEmpty(User.getToken())) {
+                Util.showLoginFragment();
+            } else {
+                mainFragment.showHideFragment(MainFragment.MESSAGE_FRAGMENT);
+            }
 
         }else if (id == R.id.btn_random_friend) {
             Util.startFragment(new RandomFriendListFragment());

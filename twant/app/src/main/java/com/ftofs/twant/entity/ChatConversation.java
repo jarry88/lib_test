@@ -7,17 +7,18 @@ import com.ftofs.twant.orm.FriendInfo;
  * @author zwm
  */
 public class ChatConversation {
+    public ChatConversation() {
+        this.friendInfo = new FriendInfo();
+        this.messageTime = "[[[[[";
+    }
     // 會話列表中，最近一條消息的描述（如果是非文本消息的話）
     public static final String LAST_MESSAGE_DESC_IMAGE = "[圖片]";
     public static final String LAST_MESSAGE_DESC_ORDERS = "[訂單]";
     public static final String LAST_MESSAGE_DESC_GOODS = "[產品]";
     public static final String LAST_MESSAGE_DESC_ENC = "[電子名片]";
     public String sendTime="";
-    public String messageTime="";
 
-    public ChatConversation() {
-        this.friendInfo = new FriendInfo();
-    }
+    public String messageTime = "sdfasdfs";
 
     public FriendInfo friendInfo;
     public int lastMessageType;
