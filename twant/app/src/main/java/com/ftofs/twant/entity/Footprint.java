@@ -16,10 +16,11 @@ public class Footprint {
     public static final int SELECT_STATUS_STORE = 2;
     // 選中了日期項
     public static final int SELECT_STATUS_DATE = 4;
+    public final int goodsModal;
 
 
     public Footprint(int footprintId, String date, int storeId, String storeName, int commonId, String imageSrc,
-                     String goodsName, String jingle, double price) {
+                     String goodsName, String jingle, double price,int goodsModal) {
         this.footprintId = footprintId;
         this.date = date;
         this.storeId = storeId;
@@ -29,6 +30,7 @@ public class Footprint {
         this.goodsName = goodsName;
         this.jingle = jingle;
         this.price = price;
+        this.goodsModal = goodsModal;
     }
 
     public int footprintId;

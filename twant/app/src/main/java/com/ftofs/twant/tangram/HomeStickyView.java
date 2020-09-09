@@ -2,6 +2,7 @@ package com.ftofs.twant.tangram;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,21 +112,26 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         SLog.info("HomeStickyView::postBindView");
         Object data = cell.optParam("data");
         if (data != null) {
+            //首頁城有數量顯示
             StickyCellData stickyCellData = (StickyCellData) data;
+            String randomFriendCount = String.valueOf(stickyCellData.memberCount);
+//            tvRandomFriendCount.setText(randomFriendCount);
+            if (Config.USE_DEVELOPER_TEST_DATA) {
+                randomFriendCount = "1234567";
+            }
+            updateRandomFriendCount(randomFriendCount);
+
+
             tvStoreCount.setText(formatCount(stickyCellData.storeCount));
             tvStoreCount.setVisibility(VISIBLE);
             tvGoodsCount.setText(formatCount(stickyCellData.goodsCommonCount));
             tvGoodsCount.setVisibility(VISIBLE);
             tvPostCount.setText(formatCount(stickyCellData.wantPostCount));
             tvPostCount.setVisibility(VISIBLE);
-            if (Config.USE_DEVELOPER_TEST_DATA) {
-                tvFriendCount.setText("555555");
-            } else {
-                tvFriendCount.setText(formatCount(stickyCellData.imSessionCount));
-            }
+            tvFriendCount.setText(formatCount(stickyCellData.imSessionCount));
             tvFriendCount.setVisibility(VISIBLE);
-            tvRandomFriendCount.setText(String.valueOf(stickyCellData.memberCount));
             tvFriendCount.setText(String.valueOf(stickyCellData.imSessionCount));
+
 
 //            vwActivityEntrancePlaceholder.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
             //加入有成交后强制影藏
@@ -137,6 +143,19 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
 //            }
         }
         iconTakewant.setOnClickListener(this);
+    }
+
+    private void updateRandomFriendCount(String randomFriendCount) {
+        int length = randomFriendCount.length();
+        int size = 9;
+        if (length > 5) {
+            size -= length - 5;
+        }
+        if (size < 6) {
+            size = 6;
+        }
+        tvRandomFriendCount.setTextSize(TypedValue.COMPLEX_UNIT_SP,size);
+        tvRandomFriendCount.setText(randomFriendCount);
     }
 
     @Override

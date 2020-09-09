@@ -85,7 +85,7 @@ android {
         debug {
             minifyEnabled false
 
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
             ext.enableCrashlytics = false //加快開發環境編譯速度
         }
     }

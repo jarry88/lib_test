@@ -788,6 +788,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                             //String nationalFlag = StringUtil.normalizeImageUrl(goodsCommon.getString("adminCountry.nationalFlag"));
 
                             GoodsSearchItem goodsSearchItem = new GoodsSearchItem(good.imageSrc,good.storeAvatarUrl,good.storeId,good.storeName,good.commonId,good.goodsName,good.jingle,good.price,null);
+                            goodsSearchItem.goodsModel = good.goodsModel;
                             if (pair == null) {
                                 pair = new GoodsSearchItemPair(Constant.ITEM_TYPE_NORMAL);
                                 pair.left = goodsSearchItem;
