@@ -940,6 +940,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
         SLog.info("params[%s]", params);
 
         String url = Api.PATH_CHANNEL_UPDATE;
+        if (Config.USE_DEVELOPER_TEST_DATA) {
+            url = "https://snailpad.cn/tmp/channel_update.json";
+        }
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -982,10 +985,6 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                     SLog.info("currentVersion[%s], newestVersion[%s]", currentVersion, newestVersion);
                     int result = Util.versionCompare(currentVersion, newestVersion);
                     SLog.info("result[%d]", result);
-
-                    if (Config.USE_DEVELOPER_TEST_DATA) {
-                        result = -1;
-                    }
 
                     if (result >= 0) {
                         if (showResult) {
