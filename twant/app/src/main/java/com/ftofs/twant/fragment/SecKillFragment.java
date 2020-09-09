@@ -52,6 +52,7 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
     SecKillZoneListAdapter secKillZoneListAdapter;
     List<SecKillZoneItem> secKillZoneItemList = new ArrayList<>();
 
+    TextView tvCountDownDesc;
     TextView tvCountDownHour;
     TextView tvCountDownMinute;
     TextView tvCountDownSecond;
@@ -106,6 +107,8 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
         });
         rvScheduleLabelList.setAdapter(secKillZoneListAdapter);
 
+        tvCountDownDesc = view.findViewById(R.id.tv_count_down_desc);
+
         int twYellow = getResources().getColor(R.color.tw_yellow, null);
         Drawable countDownDrawable = BackgroundDrawable.create(twYellow, Util.dip2px(_mActivity, 2));
         tvCountDownHour = view.findViewById(R.id.tv_count_down_hour);
@@ -140,6 +143,14 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
         super.onSupportInvisible();
     }
 
+    private void updateCountDownDesc(int scheduleState) {
+        if (scheduleState == 0) {
+            tvCountDownDesc.setText("距活動開始");
+        } else {
+            tvCountDownDesc.setText("距活動結束");
+        }
+    }
+
     /**
      * 选择秒殺活動場次
      * @param index
@@ -148,6 +159,9 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
         if (index == currentIndex) {
             return;
         }
+
+        SecKillZoneItem item = secKillZoneItemList.get(index);
+        updateCountDownDesc(item.scheduleState);
 
         currentIndex = index;
 
@@ -232,6 +246,7 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                         item.scheduleId = scheduleId;
                         item.startTime = startTime;
                         item.statusText = scheduleStateText;
+                        item.scheduleState = schedule.optInt("scheduleState");
 
                         secKillZoneItemList.add(item);
 
