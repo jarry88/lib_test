@@ -48,6 +48,7 @@ import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.fragment.BargainDetailFragment;
+import com.ftofs.twant.fragment.CommitFeedbackFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.HomeFragment;
@@ -441,7 +442,20 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
     public void showDebugPopup() {
         new XPopup.Builder(this)
 //                        .maxWidth(600)
-                .asCenterList("請選擇操作", new String[]{"隱藏浮動按鈕", "prod/線上，並重啟", "29，並重啟", "229，並重啟", "28，並重啟", "驗收/F3，並重啟", "打開日誌", "重啟", "顯示Fragment棧", "測試1", "測試2","開發寫死的數據:"+String.valueOf(Config.USE_DEVELOPER_TEST_DATA)},
+                .asCenterList("請選擇操作", new String[]{"隱藏浮動按鈕",
+                                "prod/線上，並重啟",
+                                "29，並重啟",
+                                "229，並重啟",
+                                "28，並重啟",
+                                "驗收/F3，並重啟",
+                                "打開日誌",
+                                "重啟",
+                                "顯示Fragment棧",
+                                "測試1",
+                                "測試2",
+                                "開發寫死的數據:"+ Config.USE_DEVELOPER_TEST_DATA,
+                                "當前環境："+ Config.getCurrentEnv()
+                        },
                         new OnSelectListener() {
                             @Override
                             public void onSelect(int position, String text) {

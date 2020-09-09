@@ -90,10 +90,15 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
     @Override
     public void onBindViewHolder(BaseViewHolder helper, int position) {
         ChatConversation chatConversation = getItem(position);
-
         SLog.info("顯示 name [%s],data[%s]",chatConversation.friendInfo.memberName,chatConversation.messageTime);
-        helper.setText(R.id.tv_message_time,chatConversation.messageTime );
-
+        TextView tvTime = helper.getView(R.id.tv_message_time);
+        if (tvTime != null) {
+            if (!StringUtil.isEmpty(tvTime.getText().toString()) && StringUtil.isEmpty(chatConversation.messageTime)) {
+                SLog.info("如果有旧值并且新值为空，不覆盖]");
+            } else {
+                tvTime.setText(chatConversation.messageTime);
+            }
+        }
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
         //此处已经按身份区分并返回头像
         String avatarUrl = chatConversation.friendInfo.getRoleAvatar();
@@ -173,7 +178,9 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, ChatConversation chatConversation) {}
+    protected void convert(BaseViewHolder helper, ChatConversation chatConversation) {
+        SLog.info("name 【%s],时间【%s】 convert",chatConversation.friendInfo.nickname,chatConversation.messageTime);
+    }
 
 
 }

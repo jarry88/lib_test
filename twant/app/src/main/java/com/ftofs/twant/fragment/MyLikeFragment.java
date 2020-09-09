@@ -348,8 +348,10 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                             good.jingle = goods.getSafeString("jingle");
                             good.likeCount = goods.getInt("goodsLike");
                             good.price = Util.getSpuPrice(goods);
+                            good.goodsModel = StringUtil.safeModel(goods);
 
                             GoodsSearchItem goodsSearchItem = new GoodsSearchItem(good.imageSrc,good.storeAvatarUrl,good.storeId,good.storeName,good.commonId,good.goodsName,good.jingle,good.price,null);
+                            goodsSearchItem.goodsModel = good.goodsModel;
                             if (pair == null) {
                                 pair = new GoodsSearchItemPair(Constant.ITEM_TYPE_NORMAL);
                                 pair.left = goodsSearchItem;
