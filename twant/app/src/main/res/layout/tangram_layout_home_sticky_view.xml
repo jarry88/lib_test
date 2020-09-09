@@ -75,7 +75,7 @@
                 <TextView
                     android:id="@+id/tv_random_friend_count"
                     android:layout_width="match_parent"
-                    android:layout_height="14dp"
+                    android:layout_height="13dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/circle_red_bubble_bg"
                     android:gravity="center"
