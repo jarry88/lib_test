@@ -22,6 +22,7 @@ import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.ChatConversationAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
@@ -321,12 +322,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
     private void loadData() {
         try {
+            SLog.info("加载环信及本地会话列表");
+
             totalIMUnreadCount = 0;
             chatConversationList.clear();
 
             Map<String, EMConversation> conversationMap = EMClient.getInstance().chatManager().getAllConversations();
             saveEMConversation(conversationMap);
-
 
             List<Conversation> allConversations = Conversation.getAllConversations(); //查询Conversation表的所有数据
             SLog.info("来自网络會話數[%d]，本地保存的会话数[%d]", conversationMap.size(),allConversations.size());
@@ -407,6 +409,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             updateConversationInfo();
             SLog.info("updateSize[%s]",updateConversationList.size());
             displayUnreadCount();
+            SLog.info("【-----------------》》》》》》》环信数据加载完毕");
+            if (Config.USE_DEVELOPER_TEST_DATA) {
+                for (ChatConversation chatConversation: chatConversationList) {
+                    SLog.info( chatConversation.friendInfo.nickname +"  "+chatConversation.messageTime);
+                }
+            }
             adapter.submitList(chatConversationList);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -431,6 +439,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                         }
                     }
 //                    adapter.notifyDataSetChanged();
+                    SLog.info("【-----------------》》》》》》》本地数据库获取刷新");
+
                     adapter.submitList(chatConversationList);
                 });
             }
@@ -721,9 +731,11 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
         SqliteUtil.imLogin();
         if (isPlatformCustomer) {
-            SLog.info("onSupportVisible");
+            SLog.info("平台客服页onSupportVisible");
             loadPlatformCustomerData();
         } else {
+            SLog.info("消息列表页onSupportVisible");
+
             loadConversation();
             loadData();
             //加載服務器數據補充
@@ -744,7 +756,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         }
         EasyJSONObject params = EasyJSONObject.generate("token", token);
 
-        SLog.info("params[%s]", params);
+        SLog.info("加载后端会话列表params[%s]", params);
         Api.getUI(Api.PATH_GET_IM_CONVERSATION, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {

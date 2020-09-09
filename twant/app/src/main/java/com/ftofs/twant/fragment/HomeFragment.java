@@ -312,12 +312,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void showPopupAd() {
-        SLog.bt();
         MainActivity mainActivity = (MainActivity) _mActivity;
         if (!mainActivity.canShowOtherPopup) {
             return;
         }
-        SLog.info("___here");
         long now = System.currentTimeMillis();
         // 每次resume時都顯示一次
         long resumeTimestamp = ((MainActivity) _mActivity).resumeTimestamp;

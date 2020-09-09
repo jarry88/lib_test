@@ -75,17 +75,17 @@
                 <TextView
                     android:id="@+id/tv_random_friend_count"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_12"
+                    android:layout_height="14dp"
+                    android:layout_gravity="center_horizontal"
                     android:background="@drawable/circle_red_bubble_bg"
                     android:gravity="center"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
                     android:lines="1"
-                    android:layout_gravity="center_horizontal"
-                    android:text=""
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
                     android:textColor="@android:color/white"
-                    android:textSize="9sp"
+                    android:textSize="8sp"
                     android:visibility="visible" />
+
                 <LinearLayout
                     android:id="@+id/ll_random_friend"
                     android:layout_width="wrap_content"
