@@ -48,10 +48,11 @@
                     android:gravity="center"
                     android:textColor="@color/tw_white"
                     android:src="@drawable/icon_city_friend"
-                    />
+                    visible="@{vo.isFriend}"
+
+                />
             </LinearLayout>
 
-            <!--                visible="@{vo.isFriend}"-->
 
             <TextView
                 android:id="@+id/tv_unread_count"
@@ -146,7 +147,7 @@
             </LinearLayout>
         </LinearLayout>
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_seller_logo"
+            android:id="@+id/img_shop_avatar"
             android:layout_width="@dimen/dp_20"
             android:layout_height="@dimen/dp_20"
             android:src="@drawable/img_customer_logo"
