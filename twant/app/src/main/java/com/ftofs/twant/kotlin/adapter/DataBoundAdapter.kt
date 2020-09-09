@@ -97,7 +97,9 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> (
         }else
         if (!isEmptyPosition(position)&&!isFootPosition(position)) {
             val realPosition=if(showHeadView)position-1 else position
-            initView(holder.binding, mData[realPosition])
+            if (mData.isNotEmpty()&&realPosition<mData.size) {
+                initView(holder.binding, mData[realPosition])
+            }
 //            onItemClickListener?.let { holder.binding.root.apply {setOnClickListener { _->it.onClick(realPosition,this) }  } }
 
         }

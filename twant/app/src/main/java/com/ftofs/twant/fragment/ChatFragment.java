@@ -1498,7 +1498,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        if (silMainContainer.isInputPaneOpen()) {
+        if (silMainContainer!=null&&silMainContainer.isInputPaneOpen()) {
             silMainContainer.closeInputPane();
             iconEmoji.setImageResource(R.drawable.icon_emoji);
             return true;

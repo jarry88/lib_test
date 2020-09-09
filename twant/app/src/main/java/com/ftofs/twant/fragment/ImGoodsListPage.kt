@@ -179,10 +179,6 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                 if (isNotEmpty()) {
                     labelAdapter.setNewData(this)
                 }
-//                when (type) {
-//                    ImGoodsEnum.RECOMMEND ,ImGoodsEnum.OWNER->{binding.rvStoreLabel.VorG(isNotEmpty()) }
-//                    else ->{}
-//                }
             }
              })
 
