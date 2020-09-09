@@ -71,7 +71,7 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
         mAdapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>?, view1: View, position: Int ->
             val id = view1.id
             if (id == R.id.goods_image_left_container || id == R.id.goods_image_middle_container || id == R.id.goods_image_right_container) {
-                val storeItem = adapter?.data?.get(position) as StoreItem?:null
+                val storeItem = adapter?.data?.get(position)?.let { it as StoreItem}
                 storeItem?.let {
                     it.zoneGoodsVoList?.run {
 

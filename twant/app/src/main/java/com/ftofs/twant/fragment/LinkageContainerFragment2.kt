@@ -79,7 +79,7 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
         binding.adapter = mAdapter
 
 
-        mCategoryAdapter = ZoneCategoryListAdapter(context,R.layout.store_category_list_item,ArrayList<ZoneCategory>(), OnSelectedListener(fun (type:PopupType,id:Int,extra:Any){
+        mCategoryAdapter = ZoneCategoryListAdapter(context,R.layout.store_category_list_item,ArrayList<ZoneCategory>(), OnSelectedListener(fun (_:PopupType, id:Int, extra:Any){
             val subCategory = extra as ZoneCategory
 //            ToastUtils.showShort("位置$id,name ${subCategory.categoryName},选中${subCategory.fold}")
             if (viewModel.currCategoryId.value != subCategory.categoryId) {
@@ -183,7 +183,7 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
 
 
         //上拉加载更多
-        binding.refreshLayout.setOnLoadMoreListener{ refreshLayout: RefreshLayout? ->
+        binding.refreshLayout.setOnLoadMoreListener{
             //            loadMoreTestData();   // 模拟加载更多数据
             viewModel.isRefresh=false
             if (viewModel.hasMore) {

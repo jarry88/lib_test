@@ -130,7 +130,7 @@ class CategoryCommodityKotlinFragment:BaseTwantFragmentMVVM<PageCategoryCommodit
     override fun initViewObservable() {
         viewModel.categoryNavVo.observe(this, Observer {
 //            KLog.e(it.size)
-            if (it.none {  it->it.isFold == 0 }) {
+            if (it.none {  a->a.isFold == 0 }) {
                 it.first().isFold=0
                 menuAdapter.oldPosition=0
             }
