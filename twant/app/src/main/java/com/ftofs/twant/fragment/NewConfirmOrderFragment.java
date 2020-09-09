@@ -1014,6 +1014,13 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                     isFirstLoadData = false;
 
                     getPlatformCoupon(); // 首次進入頁面才加載平臺券
+
+                    ConfirmOrderSummaryItem confirmOrderSummaryItem = getSummaryItem();
+                    if (confirmOrderSummaryItem != null) {
+                        confirmOrderSummaryItem.platformCouponCount = platformCouponList.size();
+                        SLog.info("confirmOrderSummaryItem.platformCouponCount[%d]", confirmOrderSummaryItem.platformCouponCount);
+                        confirmOrderSummaryItem.platformCouponStatus = Util.getAvailableCouponCountDesc(confirmOrderSummaryItem.platformCouponCount);
+                    }
                 }
 
                 emitter.onComplete();
