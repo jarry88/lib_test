@@ -34,7 +34,7 @@ android {
         targetSdkVersion 29
 
 
-        versionCode 197
+        versionCode 198
 
         versionName "1.2.7.00"
 
