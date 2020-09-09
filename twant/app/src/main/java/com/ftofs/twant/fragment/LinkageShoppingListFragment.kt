@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -28,17 +27,17 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.umeng.analytics.MobclickAgent
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
-import com.wzq.mvvmsmart.utils.LoadingUtil
 import java.util.*
 
+/**
+ * 专场的商店列表页
+ */
 class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecialFragment): BaseTwantFragmentMVVM<SimpleRvListBinding, LinkageShoppingListModel>() {
 
     //    private var parent by lazy { arguments?.get("parent") }
     private val mAdapter by lazy {
         ShoppingStoreListAdapter(R.layout.shopping_store_view, arrayListOf())
     }
-
-    private var loadingUtil: LoadingUtil? = null
 
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -120,8 +119,6 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
 
     }
     override fun initViewObservable() {
-        super.initViewObservable()
-
         viewModel.nestedScrollingEnable.observe(this, Observer {
             binding.rvSimple.isNestedScrollingEnabled = it
         })
@@ -163,7 +160,6 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
                 StateLiveData.StateEnum.Loading -> {
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.showLoading("加载中..")
                     KLog.e("请求数据中--显示loading")
                 }
                 StateLiveData.StateEnum.Success -> {
@@ -175,7 +171,6 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
                     KLog.e("空闲状态--关闭loading")
 //                    binding.refreshLayout.finishRefresh()
 //                    binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.hideLoading()
                 }
                 StateLiveData.StateEnum.NoData -> {
                     KLog.e("空闲状态--关闭loading")
@@ -186,7 +181,6 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
                     KLog.e("其他状态--关闭loading")
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.hideLoading()
                 }
             }
         })
@@ -218,11 +212,6 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
 //                }
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        loadingUtil?.hideLoading()
-    }
 
     fun scrollToTop() {
         UiUtil.moveToMiddle(binding.rvSimple, 0)

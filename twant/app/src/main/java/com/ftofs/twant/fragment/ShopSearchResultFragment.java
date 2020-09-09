@@ -139,14 +139,13 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
                 int commonId = -1;
                 int id = view.getId();
                 if (id == R.id.img_left_goods || id == R.id.btn_add_to_cart_left) {
-
                     goods = goodsPair.leftGoods;
-                    SLog.info(goods.goodsName);
-                    SLog.info("%s",commonId);
+//                    SLog.info(goods.goodsName);
+//                    SLog.info("%s",commonId);
                     commonId = goods.id;
                 } else if (id == R.id.img_right_goods || id == R.id.btn_add_to_cart_right) {
                     goods = goodsPair.rightGoods;
-                    SLog.info(goods.goodsName);
+//                    SLog.info(goods.goodsName);
                     SLog.info("%s",commonId);
                     commonId = goods.id;
                 }

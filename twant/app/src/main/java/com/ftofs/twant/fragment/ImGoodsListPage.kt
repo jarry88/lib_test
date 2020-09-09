@@ -24,16 +24,13 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.ToastUtil
-import com.ftofs.twant.util.Util
 import com.ftofs.twant.viewmodel.ImGoodsPageModel
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
-import com.wzq.mvvmsmart.utils.LoadingUtil
 
 class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseTwantFragmentMVVM<FragmentImGoodsPageBinding, ImGoodsPageModel>(){
 
-    private var loadingUtil: LoadingUtil? = null
     private var oldCategoryIndex=0
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.fragment_im_goods_page
@@ -49,19 +46,15 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                 get() = R.layout.im_goods_list_item
 
             override fun initView(binding: ImGoodsListItemBinding, item: Goods) {
-                if (Util.inDev()) {
-                    item.goodsModal=5
-                }
                 binding.vo=item
                 binding.root.setOnClickListener {
-                    parent.sendGoods.onSelected(PopupType.IM_CHAT_SEND_GOODS,0,EasyJSONObject.generate(
+                    parent.sendGoods?.onSelected(PopupType.IM_CHAT_SEND_GOODS,0,EasyJSONObject.generate(
                             "goodsName", item.goodsName,
                             "commonId", item.commonId,
                             "goodsImage", item.goodsImage
                     ))
                     parent.hideSoftInputPop()
                 }
-                binding.tvGoodsPrice.text = "询价"
 
             }
 
@@ -197,7 +190,6 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
             when (it) {
                 StateLiveData.StateEnum.Loading -> {
                     binding.refreshLayout.idle()
-                    loadingUtil?.showLoading("加载中..")
                     KLog.e("请求数据中--显示loading")
                 }
                 StateLiveData.StateEnum.Error -> {
@@ -215,7 +207,6 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                     KLog.e("空闲状态--关闭loading")
 //                    binding.refreshLayout.finishRefresh()
 //                    binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.hideLoading()
                 }
                 StateLiveData.StateEnum.NoData -> {
                     KLog.e("空闲状态--关闭loading")
@@ -228,7 +219,6 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
                     KLog.e("其他状态--关闭loading")
                     binding.refreshLayout.finishRefresh()
                     binding.refreshLayout.finishLoadMore()
-                    loadingUtil?.hideLoading()
                 }
             }
         })
@@ -236,8 +226,10 @@ class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseT
 
     override fun onSupportVisible() {
         super.onSupportVisible()
-        viewModel.targetName.value=parent.targetName
-        viewModel.searchType.postValue(type.searchType)
+        parent.targetName?.let {
+            viewModel.targetName.value=it
+            viewModel.searchType.postValue(type.searchType)
+        }
     }
 }
 
@@ -246,6 +238,3 @@ private fun SmartRefreshLayout.idle() {
     finishLoadMore()
 }
 
-private fun View.VorG(bool: Boolean) {
-    visibility=if(bool)View.VISIBLE else View.GONE
-}

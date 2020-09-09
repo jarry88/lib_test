@@ -116,7 +116,7 @@
                 android:textSize="13sp"
                 android:textColor="@color/tw_red"
                 android:textStyle="bold"
-                app:priceModel="@{vo}"
+                priceModel="@{vo}"
                 />
             <TextView
                 android:id="@+id/tv_goods_original_price"

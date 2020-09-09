@@ -17,12 +17,9 @@ import com.ftofs.twant.kotlin.FeatureGoodViewModel
 import com.ftofs.twant.kotlin.SellerGoodsListAdapter
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.Util
-import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
-import com.wzq.mvvmsmart.utils.LoadingUtil
 import com.wzq.mvvmsmart.utils.ToastUtils
-import java.util.*
 
 /**
  * 详情界面

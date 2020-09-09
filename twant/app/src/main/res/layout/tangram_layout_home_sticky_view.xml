@@ -278,7 +278,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="TRADEDEAL"
+                                android:text="CHATWANT"
                                 android:textColor="@android:color/white"
                                 android:textSize="7sp" />
                         </LinearLayout>

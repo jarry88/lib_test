@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ftofs.twant.BR
@@ -20,12 +18,11 @@ import com.ftofs.twant.kotlin.ImGoodsViewModel
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
 import com.ftofs.twant.log.SLog
-import com.ftofs.twant.widget.ScaledButton
 import com.ftofs.twant.widget.TestCenterPopup
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lxj.xpopup.XPopup
 
-class ImGoodsFragment(val targetName:String,val sendGoods: OnSelectedListener):BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
+class ImGoodsFragment(val targetName:String?=null,val sendGoods: OnSelectedListener?=null):BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
     private val pageList = arrayListOf<ImGoodsListPage>()
     private val tabTextList by lazy {
         enumValues<ImGoodsEnum>().apply { forEach { SLog.info(it.toString()) } }
@@ -45,17 +42,6 @@ class ImGoodsFragment(val targetName:String,val sendGoods: OnSelectedListener):B
         }
     }
 
-    val adapter by lazy {
-        object :DataBoundAdapter<Goods, ZoneGoodsListItemBinding>(){
-            override val layoutId: Int
-                get() = R.layout.zone_goods_list_item
-
-            override fun initView(binding: ZoneGoodsListItemBinding, item: Goods) {
-                binding.tvGoodsName.text =item.goodsName
-            }
-
-        }
-    }
     private val fragmentStateAdapter by lazy {
         object :FragmentStateAdapter(this){
             val NUM_PAGES= pageList.size
@@ -82,7 +68,7 @@ class ImGoodsFragment(val targetName:String,val sendGoods: OnSelectedListener):B
         binding.rlTitleContainer.tvTitle.apply {
             text="商品"
             setOnClickListener{
-                XPopup.Builder(context).asCustom(TestCenterPopup(context!!) ).show()
+                XPopup.Builder(context).asCustom(TestCenterPopup(requireContext()) ).show()
             }
         }
         binding.rlTitleContainer.btnBack.setOnClickListener { hideSoftInputPop() }
@@ -92,12 +78,7 @@ class ImGoodsFragment(val targetName:String,val sendGoods: OnSelectedListener):B
         }.attach()
 //        binding.tabs.setSelectedTabIndicator(R.drawable.tab_indicator)
 
-        binding.rvRightList.adapter=adapter
 
     }
 
-    override fun onBackPressedSupport(): Boolean {
-        hideSoftInputPop()
-        return true
-    }
 }

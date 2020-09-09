@@ -24,11 +24,19 @@ import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.Util
 
 
-@BindingAdapter(value = ["imageUrl"])
-fun loadImageUrl(v: ImageView, url: String?) {
+@BindingAdapter(value = ["imageUrl","defaultDrawable"],requireAll = false)
+fun loadImageUrl(v: ImageView, url: String?,defaultDrawable:Drawable?){
     url?.run {
-        SLog.info("url $url")
-        Glide.with(v).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(v)
+//        SLog.info("url $url ${url.length},${"".length}")
+        if (isEmpty()) {
+            SLog.info("url $url ${length},${"".length}")
+            Glide.with(v).load(defaultDrawable).centerCrop().into(v)
+
+        } else {
+//            SLog.info("url $url ${url.length},${"".length}")
+            Glide.with(v).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(v)
+
+        }
     }
 }
 @BindingAdapter(value = ["delayBackgroud"])
@@ -58,10 +66,11 @@ fun setTextPrice(v: TextView, price: Double) {
 }
 @BindingAdapter(value = ["priceModel"])
 fun setTextPriceWithModel(v: TextView, vo: Goods) {
-    if (vo.goodsModal != Constant.GOODS_TYPE_CONSULT) {
-        setTextPrice(v, vo.appPriceMin)
-    } else {
+    SLog.info(vo.goodsModal.toString())
+    if (vo.goodsModal == Constant.GOODS_TYPE_CONSULT) {
         v.text="詢價"
+    } else {
+        setTextPrice(v, vo.appPriceMin)
     }
 }
 @BindingAdapter(value = ["showOringial"])
@@ -86,6 +95,10 @@ fun setSpText(v: TextView, fir:Int,len:Int,pointSize:Int,defaultSize:Int,textInp
         v.text = sp
     }
 }
+
+/**
+ * 注意不能剪裁带背景色的view
+ */
 @BindingAdapter("radius")
 fun setBackRadius(v: View, radius: Float) {
     v.run {

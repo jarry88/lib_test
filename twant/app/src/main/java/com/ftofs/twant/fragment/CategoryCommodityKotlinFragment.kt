@@ -18,15 +18,15 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.log.SLog
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.vo.CategoryNavVo
-import com.lxj.xpopup.core.BasePopupView
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
-import com.wzq.mvvmsmart.utils.LoadingUtil
 
 //
 //private val Int.toPx: Int
 //    get() {return U}
-
+/**
+ * 商城首页 产品列表
+ */
 class CategoryCommodityKotlinFragment:BaseTwantFragmentMVVM<PageCategoryCommodityBinding, CategoryCommodityViewModel>() {
     private val loadPopup by lazy {
         Util.createLoadingPopup(context)
