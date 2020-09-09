@@ -147,11 +147,13 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
         })
         //检测当前选中categoryIndex变化
         viewModel.currCategoryIndex.observe(this, Observer {
-            if (mCategoryAdapter.data.isEmpty() || it >= mCategoryAdapter.data.size) {
-
-            } else {
+            if (mCategoryAdapter.data.run { isNotEmpty()&&it<size } ){
                 binding.rvRightList.scrollToPosition(0)
-                binding.rvZoneCategory.get(it).performClick()
+                binding.rvZoneCategory.apply {
+                    if (it < childCount) {
+                        get(it).performClick()
+                    }
+                }
             }
         })
         viewModel.categoryData.observe(this, Observer { categoryList:List<ZoneCategory>->
