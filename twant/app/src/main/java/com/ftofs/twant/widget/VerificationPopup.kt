@@ -42,7 +42,7 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
     val res by lazy {
         object :BaseRepository(){}
     }
-    val editText by lazy {
+    private val editText by lazy {
         findViewById<EditText>(R.id.et_verification)
     }
     override fun onCreate() {
@@ -57,49 +57,7 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
 //            }
         }
     }
-    //旧 网络接口调用方法
-    fun goVerifyOldType(){
-        val token = User.getToken()
-        val verification =editText.text?.toString()
-        SLog.info("token $token ordersId ${orderItem.ordersId},goodsId${orderItem.goodsId},count$count,verification$verification")
-
-        val params = EasyJSONObject.generate(
-                "token", token,
-                "ordersId", orderItem.ordersId,
-                "goodsId", orderItem.goodsId,
-                "verificationCode", verification,
-                "count",count)
-
-        SLog.info("params[%s]", params.toString())
-        val loadingPopup = Util.createLoadingPopup(context).show()
-
-        Api.postUI(Api.PATH_IFOODMACAU_VERIFY, params, object : UICallback() {
-            override fun onFailure(call: Call, e: IOException) {
-                ToastUtil.showNetworkError(context, e)
-                loadingPopup.dismiss()
-            }
-
-            @Throws(IOException::class)
-            override fun onResponse(call: Call, responseStr: String) {
-                loadingPopup.dismiss()
-                SLog.info("responseStr[%s]", responseStr)
-                val responseObj = EasyJSONObject.parse<EasyJSONObject>(responseStr)
-                if (ToastUtil.checkError(context, responseObj)) {
-                    dismiss()
-                    return
-                }
-                try {
-                    val message= responseObj.getSafeString("datas.message")
-                    ToastUtil.success(context,message);
-                    dismiss()
-                } catch (e: Exception) {
-                    SLog.info("Error!message[%s], trace[%s]", e.message, Log.getStackTraceString(e))
-                    dismiss()
-                }
-            }
-        })
-    }
-    fun goVerify(){
+    private fun goVerify(){
         val token =User.getToken()
         val verification= editText.text.toString()
         val api=object :BaseRepository(){
@@ -111,9 +69,8 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
             launch {
                 SLog.info("token $token ordersId ${orderItem.ordersId},goodsId${orderItem.goodsId},count$count,verification$verification")
 
-                val result =getIfoodmacauVerify(orderItem.ordersId,orderItem.goodsId,count,verification)
-                when (result){
-                    is Result.Success ->ToastUtil.error(context,result.datas.message)
+                when (val result =getIfoodmacauVerify(orderItem.ordersId,orderItem.goodsId,count,verification)){
+                    is Result.Success ->ToastUtil.success(context,result.datas.message)
 
                     is Result.DataError -> {//val error= EasyJSONObject.parse<String>()
 //                            SLog.info(error.toString())
