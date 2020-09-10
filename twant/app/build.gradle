@@ -23,15 +23,15 @@ android {
 
         }
     }
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
     packagingOptions {
         exclude 'res/animator/linear_indeterminate_line1_head_interpolator.xml'
     }
     defaultConfig {
         applicationId "com.ftofs.twant"
-        minSdkVersion 23
-        targetSdkVersion 29
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
 
 
         versionCode 199
