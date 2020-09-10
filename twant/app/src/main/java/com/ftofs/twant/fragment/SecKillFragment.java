@@ -23,6 +23,7 @@ import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.SecKillZoneListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.SecKillGoodsListItem;
 import com.ftofs.twant.entity.SecKillZoneItem;
 import com.ftofs.twant.entity.TimeInfo;
@@ -231,8 +232,8 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                     viewPager = contentView.findViewById(R.id.vp_goods_list);
 
 
+                    int defaultScheduleId = responseObj.optInt("datas.seckillSchedule.scheduleId"); // 【搶購中】狀態的場次Id
                     int defaultIndex = -1;  // 默認選中【搶購中】狀態的秒殺專場的位置索引
-                    long now = System.currentTimeMillis();
                     int secKillCount = 0;
                     EasyJSONArray scheduleList = responseObj.getSafeArray("datas.seckillScheduleList");
                     for (Object object : scheduleList) {
@@ -242,14 +243,10 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                         int scheduleState = schedule.optInt("scheduleState");
                         String scheduleStateText = schedule.optString("scheduleStateText");
                         String startTime = schedule.optString("startTime");
-                        long startTimeLong = Jarbon.parse(startTime).getTimestampMillis();
                         String endTime = schedule.optString("endTime");
-                        long endTimeLong = Jarbon.parse(endTime).getTimestampMillis();
-                        SLog.info("startTime[%s], startTimeLong[%d], endTime[%s], endTimeLong[%d]",
-                                startTime, startTimeLong, endTime, endTimeLong);
 
                         // 默認選中【搶購中】狀態的秒殺專場的位置索引
-                        if (scheduleState == 1) {
+                        if (scheduleId == defaultScheduleId) {
                             defaultIndex = secKillCount;
                         }
 
