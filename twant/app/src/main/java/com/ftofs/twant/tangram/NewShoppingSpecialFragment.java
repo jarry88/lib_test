@@ -94,11 +94,9 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     static int DEFAULT_ZONE = 0;
     static int GOOD_ZONE = 2;
     static int SHOP_ZONE = 1;
-    private int hasGoodsCategory;
     private TextView tvZoneName;
     private RelativeLayout rlToolBar;
     private LinkageShoppingListFragment storeListFragment;
-    private ShoppingSpecialLinkageFragment shoppingLinkageFragment;
     private CommonFragmentPagerAdapter adapter;
 
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
@@ -384,7 +382,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
 
             EasyJSONObject zoneVo = responseObj.getObject("datas.zoneVo");
-            hasGoodsCategory = zoneVo.getInt("hasGoodsCategory");
+//            hasGoodsCategory = zoneVo.getInt("hasGoodsCategory");
             zoneId = zoneVo.getInt("zoneId");
             //第一階段無用
 //            zoneState = zoneVo.getInt("zoneState");

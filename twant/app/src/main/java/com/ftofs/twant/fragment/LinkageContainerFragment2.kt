@@ -265,8 +265,13 @@ class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Bi
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
+    /***
+     * 默認直接出棧返回
+     */
+    override fun onBackPressedSupport(): Boolean {
+        hideSoftInputPop()
+        parent?.onBackPressedSupport()
+        return true
     }
 
     fun scrollToTop() {

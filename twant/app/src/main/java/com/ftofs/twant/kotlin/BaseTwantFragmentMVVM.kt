@@ -195,6 +195,7 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
      * 默認直接出棧返回
      */
     override fun onBackPressedSupport(): Boolean {
+        SLog.info("onBackPressedSupport")
         hideSoftInputPop()
         return true
     }

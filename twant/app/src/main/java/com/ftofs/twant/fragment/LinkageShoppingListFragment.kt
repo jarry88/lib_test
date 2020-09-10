@@ -48,6 +48,14 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
 
     }
 
+    override fun onBackPressedSupport(): Boolean {
+        SLog.info("onBackPressedSupport")
+
+        hideSoftInputPop()
+        parent.onBackPressedSupport()
+        return true
+    }
+
     fun getViewModel(): LinkageShoppingListModel {
         return viewModel
     }
