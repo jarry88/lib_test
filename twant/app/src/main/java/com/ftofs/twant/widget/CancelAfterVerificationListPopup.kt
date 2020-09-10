@@ -1,10 +1,7 @@
 package com.ftofs.twant.widget
 
 import android.content.Context
-import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.twant.R
@@ -13,7 +10,6 @@ import com.ftofs.twant.api.UICallback
 import com.ftofs.twant.entity.OrderItem
 import com.ftofs.twant.kotlin.OrderGoodsVoListAdapter
 import com.ftofs.twant.log.SLog
-import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
@@ -25,12 +21,12 @@ import okhttp3.Call
 import java.io.IOException
 import java.util.*
 
-class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context), View.OnClickListener{
+class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context){
 
     private  var orderList: MutableList<OrdersGoodsVo>?=null
     private  var order: OrderItem?=null
     private  val adapter by lazy {
-        OrderGoodsVoListAdapter(this)
+        OrderGoodsVoListAdapter(this).apply {  }
     }
 
     companion object{
@@ -106,6 +102,7 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
                     }
                     val filterList= list.filter { it.ifoodmacauCount>0 }
                     if (filterList.isNotEmpty()) {
+                        onCreate()
                         adapter.addAll(filterList, true)
                         SLog.info("重新加载数据")
                     } else {
@@ -120,7 +117,22 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
         })
     }
 
-    override fun onClick(v: View?) {
-//        TODO("Not yet implemented")
+    fun showVerificationPopup(item: OrdersGoodsVo, value: Int) {
+
+        XPopup.Builder(context).
+        moveUpToKeyboard(false)
+                .setPopupCallback(
+                        object :XPopupCallback{
+                            override fun onDismiss() {
+                                reloadata()
+                            }
+                            override fun onShow() {
+                                dismiss()
+                            }
+
+                        }
+                )
+                .asCustom(VerificationPopup(context,item,value))
+                .show()
     }
 }

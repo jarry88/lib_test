@@ -1,25 +1,11 @@
 package com.ftofs.twant.kotlin
 
-import android.util.Log
-import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.twant.R
-import com.ftofs.twant.api.Api
-import com.ftofs.twant.api.UICallback
 import com.ftofs.twant.databinding.VerificationGoodsItemBinding
 import com.ftofs.twant.entity.cart.SpuStatus
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.log.SLog
-import com.ftofs.twant.util.ToastUtil
-import com.ftofs.twant.util.User
-import com.ftofs.twant.util.Util
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
 import com.ftofs.twant.widget.CancelAfterVerificationListPopup
-import com.ftofs.twant.widget.VerificationPopup
-import com.lxj.xpopup.XPopup
-import com.lxj.xpopup.interfaces.XPopupCallback
-import okhttp3.Call
-import java.io.IOException
-import java.util.ArrayList
 
 /**
  * author : 谷志鹏
@@ -33,22 +19,7 @@ override val layoutId: Int
     override fun initView(binding: VerificationGoodsItemBinding, item: OrdersGoodsVo) {
         binding.vo = item
         binding.btnCancelAfterVerification.setOnClickListener{
-            XPopup.Builder(context).
-            moveUpToKeyboard(false)
-                    .setPopupCallback(
-                           object :XPopupCallback{
-                               override fun onDismiss() {
-                                   reloadData()
-                               }
-
-                               override fun onShow() {
-//                                   TODO("Not yet implemented")
-                               }
-
-                           }
-                    )
-                    .asCustom(VerificationPopup(context,item,binding.abQuantity.value))
-                    .show()
+            parent.showVerificationPopup(item,binding.abQuantity.value)
         }
         val spuStatus=SpuStatus()
         spuStatus.goodsId=item.goodsId
@@ -56,10 +27,6 @@ override val layoutId: Int
         binding.abQuantity.setMaxValue(item.ifoodmacauCount,null)
         binding.abQuantity.setSpuStatus(spuStatus)
         binding.abQuantity.value=item.ifoodmacauCount
-    }
-
-    private fun reloadData() {
-       parent.reloadata()
     }
 
     fun clear() {
