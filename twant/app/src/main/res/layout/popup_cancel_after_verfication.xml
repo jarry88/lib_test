@@ -2,9 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_300"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_20"
+        android:paddingBottom="50dp"
         android:background="@drawable/list_popup_bg_5dp_radio"
         >
         <LinearLayout
@@ -24,7 +25,8 @@
         <View android:layout_height="@dimen/dp_1"
             android:layout_width="match_parent"
             android:background="@color/tw_light_grey_EDED"
-            android:layout_marginBottom="@dimen/dp_20"/>
+            android:layout_marginBottom="@dimen/dp_20"
+            android:visibility="gone"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
