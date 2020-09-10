@@ -348,7 +348,7 @@
                         android:layout_weight="1"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        android:src="@drawable/img_group_entrance"
+                        android:src="@drawable/home_group"
                         android:tooltipText="團購"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintDimensionRatio="113:86"
@@ -375,7 +375,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:scaleType="centerCrop"
                     app:layout_constraintDimensionRatio="113:86"
-                    android:src="@drawable/img_bargain_entrance"
+                    android:src="@drawable/home_bargin"
 
 
                     android:id="@+id/img_bargain_entrance"
@@ -398,7 +398,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:scaleType="centerCrop"
                     app:layout_constraintDimensionRatio="113:86"
-                    android:src="@drawable/img_sec_kill_entrance"
+                    android:src="@drawable/home_sec_kill"
 
 
                     android:id="@+id/img_sec_kill_entrance"
