@@ -239,7 +239,7 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
                 SLog.info("onYes");
                 if (snsType == SNS_TYPE_WEIXIN) {
                     // 解綁微信
-                    ((MainActivity) _mActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_UNBIND);
+                    changeWeixinBinding(ACTION_TYPE_UNBIND, "");
                 } else if (snsType == SNS_TYPE_FACEBOOK) {
                     // 解綁Facebook
                     LoginManager.getInstance().logInWithReadPermissions(SecuritySettingFragment.this, permissions);
@@ -518,7 +518,7 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
         super.onSupportVisible();
 
         wxBindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, Constant.FALSE_INT);
-        setSwitchButtonStatus(SNS_TYPE_WEIXIN, wxBindingStatus == Constant.TRUE_INT);
+        // setSwitchButtonStatus(SNS_TYPE_WEIXIN, wxBindingStatus == Constant.TRUE_INT);
 
         fbBindingStatus = Hawk.get(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
         setSwitchButtonStatus(SNS_TYPE_FACEBOOK, fbBindingStatus == Constant.TRUE_INT);
