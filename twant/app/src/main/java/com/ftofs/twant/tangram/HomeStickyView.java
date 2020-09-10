@@ -120,18 +120,18 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.USE_DEVELOPER_TEST_DATA) {
                 randomFriendCount = "1234567";
             }
-            updateRandomFriendCount(randomFriendCount);
-
+            tvRandomFriendCount.setText(randomFriendCount);
 
             tvStoreCount.setText(formatCount(stickyCellData.storeCount));
             tvStoreCount.setVisibility(VISIBLE);
             tvGoodsCount.setText(formatCount(stickyCellData.goodsCommonCount));
             tvGoodsCount.setVisibility(VISIBLE);
-            tvPostCount.setText(formatCount(stickyCellData.wantPostCount));
-            tvPostCount.setVisibility(VISIBLE);
             tvFriendCount.setText(formatCount(stickyCellData.imSessionCount));
             tvFriendCount.setVisibility(VISIBLE);
-            tvFriendCount.setText(String.valueOf(stickyCellData.imSessionCount));
+            tvPostCount.setText(formatCount(stickyCellData.wantPostCount));
+            tvPostCount.setVisibility(VISIBLE);
+
+
 
 
 //            vwActivityEntrancePlaceholder.setVisibility(stickyCellData.activityEnable ? View.VISIBLE : View.GONE);
@@ -146,19 +146,6 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         iconTakewant.setOnClickListener(this);
     }
 
-    private void updateRandomFriendCount(String randomFriendCount) {
-        int length = randomFriendCount.length();
-        int size = 9;
-        if (length > 5) {
-            size -= length - 5;
-        }
-        if (size < 6) {
-            size = 6;
-        }
-        tvRandomFriendCount.setTextSize(TypedValue.COMPLEX_UNIT_SP,size);
-        tvRandomFriendCount.setText(randomFriendCount);
-    }
-
     @Override
     public void postUnBindView(BaseCell cell) {
 
@@ -166,14 +153,20 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
 
     private String formatCount(int count) {
         /*
-        0~9999： 直接顯示具體數量；
-        9999~11000： 11K；
-        11001~12000：12K；
-
-        以此類推進行顯示；
-        數量超過1萬後 以千位單位進行向上取整，單位為大寫 K；
+        1）顯示格式：nnnK+, nnnM+；
+        2）當時數字達到十萬級時，數字顯示時，應格式化；以千級單位K為單位進行數字格式化；
+        3）當時數字達到千萬級時，數字顯示時，應格式化；以百萬級單位M為單位進行數字格式化；
+        4）格式化時直接截去整數之后的數據信息，無需四舍五入；
+        5）格式化之后再加上+為後綴，表示以上的意思；
+        6）範例：比如102,564，格式化后顯示為102K+；如：87,945,612，格式化后顯示為87M+；
          */
-        return String.valueOf(count);
+        if (count < 100000) {
+            return String.valueOf(count);
+        } else if (count < 10000000) {
+            return (count / 1000) + "K+";
+        } else {
+            return (count / 1000000) + "M+";
+        }
     }
 
     @Override

@@ -230,6 +230,9 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
 
                     viewPager = contentView.findViewById(R.id.vp_goods_list);
 
+
+                    int defaultIndex = -1;  // 默認選中【搶購中】狀態的秒殺專場的位置索引
+                    long now = System.currentTimeMillis();
                     int secKillCount = 0;
                     EasyJSONArray scheduleList = responseObj.getSafeArray("datas.seckillScheduleList");
                     for (Object object : scheduleList) {
@@ -239,7 +242,17 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                         int scheduleState = schedule.optInt("scheduleState");
                         String scheduleStateText = schedule.optString("scheduleStateText");
                         String startTime = schedule.optString("startTime");
+                        long startTimeLong = Jarbon.parse(startTime).getTimestampMillis();
                         String endTime = schedule.optString("endTime");
+                        long endTimeLong = Jarbon.parse(endTime).getTimestampMillis();
+                        SLog.info("startTime[%s], startTimeLong[%d], endTime[%s], endTimeLong[%d]",
+                                startTime, startTimeLong, endTime, endTimeLong);
+
+                        // 默認選中【搶購中】狀態的秒殺專場的位置索引
+                        if (scheduleState == 1) {
+                            defaultIndex = secKillCount;
+                        }
+
                         Jarbon jarbon;
                         if (scheduleState == 0) { // 如果是【即將開場】，用開始時間作倒計時
                             jarbon = Jarbon.parse(startTime);
@@ -260,8 +273,9 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                         fragmentList.add(SecKillGoodsListFragment.newInstance(scheduleId));
                         secKillCount++;
                     }
-                    if (secKillZoneItemList.size() > 0) {
-                        secKillZoneListAdapter.setSelectedIndex(0);
+                    SLog.info("defaultIndex[%d]", defaultIndex);
+                    if (defaultIndex >= 0) {
+                        secKillZoneListAdapter.setSelectedIndex(defaultIndex);
                     }
                     secKillZoneListAdapter.setNewData(secKillZoneItemList);
 
@@ -270,8 +284,20 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                     CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
                     viewPager.setAdapter(adapter);
 
-                    if (secKillCount > 0) {
-                        selectSecKill(0);
+                    if (defaultIndex >= 0) {
+                        selectSecKill(defaultIndex);
+
+                        // 滾動到指定位置，【搶購中】狀態的置於中間
+                        int targetPosition = defaultIndex - 2;
+                        if (targetPosition < 0) {
+                            targetPosition = 0;
+                        }
+                        while (secKillCount - targetPosition < 5 && targetPosition > 0) {
+                            targetPosition--;
+                        }
+                        if (targetPosition > 0) {
+                            rvScheduleLabelList.scrollToPosition(targetPosition);
+                        }
                     }
 
                     isDataLoaded = true;
