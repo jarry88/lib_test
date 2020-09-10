@@ -66,7 +66,7 @@
                 android:paddingEnd="4dp"
                 android:gravity="center"
                 android:textColor="@android:color/white"
-                android:textSize="6sp"
+                android:textSize="10sp"
                 android:text=""
                 android:visibility="gone"
                 android:background="@drawable/unread_count_bg"
@@ -147,11 +147,11 @@
 
             </LinearLayout>
         </LinearLayout>
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/img_shop_avatar"
             android:layout_width="@dimen/dp_20"
             android:layout_height="@dimen/dp_20"
-            android:src="@drawable/img_customer_logo"
+            android:src="@drawable/icon_shop"
             visible="@{vo.isSeller}"
             />
     </LinearLayout>

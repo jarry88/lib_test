@@ -47,7 +47,7 @@ class MoonVoucherListPopup(context: Context, private val voucherList: MutableLis
                             }){
                                is Result.Success -> {
                                    getData()?.indexOf(item)?.let {
-                                       item.memberIsReceive = 1
+                                       item.memberIsReceive = Constant.TRUE_INT
                                        notifyItemChanged(it) }
                                    showToZonePopup()
                                }
@@ -77,6 +77,8 @@ class MoonVoucherListPopup(context: Context, private val voucherList: MutableLis
             }
 
         })).show()
+        //關閉原有彈窗
+        dismiss()
     }
 
     override fun onCreate() {
