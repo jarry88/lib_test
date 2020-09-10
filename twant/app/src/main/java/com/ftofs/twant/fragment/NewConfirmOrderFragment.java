@@ -1,7 +1,6 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +28,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.AddrItem;
-import com.ftofs.twant.entity.CalcFreightResult;
-import com.ftofs.twant.entity.ConfirmOrderResult;
+import com.ftofs.twant.entity.CommonResult;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
@@ -56,13 +54,10 @@ import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.OrderVoucherPopup;
 import com.ftofs.twant.widget.PayWayPopup;
 import com.ftofs.twant.widget.RealNamePopup;
-import com.ftofs.twant.widget.SlantedWidget;
 import com.ftofs.twant.widget.SoldOutPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
-
-import org.litepal.util.Const;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -555,11 +550,11 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 }
 
 
-                commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
+                commitBuyData.set("paymentTypeCode", currPaymentTypeCode);
                 commitBuyData.set("storeList", storeList);
 
                 // 如果是門店自提的話，還要自提手機號和買家姓名
-                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(summaryItem.paymentTypeCode) &&
+                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(currPaymentTypeCode) &&
                         paramsType == PARAMS_TYPE_COMMIT // 只有在提交訂單時，才需要校驗自提人姓名和手機號
                 ) {
                     SLog.info("是門店自提");
@@ -608,7 +603,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             }
 
             // 門店自提必須addrId設置為0，防止後臺誤判為跨城購
-            if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(getSummaryItem().paymentTypeCode)) {
+            if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(currPaymentTypeCode)) {
                 commitBuyData.set("addressId", "0");
             } else if (!commitBuyData.exists("addressId")) { // 沒有addressId也默認設為0
                 commitBuyData.set("addressId","0");
@@ -990,13 +985,16 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
 
         showLoadingPopup("正在加載，請稍候...");
 
-        Observable<ConfirmOrderResult> observable = Observable.create(new ObservableOnSubscribe<ConfirmOrderResult>() {
+        Observable<CommonResult> observable = Observable.create(new ObservableOnSubscribe<CommonResult>() {
             @Override
-            public void subscribe(ObservableEmitter<ConfirmOrderResult> emitter) throws Exception {
+            public void subscribe(ObservableEmitter<CommonResult> emitter) throws Exception {
                 SLog.info("observable.threadId[%s]", Thread.currentThread().getId());
 
                 if (startStep == STEP_DISPLAY) {
-                    stepDisplayData();
+                    CommonResult result = stepDisplayData();
+                    if (result.code != CommonResult.CODE_SUCCESS) {
+                        emitter.onError(result);
+                    }
                 }
 
                 // 如果是沒地址或門店自提時，則不需要計算運費
@@ -1028,19 +1026,22 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        Observer<ConfirmOrderResult> observer = new Observer<ConfirmOrderResult>() {
+        Observer<CommonResult> observer = new Observer<CommonResult>() {
             @Override
             public void onSubscribe(Disposable d) {
                 SLog.info("onSubscribe, threadId[%s]", Thread.currentThread().getId());
             }
             @Override
-            public void onNext(ConfirmOrderResult s) {
+            public void onNext(CommonResult s) {
                 SLog.info("onNext[%s], threadId[%s]", s, Thread.currentThread().getId());
             }
             @Override
             public void onError(Throwable e) {
                 SLog.info("onError[%s], threadId[%s], stackTrace[%s]", e.getMessage(), Thread.currentThread().getId(), Util.getStackTraceString(e));
                 dismissLoadingPopup();
+                CommonResult result = (CommonResult) e;
+                ToastUtil.error(_mActivity, result.message);
+                hideSoftInputPop();
             }
             @Override
             public void onComplete() {
@@ -1085,11 +1086,11 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
     /**
      * Step 1.查詢顯示數據
      */
-    private void stepDisplayData() {
+    private CommonResult stepDisplayData() {
         SLog.info("XXYY");
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            return;
+            return new CommonResult(CommonResult.CODE_SUCCESS);
         }
 
         try {
@@ -1106,10 +1107,18 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             SLog.info("params[%s]", params.toString());
             String responseStr = Api.syncPost(Api.PATH_DISPLAY_BILL_DATA, params);
 
+            if (Config.USE_DEVELOPER_TEST_DATA) {
+                // responseStr = "{\"code\":400,\"datas\":{\"error\":\"xxyy\"}}";
+            }
+
             SLog.info("responseStr[%s]", responseStr);
             EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
             if (ToastUtil.isError(responseObj)) {
-                return;
+                String errMsg = "";
+                if (responseObj != null) {
+                    errMsg = responseObj.optString("datas.error");
+                }
+                return new CommonResult(CommonResult.CODE_API_FAILED, errMsg);
             }
 
             // 獲取收貨地址
@@ -1143,8 +1152,10 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             confirmOrderItemList.add(confirmOrderSummaryItem);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-            return;
+            return new CommonResult(CommonResult.CODE_OTHER_ERROR, e.getMessage());
         }
+
+        return CommonResult.success();
     }
 
     /**
