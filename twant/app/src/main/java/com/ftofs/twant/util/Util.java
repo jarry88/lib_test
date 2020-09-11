@@ -281,6 +281,55 @@ public class Util {
         return sb.toString();
     }
 
+
+    public static String formatCount(int count) {
+        /*
+        1）顯示格式：nnnK, nnnM；
+        2）當時數字達到十萬級時，數字顯示時，應格式化；以千級單位K為單位進行數字格式化；
+        3）當時數字達到千萬級時，數字顯示時，應格式化；以百萬級單位M為單位進行數字格式化；
+           最多保留1位小數，並且4舍5入，例： 1749 -> 1.7K  1750 -> 1.8K
+           如果小數位為0，就不要小數  例： 2.0K -> 2K
+         */
+        if (count < 100000) {
+            return String.valueOf(count);
+        } else if (count < 10000000) {
+            return formatNumber(count, 1000) + "K";
+        } else {
+            return formatNumber(count, 1000000) + "M";
+        }
+    }
+
+
+    public static String formatNumber(double n, int unit) {
+        // 4舍5入運算
+        if (unit == 1000) {
+            n += 50;
+        } else if (unit == 1000000) {
+            n += 50000;
+        } else {
+            // 不支持這種單位
+            return null;
+        }
+
+        double dval = n / unit;
+        String val =  String.valueOf(dval);
+
+        int dotIndex = val.indexOf("."); // 小數點位置
+        if (dotIndex == -1) { // 如果沒有小數點，直接返回
+            return val;
+        }
+
+        // 只保留1位小數
+        val = val.substring(0, dotIndex + 2);
+
+        // 如果小數位為0，則直接顯示整數
+        if ('0' == val.charAt(val.length() - 1)) {
+            val = val.substring(0, dotIndex);
+        }
+
+        return val;
+    }
+
     /**
      * 獲取SPU的價格
      * @param goods
