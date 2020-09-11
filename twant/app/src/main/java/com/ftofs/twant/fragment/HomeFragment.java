@@ -100,7 +100,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         Util.setOnClickListener(view, R.id.btn_test, this);
-        // view.findViewById(R.id.btn_test).setVisibility(Config.PROD?View.GONE:View.VISIBLE);
+        view.findViewById(R.id.btn_test).setVisibility(Config.PROD?View.GONE:View.VISIBLE);
         Util.setOnClickListener(view, R.id.btn_goto_top, this);
         Util.setOnClickListener(view, R.id.btn_publish_want_post, this);
 

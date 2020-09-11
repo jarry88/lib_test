@@ -1,5 +1,6 @@
 package com.ftofs.twant.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -101,6 +102,14 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
         return R.layout.layout_black_menu;
     }
 
+
+    @Override
+    public View getPopupImplView() {
+        View view = super.getPopupImplView();
+        view.setBackground(getPopupBackground());
+        return view;
+    }
+
     @Override
     protected void onCreate() {
         super.onCreate();
@@ -146,7 +155,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_add_friend);
         }else if (type == TYPE_SELLER_GOODS) {
 //            ((ImageView) findViewById(R.id.icon_item_1)).setImageResource(R.drawable.icon_black_menu_home);
-            ((TextView) findViewById(R.id.tv_item_1)).setText("商品管理");
+            ((TextView) findViewById(R.id.tv_item_1)).setText(R.string.text_goods_mannager);
 //            ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.icon_meun_bag);
             ((TextView) findViewById(R.id.tv_item_2)).setText("商品發佈");
 //            ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_black_menu_my);
@@ -242,12 +251,13 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     }
 
     // 如果要自定义弹窗的背景，不要给布局设置背景图片，重写这个方法返回一个Drawable即可
-    @Override
+    @SuppressLint("UseCompatLoadingForDrawables")
     protected Drawable getPopupBackground() {
         if (type == TYPE_HOME_AND_MY || type == TYPE_CONTACT) {
             return getResources().getDrawable(R.drawable.black_menu_bg_small, null);
         } else if(type==TYPE_POST_DETAIL||type==TYPE_CHAT){
-            return getResources().getDrawable(R.drawable.black_menu_bg_mini, null);
+
+           return getResources().getDrawable(R.drawable.black_menu_bg_mini, null);
         } else{
             return getResources().getDrawable(R.drawable.black_menu_bg, null);
         }

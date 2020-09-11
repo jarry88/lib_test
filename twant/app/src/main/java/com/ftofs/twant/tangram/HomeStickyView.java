@@ -122,13 +122,13 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             }
             tvRandomFriendCount.setText(randomFriendCount);
 
-            tvStoreCount.setText(formatCount(stickyCellData.storeCount));
+            tvStoreCount.setText(Util.formatCount(stickyCellData.storeCount));
             tvStoreCount.setVisibility(VISIBLE);
-            tvGoodsCount.setText(formatCount(stickyCellData.goodsCommonCount));
+            tvGoodsCount.setText(Util.formatCount(stickyCellData.goodsCommonCount));
             tvGoodsCount.setVisibility(VISIBLE);
-            tvFriendCount.setText(formatCount(stickyCellData.imSessionCount));
+            tvFriendCount.setText(Util.formatCount(stickyCellData.imSessionCount));
             tvFriendCount.setVisibility(VISIBLE);
-            tvPostCount.setText(formatCount(stickyCellData.wantPostCount));
+            tvPostCount.setText(Util.formatCount(stickyCellData.wantPostCount));
             tvPostCount.setVisibility(VISIBLE);
 
 
@@ -149,24 +149,6 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     @Override
     public void postUnBindView(BaseCell cell) {
 
-    }
-
-    private String formatCount(int count) {
-        /*
-        1）顯示格式：nnnK+, nnnM+；
-        2）當時數字達到十萬級時，數字顯示時，應格式化；以千級單位K為單位進行數字格式化；
-        3）當時數字達到千萬級時，數字顯示時，應格式化；以百萬級單位M為單位進行數字格式化；
-        4）格式化時直接截去整數之后的數據信息，無需四舍五入；
-        5）格式化之后再加上+為後綴，表示以上的意思；
-        6）範例：比如102,564，格式化后顯示為102K+；如：87,945,612，格式化后顯示為87M+；
-         */
-        if (count < 100000) {
-            return String.valueOf(count);
-        } else if (count < 10000000) {
-            return (count / 1000) + "K+";
-        } else {
-            return (count / 1000000) + "M+";
-        }
     }
 
     @Override

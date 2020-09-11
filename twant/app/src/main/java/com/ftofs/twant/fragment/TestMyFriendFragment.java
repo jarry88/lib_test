@@ -74,17 +74,7 @@ public class TestMyFriendFragment extends BaseFragment implements View.OnClickLi
                 int id = view.getId();
                 if(id == R.id.btn_delete) {
                     new XPopup.Builder(_mActivity)
-                            .setPopupCallback(new XPopupCallback() {
-                                @Override
-                                public void onShow() {
-
-                                }
-
-                                @Override
-                                public void onDismiss() {
-
-                                }
-                            }).asCustom(new TwConfirmPopup(_mActivity, "你確定要刪？", null, new OnConfirmCallback() {
+                            .asCustom(new TwConfirmPopup(_mActivity, "你確定要刪？", null, new OnConfirmCallback() {
                         @Override
                         public void onYes() {
                             SLog.info("Yes");

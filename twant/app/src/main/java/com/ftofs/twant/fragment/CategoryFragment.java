@@ -373,17 +373,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
             case R.id.btn_expand_history:
                 searchHistoryPopup = (SearchHistoryPopup) new XPopup.Builder(_mActivity)
                         .atView(vwAnchor)
-                        .setPopupCallback(new XPopupCallback() {
-                            @Override
-                            public void onShow() {
-                                SLog.info("显示了");
-                            }
-                            @Override
-                            public void onDismiss() {
-                                SLog.info("关闭了");
-                            }
-                        })
-                        .asCustom(new SearchHistoryPopup(_mActivity, searchType, this));
+                      .asCustom(new SearchHistoryPopup(_mActivity, searchType, this));
                 searchHistoryPopup.show();
                 break;
             case R.id.ll_mask:

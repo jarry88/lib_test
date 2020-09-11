@@ -222,14 +222,7 @@ public class AddGoodsFragment extends BaseFragment
 //                         .dismissOnTouchOutside(false)
                 // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                .setPopupCallback(new XPopupCallback() {
-                    @Override
-                    public void onShow() {
-                    }
-                    @Override
-                    public void onDismiss() {
-                    }
-                }).asCustom(new TwConfirmPopup(_mActivity, "確定要離開商品發佈頁嗎?", null, "離開頁面","繼續編輯",new OnConfirmCallback() {
+               .asCustom(new TwConfirmPopup(_mActivity, "確定要離開商品發佈頁嗎?", null, "離開頁面","繼續編輯",new OnConfirmCallback() {
             @Override
             public void onYes() {
                 SLog.info("onYes");

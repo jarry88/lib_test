@@ -860,15 +860,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 //                         .dismissOnTouchOutside(false)
                 // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                .setPopupCallback(new XPopupCallback() {
-                    @Override
-                    public void onShow() {
-                    }
-
-                    @Override
-                    public void onDismiss() {
-                    }
-                }).asCustom(
+              .asCustom(
                         new TwConfirmPopup(_mActivity, "是否取消當前訂單的支付", null,
                 //继续在右，优化用户体验
                 "繼續購買", "確認取消"
