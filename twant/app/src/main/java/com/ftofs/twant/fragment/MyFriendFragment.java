@@ -119,14 +119,7 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
 //                         .dismissOnTouchOutside(false)
                             // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                            .setPopupCallback(new XPopupCallback() {
-                                @Override
-                                public void onShow() {
-                                }
-                                @Override
-                                public void onDismiss() {
-                                }
-                            }).asCustom(new TwConfirmPopup(_mActivity, "您確定要刪除好友嗎?", null, new OnConfirmCallback() {
+                           .asCustom(new TwConfirmPopup(_mActivity, "您確定要刪除好友嗎?", null, new OnConfirmCallback() {
                         @Override
                         public void onYes() {
                             SLog.info("onYes");

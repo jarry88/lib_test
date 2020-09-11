@@ -908,14 +908,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 //                         .dismissOnTouchOutside(false)
                         // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                        .setPopupCallback(new XPopupCallback() {
-                            @Override
-                            public void onShow() {
-                            }
-                            @Override
-                            public void onDismiss() {
-                            }
-                        }).asCustom(new TwConfirmPopup(_mActivity, "您確認要發送電子名片?","由於電子名片涉及個人隱私", "確認", "取消",new OnConfirmCallback() {
+                       .asCustom(new TwConfirmPopup(_mActivity, "您確認要發送電子名片?","由於電子名片涉及個人隱私", "確認", "取消",new OnConfirmCallback() {
                     @Override
                     public void onYes() {
                         SLog.info("onYes");
@@ -1535,14 +1528,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 //                         .dismissOnTouchOutside(false)
                 // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                .setPopupCallback(new XPopupCallback() {
-                    @Override
-                    public void onShow() {
-                    }
-                    @Override
-                    public void onDismiss() {
-                    }
-                }).asCustom(new TwConfirmPopup(_mActivity, "確認", "確定要刪除這條消息嗎?", new OnConfirmCallback() {
+               .asCustom(new TwConfirmPopup(_mActivity, "確認", "確定要刪除這條消息嗎?", new OnConfirmCallback() {
             @Override
             public void onYes() {
                 SLog.info("onYes");

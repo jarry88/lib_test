@@ -226,14 +226,7 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
                 .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
                 // 设置弹窗显示和隐藏的回调监听
                 // .autoDismiss(false)
-                .setPopupCallback(new XPopupCallback() {
-                    @Override
-                    public void onShow() {
-                    }
-                    @Override
-                    public void onDismiss() {
-                    }
-                }).asCustom(new TwConfirmPopup(_mActivity, title, content, "確認", "取消", new OnConfirmCallback() {
+               .asCustom(new TwConfirmPopup(_mActivity, title, content, "確認", "取消", new OnConfirmCallback() {
             @Override
             public void onYes() {
                 SLog.info("onYes");

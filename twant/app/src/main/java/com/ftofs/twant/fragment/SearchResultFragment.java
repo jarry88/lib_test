@@ -1244,7 +1244,17 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     .atView(view)
                     .setPopupCallback(new XPopupCallback() {
                         @Override
-                        public void onShow() {
+                        public void onCreated(BasePopupView popupView) {
+
+                        }
+
+                        @Override
+                        public void beforeShow(BasePopupView popupView) {
+
+                        }
+
+                        @Override
+                        public void onShow(BasePopupView basePopupView) {
                             SLog.info("显示了");
                             if (currSelId == R.id.btn_sort) {
                                 sortSelect(true);
@@ -1264,7 +1274,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             }
                         }
                         @Override
-                        public void onDismiss() {
+                        public void onDismiss(BasePopupView basePopupView) {
                             SLog.info("关闭了");
 
                             btnSort.setBackground(null);
@@ -1281,6 +1291,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 //                            tvBizCircle.setTextColor(twBlack);
 //                            tvBizCircle.setText("商圈");
 //                            iconBizCircle.setImageResource(R.drawable.icon_filter_black_expand);
+                        }
+
+                        @Override
+                        public void beforeDismiss(BasePopupView popupView) {
+
+                        }
+
+                        @Override
+                        public boolean onBackPressed(BasePopupView popupView) {
+                            return false;
                         }
                     })
                     .asCustom(new StoreFilterPopup(_mActivity, popupType, generalItemSelectedId,

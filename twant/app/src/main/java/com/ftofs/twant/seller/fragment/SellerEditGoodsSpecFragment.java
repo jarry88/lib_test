@@ -222,14 +222,7 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
 //                         .dismissOnTouchOutside(false)
                             // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                            .setPopupCallback(new XPopupCallback() {
-                                @Override
-                                public void onShow() {
-                                }
-                                @Override
-                                public void onDismiss() {
-                                }
-                            }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除規格嗎?",null, "確定", "取消",new OnConfirmCallback() {
+                          .asCustom(new TwConfirmPopup(_mActivity, "確定要刪除規格嗎?",null, "確定", "取消",new OnConfirmCallback() {
                         @Override
                         public void onYes() {
                             deleteSpec(specId);

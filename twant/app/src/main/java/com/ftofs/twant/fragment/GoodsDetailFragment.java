@@ -899,14 +899,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 //                         .dismissOnTouchOutside(false)
                                         // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                                        .setPopupCallback(new XPopupCallback() {
-                                            @Override
-                                            public void onShow() {
-                                            }
-                                            @Override
-                                            public void onDismiss() {
-                                            }
-                                        }).asCustom(new TwConfirmPopup(_mActivity, title,null   , "立即購買", "等等團購",new OnConfirmCallback() {
+                                      .asCustom(new TwConfirmPopup(_mActivity, title,null   , "立即購買", "等等團購",new OnConfirmCallback() {
                                     @Override
                                     public void onYes() {
                                         SLog.info("onYes");
@@ -926,14 +919,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 //                         .dismissOnTouchOutside(false)
                                     // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                                    .setPopupCallback(new XPopupCallback() {
-                                        @Override
-                                        public void onShow() {
-                                        }
-                                        @Override
-                                        public void onDismiss() {
-                                        }
-                                    }).asCustom(new TwConfirmPopup(_mActivity, "是否參與團購優惠活動",null   , "參與團購", "原價購買",new OnConfirmCallback() {
+                                  .asCustom(new TwConfirmPopup(_mActivity, "是否參與團購優惠活動",null   , "參與團購", "原價購買",new OnConfirmCallback() {
                                 @Override
                                 public void onYes() {
                                     SLog.info("onYes");

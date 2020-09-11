@@ -329,14 +329,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 //                         .dismissOnTouchOutside(false)
         // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                @Override
-                public void onShow() {
-                }
-                @Override
-                public void onDismiss() {
-                }
-            }).asCustom(new TwConfirmPopup(context, "分享鏈接已復制", shareUrl, new OnConfirmCallback() {
+                  .asCustom(new TwConfirmPopup(context, "分享鏈接已復制", shareUrl, new OnConfirmCallback() {
                 @Override
                 public void onYes() {
                     SLog.info("onYes");
@@ -377,14 +370,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 //                         .dismissOnTouchOutside(false)
                     // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new WordSharePopup(context, word)).show();
+                    .asCustom(new WordSharePopup(context, word)).show();
 
             dismiss();
         }

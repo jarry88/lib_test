@@ -24,6 +24,8 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.databinding.FragmentLabBinding;
 import com.ftofs.twant.entity.CategoryCommodity;
+import com.ftofs.twant.entity.StoreVoucher;
+import com.ftofs.twant.entity.StoreVoucherVo;
 import com.ftofs.twant.kotlin.net.BaseRepository;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.CroppyInitUtilKt;
@@ -35,6 +37,7 @@ import com.ftofs.twant.widget.CheckPhoneView;
 import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.NineLuckPan;
 
+import com.lxj.xpopup.XPopup;
 import com.lyrebirdstudio.aspectratiorecyclerviewlib.aspectratio.model.AspectRatio;
 import com.lyrebirdstudio.croppylib.Croppy;
 import com.lyrebirdstudio.croppylib.main.CropRequest;
@@ -193,7 +196,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
             RestartApp.restartThroughIntentCompatMakeRestartActivityTask(_mActivity);
         }else if (id == R.id.btn_post1) {
             ToastUtil.info(_mActivity, "btn_post1");
-
+            new XPopup.Builder(getContext()).asCustom(new MoonVoucherListPopup(getContext(),new ArrayList<StoreVoucher>(),"10")).show();
         } else if (id == R.id.btn_test2) {
             ToastUtil.info(_mActivity, "way2");
             RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);

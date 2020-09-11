@@ -261,14 +261,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 //                         .dismissOnTouchOutside(false)
                     // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new TwConfirmPopup(_mActivity, "您確認要刪除貼文?",null, "確認", "取消",new OnConfirmCallback() {
+                  .asCustom(new TwConfirmPopup(_mActivity, "您確認要刪除貼文?",null, "確認", "取消",new OnConfirmCallback() {
                 @Override
                 public void onYes() {
                     deletePost();

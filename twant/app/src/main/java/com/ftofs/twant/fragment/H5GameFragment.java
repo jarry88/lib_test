@@ -253,14 +253,7 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
 //                         .dismissOnTouchOutside(false)
                             // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                            .setPopupCallback(new XPopupCallback() {
-                                @Override
-                                public void onShow() {
-                                }
-                                @Override
-                                public void onDismiss() {
-                                }
-                            }).asCustom(new TwConfirmPopup(_mActivity, "保存至手機相冊?", null, new OnConfirmCallback() {
+                       .asCustom(new TwConfirmPopup(_mActivity, "保存至手機相冊?", null, new OnConfirmCallback() {
                         @Override
                         public void onYes() {
                             SLog.info("onYes");

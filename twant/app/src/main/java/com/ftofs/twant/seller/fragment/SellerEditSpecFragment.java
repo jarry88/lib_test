@@ -146,14 +146,7 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
 //                         .dismissOnTouchOutside(false)
                 // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                .setPopupCallback(new XPopupCallback() {
-                    @Override
-                    public void onShow() {
-                    }
-                    @Override
-                    public void onDismiss() {
-                    }
-                }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎?", null, new OnConfirmCallback() {
+                .asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎?", null, new OnConfirmCallback() {
             @Override
             public void onYes() {
                 SLog.info("onYes");

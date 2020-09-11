@@ -374,14 +374,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
 //                         .dismissOnTouchOutside(false)
                     // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new BottomConfirmPopup(_mActivity, this))
+                  .asCustom(new BottomConfirmPopup(_mActivity, this))
                     .show();
                 break;
             default:
