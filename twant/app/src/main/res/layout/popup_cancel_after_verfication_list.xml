@@ -30,7 +30,8 @@
         </LinearLayout>
         <View android:layout_height="@dimen/dp_1"
             android:layout_width="match_parent"
-            android:background="@color/tw_light_grey_EDED"/>
+            android:background="@color/tw_light_grey_EDED"
+            android:visibility="gone"/>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
