@@ -1609,8 +1609,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         TextView tvBargainCountDownLabel = contentView.findViewById(R.id.tv_bargain_count_down_label);
                         if (bargainState == Constant.BARGAIN_STATE_NOT_STARTED) {
                             tvBargainCountDownLabel.setText("距離活動開始");
+                            promotionCountDownTimeType = COUNT_DOWN_TYPE_BEGIN;
                         } else if (bargainState == Constant.BARGAIN_STATE_ONGOING) {
                             tvBargainCountDownLabel.setText("活動倒計時");
+                            promotionCountDownTimeType = COUNT_DOWN_TYPE_END;
                         }
 
 
