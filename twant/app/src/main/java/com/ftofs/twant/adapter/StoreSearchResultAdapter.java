@@ -13,7 +13,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.JobInfoItem;
 import com.ftofs.twant.entity.StoreSearchItem;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.text.DecimalFormat;

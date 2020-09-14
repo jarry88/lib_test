@@ -4,11 +4,10 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
 
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import me.yokeyword.fragmentation.SupportActivity;

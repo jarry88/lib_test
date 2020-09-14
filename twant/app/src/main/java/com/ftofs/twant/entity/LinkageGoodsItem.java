@@ -3,7 +3,7 @@ package com.ftofs.twant.entity;
 import android.util.Log;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 

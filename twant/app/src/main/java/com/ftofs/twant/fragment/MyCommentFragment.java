@@ -20,7 +20,8 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
@@ -30,14 +31,12 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

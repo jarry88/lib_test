@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 /**
  * 網格布局

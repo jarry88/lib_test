@@ -7,7 +7,7 @@ import android.content.Intent;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -48,7 +48,6 @@ import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.fragment.BargainDetailFragment;
-import com.ftofs.twant.fragment.CommitFeedbackFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.HomeFragment;
@@ -63,7 +62,7 @@ import com.ftofs.twant.handler.StackViewTouchListener;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.tangram.CarouselView;
 import com.ftofs.twant.tangram.HomeStickyView;
 import com.ftofs.twant.tangram.LogoView;
@@ -89,9 +88,9 @@ import com.ftofs.twant.widget.AppUpdatePopup;
 import com.ftofs.twant.widget.CouponWordDialog;
 import com.ftofs.twant.widget.NewWordPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
+import com.gzp.lib_common.base.BaseActivity;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
 import com.orhanobut.hawk.Hawk;
@@ -125,6 +124,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.github.iamyours.router.annotation.Route;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -133,6 +133,7 @@ import okhttp3.Response;
  * 主Activity
  * @author zwm
  */
+@Route(path = "main/activity")
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces, SimpleCallback {
     long lastBackPressedTime;
 

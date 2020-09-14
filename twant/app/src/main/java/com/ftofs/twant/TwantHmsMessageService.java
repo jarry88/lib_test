@@ -2,7 +2,6 @@ package com.ftofs.twant;
 
 //import android.app.Service;
 
-import com.ftofs.twant.log.SLog;
 //import com.huawei.hms.push.HmsMessageService;
 //import com.huawei.hms.push.RemoteMessage;
 //

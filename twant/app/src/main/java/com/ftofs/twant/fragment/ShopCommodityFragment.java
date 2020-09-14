@@ -1,6 +1,5 @@
 package com.ftofs.twant.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,17 +25,15 @@ import com.ftofs.twant.adapter.StoreCategoryListAdapter;
 import com.ftofs.twant.adapter.VideoListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.GoodsPair;
 import com.ftofs.twant.entity.VideoItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -57,9 +54,6 @@ import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
-import me.everything.android.ui.overscroll.IOverScrollDecor;
-import me.everything.android.ui.overscroll.IOverScrollStateListener;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import okhttp3.Call;
 
 /**

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 public class SizeChangedRecyclerView extends RecyclerView {
     ViewSizeChangedListener viewSizeChangedListener;

@@ -6,8 +6,6 @@ import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
@@ -23,7 +21,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.PopupType;
@@ -38,7 +35,8 @@ import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -52,11 +50,8 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

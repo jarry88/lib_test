@@ -12,11 +12,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.AppGuidePagerAdapter;
-import com.ftofs.twant.fragment.StoreHomeFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.HwLoadingView;
+import com.gzp.lib_common.base.BaseActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

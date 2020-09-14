@@ -2,7 +2,7 @@ package com.ftofs.twant.orm;
 
 import androidx.annotation.NonNull;
 
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;

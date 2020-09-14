@@ -2,14 +2,13 @@ package com.ftofs.twant.kotlin.testnet
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.LinkageModel
-import com.ftofs.twant.kotlin.base.BaseViewModel
+import com.gzp.lib_common.base.BaseViewModel
 import com.ftofs.twant.kotlin.bean.NewsData
 import com.ftofs.twant.kotlin.net.MRequest
 import com.ftofs.twant.kotlin.vo.SellerPageVO
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.User
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.net.base.BaseResponse
@@ -20,7 +19,6 @@ import com.wzq.mvvmsmart.utils.ToastUtils
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 

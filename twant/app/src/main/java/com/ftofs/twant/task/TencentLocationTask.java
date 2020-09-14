@@ -4,9 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
-import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.interfaces.CommonCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.tencent.map.geolocation.TencentLocationManager;

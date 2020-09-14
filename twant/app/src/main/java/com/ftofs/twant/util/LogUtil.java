@@ -4,7 +4,7 @@ import android.os.Build;
 
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.api.Api;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import java.io.IOException;
 

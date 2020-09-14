@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.ftofs.twant.domain.store.StoreLabel
 import com.ftofs.twant.entity.ImStoreOrderItem
 import com.ftofs.twant.kotlin.net.BaseRepository
-import com.ftofs.twant.kotlin.net.Result
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.net.Result
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.User
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +49,7 @@ class ImOrdersPageModel(application: Application) :BaseViewModelMVVM(application
         MutableLiveData<String>()
     }
 
-    val net by lazy { object :BaseRepository(){} }
+    val net by lazy { object : BaseRepository(){} }
 
 
     fun getImOrdersSearch( keyword:String?=null,isRefresh :Boolean=true) {

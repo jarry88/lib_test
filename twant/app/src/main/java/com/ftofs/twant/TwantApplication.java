@@ -29,7 +29,9 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.MainFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.callback.UCallBack;
+import com.gzp.lib_common.utils.AppUtil;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.FriendInfo;
@@ -46,6 +48,7 @@ import com.ftofs.twant.util.Vendor;
 import com.ftofs.twant.vo.member.MemberVo;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
+import com.gzp.lib_common.base.BaseApplication;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -56,29 +59,15 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.push.EMPushConfig;
-import com.jeremyliao.liveeventbus.LiveEventBus;
 import com.macau.pay.sdk.MPaySdk;
 import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
-import com.scwang.smartrefresh.layout.api.DefaultRefreshInitializer;
-import com.scwang.smartrefresh.layout.api.RefreshHeader;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.tencent.mmkv.MMKV;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.commonsdk.UMConfigure;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
-import com.umeng.message.UTrack;
-import com.umeng.message.UmengMessageHandler;
-import com.umeng.message.UmengNotificationClickHandler;
-import com.umeng.message.entity.UMessage;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.wzq.mvvmsmart.base.AppManagerMVVM;
 import com.wzq.mvvmsmart.net.net_utils.Utils;
@@ -86,8 +75,6 @@ import com.wzq.mvvmsmart.utils.KLog;
 import com.wzq.mvvmsmart.utils.Tasks;
 
 
-//import org.android.agoo.huawei.HuaWeiRegister;
-import org.android.agoo.huawei.HuaWeiRegister;
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
 
@@ -99,7 +86,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import cat.ereza.customactivityoncrash.config.CaocConfig;
 import cn.snailpad.easyjson.EasyJSONObject;
 import kotlin.jvm.Synchronized;
 import me.yokeyword.fragmentation.Fragmentation;
@@ -111,7 +97,7 @@ import static com.orhanobut.hawk.Hawk.init;
  * TwantApplication
  * @author zwm
  */
-public class TwantApplication extends Application {
+public class TwantApplication extends BaseApplication {
     // 線程等待隊列大小
     private static final int THREAD_QUEUE_SIZE = 1024;
     // 線程池大小
@@ -119,7 +105,6 @@ public class TwantApplication extends Application {
     // 線程池
     private static ExecutorService executorService;
 
-    String umengDeviceToken;
 
 
     // IWXAPI是第三方app和微信通信的openapi接口
@@ -130,11 +115,7 @@ public class TwantApplication extends Application {
     private int notificationId;
     private int count;
 
-    public static TwantApplication getInstance() {
-        return instance;
-    }
 
-    PushAgent mPushAgent;
     //保存當前會員身份信息，目前主要用於取得role，來判斷用戶身份
     private MemberVo currMemberInfo=null;
     static {//使用static代码段可以防止内存泄漏
@@ -148,14 +129,19 @@ public class TwantApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        AppUtil.INSTANCE.setApp(this);
+        initUmeng(() -> {
+            MainFragment mainFragment = MainFragment.getInstance();
+            if (mainFragment != null) {
+                mainFragment.handleUmengCustomAction();
+            }
+        });
         SLog.info("Launch performance...");
 
         int pid = android.os.Process.myPid();
 
         String processAppName = getAppName(pid);
         SLog.info("TwantApplication::onCreate(), pid[%d], processName[%s]", pid, processAppName);
-        instance = this;
 
         //Bugly异常处理
         if (!Config.DEVELOPER_MODE){
@@ -169,9 +155,6 @@ public class TwantApplication extends Application {
         // 添加全局異常處理
         // CrashHandler crashHandler = CrashHandler.getInstance();
         // crashHandler.init(getApplicationContext());
-
-        //初始化mvvm操作
-        initMVVM();
 
         // 在開發過程中，啟用 StrictMode
         if (Config.DEVELOPER_MODE) {
@@ -275,8 +258,6 @@ public class TwantApplication extends Application {
         // or load with glide
         BigImageViewer.initialize(GlideImageLoader.with(this));
 
-        initUmeng();
-
         initAmapLocation();
 
         // 將應用注冊到微信
@@ -284,84 +265,8 @@ public class TwantApplication extends Application {
         //創建通知等級
     }
 
-    private void initMVVM() {
-        Tasks.init();
-        Utils.init(this);
-        //是否开启打印日志
-//        KLog.init(BuildConfig.DEBUG);
-        KLog.INSTANCE.init(BuildConfig.DEBUG);
-        //初始化全局异常崩溃
-        initCrash();
-        MMKV.initialize(this);   // 替换sp
-        LiveEventBus  // 事件儿总线通信
-                .config().supportBroadcast(this) // 配置支持跨进程、跨APP通信，传入Context，需要在application onCreate中配置
-                .lifecycleObserverAlwaysActive(true); //    整个生命周期（从onCreate到onDestroy）都可以实时收到消息
-        setActivityLifecycle(this);
-    }
 
-    /**
-     * app 崩溃重启的配置
-     */
-     private void initCrash() {
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT) //背景模式,开启沉浸式
-                .enabled(true) //是否启动全局异常捕获
-                .showErrorDetails(true) //是否显示错误详细信息
-                .showRestartButton(true) //是否显示重启按钮
-                .trackActivities(true) //是否跟踪Activity
-                .minTimeBetweenCrashesMs(2000) //崩溃的间隔时间(毫秒)
-                .errorDrawable(R.mipmap.ic_launcher) //错误图标
-                .restartActivity(MainActivity.class) //重新启动后的activity
-                //                                .errorActivity(YourCustomErrorActivity.class) //崩溃后的错误activity
-                //                                .eventListener(new YourCustomEventListener()) //崩溃后的错误监听
-                .apply();
-    }
-    /**
-     * 当主工程没有继承BaseApplication时，可以使用setApplication方法初始化BaseApplication
-     *
-     * @param application
-     */
-    @Synchronized
-    void setActivityLifecycle( Application application) {
-        //注册监听每个activity的生命周期,便于堆栈式管理
-        application.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
-            @Override
-            public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-                AppManagerMVVM.Companion.get().addActivity(activity);
-            }
 
-            @Override
-            public void onActivityStarted(@NonNull Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityResumed(@NonNull Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityPaused(@NonNull Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityStopped(@NonNull Activity activity) {
-
-            }
-
-            @Override
-            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
-
-            }
-
-            @Override
-            public void onActivityDestroyed(@NonNull Activity activity) {
-                AppManagerMVVM.Companion.get().removeActivity(activity);
-
-            }
-
-        });
-    }
     private void initNotification() {
         //创建自定义通知渠道，和全局通知管理器
         if (!Hawk.contains(SPField.USER_RECEIVE_NEWS)) {
@@ -403,225 +308,6 @@ public class TwantApplication extends Application {
         return executorService;
     }
 
-
-    private void initUmeng() {
-        SLog.info("initUmeng");
-        int pid = android.os.Process.myPid();
-
-        String processAppName = getAppName(pid);
-        SLog.info("Umeng init processName[%s], pid[%d]", processAppName, pid);
-        // mPushAgent.register方法应该在主进程和channel进程中都被调用
-        if (processAppName == null ||!processAppName.equalsIgnoreCase(getPackageName())) {
-            // SLog.info("Warning!UMENG enter the service process!processAppName[%s]", processAppName);
-
-            // 则此application::onCreate 是被service 调用的，直接返回
-            // return;
-        }
-
-
-        if (Config.DEVELOPER_MODE) {
-            UMConfigure.setLogEnabled(true);
-        }
-        // 在此处调用基础组件包提供的初始化函数 相应信息可在应用管理 -> 应用信息 中找到 http://message.umeng.com/list/apps
-        // 参数一：当前上下文context；
-        // 参数二：应用申请的Appkey（需替换
-        // 参数三：渠道名称；
-        // 参数四：设备类型，必须参数，传参数为UMConfigure.DEVICE_TYPE_PHONE则表示手机；传参数为UMConfigure.DEVICE_TYPE_BOX则表示盒子；默认为手机；
-        // 参数五：Push推送业务的secret 填充Umeng Message Secret对应信息（需替换）
-        UMConfigure.init(this, getString(R.string.umeng_push_app_key), "official", UMConfigure.DEVICE_TYPE_PHONE, getString(R.string.umeng_push_message_secret));
-
-        // 友盟統計：选用AUTO页面采集模式
-        MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
-
-        //获取消息推送代理示例
-        mPushAgent = PushAgent.getInstance(this);
-        // mPushAgent.setNotificaitonOnForeground(false); // 如果应用在前台，您可以设置不显示通知栏消息。默认情况下，应用在前台是显示通知的。此方法请在mPushAgent.register方法之前调用。
-
-        UmengMessageHandler messageHandler = new UmengMessageHandler() {
-
-            /**
-             * 通知的回调方法（通知送达时会回调）
-             */
-            @Override
-            public void dealWithNotificationMessage(Context context, UMessage msg) {
-                SLog.info("dealWithNotificationMessage, msg[%s][%s]", dumpUmengMessage(msg), msg.msg_id);
-
-                //调用super，会展示通知，不调用super，则不展示通知。
-                super.dealWithNotificationMessage(context, msg);
-            }
-
-            /**
-             * 自定义消息的回调方法
-             */
-            @Override
-            public void dealWithCustomMessage(final Context context, final UMessage msg) {
-                SLog.info("dealWithCustomMessage, msg[%s]", dumpUmengMessage(msg));
-            }
-
-            /**
-             * 自定义通知栏样式的回调方法
-             */
-            @Override
-            public Notification getNotification(Context context, UMessage uMessage) {
-                SLog.info("getNotification, msg[%s][%s]", dumpUmengMessage(uMessage), uMessage.msg_id);
-                return super.getNotification(context, uMessage);
-            }
-        };
-        mPushAgent.setMessageHandler(messageHandler);
-
-
-        /**
-         * 自定义行为的回调处理，参考文档：高级功能-通知的展示及提醒-自定义通知打开动作
-         * UmengNotificationClickHandler是在BroadcastReceiver中被调用，故
-         * 如果需启动Activity，需添加Intent.FLAG_ACTIVITY_NEW_TASK
-         * */
-        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
-
-            @Override
-            public void launchApp(Context context, UMessage msg) {
-                super.launchApp(context, msg);
-                SLog.info("launchApp()");
-
-                String extraDataStr = getUmengExtraData(msg);
-                Hawk.put(SPField.FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS, extraDataStr);
-                SLog.info("extraDataStr[%s]", extraDataStr);
-
-                MainFragment mainFragment = MainFragment.getInstance();
-                if (mainFragment != null) {
-                    mainFragment.handleUmengCustomAction();
-                }
-            }
-
-            @Override
-            public void openUrl(Context context, UMessage msg) {
-                super.openUrl(context, msg);
-                SLog.info("openUrl()");
-            }
-
-            @Override
-            public void openActivity(Context context, UMessage msg) {
-                super.openActivity(context, msg);
-                SLog.info("openActivity()");
-            }
-
-            @Override
-            public void dealWithCustomAction(Context context, UMessage msg) {
-                SLog.info("dealWithCustomAction, message[%s][%s]", msg.custom, msg.msg_id);
-
-                String extraDataStr = getUmengExtraData(msg);
-                Hawk.put(SPField.FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS, extraDataStr);
-                SLog.info("extraDataStr[%s]", extraDataStr);
-
-                MainFragment mainFragment = MainFragment.getInstance();
-                if (mainFragment != null) {
-                    mainFragment.handleUmengCustomAction();
-                }
-            }
-        };
-        //使用自定义的NotificationHandler
-        mPushAgent.setNotificationClickHandler(notificationClickHandler);
-
-        SLog.info("mPushAgent.register");
-        if (Vendor.VENDOR_HUAWEI == Vendor.getVendorType()) {
-            HuaWeiRegister.register(this);
-//            SLog.info("VENDOR_HUAWEI.register");
-
-        }
-        //注册推送服务，每次调用register方法都会回调该接口
-        mPushAgent.register(new IUmengRegisterCallback() {
-            @Override
-            public void onSuccess(String deviceToken) {
-                //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
-                SLog.info("mPushAgent.register 注册成功：deviceToken：-------->  " + deviceToken);
-                umengDeviceToken = deviceToken;
-
-                setUmengAlias(Constant.ACTION_ADD);
-            }
-            @Override
-            public void onFailure(String s, String s1) {
-                SLog.info("mPushAgent.register 注册失败：-------->  " + "s:" + s + ",s1:" + s1);
-            }
-        });
-    }
-
-    public String getUmengDeviceToken() {
-        return umengDeviceToken;
-    }
-
-    /**
-     * 格式化友盟消息
-     * @param msg
-     * @return
-     */
-    private String dumpUmengMessage(UMessage msg) {
-        return String.format("custom[%s], extra[%s]", msg.custom, getUmengExtraData(msg));
-    }
-
-    /**
-     * 獲取友盟推送自定義參數
-     * @param msg
-     * @return
-     */
-    private String getUmengExtraData(UMessage msg) {
-        EasyJSONObject extra = EasyJSONObject.generate();
-        try {
-            for (String key : msg.extra.keySet()) {
-                extra.set(key, msg.extra.get(key));
-            }
-        } catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
-
-        return extra.toString();
-    }
-
-
-    public void setUmengAlias(int action) {
-        if (mPushAgent == null) {
-            return;
-        }
-        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
-        if (StringUtil.isEmpty(memberName)) {
-            return;
-        }
-
-        if (StringUtil.isEmpty(umengDeviceToken)) {
-            return;
-        }
-        if (action == Constant.ACTION_ADD) {
-            mPushAgent.addAlias(memberName, Constant.UMENG_ALIAS_TYPE, new UTrack.ICallBack() {
-                @Override
-                public void onMessage(boolean b, String s) {
-                    SLog.info("addAlias.UTrack.ICallBack.onMessage[%s][%s]", b, s);
-                }
-            });
-        } else if (action == Constant.ACTION_EDIT) {
-            mPushAgent.setAlias(memberName, Constant.UMENG_ALIAS_TYPE, new UTrack.ICallBack() {
-                @Override
-                public void onMessage(boolean b, String s) {
-                    SLog.info("setAlias.UTrack.ICallBack.onMessage[%s][%s]", b, s);
-                }
-            });
-        }
-    }
-
-    public void delUmengAlias() {
-        if (mPushAgent == null) {
-            return;
-        }
-
-        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
-        if (StringUtil.isEmpty(memberName)) {
-            return;
-        }
-
-        mPushAgent.deleteAlias(memberName, Constant.UMENG_ALIAS_TYPE, new UTrack.ICallBack() {
-            @Override
-            public void onMessage(boolean isSuccess, String message) {
-                SLog.info("deleteAlias.UTrack.ICallBack.onMessage[%s][%s]", isSuccess, message);
-            }
-        });
-    }
 
 
     /**
@@ -936,28 +622,6 @@ public class TwantApplication extends Application {
 //        twLocation = new TwLocation(this);
     }
 
-    private String getAppName(int pID) {
-        String processName = "";
-        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-        List l = am.getRunningAppProcesses();
-        if (l == null) {
-            return "";
-        }
-        Iterator i = l.iterator();
-        PackageManager pm = this.getPackageManager();
-        while (i.hasNext()) {
-            ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i.next());
-            try {
-                if (info.pid == pID) {
-                    processName = info.processName;
-                    return processName;
-                }
-            } catch (Exception e) {
-                // Log.d("Process", "Error>> :"+ e.toString());
-            }
-        }
-        return processName;
-    }
 
     public static String getStringRes(int resId) {
         if (instance != null) {

@@ -2,36 +2,21 @@ package com.ftofs.twant.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import com.ftofs.twant.R
 import com.ftofs.twant.kotlin.bean.ZoneInfo
 import com.ftofs.twant.kotlin.net.BaseRepository
-import com.ftofs.twant.kotlin.net.Result
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.net.Result
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
 import com.lxj.xpopup.core.CenterPopupView
-import androidx.lifecycle.viewModelScope
-import cn.snailpad.easyjson.EasyJSONObject
-import com.ftofs.twant.api.Api
-import com.ftofs.twant.api.UICallback
-import com.ftofs.twant.kotlin.bean.TwantResponse
-import com.ftofs.twant.util.Util
-import com.wzq.mvvmsmart.net.net_utils.GsonUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import okhttp3.Call
-import okhttp3.MediaType
-import okhttp3.RequestBody
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import java.util.ArrayList
 
 
 @SuppressLint("ViewConstructor")
@@ -40,7 +25,7 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
         return R.layout.popup_cancel_after_verfication
     }
     val res by lazy {
-        object :BaseRepository(){}
+        object : BaseRepository(){}
     }
     private val editText by lazy {
         findViewById<EditText>(R.id.et_verification)
@@ -60,7 +45,7 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
     private fun goVerify(){
         val token =User.getToken()
         val verification= editText.text.toString()
-        val api=object :BaseRepository(){
+        val api=object : BaseRepository(){
             suspend fun getIfoodmacauVerify(ordersId: Int, goodsId: Int, count: Int, verificationCode: String?): Result<ZoneInfo> {
                 return safeApiCall(call = { executeResponse(api.getIfoodmacauVerify( token,verificationCode,  ordersId,goodsId,count))})
 

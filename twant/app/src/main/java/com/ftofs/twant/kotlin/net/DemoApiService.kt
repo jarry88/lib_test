@@ -3,7 +3,7 @@ package com.ftofs.twant.kotlin.net
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.bean.ImGoodsSearch
 import com.ftofs.twant.kotlin.bean.NewsData
-import com.ftofs.twant.kotlin.bean.TwantResponse
+import com.gzp.lib_common.net.TwantResponse
 import com.ftofs.twant.kotlin.bean.ZoneInfo
 import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.wzq.mvvmsmart.net.base.BaseResponse
@@ -70,7 +70,7 @@ interface DemoApiService {
 //    @Query("token") token:String,
     @POST("member/voucher/command/receive")
     suspend fun getVoucherCommandReceive(@Query("token")token:String,
-                                         @Query("templateId")templateId:String?):TwantResponse<CommonInfo>
+                                         @Query("templateId")templateId:String?): TwantResponse<CommonInfo>
 
 //【首頁】誠友列表
     @GET("app/home/random/member/list")

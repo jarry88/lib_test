@@ -13,7 +13,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.StoreItem;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 

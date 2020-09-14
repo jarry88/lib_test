@@ -30,7 +30,8 @@ import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.UnreadCount;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ApiUtil;
@@ -53,7 +54,6 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

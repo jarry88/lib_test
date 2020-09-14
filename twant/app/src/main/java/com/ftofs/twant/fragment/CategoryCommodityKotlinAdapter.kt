@@ -4,9 +4,7 @@ import androidx.databinding.ViewDataBinding
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CategoryHeadItemBinding
 import com.ftofs.twant.databinding.SimpleGoodDisplayItemBinding
-import com.ftofs.twant.entity.CategoryCommodity
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.log.SLog
 import com.ftofs.twant.vo.CategoryNavVo
 
 //SimpleGoodDisplayItemBinding

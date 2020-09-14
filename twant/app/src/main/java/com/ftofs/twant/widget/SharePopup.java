@@ -17,9 +17,8 @@ import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
-import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
@@ -34,16 +33,13 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.WeixinUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BottomPopupView;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.lxj.xpopup.util.XPopupUtils;
 
 import org.urllib.Urls;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

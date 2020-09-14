@@ -15,10 +15,9 @@ import com.ftofs.twant.adapter.CartCrossBorderAdapter;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.CartCrossBorderItem;
 import com.ftofs.twant.entity.CrossBorderStoreInfo;
-import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.fragment.NewConfirmOrderFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
@@ -29,7 +28,6 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 購物車跨境購商品列表彈窗

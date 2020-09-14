@@ -3,7 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.StoreAnnouncement;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.LockableNestedScrollView;

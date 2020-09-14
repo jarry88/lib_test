@@ -24,7 +24,8 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -34,7 +35,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

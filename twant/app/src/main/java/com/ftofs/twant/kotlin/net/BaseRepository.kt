@@ -1,7 +1,8 @@
 package com.ftofs.twant.kotlin.net
 
-import com.ftofs.twant.kotlin.bean.TwantResponse
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.net.Result
+import com.gzp.lib_common.net.TwantResponse
+import com.gzp.lib_common.utils.SLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import java.io.IOException
@@ -44,7 +45,7 @@ open class BaseRepository {
         }
     }
     open suspend fun <T : Any> simpleGet(response: TwantResponse<T>, successBlock: (suspend CoroutineScope.() -> Unit)? = null,
-                                          errorBlock: (suspend CoroutineScope.() -> Unit)? = null): Result<T> {
+                                         errorBlock: (suspend CoroutineScope.() -> Unit)? = null): Result<T> {
         return safeApiCall(call = {executeResponse(response)})
     }
 

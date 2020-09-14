@@ -3,10 +3,9 @@ package com.ftofs.twant.util;
 import android.os.Build;
 import android.util.Log;
 
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Vendor {

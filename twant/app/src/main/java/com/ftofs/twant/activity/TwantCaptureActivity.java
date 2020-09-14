@@ -3,12 +3,11 @@ package com.ftofs.twant.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.widget.ScaledButton;
+import com.gzp.lib_common.base.BaseActivity;
 import com.uuzuche.lib_zxing.activity.CaptureFragment;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 

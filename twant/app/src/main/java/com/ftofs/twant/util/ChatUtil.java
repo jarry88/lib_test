@@ -2,14 +2,11 @@ package com.ftofs.twant.util;
 
 import android.util.Log;
 
-import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.fragment.ChatFragment;
-import com.ftofs.twant.fragment.MainFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.vo.member.MemberVo;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;

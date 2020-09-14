@@ -69,7 +69,7 @@ import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.widget.TwLoadingPopup;
 import com.jaeger.library.StatusBarUtil;
@@ -80,7 +80,6 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 
-import org.litepal.util.Const;
 import org.urllib.Query;
 import org.urllib.Urls;
 

@@ -17,9 +17,9 @@ import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.UmengAnalyticsActionName
 import com.ftofs.twant.databinding.SimpleRvListBinding
 import com.ftofs.twant.entity.StoreItem
-import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.LinkageShoppingListModel
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.UiUtil
 import com.ftofs.twant.util.Util

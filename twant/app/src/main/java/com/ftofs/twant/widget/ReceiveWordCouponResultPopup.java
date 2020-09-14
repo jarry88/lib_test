@@ -3,31 +3,21 @@ package com.ftofs.twant.widget;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.api.Api;
-import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.util.User;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
-import java.io.IOException;
-
 import cn.snailpad.easyjson.EasyJSONObject;
-import okhttp3.Call;
 
 public class ReceiveWordCouponResultPopup extends CenterPopupView implements View.OnClickListener {
     Context context;

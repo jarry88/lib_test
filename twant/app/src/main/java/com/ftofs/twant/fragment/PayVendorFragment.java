@@ -1,8 +1,6 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
@@ -34,8 +30,8 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.PayCardItem;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -46,12 +42,10 @@ import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.WalletPayPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.enums.PopupAnimation;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.macau.pay.sdk.MPaySdk;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.analytics.pro.k;
 import com.vivebest.taifung.api.PaymentHandler;
 import com.vivebest.taifung.api.TaifungSDK;
 

@@ -3,7 +3,6 @@ package com.ftofs.twant.util;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -12,7 +11,7 @@ import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import java.io.BufferedWriter;
 import java.io.File;

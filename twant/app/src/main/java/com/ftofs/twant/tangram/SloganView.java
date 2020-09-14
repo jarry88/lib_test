@@ -22,7 +22,7 @@ import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.fragment.BargainListFragment;
 import com.ftofs.twant.fragment.GroupInfoListFragment;
 import com.ftofs.twant.fragment.SecKillFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;

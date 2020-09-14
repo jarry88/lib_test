@@ -3,7 +3,7 @@ package com.ftofs.twant.kotlin
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.kotlin.base.BaseViewModel
+import com.gzp.lib_common.base.BaseViewModel
 import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.ftofs.twant.util.User
 import com.wzq.mvvmsmart.net.base.BaseResponse

@@ -19,24 +19,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
-import com.ftofs.twant.activity.AppGuideActivity;
-import com.ftofs.twant.activity.MainActivity;
-import com.ftofs.twant.activity.SplashActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.handler.NativeJsBridge;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -45,8 +39,6 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.interfaces.XPopupCallback;
-import com.orhanobut.hawk.Hawk;
 import com.yanzhenjie.permission.runtime.Permission;
 
 
@@ -54,7 +46,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

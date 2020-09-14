@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity;
 
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import java.util.List;
 

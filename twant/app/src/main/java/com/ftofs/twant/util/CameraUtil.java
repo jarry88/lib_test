@@ -1,7 +1,6 @@
 package com.ftofs.twant.util;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,11 +13,10 @@ import androidx.fragment.app.Fragment;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.interfaces.CommonCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
-import java.io.IOException;
 
 public class CameraUtil {
     /**

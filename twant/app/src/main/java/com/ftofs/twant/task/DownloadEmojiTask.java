@@ -2,7 +2,7 @@ package com.ftofs.twant.task;
 
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.UserStatus;
 import com.ftofs.twant.util.FileUtil;

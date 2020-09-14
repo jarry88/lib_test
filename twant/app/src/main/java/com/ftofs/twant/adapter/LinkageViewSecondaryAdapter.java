@@ -15,14 +15,12 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SlantedWidget;
 
 import java.util.List;
-
-import me.yokeyword.fragmentation.SupportActivity;
 
 /**
  * @author gzp

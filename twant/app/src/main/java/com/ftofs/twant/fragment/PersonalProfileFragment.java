@@ -15,10 +15,9 @@ import android.widget.TextView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -27,8 +26,6 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;

@@ -17,7 +17,7 @@ import com.ftofs.twant.entity.FilterCategoryGroup;
 import com.ftofs.twant.entity.FilterCategoryItem;
 import com.ftofs.twant.entity.FilterCategoryMeta;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.lxj.xpopup.core.DrawerPopupView;
@@ -25,7 +25,6 @@ import com.lxj.xpopup.core.DrawerPopupView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**

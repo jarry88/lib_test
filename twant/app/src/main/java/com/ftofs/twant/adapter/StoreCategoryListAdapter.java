@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,8 +19,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 
 import java.util.ArrayList;

@@ -19,17 +19,17 @@ import com.ftofs.twant.databinding.FragmentImGoodsPageBinding
 import com.ftofs.twant.databinding.ImGoodsListItemBinding
 import com.ftofs.twant.domain.store.StoreLabel
 import com.ftofs.twant.entity.Goods
-import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.viewmodel.ImGoodsPageModel
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 
-class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) :BaseTwantFragmentMVVM<FragmentImGoodsPageBinding, ImGoodsPageModel>(){
+class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) : BaseTwantFragmentMVVM<FragmentImGoodsPageBinding, ImGoodsPageModel>(){
 
     private var oldCategoryIndex=0
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {

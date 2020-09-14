@@ -1,9 +1,8 @@
 package com.ftofs.twant.seller.fragment
 
 import android.os.Bundle
-import com.ftofs.twant.fragment.BaseFragment
+import com.gzp.lib_common.base.BaseFragment
 import com.ftofs.twant.kotlin.adapter.FeatureGoodAdapter
-import com.ftofs.twant.log.SLog
 
 //在Fragment中使用，引入资源文件，直接使用id访问视图有一点特别注意：
 // 在onCreateView中不直接访问视图，因为视图没有加载完成，容易引起空指针，需要在onViewCreated中访问视图，代码如下：

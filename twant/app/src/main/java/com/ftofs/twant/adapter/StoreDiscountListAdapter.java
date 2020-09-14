@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.StoreDiscount;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 

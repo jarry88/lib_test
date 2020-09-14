@@ -8,9 +8,7 @@ import androidx.lifecycle.Observer
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.FragmentTestNetBinding
-import com.ftofs.twant.fragment.TestFragment
-import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.wzq.mvvmsmart.utils.KLog
 
 /**

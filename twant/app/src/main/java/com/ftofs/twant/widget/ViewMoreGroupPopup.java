@@ -17,7 +17,7 @@ import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.GroupListItem;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.lxj.xpopup.core.CenterPopupView;

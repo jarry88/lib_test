@@ -1,13 +1,9 @@
 package com.ftofs.twant.widget;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,7 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.entity.DownloadImageResult;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.QRCode;

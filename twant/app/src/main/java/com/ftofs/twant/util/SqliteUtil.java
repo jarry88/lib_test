@@ -2,13 +2,9 @@ package com.ftofs.twant.util;
 
 import android.util.Log;
 
-import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.task.DownloadEmojiTask;
-import com.ftofs.twant.widget.SlantedWidget;
+import com.gzp.lib_common.utils.SLog;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 

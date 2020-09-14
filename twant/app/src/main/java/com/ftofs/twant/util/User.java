@@ -8,7 +8,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.orhanobut.hawk.Hawk;

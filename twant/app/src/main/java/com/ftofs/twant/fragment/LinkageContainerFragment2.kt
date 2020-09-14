@@ -18,20 +18,19 @@ import com.ftofs.twant.constant.PopupType
 import com.ftofs.twant.databinding.LinkageContainerLayout2Binding
 import com.ftofs.twant.entity.Goods
 import com.ftofs.twant.interfaces.OnSelectedListener
-import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
 import com.ftofs.twant.kotlin.LinkageContainerViewModel2
 import com.ftofs.twant.kotlin.ZoneCategory
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.UiUtil
-import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.ToastUtils
 import java.util.*
 
-class LinkageContainerFragment2 :BaseTwantFragmentMVVM<LinkageContainerLayout2Binding, LinkageContainerViewModel2>(){
+class LinkageContainerFragment2 : BaseTwantFragmentMVVM<LinkageContainerLayout2Binding, LinkageContainerViewModel2>(){
 
     var parent:NewShoppingSpecialFragment?=null
 

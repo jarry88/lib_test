@@ -3,37 +3,13 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.CategoryBrandAdapter;
-import com.ftofs.twant.adapter.CategoryMenuAdapter;
-import com.ftofs.twant.api.Api;
-import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.constant.SearchType;
-import com.ftofs.twant.entity.CategoryBrand;
-import com.ftofs.twant.entity.CategoryMenu;
-import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.util.Util;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
-import cn.snailpad.easyjson.EasyJSONObject;
-import okhttp3.Call;
+import com.gzp.lib_common.base.BaseFragment;
 
 
 /**

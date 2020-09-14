@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.core.view.marginStart
 import androidx.lifecycle.Observer
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
@@ -15,16 +14,14 @@ import com.ftofs.twant.databinding.ImOrdersLayoutBinding
 import com.ftofs.twant.databinding.ImStoreOrderItemBinding
 import com.ftofs.twant.entity.ImStoreOrderItem
 import com.ftofs.twant.interfaces.OnSelectedListener
-import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.util.ToastUtil
-import com.ftofs.twant.util.Util
 import com.ftofs.twant.viewmodel.ImOrdersPageModel
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
-import kotlin.math.absoluteValue
 
-class ImOrdersFragment(val imName: String, val sendOrder: OnSelectedListener) :BaseTwantFragmentMVVM<ImOrdersLayoutBinding, ImOrdersPageModel>() {
+class ImOrdersFragment(val imName: String, val sendOrder: OnSelectedListener) : BaseTwantFragmentMVVM<ImOrdersLayoutBinding, ImOrdersPageModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.im_orders_layout
 

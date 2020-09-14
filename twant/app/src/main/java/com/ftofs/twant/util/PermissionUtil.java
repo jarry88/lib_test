@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.interfaces.CommonCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Rationale;

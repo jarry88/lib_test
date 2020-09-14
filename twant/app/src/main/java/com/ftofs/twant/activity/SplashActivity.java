@@ -15,33 +15,22 @@ import android.widget.TextView;
 
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
-import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.entity.SoftInputInfo;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.task.TaskObservable;
-import com.ftofs.twant.task.TaskObserver;
-import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.HawkUtil;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Jarbon;
-import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.gzp.lib_common.base.BaseActivity;
 import com.orhanobut.hawk.Hawk;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

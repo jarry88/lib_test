@@ -8,13 +8,11 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-
-import org.greenrobot.eventbus.EventBus;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 

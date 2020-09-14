@@ -1,19 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.speech.tts.UtteranceProgressListener;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,12 +25,11 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.seller.entity.SellerOrderFilterParams;
 import com.ftofs.twant.seller.entity.SellerOrderRefundItem;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.fragment.SellerOrderInfoFragment;
-import com.ftofs.twant.seller.fragment.SellerOrderListPageFragment;
 import com.ftofs.twant.seller.fragment.SellerRefundDetailFragment;
 import com.ftofs.twant.seller.widget.SellerOrderFilterDrawerPopupView;
-import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
