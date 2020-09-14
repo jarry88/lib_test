@@ -9,7 +9,7 @@ import com.ftofs.twant.databinding.PopupCancelAfterVerficationListBinding
 import com.ftofs.twant.databinding.VerificationGoodsItemBinding
 import com.ftofs.twant.entity.OrderItem
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.kotlin.net.BaseRepository
+import com.gzp.lib_common.net.BaseRepository
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
 import com.lxj.xpopup.core.CenterPopupView
 

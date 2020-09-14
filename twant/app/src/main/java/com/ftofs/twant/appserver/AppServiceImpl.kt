@@ -37,7 +37,7 @@ class AppServiceImpl:AppService {
     }
 
     override fun updateMainSelectedFragment(fragment: BaseFragment,selectedFragmentIndex: Int) {
-                MainFragment mainFragment = (MainFragment) getParentFragment();
+        val mainFragment =fragment.parentFragment as MainFragment
         if (mainFragment != null) {
             mainFragment.selectedFragmentIndex = selectedFragmentIndex;
         }

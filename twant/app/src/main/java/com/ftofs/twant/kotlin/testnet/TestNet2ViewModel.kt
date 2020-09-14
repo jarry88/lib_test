@@ -6,7 +6,7 @@ import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.LinkageModel
 import com.gzp.lib_common.base.BaseViewModel
 import com.ftofs.twant.kotlin.bean.NewsData
-import com.ftofs.twant.kotlin.net.MRequest
+import com.gzp.lib_common.net.MRequest
 import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.User

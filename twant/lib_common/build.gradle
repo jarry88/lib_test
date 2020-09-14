@@ -48,7 +48,7 @@ dependencies {
     api 'com.alibaba:arouter-api:1.5.0'
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
 
-    implementation fileTree(include:['*.jar'],dir: 'libs')
+    api fileTree(include:['*.jar'],dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -142,6 +142,10 @@ dependencies {
 
     api "io.github.prototypez:app-joint-core:1.7"
 
+    //retrofit
+    api rootProject.ext.dependencies["adapter-rxjava2"]
+    api rootProject.ext.dependencies["retrofit"]
+    api rootProject.ext.dependencies["rxandroid"]
 
 //    compileOnly rootProject.ext.dependencies["converter-gson"]
 //

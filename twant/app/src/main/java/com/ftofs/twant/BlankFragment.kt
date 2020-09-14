@@ -14,7 +14,7 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.gzp.lib_common.base.BaseFragment
 import com.ftofs.twant.kotlin.BlankAdapter
-import com.ftofs.twant.kotlin.net.BaseRepository
+import com.gzp.lib_common.net.BaseRepository
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
 import com.lyrebirdstudio.croppylib.Croppy

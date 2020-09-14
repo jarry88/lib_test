@@ -2,17 +2,15 @@ package com.ftofs.twant.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.ftofs.twant.domain.store.StoreLabel
 import com.ftofs.twant.entity.Goods
-import com.ftofs.twant.kotlin.net.BaseRepository
+import com.gzp.lib_common.net.BaseRepository
 import com.gzp.lib_common.net.Result
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.User
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 

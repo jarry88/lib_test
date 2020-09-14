@@ -26,6 +26,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Fragment公共基類
+ * 将基本类迁移到common module
  * @author zwm
  */
 public abstract class BaseFragment extends SupportFragment {

@@ -2,10 +2,13 @@ package com.gzp.lib_common.base
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
+import com.gzp.lib_common.net.BaseRepository
 import com.gzp.lib_common.net.Result
+import com.gzp.lib_common.service.AppService
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
+import io.github.prototypez.appjoint.AppJoint
 import kotlinx.coroutines.launch
 
 /**
@@ -23,7 +26,7 @@ import kotlinx.coroutines.launch
  *
  */
 open class BaseViewModel(application: Application) : BaseViewModelMVVM(application){
-    val repository by lazy {object: com.ftofs.twant.kotlin.net.BaseRepository(){}}
+    val repository by lazy {object : BaseRepository(){} }
     var errorMessage :String?=null
 
     fun<T,D:Any> launch(liveData: StateLiveData<T>,

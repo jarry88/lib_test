@@ -1,8 +1,8 @@
-package com.gzp.lib_common.module
+package com.ftofs.twant.di
 
 import org.koin.dsl.module
 
 
 val koinModule = module {
-    factory { pres }
+    factory {  }
 }

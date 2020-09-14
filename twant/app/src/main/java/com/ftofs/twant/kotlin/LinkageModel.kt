@@ -2,8 +2,8 @@ package com.ftofs.twant.kotlin
 
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.bean.ZoneInfo
-import com.ftofs.twant.kotlin.net.BaseRepository
-import com.ftofs.twant.kotlin.net.MRequest
+import com.gzp.lib_common.net.BaseRepository
+import com.gzp.lib_common.net.MRequest
 import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.gzp.lib_common.net.Result
 class LinkageModel : BaseRepository(){

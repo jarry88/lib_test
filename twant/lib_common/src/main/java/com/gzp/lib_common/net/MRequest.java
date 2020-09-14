@@ -1,28 +1,22 @@
-package com.ftofs.twant.kotlin.net;
+package com.gzp.lib_common.net;
 
 import android.annotation.SuppressLint;
 
-import com.ftofs.twant.entity.SellerGoodsItem;
-import com.ftofs.twant.kotlin.bean.NewsData;
-import com.ftofs.twant.kotlin.vo.SellerPageVO;
 import com.wzq.mvvmsmart.net.base.BaseRequest;
-import com.wzq.mvvmsmart.net.base.BaseResponse;
+import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil;
+import com.wzq.mvvmsmart.utils.KLog;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import io.reactivex.Observable;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+import retrofit2.Retrofit;
 
 /**
- * author :王志强
+ * author :谷志鹏
  * date   : 2019/11/12 11:10
  */
-public class MRequest extends BaseRequest {
+public class MRequest {
+    protected Retrofit retrofit;
 
     public DemoApiService service;
 
@@ -43,9 +37,10 @@ public class MRequest extends BaseRequest {
     }
 
     private MRequest() {
-        super();
+        this.retrofit = RetrofitUtil.getInstance().getRetrofit();
         this.service = retrofit.create(DemoApiService.class);
-        retrofit.baseUrl();
+        KLog.INSTANCE.e(retrofit.baseUrl());
+//        KLog.retrofit.baseUrl();
     }
     //下方為參考代碼，後面會逐步移除-----------------------
     //--------------------------------
@@ -63,15 +58,15 @@ public class MRequest extends BaseRequest {
 //    }
 
     // post请求
-    public Observable<BaseResponse<ArrayList<NewsData>>> doPostServerNews(String jsonParams) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams);
-        Observable<BaseResponse<ArrayList<NewsData>>> observable = service.doPostServerNews(requestBody);
-        return observable;
-    }
-    // get 商品列表请求
-    public Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>> doSellerGoodsList(Map<String,Object> params) {
-
-        Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>> observable = service.doSellerGoodsList(params);
-        return observable;
-    }
+//    public Observable<BaseResponse<ArrayList<NewsData>>> doPostServerNews(String jsonParams) {
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams);
+//        Observable<BaseResponse<ArrayList<NewsData>>> observable = service.doPostServerNews(requestBody);
+//        return observable;
+//    }
+//    // get 商品列表请求
+//    public Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>> doSellerGoodsList(Map<String,Object> params) {
+//
+//        Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>> observable = service.doSellerGoodsList(params);
+//        return observable;
+//    }
 }

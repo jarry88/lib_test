@@ -1,7 +1,5 @@
-package com.ftofs.twant.kotlin.net
+package com.gzp.lib_common.net
 
-import com.gzp.lib_common.net.Result
-import com.gzp.lib_common.net.TwantResponse
 import com.gzp.lib_common.utils.SLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope

@@ -13,13 +13,12 @@ import cn.snailpad.easyjson.EasyJSONObject
 import com.alibaba.android.arouter.BuildConfig
 import com.alibaba.android.arouter.launcher.ARouter
 import com.gzp.lib_common.R
-import com.gzp.lib_common.base.callback.UCallBack
 import com.gzp.lib_common.config.Config
 import com.gzp.lib_common.constant.Constant
 import com.gzp.lib_common.constant.SPField
 import com.gzp.lib_common.constant.Vendor
 import com.gzp.lib_common.model.User
-import com.gzp.lib_common.module.koinModule
+import com.ftofs.twant.di.koinModule
 import com.gzp.lib_common.service.AppService
 import com.gzp.lib_common.utils.AppUtil
 import com.gzp.lib_common.utils.SLog
@@ -34,15 +33,12 @@ import com.umeng.message.UmengMessageHandler
 import com.umeng.message.UmengNotificationClickHandler
 import com.umeng.message.entity.UMessage
 import com.wzq.mvvmsmart.base.AppManagerMVVM
-import com.wzq.mvvmsmart.base.AppManagerMVVM.Companion.get
 import com.wzq.mvvmsmart.net.net_utils.Utils
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.KLog.init
 import com.wzq.mvvmsmart.utils.Tasks
 import io.github.prototypez.appjoint.AppJoint
 import org.android.agoo.huawei.HuaWeiRegister
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
 open class BaseApplication:Application() {
@@ -72,12 +68,9 @@ open class BaseApplication:Application() {
             ARouter.openLog()
         }
         ARouter.init(this)
-        startKoin{
-            androidLogger()
-            androidContext(this@BaseApplication)
-            modules(koinModule)
-        }
+        MMKV.initialize(this) // 替换sp
         initMVVM()
+        startKoin {  }
     }
     private fun initMVVM() {
         Tasks.init()
@@ -87,7 +80,6 @@ open class BaseApplication:Application() {
         init(BuildConfig.DEBUG)
         //初始化全局异常崩溃
         initCrash()
-        MMKV.initialize(this) // 替换sp
         LiveEventBus // 事件儿总线通信
                 .config().supportBroadcast(this) // 配置支持跨进程、跨APP通信，传入Context，需要在application onCreate中配置
                 .lifecycleObserverAlwaysActive(true) //    整个生命周期（从onCreate到onDestroy）都可以实时收到消息
@@ -156,7 +148,7 @@ open class BaseApplication:Application() {
         }
         return processName
     }
-    open  fun initUmeng(setMainFragment:UCallBack) {
+    open  fun initUmeng(setMainFragment:()->Unit?) {
         SLog.info("initUmeng")
         val pid = Process.myPid()
         val processAppName: String = getAppName(pid)
@@ -225,7 +217,7 @@ open class BaseApplication:Application() {
                 Hawk.put(SPField.FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS, extraDataStr)
                 SLog.info("extraDataStr[%s]", extraDataStr)
                 // TODO: 2020/9/14 启动mainfragment
-                setMainFragment.setMainFragment()
+                setMainFragment()
 
             }
 
@@ -244,7 +236,7 @@ open class BaseApplication:Application() {
                 val extraDataStr = getUmengExtraData(msg)
                 Hawk.put(SPField.FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS, extraDataStr)
                 SLog.info("extraDataStr[%s]", extraDataStr)
-                setMainFragment.setMainFragment()
+                setMainFragment()
 
             }
         }

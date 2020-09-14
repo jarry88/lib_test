@@ -22,10 +22,10 @@ interface DemoApiService {
 //    //  获取网络数据
 //    @GET("AppNews/getNewsList/type/1/p/{pageNum}")
 //    fun doGetServerNews(@Path("pageNum") newsId: Int): Observable<BaseResponse<ArrayList<SellerGoodsItem>>>
-
-    //  获取网络数据
-    @POST("AppNews/getNewsList/type/1/p/1")
-    fun doPostServerNews(@Body requestBody: RequestBody): Observable<BaseResponse<ArrayList<NewsData>>>
+//
+//    //  获取网络数据
+//    @POST("AppNews/getNewsList/type/1/p/1")
+//    fun doPostServerNews(@Body requestBody: RequestBody): Observable<BaseResponse<ArrayList<NewsData>>>
 
     //  获取商家商品列表
     @GET("member/seller/goods/list")

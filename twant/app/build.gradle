@@ -368,8 +368,6 @@ dependencies {
 //    api rootProject.ext.dependencies["koinFragmet"] // 刷新框架
 
     api rootProject.ext.dependencies["rxjava"] // rxjava2
-    api rootProject.ext.dependencies["adapter-rxjava2"]
-    api rootProject.ext.dependencies["rxandroid"]
 
     api rootProject.ext.dependencies["room-runtime"]
     api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
@@ -381,7 +379,6 @@ dependencies {
 //    api rootProject.ext.dependencies["converter-gson"]
 //    api rootProject.ext.dependencies["cat"]
     //其它项目中有用
-//    api rootProject.ext.dependencies["MMKV"]
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'io.github.iamyours:router-api:1.0.1'
     implementation 'com.qmuiteam:qmui:2.0.0-alpha10'

@@ -42,5 +42,7 @@ public class BaseActivity extends SupportActivity {
         ClassicsFooter.REFRESH_FOOTER_LOADING = getString(R.string.zhengzaijiazhai);
         ClassicsFooter.REFRESH_FOOTER_FINISH = getString(R.string.jiazhaiwancheng);
         ClassicsFooter.REFRESH_FOOTER_FAILED = getString(R.string.jiazhaoshibai);
+        ClassicsFooter.REFRESH_FOOTER_LOADING = "加载中...";
+
     }
 }

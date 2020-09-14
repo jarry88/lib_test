@@ -1,24 +1,16 @@
 package com.ftofs.twant;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.ftofs.twant.activity.MainActivity;
@@ -29,9 +21,6 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.MainFragment;
-import com.gzp.lib_common.base.callback.UCallBack;
-import com.gzp.lib_common.utils.AppUtil;
-import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.FriendInfo;
@@ -44,11 +33,12 @@ import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.User;
-import com.ftofs.twant.util.Vendor;
 import com.ftofs.twant.vo.member.MemberVo;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.gzp.lib_common.base.BaseApplication;
+import com.gzp.lib_common.utils.AppUtil;
+import com.gzp.lib_common.utils.SLog;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -69,16 +59,12 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
-import com.wzq.mvvmsmart.base.AppManagerMVVM;
-import com.wzq.mvvmsmart.net.net_utils.Utils;
-import com.wzq.mvvmsmart.utils.KLog;
-import com.wzq.mvvmsmart.utils.Tasks;
 
-
+import org.koin.core.Koin;
+import org.koin.core.context.ContextFunctionsKt;
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -87,7 +73,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import cn.snailpad.easyjson.EasyJSONObject;
-import kotlin.jvm.Synchronized;
 import me.yokeyword.fragmentation.Fragmentation;
 
 import static android.app.PendingIntent.getActivity;

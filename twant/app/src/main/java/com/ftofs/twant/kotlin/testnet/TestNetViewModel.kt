@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.gzp.lib_common.base.BaseViewModel
 import com.ftofs.twant.kotlin.bean.NewsData
-import com.ftofs.twant.kotlin.net.MRequest
+import com.gzp.lib_common.net.MRequest
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.net.base.BaseResponse
 import com.wzq.mvvmsmart.net.net_utils.GsonUtil

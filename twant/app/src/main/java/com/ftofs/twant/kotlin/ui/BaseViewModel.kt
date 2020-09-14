@@ -1,11 +1,10 @@
 package com.ftofs.twant.kotlin.ui
 
 import android.app.Application
-import androidx.lifecycle.viewModelScope
+import com.gzp.lib_common.net.BaseRepository
 import com.gzp.lib_common.utils.SLog
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.event.StateLiveData
-import kotlinx.coroutines.launch
 
 /**
  *
@@ -22,7 +21,7 @@ import kotlinx.coroutines.launch
  *
  */
 open class BaseViewModel(application: Application) :BaseViewModelMVVM(application){
-    val repository by lazy {object: com.ftofs.twant.kotlin.net.BaseRepository(){}}
+    val repository by lazy {object: BaseRepository(){}}
     var errorMessage :String?=null
 
     fun<T,D:Any> launch(liveData: StateLiveData<T>,
