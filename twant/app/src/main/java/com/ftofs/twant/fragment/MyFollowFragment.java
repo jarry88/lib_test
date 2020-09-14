@@ -18,7 +18,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.adapter.MyFollowArticleAdapter;
-import com.ftofs.twant.adapter.MyFollowGoodsAdapter;
 import com.ftofs.twant.adapter.MyFollowMemberAdapter;
 import com.ftofs.twant.adapter.MyFollowRecruitmentAdapter;
 import com.ftofs.twant.adapter.MyFollowStoreAdapter;
@@ -81,7 +80,6 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
     boolean storeDataLoaded = false;
     MyFollowStoreAdapter myFollowStoreAdapter;
     boolean goodsDataLoaded = false;
-    MyFollowGoodsAdapter myFollowGoodsAdapter;
     boolean articleDataLoaded = false;
     MyFollowArticleAdapter myFollowArticleAdapter;
     boolean recruitmentDataLoaded = false;
