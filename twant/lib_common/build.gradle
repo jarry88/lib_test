@@ -139,10 +139,6 @@ dependencies {
 //    compileOnly 'me.yokeyword:fragmentationx:1.0.2'
 //    compileOnly 'me.yokeyword:eventbus-activity-scope:1.1.0'
 //    compileOnly rootProject.ext.dependencies["smartRefreshLayout"] // 刷新框架
-//
-//    compileOnly rootProject.ext.dependencies["koinScop"] // koin三兄弟
-//    compileOnly rootProject.ext.dependencies["KoinViewModel"] //
-//    compileOnly rootProject.ext.dependencies["koinFragmet"] // 刷新框架
 
 
 }

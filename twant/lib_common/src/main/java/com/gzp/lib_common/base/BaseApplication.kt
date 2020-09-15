@@ -132,7 +132,7 @@ open class BaseApplication:Application() {
         val am = this.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val l = am.runningAppProcesses ?: return ""
         val i = l.iterator()
-        val pm = this.packageManager
+//        val pm = this.packageManager
         while (i.hasNext()) {
             val info = i.next() as ActivityManager.RunningAppProcessInfo
             try {

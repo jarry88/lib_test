@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gzp.lib_common.model.User
 import com.tencent.mmkv.MMKV
+import com.ftofs.ft_login.ui.LoginActivity
 
 object UserManager {
     private const val USER_DATA: String = "user_data"

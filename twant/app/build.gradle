@@ -211,11 +211,6 @@ dependencies {
     api rootProject.ext.dependencies["room-runtime"]
     kapt rootProject.ext.dependencies["room-compiler"]  //  room
 
-    api rootProject.ext.dependencies["fragment-ktx"]
-    api rootProject.ext.dependencies["lifecycle-runtime-ktx"]
-    api rootProject.ext.dependencies["lifecycle-viewmodel-ktx"]
-    api rootProject.ext.dependencies["lifecycle-livedata-ktx"]
-    api rootProject.ext.dependencies["lifecycle-common-java8"]
     //jetpack 全家桶裝填完畢
     //3.9.0版本是使用Java写的，从4.0.0后改用的Kotlin写的
     api rootProject.ext.dependencies["okhttp"] //
