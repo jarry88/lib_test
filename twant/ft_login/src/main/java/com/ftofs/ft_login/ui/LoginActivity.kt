@@ -1,17 +1,29 @@
 package com.ftofs.ft_login.ui
 
 import com.ftofs.ft_login.R
-import com.ftofs.ft_login.databinding.ActivityLoginBinding
-import com.gzp.lib_common.base.BaseTwantActivityMVVM
+import com.ftofs.ft_login.databinding.ActivityTestBlackBinding
+import com.gzp.lib_common.base.MBaseActivity
 
 
-class LoginActivity :BaseTwantActivityMVVM<LoginViewModel, ActivityLoginBinding>(){
-    override fun getLayoutResId(): Int= R.layout.activity_login
+class LoginActivity :MBaseActivity<LoginViewModel, ActivityTestBlackBinding>(){
     override fun initData() {
-//        TODO("Not yet implemented")
     }
 
     override fun initView() {
-//        TODO("Not yet implemented")
+
     }
+
+    override fun getLayoutResId(): Int {
+       return R.layout.activity_test_black
+    }
+//    override fun initContentView(savedInstanceState: Bundle?): Int {
+//        return R.layout.activity_test_black
+//    }
+//
+//    override fun initVariableId(): Int {
+//        return BR.viewModel
+//    }
+
+
+
 }

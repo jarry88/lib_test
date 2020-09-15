@@ -21,6 +21,9 @@ class LoginServiceImpl : LoginService {
     override fun start(context: Context): LiveData<User> {
         return UserManager.start(context)
     }
+    override fun getLiveData(): LiveData<User> {
+        return UserManager.getLoginLiveData()
+    }
 
     override fun init(context: Context?) {
 

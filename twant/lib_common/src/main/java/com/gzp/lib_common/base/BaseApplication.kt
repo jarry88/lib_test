@@ -38,6 +38,7 @@ import com.wzq.mvvmsmart.utils.KLog.init
 import com.wzq.mvvmsmart.utils.Tasks
 import io.github.prototypez.appjoint.AppJoint
 import org.android.agoo.huawei.HuaWeiRegister
+import org.android.agoo.xiaomi.MiPushRegistar
 import org.koin.core.context.startKoin
 
 open class BaseApplication:Application() {
@@ -145,7 +146,7 @@ open class BaseApplication:Application() {
         }
         return processName
     }
-    open  fun initUmeng(setMainFragment:()->Unit?) {
+    open  fun initUmeng(context:Context,setMainFragment:()->Unit?) {
         SLog.info("initUmeng")
         val pid = Process.myPid()
         val processAppName: String = getAppName(pid)
@@ -166,13 +167,13 @@ open class BaseApplication:Application() {
         // 参数三：渠道名称；
         // 参数四：设备类型，必须参数，传参数为UMConfigure.DEVICE_TYPE_PHONE则表示手机；传参数为UMConfigure.DEVICE_TYPE_BOX则表示盒子；默认为手机；
         // 参数五：Push推送业务的secret 填充Umeng Message Secret对应信息（需替换）
-        UMConfigure.init(this, getString(R.string.umeng_push_app_key), "official", UMConfigure.DEVICE_TYPE_PHONE, getString(R.string.umeng_push_message_secret))
+        UMConfigure.init(context, getString(R.string.umeng_push_app_key), "official", UMConfigure.DEVICE_TYPE_PHONE, getString(R.string.umeng_push_message_secret))
 
         // 友盟統計：选用AUTO页面采集模式
         MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO)
 
         //获取消息推送代理示例
-        mPushAgent = PushAgent.getInstance(this)
+        mPushAgent = PushAgent.getInstance(context)
         // mPushAgent.setNotificaitonOnForeground(false); // 如果应用在前台，您可以设置不显示通知栏消息。默认情况下，应用在前台是显示通知的。此方法请在mPushAgent.register方法之前调用。
         val messageHandler: UmengMessageHandler = object : UmengMessageHandler() {
             /**
@@ -238,11 +239,14 @@ open class BaseApplication:Application() {
             }
         }
         //使用自定义的NotificationHandler
-        mPushAgent?.setNotificationClickHandler(notificationClickHandler)
+        mPushAgent?.notificationClickHandler = notificationClickHandler
         SLog.info("mPushAgent.register")
         if (Vendor.VENDOR_HUAWEI == Vendor.getVendorType()) {
             HuaWeiRegister.register(this)
             //            SLog.info("VENDOR_HUAWEI.register");
+        } else if(Vendor.VENDOR_XIAOMI == Vendor.getVendorType()) {
+//            MiPushRegistar.register(this);
+//            MiPushRegistar.register(this, final String XIAOMI_ID, final String XIAOMI_KEY);
         }
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent?.register(object : IUmengRegisterCallback{

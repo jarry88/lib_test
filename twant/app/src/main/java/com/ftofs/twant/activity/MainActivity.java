@@ -511,7 +511,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
     }
 
     private void updateDeviceToken() {
-        SLog.info("开始请求华为token");
+        SLog.info("开始请求token");
         // 請求華爲token
         if (Vendor.VENDOR_HUAWEI != Vendor.getVendorType()) {
             return;

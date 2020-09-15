@@ -37,6 +37,7 @@ object UserManager {
 //            liveData.postValue(getUser())
 //        }
     }
+
     fun start(context: Context): LiveData<User> {
         context.startActivity(Intent(context, LoginActivity::class.java))
         return liveData

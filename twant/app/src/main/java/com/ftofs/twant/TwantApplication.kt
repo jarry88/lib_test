@@ -125,7 +125,7 @@ class TwantApplication :BaseApplication(){
 
         AppUtil.app=this
 
-        initUmeng{MainFragment.getInstance()?.let { it.handleUmengCustomAction() }}
+        initUmeng(this){MainFragment.getInstance()?.let { it.handleUmengCustomAction() }}
         startKoin {
             androidLogger()
             androidContext(this@TwantApplication)

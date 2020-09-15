@@ -32,6 +32,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+
+//            signingConfig signingConfigs.release
+            ext.enableCrashlytics = false //加快開發環境編譯速度
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -47,7 +53,7 @@ android {
 
 dependencies {
     api 'com.alibaba:arouter-api:1.5.0'
-    annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
+    kapt 'com.alibaba:arouter-compiler:1.2.2'
 
     api fileTree(include:['*.jar'],dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -107,6 +113,9 @@ dependencies {
     api 'com.umeng.umsdk:huawei-basetb:2.6.3.306'
     api 'com.umeng.umsdk:huawei-pushtb:2.6.3.306'
     api 'com.umeng.umsdk:huawei-umengaccs:1.2.4'
+
+    api 'com.umeng.umsdk:xiaomi-push:3.7.0'
+    api 'com.umeng.umsdk:xiaomi-umengaccs:1.1.4'
     //smartrefresh初始化
     api rootProject.ext.dependencies["smartRefreshLayout"] // 刷新框架
 

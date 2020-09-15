@@ -22,4 +22,7 @@ object LoginServiceImplWrap {
     fun start(context: Context): LiveData<User> {
         return service.start(context)
     }
+    fun getLiveData():LiveData<User>{
+        return service.getLiveData()
+    }
 }
