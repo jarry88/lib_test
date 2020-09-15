@@ -13,6 +13,7 @@ import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseFragment
 import com.gzp.lib_common.service.AppService
 import com.gzp.lib_common.utils.AppUtil
+import com.gzp.lib_common.utils.BaseContext
 import io.github.prototypez.appjoint.core.ServiceProvider
 
 @ServiceProvider
@@ -23,7 +24,7 @@ class AppServiceImpl:AppService {
     }
 
     override fun getCaptureIntent(): Intent {
-        return Intent(AppUtil.app, TwantCaptureActivity::class.java)
+        return Intent(BaseContext.instance.getContext(), TwantCaptureActivity::class.java)
     }
     override fun errorPopToMainFragment(context: Context) {
         if (context is FragmentActivity) {

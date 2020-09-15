@@ -12,6 +12,7 @@ import android.os.Process
 import android.os.StrictMode
 import androidx.core.app.NotificationCompat
 import cn.snailpad.easyjson.EasyJSONObject
+import com.alibaba.android.arouter.launcher.ARouter
 import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
@@ -120,6 +121,8 @@ class TwantApplication :BaseApplication(){
     override fun onCreate() {
         super.onCreate()
         BaseContext.instance.init(this)
+        ARouter.init(this)
+
         AppUtil.app=this
 
         initUmeng{MainFragment.getInstance()?.let { it.handleUmengCustomAction() }}
@@ -233,9 +236,6 @@ class TwantApplication :BaseApplication(){
         if (isMainPid()) {
             SqliteUtil.imLogin()
         }
-
-
-        // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT
 
 
         // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT

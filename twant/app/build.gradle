@@ -4,6 +4,9 @@ apply plugin: 'com.huawei.agconnect'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'app-joint'
+
+// 路由表自动加载插件
+apply plugin: 'com.alibaba.arouter'
 //apply plugin: 'de.mannodermaus.android-junit5'
 
 android {
@@ -46,6 +49,11 @@ android {
 
         resConfigs "zh", "en"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
 
 
     }
@@ -145,10 +153,14 @@ android {
 }
 
 dependencies {
+    implementation project(":ft_login")
     implementation project(":lib_common")
     implementation project(":lib_common_ui")
     implementation project(":lib_net")
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
+//    kapt 'com.alibaba:arouter-compiler:1.2.2'
+
     api rootProject.ext.dependencies["ktx"]
 
     api rootProject.ext.dependencies["appcompat"] //
@@ -195,15 +207,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.3.0'
     testImplementation 'org.mockito:mockito-core:2.27.0'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-
-    // The following Espresso dependency can be either "implementation"
-    // or "androidTestImplementation", depending on whether you want the
-    // dependency to appear on your APK's compile classpath or the test APK
-    // classpath.
-    // Optional -- UI testing with UI Automator
-//    // Optional -- Mockito framework
-//    testImplementation 'org.mockito:mockito-core:2.27.0'
-    //
 
     implementation 'com.kunminx.linkage:linkage-recyclerview:1.9.2'
     //jetpack
@@ -359,11 +362,6 @@ dependencies {
 //添加HttpLoggingInterceptor进行调试
 
     // retrofit 有mvvm依赖提供
-
-//    api rootProject.ext.dependencies["koinScop"] // koin三兄弟
-//    api rootProject.ext.dependencies["KoinViewModel"] //
-//    api rootProject.ext.dependencies["koinFragmet"] // 刷新框架
-
     api rootProject.ext.dependencies["rxjava"] // rxjava2
 
     api rootProject.ext.dependencies["room-runtime"]

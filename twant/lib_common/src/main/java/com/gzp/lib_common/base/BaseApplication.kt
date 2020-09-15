@@ -66,7 +66,6 @@ open class BaseApplication:Application() {
             ARouter.openDebug()
             ARouter.openLog()
         }
-        ARouter.init(this)
         MMKV.initialize(this) // 替换sp
         initMVVM()
     }

@@ -1,7 +1,7 @@
 package com.ftofs.ft_login.ui
 
-import com.ftofs.twant.R
-import com.ftofs.twant.databinding.ActivityLoginBinding
+import com.ftofs.ft_login.R
+import com.ftofs.ft_login.databinding.ActivityLoginBinding
 import com.gzp.lib_common.base.BaseTwantActivityMVVM
 
 
