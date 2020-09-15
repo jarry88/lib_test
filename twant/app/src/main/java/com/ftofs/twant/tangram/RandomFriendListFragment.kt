@@ -13,7 +13,7 @@ import com.ftofs.twant.fragment.ChatFragment
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.RandomFriendViewModel
-import com.ftofs.twant.kotlin.vo.RandomMemberVo
+import com.ftofs.lib_net.model.RandomMemberVo
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.orm.FriendInfo
 import com.ftofs.twant.util.ChatUtil

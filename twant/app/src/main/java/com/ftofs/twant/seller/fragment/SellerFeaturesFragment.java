@@ -16,7 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.entity.Goods;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;

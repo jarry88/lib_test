@@ -130,7 +130,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (Config.PROD) {
                         HashMap<String, Object> analyticsDataMap = new HashMap<>();
                         analyticsDataMap.put("commonId", item.goods.id);
-                        MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.ACTIVITY_GOODS, analyticsDataMap);
+                        MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.ACTIVITY_GOODS, analyticsDataMap);
                     }
                     Util.startFragment(GoodsDetailFragment.newInstance(item.goods.id, 0));
                 });

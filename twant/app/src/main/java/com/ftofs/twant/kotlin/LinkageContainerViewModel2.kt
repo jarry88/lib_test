@@ -3,15 +3,18 @@ package com.ftofs.twant.kotlin
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.ftofs.twant.config.Config
-import com.ftofs.twant.entity.Goods
-import com.ftofs.twant.entity.SellerGoodsItem
+import com.ftofs.lib_net.model.Goods
+import com.ftofs.lib_net.model.SellerGoodsItem
+import com.ftofs.lib_net.model.ZoneCategory
 import com.gzp.lib_common.base.BaseViewModel
-import com.gzp.lib_common.net.Result
+import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
 import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 

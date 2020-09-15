@@ -134,7 +134,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("zoneId", zoneId);
-            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.ACTIVITY_ZONE, analyticsDataMap);
+            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.ACTIVITY_ZONE, analyticsDataMap);
         }
 
 

@@ -86,7 +86,7 @@ public class User {
         }
 
         // 解除友盟別名綁定
-        TwantApplication.getInstance().delUmengAlias();
+        TwantApplication.Companion.get().delUmengAlias();
 
         Hawk.delete(SPField.FIELD_LOGIN_TYPE);
         Hawk.delete(SPField.FIELD_WX_BINDING_STATUS);
@@ -138,8 +138,8 @@ public class User {
     public static void onLoginSuccess(int userId, LoginType loginType, EasyJSONObject responseObj) {
         SLog.info("loginType[%s],responseObj[%s]",loginType.toString(),responseObj.toString());
         SharedPreferenceUtil.saveUserInfo(loginType, responseObj);
-        TwantApplication.getInstance().setUmengAlias(Constant.ACTION_ADD);
-        TwantApplication.getInstance().updateCurrMemberInfo();
+        TwantApplication.Companion.get().setUmengAlias(Constant.ACTION_ADD);
+//        TwantApplication.Companion.get().updateCurrMemberInfo();
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
 
         MainActivity mainActivity = MainActivity.getInstance();

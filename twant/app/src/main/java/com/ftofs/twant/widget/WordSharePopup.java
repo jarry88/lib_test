@@ -45,7 +45,7 @@ public class WordSharePopup extends CenterPopupView implements View.OnClickListe
         TextView tvWord = findViewById(R.id.tv_word);
         tvWord.setText(word);
 
-        wxInstalled = TwantApplication.wxApi.isWXAppInstalled();
+        wxInstalled = TwantApplication.Companion.get().getWxApi().isWXAppInstalled();
         TextView btnShare = findViewById(R.id.btn_share);
         btnShare.setOnClickListener(this);
         // 檢測微信是否已經安裝

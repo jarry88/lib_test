@@ -5,7 +5,7 @@
 
         <variable
             name="vo"
-            type="com.ftofs.twant.entity.Goods" />
+            type="com.ftofs.lib_net.model.Goods" />
     </data>
     <LinearLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"

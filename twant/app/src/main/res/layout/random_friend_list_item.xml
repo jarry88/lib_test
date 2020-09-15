@@ -4,7 +4,7 @@
     <data >
         <variable
             name="vo"
-            type="com.ftofs.twant.kotlin.vo.RandomMemberVo" />
+            type="com.ftofs.lib_net.model.RandomMemberVo" />
     </data>
     <LinearLayout
         android:id="@+id/ll_message_item_container"

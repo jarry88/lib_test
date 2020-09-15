@@ -12,7 +12,8 @@ import androidx.fragment.app.Fragment;
 
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
-import com.ftofs.twant.interfaces.CommonCallback;
+import com.gzp.lib_common.base.callback.CommonCallback;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.gzp.lib_common.utils.SLog;
 import com.yanzhenjie.permission.runtime.Permission;
 

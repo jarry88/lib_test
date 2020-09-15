@@ -1,11 +1,11 @@
 package com.ftofs.twant.kotlin
 
-import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.kotlin.bean.ZoneInfo
-import com.gzp.lib_common.net.BaseRepository
-import com.gzp.lib_common.net.MRequest
-import com.ftofs.twant.kotlin.vo.SellerPageVO
-import com.gzp.lib_common.net.Result
+import com.ftofs.lib_net.model.SellerGoodsItem
+import com.ftofs.lib_net.model.ZoneInfo
+import com.ftofs.lib_net.BaseRepository
+import com.ftofs.lib_net.MRequest
+import com.ftofs.lib_net.model.SellerPageVO
+import com.gzp.lib_common.constant.Result
 class LinkageModel : BaseRepository(){
     suspend fun getShoppingGoodsList1(zoneId:Int): Result<SellerPageVO<SellerGoodsItem>> {
 

@@ -188,7 +188,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("storeId", storeId);
-            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.STORE, analyticsDataMap);
+            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.STORE, analyticsDataMap);
         }
 
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);

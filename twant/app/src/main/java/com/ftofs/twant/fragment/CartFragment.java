@@ -34,6 +34,7 @@ import com.ftofs.twant.entity.cart.StoreStatus;
 import com.ftofs.twant.entity.cart.TotalStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;

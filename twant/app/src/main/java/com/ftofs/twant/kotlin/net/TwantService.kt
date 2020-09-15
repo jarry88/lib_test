@@ -1,8 +1,8 @@
 package com.ftofs.twant.kotlin.net
 
-import com.ftofs.twant.entity.SellerGoodsItem
-import com.gzp.lib_common.net.TwantResponse
-import com.ftofs.twant.kotlin.vo.SellerPageVO
+import com.ftofs.lib_net.model.SellerGoodsItem
+import com.ftofs.lib_net.net.TwantResponse
+import com.ftofs.lib_net.model.SellerPageVO
 import com.wzq.mvvmsmart.net.net_utils.MetaDataUtil
 import retrofit2.http.GET
 import retrofit2.http.Path

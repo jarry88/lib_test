@@ -211,7 +211,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
             rlPromotionCodeContainer.setVisibility(promotionCodeVisible ? View.VISIBLE : View.GONE);
         } else if (id == R.id.btn_register) {
             if (Config.PROD) {
-                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.REGISTER);
+                MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.REGISTER);
             }
 
             String fullMobile = areaCode + "," + mobile;
@@ -306,7 +306,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                         ToastUtil.success(_mActivity, "注冊成功");
 
                         if (Config.PROD) {
-                            MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.REGISTER_SUCCESS);
+                            MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.REGISTER_SUCCESS);
                         }
 
                         // 注冊成功，跳到主頁面

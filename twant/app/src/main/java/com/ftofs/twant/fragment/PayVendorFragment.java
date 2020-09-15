@@ -433,7 +433,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
             if (selectedPayButtonId == PayCardItem.PAY_TYPE_WEIXING) {
                 // 檢測微信是否已經安裝
-                if (!TwantApplication.wxApi.isWXAppInstalled()) {
+                if (!TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) {
                     ToastUtil.error(_mActivity, getString(R.string.weixin_not_installed_hint));
                     return;
                 }
@@ -682,7 +682,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                             req.prepayId, req.sign, req.nonceStr, req.timeStamp);
                     // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
 
-                    TwantApplication.wxApi.sendReq(req);
+                    TwantApplication.Companion.get().getWxApi().sendReq(req);
 
                     markPayId(SPField.FIELD_WX_PAY_ID);
 

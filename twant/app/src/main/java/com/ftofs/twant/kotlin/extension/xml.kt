@@ -1,16 +1,10 @@
 package com.ftofs.twant.kotlin.extension
 
-import android.graphics.Paint
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.ShapeDrawable
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.ftofs.twant.util.StringUtil
-import com.ftofs.twant.vo.CategoryNavVo
-import com.google.android.material.tabs.TabLayout
 import com.wzq.mvvmsmart.utils.KLog
 
 @BindingAdapter("imgUrl")

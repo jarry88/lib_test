@@ -146,6 +146,8 @@ android {
 
 dependencies {
     implementation project(":lib_common")
+    implementation project(":lib_common_ui")
+    implementation project(":lib_net")
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     api rootProject.ext.dependencies["ktx"]
 
@@ -370,14 +372,8 @@ dependencies {
     api rootProject.ext.dependencies["rxjava"] // rxjava2
 
     api rootProject.ext.dependencies["room-runtime"]
-    api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
 //    api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
 
-
-    //mvvm 模塊依賴
-//    api rootProject.ext.dependencies["liveEventBus"]
-//    api rootProject.ext.dependencies["converter-gson"]
-//    api rootProject.ext.dependencies["cat"]
     //其它项目中有用
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'io.github.iamyours:router-api:1.0.1'

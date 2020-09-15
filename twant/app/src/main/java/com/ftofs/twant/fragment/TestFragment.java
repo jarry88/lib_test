@@ -245,7 +245,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
             Util.popToMainFragment(_mActivity);
         } else if (id == R.id.test_im) {
             ApiUtil.getImInfo(_mActivity,User.getUserInfo(SPField.FIELD_MEMBER_NAME,null),(memberVo)->{
-                TwantApplication.getInstance().setMemberVo((MemberVo) memberVo);
+                TwantApplication.Companion.get().setMemberVo((MemberVo) memberVo);
             });
 //            testNotification();
 //            ToastUtil.success(_mActivity, String.format("%d條會話",EMClient.getInstance().chatManager().getAllConversations().size()));

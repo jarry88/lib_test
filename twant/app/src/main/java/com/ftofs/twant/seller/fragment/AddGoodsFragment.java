@@ -36,7 +36,7 @@ import com.ftofs.twant.domain.AdminCountry;
 import com.ftofs.twant.domain.Format;
 import com.ftofs.twant.domain.goods.Brand;
 import com.ftofs.twant.domain.goods.Category;
-import com.ftofs.twant.domain.store.StoreLabel;
+import com.ftofs.lib_net.model.StoreLabel;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.interfaces.EditorResultInterface;

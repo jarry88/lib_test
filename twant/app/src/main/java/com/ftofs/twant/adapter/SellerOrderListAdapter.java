@@ -3,15 +3,11 @@ package com.ftofs.twant.adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.entity.Goods;
-import com.ftofs.twant.entity.OrderItem;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;

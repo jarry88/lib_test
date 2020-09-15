@@ -249,7 +249,7 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
             }
         };
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 EasyJSONArray wantCommentVoList = EasyJSONArray.generate();

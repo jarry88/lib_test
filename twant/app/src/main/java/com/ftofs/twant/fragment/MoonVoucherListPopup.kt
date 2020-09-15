@@ -9,8 +9,8 @@ import com.ftofs.twant.databinding.MoonVoucherListItemBinding
 import com.ftofs.twant.entity.StoreVoucher
 import com.ftofs.twant.interfaces.OnConfirmCallback
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.gzp.lib_common.net.BaseRepository
-import com.gzp.lib_common.net.Result
+import com.ftofs.lib_net.BaseRepository
+import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.ToastUtil

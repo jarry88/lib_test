@@ -18,12 +18,13 @@ import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.fragment.ChatFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.LoginFragment;
-import com.ftofs.twant.interfaces.CommonCallback;
+import com.gzp.lib_common.base.callback.CommonCallback;
+
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;

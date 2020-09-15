@@ -49,7 +49,7 @@ import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.ClipboardUtils;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -596,7 +596,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                          //好友
                         boolean hasData = false;
-                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, TwantApplication.getStringRes(R.string.text_friend)));
+                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, TwantApplication.Companion.get().getStringRes(R.string.text_friend)));
                         EasyJSONArray friends = null;
                         if (responseObj.exists("datas.friendList")) {
                             friends = responseObj.getArray("datas.friendList");

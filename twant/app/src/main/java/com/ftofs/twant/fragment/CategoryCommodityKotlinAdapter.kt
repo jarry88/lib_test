@@ -5,7 +5,7 @@ import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CategoryHeadItemBinding
 import com.ftofs.twant.databinding.SimpleGoodDisplayItemBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.vo.CategoryNavVo
+import com.ftofs.lib_net.model.CategoryNavVo
 
 //SimpleGoodDisplayItemBinding
 class CategoryCommodityKotlinAdapter() :DataBoundAdapter<CategoryNavVo,SimpleGoodDisplayItemBinding> (){

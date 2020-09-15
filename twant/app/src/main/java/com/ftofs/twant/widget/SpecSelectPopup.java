@@ -469,7 +469,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         if (Config.PROD) {
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("commonId", commonId);
-            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_BUY, analyticsDataMap);
+            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS_BUY, analyticsDataMap);
         }
 
         if (!User.isLogin()) {
@@ -543,7 +543,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                     if (Config.PROD) {
                         HashMap<String, Object> analyticsDataMap = new HashMap<>();
                         analyticsDataMap.put("commonId", goodsInfo.commonId);
-                        MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
+                        MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
                     }
 
                     addToCart();

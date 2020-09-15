@@ -125,7 +125,7 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
         fbBindingStatus = Hawk.get(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
         loadBindStatus();//請求接口更新綁定狀態
 
-        if (TwantApplication.wxApi.isWXAppInstalled()) {  // 如果微信已經安裝，則顯示綁定設置
+        if (TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) {  // 如果微信已經安裝，則顯示綁定設置
             view.findViewById(R.id.btn_wx_login_setting).setVisibility(View.VISIBLE);
         } else {
             view.findViewById(R.id.btn_wx_login_setting).setVisibility(View.GONE);

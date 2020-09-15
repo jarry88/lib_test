@@ -1,7 +1,6 @@
 package com.ftofs.twant.seller.adapter;
 
 import android.content.Context;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -11,8 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.Goods;
-import com.ftofs.twant.entity.SellerGoodsItem;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.seller.fragment.SellerGoodsListFragment;
 import com.ftofs.twant.util.StringUtil;
 

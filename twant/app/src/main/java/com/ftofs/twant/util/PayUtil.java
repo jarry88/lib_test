@@ -49,7 +49,7 @@ public class PayUtil {
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
 
         if (Config.PROD) {
-            MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.PAY_SUCCESS);
+            MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.PAY_SUCCESS);
         }
 
         if (startPaySuccessFragment) {

@@ -162,24 +162,24 @@ public class PasswordLoginFragment extends BaseFragment implements
             }
 
             if (Config.PROD) {
-                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.LOGIN);
+                MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.LOGIN);
             }
 
             doLogin();
         } else if (id == R.id.btn_wechat_login) {
-            if (!TwantApplication.wxApi.isWXAppInstalled()) { // 未安裝微信
+            if (!TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) { // 未安裝微信
                 ToastUtil.error(_mActivity, getString(R.string.weixin_not_installed_hint));
                 return;
             }
 
             if (Config.PROD) {
-                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.WECHAT_LOGIN);
+                MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.WECHAT_LOGIN);
             }
 
             ((MainActivity) _mActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_LOGIN);
         } else if (id == R.id.btn_facebook_login) {
             if (Config.PROD) {
-                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.FACEBOOK_LOGIN);
+                MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.FACEBOOK_LOGIN);
             }
 
             ((LoginFragment) commonCallback).facebookLogin();

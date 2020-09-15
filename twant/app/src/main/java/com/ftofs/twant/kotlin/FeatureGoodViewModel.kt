@@ -2,9 +2,10 @@ package com.ftofs.twant.kotlin
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.ftofs.twant.entity.SellerGoodsItem
+import com.ftofs.lib_net.BaseRepository
+import com.ftofs.lib_net.model.SellerGoodsItem
 import com.gzp.lib_common.base.BaseViewModel
-import com.ftofs.twant.kotlin.vo.SellerPageVO
+import com.ftofs.lib_net.model.SellerPageVO
 import com.ftofs.twant.util.User
 import com.wzq.mvvmsmart.net.base.BaseResponse
 import com.wzq.mvvmsmart.net.net_utils.RxUtil
@@ -14,6 +15,8 @@ import com.wzq.mvvmsmart.utils.ToastUtils
 import io.reactivex.disposables.Disposable
 
 class FeatureGoodViewModel(application: Application) : BaseViewModel(application) {
+//    val repository by lazy {object : BaseRepository(){} }
+
     private val viewModel: FeatureGoodModel = FeatureGoodModel()
     var pageNum = 1
 

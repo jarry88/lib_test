@@ -1853,7 +1853,7 @@ public class Api {
     }
 
     public static void refreshCaptcha(TaskObserver taskObserver) {
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 return Api.getCaptcha();
@@ -1862,7 +1862,7 @@ public class Api {
     }
 
     public static void getMobileZoneList(TaskObserver taskObserver) {
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 List<MobileZone> mobileZoneList = new ArrayList<>();
@@ -1961,7 +1961,7 @@ public class Api {
         }
 
 
-        TwantApplication.getThreadPool().execute(new Runnable() {
+        TwantApplication.Companion.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
 
@@ -1974,13 +1974,13 @@ public class Api {
                 Object data = message;
                 if (data != null) {
                     if ("1".equals(data.toString())){
-                        ToastUtil.error(TwantApplication.getInstance().getApplicationContext(), "網絡異常，上傳失敗");
+                        ToastUtil.error(TwantApplication.Companion.get().getApplicationContext(), "網絡異常，上傳失敗");
                     }
                 }
             }
         };
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 String avatarUrl = syncUploadFile(file);
@@ -2003,7 +2003,7 @@ public class Api {
      */
     public static String syncUploadFile(File file) {
         long threadId = Thread.currentThread().getId();
-        Context context = TwantApplication.getInstance();
+        Context context = TwantApplication.Companion.get();
 
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
@@ -2073,7 +2073,7 @@ public class Api {
      */
     public static String syncTestUploadFile(File file,TaskObserver taskObserver) {
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 SLog.info("上傳圖片開始");

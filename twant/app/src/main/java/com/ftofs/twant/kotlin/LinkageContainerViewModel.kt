@@ -3,10 +3,12 @@ package com.ftofs.twant.kotlin
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ftofs.twant.entity.SellerGoodsItem
+import androidx.lifecycle.viewModelScope
+import com.ftofs.lib_net.model.SellerGoodsItem
 import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.utils.SLog
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 

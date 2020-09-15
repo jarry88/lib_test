@@ -28,6 +28,7 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.gzp.lib_common.base.BaseApplication
 import com.gzp.lib_common.utils.AppUtil
+import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
 import com.hyphenate.EMConnectionListener
 import com.hyphenate.EMContactListener
@@ -48,6 +49,7 @@ import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.uuzuche.lib_zxing.activity.ZXingLibrary
+import com.wzq.mvvmsmart.utils.KLog
 import me.yokeyword.fragmentation.Fragmentation
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -65,32 +67,59 @@ class TwantApplication :BaseApplication(){
 
     // 線程池大小
     private val THREAD_POOL_SIZE = 12
-
-    // 線程池
-    private var executorService: ExecutorService? = null
-
-
-    // IWXAPI是第三方app和微信通信的openapi接口
+    val instance:TwantApplication=this
     var wxApi: IWXAPI? = null
 
-    private val instance: TwantApplication? = null
+    companion object{
+        // 線程池
+        private var executorService: ExecutorService? = null
+//        var instance: TwantApplication? = null
+//            get() {
+//                if (field == null) {
+//                    field = TwantApplication()
+//                }
+//                return field
+//            }
+        private var instance: TwantApplication? = null
+        get() {
+        if (field == null) {
+            field = TwantApplication()
+        }
+        return field
+    }
+        @Synchronized
+        fun get(): TwantApplication{
+            return instance!!
+        }
+        fun getThreadPool(): ExecutorService {
+            return executorService!!
+        }
+        init {
+            AppUtil.app= get()
+
+        }
+    }
+
+    // IWXAPI是第三方app和微信通信的openapi接口
+
     private var mNotificationManager: NotificationManager? = null
     private var notificationId = 0
     private var count = 0
 
 
     //保存當前會員身份信息，目前主要用於取得role，來判斷用戶身份
-    var currMemberInfo: MemberVo? = null
+    var memberVo: MemberVo? = null
     init { //使用static代码段可以防止内存泄漏
         //设置全局默认配置（优先级最低，会被其他设置覆盖）
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, _ -> ClassicsHeader(context) }
 
         //全局设置默认的 Header
-        SmartRefreshLayout.setDefaultRefreshFooterCreator{context, layout ->  ClassicsFooter(context).setDrawableSize(20f) }
+        SmartRefreshLayout.setDefaultRefreshFooterCreator{ context, _ ->  ClassicsFooter(context).setDrawableSize(20f) }
     }
 
     override fun onCreate() {
         super.onCreate()
+        BaseContext.instance.init(this)
         AppUtil.app=this
 
         initUmeng{MainFragment.getInstance()?.let { it.handleUmengCustomAction() }}
@@ -193,7 +222,7 @@ class TwantApplication :BaseApplication(){
                 LinkedBlockingQueue<Runnable>(THREAD_QUEUE_SIZE))
         //保存一些伴隨app生命進程的變量
         //保存一些伴隨app生命進程的變量
-        currMemberInfo = MemberVo() //初始化防止空指針
+        memberVo = MemberVo() //初始化防止空指針
 //        updateCurrMemberInfo();
         //初始化Im消息推送通知
         initNotification()
@@ -252,9 +281,9 @@ class TwantApplication :BaseApplication(){
         val channelId = "imChannel"
         val channelName: CharSequence = "New Message"
         val importance = NotificationManager.IMPORTANCE_HIGH
-        var notificationChannel: NotificationChannel? = null
+//        var notificationChannel: NotificationChannel? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = NotificationChannel(channelId, channelName, importance)
+            val notificationChannel = NotificationChannel(channelId, channelName, importance)
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = R.color.tw_red
             notificationChannel.enableVibration(true)
@@ -268,9 +297,7 @@ class TwantApplication :BaseApplication(){
         // 将应用的appId注册到微信
         wxApi?.registerApp(getString(R.string.weixin_app_id))
     }
-    fun getThreadPool(): ExecutorService? {
-        return executorService
-    }
+
 
 
     /**
@@ -296,7 +323,7 @@ class TwantApplication :BaseApplication(){
         options.setAutoDownloadThumbnail(true)
 
         //初始化
-        EMClient.getInstance().init(instance, options)
+        EMClient.getInstance().init(this, options)
         //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
         EMClient.getInstance().setDebugMode(true)
 
@@ -476,16 +503,16 @@ class TwantApplication :BaseApplication(){
     private fun pushNotification(chatMessage: ChatMessage, pushContent: String) {
 //        try {
 //            URL url=new URL(chatMessage.avatar);
-        var notification: Notification? = null
+//        var notification: Notification? = null
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra(Constant.MSG_NOTIFY_HXID, "chatMessage.fromMemberName")
-        val s = arrayOfNulls<Intent>(1)
+//        val s = arrayOfNulls<Intent>(1)
         //            s[0] = intent;
 //            ToastUtil.success(getApplicationContext(),intent.getExtras().toString());
         val pi = PendingIntent.getActivity(applicationContext, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         //            SLog.info(intent.getExtras().toString());
 //            try {
-        notification = NotificationCompat.Builder(applicationContext, "imChannel")
+        val notification = NotificationCompat.Builder(applicationContext, "imChannel")
                 .setContentTitle(resources.getString(R.string.app_name))
                 .setContentText(pushContent)
                 .setWhen(System.currentTimeMillis())
@@ -518,7 +545,7 @@ class TwantApplication :BaseApplication(){
 
     }
     fun getStringRes(resId: Int): String? {
-        return instance?.getString(resId)
+        return getString(resId)
     }
 //    override fun onTerminate() {
 //        super.onTerminate()

@@ -16,7 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.CustomAction;
-import com.ftofs.twant.entity.SellerGoodsItem;
+import com.ftofs.lib_net.model.SellerGoodsItem;
 import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;

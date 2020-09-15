@@ -79,7 +79,7 @@ public class ChatUtil {
     public static void setMessageCommonAttr(EMMessage message, String messageType,String em_push_content) {//原來的方法參數是role注意兼容
 //        String nickname = User.getUserInfo(SPField.FIELD_NICKNAME, "");
 //        String avatarUrl = User.getUserInfo(SPField.FIELD_AVATAR, "");
-        MemberVo currMemberInfo = TwantApplication.getInstance().getMemberVo();
+        MemberVo currMemberInfo = TwantApplication.Companion.get().getMemberVo();
         SLog.info(currMemberInfo.toString());
         String avatar = currMemberInfo.getAvatarUrl();
         String nickname = currMemberInfo.getNickName();

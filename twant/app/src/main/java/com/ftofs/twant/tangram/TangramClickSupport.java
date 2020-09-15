@@ -3,7 +3,7 @@ package com.ftofs.twant.tangram;
 import android.view.View;
 
 import com.ftofs.twant.constant.TangramCellType;
-import com.ftofs.twant.entity.StoreItem;
+import com.ftofs.lib_net.model.StoreItem;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;

@@ -506,7 +506,7 @@ public class Util {
 
         MainFragment mainFragment = MainFragment.getInstance();
         if (mainFragment == null) {
-            ToastUtil.error(TwantApplication.getInstance(), "MainFragment為空");
+            ToastUtil.error(TwantApplication.Companion.get(), "MainFragment為空");
             return;
         }
 
@@ -516,7 +516,7 @@ public class Util {
     public static void startFragmentForResult(ISupportFragment fragment, int requestCode) {
         MainFragment mainFragment = MainFragment.getInstance();
         if (mainFragment == null) {
-            ToastUtil.error(TwantApplication.getInstance(), "MainFragment為空");
+            ToastUtil.error(TwantApplication.Companion.get(), "MainFragment為空");
             return;
         }
 

@@ -216,7 +216,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 if (Config.PROD) {
                     HashMap<String, Object> analyticsDataMap = new HashMap<>();
                     analyticsDataMap.put("commonId", goodsItem.commonId);
-                    MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
+                    MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
                 }
 
                 Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> {ToastUtil.success(_mActivity, "添加購物袋成功");

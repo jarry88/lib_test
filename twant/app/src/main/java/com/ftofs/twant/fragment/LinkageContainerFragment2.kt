@@ -16,12 +16,12 @@ import com.ftofs.twant.adapter.ZoneCategoryListAdapter
 import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.constant.PopupType
 import com.ftofs.twant.databinding.LinkageContainerLayout2Binding
-import com.ftofs.twant.entity.Goods
+import com.ftofs.lib_net.model.Goods
 import com.ftofs.twant.interfaces.OnSelectedListener
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
 import com.ftofs.twant.kotlin.LinkageContainerViewModel2
-import com.ftofs.twant.kotlin.ZoneCategory
+import com.ftofs.lib_net.model.ZoneCategory
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.UiUtil

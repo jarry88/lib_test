@@ -12,7 +12,7 @@ import com.ftofs.twant.R
 import com.ftofs.twant.constant.PopupType
 import com.ftofs.twant.databinding.ImOrdersLayoutBinding
 import com.ftofs.twant.databinding.ImStoreOrderItemBinding
-import com.ftofs.twant.entity.ImStoreOrderItem
+import com.ftofs.lib_net.model.ImStoreOrderItem
 import com.ftofs.twant.interfaces.OnSelectedListener
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter

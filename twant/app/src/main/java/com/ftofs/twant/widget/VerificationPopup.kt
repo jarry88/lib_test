@@ -5,9 +5,9 @@ import android.content.Context
 import android.widget.EditText
 import android.widget.TextView
 import com.ftofs.twant.R
-import com.ftofs.twant.kotlin.bean.ZoneInfo
-import com.gzp.lib_common.net.BaseRepository
-import com.gzp.lib_common.net.Result
+import com.ftofs.lib_net.model.ZoneInfo
+import com.ftofs.lib_net.BaseRepository
+import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User

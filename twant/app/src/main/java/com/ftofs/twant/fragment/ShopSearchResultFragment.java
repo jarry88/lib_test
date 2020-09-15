@@ -24,7 +24,7 @@ import com.ftofs.twant.adapter.ShopGoodsGridAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.Goods;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.entity.GoodsPair;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;

@@ -26,7 +26,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wxentry);
         SLog.info("WXEntryActivity.onCreate()");
-        TwantApplication.wxApi.handleIntent(getIntent(), this);
+        TwantApplication.Companion.get().getWxApi().handleIntent(getIntent(), this);
     }
     // 微信发送请求到第三方应用时，会回调到该方法
     @Override

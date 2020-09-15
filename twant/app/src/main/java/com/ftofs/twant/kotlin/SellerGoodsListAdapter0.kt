@@ -3,7 +3,7 @@ package com.ftofs.twant.kotlin
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ftofs.twant.R
-import com.ftofs.twant.entity.SellerGoodsItem
+import com.ftofs.lib_net.model.SellerGoodsItem
 import com.wzq.mvvmsmart.utils.GlideLoadUtils
 
 /**

@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.entity.Goods;
-import com.ftofs.twant.entity.StoreItem;
+import com.ftofs.lib_net.model.Goods;
+import com.ftofs.lib_net.model.StoreItem;
 import com.ftofs.twant.util.StringUtil;
 
 

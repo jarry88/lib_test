@@ -114,7 +114,7 @@ public abstract class BaseFragment extends SupportFragment {
     public void updateMainSelectedFragment(int selectedFragmentIndex) {
         SLog.info("updateMainSelectedFragment:selectedFragmentIndex[%d]", selectedFragmentIndex);
         AppService appService = AppJoint.service(AppService.class);
-//        appService.updateMainSelectedFragment(this,selectedFragmentIndex);
+        appService.updateMainSelectedFragment(this,selectedFragmentIndex);
     }
 
     @Override

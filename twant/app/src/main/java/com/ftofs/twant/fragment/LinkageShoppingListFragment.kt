@@ -16,7 +16,7 @@ import com.ftofs.twant.adapter.ShoppingStoreListAdapter
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.UmengAnalyticsActionName
 import com.ftofs.twant.databinding.SimpleRvListBinding
-import com.ftofs.twant.entity.StoreItem
+import com.ftofs.lib_net.model.StoreItem
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.LinkageShoppingListModel
 import com.gzp.lib_common.utils.SLog
@@ -79,7 +79,7 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
         mAdapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>?, view1: View, position: Int ->
             val id = view1.id
             if (id == R.id.goods_image_left_container || id == R.id.goods_image_middle_container || id == R.id.goods_image_right_container) {
-                val storeItem = adapter?.data?.get(position)?.let { it as StoreItem}
+                val storeItem = adapter?.data?.get(position)?.let { it as StoreItem }
                 storeItem?.let {
                     it.zoneGoodsVoList?.run {
 
@@ -105,7 +105,7 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
             if (Config.PROD) {
                 val analyticsDataMap = HashMap<String, Any>()
                 analyticsDataMap["storeId"] = store.storeId
-                MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.ACTIVITY_STORE, analyticsDataMap)
+                MobclickAgent.onEventObject(TwantApplication.get(), UmengAnalyticsActionName.ACTIVITY_STORE, analyticsDataMap)
             }
             Util.startFragment(ShopMainFragment.newInstance(store.storeId))
         }

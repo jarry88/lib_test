@@ -15,7 +15,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ItemAdapter;
 import com.ftofs.twant.adapter.MenuAdapter;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.Goods;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.entity.Item;
 import com.ftofs.twant.entity.Menu;
 import com.ftofs.twant.interfaces.OnItemClickListener;

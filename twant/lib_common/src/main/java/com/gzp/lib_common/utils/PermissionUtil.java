@@ -33,8 +33,7 @@ public class PermissionUtil {
      * @return  true -- 有权限  false -- 没权限
      */
     public static boolean hasPermission(String[] permission) {
-//        return AndPermission.hasPermissions(TwantApplication.getInstance(), permission);
-        return AndPermission.hasPermissions(AppUtil.INSTANCE.getApp(), permission);
+        return AndPermission.hasPermissions(BaseContext.Companion.getInstance().getContext(), permission);
     }
 
 

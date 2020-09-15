@@ -24,15 +24,15 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.handler.NativeJsBridge;
-import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.base.callback.CommonCallback;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.PathUtil;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -419,7 +419,7 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
             }
         };
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 boolean success;

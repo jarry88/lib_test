@@ -48,14 +48,14 @@ import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.CommonUsedSpeech;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
-import com.ftofs.twant.entity.ImStoreOrderItem;
+import com.ftofs.lib_net.model.ImStoreOrderItem;
 import com.ftofs.twant.entity.UnicodeEmojiItem;
-import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
 import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.base.callback.CommonCallback;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.FriendInfo;
@@ -65,7 +65,7 @@ import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -1174,7 +1174,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     KEYCODE_DEL	        退格键	       67
                     KEYCODE_FORWARD_DEL	删除键	      112
                      */
-                    TwantApplication.getThreadPool().execute(new Runnable() {
+                    TwantApplication.Companion.getThreadPool().execute(new Runnable() {
                         @Override
                         public void run() {
                             Instrumentation inst = new Instrumentation();
@@ -1679,7 +1679,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         };
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 File file = new File(absolutePath);

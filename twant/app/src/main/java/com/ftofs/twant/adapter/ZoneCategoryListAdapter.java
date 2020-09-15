@@ -20,7 +20,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.kotlin.ZoneCategory;
+import com.ftofs.lib_net.model.ZoneCategory;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 

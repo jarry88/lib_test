@@ -3,9 +3,7 @@ package com.ftofs.twant.adapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.domain.Area;
 import com.ftofs.twant.domain.goods.Category;
-import com.ftofs.twant.domain.store.StoreLabel;
 
 import java.util.List;
 

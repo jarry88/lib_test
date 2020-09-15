@@ -18,7 +18,6 @@ import com.gzp.lib_common.constant.Constant
 import com.gzp.lib_common.constant.SPField
 import com.gzp.lib_common.constant.Vendor
 import com.gzp.lib_common.model.User
-import com.ftofs.twant.di.koinModule
 import com.gzp.lib_common.service.AppService
 import com.gzp.lib_common.utils.AppUtil
 import com.gzp.lib_common.utils.SLog
@@ -70,7 +69,6 @@ open class BaseApplication:Application() {
         ARouter.init(this)
         MMKV.initialize(this) // 替换sp
         initMVVM()
-        startKoin {  }
     }
     private fun initMVVM() {
         Tasks.init()

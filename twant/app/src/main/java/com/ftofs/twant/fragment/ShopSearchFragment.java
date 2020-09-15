@@ -20,7 +20,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreSearchItemAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.domain.store.StoreLabel;
+import com.ftofs.lib_net.model.StoreLabel;
 import com.ftofs.twant.entity.SearchItem;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;

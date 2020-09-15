@@ -246,7 +246,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             dismiss();
         } else if (id == R.id.btn_share_to_friend || id == R.id.btn_share_to_timeline) {
             // 檢測微信是否已經安裝
-            if (!TwantApplication.wxApi.isWXAppInstalled()) {
+            if (TwantApplication.Companion.get().getWxApi()!=null&&!TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) {
                 ToastUtil.error(context, context.getString(R.string.weixin_not_installed_hint));
                 return;
             }
@@ -279,7 +279,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                     shareToWeixin(scene, filepath);
                 }
             };
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     try {

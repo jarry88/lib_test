@@ -407,7 +407,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                     KEYCODE_DEL	        退格键	       67
                     KEYCODE_FORWARD_DEL	删除键	      112
                      */
-                    TwantApplication.getThreadPool().execute(new Runnable() {
+                    TwantApplication.Companion.getThreadPool().execute(new Runnable() {
                         @Override
                         public void run() {
                             Instrumentation inst = new Instrumentation();

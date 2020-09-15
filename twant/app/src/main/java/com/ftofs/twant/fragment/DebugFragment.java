@@ -21,7 +21,7 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.SoftInputInfo;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -149,7 +149,7 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
 
             Toast.makeText(_mActivity, sb.toString(), Toast.LENGTH_LONG).show();
         } else if (id == R.id.btn_get_umeng_device_token) {
-            String umengDeviceToken = TwantApplication.getInstance().getUmengDeviceToken();
+            String umengDeviceToken = TwantApplication.Companion.get().getUmengDeviceToken();
             SLog.info("umengDeviceToken[%s]", umengDeviceToken);
             etUmengDeviceToken.setText(umengDeviceToken);
         } else if (id == R.id.btn_get_soft_input_height) {

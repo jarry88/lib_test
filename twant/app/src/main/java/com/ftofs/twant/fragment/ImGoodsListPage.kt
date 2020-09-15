@@ -17,8 +17,8 @@ import com.ftofs.twant.R
 import com.ftofs.twant.constant.PopupType
 import com.ftofs.twant.databinding.FragmentImGoodsPageBinding
 import com.ftofs.twant.databinding.ImGoodsListItemBinding
-import com.ftofs.twant.domain.store.StoreLabel
-import com.ftofs.twant.entity.Goods
+import com.ftofs.lib_net.model.StoreLabel
+import com.ftofs.lib_net.model.Goods
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum

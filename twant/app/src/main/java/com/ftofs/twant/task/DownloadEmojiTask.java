@@ -63,7 +63,7 @@ public class DownloadEmojiTask implements Runnable {
                 String ext = PathUtil.getExtension(url, true);
 
                 String absolutePath = String.format("emojiList/%s/%d.%s", versions, emojiId, ext);
-                File emojiFile = FileUtil.getCacheFile(TwantApplication.getInstance(), absolutePath);
+                File emojiFile = FileUtil.getCacheFile(TwantApplication.Companion.get(), absolutePath);
                 boolean success = Api.syncDownloadFile(url, emojiFile);
                 if (success) {
                     // SLog.info("emoji absolutePath[%s]", emojiFile.getAbsolutePath());

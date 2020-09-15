@@ -14,7 +14,7 @@ import com.ftofs.twant.adapter.ImStoreOrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.entity.ImStoreOrderItem;
+import com.ftofs.lib_net.model.ImStoreOrderItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;

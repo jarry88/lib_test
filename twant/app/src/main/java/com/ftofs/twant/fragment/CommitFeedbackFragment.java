@@ -161,7 +161,7 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
                 }
             };
 
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     EasyJSONArray imageList = EasyJSONArray.generate();

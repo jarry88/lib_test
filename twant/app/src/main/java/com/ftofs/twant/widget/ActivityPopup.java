@@ -140,7 +140,7 @@ public class ActivityPopup extends CenterPopupView implements View.OnClickListen
                 } else if ("wantPost".equals(appPopupAdLinkType)) { // 想要圈
                     MainFragment mainFragment = MainFragment.getInstance();
                     if (mainFragment == null) {
-                        ToastUtil.error(TwantApplication.getInstance(), "MainFragment為空");
+                        ToastUtil.error(TwantApplication.Companion.get(), "MainFragment為空");
                         return;
                     }
                     mainFragment.showHideFragment(MainFragment.CIRCLE_FRAGMENT);

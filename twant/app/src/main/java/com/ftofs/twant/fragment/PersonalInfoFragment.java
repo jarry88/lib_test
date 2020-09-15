@@ -25,7 +25,8 @@ import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.interfaces.CommonCallback;
+import com.gzp.lib_common.base.callback.CommonCallback;
+
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
@@ -35,7 +36,7 @@ import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.Jarbon;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -566,7 +567,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     }
                 };
 
-                TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+                TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                     @Override
                     public Object doWork() {
                         File file = new File(absolutePath);

@@ -42,9 +42,9 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.AliPayResult;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.entity.Goods;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.entity.Location;
-import com.ftofs.twant.entity.StoreItem;
+import com.ftofs.lib_net.model.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.fragment.BargainDetailFragment;
@@ -59,9 +59,9 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SecKillFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.handler.StackViewTouchListener;
-import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.gzp.lib_common.base.callback.CommonCallback;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.tangram.CarouselView;
 import com.ftofs.twant.tangram.HomeStickyView;
@@ -76,7 +76,7 @@ import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.PayUtil;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.RestartApp;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
@@ -536,7 +536,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
             public <IMAGE extends ImageView> void doLoadImageUrl(@NonNull IMAGE view,
                                                                  @Nullable String url) {
                 //假设你使用 Picasso 加载图片
-                Glide.with(TwantApplication.getInstance()).load(url).into(view);
+                Glide.with(TwantApplication.Companion.get()).load(url).into(view);
             }
         }, ImageView.class);
 
@@ -1218,7 +1218,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
             }
         };
         // 必须异步调用
-        TwantApplication.getThreadPool().execute(payRunnable);
+        TwantApplication.Companion.getThreadPool().execute(payRunnable);
     }
 
     public CallbackManager getCallbackManager() {
@@ -1317,7 +1317,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
         req.state = EasyJSONObject.generate(
                 "timestamp", System.currentTimeMillis(),
                 "usage", usage).toString();
-        TwantApplication.wxApi.sendReq(req);
+        TwantApplication.Companion.get().getWxApi().sendReq(req);
     }
     /**
      * 重啟app

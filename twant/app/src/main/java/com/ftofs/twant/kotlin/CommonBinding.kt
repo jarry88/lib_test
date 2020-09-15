@@ -17,7 +17,7 @@ import anet.channel.util.Utils
 import com.bumptech.glide.Glide
 import com.ftofs.twant.R
 import com.ftofs.twant.constant.Constant
-import com.ftofs.twant.entity.Goods
+import com.ftofs.lib_net.model.Goods
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Time

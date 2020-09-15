@@ -2,10 +2,10 @@ package com.ftofs.twant.kotlin
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.entity.StoreItem
+import com.ftofs.lib_net.model.SellerGoodsItem
+import com.ftofs.lib_net.model.StoreItem
 import com.gzp.lib_common.base.BaseViewModel
-import com.gzp.lib_common.net.Result
+import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
 import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.coroutines.*

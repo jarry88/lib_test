@@ -174,7 +174,7 @@ public class SmoothInputLayout extends LinearLayout {
     private void saveKeyboardHeight() {
         SLog.info("saveKeyboardHeight[%d]", mKeyboardHeight);
         if (mAutoSaveKeyboardHeight)
-            getKeyboardSharedPreferences().edit().putInt(KEY_HEIGHT, mKeyboardHeight).commit();
+            getKeyboardSharedPreferences().edit().putInt(KEY_HEIGHT, mKeyboardHeight).apply();
         else {
             if (mKeyboardProcessor != null)
                 mKeyboardProcessor.onSaveKeyboardHeight(mKeyboardHeight);

@@ -1,6 +1,7 @@
 package com.ftofs.twant.entity;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.constant.Constant;
 
 public class GoodsPair implements MultiItemEntity {

@@ -682,7 +682,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("commonId", commonId);
-            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS, analyticsDataMap);
+            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS, analyticsDataMap);
         }
     }
 

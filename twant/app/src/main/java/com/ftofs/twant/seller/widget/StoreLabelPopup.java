@@ -18,7 +18,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.goods.Category;
-import com.ftofs.twant.domain.store.StoreLabel;
+import com.ftofs.lib_net.model.StoreLabel;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;

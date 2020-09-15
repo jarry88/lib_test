@@ -344,7 +344,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 }
             };
 
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     StringBuilder picJson = new StringBuilder();
@@ -448,7 +448,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 }
             };
 
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     StringBuilder picJson = new StringBuilder();
@@ -523,7 +523,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 }
             };
 
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     StringBuilder picJson = new StringBuilder();

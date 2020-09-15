@@ -14,7 +14,7 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.gzp.lib_common.base.BaseFragment
 import com.ftofs.twant.kotlin.BlankAdapter
-import com.gzp.lib_common.net.BaseRepository
+import com.ftofs.lib_net.BaseRepository
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
 import com.lyrebirdstudio.croppylib.Croppy
@@ -177,7 +177,7 @@ class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
 //            val token = User.getToken()
 //
 //            val api=object :BaseRepository(){
-//                suspend fun testPost(): com.gzp.lib_common.net.Result<ZoneInfo> {
+//                suspend fun testPost(): com.gzp.lib_common.constant.Result<ZoneInfo> {
 //                    return safeApiCall(call = {
 //                        executeResponse(
 ////                                api.testPost(

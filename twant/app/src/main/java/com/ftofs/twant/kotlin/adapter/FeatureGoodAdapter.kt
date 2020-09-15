@@ -10,8 +10,8 @@ import com.ftofs.twant.api.Api
 import com.ftofs.twant.api.UICallback
 import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.databinding.SellerGoodsItemUnswipeBinding
-import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.kotlin.vo.SellerGoodsVO
+import com.ftofs.lib_net.model.SellerGoodsItem
+import com.ftofs.lib_net.model.SellerGoodsVO
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.seller.fragment.SellerGoodsDetailFragment
 import com.ftofs.twant.seller.fragment.SellerGoodsSkuListFragment
