@@ -1,4 +1,4 @@
-package com.ftofs.twant
+package com.ftofs.ft_login
 
 import android.content.Context
 import android.content.Intent

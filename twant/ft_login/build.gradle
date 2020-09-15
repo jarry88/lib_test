@@ -5,8 +5,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
         minSdkVersion 23
@@ -37,18 +37,17 @@ android {
 }
 
 dependencies {
-    implementation project(":lib_common")
-
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compileOnly rootProject.ext.dependencies["ktx"]
-    compileOnly rootProject.ext.dependencies["appcompat"]
-    compileOnly rootProject.ext.dependencies["design"]
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     compileOnly project(":lib_common")
+    compileOnly project(":lib_common_ui")
+    compileOnly project(":lib_net")
 
 }
