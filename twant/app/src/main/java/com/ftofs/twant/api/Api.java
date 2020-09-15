@@ -1621,6 +1621,11 @@ public class Api {
         SLog.info("%s url[%s]", method == METHOD_GET ? "GET" : "POST", url);
         Request request = null;
 
+        String token = User.getToken();
+        if (token == null) {
+            token = "";
+        }
+
         if (method == METHOD_GET) {
             // 如果有其他get参数，拼接到url中
             if (params != null) {
@@ -1629,6 +1634,7 @@ public class Api {
 
             request = new Request.Builder()
                     .url(url)
+                    .header("Authorization", token)
                     .build();
         } else if (method == METHOD_POST) {
             FormBody.Builder builder = new FormBody.Builder();
@@ -1644,6 +1650,7 @@ public class Api {
             request = new Request.Builder()
                     .url(url)
                     .post(formBody)
+                    .header("Authorization", token)
                     .build();
         }
 
@@ -1763,9 +1770,18 @@ public class Api {
         FileOutputStream fos = null;
         InputStream is = null;
         boolean result = true;
+
+        String token = User.getToken();
+        if (token == null) {
+            token = "";
+        }
+
         try {
             OkHttpClient client = getOkHttpClient();
-            Request request = new Request.Builder().url(url).build();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .header("Authorization", token)
+                    .build();
 
             Response response = client.newCall(request).execute();
             byte[] buffer = new byte[BUFFER_SIZE];
@@ -1810,6 +1826,12 @@ public class Api {
         InputStream is = null;
         Bitmap bitmap = null;
         String captchaKey = null;
+
+        String token = User.getToken();
+        if (token == null) {
+            token = "";
+        }
+
         try {
             // 1. 首先獲取captcha key
             String responseStr = syncGet(PATH_MAKE_CAPTCHA_KEY, null);
@@ -1832,6 +1854,7 @@ public class Api {
             OkHttpClient client = getOkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
+                    .header("Authorization", token)
                     .build();
             Response response = client.newCall(request).execute();
             is = response.body().byteStream();
@@ -2051,6 +2074,7 @@ public class Api {
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
+                .header("Authorization", token)
                 .build();
         try {
             Response response = client.newCall(request).execute();
@@ -2079,6 +2103,10 @@ public class Api {
         TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
+                String token = User.getToken();
+                if (token == null) {
+                    token = "";
+                }
                 SLog.info("上傳圖片開始");
                 OkHttpClient client = getOkHttpClient();
                 MultipartBody.Builder builder = new MultipartBody.Builder();
@@ -2097,6 +2125,7 @@ public class Api {
                 Request request = new Request.Builder()
                         .url(url)
                         .post(requestBody)
+                        .header("Authorization", token)
                         .build();
 
                 try {
@@ -2165,9 +2194,18 @@ public class Api {
     public static String postJson(String path, String json, Callback ioCallback, final UICallback uiCallback) {
         String url = API_BASE_URL + path;
 
+        String token = User.getToken();
+        if (token == null) {
+            token = "";
+        }
+
         OkHttpClient client = getOkHttpClient();
         RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder().url(url).post(body).build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .header("Authorization", token)
+                .build();
 
         if (uiCallback != null) {
             // 在UI線程中執行回調
