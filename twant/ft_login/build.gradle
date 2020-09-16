@@ -55,6 +55,7 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+//    implementation(name: 'phoneNumber-L-AuthSDK-2.10.1', ext: 'aar')
     compileOnly project(":lib_common")
     compileOnly project(":lib_common_ui")
     compileOnly project(":lib_net")

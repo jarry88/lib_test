@@ -6,14 +6,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
+import me.yokeyword.fragmentation.ExtraTransaction
+import me.yokeyword.fragmentation.ISupportActivity
+import me.yokeyword.fragmentation.SupportActivityDelegate
+import me.yokeyword.fragmentation.anim.FragmentAnimator
+import me.yokeyword.fragmentation_swipeback.SwipeBackActivity
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 
 /**
  * Create by liwen on 2020-05-18
  */
-abstract class MBaseActivity<T : ViewModel, M : ViewDataBinding> : AppCompatActivity() {
+abstract class MBaseActivity<T : ViewModel, M : ViewDataBinding> : SwipeBackActivity() {
 
     lateinit var mViewModel: T
     lateinit var mViewBinding: M

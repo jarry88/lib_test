@@ -3,12 +3,28 @@
     package="com.ftofs.ft_login">
     <application>
 
-        <activity android:name=".ui.LoginActivity" >
+        <activity android:name=".ui.LoginActivity">
+
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
 
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             <!--            </intent-filter>-->
         </activity>
+         <!--协议⻚⾯webview-->
+<!--         <activity-->
+<!--         android:name="com.mobile.auth.gatewayauth.activity.AuthWebVei-->
+<!--        wActivity"-->
+<!--         android:configChanges="orientation|keyboardHidden|screenSize"-->
+<!--         android:exported="false"-->
+<!--         android:launchMode="singleTop"-->
+<!--         android:screenOrientation="behind" />-->
+<!--         &lt;!&ndash;移动授权⻚&ndash;&gt;-->
+<!--         <activity-->
+<!--         android:name="com.cmic.sso.sdk.activity.LoginAuthActivity"-->
+<!--         android:configChanges="orientation|keyboardHidden|screenSize"-->
+<!--         android:exported="false"-->
+<!--         android:launchMode="singleTop" />-->
+
     </application>
 </manifest>
