@@ -53,6 +53,7 @@ import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.HomeFragment;
 import com.ftofs.twant.fragment.JobDetailFragment;
+import com.ftofs.twant.fragment.LabFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
@@ -507,7 +508,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                         }
                                     });
                                 } else if (position == 10) { // 測試2
-                                    Util.startFragment(SecKillFragment.newInstance());
+                                    Util.startFragment(LabFragment.newInstance());
                                 }else if (position == 11) { // 開發寫死的數值通道開關
                                     Config.USE_DEVELOPER_TEST_DATA = !Config.USE_DEVELOPER_TEST_DATA;
                                     ToastUtil.success(getApplicationContext(),Config.USE_DEVELOPER_TEST_DATA?"使用寫死的數據":"使用服務器數據");

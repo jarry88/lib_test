@@ -140,6 +140,9 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
                     }
 
                     int isShowAuth = responseObj.getInt("datas.isShowAuth");
+                    if (Config.USE_DEVELOPER_TEST_DATA) {
+                        isShowAuth = Constant.TRUE_INT;
+                    }
                     if (isShowAuth == Constant.TRUE_INT) {
                         btnRealNameSet.setVisibility(View.VISIBLE);
                     } else {

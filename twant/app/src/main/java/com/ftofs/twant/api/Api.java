@@ -74,9 +74,12 @@ public class Api {
 
     /**
      * Http請求方式
+     * 獲取GET，添加POST，修改PUT，刪除DELETE
      */
     public static final int METHOD_GET = 1;
     public static final int METHOD_POST = 2;
+    public static final int METHOD_PUT = 3;
+    public static final int METHOD_DELETE = 4;
 
 
     /**
@@ -1600,6 +1603,13 @@ public class Api {
     public static final String PATH_SEC_KILL_GOODS_LIST = "/seckill/goods";
 
     /**
+     * 【跨城購實名認證】添加認證
+     */
+    public static final String PATH_MEMBER_AUTH_ADD = "/member/auth/add";
+
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST
@@ -1636,7 +1646,7 @@ public class Api {
                     .url(url)
                     .header("Authorization", token)
                     .build();
-        } else if (method == METHOD_POST) {
+        } else if (method == METHOD_POST || method == METHOD_PUT || method == METHOD_DELETE) {
             FormBody.Builder builder = new FormBody.Builder();
 
             // 如果有其他post参数，也拼装起来
@@ -1647,11 +1657,25 @@ public class Api {
             }
 
             RequestBody formBody = builder.build();
-            request = new Request.Builder()
-                    .url(url)
-                    .post(formBody)
-                    .header("Authorization", token)
-                    .build();
+            if (method == METHOD_POST) {
+                request = new Request.Builder()
+                        .url(url)
+                        .post(formBody)
+                        .header("Authorization", token)
+                        .build();
+            } else if (method == METHOD_PUT) {
+                request = new Request.Builder()
+                        .url(url)
+                        .put(formBody)
+                        .header("Authorization", token)
+                        .build();
+            } else { // method == METHOD_DELETE
+                request = new Request.Builder()
+                        .url(url)
+                        .delete(formBody)
+                        .header("Authorization", token)
+                        .build();
+            }
         }
 
 
