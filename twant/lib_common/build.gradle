@@ -66,6 +66,11 @@ dependencies {
 
     kapt rootProject.ext.dependencies["room-compiler"]  //  room
 
+    //navigation路由框架
+    api rootProject.ext.dependencies["navigation-fragment"]
+    api rootProject.ext.dependencies["navigation-ui"]
+    api rootProject.ext.dependencies["navigation-ui-ktx"]
+
     api rootProject.ext.dependencies["fragment-ktx"]
     api rootProject.ext.dependencies["lifecycle-runtime-ktx"]
     api rootProject.ext.dependencies["lifecycle-viewmodel-ktx"]

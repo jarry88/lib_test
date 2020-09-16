@@ -165,8 +165,6 @@ dependencies {
 
     api rootProject.ext.dependencies["appcompat"] //
     api rootProject.ext.dependencies["design"] //
-    api rootProject.ext.dependencies["recyclerview"] //
-    api rootProject.ext.dependencies["constraint-layout"]
     //android 測試桶
     testImplementation  rootProject.ext.dependencies["robolectric"] // 測試框架
     // Required for local unit tests (JUnit 4 framework)
@@ -223,8 +221,6 @@ dependencies {
     implementation 'com.github.yalantis:ucrop:2.2.4'
     implementation 'com.lxj:xpopup:2.0.8-rc7'
     implementation 'com.isseiaoki:simplecropview:1.1.8'
-//    implementation 'me.yokeyword:fragmentationx:1.0.2'
-//    implementation 'me.yokeyword:eventbus-activity-scope:1.1.0'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.alibaba:fastjson:1.2.41'
     implementation 'org.litepal.android:java:3.0.0'

@@ -42,21 +42,6 @@ import org.android.agoo.xiaomi.MiPushRegistar
 import org.koin.core.context.startKoin
 
 open class BaseApplication:Application() {
-    companion object {
-        private var instance: BaseApplication? = null
-            get() {
-                if (field == null) {
-                    field = BaseApplication()
-                }
-                return field
-            }
-        fun get(): BaseApplication{
-            //细心的小伙伴肯定发现了，这里不用getInstance作为为方法名，是因为在伴生对象声明时，内部已有getInstance方法，所以只能取其他名字
-            KLog.e("拿到App了")
-            AppUtil.app= instance
-            return instance!!
-        }
-    }
 
     var mPushAgent: PushAgent? = null
     var umengDeviceToken:String?=""

@@ -39,6 +39,7 @@ dependencies {
     compileOnly rootProject.ext.dependencies["ktx"]
     compileOnly rootProject.ext.dependencies["appcompat"]
     compileOnly rootProject.ext.dependencies["design"]
+    //自定義標題欄
     api rootProject.ext.dependencies["recyclerview"] //
     api rootProject.ext.dependencies["constraint-layout"]
     testImplementation 'junit:junit:4.+'

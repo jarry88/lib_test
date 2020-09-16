@@ -15,4 +15,10 @@
     <!-- 友盟推送 -->
     <string name="umeng_push_app_key">5cefabce0cafb289ab0000a2</string>
     <string name="umeng_push_message_secret">ac61bf046b5cd3a62387ae4c3687e70a</string>
+
+
+    <!-- 友盟推送 -->
+    <string name="xiaomi_app_id">2882303761518439215 </string>
+    <string name="xiaomi_app_key">5831843943215</string>
+    <string name="xiaomi_app_secret">c+R93fbSuxeVrvRZJllnFA==</string>
 </resources>

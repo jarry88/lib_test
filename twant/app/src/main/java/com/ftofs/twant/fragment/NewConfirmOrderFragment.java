@@ -1060,7 +1060,10 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 if (soldOutGoodsItemList.size() > 0) {
                     showSoldOutPopup();
                 }
-
+                TwantApplication twantApplication = TwantApplication.Companion.get();
+                if (twantApplication == null) {
+                    ToastUtil.error(_mActivity,"空的");
+                }
                 String template = TwantApplication.Companion.get().getString(R.string.text_confirm_order_total_item_count);
                 if (tariffTotalEnable == Constant.TRUE_INT) {
                     template =TwantApplication.Companion.get().getString(R.string.text_confirm_order_total_with_tax_item_count);

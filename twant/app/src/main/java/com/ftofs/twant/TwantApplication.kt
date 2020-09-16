@@ -68,36 +68,26 @@ class TwantApplication :BaseApplication(){
 
     // 線程池大小
     private val THREAD_POOL_SIZE = 12
-    val instance:TwantApplication=this
     var wxApi: IWXAPI? = null
 
     companion object{
         // 線程池
         private var executorService: ExecutorService? = null
 //        var instance: TwantApplication? = null
-//            get() {
-//                if (field == null) {
-//                    field = TwantApplication()
-//                }
-//                return field
-//            }
+
         private var instance: TwantApplication? = null
-        get() {
-        if (field == null) {
-            field = TwantApplication()
-        }
-        return field
-    }
-        @Synchronized
-        fun get(): TwantApplication{
-            return instance!!
-        }
+            get() {
+                if (field == null) {
+                    field = TwantApplication()
+                }
+                return field
+            }
         fun getThreadPool(): ExecutorService {
             return executorService!!
         }
-        init {
-            AppUtil.app= get()
 
+        fun get(): TwantApplication {
+            return instance!!
         }
     }
 
@@ -120,7 +110,8 @@ class TwantApplication :BaseApplication(){
 
     override fun onCreate() {
         super.onCreate()
-        BaseContext.instance.init(this)
+        instance=this
+        BaseContext.instance.init(this)//初始話instance
         ARouter.init(this)
 
         AppUtil.app=this
@@ -546,6 +537,7 @@ class TwantApplication :BaseApplication(){
     }
     fun getStringRes(resId: Int): String? {
         return getString(resId)
+//        return getString(resId)
     }
 //    override fun onTerminate() {
 //        super.onTerminate()
