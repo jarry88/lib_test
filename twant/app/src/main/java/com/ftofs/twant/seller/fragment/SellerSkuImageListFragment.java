@@ -2,7 +2,6 @@ package com.ftofs.twant.seller.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.donkingliang.imageselector.utils.ImageSelector;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.RequestCode;
-import com.ftofs.twant.fragment.BaseFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.adapter.SellerSkuImageListAdapter;
 import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
 import com.ftofs.twant.seller.entity.SellerSpecItem;

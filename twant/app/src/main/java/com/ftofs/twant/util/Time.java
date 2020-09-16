@@ -1,7 +1,6 @@
 package com.ftofs.twant.util;
 
 import com.ftofs.twant.entity.TimeInfo;
-import com.ftofs.twant.log.SLog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

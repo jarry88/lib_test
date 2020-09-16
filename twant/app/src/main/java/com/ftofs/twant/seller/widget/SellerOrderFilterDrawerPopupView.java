@@ -8,17 +8,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.api.HttpHelper;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.seller.entity.SellerOrderFilterParams;
 import com.ftofs.twant.seller.entity.TwDate;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.DrawerPopupView;

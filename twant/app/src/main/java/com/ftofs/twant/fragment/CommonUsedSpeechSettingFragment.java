@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.RequestCode;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 
 /**

@@ -1,8 +1,6 @@
 package com.ftofs.twant.widget;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -10,13 +8,12 @@ import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreNavigationAdapter;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.entity.StoreNavigationItem;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.ShopCustomerServiceFragment;
 import com.ftofs.twant.fragment.ShopRelativePostFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.AttachPopupView;
 

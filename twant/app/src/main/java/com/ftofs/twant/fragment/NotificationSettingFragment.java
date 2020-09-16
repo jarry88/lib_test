@@ -10,13 +10,12 @@ import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.kyleduo.switchbutton.SwitchButton;
-
-import me.yokeyword.fragmentation.ISupportFragment;
 
 public class NotificationSettingFragment extends BaseFragment implements View.OnClickListener {
 

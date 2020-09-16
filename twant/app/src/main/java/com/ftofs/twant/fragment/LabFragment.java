@@ -8,33 +8,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.TestAdapter;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.databinding.FragmentLabBinding;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.StoreVoucher;
-import com.ftofs.twant.entity.StoreVoucherVo;
-import com.ftofs.twant.kotlin.net.BaseRepository;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.CroppyInitUtilKt;
 import com.ftofs.twant.util.RestartApp;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.CheckPhoneView;
-import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.NineLuckPan;
 
 import com.lxj.xpopup.XPopup;
@@ -46,7 +40,6 @@ import com.lyrebirdstudio.croppylib.main.StorageType;
 import com.lyrebirdstudio.croppylib.util.file.FileCreator;
 import com.lyrebirdstudio.croppylib.util.file.FileOperationRequest;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 

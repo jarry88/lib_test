@@ -2,19 +2,16 @@ package com.ftofs.twant.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.text.Editable
 import android.util.AttributeSet
 import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.text.set
 import androidx.core.widget.doAfterTextChanged
 import com.ftofs.twant.R
 import com.ftofs.twant.entity.MobileZone
-import com.ftofs.twant.log.SLog
-import com.ftofs.twant.util.StringUtil
+import com.gzp.lib_common.utils.SLog
 import java.util.regex.Pattern
 
 const val text_invalid_mobile="你輸入的%s手機號碼有誤，請重新輸入"

@@ -1,7 +1,6 @@
 package com.ftofs.twant.fragment;
 
 import android.app.Instrumentation;
-import android.app.assist.AssistStructure;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.method.LinkMovementMethod;
@@ -41,8 +40,8 @@ import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.UnicodeEmojiItem;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -59,7 +58,6 @@ import java.util.Map;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
-import me.yokeyword.fragmentation.ISupportFragment;
 import okhttp3.Call;
 
 /**
@@ -703,7 +701,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                     KEYCODE_DEL	        退格键	       67
                     KEYCODE_FORWARD_DEL	删除键	      112
                      */
-                    TwantApplication.getThreadPool().execute(new Runnable() {
+                    TwantApplication.Companion.getThreadPool().execute(new Runnable() {
                         @Override
                         public void run() {
                             Instrumentation inst = new Instrumentation();

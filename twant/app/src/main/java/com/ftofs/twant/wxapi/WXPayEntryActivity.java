@@ -3,11 +3,10 @@ package com.ftofs.twant.wxapi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;

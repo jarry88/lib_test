@@ -17,7 +17,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.fragment.ChatFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;

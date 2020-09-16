@@ -29,11 +29,9 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
-import com.ftofs.twant.constant.GroupBuyStatus;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EvaluationGoodsItem;
 import com.ftofs.twant.entity.GoodsInfo;
@@ -41,7 +39,8 @@ import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.ListUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -50,14 +49,12 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.store.StoreVo;
-import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,8 +72,6 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
-
-import static android.view.View.GONE;
 
 /**
  * 訂單詳情
@@ -221,7 +216,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 if (Config.PROD) {
                     HashMap<String, Object> analyticsDataMap = new HashMap<>();
                     analyticsDataMap.put("commonId", goodsItem.commonId);
-                    MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
+                    MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
                 }
 
                 Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> {ToastUtil.success(_mActivity, "添加購物袋成功");

@@ -18,8 +18,8 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.fragment.BaseFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.adapter.SellerOrderAdapter;
 import com.ftofs.twant.seller.entity.SellerOrderFilterParams;
 import com.ftofs.twant.seller.entity.SellerOrderItem;
@@ -30,7 +30,6 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.SimpleTabButton;
 import com.lxj.xpopup.XPopup;
 
 import org.greenrobot.eventbus.EventBus;

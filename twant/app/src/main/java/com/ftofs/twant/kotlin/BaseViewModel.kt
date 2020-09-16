@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.ftofs.twant.kotlin.vo.PageEntity
-import com.ftofs.twant.kotlin.vo.SellerPageVO
+import com.ftofs.lib_net.model.PageEntity
+import com.ftofs.lib_net.model.SellerPageVO
 
 /**
  * @dep

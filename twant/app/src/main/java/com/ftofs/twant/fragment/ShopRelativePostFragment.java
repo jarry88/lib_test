@@ -1,6 +1,5 @@
 package com.ftofs.twant.fragment;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,21 +18,17 @@ import com.ftofs.twant.adapter.ShopRelativePostAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.PostItem;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
-import com.ftofs.twant.util.StringUtil;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.impl.LoadingPopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 

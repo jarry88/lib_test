@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.ArrayList;

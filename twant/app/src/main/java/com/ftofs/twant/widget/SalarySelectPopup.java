@@ -13,12 +13,10 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.ftofs.twant.R;
-import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
-import com.lxj.xpopup.core.BasePopupView;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.core.BottomPopupView;
 
 import java.util.List;

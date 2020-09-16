@@ -10,17 +10,17 @@ import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.databinding.RandomFriendListItemBinding
 import com.ftofs.twant.databinding.RandomFriendListLayoutBinding
 import com.ftofs.twant.fragment.ChatFragment
-import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.RandomFriendViewModel
-import com.ftofs.twant.kotlin.vo.RandomMemberVo
-import com.ftofs.twant.log.SLog
+import com.ftofs.lib_net.model.RandomMemberVo
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.orm.FriendInfo
 import com.ftofs.twant.util.ChatUtil
 import com.ftofs.twant.util.Util
 
 
-class RandomFriendListFragment:BaseTwantFragmentMVVM<RandomFriendListLayoutBinding, RandomFriendViewModel>() {
+class RandomFriendListFragment: BaseTwantFragmentMVVM<RandomFriendListLayoutBinding, RandomFriendViewModel>() {
 
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.random_friend_list_layout

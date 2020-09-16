@@ -3,23 +3,19 @@ package com.ftofs.twant.util;
 import android.util.Log;
 
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.domain.search.SearchHistory;
 import com.ftofs.twant.entity.SearchHistoryItem;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
-import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * 搜索歷史工具類

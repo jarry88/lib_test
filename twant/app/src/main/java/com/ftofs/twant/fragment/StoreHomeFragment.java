@@ -21,11 +21,10 @@ import com.ftofs.twant.adapter.FeaturesGoodsAdapter;
 import com.ftofs.twant.adapter.StoreGoodsListAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.Goods;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.entity.StoreGoodsPair;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.StringUtil;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.LockableNestedScrollView;
 

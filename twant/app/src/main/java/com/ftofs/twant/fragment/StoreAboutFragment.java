@@ -1,41 +1,16 @@
 package com.ftofs.twant.fragment;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
 
-import android.renderscript.ScriptC;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
-import com.ftofs.twant.config.Config;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.QRCode;
-import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.LockableNestedScrollView;
-import com.ftofs.twant.widget.TwLoadingPopup;
-import com.ftofs.twant.widget.TwQRCodePopup;
-
-import com.ftofs.twant.entity.StoreMapInfo;
-import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.AmapPopup;
-
-import com.lxj.xpopup.XPopup;
-
-import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
-import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * @author gzp

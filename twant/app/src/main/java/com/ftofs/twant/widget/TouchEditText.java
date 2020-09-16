@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 
 
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 /**
  * 捕獲觸摸選中事件的EditText

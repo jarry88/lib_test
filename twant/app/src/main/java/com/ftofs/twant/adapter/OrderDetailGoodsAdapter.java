@@ -1,29 +1,21 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import androidx.annotation.RequiresApi;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
-
-import static java.util.Comparator.*;
 
 /**
  * 訂單詳情頁面的產品列表Adapter

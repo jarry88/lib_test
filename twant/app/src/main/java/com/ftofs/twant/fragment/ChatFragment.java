@@ -1,11 +1,8 @@
 package com.ftofs.twant.fragment;
 
 import android.app.Instrumentation;
-import android.app.MediaRouteButton;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,11 +19,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,20 +43,20 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.UnicodeEmoji;
-import com.ftofs.twant.domain.member.Member;
 import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.CommonUsedSpeech;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
-import com.ftofs.twant.entity.ImStoreOrderItem;
+import com.ftofs.lib_net.model.ImStoreOrderItem;
 import com.ftofs.twant.entity.UnicodeEmojiItem;
-import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.base.callback.CommonCallback;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.task.TaskObservable;
@@ -70,16 +65,13 @@ import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.LogUtil;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.member.MemberVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
-import com.ftofs.twant.widget.ImStoreGoodsPopup;
-import com.ftofs.twant.widget.ImStoreOrderPopup;
 import com.ftofs.twant.widget.ImagePreviewPopup;
 import com.ftofs.twant.widget.SizeChangedRecyclerView;
 import com.ftofs.twant.widget.SmoothInputLayout;
@@ -94,7 +86,6 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.exceptions.HyphenateException;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 import com.yanzhenjie.permission.runtime.Permission;
 
@@ -108,9 +99,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -1185,7 +1174,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     KEYCODE_DEL	        退格键	       67
                     KEYCODE_FORWARD_DEL	删除键	      112
                      */
-                    TwantApplication.getThreadPool().execute(new Runnable() {
+                    TwantApplication.Companion.getThreadPool().execute(new Runnable() {
                         @Override
                         public void run() {
                             Instrumentation inst = new Instrumentation();
@@ -1690,7 +1679,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         };
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 File file = new File(absolutePath);

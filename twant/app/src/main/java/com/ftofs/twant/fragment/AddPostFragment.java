@@ -43,12 +43,13 @@ import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.UnicodeEmoji;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
-import com.ftofs.twant.entity.Goods;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.UnicodeEmojiItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
@@ -650,7 +651,7 @@ public class AddPostFragment extends BaseFragment implements
         };
 
         inProgressPopup.show();
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 try {
@@ -835,7 +836,7 @@ public class AddPostFragment extends BaseFragment implements
                     KEYCODE_DEL	        退格键	       67
                     KEYCODE_FORWARD_DEL	删除键	      112
                      */
-                    TwantApplication.getThreadPool().execute(new Runnable() {
+                    TwantApplication.Companion.getThreadPool().execute(new Runnable() {
                         @Override
                         public void run() {
                             Instrumentation inst = new Instrumentation();

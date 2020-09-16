@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.AppGuideActivity;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.ArrayList;

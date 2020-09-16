@@ -31,7 +31,8 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.RefundGoodsItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
@@ -41,7 +42,6 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
 import com.ftofs.twant.widget.ListPopup;
-import com.ftofs.twant.widget.PayWayPopup;
 import com.ftofs.twant.widget.RefundWayPopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.lxj.xpopup.XPopup;
@@ -53,7 +53,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -345,7 +344,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 }
             };
 
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     StringBuilder picJson = new StringBuilder();
@@ -449,7 +448,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 }
             };
 
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     StringBuilder picJson = new StringBuilder();
@@ -524,7 +523,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 }
             };
 
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     StringBuilder picJson = new StringBuilder();

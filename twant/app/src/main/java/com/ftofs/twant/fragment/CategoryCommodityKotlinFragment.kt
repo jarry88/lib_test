@@ -12,12 +12,12 @@ import com.ftofs.twant.constant.SearchType
 import com.ftofs.twant.databinding.CategoryCommodityBrandMenuItemBinding
 import com.ftofs.twant.databinding.CategoryCommodityTableItemBinding
 import com.ftofs.twant.databinding.PageCategoryCommodityBinding
-import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.CategoryCommodityViewModel
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.Util
-import com.ftofs.twant.vo.CategoryNavVo
+import com.ftofs.lib_net.model.CategoryNavVo
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 
@@ -27,7 +27,7 @@ import com.wzq.mvvmsmart.utils.KLog
 /**
  * 商城首页 产品列表
  */
-class CategoryCommodityKotlinFragment:BaseTwantFragmentMVVM<PageCategoryCommodityBinding, CategoryCommodityViewModel>() {
+class CategoryCommodityKotlinFragment: BaseTwantFragmentMVVM<PageCategoryCommodityBinding, CategoryCommodityViewModel>() {
     private val loadPopup by lazy {
         Util.createLoadingPopup(context)
     }

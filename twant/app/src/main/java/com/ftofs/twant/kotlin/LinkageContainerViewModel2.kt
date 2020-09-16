@@ -5,13 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ftofs.twant.config.Config
-import com.ftofs.twant.constant.Constant
-import com.ftofs.twant.entity.Goods
-import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.kotlin.base.BaseViewModel
-import com.ftofs.twant.kotlin.net.Result
-import com.ftofs.twant.log.SLog
-import com.ftofs.twant.tangram.SloganView
+import com.ftofs.lib_net.model.Goods
+import com.ftofs.lib_net.model.SellerGoodsItem
+import com.ftofs.lib_net.model.ZoneCategory
+import com.gzp.lib_common.base.BaseViewModel
+import com.gzp.lib_common.constant.Result
+import com.gzp.lib_common.utils.SLog
 import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class LinkageContainerViewModel2(application:Application) :BaseViewModel(application){
+class LinkageContainerViewModel2(application:Application) : BaseViewModel(application){
     var isRefresh: Boolean=false
     var viewModel: LinkageModel = LinkageModel()
     private val _uiState = MutableLiveData<LinkageUiModel>()
@@ -125,7 +124,7 @@ class LinkageContainerViewModel2(application:Application) :BaseViewModel(applica
                             }
                         }else{
                             if (Config.USE_DEVELOPER_TEST_DATA) {
-                                list.forEach{SLog.info("[%s]", it.goodsName+it.jingle)}
+                                list.forEach{ SLog.info("[%s]", it.goodsName+it.jingle)}
                             }
                             goodsList.value = result.datas.zoneGoodsList
                             stateLiveData.postSuccess()

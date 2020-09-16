@@ -10,7 +10,7 @@
             type="com.ftofs.twant.adapter.CategoryGridAdapter" />
         <variable
             name="vo"
-            type="com.ftofs.twant.vo.CategoryNavVo" />
+            type="com.ftofs.lib_net.model.CategoryNavVo" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"

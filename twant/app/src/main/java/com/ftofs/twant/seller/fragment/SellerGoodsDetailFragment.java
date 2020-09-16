@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.collection.ArraySet;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -20,16 +19,15 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.fragment.BaseFragment;
+import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.impl.LoadingPopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;

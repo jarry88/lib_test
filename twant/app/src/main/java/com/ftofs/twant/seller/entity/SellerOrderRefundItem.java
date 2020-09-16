@@ -2,8 +2,7 @@ package com.ftofs.twant.seller.entity;
 
 import androidx.annotation.NonNull;
 
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.Util;
+import com.gzp.lib_common.utils.SLog;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 

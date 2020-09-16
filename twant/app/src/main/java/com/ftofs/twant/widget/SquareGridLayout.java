@@ -12,7 +12,6 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.fragment.GifFragment;
 import com.ftofs.twant.fragment.ImageFragment;
 import com.ftofs.twant.fragment.ImageViewerFragment;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 

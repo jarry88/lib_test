@@ -1,12 +1,9 @@
 package com.ftofs.twant.seller.fragment;
 
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,34 +26,25 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.domain.AdminCountry;
-import com.ftofs.twant.domain.goods.Category;
-import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.fragment.BaseFragment;
+import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.entity.TwDate;
-import com.ftofs.twant.seller.widget.CalendarPopup;
-import com.ftofs.twant.seller.widget.StoreLabelPopup;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.ScaledButton;
 import com.kyleduo.switchbutton.SwitchButton;
-import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
-import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

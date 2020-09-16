@@ -13,14 +13,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.fragment.BaseFragment;
-import com.ftofs.twant.fragment.CouponListFragment;
+import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.entity.SellerOrderFilterParams;
 import com.ftofs.twant.seller.widget.SellerOrderFilterDrawerPopupView;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.lxj.xpopup.XPopup;
@@ -28,8 +26,6 @@ import com.lxj.xpopup.enums.PopupPosition;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * 商家訂單列表頁面

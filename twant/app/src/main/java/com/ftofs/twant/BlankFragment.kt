@@ -11,47 +11,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.net.toUri
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.fastloan.app.ui.adapter.DataBoundViewHolder
-import com.ftofs.twant.databinding.FragmentBlankBinding
-import com.ftofs.twant.databinding.VerificationGoodsItemBinding
-import com.ftofs.twant.entity.Goods
-import com.ftofs.twant.fragment.BaseFragment
-import com.ftofs.twant.kotlin.BlackViewModel
+import com.gzp.lib_common.base.BaseFragment
 import com.ftofs.twant.kotlin.BlankAdapter
-import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
-import com.ftofs.twant.kotlin.OrderGoodsVoListAdapter
-import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.kotlin.bean.ZoneInfo
-import com.ftofs.twant.kotlin.net.BaseRepository
-import com.ftofs.twant.kotlin.net.Result
-import com.ftofs.twant.log.SLog
-import com.ftofs.twant.util.Time
-import com.ftofs.twant.util.ToastUtil
-import com.ftofs.twant.util.User
+import com.ftofs.lib_net.BaseRepository
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
-import com.ftofs.twant.widget.VerificationPopup
-import com.google.android.material.button.MaterialButton
-import com.lxj.xpopup.XPopup
-import com.lyrebirdstudio.aspectratiorecyclerviewlib.aspectratio.model.AspectRatio
 import com.lyrebirdstudio.croppylib.Croppy
 import com.lyrebirdstudio.croppylib.main.CropRequest
 import com.lyrebirdstudio.croppylib.main.CroppyTheme
-import com.lyrebirdstudio.croppylib.main.StorageType
 import com.lyrebirdstudio.croppylib.util.file.FileCreator
 import com.lyrebirdstudio.croppylib.util.file.FileOperationRequest
-import com.wzq.mvvmsmart.net.net_utils.GsonUtil
-import kotlinx.android.synthetic.main.fragment_blank.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import okhttp3.MediaType
-import okhttp3.RequestBody
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -110,7 +83,7 @@ class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
         return R.layout.fragment_blank
     }
     val net by lazy {
-        object :BaseRepository(){}
+        object : BaseRepository(){}
     }
 
     companion object {
@@ -204,7 +177,7 @@ class BlankFragment : BaseFragment() , CoroutineScope by MainScope() {
 //            val token = User.getToken()
 //
 //            val api=object :BaseRepository(){
-//                suspend fun testPost(): com.ftofs.twant.kotlin.net.Result<ZoneInfo> {
+//                suspend fun testPost(): com.gzp.lib_common.constant.Result<ZoneInfo> {
 //                    return safeApiCall(call = {
 //                        executeResponse(
 ////                                api.testPost(

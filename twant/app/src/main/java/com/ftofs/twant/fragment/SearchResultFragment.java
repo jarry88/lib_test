@@ -1,7 +1,5 @@
 package com.ftofs.twant.fragment;
 
-import android.app.Notification;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,14 +23,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.adapter.StoreSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
@@ -46,7 +42,8 @@ import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.JobInfoItem;
 import com.ftofs.twant.entity.StoreSearchItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ApiUtil;
@@ -73,7 +70,6 @@ import java.util.List;
 import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

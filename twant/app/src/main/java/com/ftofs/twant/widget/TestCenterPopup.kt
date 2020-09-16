@@ -1,18 +1,15 @@
 package com.ftofs.twant.widget
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.PopupCancelAfterVerficationListBinding
 import com.ftofs.twant.databinding.VerificationGoodsItemBinding
 import com.ftofs.twant.entity.OrderItem
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.kotlin.net.BaseRepository
+import com.ftofs.lib_net.BaseRepository
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
 import com.lxj.xpopup.core.CenterPopupView
 
@@ -21,7 +18,7 @@ class TestCenterPopup(context: Context):CenterPopupView(context), View.OnClickLi
     private  var orderList: MutableList<OrdersGoodsVo>?=null
     private  var order: OrderItem?=null
     private val net by lazy {
-        object :BaseRepository(){}
+        object : BaseRepository(){}
     }
     private  val adapter by lazy {
         object :DataBoundAdapter<OrdersGoodsVo,VerificationGoodsItemBinding>(){

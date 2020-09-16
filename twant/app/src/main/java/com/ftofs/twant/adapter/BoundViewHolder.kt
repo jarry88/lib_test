@@ -1,12 +1,7 @@
 package com.ftofs.twant.adapter
 
-import android.view.View
-import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.chad.library.adapter.base.BaseViewHolder
-import com.ftofs.twant.R
-import com.ftofs.twant.log.SLog
-import kotlinx.android.synthetic.main.image_popup.view.*
 
 class BoundViewHolder< out T : ViewDataBinding> constructor(val binding: T) :
        BaseViewHolder(binding.root)

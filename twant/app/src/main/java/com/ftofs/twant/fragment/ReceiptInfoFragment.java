@@ -10,7 +10,8 @@ import android.widget.EditText;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.Receipt;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;

@@ -7,7 +7,7 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 
 /**
  * 可拖拽的悬浮控件按钮

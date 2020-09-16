@@ -11,15 +11,15 @@ import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.ImGoodsLayoutBinding
 import com.ftofs.twant.interfaces.OnSelectedListener
-import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.ImGoodsViewModel
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.widget.TestCenterPopup
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lxj.xpopup.XPopup
 
-class ImGoodsFragment(val targetName:String?=null,val sendGoods: OnSelectedListener?=null):BaseTwantFragmentMVVM <ImGoodsLayoutBinding, ImGoodsViewModel>(){
+class ImGoodsFragment(val targetName:String?=null,val sendGoods: OnSelectedListener?=null): BaseTwantFragmentMVVM<ImGoodsLayoutBinding, ImGoodsViewModel>(){
     private val pageList = arrayListOf<ImGoodsListPage>()
     private val tabTextList by lazy {
         enumValues<ImGoodsEnum>().apply { forEach { SLog.info(it.toString()) } }

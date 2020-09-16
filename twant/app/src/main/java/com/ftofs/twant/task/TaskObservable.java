@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 /**
  * 耗時的任務

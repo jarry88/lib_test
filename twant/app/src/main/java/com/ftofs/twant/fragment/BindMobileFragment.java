@@ -31,7 +31,8 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -46,7 +47,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

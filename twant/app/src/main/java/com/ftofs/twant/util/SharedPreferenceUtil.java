@@ -5,11 +5,10 @@ import android.util.Log;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.orhanobut.hawk.Hawk;
 import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**

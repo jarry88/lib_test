@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.TestAdapter;
+import com.gzp.lib_common.base.BaseFragment;
 
 public class SecondFragment extends BaseFragment {
     RecyclerView rvList;

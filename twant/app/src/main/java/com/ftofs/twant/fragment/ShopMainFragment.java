@@ -31,7 +31,8 @@ import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.StoreNavigationItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
@@ -187,7 +188,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("storeId", storeId);
-            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.STORE, analyticsDataMap);
+            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.STORE, analyticsDataMap);
         }
 
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);

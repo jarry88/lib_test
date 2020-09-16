@@ -2,7 +2,7 @@ package com.ftofs.twant.entity;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 /**
  * 產品總計

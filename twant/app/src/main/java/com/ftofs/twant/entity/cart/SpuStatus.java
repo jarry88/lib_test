@@ -1,6 +1,6 @@
 package com.ftofs.twant.entity.cart;
 
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import java.util.ArrayList;
 import java.util.List;
