@@ -1,5 +1,6 @@
 package com.gzp.lib_common.base
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.wzq.mvvmsmart.base.BaseViewModelMVVM
@@ -16,6 +18,7 @@ import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
 abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> :BaseFragment(), IBaseViewMVVM {
+    protected lateinit var mActivity: FragmentActivity
     protected lateinit var binding: V
     protected lateinit var viewModel: VM
     private var emptyViewHelper: EmptyViewHelper? = null
@@ -37,7 +40,6 @@ abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM
         }
         return lastView
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (!isNavigationViewInit) { //初始化过视图则不再进行view和data初始化
             super.onViewCreated(view, savedInstanceState)

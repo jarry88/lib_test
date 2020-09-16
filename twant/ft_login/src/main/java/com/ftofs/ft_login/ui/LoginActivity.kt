@@ -1,23 +1,22 @@
 package com.ftofs.ft_login.ui
 
+import android.media.MediaRouter
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.ftofs.ft_login.R
 import com.ftofs.ft_login.databinding.ActivityLoginBinding
 import com.gzp.lib_common.base.MBaseActivity
+import com.gzp.lib_common.base.callback.SimpleCallBack
 import com.gzp.lib_common.utils.SLog
 
 
-class LoginActivity :MBaseActivity<LoginViewModel, ActivityLoginBinding>(){
-    var lastBackPressedTime =1
+class LoginActivity :MBaseActivity<LoginViewModel, ActivityLoginBinding>(), SimpleCallBack {
     private lateinit var navController: NavController
     override fun initData() {
     }
 
     override fun initView() {
-        setContentView(R.layout.activity_login)
-//        addFragment(HistoryLoginFragment(),"history")
-        loadRootFragment(R.id.container, findFragment<HistoryLoginFragment>(HistoryLoginFragment::class.java)?:HistoryLoginFragment())
+        loadRootFragment(R.id.container, findFragment(HistoryLoginFragment::class.java)?:HistoryLoginFragment(this))
 
     }
 
@@ -25,15 +24,14 @@ class LoginActivity :MBaseActivity<LoginViewModel, ActivityLoginBinding>(){
        return R.layout.activity_login
     }
 
-    override fun onBackPressedSupport() {
-        super.onBackPressedSupport()
-        SLog.info(supportFragmentManager.backStackEntryCount.toString())
+    override fun onCall() {
+         onBackPressedSupport()
     }
 
-
-    private fun addFragment(fragment: Fragment, tag: String) {
-        val beginTransaction = supportFragmentManager.beginTransaction()
-        beginTransaction.replace(R.id.container, fragment, tag)
-        beginTransaction.commit()
-    }
+//
+//    private fun addFragment(fragment: Fragment, tag: String) {
+//        val beginTransaction = supportFragmentManager.beginTransaction()
+//        beginTransaction.replace(R.id.container, fragment, tag)
+//        beginTransaction.commit()
+//    }
 }

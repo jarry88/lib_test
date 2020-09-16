@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.gzp.lib_common.model.User
 import com.tencent.mmkv.MMKV
 import com.ftofs.ft_login.ui.LoginActivity
+import com.alibaba.fastjson.JSON
 
 object UserManager {
     private const val USER_DATA: String = "user_data"
@@ -39,7 +40,10 @@ object UserManager {
     }
 
     fun start(context: Context): LiveData<User> {
-        context.startActivity(Intent(context, LoginActivity::class.java))
+        val intent=
+            Intent(context,LoginActivity::class.java).takeIf { Math.random()>0.4 }
+                    .let {it?.putExtra("user",JSON.toJSONString(User(2,"1","1",1,"s")))}
+        context.startActivity(intent)
         return liveData
     }
 }

@@ -377,9 +377,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
-//            LoginServiceImplWrap.INSTANCE.start(requireContext());
-//            Util.startFragment(LabFragment.newInstance());
+//            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
+            LoginServiceImplWrap.INSTANCE.start(requireContext());
         }
     }
 

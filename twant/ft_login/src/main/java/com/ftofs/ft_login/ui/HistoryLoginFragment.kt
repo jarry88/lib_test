@@ -1,18 +1,15 @@
 package com.ftofs.ft_login.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.CallSuper
-import androidx.annotation.MainThread
 import com.ftofs.ft_login.BR
 import com.ftofs.ft_login.R
 import com.ftofs.ft_login.databinding.LayoutHistoryLoginBinding
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
-import com.gzp.lib_common.utils.SLog
+import com.gzp.lib_common.base.callback.SimpleCallBack
 
-class HistoryLoginFragment:BaseTwantFragmentMVVM<LayoutHistoryLoginBinding,HistoryLoginViewModel>(){
+class HistoryLoginFragment(val call:SimpleCallBack):BaseTwantFragmentMVVM<LayoutHistoryLoginBinding,HistoryLoginViewModel>(){
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.layout_history_login
     }
@@ -27,9 +24,11 @@ class HistoryLoginFragment:BaseTwantFragmentMVVM<LayoutHistoryLoginBinding,Histo
     }
 
     override fun onBackPressedSupport(): Boolean {
-        SLog.info("here")
-        parentFragment?.activity?.onBackPressed()
-        hideSoftInputPop()
+        if (parentFragmentManager.backStackEntryCount <= 1) {
+            call.onCall()
+        }else{
+            hideSoftInputPop()
+        }
         return true
     }
 
