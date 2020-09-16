@@ -10,6 +10,7 @@ import com.ftofs.ft_login.BR
 import com.ftofs.ft_login.R
 import com.ftofs.ft_login.databinding.LayoutHistoryLoginBinding
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
+import com.gzp.lib_common.utils.SLog
 
 class HistoryLoginFragment:BaseTwantFragmentMVVM<LayoutHistoryLoginBinding,HistoryLoginViewModel>(){
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
@@ -26,6 +27,7 @@ class HistoryLoginFragment:BaseTwantFragmentMVVM<LayoutHistoryLoginBinding,Histo
     }
 
     override fun onBackPressedSupport(): Boolean {
+        SLog.info("here")
         parentFragment?.activity?.onBackPressed()
         hideSoftInputPop()
         return true

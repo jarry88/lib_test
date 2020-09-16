@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.activity.TestActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -375,7 +377,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            LoginServiceImplWrap.INSTANCE.start(requireContext());
+            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
+//            LoginServiceImplWrap.INSTANCE.start(requireContext());
 //            Util.startFragment(LabFragment.newInstance());
         }
     }

@@ -16,6 +16,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ftofs.twant.BlankFragment;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.databinding.FragmentLabBinding;
@@ -78,6 +79,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         Util.setOnClickListener(view, R.id.btn_test1, this);
         Util.setOnClickListener(view, R.id.btn_test2, this);
+        Util.setOnClickListener(view, R.id.btn_goto, this);
         Util.setOnClickListener(view, R.id.btn_themeCropRequest, this);
         Util.setOnClickListener(view, R.id.btn_cacheCropRequest, this);
         Util.setOnClickListener(view, R.id.btn_excludeAspectRatiosCropRequest, this);
@@ -193,6 +195,9 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         } else if (id == R.id.btn_test2) {
             ToastUtil.info(_mActivity, "way2");
             RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);
+        } else if (id == R.id.btn_goto) {
+            ToastUtil.info(_mActivity, "way3");
+            start(BlankFragment.newInstance("a","b"));
         }else if (id == R.id.btn_themeCropRequest) {
             ToastUtil.info(_mActivity, "btn_themeCropRequest");
             Croppy.INSTANCE.start(getActivity(), themeCropRequest);

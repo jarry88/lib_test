@@ -15,6 +15,7 @@ class LoginActivity :MBaseActivity<LoginViewModel, ActivityLoginBinding>(){
     }
 
     override fun initView() {
+        setContentView(R.layout.activity_login)
 //        addFragment(HistoryLoginFragment(),"history")
         loadRootFragment(R.id.container, findFragment<HistoryLoginFragment>(HistoryLoginFragment::class.java)?:HistoryLoginFragment())
 
