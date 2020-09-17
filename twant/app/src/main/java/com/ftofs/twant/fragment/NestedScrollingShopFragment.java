@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.TestAdapter;
 import com.ftofs.twant.interfaces.ScrollableContainer;
-
-
+import com.gzp.lib_common.base.BaseFragment;
 
 
 /**

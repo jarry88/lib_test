@@ -1,10 +1,6 @@
 package com.ftofs.twant.entity;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-
-import com.ftofs.twant.log.SLog;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 

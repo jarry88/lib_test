@@ -2,8 +2,6 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,17 +31,14 @@ import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.CommonCallback;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.task.TaskObserver;
-import com.ftofs.twant.util.ApiUtil;
-import com.ftofs.twant.util.HawkUtil;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
-import com.lxj.xpopup.XPopup;
 import com.orhanobut.hawk.Hawk;
 import com.umeng.analytics.MobclickAgent;
 

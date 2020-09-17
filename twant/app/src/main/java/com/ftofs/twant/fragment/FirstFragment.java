@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +16,8 @@ import com.ftofs.twant.adapter.MenuAdapter;
 import com.ftofs.twant.entity.Item;
 import com.ftofs.twant.entity.Menu;
 import com.ftofs.twant.interfaces.OnItemClickListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 
 import java.util.ArrayList;
 import java.util.List;

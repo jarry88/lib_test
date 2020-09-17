@@ -1,6 +1,5 @@
 package com.ftofs.twant.fragment;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,7 +27,8 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreAnnouncement;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.fragment.SellerGoodsListFragment;
 import com.ftofs.twant.seller.fragment.SellerOrderListFragment;
 import com.ftofs.twant.util.Jarbon;

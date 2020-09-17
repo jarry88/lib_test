@@ -24,13 +24,12 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EntityReplace;
 import com.ftofs.twant.entity.Mobile;
-import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
 import com.ftofs.twant.widget.TwClickableSpan;
@@ -44,13 +43,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
-import kotlin.math.UMathKt;
 import okhttp3.Call;
 
 /**

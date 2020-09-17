@@ -1,6 +1,5 @@
 package com.ftofs.twant.constant;
 
-import com.huawei.updatesdk.fileprovider.UpdateSdkFileProvider;
 
 /**
  * 常量定義

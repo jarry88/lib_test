@@ -9,7 +9,7 @@ import com.ftofs.twant.api.Api
 import com.ftofs.twant.api.UICallback
 import com.ftofs.twant.entity.OrderItem
 import com.ftofs.twant.kotlin.OrderGoodsVoListAdapter
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util

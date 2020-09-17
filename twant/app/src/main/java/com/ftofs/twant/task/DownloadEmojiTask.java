@@ -2,7 +2,7 @@ package com.ftofs.twant.task;
 
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.UserStatus;
 import com.ftofs.twant.util.FileUtil;
@@ -63,7 +63,7 @@ public class DownloadEmojiTask implements Runnable {
                 String ext = PathUtil.getExtension(url, true);
 
                 String absolutePath = String.format("emojiList/%s/%d.%s", versions, emojiId, ext);
-                File emojiFile = FileUtil.getCacheFile(TwantApplication.getInstance(), absolutePath);
+                File emojiFile = FileUtil.getCacheFile(TwantApplication.Companion.get(), absolutePath);
                 boolean success = Api.syncDownloadFile(url, emojiFile);
                 if (success) {
                     // SLog.info("emoji absolutePath[%s]", emojiFile.getAbsolutePath());

@@ -13,9 +13,8 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
-import com.ftofs.twant.entity.StoreItem;
+import com.ftofs.lib_net.model.StoreItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;

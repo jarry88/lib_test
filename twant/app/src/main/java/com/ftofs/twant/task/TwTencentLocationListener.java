@@ -2,7 +2,7 @@ package com.ftofs.twant.task;
 
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.Location;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;

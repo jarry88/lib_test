@@ -1,9 +1,7 @@
 package com.ftofs.twant.fragment
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.ftofs.twant.R
 import com.ftofs.twant.constant.Constant
@@ -11,9 +9,9 @@ import com.ftofs.twant.databinding.MoonVoucherListItemBinding
 import com.ftofs.twant.entity.StoreVoucher
 import com.ftofs.twant.interfaces.OnConfirmCallback
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.kotlin.net.BaseRepository
-import com.ftofs.twant.kotlin.net.Result
-import com.ftofs.twant.log.SLog
+import com.ftofs.lib_net.BaseRepository
+import com.gzp.lib_common.constant.Result
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User

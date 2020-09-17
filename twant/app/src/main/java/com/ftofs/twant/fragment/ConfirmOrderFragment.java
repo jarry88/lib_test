@@ -23,7 +23,6 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ConfirmOrderStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
@@ -45,7 +44,8 @@ import com.ftofs.twant.entity.StoreVoucherVo;
 import com.ftofs.twant.entity.VoucherUseStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
@@ -60,7 +60,6 @@ import com.ftofs.twant.widget.SoldOutPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
@@ -347,7 +346,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new ListPopup(_mActivity, TwantApplication.getInstance().getString(R.string.text_shipping_time),
+                .asCustom(new ListPopup(_mActivity, TwantApplication.Companion.get().getString(R.string.text_shipping_time),
                         PopupType.SHIPPING_TIME, shippingItemList, summaryItem.shipTimeType, this, position))
                 .show();
     }
@@ -688,7 +687,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new ListPopup(_mActivity, TwantApplication.getInstance().getString(R.string.mobile_zone_text),
+                    .asCustom(new ListPopup(_mActivity, TwantApplication.Companion.get().getString(R.string.mobile_zone_text),
                             PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
         }
@@ -1466,7 +1465,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
         };
 
-        TwantApplication.getThreadPool().execute(taskObservable);
+        TwantApplication.Companion.getThreadPool().execute(taskObservable);
     }
 
     /**
@@ -1476,9 +1475,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         updateAddrView();
 
         ConfirmOrderSummaryItem summaryItem = getSummaryItem();
-        String template = TwantApplication.getInstance().getString(R.string.text_confirm_order_total_item_count);
+        String template = TwantApplication.Companion.get().getString(R.string.text_confirm_order_total_item_count);
         if (tariffTotalEnable == Constant.TRUE_INT) {
-            template = TwantApplication.getInstance().getString(R.string.text_confirm_order_total_with_tax_item_count);
+            template = TwantApplication.Companion.get().getString(R.string.text_confirm_order_total_with_tax_item_count);
         }
         tvItemCount.setText(String.format(template, totalItemCount));
         if (summaryItem != null) {
@@ -1666,9 +1665,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             summaryItem.totalFreight,summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
 
                     totalPrice = summaryItem.calcTotalPrice();
-                    String template = TwantApplication.getInstance().getString(R.string.text_confirm_order_total_item_count);
+                    String template = TwantApplication.Companion.get().getString(R.string.text_confirm_order_total_item_count);
                     if (tariffTotalEnable == Constant.TRUE_INT) {
-                        template = TwantApplication.getInstance().getString(R.string.text_confirm_order_total_with_tax_item_count);
+                        template = TwantApplication.Companion.get().getString(R.string.text_confirm_order_total_with_tax_item_count);
                     }
                     tvItemCount.setText(String.format(template, totalItemCount));
                     tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0,2));

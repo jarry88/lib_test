@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 public class CustomerLinearLayoutManager extends LinearLayoutManager {
     public CustomerLinearLayoutManager(Context context) {

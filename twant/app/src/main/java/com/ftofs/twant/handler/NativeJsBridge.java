@@ -18,12 +18,13 @@ import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.fragment.ChatFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.LoginFragment;
-import com.ftofs.twant.interfaces.CommonCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.callback.CommonCallback;
+
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -32,11 +33,9 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
 

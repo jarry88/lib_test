@@ -1,12 +1,10 @@
 package com.ftofs.twant.fragment;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,14 +17,12 @@ import com.ftofs.twant.adapter.SecKillGoodsListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
-import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.SecKillGoodsListItem;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.BackgroundDrawable;
 
 import java.io.IOException;
 import java.util.ArrayList;

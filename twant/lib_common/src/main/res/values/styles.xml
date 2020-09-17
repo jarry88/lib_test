@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="tw_toast">
+        <item name="stTextBold">false</item>
+        <item name="stTextColor">#fff</item>
+        <item name="stTextSize">17sp</item>
+        <item name="stColorBackground">@color/tw_black</item>
+        <item name="stSolidBackground">true</item>
+        <item name="stLength">SHORT</item>
+        <item name="stGravity">center</item>
+        <item name="stRadius">4dp</item>
+    </style>
+</resources>

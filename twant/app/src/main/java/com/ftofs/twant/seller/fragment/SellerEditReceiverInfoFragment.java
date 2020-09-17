@@ -19,32 +19,27 @@ import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
-import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.Area;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
-import com.ftofs.twant.fragment.BaseFragment;
+import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.ListPopup;
-import com.ftofs.twant.widget.ScaledButton;
 import com.lxj.xpopup.XPopup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
-import okhttp3.Call;
 
 /**
  * 【賣家】編輯收貨人信息

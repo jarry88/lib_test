@@ -1,7 +1,6 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,32 +18,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
-import com.donkingliang.imageselector.utils.ImageSelector;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
-import com.ftofs.twant.entity.CalcFreightResult;
 import com.ftofs.twant.entity.RealNameListItem;
-import com.ftofs.twant.interfaces.CommonCallback;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.CameraUtil;
-import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.HwLoadingPopup;
-import com.ftofs.twant.widget.ImagePreviewPopup;
-import com.ftofs.twant.widget.RealNameInstructionPopup;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.base.callback.CommonCallback;
+import com.gzp.lib_common.utils.PermissionUtil;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import io.reactivex.Observable;

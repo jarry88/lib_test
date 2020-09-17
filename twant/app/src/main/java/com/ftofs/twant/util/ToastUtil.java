@@ -9,20 +9,14 @@ import androidx.fragment.app.FragmentActivity;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.ResponseCode;
-import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.MainFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.muddzdev.styleabletoast.StyleableToast;
-import com.orhanobut.hawk.Hawk;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
-import es.dmoral.toasty.Toasty;
 
 /**
  * Toast工具類

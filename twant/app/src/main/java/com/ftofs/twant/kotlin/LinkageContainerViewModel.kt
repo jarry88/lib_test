@@ -4,15 +4,15 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.kotlin.base.BaseViewModel
-import com.ftofs.twant.log.SLog
+import com.ftofs.lib_net.model.SellerGoodsItem
+import com.gzp.lib_common.base.BaseViewModel
+import com.gzp.lib_common.utils.SLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class LinkageContainerViewModel(application:Application) :BaseViewModel(application){
+class LinkageContainerViewModel(application:Application) : BaseViewModel(application){
     var viewModel: LinkageModel = LinkageModel()
     private val _uiState = MutableLiveData<LinkageUiModel>()
     val uiState: LiveData<LinkageUiModel>

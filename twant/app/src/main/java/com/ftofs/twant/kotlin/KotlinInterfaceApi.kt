@@ -3,9 +3,7 @@ package com.ftofs.twant.kotlin
 import androidx.lifecycle.LiveData
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.kotlin.adapter.LiveDataCallAdapterFactory
-import com.ftofs.twant.kotlin.vo.BannerVO
-import com.ftofs.twant.kotlin.vo.SellerGoodsVO
-import com.ftofs.twant.kotlin.vo.SellerPageVO
+import com.ftofs.lib_net.model.BannerVO
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit

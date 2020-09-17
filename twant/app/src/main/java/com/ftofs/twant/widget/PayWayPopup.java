@@ -12,7 +12,7 @@ import com.ftofs.twant.adapter.PayWayAdapter;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.PayWayItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 

@@ -2,12 +2,11 @@ package com.ftofs.twant.api;
 
 import android.util.Log;
 
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import java.io.IOException;
 
 import okhttp3.Call;
-import okhttp3.Response;
 
 
 /**

@@ -2,16 +2,16 @@ package com.ftofs.twant.kotlin
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.entity.StoreItem
-import com.ftofs.twant.kotlin.base.BaseViewModel
-import com.ftofs.twant.kotlin.net.Result
-import com.ftofs.twant.log.SLog
+import com.ftofs.lib_net.model.SellerGoodsItem
+import com.ftofs.lib_net.model.StoreItem
+import com.gzp.lib_common.base.BaseViewModel
+import com.gzp.lib_common.constant.Result
+import com.gzp.lib_common.utils.SLog
 import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.coroutines.*
 
 
-class LinkageShoppingListModel(application:Application) :BaseViewModel(application),CoroutineScope by MainScope(){
+class LinkageShoppingListModel(application:Application) : BaseViewModel(application),CoroutineScope by MainScope(){
     var viewModel: LinkageModel = LinkageModel()
 //    private val _uiState = MutableLiveData<LinkageUiModel>()
     //後面要學封裝UI狀態

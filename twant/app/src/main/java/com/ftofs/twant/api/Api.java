@@ -17,7 +17,7 @@ import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.entity.ToastData;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
@@ -31,8 +31,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -47,7 +45,6 @@ import javax.net.ssl.X509TrustManager;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -1903,7 +1900,7 @@ public class Api {
     }
 
     public static void refreshCaptcha(TaskObserver taskObserver) {
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 return Api.getCaptcha();
@@ -1912,7 +1909,7 @@ public class Api {
     }
 
     public static void getMobileZoneList(TaskObserver taskObserver) {
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 List<MobileZone> mobileZoneList = new ArrayList<>();
@@ -2011,7 +2008,7 @@ public class Api {
         }
 
 
-        TwantApplication.getThreadPool().execute(new Runnable() {
+        TwantApplication.Companion.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
 
@@ -2024,13 +2021,13 @@ public class Api {
                 Object data = message;
                 if (data != null) {
                     if ("1".equals(data.toString())){
-                        ToastUtil.error(TwantApplication.getInstance().getApplicationContext(), "網絡異常，上傳失敗");
+                        ToastUtil.error(TwantApplication.Companion.get().getApplicationContext(), "網絡異常，上傳失敗");
                     }
                 }
             }
         };
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 String avatarUrl = syncUploadFile(file);
@@ -2053,7 +2050,7 @@ public class Api {
      */
     public static String syncUploadFile(File file) {
         long threadId = Thread.currentThread().getId();
-        Context context = TwantApplication.getInstance();
+        Context context = TwantApplication.Companion.get();
 
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
@@ -2124,7 +2121,7 @@ public class Api {
      */
     public static String syncTestUploadFile(File file,TaskObserver taskObserver) {
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+        TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
                 String token = User.getToken();

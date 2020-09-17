@@ -1,6 +1,5 @@
 package com.ftofs.twant.adapter;
 
-import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,7 +11,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.VideoItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 
 import java.util.List;

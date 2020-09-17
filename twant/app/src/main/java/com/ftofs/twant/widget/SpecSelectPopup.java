@@ -30,12 +30,11 @@ import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.entity.SpecValue;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
-import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.fragment.NewConfirmOrderFragment;
 import com.ftofs.twant.fragment.ViewPagerFragment;
 import com.ftofs.twant.fragment.SkuImageFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -470,7 +469,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         if (Config.PROD) {
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("commonId", commonId);
-            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_BUY, analyticsDataMap);
+            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS_BUY, analyticsDataMap);
         }
 
         if (!User.isLogin()) {
@@ -544,7 +543,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                     if (Config.PROD) {
                         HashMap<String, Object> analyticsDataMap = new HashMap<>();
                         analyticsDataMap.put("commonId", goodsInfo.commonId);
-                        MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
+                        MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
                     }
 
                     addToCart();

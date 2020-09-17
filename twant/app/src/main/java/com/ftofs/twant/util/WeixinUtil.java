@@ -71,7 +71,7 @@ public class WeixinUtil {
      * SHARE_MEDIA_TEXT
      */
     public static void share(Context context, int scene, int shareMediaType, WeixinShareInfo shareInfo) {
-        if (!TwantApplication.wxApi.isWXAppInstalled()) {
+        if (!TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) {
             ToastUtil.error(context, "未安裝微信");
         }
 
@@ -154,7 +154,7 @@ public class WeixinUtil {
         req.message = mediaMessage;
         req.scene = scene;
 
-        boolean success = TwantApplication.wxApi.sendReq(req);  // 如果调用成功微信,会返回true
+        boolean success = TwantApplication.Companion.get().getWxApi().sendReq(req);  // 如果调用成功微信,会返回true
         if (!success) {
             ToastUtil.error(context, "分享失敗");
         }

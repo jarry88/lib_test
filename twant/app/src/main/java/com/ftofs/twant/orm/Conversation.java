@@ -5,28 +5,20 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.ftofs.twant.entity.ChatConversation;
-import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GoodsInfo;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.User;
 import com.ftofs.twant.vo.member.MemberVo;
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.umeng.commonsdk.debug.E;
 
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
-
-import static com.ftofs.twant.orm.ImNameMap.getByImName;
 
 public class Conversation extends LitePalSupport {
     public String conversationId;

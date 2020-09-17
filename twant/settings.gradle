@@ -1,3 +1,7 @@
+include ':lib_common_ui'
+include ':lib_net'
+include ':ft_login'
+include ':lib_common'
 rootProject.name='twant'
 include ':app'
 

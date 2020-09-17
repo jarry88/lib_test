@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 public class TwClickableSpan extends ClickableSpan {
     SimpleCallback simpleCallback;

@@ -16,7 +16,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.PaySuccessStoreInfoItem;
 import com.ftofs.twant.entity.PaySuccessSummaryItem;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.orhanobut.hawk.Hawk;

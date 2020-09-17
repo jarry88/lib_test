@@ -11,7 +11,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;

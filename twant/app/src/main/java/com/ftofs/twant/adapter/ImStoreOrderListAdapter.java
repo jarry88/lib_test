@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.entity.ImStoreOrderItem;
+import com.ftofs.lib_net.model.ImStoreOrderItem;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;

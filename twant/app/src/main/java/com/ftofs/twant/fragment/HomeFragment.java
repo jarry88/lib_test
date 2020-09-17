@@ -23,10 +23,11 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.service.login.wrap.LoginServiceImplWrap;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.Jarbon;
@@ -374,7 +375,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            Util.startFragment(LabFragment.newInstance());
+            LoginServiceImplWrap.INSTANCE.start(requireContext());
+//            Util.startFragment(LabFragment.newInstance());
         }
     }
 

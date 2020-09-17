@@ -1,10 +1,7 @@
 package com.ftofs.twant.seller.widget;
 
 import android.content.Context;
-import android.text.Html;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,35 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.AreaPopupAdapter;
-import com.ftofs.twant.api.Api;
-import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.domain.Area;
-import com.ftofs.twant.domain.store.Seller;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.adapter.SellerSpecAdapter;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
-import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.util.User;
-import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.AreaItemView;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
-import org.litepal.util.Const;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
-import okhttp3.Call;
 
 public class SellerSelectSpecPopup extends BottomPopupView implements View.OnClickListener {
     Context context;

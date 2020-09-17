@@ -10,8 +10,8 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.StoreItem;
-import com.ftofs.twant.log.SLog;
+import com.ftofs.lib_net.model.StoreItem;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
