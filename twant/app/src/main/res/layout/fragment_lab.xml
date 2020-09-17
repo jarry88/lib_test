@@ -9,6 +9,11 @@
 
         tools:context=".activity.MainActivity"
         android:orientation="vertical">
+        <com.ftofs.lib_common_ui.toolbar.TitleBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleBar_leftImage="@drawable/ic_arrow_back_white_24dp"
+            app:titleBar_title="这是一个标题栏"/>
         <Button
             android:id="@+id/btn_test1"
             android:layout_width="match_parent"
@@ -17,6 +22,11 @@
         </Button>
         <Button
             android:id="@+id/btn_test2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="test2"/>
+        <Button
+            android:id="@+id/btn_goto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="test2"/>
