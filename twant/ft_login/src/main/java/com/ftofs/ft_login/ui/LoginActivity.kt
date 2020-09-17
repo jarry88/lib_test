@@ -1,5 +1,6 @@
 package com.ftofs.ft_login.ui
 
+import android.content.Intent
 import android.media.MediaRouter
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -7,6 +8,7 @@ import com.ftofs.ft_login.R
 import com.ftofs.ft_login.databinding.ActivityLoginBinding
 import com.gzp.lib_common.base.MBaseActivity
 import com.gzp.lib_common.base.callback.SimpleCallBack
+import com.gzp.lib_common.model.User
 import com.gzp.lib_common.utils.SLog
 
 
@@ -16,7 +18,10 @@ class LoginActivity :MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Simp
     }
 
     override fun initView() {
-        loadRootFragment(R.id.container, findFragment(HistoryLoginFragment::class.java)?:HistoryLoginFragment(this))
+        intent.getParcelableExtra<User>("user")?.let {
+            loadRootFragment(R.id.container,findFragment(OneStepLoginFragment::class.java)?:OneStepLoginFragment())
+        }?: loadRootFragment(R.id.container, findFragment(HistoryLoginFragment::class.java)?:HistoryLoginFragment(this))
+
 
     }
 

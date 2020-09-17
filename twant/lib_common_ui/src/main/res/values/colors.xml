@@ -186,5 +186,7 @@
 
 
     <color name="theme_disable">#FFFC9B89</color>
+    <color name="tw_light_grey_EDED">#EDEDED</color>
+
 
 </resources>

@@ -25,7 +25,8 @@ class HistoryLoginFragment(val call:SimpleCallBack):BaseTwantFragmentMVVM<Layout
 
     override fun onBackPressedSupport(): Boolean {
         if (parentFragmentManager.backStackEntryCount <= 1) {
-            call.onCall()
+//            call.onCall()
+            (activity as LoginActivity).onBackPressedSupport()
         }else{
             hideSoftInputPop()
         }
