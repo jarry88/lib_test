@@ -4,19 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import com.ftofs.ft_login.BR
 import com.ftofs.ft_login.R
-import com.ftofs.ft_login.databinding.LayoutHistoryLoginBinding
+import com.ftofs.ft_login.BR
+import com.ftofs.ft_login.databinding.MessageLoginLayoutBinding
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
-import com.gzp.lib_common.base.callback.SimpleCallBack
-import com.gzp.lib_common.model.User
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.bind
 
-class HistoryLoginFragment(val historyUser: User):BaseTwantFragmentMVVM<LayoutHistoryLoginBinding,HistoryLoginViewModel>(){
+class MessageFragment(val mobile:String) : BaseTwantFragmentMVVM<MessageLoginLayoutBinding,MessageLoginViewModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
-        return R.layout.layout_history_login
+        return R.layout.message_login_layout
     }
 
     override fun initVariableId(): Int {
@@ -24,26 +22,22 @@ class HistoryLoginFragment(val historyUser: User):BaseTwantFragmentMVVM<LayoutHi
     }
 
     override fun initData() {
-        binding.tvOneStep.setOnClickListener { parentFragmentManager.beginTransaction().addToBackStack("OneStepLoginFragment").replace(R.id.container,OneStepLoginFragment()).commit() }
-        binding.tvTwoStep.setOnClickListener { start(OneStepLoginFragment()) }
-        binding.btnLogin.setOnClickListener {loginAction() }
+        binding.btnGetMessage.setOnClickListener { messageAction() }
+        binding.btnLogin.setOnClickListener { loginAction() }
+        binding.btnPasswordLogin.setOnClickListener{passwordAction()}
+    }
+
+    private fun passwordAction() {
+        start(PasswordLoginFragment(binding.etNumber.text.toString()))
     }
 
     private fun loginAction() {
-//        (activity as LoginActivity).viewModel<LoginViewModel>().value
-        viewModel.login(historyUser)
+        viewModel.getMessageLogin(mobile,binding.etNumber.text.toString(),binding.etRecommendNumber.text.toString())
     }
 
-    override fun onBackPressedSupport(): Boolean {
-        if (parentFragmentManager.backStackEntryCount <= 1) {
-//            call.onCall()
-            (activity as LoginActivity).onBackPressedSupport()
-        }else{
-            hideSoftInputPop()
-        }
-        return true
+    private fun messageAction() {
+        viewModel.getSmsAuthCode(mobile)
     }
-
     override fun initViewObservable() {
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
             when(it){
@@ -75,7 +69,5 @@ class HistoryLoginFragment(val historyUser: User):BaseTwantFragmentMVVM<LayoutHi
                 }
             }
         })
-    }
-
-
+}
 }

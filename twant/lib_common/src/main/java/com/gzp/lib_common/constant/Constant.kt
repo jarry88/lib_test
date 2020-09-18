@@ -2,6 +2,7 @@ package com.gzp.lib_common.constant
 
 object Constant {
 
+
     /**
      * 增刪查改 -- 動作定義
      */

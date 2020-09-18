@@ -9,8 +9,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import com.ftofs.lib_common_ui.R
+import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
 
 class TitleBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -22,12 +22,15 @@ class TitleBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     private val titlebarRightText by lazy { mView.findViewById<TextView>(R.id.titlebar_righttext) }
     private val titlebarRightImage by lazy { mView.findViewById<ImageView>(R.id.titlebar_rightimage) }
     private val root by lazy { mView.findViewById<RelativeLayout>(R.id.titlebar_root) }
-    private var mView:View = LayoutInflater.from(context).inflate(R.layout.rl_title_wight, this)
+    private var mView:View = LayoutInflater.from(context).inflate(R.layout.rl_title_wight, null,false)
 
     init {
         //通过布局解释器获取布局
         //通过attrs设置相关属性
-        mView.findViewById<TextView>(R.id.titlebar_title)?.let { setStyle(attrs!!) }?:ToastUtil.error(context,"沒有拿到")
+        if (mView.findViewById<TextView>(R.id.titlebar_title) == null) {
+            SLog.info("沒找到")
+        }
+//        mView.findViewById<TextView>(R.id.titlebar_title)?.let { setStyle(attrs!!) }?:ToastUtil.error(context,"沒有拿到")
         //设置默认背景颜色
         setDefaultColor()
         addView(mView)

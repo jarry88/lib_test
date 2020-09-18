@@ -19,8 +19,11 @@ class LoginActivity :MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Simp
 
     override fun initView() {
         intent.getParcelableExtra<User>("user")?.let {
-            loadRootFragment(R.id.container,findFragment(OneStepLoginFragment::class.java)?:OneStepLoginFragment())
-        }?: loadRootFragment(R.id.container, findFragment(HistoryLoginFragment::class.java)?:HistoryLoginFragment(this))
+            SLog.info("有歷史數據")
+            loadRootFragment(R.id.container, findFragment(HistoryLoginFragment::class.java)?:HistoryLoginFragment(it))
+
+        }?:loadRootFragment(R.id.container,findFragment(OneStepLoginFragment::class.java)?:OneStepLoginFragment())
+
 
 
     }
