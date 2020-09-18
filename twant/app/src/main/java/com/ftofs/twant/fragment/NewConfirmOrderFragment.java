@@ -1436,6 +1436,8 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                         tariffTotalEnable = Constant.TRUE_INT;
                     }
                     double goodsPrice = buyGoodsItem.getDouble("goodsPrice");
+                    int goodsModel = buyGoodsItem.optInt("goodsModal");
+
 
                     // 處理SKU贈品信息
                     List<GiftItem> giftItemList = new ArrayList<>();
@@ -1453,6 +1455,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                     confirmOrderSkuItem.storageStatus = storageStatus;
                     confirmOrderSkuItem.allowSend = allowSend;
                     confirmOrderSkuItem.joinBigSale = joinBigSale;
+                    confirmOrderSkuItem.goodsModel = goodsModel;
                     confirmOrderSkuItemList.add(confirmOrderSkuItem);
 
                     String keyName = "cartId";

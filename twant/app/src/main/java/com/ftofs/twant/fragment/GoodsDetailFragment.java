@@ -351,6 +351,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvSecKillPrice;
     TextView tvSecKillOriginalPrice;
 
+    View imgCrossBorderIndicator; // 【跨城購】標誌
+
     @Override
     public void onSimpleCall(Object data) {
         try {
@@ -436,11 +438,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SLog.info("onViewCreated");
 
         twLightGrey = getResources().getColor(R.color.tw_light_grey, null);
         EventBus.getDefault().register(this);
         iconTariff = view.findViewById(R.id.icon_tariffEnable);
+
 
         Bundle args = getArguments();
         commonId = args.getInt("commonId");
@@ -460,6 +462,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             }
             return false;
         });
+
+        imgCrossBorderIndicator = view.findViewById(R.id.img_cross_border_indicator);
+
         //  用于 存储 上一次 滚动的Y坐标
         rlTopBarContainer = view.findViewById(R.id.tool_bar);
         preTopBarContainer = view.findViewById(R.id.rv_pre_tool_bar);
@@ -676,6 +681,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         pageIndicatorView = view.findViewById(R.id.pageIndicatorView);
         setImageBanner(rvGalleryImageList);
+
 
         if (Config.PROD) {
             MobclickAgent.onPageStart(UmengAnalyticsPageName.GOODS);
@@ -1896,11 +1902,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         flAddToCart.setVisibility(GONE);
                         btnBuy.setVisibility(GONE);
                         btnConsult.setVisibility(VISIBLE);
-
                     } else {
                         goodsPrice = Util.getSpuPrice(goodsDetail);
                         UiUtil.toPriceUI(tvGoodsPrice,0);
                     }
+
+                    imgCrossBorderIndicator.setVisibility(goodsModel == Constant.GOODS_TYPE_CROSS_BORDER ? VISIBLE : GONE);
 
                     // 是否点赞
                     isLike = goodsDetail.getInt("isLike");

@@ -1567,7 +1567,7 @@ public class Api {
         if (token == null) {
             token = "";
         }
-        SLog.info("%s url[%s], token[%s]", getMethodDesc(method), url, token);
+        SLog.info("%s url[%s], Authorization[%s]", getMethodDesc(method), url, token);
 
         if (method == METHOD_GET) {
             // 如果有其他get参数，拼接到url中

@@ -148,6 +148,10 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 Glide.with(goodsImageView).load(confirmOrderSkuItem.goodsImage).centerCrop().into(goodsImageView);
                 TextView goodsName = skuItemView.findViewById(R.id.tv_goods_name);
                 goodsName.setText(confirmOrderSkuItem.goodsName);
+                ImageView imgCrossBorderIndicator = skuItemView.findViewById(R.id.img_cross_border_indicator);
+                imgCrossBorderIndicator.setVisibility(
+                            confirmOrderSkuItem.goodsModel == Constant.GOODS_TYPE_CROSS_BORDER ? View.VISIBLE : View.GONE);
+
                 TextView tvFullSpecs = skuItemView.findViewById(R.id.tv_goods_full_specs);
                 tvFullSpecs.setText(confirmOrderSkuItem.goodsFullSpecs);
                 TextView tvBuyNum = skuItemView.findViewById(R.id.tv_sku_count);
