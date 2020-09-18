@@ -42,7 +42,6 @@
             android:text="確定"
             android:textSize="15sp"
             android:textColor="@color/tw_blue">
-
         </TextView>
     </RelativeLayout>
 
@@ -213,7 +212,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="上传身份证人像面"
+                            android:text="上傳身份證人像面"
                             android:textSize="16sp"
                             android:textColor="@color/tw_black">
                         </TextView>
@@ -231,6 +230,7 @@
                                 android:scaleType="fitXY">
                             </com.makeramen.roundedimageview.RoundedImageView>
                             <ImageView
+                                android:id="@+id/icon_import_front"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
@@ -283,7 +283,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="上传身份证国徽面"
+                            android:text="上傳身份證國徽面"
                             android:textSize="16sp"
                             android:textColor="@color/tw_black">
                         </TextView>
@@ -301,6 +301,7 @@
                                 android:scaleType="fitXY">
                             </com.makeramen.roundedimageview.RoundedImageView>
                             <ImageView
+                                android:id="@+id/icon_import_back"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"

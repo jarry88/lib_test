@@ -83,6 +83,9 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
     ImageView imgFrontImage;
     ImageView imgBackImage;
 
+    View iconImportFront;
+    View iconImportBack;
+
     /**
      * 構造Ctor
      * @param action
@@ -145,6 +148,10 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (action == Constant.ACTION_EDIT) { // 如果是編輯，不需要顯示清除按鈕
+                    return;
+                }
+
                 if (s.length() > 0) {
                     btnClearName.setVisibility(View.VISIBLE);
                 } else {
@@ -152,7 +159,6 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
                 }
             }
         });
-
 
         etId = view.findViewById(R.id.et_id);
         etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -179,6 +185,10 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (action == Constant.ACTION_EDIT) { // 如果是編輯，不需要顯示清除按鈕
+                    return;
+                }
+
                 if (s.length() > 0) {
                     btnClearId.setVisibility(View.VISIBLE);
                 } else {
@@ -187,22 +197,42 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
             }
         });
 
-
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
+
+        imgFrontImage = view.findViewById(R.id.img_front_image);
+        imgBackImage = view.findViewById(R.id.img_back_image);
+
+        iconImportFront = view.findViewById(R.id.icon_import_front);
+        iconImportBack = view.findViewById(R.id.icon_import_back);
+
         if (action == Constant.ACTION_ADD) {
             tvFragmentTitle.setText("信息添加");
         } else {
             tvFragmentTitle.setText("信息編輯");
-            etName.setText(realNameItem.name);
 
-            // 設置身份證為只讀狀態
+            btnClearId.setVisibility(View.GONE);
+            btnClearName.setVisibility(View.GONE);
+
+            etName.setText(realNameItem.name);
+            etId.setText(realNameItem.idNum);
+
+            // 設置姓名和身份證為只讀狀態
+            etName.setCursorVisible(false);      //设置输入框中的光标不可见
+            etName.setFocusable(false);           //无焦点
+            etName.setFocusableInTouchMode(false);     //触摸时也得不到焦点
+
             etId.setCursorVisible(false);      //设置输入框中的光标不可见
             etId.setFocusable(false);           //无焦点
             etId.setFocusableInTouchMode(false);     //触摸时也得不到焦点
-        }
 
-        imgFrontImage = view.findViewById(R.id.img_front_image);
-        imgBackImage = view.findViewById(R.id.img_back_image);
+            frontImageUrl = realNameItem.idCardFrontImage;
+            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(frontImageUrl)).into(imgFrontImage);
+            iconImportFront.setVisibility(View.GONE);
+
+            backImageUrl = realNameItem.idCardBackImage;
+            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(backImageUrl)).into(imgBackImage);
+            iconImportBack.setVisibility(View.GONE);
+        }
     }
 
     private void commitData() {
@@ -225,55 +255,117 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
                 return;
             }
 
+            if (StringUtil.isEmpty(frontImageUrl)) {
+                ToastUtil.error(_mActivity, "請上傳身份證人像面");
+                return;
+            }
+
+            if (StringUtil.isEmpty(backImageUrl)) {
+                ToastUtil.error(_mActivity, "請上傳身份證國徽面");
+                return;
+            }
+
             EasyJSONObject params = EasyJSONObject.generate(
-                    "token", token,
-                    "consigneeName", name,
-                    "idCartNumber", idNum
+                    "idCardFrontImage", frontImageUrl,
+                    "idCardBackImage", backImageUrl
             );
 
             String url;
             if (action == Constant.ACTION_ADD) {
-                url = Api.PATH_SAVE_REAL_NAME_INFO;
-            } else {
-                url = Api.PATH_EDIT_REAL_NAME_INFO;
-                params.set("authId", realNameItem.authId);
-            }
-
-            SLog.info("url[%s], params[%s]", url, params);
-            Api.postUI(url, params, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    ToastUtil.showNetworkError(_mActivity, e);
+                /*
+                {
+                    "authConsigneeName": "測試1 #真實姓名【必填】",
+                    "idCardNumber": "360734199509121310 #身份證號【必填】",
+                    "idCardFrontImage": "身份證正面照片(國徽)",
+                    "idCardBackImage": "身份證背面照片(人像)"
                 }
+                 */
+                url = Api.PATH_MEMBER_AUTH_ADD;
+                params.set("idCardNumber", idNum);
+                params.set("authConsigneeName", name);
 
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    try {
-                        SLog.info("responseStr[%s]", responseStr);
+                SLog.info("url[%s], params[%s]", url, params);
+                Api.postJsonUi(url, params.toString(), new UICallback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        ToastUtil.showNetworkError(_mActivity, e);
+                    }
 
-                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                        if (ToastUtil.checkError(_mActivity, responseObj)) {
-                            return;
-                        }
-                        if (responseObj.exists("datas.isAuth")) {
-                            int isAuth = responseObj.getInt("datas.isAuth");
-                            if (isAuth == 1) {
-                                ToastUtil.success(_mActivity, "datas.message");
+                    @Override
+                    public void onResponse(Call call, String responseStr) throws IOException {
+                        try {
+                            SLog.info("responseStr[%s]", responseStr);
+
+                            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                            if (ToastUtil.checkError(_mActivity, responseObj)) {
                                 return;
                             }
+                            if (responseObj.exists("datas.isAuth")) {
+                                int isAuth = responseObj.getInt("datas.isAuth");
+                                if (isAuth == 1) {
+                                    ToastUtil.success(_mActivity, "datas.message");
+                                    return;
+                                }
+                            }
+                            ToastUtil.success(_mActivity, "保存成功");
+
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("reloadData", true);
+                            setFragmentResult(RESULT_OK, bundle);
+
+                            hideSoftInputPop();
+                        } catch (Exception e) {
+                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                         }
-                        ToastUtil.success(_mActivity, "保存成功");
-
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("reloadData", true);
-                        setFragmentResult(RESULT_OK, bundle);
-
-                        hideSoftInputPop();
-                    } catch (Exception e) {
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
+                });
+            } else { // 編輯操作
+                /*
+                {
+                    "authId": 129 #認證ID【必填】,
+                    "idCardFrontImage": "idCardFrontImage #身份證正面照(國徽)【必填】",
+                    "idCardBackImage": "idCardBackImage #身份證反面照(人像)【必填】"
                 }
-            });
+                 */
+                url = Api.PATH_MEMBER_AUTH_EDIT;
+                params.set("authId", realNameItem.authId);
+
+                SLog.info("url[%s], params[%s]", url, params);
+                Api.putJsonUi(url, params.toString(), new UICallback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        ToastUtil.showNetworkError(_mActivity, e);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, String responseStr) throws IOException {
+                        try {
+                            SLog.info("responseStr[%s]", responseStr);
+
+                            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                            if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                return;
+                            }
+                            if (responseObj.exists("datas.isAuth")) {
+                                int isAuth = responseObj.getInt("datas.isAuth");
+                                if (isAuth == 1) {
+                                    ToastUtil.success(_mActivity, "datas.message");
+                                    return;
+                                }
+                            }
+                            ToastUtil.success(_mActivity, "保存成功");
+
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("reloadData", true);
+                            setFragmentResult(RESULT_OK, bundle);
+
+                            hideSoftInputPop();
+                        } catch (Exception e) {
+                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                        }
+                    }
+                });
+            }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -373,8 +465,10 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
 
                     if (isFrontIdImage) {
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(frontImageUrl)).into(imgFrontImage);
+                        iconImportFront.setVisibility(View.GONE);
                     } else {
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(backImageUrl)).into(imgBackImage);
+                        iconImportBack.setVisibility(View.GONE);
                     }
                 }
             };

@@ -117,11 +117,6 @@ public class Api {
      */
     public static final String PATH_LOGIN = "/login";
 
-    /**
-     * 修改会员支付密码
-     */
-    public static final String PATH_EDIT_PAYMENT_PASSWORD = "/member/security/edit/payPwd";
-
 
     /**
      * 重置密碼
@@ -153,23 +148,10 @@ public class Api {
 
 
     /**
-     * 品牌分類
-     */
-    public static final String PATH_BRAND_CATEGORY = "/app/home/brand_label_nav";
-
-
-    /**
      * 商店首頁
      */
     public static final String PATH_SHOP_HOME = "/store/home";
-    /**
-     * 商店首頁評論總數
-     */
-    public static final String PATH_COMMENT_STORE_COUNT = "/app/comment/store/count";
-    /**
-     * 商店首頁評論
-     */
-    public static final String PATH_STORE_COMMENT = "/store/comment";
+
     /**
      * 商店招聘列表
      */
@@ -418,20 +400,12 @@ public class Api {
      */
     public static final String PATH_HOT_KEYWORD = "/search/default/keyword";
 
-    /**
-     * 默認搜索詞
-     */
-    public static final String PATH_DEFAULT_KEYWORD = "/search/hot/keyword";
 
     /**
      * 搜索时下拉联想提示词
      */
     public static final String PATH_SEARCH_SUGGESTION = "/search/suggest.json";
 
-    /**
-     * 分类消息列表
-     */
-    public static final String PATH_MESSAGE_CATEGORY = "/member/message/class";
 
     /**
      * 消息列表
@@ -636,10 +610,6 @@ public class Api {
      */
     public static final String PATH_GET_EMOJI_LIST = "/app/emoji/list";
 
-    /**
-     * mpay參數獲取
-     */
-    // public static final String PATH_MPAY_PARAMS = "/member/mpay/params";
 
     /**
      * mpay支付
@@ -842,10 +812,7 @@ public class Api {
      */
     public static final String PATH_UNFOLLOW_JOB = "/app/store/hr/unfollow";
 
-    /**
-     * 個人專頁-我的評論
-     */
-    public static final String PATH_MEMBER_PAGE_ALL_COMMENT = "/memberpage/all/comment";
+
     /**
      * 個人專頁-互動-我的評論
      */
@@ -876,11 +843,6 @@ public class Api {
      */
     public static final String PATH_FEEDBACK_LIST = "/app/suggest/list";
 
-
-    /**
-     * 檢測更新
-     */
-    // public static final String PATH_CHECK_UPDATE = "/app/android";
 
     /**
      * 訂單數量查詢
@@ -1047,12 +1009,6 @@ public class Api {
 
 
     /**
-     * 聖誕活動參與狀態
-     */
-    public static final String PATH_GET_JOIN_CHRISTMAS_STATUS = "/member/christmas/join";
-
-
-    /**
      * 设置婚姻
      */
     public static final String PATH_SET_MARRIAGE ="/member/membermarriage/edit" ;
@@ -1190,10 +1146,6 @@ public class Api {
     /**
      * 獲取用戶token(活動身份令牌)
      */
-    public static final String PATH_GET_MEMBER_TOKEN = "/member/getToken";
-    /**
-     * 獲取用戶token(活動身份令牌)
-     */
     public static final String PATH_GET_IM_TOKEN = "/member/getUserTokenBySession";
     /**
      * 獲取用戶对话框列表
@@ -1250,16 +1202,6 @@ public class Api {
     public static final String PATH_SAVE_REAL_NAME_INFO = "/consigneeNameAuth/identification";
 
     /**
-     * 【實名認證】認證列表
-     */
-    public static final String PATH_REAL_NAME_LIST = "/consigneeNameAuth/list";
-
-    /**
-     * 【實名認證】刪除
-     */
-    public static final String PATH_DELETE_REAL_NAME_INFO = "/consigneeNameAuth/delete";
-
-    /**
      * 【實名認證】編輯認證信息
      */
     public static final String PATH_EDIT_REAL_NAME_INFO = "/consigneeNameAuth/edit";
@@ -1294,12 +1236,6 @@ public class Api {
      */
     public static final String PATH_SELLER_ORDER_DETAIL = "/member/seller/orders/info";
 
-     /**
-     * 【商家】鏟平交易信息
-     * 兼退款訂單信息/refundId
-     * 兼退貨訂單信息/refundId
-     */
-    public static final String PATH_SELLER_RETURN_ORDER_DETAIL = "/member/seller/return/orders/info";
     /**
      * 【商家】退款處理
      */
@@ -1345,11 +1281,7 @@ public class Api {
      * 查詢商品分類綁定的品牌列表
      */
     public static final String PATH_SELLER_QUERY_BIND_BRANDS = "/member/seller/query/bind/brands";
-    /**
-     * 【商家】
-     * 查詢商傢物流模板
-     */
-    public static final String PATH_SELLER_FREIGHT_TEMPLATE = "/member/seller/freight/template";
+
     /**
      * 【商家】
      * 查詢所有品牌所在地
@@ -1365,12 +1297,7 @@ public class Api {
      * 商品發佈頁 保存
      */
     public static final String PATH_SELLER_GOODS_PUBLISH_SAVE = "/member/seller/goods/publish/save";
-    /**
-     * 【商家】
-     * 退款訂單信息(產品交易信息)
-     */
-    public static final String PATH_SELLER_ORDERS_INFO = "/member/seller/orders/info"
-            ;
+
     /**
      * 取消镇店之宝
      */
@@ -1408,10 +1335,6 @@ public class Api {
      * 【購物專場】新版可復用購物專場主頁
      */
     public static final String PATH_SHOPPING_ZONE = "/shoppingzone/info";
-    /**
-     * 【購物專場】新版可復用購物專場店鋪查詢頁
-     */
-    public static final String PATH_SHOPPING_ZONE_STORE = "/shoppingzone/store";
 
 
     /**
@@ -1580,10 +1503,7 @@ public class Api {
      */
     public static final String PATH_GROUP_GOODS_LIST = "/group/list";
 
-    /**
-     * 食在澳門核銷驗證
-     */
-    public static final String PATH_IFOODMACAU_VERIFY = "/member/orders/ifoodmacau/verify";
+
     /**
      * 食在澳門核銷商品列表
      */
@@ -1603,6 +1523,21 @@ public class Api {
      * 【跨城購實名認證】添加認證
      */
     public static final String PATH_MEMBER_AUTH_ADD = "/member/auth/add";
+
+    /**
+     * 【跨城購實名認證】編輯認證(上傳身份證照片)
+     */
+    public static final String PATH_MEMBER_AUTH_EDIT = "/member/auth/edit";
+
+    /**
+     * 【跨城購實名認證】我的認證列表
+     */
+    public static final String PATH_MEMBER_AUTH_LIST = "/member/auth/list";
+
+    /**
+     * 【跨城購實名認證】刪除認證
+     */
+    public static final String PATH_MEMBER_AUTH_DELETE = "/member/auth/delete/";
 
 
 
@@ -1625,13 +1560,14 @@ public class Api {
         } else {
             url = API_BASE_URL + path;
         }
-        SLog.info("%s url[%s]", method == METHOD_GET ? "GET" : "POST", url);
+
         Request request = null;
 
         String token = User.getToken();
         if (token == null) {
             token = "";
         }
+        SLog.info("%s url[%s], token[%s]", getMethodDesc(method), url, token);
 
         if (method == METHOD_GET) {
             // 如果有其他get参数，拼接到url中
@@ -1837,6 +1773,53 @@ public class Api {
         }
 
         return result;
+    }
+
+
+    /**
+     * PUT 方法的內部實現
+     * @param path
+     * @param params
+     * @param ioCallback
+     * @param uiCallback
+     * @return
+     */
+    private static String putInternal(String path, EasyJSONObject params, Callback ioCallback, final UICallback uiCallback) {
+        return httpRequest(METHOD_PUT, path, params, ioCallback, uiCallback);
+    }
+
+
+    /**
+     * 以PUT方式提交 JSON,回調在UI線程中執行
+     * @param path
+     * @param json
+     * @param uiCallback
+     */
+    public static void putJsonUi(String path, String json, UICallback uiCallback) {
+        jsonRequest(METHOD_PUT, path, json, null, uiCallback);
+    }
+
+
+    /**
+     * DELETE 方法的內部實現
+     * @param path
+     * @param params
+     * @param ioCallback
+     * @param uiCallback
+     * @return
+     */
+    private static String deleteInternal(String path, EasyJSONObject params, Callback ioCallback, final UICallback uiCallback) {
+        return httpRequest(METHOD_DELETE, path, params, ioCallback, uiCallback);
+    }
+
+    /**
+     * DELETE請求，回調在UI線程中執行
+     * @param path
+     * @param params
+     * @param uiCallback
+     */
+    public static void deleteUI(String path, EasyJSONObject params, UICallback uiCallback) {
+        deleteInternal(path, params, null, uiCallback);
     }
 
 
@@ -2179,7 +2162,7 @@ public class Api {
      * @throws IOException
      */
     public static String syncPostJson(String path, String json) {
-        return postJson(path, json, null, null);
+        return jsonRequest(METHOD_POST, path, json, null, null);
     }
 
     /**
@@ -2189,7 +2172,7 @@ public class Api {
      * @param uiCallback
      */
     public static void postJsonUi(String path, String json, UICallback uiCallback) {
-        postJson(path, json, null, uiCallback);
+        jsonRequest(METHOD_POST, path, json, null, uiCallback);
     }
 
     /**
@@ -2199,20 +2182,21 @@ public class Api {
      * @param ioCallback
      */
     public static void postJsonIo(String path, String json, Callback ioCallback) {
-        postJson(path, json, ioCallback, null);
+        jsonRequest(METHOD_POST, path, json, ioCallback, null);
     }
 
 
     /**
      * 以【POST】方式提交JSON字符串
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
+     * @param method
      * @param path URL的路徑
      * @param json 提交給服務器的json字符串
      * @param ioCallback 在IO線程中執行的回調(可以為null)
      * @param uiCallback 在UI線程中執行的回調(可以為null)
      * @return 如果以異步方式執行，固定返回null；如果以同步方式執行，返回結果字符串
      */
-    public static String postJson(String path, String json, Callback ioCallback, final UICallback uiCallback) {
+    public static String jsonRequest(int method, String path, String json, Callback ioCallback, final UICallback uiCallback) {
         String url = API_BASE_URL + path;
 
         String token = User.getToken();
@@ -2222,11 +2206,31 @@ public class Api {
 
         OkHttpClient client = getOkHttpClient();
         RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .header("Authorization", token)
-                .build();
+        Request request;
+
+        if (method == METHOD_POST) {
+            request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .header("Authorization", token)
+                    .build();
+        } else if (method == METHOD_PUT) {
+            request = new Request.Builder()
+                    .url(url)
+                    .put(body)
+                    .header("Authorization", token)
+                    .build();
+        } else if (method == METHOD_DELETE) {
+            request = new Request.Builder()
+                    .url(url)
+                    .delete(body)
+                    .header("Authorization", token)
+                    .build();
+        } else {
+            // 其他方法不支持
+            return null;
+        }
+
 
         if (uiCallback != null) {
             // 在UI線程中執行回調
@@ -2382,5 +2386,19 @@ public class Api {
                 .hostnameVerifier(DO_NOT_VERIFY)
                 .build();
         return okHttpClient;
+    }
+
+    public static String getMethodDesc(int method) {
+        if (method == METHOD_GET) {
+            return "GET";
+        } else if (method == METHOD_POST) {
+            return "POST";
+        } else if (method == METHOD_PUT) {
+            return "PUT";
+        } else if (method == METHOD_DELETE) {
+            return "DELETE";
+        }
+
+        return null;
     }
 }

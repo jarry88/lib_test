@@ -2809,6 +2809,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      * @param goodsInfo sku信息
      *
      */
+
     private void showPriceTag(GoodsInfo goodsInfo) {
         SLog.info("promotionType[%d], promotionCountDownTime[%d]", promotionType, promotionCountDownTime);
         if (Util.noPrice(goodsModel)) {
