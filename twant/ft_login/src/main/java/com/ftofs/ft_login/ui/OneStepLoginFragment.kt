@@ -8,6 +8,8 @@ import com.alibaba.fastjson.JSON
 import com.ftofs.ft_login.BR
 import com.ftofs.ft_login.R
 import com.ftofs.ft_login.databinding.OneStepLoginLayoutBinding
+import com.ftofs.ft_login.utils.ExecutorManager
+import com.ftofs.ft_login.utils.MockRequest
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
@@ -22,6 +24,7 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,Histo
     private val mTokenResultListener by lazy {  object : TokenResultListener {
         override fun onTokenSuccess(s: String) {
             ToastUtil.success(context,"獲取成功")
+            SLog.info("獲取成功")
             var tokenRet: TokenRet? = null
             try {
                 tokenRet = JSON.parseObject(s, TokenRet::class.java)
@@ -30,7 +33,7 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,Histo
                 }
                 if (ResultCode.CODE_GET_TOKEN_SUCCESS == tokenRet.code) {
                     Log.i("TAG", "获取token成功：$s")
-//                    getResultWithToken(tokenRet.token)
+                    getResultWithToken(tokenRet.token)
 //                    mUIConfig.release()
                 }
             } catch (e: Exception) {
@@ -39,6 +42,8 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,Histo
         }
 
         override fun onTokenFailed(s: String) {
+            SLog.info("獲取失败$s")
+
             Log.e("OneKeyLoginActivity.TAG", "获取token失败：$s")
             var tokenRet: TokenRet? = null
             mPhoneNumberAuthHelper?.quitLoginPage()
@@ -48,7 +53,7 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,Histo
                     //模拟的是必须登录 否则直接退出app的场景
                     activity?.finish()
                 } else {
-//                    Toast.makeText(getApplicationContext(), "一键登录失败切换到其他登录方式", Toast.LENGTH_SHORT).show()
+                    ToastUtil.error(context, "一键登录失败切换到其他登录方式")
 //                    val pIntent = Intent(this@OneKeyLoginActivity, MessageActivity::class.java)
 //                    startActivityForResult(pIntent, 1002)
                 }
@@ -58,6 +63,20 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,Histo
         }
     }
     }
+
+    private fun getResultWithToken(token: String?) {
+        token?.let {
+            ExecutorManager.run{
+                (activity as LoginActivity).runOnUiThread{
+//                    mTvResult.setText("登陆成功：$result")
+                    ToastUtil.success(context,           MockRequest.getPhoneNumber(it)
+                    )
+                    mPhoneNumberAuthHelper!!.quitLoginPage()
+                }
+            }
+        }
+    }
+
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.one_step_login_layout
     }
@@ -81,7 +100,10 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,Histo
             SLog.info("獲取字符穿：")
 
             //3設置sdk密匙
-            setAuthSDKInfo(getString(R.string.one_key_secret_keys))
+//            setAuthSDKInfo(getString(R.string.one_key_secret_keys))
+//            setAuthSDKInfo(getString(R.string.one_key_secret_keys))
+//            reporter.setLoggerEnable(BuildConfig.DEBUG)
+
         }
 
     }
@@ -92,10 +114,10 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,Histo
     private fun oneKeyLogin() {
         //4检测终端⽹络环境是否⽀持⼀键登录或者号码认证，根据回调结果确定是否可以使
         //⽤⼀键登录功能
-        mPhoneNumberAuthHelper?.takeIf { it.checkEnvAvailable() }.let {
+        mPhoneNumberAuthHelper?.takeIf { it.checkEnvAvailable() }?.let {
             KLog.e("進行一鍵登錄")
-
-            getLoginToken(5000)
+            SLog.info("進行一鍵登錄")
+            it.getLoginToken(context,5000)
         }
     }
 
@@ -103,8 +125,4 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,Histo
      * 拉起授权页
      * @param timeout 超时时间
      */
-    fun getLoginToken(timeout: Int) {
-        mPhoneNumberAuthHelper!!.getLoginToken(context, timeout)
-//        showLoadingDialog("正在唤起授权页")
-    }
 }

@@ -61,12 +61,12 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation(name: 'alicomphonenumberauthsdk-log-online-release', ext: 'aar')
+    api(name: 'alicomphonenumberauthsdk-log-online-release', ext: 'aar')
 
     //集成crash组件
-    implementation(name:'crashshield-release', ext:'aar')
+    api(name:'crashshield-release', ext:'aar')
     //环境检测
-    implementation(name:'operation-release', ext:'aar')
+    api(name:'operation-release', ext:'aar')
     compileOnly project(":lib_common")
     compileOnly project(":lib_common_ui")
     compileOnly project(":lib_net")
