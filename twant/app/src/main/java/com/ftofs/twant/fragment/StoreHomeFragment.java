@@ -28,6 +28,8 @@ import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.LockableNestedScrollView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +68,7 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shop_home_item, container, false);
         return view;
     }

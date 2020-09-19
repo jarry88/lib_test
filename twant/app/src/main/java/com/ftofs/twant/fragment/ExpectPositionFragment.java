@@ -28,6 +28,8 @@ import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.PositionSelectPopup;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +80,7 @@ public class ExpectPositionFragment extends BaseFragment implements View.OnClick
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_expect_position, container, false);
         return view;
     }

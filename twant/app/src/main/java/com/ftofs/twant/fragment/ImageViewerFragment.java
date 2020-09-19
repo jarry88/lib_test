@@ -16,6 +16,8 @@ import com.ftofs.twant.util.Util;
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator;
 import com.github.piasy.biv.view.BigImageView;
 
+import org.jetbrains.annotations.NotNull;
+
 
 /**
  * 查看圖片Fragment
@@ -48,7 +50,7 @@ public class ImageViewerFragment extends BaseFragment implements View.OnClickLis
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_viewer, container, false);
         return view;
     }

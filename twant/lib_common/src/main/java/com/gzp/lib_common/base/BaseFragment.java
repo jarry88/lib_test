@@ -13,8 +13,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
 import com.gzp.lib_common.base.callback.CommonCallback;
+import com.gzp.lib_common.base.callback.IntentCallBack;
 import com.gzp.lib_common.constant.RequestCode;
-import com.gzp.lib_common.service.AppService;
 import com.gzp.lib_common.utils.IntentUtil;
 import com.gzp.lib_common.utils.PermissionUtil;
 import com.gzp.lib_common.utils.SLog;
@@ -31,6 +31,8 @@ import me.yokeyword.fragmentation.SupportFragment;
 public abstract class BaseFragment extends SupportFragment {
     protected Context _mContext;
     protected ViewDataBinding simpleBind;
+    private IntentCallBack mCapureCallBack;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -57,19 +59,20 @@ public abstract class BaseFragment extends SupportFragment {
     protected  int simpleBind(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         return 0;
     };
-
+    public void setAppService(IntentCallBack callBack){
+        mCapureCallBack = callBack;
+    }
     /**
      * 調起掃描二維碼的Activity
+     * 因為項目結構調整
+     * 凡是要使用拉起二維碼activity的fragment要自己實現intent回調
      */
-    public void startCaptureActivity() {
+    public void startCaptureActivity(Intent intent) {
         PermissionUtil.actionWithPermission(_mActivity, new String[] {Permission.CAMERA}, "掃一掃需要授予", new CommonCallback() {
             @Override
             public String onSuccess(@Nullable String data) {
                 //todo 处理扫码跳转
-//                AppService appService = AppJoint.service(AppService.class);
-//
-//                Intent intent = appService.getCaptureIntent();
-//                startActivityForResult(intent, RequestCode.SCAN_QR_CODE.ordinal());
+                startActivityForResult(intent, RequestCode.SCAN_QR_CODE.ordinal());
                 return null;
             }
 

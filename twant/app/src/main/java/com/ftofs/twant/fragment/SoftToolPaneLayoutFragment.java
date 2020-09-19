@@ -16,6 +16,8 @@ import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SoftToolPaneLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * SoftToolPaneLayout實驗Fragment
  * @author zwm
@@ -37,7 +39,7 @@ public class SoftToolPaneLayoutFragment extends BaseFragment implements View.OnC
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_soft_tool_pane_layout, container, false);
         return view;
     }

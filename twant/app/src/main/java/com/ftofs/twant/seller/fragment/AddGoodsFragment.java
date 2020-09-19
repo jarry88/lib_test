@@ -65,6 +65,8 @@ import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
 import com.orhanobut.hawk.Hawk;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -255,7 +257,7 @@ public class AddGoodsFragment extends BaseFragment
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_seller_goods_publish, container, false);
         llDetailBody = (LinearLayout) view.findViewById(R.id.ll_detail_body);

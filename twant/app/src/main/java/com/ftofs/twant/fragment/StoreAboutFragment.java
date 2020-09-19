@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.widget.LockableNestedScrollView;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author gzp
  */
@@ -37,7 +39,7 @@ public class StoreAboutFragment extends ScrollableBaseFragment implements View.O
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_about, container, false);
         return view;
     }

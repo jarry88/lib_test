@@ -18,6 +18,8 @@ import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 店鋪公告詳情Fragment
  * @author zwm
@@ -50,7 +52,7 @@ public class StoreAnnouncementDetailFragment extends BaseFragment implements Vie
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_announcement_detail, container, false);
         return view;
     }

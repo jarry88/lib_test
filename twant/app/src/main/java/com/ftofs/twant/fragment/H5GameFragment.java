@@ -42,6 +42,8 @@ import com.lxj.xpopup.core.BasePopupView;
 import com.yanzhenjie.permission.runtime.Permission;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -111,7 +113,7 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_h5_game, container, false);
         return view;
     }

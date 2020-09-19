@@ -17,6 +17,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 互動Fragment
  * @author zwm
@@ -43,7 +45,7 @@ public class InteractiveFragment extends BaseFragment implements View.OnClickLis
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_interactive, container, false);
         return view;
     }

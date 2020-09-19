@@ -28,6 +28,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.DateSelectPopup;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -72,7 +74,7 @@ public class AddWorkExpFragment extends BaseFragment implements View.OnClickList
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_work_exp, container, false);
         return view;
     }

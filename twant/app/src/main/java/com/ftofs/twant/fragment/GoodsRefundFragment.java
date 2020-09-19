@@ -47,6 +47,8 @@ import com.ftofs.twant.widget.SquareGridLayout;
 import com.lxj.xpopup.XPopup;
 import com.orhanobut.hawk.Hawk;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -124,7 +126,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_goods_refund, container, false);
         return view;
     }

@@ -16,6 +16,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 
+import org.jetbrains.annotations.NotNull;
+
 
 /**
  * 單據信息Fragment
@@ -62,7 +64,7 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_receipt_info, container, false);
         return view;
     }

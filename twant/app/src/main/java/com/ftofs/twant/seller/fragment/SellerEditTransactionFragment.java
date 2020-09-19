@@ -30,6 +30,8 @@ import com.ftofs.twant.widget.ScaledButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -70,7 +72,7 @@ public class SellerEditTransactionFragment extends BaseFragment implements View.
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_goods_transaction_edit, container, false);
         return view;
     }

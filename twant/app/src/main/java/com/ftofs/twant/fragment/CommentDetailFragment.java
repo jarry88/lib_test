@@ -49,6 +49,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SmoothInputLayout;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,7 +177,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comment_detail, container, false);
         return view;
     }

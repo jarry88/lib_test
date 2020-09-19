@@ -27,6 +27,8 @@ import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +79,7 @@ public class SenderInfoFragment extends BaseFragment implements View.OnClickList
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sender_info, container, false);
         return view;
     }

@@ -23,6 +23,8 @@ import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.seller.widget.SellerEditSkuInfoPopup;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -44,7 +46,7 @@ public class SellerSkuGoodsListFragment extends BaseFragment implements SimpleCa
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_sku_goods_list, container, false);
         return view;
     }

@@ -6,8 +6,6 @@ import android.content.Intent
 import com.gzp.lib_common.base.BaseFragment
 interface AppService {
 
-    fun getCaptureIntent(): Intent
-
     // start Activity from app module
     fun startActivityOfApp(context: Context)
     //原来ToastUtil的一段代码

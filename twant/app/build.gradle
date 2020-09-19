@@ -49,11 +49,6 @@ android {
 
 
     }
-    kapt {
-        arguments {
-            arg("moduleName", project.getName())
-        }
-    }
     flavorDimensions "channel"
     productFlavors {
         // Google Play渠道

@@ -31,6 +31,8 @@ import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.UnscrollableViewPager;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +67,7 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_goods_list, container, false);
 
         return view;

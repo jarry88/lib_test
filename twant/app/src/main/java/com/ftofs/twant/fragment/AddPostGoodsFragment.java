@@ -27,6 +27,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.lxj.xpopup.core.BasePopupView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +67,7 @@ public class AddPostGoodsFragment extends BaseFragment implements View.OnClickLi
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_post_goods, container, false);
         return view;
     }

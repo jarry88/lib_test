@@ -29,6 +29,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.RealNameInstructionPopup;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -71,7 +73,7 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_real_name_info, container, false);
         return view;
     }

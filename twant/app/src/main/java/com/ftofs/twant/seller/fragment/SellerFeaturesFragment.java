@@ -30,6 +30,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +70,7 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.seller_edit_features_layout, container, false);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         rvList = (RecyclerView) view.findViewById(R.id.rv_features_goods_list);

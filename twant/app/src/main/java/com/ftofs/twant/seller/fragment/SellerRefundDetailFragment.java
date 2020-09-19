@@ -29,6 +29,8 @@ import com.ftofs.twant.widget.ProcessProgressIndicator;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SquareGridLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -239,7 +241,7 @@ public class SellerRefundDetailFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_refund_detail, container, false);
         llAdiminContainer = (LinearLayout) view.findViewById(R.id.ll_admin_container);
         tvAdminState = (TextView) view.findViewById(R.id.tv_admin_handle_state);

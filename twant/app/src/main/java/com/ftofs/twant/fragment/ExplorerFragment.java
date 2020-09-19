@@ -19,6 +19,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BasePopupView;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 瀏覽器Fragment
  * @author zwm
@@ -43,7 +45,7 @@ public class ExplorerFragment extends BaseFragment implements View.OnClickListen
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_explorer, container, false);
         return view;
     }

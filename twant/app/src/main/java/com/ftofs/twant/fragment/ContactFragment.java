@@ -27,6 +27,8 @@ import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +58,7 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
         return view;
     }

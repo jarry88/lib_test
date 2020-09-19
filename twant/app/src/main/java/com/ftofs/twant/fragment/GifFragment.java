@@ -14,6 +14,8 @@ import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 顯示Gif動圖
  * @author zwm
@@ -32,7 +34,7 @@ public class GifFragment extends BaseFragment implements View.OnClickListener {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gif, container, false);
         return view;
     }

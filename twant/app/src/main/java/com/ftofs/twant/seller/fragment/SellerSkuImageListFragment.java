@@ -24,6 +24,8 @@ import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,7 @@ public class SellerSkuImageListFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_sku_image_list, container, false);
         return view;
     }

@@ -113,7 +113,6 @@ class TwantApplication :BaseApplication(){
         instance=this
         BaseContext.instance.init(this)//初始話instance
 
-        AppUtil.app=this
         PhoneNumberAuthHelper.getInstance(this,object :TokenResultListener{
             override fun onTokenFailed(p0: String?) {
                 Log.e("init", "onTokenFaild: $p0")

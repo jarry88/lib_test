@@ -72,6 +72,8 @@ import com.yanzhenjie.permission.runtime.Permission;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -321,7 +323,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_home, container, false);
         imgStoreStatus = (ImageView) view.findViewById(R.id.img_store_status);
         imgShopLogo = (ImageView) view.findViewById(R.id.img_store_figure);

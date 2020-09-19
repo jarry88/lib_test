@@ -29,6 +29,8 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BasePopupView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,7 @@ public class EducationExperienceFragment extends BaseFragment implements View.On
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_education_experience,container,false);
         return view;
     }

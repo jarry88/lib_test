@@ -25,6 +25,8 @@ import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +59,7 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shop_category, container, false);
         return view;
     }
