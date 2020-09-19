@@ -10,6 +10,7 @@ import com.gzp.lib_common.base.MBaseActivity
 import com.gzp.lib_common.base.callback.SimpleCallBack
 import com.gzp.lib_common.model.User
 import com.gzp.lib_common.utils.SLog
+import com.ftofs.lib_common_ui.switchTranslucentMode
 
 
 class LoginActivity :MBaseActivity<LoginViewModel, ActivityLoginBinding>(), SimpleCallBack {
@@ -18,6 +19,7 @@ class LoginActivity :MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Simp
     }
 
     override fun initView() {
+        switchTranslucentMode(this,false)
         intent.getParcelableExtra<User>("user")?.let {
             SLog.info("有歷史數據")
             loadRootFragment(R.id.container, findFragment(HistoryLoginFragment::class.java)?:HistoryLoginFragment(it))

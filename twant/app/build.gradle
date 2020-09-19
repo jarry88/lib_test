@@ -159,7 +159,7 @@ dependencies {
     implementation project(":lib_common_ui")
     implementation project(":lib_net")
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
+    kapt 'com.alibaba:arouter-compiler:1.2.2'
 //    kapt 'com.alibaba:arouter-compiler:1.2.2'
 
     api rootProject.ext.dependencies["ktx"]
@@ -228,15 +228,8 @@ dependencies {
     implementation 'com.github.lyrebirdstudio:Croppy:0.2'
     //    implementation 'com.github.pinguo-zhouwei:MZBannerView:v2.0.2'
     implementation 'com.nex3z:flow-layout:1.2.4'
-    implementation 'de.hdodenhof:circleimageview:3.0.0' //後面可以考慮移除
-    implementation 'com.makeramen:roundedimageview:2.3.0'
-    api rootProject.ext.dependencies["glide"]
-    api rootProject.ext.dependencies["glide:okhttp3-integration"]
-
-    // 新增
     kapt rootProject.ext.dependencies["glide-compiler"]
     // 新增
-    api rootProject.ext.dependencies["glide:annotations"]
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
@@ -321,7 +314,6 @@ dependencies {
     //4，permissionsdispatcher权限
     implementation 'com.github.hotchemi:permissionsdispatcher:3.1.0'
     kapt rootProject.ext.dependencies["permissionsdispatcher-processor"]
-    implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.github.JuHonggang:ShadowDrawable:0.1'
 
 
@@ -366,7 +358,6 @@ dependencies {
     //其它项目中有用
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'io.github.iamyours:router-api:1.0.1'
-    implementation 'com.qmuiteam:qmui:2.0.0-alpha10'
     implementation 'com.github.angcyo:DslAdapter:2.5.1'
 
 }

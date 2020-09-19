@@ -46,7 +46,7 @@ object UserManager {
         val r = Util.random(6)
 
         val intent=
-            Intent(context,LoginActivity::class.java).apply {if(r)putExtra("user",User("00853,61234567","abc123456",2,"1","1",1,"s"))}
+            Intent(context,LoginActivity::class.java).apply {if(r)putExtra("user",User("00853,61234567","abc123456",2,"1","1",1,"s","dd"))}
         context.startActivity(intent)
         return liveData
     }

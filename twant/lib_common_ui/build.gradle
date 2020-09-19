@@ -2,6 +2,9 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
 }
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -36,15 +39,29 @@ dependencies {
     api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compileOnly rootProject.ext.dependencies["ktx"]
-    compileOnly rootProject.ext.dependencies["appcompat"]
-    compileOnly rootProject.ext.dependencies["design"]
+    implementation rootProject.ext.dependencies["ktx"]
+    implementation rootProject.ext.dependencies["appcompat"]
+    implementation  rootProject.ext.dependencies["design"]
     //自定義標題欄
     api rootProject.ext.dependencies["recyclerview"] //
     api rootProject.ext.dependencies["constraint-layout"]
-    testImplementation 'junit:junit:4.+'
+    api 'de.hdodenhof:circleimageview:3.0.0' //後面可以考慮移除
+    api 'com.jaeger.statusbarutil:library:1.5.1'
+    api 'com.qmuiteam:qmui:2.0.0-alpha10'
+
+    api 'com.makeramen:roundedimageview:2.3.0'
+    api rootProject.ext.dependencies["glide"]
+    api rootProject.ext.dependencies["glide:okhttp3-integration"]
+
+    // 新增
+    api rootProject.ext.dependencies["glide:annotations"]
+    kapt rootProject.ext.dependencies["glide-compiler"]
+
+
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
 
     compileOnly project(":lib_common")
 }

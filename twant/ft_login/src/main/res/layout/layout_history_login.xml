@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
+    <data>
+        <variable
+            name="vo"
+            type="com.gzp.lib_common.model.User" />
+    </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@color/white"
         android:orientation="vertical"
         android:gravity="center_horizontal">
+        <com.ftofs.ft_login.widget.Title
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tw_blue"
+            android:paddingTop="13dp"
+            android:paddingBottom="13dp"
+            android:paddingStart="13dp"
+            android:paddingEnd="7dp"
+            android:textSize="12sp"
+            android:background="@color/bg_blue"
+            android:textStyle=""
+            android:text="@string/tv_login_info"
+            />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="78dp"
+            android:layout_height="78dp"
+            android:layout_marginTop="42dp"
+            imageUrl="{vo.avatar}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:id="@+id/tv_nickname"/>
+
         <TextView
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"

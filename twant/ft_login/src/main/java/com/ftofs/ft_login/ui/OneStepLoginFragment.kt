@@ -71,6 +71,8 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,OneKe
 
     private fun actionOneKeyLogin(token:String) {
         viewModel.login(token)
+        getResultWithToken(token)
+
     }
 
     private fun getResultWithToken(token: String?) {
@@ -137,6 +139,8 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,OneKe
                     KLog.e("请求数据中--显示loading")
                 }
                 StateLiveData.StateEnum.Success -> {
+                    SLog.info("進行一鍵登錄,後端返回成功")
+
                     onBackPressedSupport()
                     KLog.e("数据获取成功--关闭loading")
                 }

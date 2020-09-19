@@ -31,6 +31,7 @@ import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.CommonCallback;
+import com.ftofs.twant.widget.ScaledButton;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
@@ -122,7 +123,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
 
-
+        ScaledButton scaledButton = view.findViewById(R.id.btn_back);
+        scaledButton.setIconResource(com.ftofs.lib_common_ui.R.drawable.ic_baseline_close_24);
         fragmentList.add(PasswordLoginFragment.newInstance(this));
         fragmentList.add(DynamicCodeLoginFragment.newInstance(this));
 

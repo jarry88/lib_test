@@ -22,7 +22,6 @@
             android:layout_height="31dp"
             android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
-            app:icon_src="@drawable/btn_fragment_close"
             />
 
         <TextView

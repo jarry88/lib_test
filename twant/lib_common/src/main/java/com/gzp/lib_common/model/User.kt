@@ -11,7 +11,8 @@ data class User(
         val token:String,
         val nickname:String,
         val lastLoginTime:Int=0,
-        val memberToken:String
+        val memberToken:String,
+        val avatar:String?
 ):Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -21,7 +22,9 @@ data class User(
             parcel.readString()!!,
             parcel.readString()!!,
             parcel.readInt(),
-            parcel.readString()!!) {
+            parcel.readString()!!,
+            parcel.readString()
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -32,6 +35,7 @@ data class User(
         parcel.writeString(nickname)
         parcel.writeInt(lastLoginTime)
         parcel.writeString(memberToken)
+        parcel.writeString(avatar)
     }
 
     override fun describeContents(): Int {
