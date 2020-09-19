@@ -29,6 +29,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/img_cross_border_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_among_city_with_text">
+                </ImageView>
+
                 <TextView
                     android:id="@+id/tv_goods_name"
                     android:layout_width="0dp"

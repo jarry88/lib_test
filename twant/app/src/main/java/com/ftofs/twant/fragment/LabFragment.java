@@ -187,8 +187,9 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         int id = v.getId();
 
         if (id == R.id.btn_test1) {
-            ToastUtil.info(_mActivity, "way1");
-            RestartApp.restartThroughIntentCompatMakeRestartActivityTask(_mActivity);
+            // ToastUtil.info(_mActivity, "way1");
+            // RestartApp.restartThroughIntentCompatMakeRestartActivityTask(_mActivity);
+            start(TestFragment.newInstance());
         }else if (id == R.id.btn_post1) {
             ToastUtil.info(_mActivity, "btn_post1");
             new XPopup.Builder(getContext()).asCustom(new MoonVoucherListPopup(getContext(),new ArrayList<StoreVoucher>(),"10")).show();

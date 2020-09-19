@@ -112,6 +112,9 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 }
 
                 helper.addOnClickListener(R.id.btn_goto_store_left, R.id.cl_container_left);
+
+                // 設置是否顯示【跨城購】標籤
+                helper.setGone(R.id.tv_cross_border_indicator_left, item.left.goodsModel == Constant.GOODS_TYPE_CROSS_BORDER);
             }
             // 設置右邊item的可見性
 
@@ -164,6 +167,9 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 }
 
                 helper.addOnClickListener(R.id.btn_goto_store_right, R.id.cl_container_right);
+
+                // 設置是否顯示【跨城購】標籤
+                helper.setGone(R.id.tv_cross_border_indicator_right, item.right.goodsModel == Constant.GOODS_TYPE_CROSS_BORDER);
             }
             boolean rightHandSideVisible = (item.right != null);
             helper.setGone(R.id.cl_container_right, rightHandSideVisible)
