@@ -21,7 +21,6 @@ import com.gzp.lib_common.utils.SLog;
 import com.gzp.lib_common.utils.ToastUtil;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import io.github.prototypez.appjoint.AppJoint;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -67,10 +66,10 @@ public abstract class BaseFragment extends SupportFragment {
             @Override
             public String onSuccess(@Nullable String data) {
                 //todo 处理扫码跳转
-                AppService appService = AppJoint.service(AppService.class);
-
-                Intent intent = appService.getCaptureIntent();
-                startActivityForResult(intent, RequestCode.SCAN_QR_CODE.ordinal());
+//                AppService appService = AppJoint.service(AppService.class);
+//
+//                Intent intent = appService.getCaptureIntent();
+//                startActivityForResult(intent, RequestCode.SCAN_QR_CODE.ordinal());
                 return null;
             }
 
@@ -113,8 +112,8 @@ public abstract class BaseFragment extends SupportFragment {
 
     public void updateMainSelectedFragment(int selectedFragmentIndex) {
         SLog.info("updateMainSelectedFragment:selectedFragmentIndex[%d]", selectedFragmentIndex);
-        AppService appService = AppJoint.service(AppService.class);
-        appService.updateMainSelectedFragment(this,selectedFragmentIndex);
+//        AppService appService = AppJoint.service(AppService.class);
+//        appService.updateMainSelectedFragment(this,selectedFragmentIndex);
     }
 
     @Override

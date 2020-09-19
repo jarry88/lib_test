@@ -142,8 +142,6 @@ dependencies {
     api 'cn.snailpad:EasyJSON:1.0.26'
     api 'com.muddzdev:styleabletoast:2.2.0'
 
-    api "io.github.prototypez:app-joint-core:1.7"
-
 //    compileOnly rootProject.ext.dependencies["converter-gson"]
 //
 //    compileOnly rootProject.ext.dependencies["rxjava"] // rxjava2

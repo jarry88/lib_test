@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.huawei.agconnect'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'app-joint'
 
 // 路由表自动加载插件
 apply plugin: 'com.alibaba.arouter'
@@ -92,6 +91,10 @@ android {
 //            buildConfigField("Boolean","DEBUG","\"js$suffix\"")
         }
         debug {
+            aaptOptions{
+                //據説加快編譯速度，原先1.45
+                cruncherEnabled=false
+            }
             minifyEnabled false
             signingConfig signingConfigs.release
 

@@ -17,7 +17,7 @@ class TitleBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         RelativeLayout(context, attrs, defStyleAttr){
     private val  titlebarTitle by lazy { mView.findViewById<TextView>(R.id.titlebar_title) }
     private val titlebarLeft by lazy { mView.findViewById<RelativeLayout>(R.id.titlebar_leftlayout) }
-    private val titlebarLeftImage by lazy { mView.findViewById<ImageView>(R.id.titlebar_leftimage) }
+    private val titlebarLeftImage by lazy { mView.findViewById<ImageView>(R.id.titlebarLeftImage) }
     private val titlebarRight by lazy { mView.findViewById<RelativeLayout>(R.id.titlebar_rightlayout) }
     private val titlebarRightText by lazy { mView.findViewById<TextView>(R.id.titlebar_righttext) }
     private val titlebarRightImage by lazy { mView.findViewById<ImageView>(R.id.titlebar_rightimage) }

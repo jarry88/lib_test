@@ -133,7 +133,8 @@ class TwantApplication :BaseApplication(){
         startKoin {
             androidLogger()
             androidContext(this@TwantApplication)
-            modules(koinModule)
+            koin.loadModules(koinModule)
+            koin.createRootScope()
         }
         SLog.info("Launch performance...")
 

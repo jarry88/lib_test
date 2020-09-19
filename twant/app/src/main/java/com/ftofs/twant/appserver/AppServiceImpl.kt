@@ -14,9 +14,7 @@ import com.gzp.lib_common.base.BaseFragment
 import com.gzp.lib_common.service.AppService
 import com.gzp.lib_common.utils.AppUtil
 import com.gzp.lib_common.utils.BaseContext
-import io.github.prototypez.appjoint.core.ServiceProvider
 
-@ServiceProvider
 class AppServiceImpl:AppService {
     override fun startActivityOfApp(context: Context) {
         //可以在这里启动mainactivity

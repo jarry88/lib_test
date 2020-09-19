@@ -36,7 +36,6 @@ import com.wzq.mvvmsmart.net.net_utils.Utils
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.KLog.init
 import com.wzq.mvvmsmart.utils.Tasks
-import io.github.prototypez.appjoint.AppJoint
 import org.android.agoo.huawei.HuaWeiRegister
 import org.android.agoo.xiaomi.MiPushRegistar
 import org.koin.core.context.startKoin
@@ -73,7 +72,7 @@ open class BaseApplication:Application() {
      * app 崩溃重启的配置
      */
     open fun initCrash() {
-        val appService=AppJoint.service(AppService::class.java)
+//        val appService=AppJoint.service(AppService::class.java)
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT) //背景模式,开启沉浸式
                 .enabled(true) //是否启动全局异常捕获
                 .showErrorDetails(true) //是否显示错误详细信息
@@ -82,7 +81,7 @@ open class BaseApplication:Application() {
                 .minTimeBetweenCrashesMs(2000) //崩溃的间隔时间(毫秒)
                 .errorDrawable(R.mipmap.ic_launcher) //错误图标
                 //todo 设置重启activity
-                .restartActivity(appService.getMainActivity()) //重新启动后的activity
+//                .restartActivity(appService.getMainActivity()) //重新启动后的activity
                 //                                .errorActivity(YourCustomErrorActivity.class) //崩溃后的错误activity
                 //                                .eventListener(new YourCustomEventListener()) //崩溃后的错误监听
                 .apply()
