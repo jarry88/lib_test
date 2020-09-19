@@ -5,34 +5,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.LogUtil;
-import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.widget.NineLuckPan;
-import com.ftofs.twant.widget.SearchHistoryPopup;
-import com.gzp.lib_common.base.BaseFragment;
-import com.gzp.lib_common.utils.SLog;
-import com.lyrebirdstudio.croppylib.main.CropRequest;
+
 
 import java.io.IOException;
 
-import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 public class CrossBorderHomeFragment extends BaseFragment implements View.OnClickListener {
-    public static LabFragment newInstance() {
-        LabFragment fragment = new LabFragment();
+    public static CrossBorderHomeFragment newInstance() {
+        CrossBorderHomeFragment fragment = new CrossBorderHomeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -51,10 +43,14 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        loadData();
     }
 
     private void loadData() {
-        String url = Api.PATH_TARIFF_BUY_INDEX;
+        // String url = Api.PATH_TARIFF_BUY_INDEX;
+        String url = "https://test.weshare.team/tmp/test3.json";
+
         Api.getUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {

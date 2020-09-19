@@ -1,6 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="212dp"
+        android:background="#019AA7"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+            <com.ftofs.twant.widget.ScaledButton
+                android:id="@+id/btn_back"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="7dp"
+                android:layout_centerVertical="true"
+                app:icon_src="@drawable/ic_arrow_back_white_24dp">
+
+            </com.ftofs.twant.widget.ScaledButton>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/img_cross_border_title">
+            </ImageView>
+
+            <com.ftofs.twant.widget.ScaledButton
+                android:id="@+id/btn_search"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_marginEnd="7dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:icon_src="@drawable/icon_shop_goods_search">
+            </com.ftofs.twant.widget.ScaledButton>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="首頁"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:gravity="center">
+            </TextView>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="美妝"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:gravity="center">
+            </TextView>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="母嬰"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:gravity="center">
+            </TextView>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="數碼"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:gravity="center">
+            </TextView>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="保健"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:gravity="center">
+            </TextView>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
