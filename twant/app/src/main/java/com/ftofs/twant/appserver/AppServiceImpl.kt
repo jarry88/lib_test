@@ -44,6 +44,10 @@ class AppServiceImpl:AppService {
         return MainActivity::class.java
     }
 
+    override fun init(context: Context) {
+
+    }
+
     override fun updateMainSelectedFragment(fragment: BaseFragment,selectedFragmentIndex: Int) {
         val mainFragment =fragment.parentFragment as MainFragment?
         if (mainFragment != null) {

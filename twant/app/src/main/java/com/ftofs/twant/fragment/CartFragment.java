@@ -34,8 +34,6 @@ import com.ftofs.twant.entity.cart.StoreStatus;
 import com.ftofs.twant.entity.cart.TotalStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.gzp.lib_common.base.BaseFragment;
-import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -45,6 +43,8 @@ import com.ftofs.twant.widget.CartAdjustButton;
 import com.ftofs.twant.widget.CartCrossBorderPopup;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -70,7 +70,7 @@ import static com.ftofs.twant.entity.cart.BaseStatus.PHRASE_BUBBLE;
  * 購物袋
  * @author zwm
  */
-public class CartFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class CartFragment extends MainBaseFragment implements View.OnClickListener, OnSelectedListener {
     TextView tvFragmentTitle;
     LinearLayout cartStoreItemContainer;
     String textSettlement;

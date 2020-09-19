@@ -12,9 +12,14 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
+import com.github.richardwrq.krouter.annotation.Inject;
+import com.github.richardwrq.krouter.api.core.KRouter;
 import com.gzp.lib_common.base.callback.CommonCallback;
 import com.gzp.lib_common.base.callback.IntentCallBack;
+import com.gzp.lib_common.constant.Constant;
 import com.gzp.lib_common.constant.RequestCode;
+import com.gzp.lib_common.service.AppService;
+import com.gzp.lib_common.service.ConstantsPath;
 import com.gzp.lib_common.utils.IntentUtil;
 import com.gzp.lib_common.utils.PermissionUtil;
 import com.gzp.lib_common.utils.SLog;
@@ -33,6 +38,8 @@ public abstract class BaseFragment extends SupportFragment {
     protected ViewDataBinding simpleBind;
     private IntentCallBack mCapureCallBack;
 
+    @Inject(name = ConstantsPath.APP_SERVICE_PATH)
+    AppService appService;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -59,9 +66,6 @@ public abstract class BaseFragment extends SupportFragment {
     protected  int simpleBind(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         return 0;
     };
-    public void setAppService(IntentCallBack callBack){
-        mCapureCallBack = callBack;
-    }
     /**
      * 調起掃描二維碼的Activity
      * 因為項目結構調整
@@ -113,11 +117,7 @@ public abstract class BaseFragment extends SupportFragment {
         pop();
     }
 
-    public void updateMainSelectedFragment(int selectedFragmentIndex) {
-        SLog.info("updateMainSelectedFragment:selectedFragmentIndex[%d]", selectedFragmentIndex);
-//        AppService appService = AppJoint.service(AppService.class);
-//        appService.updateMainSelectedFragment(this,selectedFragmentIndex);
-    }
+
 
     @Override
     public void onAttach(@NonNull Context context) {

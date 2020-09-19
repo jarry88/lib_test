@@ -35,18 +35,13 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.entity.UniversalMemberItem;
-import com.gzp.lib_common.base.callback.CommonCallback;
-
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.gzp.lib_common.base.BaseFragment;
-import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.HawkUtil;
-import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -54,6 +49,9 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BottomConfirmPopup;
 import com.ftofs.twant.widget.QuickClickButton;
 import com.ftofs.twant.widget.SharePopup;
+import com.gzp.lib_common.base.callback.CommonCallback;
+import com.gzp.lib_common.utils.PermissionUtil;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.orhanobut.hawk.Hawk;
@@ -78,7 +76,7 @@ import okhttp3.Call;
  * 我的
  * @author zwm
  */
-public class MyFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener,BaseQuickAdapter.RequestLoadMoreListener {
+public class MyFragment extends MainBaseFragment implements View.OnClickListener, OnSelectedListener,BaseQuickAdapter.RequestLoadMoreListener {
     // 【想粉】數據列表
     List<UniversalMemberItem> followMeList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();

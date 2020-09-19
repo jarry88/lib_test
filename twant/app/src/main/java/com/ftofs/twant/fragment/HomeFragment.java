@@ -17,9 +17,9 @@ import com.ftofs.ft_login.service.LoginServiceImpl;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
-import com.ftofs.twant.activity.TestActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.appserver.AppServiceImpl;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -48,6 +48,7 @@ import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
 import com.tmall.wireless.tangram.structure.BaseCell;
+import com.wzq.mvvmsmart.utils.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,11 +65,9 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends MainBaseFragment implements View.OnClickListener {
     RecyclerView rvList;
     TangramEngine tangramEngine;
-    @Inject(name=ConstantsPath.LOGIN_SERVICE_PATH)
-    LoginServiceImpl loginServiceWrap;
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
     LinearLayout llFloatButtonContainer;
     private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800; // 浮動按鈕滑動顯示與隱藏效果的延遲時間(毫秒)
@@ -84,6 +83,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     boolean newArrivalsLoaded = false;
 
     BasePopupView popupViewAd;
+    @Inject(name = ConstantsPath.LOGIN_SERVICE_PATH)
+    LoginServiceImpl loginService;
+
 
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -103,9 +105,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        EventBus.getDefault().register(this);
         KRouter.INSTANCE.inject(this);
+        EventBus.getDefault().register(this);
 
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         Util.setOnClickListener(view, R.id.btn_test, this);
@@ -385,7 +386,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         } else if (id == R.id.btn_test) {
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
-            loginServiceWrap.start(requireContext());
+            loginService.start(requireContext());
         }
     }
 

@@ -184,6 +184,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         if (!isAdded()) {
             return;
         }
+        SLog.info("切換【%s】",index);
         showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
 
         // 切換未選中圖標
