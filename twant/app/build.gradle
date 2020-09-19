@@ -4,9 +4,6 @@ apply plugin: 'com.huawei.agconnect'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
-// 路由表自动加载插件
-apply plugin: 'com.alibaba.arouter'
-//apply plugin: 'de.mannodermaus.android-junit5'
 
 android {
     signingConfigs {
@@ -48,11 +45,6 @@ android {
 
         resConfigs "zh", "en"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [AROUTER_MODULE_NAME: project.getName()]
-            }
-        }
 
 
     }
@@ -162,8 +154,6 @@ dependencies {
     implementation project(":lib_common_ui")
     implementation project(":lib_net")
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    kapt 'com.alibaba:arouter-compiler:1.2.2'
-//    kapt 'com.alibaba:arouter-compiler:1.2.2'
 
     api rootProject.ext.dependencies["ktx"]
 

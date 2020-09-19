@@ -12,7 +12,6 @@ import android.os.StrictMode
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import cn.snailpad.easyjson.EasyJSONObject
-import com.alibaba.android.arouter.launcher.ARouter
 import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
@@ -113,7 +112,6 @@ class TwantApplication :BaseApplication(){
         super.onCreate()
         instance=this
         BaseContext.instance.init(this)//初始話instance
-        ARouter.init(this)
 
         AppUtil.app=this
         PhoneNumberAuthHelper.getInstance(this,object :TokenResultListener{

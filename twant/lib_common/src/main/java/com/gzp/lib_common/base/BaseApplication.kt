@@ -10,8 +10,6 @@ import android.os.Process
 import android.util.Log
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import cn.snailpad.easyjson.EasyJSONObject
-import com.alibaba.android.arouter.BuildConfig
-import com.alibaba.android.arouter.launcher.ARouter
 import com.gzp.lib_common.R
 import com.gzp.lib_common.config.Config
 import com.gzp.lib_common.constant.Constant
@@ -47,10 +45,6 @@ open class BaseApplication:Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.DEBUG) {
-            ARouter.openDebug()
-            ARouter.openLog()
-        }
         MMKV.initialize(this) // 替换sp
         initMVVM()
     }
