@@ -3,7 +3,7 @@
     <data>
         <variable
             name="vo"
-            type="com.ftofs.twant.vo.CategoryNavVo" />
+            type="com.ftofs.lib_net.model.CategoryNavVo" />
 
     </data>
     <RelativeLayout

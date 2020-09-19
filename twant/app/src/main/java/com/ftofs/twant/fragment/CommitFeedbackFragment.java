@@ -21,7 +21,8 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ButtonClickInfo;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
@@ -160,7 +161,7 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
                 }
             };
 
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     EasyJSONArray imageList = EasyJSONArray.generate();

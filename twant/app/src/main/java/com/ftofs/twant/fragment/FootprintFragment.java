@@ -26,7 +26,8 @@ import com.ftofs.twant.entity.footprint.GoodsStatus;
 import com.ftofs.twant.entity.footprint.StoreStatus;
 import com.ftofs.twant.entity.footprint.TotalStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -35,7 +36,6 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -168,14 +168,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
 //                         .dismissOnTouchOutside(false)
                     // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除選中的足跡嗎?", null, new OnConfirmCallback() {
+                .asCustom(new TwConfirmPopup(_mActivity, "確定要刪除選中的足跡嗎?", null, new OnConfirmCallback() {
                             @Override
                             public void onYes() {
                                 SLog.info("onYes");

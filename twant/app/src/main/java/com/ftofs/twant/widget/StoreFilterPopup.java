@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.telephony.CellSignalStrength;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import com.ftofs.twant.entity.BizCircleId;
 import com.ftofs.twant.entity.BizCircleItem;
 import com.ftofs.twant.entity.StoreSortCriteriaItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.impl.PartShadowPopupView;
 import com.nex3z.flowlayout.FlowLayout;

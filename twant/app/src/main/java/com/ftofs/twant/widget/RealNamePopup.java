@@ -1,7 +1,6 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,8 +15,7 @@ import androidx.annotation.NonNull;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;

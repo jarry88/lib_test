@@ -24,7 +24,7 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -140,7 +140,7 @@ public class ActivityPopup extends CenterPopupView implements View.OnClickListen
                 } else if ("wantPost".equals(appPopupAdLinkType)) { // 想要圈
                     MainFragment mainFragment = MainFragment.getInstance();
                     if (mainFragment == null) {
-                        ToastUtil.error(TwantApplication.getInstance(), "MainFragment為空");
+                        ToastUtil.error(TwantApplication.Companion.get(), "MainFragment為空");
                         return;
                     }
                     mainFragment.showHideFragment(MainFragment.CIRCLE_FRAGMENT);

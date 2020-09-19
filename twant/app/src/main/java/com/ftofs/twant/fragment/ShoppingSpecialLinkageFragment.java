@@ -15,11 +15,12 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ItemAdapter;
 import com.ftofs.twant.adapter.MenuAdapter;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.Goods;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.entity.Item;
 import com.ftofs.twant.entity.Menu;
 import com.ftofs.twant.interfaces.OnItemClickListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.AssetsUtil;
 

@@ -8,33 +8,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ftofs.twant.BlankFragment;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.TestAdapter;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.databinding.FragmentLabBinding;
 import com.ftofs.twant.entity.CategoryCommodity;
-import com.ftofs.twant.kotlin.net.BaseRepository;
-import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.entity.StoreVoucher;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.CroppyInitUtilKt;
 import com.ftofs.twant.util.RestartApp;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.CheckPhoneView;
-import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.NineLuckPan;
 
+import com.lxj.xpopup.XPopup;
 import com.lyrebirdstudio.aspectratiorecyclerviewlib.aspectratio.model.AspectRatio;
 import com.lyrebirdstudio.croppylib.Croppy;
 import com.lyrebirdstudio.croppylib.main.CropRequest;
@@ -43,7 +41,6 @@ import com.lyrebirdstudio.croppylib.main.StorageType;
 import com.lyrebirdstudio.croppylib.util.file.FileCreator;
 import com.lyrebirdstudio.croppylib.util.file.FileOperationRequest;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +79,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         Util.setOnClickListener(view, R.id.btn_test1, this);
         Util.setOnClickListener(view, R.id.btn_test2, this);
+        Util.setOnClickListener(view, R.id.btn_goto, this);
         Util.setOnClickListener(view, R.id.btn_themeCropRequest, this);
         Util.setOnClickListener(view, R.id.btn_cacheCropRequest, this);
         Util.setOnClickListener(view, R.id.btn_excludeAspectRatiosCropRequest, this);
@@ -189,14 +187,18 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         int id = v.getId();
 
         if (id == R.id.btn_test1) {
-            ToastUtil.info(_mActivity, "way1");
-            RestartApp.restartThroughIntentCompatMakeRestartActivityTask(_mActivity);
+            // ToastUtil.info(_mActivity, "way1");
+            // RestartApp.restartThroughIntentCompatMakeRestartActivityTask(_mActivity);
+            start(TestFragment.newInstance());
         }else if (id == R.id.btn_post1) {
             ToastUtil.info(_mActivity, "btn_post1");
-
+            new XPopup.Builder(getContext()).asCustom(new MoonVoucherListPopup(getContext(),new ArrayList<StoreVoucher>(),"10")).show();
         } else if (id == R.id.btn_test2) {
             ToastUtil.info(_mActivity, "way2");
             RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);
+        } else if (id == R.id.btn_goto) {
+            ToastUtil.info(_mActivity, "way3");
+            start(BlankFragment.newInstance("a","b"));
         }else if (id == R.id.btn_themeCropRequest) {
             ToastUtil.info(_mActivity, "btn_themeCropRequest");
             Croppy.INSTANCE.start(getActivity(), themeCropRequest);

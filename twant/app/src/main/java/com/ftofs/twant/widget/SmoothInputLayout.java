@@ -28,7 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 
 /**
@@ -174,7 +174,7 @@ public class SmoothInputLayout extends LinearLayout {
     private void saveKeyboardHeight() {
         SLog.info("saveKeyboardHeight[%d]", mKeyboardHeight);
         if (mAutoSaveKeyboardHeight)
-            getKeyboardSharedPreferences().edit().putInt(KEY_HEIGHT, mKeyboardHeight).commit();
+            getKeyboardSharedPreferences().edit().putInt(KEY_HEIGHT, mKeyboardHeight).apply();
         else {
             if (mKeyboardProcessor != null)
                 mKeyboardProcessor.onSaveKeyboardHeight(mKeyboardHeight);

@@ -5,9 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -26,9 +23,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.Item;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.fragment.LoginFragment;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.AssetsUtil;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.UiUtil;
@@ -135,7 +130,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (Config.PROD) {
                         HashMap<String, Object> analyticsDataMap = new HashMap<>();
                         analyticsDataMap.put("commonId", item.goods.id);
-                        MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.ACTIVITY_GOODS, analyticsDataMap);
+                        MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.ACTIVITY_GOODS, analyticsDataMap);
                     }
                     Util.startFragment(GoodsDetailFragment.newInstance(item.goods.id, 0));
                 });

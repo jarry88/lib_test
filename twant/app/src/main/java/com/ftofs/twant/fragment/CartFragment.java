@@ -1,6 +1,5 @@
 package com.ftofs.twant.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -35,42 +34,34 @@ import com.ftofs.twant.entity.cart.StoreStatus;
 import com.ftofs.twant.entity.cart.TotalStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.AdjustButton;
 import com.ftofs.twant.widget.CartAdjustButton;
 import com.ftofs.twant.widget.CartCrossBorderPopup;
-import com.ftofs.twant.widget.RealNameInstructionPopup;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
-import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-import static android.view.View.VISIBLE;
 import static com.ftofs.twant.entity.cart.BaseStatus.PHRASE_BUBBLE;
 
 
@@ -482,15 +473,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 //                         .dismissOnTouchOutside(false)
                             // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                            .setPopupCallback(new XPopupCallback() {
-                                @Override
-                                public void onShow() {
-                                }
-
-                                @Override
-                                public void onDismiss() {
-                                }
-                            }).asCustom(new TwConfirmPopup(_mActivity, "每次交易總金額不得超過$20,000，請調整購物數量再提交", null, new OnConfirmCallback() {
+                            .asCustom(new TwConfirmPopup(_mActivity, "每次交易總金額不得超過$20,000，請調整購物數量再提交", null, new OnConfirmCallback() {
                         @Override
                         public void onYes() {
                             SLog.info("onYes");
@@ -533,14 +516,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 //                         .dismissOnTouchOutside(false)
                         // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                        .setPopupCallback(new XPopupCallback() {
-                            @Override
-                            public void onShow() {
-                            }
-                            @Override
-                            public void onDismiss() {
-                            }
-                        }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎？", null, new OnConfirmCallback() {
+                       .asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎？", null, new OnConfirmCallback() {
                         @Override
                         public void onYes() {
                             SLog.info("onYes");

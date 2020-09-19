@@ -828,19 +828,11 @@
     <string name="text_cancel_after_verification_code">核銷碼</string>
     <string name="text_verification_limit">限購 張</string>
     <string name="text_avaliable">可使用</string>
-    <string name="jiazhaoshibai">加載失敗</string>
-    <string name="jiazhaiwancheng">加載完成</string>
-    <string name="zhengzaijiazhai">正在加載</string>
-    <string name="zhengzaishuaxin">正在刷新</string>
-    <string name="shifangshuaxin">釋放刷新</string>
-    <string name="shuanxinwancheng">刷新完成</string>
-    <string name="shuaxinshibai">刷新失敗</string>
-    <string name="shifanglijijiazhai">釋放立即加載</string>
-    <string name="shangcigengxin">上次更新 M-d HH:mm</string>
     <string name="text_type_retail">零售型</string>
     <string name="text_type_consult">咨詢型</string>
     <string name="text_type_virtual">虛擬型</string>
     <string name="text_consult">詢價</string>
     <string name="text_want_to_consult">想要咨詢</string>
     <string name="text_more_activity_prepare">更多活動正在籌備中</string>
+    <string name="text_goods_mannager">商品管理</string>
 </resources>

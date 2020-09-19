@@ -29,11 +29,11 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.SearchType;
-import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.SearchHistoryItem;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
@@ -44,14 +44,12 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SearchHistoryPopup;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -373,17 +371,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
             case R.id.btn_expand_history:
                 searchHistoryPopup = (SearchHistoryPopup) new XPopup.Builder(_mActivity)
                         .atView(vwAnchor)
-                        .setPopupCallback(new XPopupCallback() {
-                            @Override
-                            public void onShow() {
-                                SLog.info("显示了");
-                            }
-                            @Override
-                            public void onDismiss() {
-                                SLog.info("关闭了");
-                            }
-                        })
-                        .asCustom(new SearchHistoryPopup(_mActivity, searchType, this));
+                      .asCustom(new SearchHistoryPopup(_mActivity, searchType, this));
                 searchHistoryPopup.show();
                 break;
             case R.id.ll_mask:

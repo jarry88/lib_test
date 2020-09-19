@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.SoftInputInfo;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.orhanobut.hawk.Hawk;
 
 

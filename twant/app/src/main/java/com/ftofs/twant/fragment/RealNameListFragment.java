@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +17,12 @@ import com.ftofs.twant.adapter.RealNameListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.RealNameListItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.LogUtil;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -30,13 +30,13 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.RealNameInstructionPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -86,19 +86,11 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
 //                         .dismissOnTouchOutside(false)
                             // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                            .setPopupCallback(new XPopupCallback() {
-                                @Override
-                                public void onShow() {
-                                }
-                                @Override
-                                public void onDismiss() {
-                                }
-                            }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎?", null, new OnConfirmCallback() {
+                           .asCustom(new TwConfirmPopup(_mActivity, true, "確定要刪除嗎?", null, new OnConfirmCallback() {
                         @Override
                         public void onYes() {
                             SLog.info("onYes");
                             deleteRealNameInfo(position);
-                            adapter.notifyDataSetChanged();
                         }
 
                         @Override
@@ -146,11 +138,7 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
-        EasyJSONObject params = EasyJSONObject.generate(
-               "token", token
-        );
-
-        Api.getUI(Api.PATH_REAL_NAME_LIST, params, new UICallback() {
+        Api.getUI(Api.PATH_MEMBER_AUTH_LIST, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
@@ -167,13 +155,15 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
                     }
 
                     realNameItemList.clear();
-                    EasyJSONArray consigneeNameAuthList = responseObj.getSafeArray("datas.consigneeNameAuthList");
+                    EasyJSONArray consigneeNameAuthList = responseObj.getSafeArray("datas.authList");
                     for (Object object : consigneeNameAuthList) {
                         EasyJSONObject itemObj = (EasyJSONObject) object;
                         RealNameListItem item = new RealNameListItem();
                         item.authId = itemObj.getInt("authId");
                         item.name = itemObj.getSafeString("authConsigneeName");
-                        item.idNum = itemObj.getSafeString("idCartNumber");
+                        item.idNum = itemObj.getSafeString("idCardNumber");
+                        item.idCardFrontImage = itemObj.optString("idCardFrontImage");
+                        item.idCardBackImage = itemObj.optString("idCardBackImage");
 
                         realNameItemList.add(item);
                     }
@@ -187,15 +177,13 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
 
     private void deleteRealNameInfo(int position) {
         RealNameListItem item = realNameItemList.get(position);
-        String token = User.getToken();
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "authId", item.authId
-        );
+        String url = Api.PATH_MEMBER_AUTH_DELETE + item.authId;
+        SLog.info("url[%s]", url);
 
-        Api.postUI(Api.PATH_DELETE_REAL_NAME_INFO, params, new UICallback() {
+        Api.deleteUI(url, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
@@ -206,12 +194,13 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
 
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, "", responseStr, "");
                         return;
                     }
 
                     ToastUtil.success(_mActivity, "刪除成功");
                     realNameItemList.remove(position);
-                    realNameListAdapter.notifyDataSetChanged();
+                    realNameListAdapter.notifyItemRemoved(position);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }

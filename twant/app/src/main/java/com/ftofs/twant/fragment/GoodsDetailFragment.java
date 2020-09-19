@@ -46,9 +46,7 @@ import com.ftofs.twant.constant.GroupBuyStatus;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
-import com.ftofs.twant.domain.bargain.Bargain;
 import com.ftofs.twant.entity.AddrItem;
-import com.ftofs.twant.entity.BargainItem;
 import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
@@ -65,7 +63,8 @@ import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.LogUtil;
@@ -89,7 +88,6 @@ import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.ViewMoreGroupPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.rd.PageIndicatorView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -353,6 +351,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvSecKillPrice;
     TextView tvSecKillOriginalPrice;
 
+    View imgCrossBorderIndicator; // 【跨城購】標誌
+
     @Override
     public void onSimpleCall(Object data) {
         try {
@@ -438,11 +438,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SLog.info("onViewCreated");
 
         twLightGrey = getResources().getColor(R.color.tw_light_grey, null);
         EventBus.getDefault().register(this);
         iconTariff = view.findViewById(R.id.icon_tariffEnable);
+
 
         Bundle args = getArguments();
         commonId = args.getInt("commonId");
@@ -462,6 +462,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             }
             return false;
         });
+
+        imgCrossBorderIndicator = view.findViewById(R.id.img_cross_border_indicator);
+
         //  用于 存储 上一次 滚动的Y坐标
         rlTopBarContainer = view.findViewById(R.id.tool_bar);
         preTopBarContainer = view.findViewById(R.id.rv_pre_tool_bar);
@@ -679,12 +682,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         pageIndicatorView = view.findViewById(R.id.pageIndicatorView);
         setImageBanner(rvGalleryImageList);
 
+
         if (Config.PROD) {
             MobclickAgent.onPageStart(UmengAnalyticsPageName.GOODS);
 
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("commonId", commonId);
-            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS, analyticsDataMap);
+            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS, analyticsDataMap);
         }
     }
 
@@ -899,14 +903,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 //                         .dismissOnTouchOutside(false)
                                         // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                                        .setPopupCallback(new XPopupCallback() {
-                                            @Override
-                                            public void onShow() {
-                                            }
-                                            @Override
-                                            public void onDismiss() {
-                                            }
-                                        }).asCustom(new TwConfirmPopup(_mActivity, title,null   , "立即購買", "等等團購",new OnConfirmCallback() {
+                                      .asCustom(new TwConfirmPopup(_mActivity, title,null   , "立即購買", "等等團購",new OnConfirmCallback() {
                                     @Override
                                     public void onYes() {
                                         SLog.info("onYes");
@@ -926,14 +923,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 //                         .dismissOnTouchOutside(false)
                                     // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                                    .setPopupCallback(new XPopupCallback() {
-                                        @Override
-                                        public void onShow() {
-                                        }
-                                        @Override
-                                        public void onDismiss() {
-                                        }
-                                    }).asCustom(new TwConfirmPopup(_mActivity, "是否參與團購優惠活動",null   , "參與團購", "原價購買",new OnConfirmCallback() {
+                                  .asCustom(new TwConfirmPopup(_mActivity, "是否參與團購優惠活動",null   , "參與團購", "原價購買",new OnConfirmCallback() {
                                 @Override
                                 public void onYes() {
                                     SLog.info("onYes");
@@ -1623,8 +1613,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         TextView tvBargainCountDownLabel = contentView.findViewById(R.id.tv_bargain_count_down_label);
                         if (bargainState == Constant.BARGAIN_STATE_NOT_STARTED) {
                             tvBargainCountDownLabel.setText("距離活動開始");
+                            promotionCountDownTimeType = COUNT_DOWN_TYPE_BEGIN;
                         } else if (bargainState == Constant.BARGAIN_STATE_ONGOING) {
                             tvBargainCountDownLabel.setText("活動倒計時");
+                            promotionCountDownTimeType = COUNT_DOWN_TYPE_END;
                         }
 
 
@@ -1910,11 +1902,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         flAddToCart.setVisibility(GONE);
                         btnBuy.setVisibility(GONE);
                         btnConsult.setVisibility(VISIBLE);
-
                     } else {
                         goodsPrice = Util.getSpuPrice(goodsDetail);
                         UiUtil.toPriceUI(tvGoodsPrice,0);
                     }
+
+                    imgCrossBorderIndicator.setVisibility(goodsModel == Constant.GOODS_TYPE_CROSS_BORDER ? VISIBLE : GONE);
 
                     // 是否点赞
                     isLike = goodsDetail.getInt("isLike");
@@ -2823,6 +2816,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      * @param goodsInfo sku信息
      *
      */
+
     private void showPriceTag(GoodsInfo goodsInfo) {
         SLog.info("promotionType[%d], promotionCountDownTime[%d]", promotionType, promotionCountDownTime);
         if (Util.noPrice(goodsModel)) {

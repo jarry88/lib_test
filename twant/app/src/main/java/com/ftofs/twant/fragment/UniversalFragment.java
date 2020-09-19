@@ -22,7 +22,8 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -140,6 +141,9 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
                     }
 
                     int isShowAuth = responseObj.getInt("datas.isShowAuth");
+                    if (Config.USE_DEVELOPER_TEST_DATA) {
+                        isShowAuth = Constant.TRUE_INT;
+                    }
                     if (isShowAuth == Constant.TRUE_INT) {
                         btnRealNameSet.setVisibility(View.VISIBLE);
                     } else {

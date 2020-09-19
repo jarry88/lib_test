@@ -1,5 +1,7 @@
 package com.ftofs.twant.entity;
 
+import com.ftofs.lib_net.model.Goods;
+
 public class Item {
     public boolean isCategoryTitle;
     public int category;

@@ -2,7 +2,6 @@ package com.ftofs.twant.tangram;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +24,12 @@ import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
-import com.ftofs.twant.fragment.ImGoodsFragment;
-import com.ftofs.twant.fragment.LabFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -281,7 +278,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             case "wantPost":
                 MainFragment mainFragment = MainFragment.getInstance();
                 if (mainFragment == null) {
-                    ToastUtil.error(TwantApplication.getInstance(), "MainFragment為空");
+                    ToastUtil.error(TwantApplication.Companion.get(), "MainFragment為空");
                     return;
                 }
                 mainFragment.showHideFragment(MainFragment.CIRCLE_FRAGMENT);

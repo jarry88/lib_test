@@ -17,9 +17,8 @@ import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
-import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
@@ -34,16 +33,13 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.WeixinUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BottomPopupView;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.lxj.xpopup.util.XPopupUtils;
 
 import org.urllib.Urls;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -250,7 +246,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             dismiss();
         } else if (id == R.id.btn_share_to_friend || id == R.id.btn_share_to_timeline) {
             // 檢測微信是否已經安裝
-            if (!TwantApplication.wxApi.isWXAppInstalled()) {
+            if (TwantApplication.Companion.get().getWxApi()!=null&&!TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) {
                 ToastUtil.error(context, context.getString(R.string.weixin_not_installed_hint));
                 return;
             }
@@ -283,7 +279,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                     shareToWeixin(scene, filepath);
                 }
             };
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     try {
@@ -329,14 +325,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 //                         .dismissOnTouchOutside(false)
         // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                @Override
-                public void onShow() {
-                }
-                @Override
-                public void onDismiss() {
-                }
-            }).asCustom(new TwConfirmPopup(context, "分享鏈接已復制", shareUrl, new OnConfirmCallback() {
+                  .asCustom(new TwConfirmPopup(context, "分享鏈接已復制", shareUrl, new OnConfirmCallback() {
                 @Override
                 public void onYes() {
                     SLog.info("onYes");
@@ -377,14 +366,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 //                         .dismissOnTouchOutside(false)
                     // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new WordSharePopup(context, word)).show();
+                    .asCustom(new WordSharePopup(context, word)).show();
 
             dismiss();
         }

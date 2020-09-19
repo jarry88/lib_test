@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 public class QuickClickButton extends androidx.appcompat.widget.AppCompatTextView {
     public interface OnQuickClickListener {

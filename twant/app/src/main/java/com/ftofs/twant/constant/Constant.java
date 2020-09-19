@@ -1,6 +1,5 @@
 package com.ftofs.twant.constant;
 
-import com.huawei.updatesdk.fileprovider.UpdateSdkFileProvider;
 
 /**
  * 常量定義
@@ -341,7 +340,8 @@ public class Constant {
     public static final int GOODS_STATUS_OFF_SHELF = 0;  // 下架
     public static final int GOODS_STATUS_ON_SHELF = 1;   // 在售(即上架)
     public static final int RC_CROP_IMAGE = 102;
-    public static final int GOODS_TYPE_CONSULT = 5;
+    public static final int GOODS_TYPE_CONSULT = 5; // 諮詢類商品
+    public static final int GOODS_TYPE_CROSS_BORDER = 6; // 購城購商品
     public static final int CONSULT_STORE = 1;
     public static final int NORMAL_STORE = 2;
     public static int SELLER_REFUND=1;//退款

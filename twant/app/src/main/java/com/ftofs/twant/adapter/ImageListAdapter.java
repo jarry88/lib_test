@@ -2,7 +2,6 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -10,8 +9,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.ftofs.twant.R;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.Util;
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator;
 import com.github.piasy.biv.loader.ImageLoader;
 import com.github.piasy.biv.view.BigImageView;

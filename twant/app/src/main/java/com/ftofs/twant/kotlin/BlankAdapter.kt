@@ -6,7 +6,7 @@ import com.fastloan.app.ui.adapter.DataBoundViewHolder
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.VerificationGoodsItemBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
 
 class BlankAdapter : DataBoundAdapter<OrdersGoodsVo, VerificationGoodsItemBinding>(){

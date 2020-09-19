@@ -17,7 +17,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.adapter.MyLikeArticleAdapter;
-import com.ftofs.twant.adapter.MyLikeGoodsAdapter;
 import com.ftofs.twant.adapter.MyLikeStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -28,7 +27,8 @@ import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.MyFollowGoodsItem;
 import com.ftofs.twant.entity.MyLikeStoreItem;
 import com.ftofs.twant.entity.PostItem;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -62,7 +62,6 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
     boolean storeDataLoaded = false;
     MyLikeStoreAdapter myLikeStoreAdapter;
     boolean goodsDataLoaded = false;
-    MyLikeGoodsAdapter myLikeGoodsAdapter;
     boolean articleDataLoaded = false;
     MyLikeArticleAdapter myLikeArticleAdapter;
 

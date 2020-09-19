@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

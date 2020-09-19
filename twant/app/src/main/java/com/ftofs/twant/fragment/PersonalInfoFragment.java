@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,30 +25,27 @@ import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.interfaces.CommonCallback;
-import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.gzp.lib_common.base.callback.CommonCallback;
+
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.Jarbon;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.DateSelectPopup;
-import com.ftofs.twant.widget.ImagePreviewPopup;
 import com.ftofs.twant.widget.ListPopup;
-import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 import com.yalantis.ucrop.UCrop;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -571,7 +567,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     }
                 };
 
-                TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+                TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                     @Override
                     public Object doWork() {
                         File file = new File(absolutePath);

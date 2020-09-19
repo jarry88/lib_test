@@ -8,13 +8,11 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-
-import org.greenrobot.eventbus.EventBus;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -28,7 +26,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wxentry);
         SLog.info("WXEntryActivity.onCreate()");
-        TwantApplication.wxApi.handleIntent(getIntent(), this);
+        TwantApplication.Companion.get().getWxApi().handleIntent(getIntent(), this);
     }
     // 微信发送请求到第三方应用时，会回调到该方法
     @Override

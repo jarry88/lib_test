@@ -6,8 +6,6 @@ import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
@@ -23,7 +21,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.PopupType;
@@ -38,7 +35,8 @@ import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -52,11 +50,8 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -180,13 +175,13 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         if (id == R.id.btn_refresh_captcha) {
             refreshCaptcha();
         } else if (id == R.id.btn_wechat_login) {
-            if (!TwantApplication.wxApi.isWXAppInstalled()) { // 未安裝微信
+            if (!TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) { // 未安裝微信
                 ToastUtil.error(_mActivity, getString(R.string.weixin_not_installed_hint));
                 return;
             }
 
             if (Config.PROD) {
-                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.WECHAT_LOGIN);
+                MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.WECHAT_LOGIN);
             }
 
             ((MainActivity) _mActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_LOGIN);
@@ -196,7 +191,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
 
         } else if (id == R.id.btn_facebook_login) {
             if (Config.PROD) {
-                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.FACEBOOK_LOGIN);
+                MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.FACEBOOK_LOGIN);
             }
 //            LoginFragment loginFragment = (LoginFragment) commonCallback;
 //            if (loginFragment != null) {
@@ -270,7 +265,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 return;
             }
             if (Config.PROD) {
-                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.LOGIN);
+                MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.LOGIN);
             }
             doLogin();
         } else if (id == R.id.btn_mobile_zone) {

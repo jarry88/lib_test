@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity.cart;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.widget.ScaledButton;
 
 public class BaseStatus {

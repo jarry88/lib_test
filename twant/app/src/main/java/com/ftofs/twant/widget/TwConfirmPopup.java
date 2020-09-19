@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
@@ -18,20 +18,37 @@ import com.lxj.xpopup.util.XPopupUtils;
  * @author zwm
  */
 public class TwConfirmPopup extends CenterPopupView implements View.OnClickListener {
+    public static final String TEXT_BTN_YES = "確定";
+    public static final String TEXT_BTN_NO = "取消";
+
     Context context;
     OnConfirmCallback callback;
     String title;
     String content;
-    String textBtnYes = "確定";
-    String textBtnNo = "取消";
+    String textBtnYes = TEXT_BTN_YES;
+    String textBtnNo = TEXT_BTN_NO;
 
+    boolean hideBtnNo = false;  // 隱藏取消按鈕
 
     public TwConfirmPopup(@NonNull Context context, String title, String content, OnConfirmCallback callback) {
         this(context, title, content, null, null, callback);
     }
 
+    /**
+     * 構造方法
+     * @param context
+     * @param showBtnNo 是否顯示【取消】按鈕
+     * @param title
+     * @param content
+     * @param callback
+     */
+    public TwConfirmPopup(@NonNull Context context, boolean showBtnNo, String title, String content, OnConfirmCallback callback) {
+        this(context, title, content, showBtnNo ? TEXT_BTN_YES : null, showBtnNo ? TEXT_BTN_NO : null, callback);
+    }
+
     public TwConfirmPopup(@NonNull Context context, String title, String content, String textBtnYes, String textBtnNo, OnConfirmCallback callback) {
         super(context);
+
 
         this.context = context;
         this.callback = callback;
@@ -43,7 +60,7 @@ public class TwConfirmPopup extends CenterPopupView implements View.OnClickListe
         if (!StringUtil.isEmpty(textBtnNo)) {
             this.textBtnNo = textBtnNo;
         } else {
-            findViewById(R.id.btn_no).setVisibility(GONE);
+            hideBtnNo = true;
         }
     }
 
@@ -63,6 +80,9 @@ public class TwConfirmPopup extends CenterPopupView implements View.OnClickListe
         TextView btnNo = findViewById(R.id.btn_no);
         btnNo.setOnClickListener(this);
         btnNo.setText(textBtnNo);
+        if (hideBtnNo) {
+            btnNo.setVisibility(GONE);
+        }
 
         TextView tvTitle = findViewById(R.id.tv_title);
         if (StringUtil.isEmpty(title)) {

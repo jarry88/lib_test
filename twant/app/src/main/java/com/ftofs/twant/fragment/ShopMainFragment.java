@@ -31,7 +31,8 @@ import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.StoreNavigationItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
@@ -187,7 +188,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("storeId", storeId);
-            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.STORE, analyticsDataMap);
+            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.STORE, analyticsDataMap);
         }
 
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
@@ -575,7 +576,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 .offsetX(-Util.dip2px(_mActivity, 45))
                 .offsetY(-Util.dip2px(_mActivity, 6))
 //                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖.hasShadowBg(false) // 去掉半透明背景
-                .hasShadowBg(false)
+                .hasShadowBg(true)
                 .popupAnimation(PopupAnimation.ScaleAlphaFromCenter)
                 .atView(imgIcon)
                 .asCustom(new WhiteDropdownMenu(_mActivity, storeId, storeFigure, storeNavigationItemList, this));

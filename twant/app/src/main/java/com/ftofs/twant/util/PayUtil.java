@@ -9,7 +9,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.PaySuccessFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class PayUtil {
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
 
         if (Config.PROD) {
-            MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.PAY_SUCCESS);
+            MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.PAY_SUCCESS);
         }
 
         if (startPaySuccessFragment) {

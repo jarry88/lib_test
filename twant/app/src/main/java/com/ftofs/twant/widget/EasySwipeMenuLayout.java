@@ -14,7 +14,7 @@ import android.widget.Scroller;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EasySwipeMenuState;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 
 import java.util.ArrayList;
 

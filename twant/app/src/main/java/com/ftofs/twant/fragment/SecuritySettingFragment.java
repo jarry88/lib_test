@@ -28,7 +28,8 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -36,7 +37,6 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.EventBus;
@@ -125,7 +125,7 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
         fbBindingStatus = Hawk.get(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
         loadBindStatus();//請求接口更新綁定狀態
 
-        if (TwantApplication.wxApi.isWXAppInstalled()) {  // 如果微信已經安裝，則顯示綁定設置
+        if (TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) {  // 如果微信已經安裝，則顯示綁定設置
             view.findViewById(R.id.btn_wx_login_setting).setVisibility(View.VISIBLE);
         } else {
             view.findViewById(R.id.btn_wx_login_setting).setVisibility(View.GONE);
@@ -226,14 +226,7 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
                 .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
                 // 设置弹窗显示和隐藏的回调监听
                 // .autoDismiss(false)
-                .setPopupCallback(new XPopupCallback() {
-                    @Override
-                    public void onShow() {
-                    }
-                    @Override
-                    public void onDismiss() {
-                    }
-                }).asCustom(new TwConfirmPopup(_mActivity, title, content, "確認", "取消", new OnConfirmCallback() {
+               .asCustom(new TwConfirmPopup(_mActivity, title, content, "確認", "取消", new OnConfirmCallback() {
             @Override
             public void onYes() {
                 SLog.info("onYes");

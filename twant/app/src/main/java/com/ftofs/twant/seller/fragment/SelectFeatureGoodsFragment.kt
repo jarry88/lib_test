@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.SellerEditFeaturesLayoutBinding
-import com.ftofs.twant.entity.SellerGoodsItem
-import com.ftofs.twant.kotlin.BaseTwantFragmentMVVM
+import com.ftofs.lib_net.model.SellerGoodsItem
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.FeatureGoodViewModel
 import com.ftofs.twant.kotlin.SellerGoodsListAdapter
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.Util
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog

@@ -1,28 +1,20 @@
 package com.ftofs.twant.fragment;
 
-import android.app.Instrumentation;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Outline;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.DrawableWrapper;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
 import android.text.Layout;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,7 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
@@ -42,14 +33,11 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.GoodsGalleryAdapter;
-import com.ftofs.twant.adapter.NestedScrollingFragmentAdapter;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.InStorePersonItem;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
@@ -57,11 +45,11 @@ import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.ClipboardUtils;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -70,9 +58,7 @@ import com.ftofs.twant.view.BannerViewHolder;
 import com.ftofs.twant.widget.AmapPopup;
 import com.ftofs.twant.widget.DataCircleImageView;
 import com.ftofs.twant.widget.DataImageView;
-import com.ftofs.twant.widget.ImagePopup;
 import com.ftofs.twant.widget.InStorePersonPopup;
-import com.ftofs.twant.widget.LockableNestedScrollView;
 import com.ftofs.twant.widget.MerchantIntroductionPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
@@ -80,7 +66,6 @@ import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.TwQRCodePopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.rd.PageIndicatorView;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -91,9 +76,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -614,7 +596,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                          //好友
                         boolean hasData = false;
-                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, TwantApplication.getStringRes(R.string.text_friend)));
+                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, TwantApplication.Companion.get().getStringRes(R.string.text_friend)));
                         EasyJSONArray friends = null;
                         if (responseObj.exists("datas.friendList")) {
                             friends = responseObj.getArray("datas.friendList");
@@ -1036,14 +1018,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 //                         .dismissOnTouchOutside(false)
                                 // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                                .setPopupCallback(new XPopupCallback() {
-                                    @Override
-                                    public void onShow() {
-                                    }
-                                    @Override
-                                    public void onDismiss() {
-                                    }
-                                }).asCustom(new TwConfirmPopup(_mActivity, "社交帳號已複製", content, new OnConfirmCallback() {
+                              .asCustom(new TwConfirmPopup(_mActivity, "社交帳號已複製", content, new OnConfirmCallback() {
                             @Override
                             public void onYes() {
                                 SLog.info("onYes");

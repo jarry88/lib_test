@@ -1,7 +1,6 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -9,13 +8,12 @@ import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreNavigationAdapter;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.entity.StoreNavigationItem;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.ShopCustomerServiceFragment;
 import com.ftofs.twant.fragment.ShopRelativePostFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.AttachPopupView;
 
@@ -55,7 +53,6 @@ public class WhiteDropdownMenu extends AttachPopupView {
     @Override
     protected void onCreate() {
         super.onCreate();
-
         LinearLayout llMenuList = findViewById(R.id.ll_menu_list);
         storeNavigationAdapter = new StoreNavigationAdapter(context, llMenuList, R.layout.store_navigation_item);
         storeNavigationAdapter.setItemClickListener((adapter, view, position) -> {
@@ -82,9 +79,14 @@ public class WhiteDropdownMenu extends AttachPopupView {
     }
 
     // 如果要自定义弹窗的背景，不要给布局设置背景图片，重写这个方法返回一个Drawable即可
+//    @Override
+//    protected Drawable getPopupBackground() {
+//        return getResources().getDrawable(R.drawable.white_menu_bg_small, null);
+//    }
+
     @Override
-    protected Drawable getPopupBackground() {
-        return getResources().getDrawable(R.drawable.white_menu_bg_small, null);
+    public View getPopupImplView() {
+        return super.getPopupImplView();
     }
 
     @Override

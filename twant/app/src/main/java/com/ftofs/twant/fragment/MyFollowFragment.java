@@ -18,7 +18,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.adapter.MyFollowArticleAdapter;
-import com.ftofs.twant.adapter.MyFollowGoodsAdapter;
 import com.ftofs.twant.adapter.MyFollowMemberAdapter;
 import com.ftofs.twant.adapter.MyFollowRecruitmentAdapter;
 import com.ftofs.twant.adapter.MyFollowStoreAdapter;
@@ -33,7 +32,8 @@ import com.ftofs.twant.entity.MyFollowMemberItem;
 import com.ftofs.twant.entity.MyFollowStoreItem;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.entity.WantedPostItem;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -48,7 +48,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -81,7 +80,6 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
     boolean storeDataLoaded = false;
     MyFollowStoreAdapter myFollowStoreAdapter;
     boolean goodsDataLoaded = false;
-    MyFollowGoodsAdapter myFollowGoodsAdapter;
     boolean articleDataLoaded = false;
     MyFollowArticleAdapter myFollowArticleAdapter;
     boolean recruitmentDataLoaded = false;

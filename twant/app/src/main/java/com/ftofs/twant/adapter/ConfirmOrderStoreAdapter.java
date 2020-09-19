@@ -23,9 +23,8 @@ import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
@@ -149,6 +148,10 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 Glide.with(goodsImageView).load(confirmOrderSkuItem.goodsImage).centerCrop().into(goodsImageView);
                 TextView goodsName = skuItemView.findViewById(R.id.tv_goods_name);
                 goodsName.setText(confirmOrderSkuItem.goodsName);
+                ImageView imgCrossBorderIndicator = skuItemView.findViewById(R.id.img_cross_border_indicator);
+                imgCrossBorderIndicator.setVisibility(
+                            confirmOrderSkuItem.goodsModel == Constant.GOODS_TYPE_CROSS_BORDER ? View.VISIBLE : View.GONE);
+
                 TextView tvFullSpecs = skuItemView.findViewById(R.id.tv_goods_full_specs);
                 tvFullSpecs.setText(confirmOrderSkuItem.goodsFullSpecs);
                 TextView tvBuyNum = skuItemView.findViewById(R.id.tv_sku_count);

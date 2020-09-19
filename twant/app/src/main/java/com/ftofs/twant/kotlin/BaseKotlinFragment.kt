@@ -1,19 +1,13 @@
 package com.ftofs.twant.kotlin
 
 import android.os.Bundle
-import android.os.Handler
-import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.ftofs.twant.TwantApplication
-import com.ftofs.twant.fragment.BaseFragment
+import com.gzp.lib_common.base.BaseFragment
 import com.ftofs.twant.kotlin.observer.LoadingObserver
 
 abstract class BaseKotlinFragment <T : ViewDataBinding>: BaseFragment(){

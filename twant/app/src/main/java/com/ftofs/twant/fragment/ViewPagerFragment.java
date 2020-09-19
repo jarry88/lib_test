@@ -12,11 +12,10 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
-import com.ftofs.twant.constant.Uri;
 import com.ftofs.twant.domain.goods.GoodsImage;
 import com.ftofs.twant.entity.GoodsInfo;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.HackyViewPager;
@@ -25,8 +24,6 @@ import com.github.chrisbanes.photoview.PhotoView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * 縮放圖片，橫滑動切換下一張圖片

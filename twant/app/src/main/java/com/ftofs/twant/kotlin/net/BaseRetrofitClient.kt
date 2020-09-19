@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit
  * Created by gzp
  * on 2020/7/15 14:58
  */
+//參考代碼
 abstract class BaseRetrofitClient {
 
     companion object {

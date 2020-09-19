@@ -245,6 +245,19 @@
                     android:paddingTop="3dp">
 
                     <TextView
+                        android:id="@+id/tv_cross_border_indicator_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:background="@drawable/icon_goods_bargain_bg"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:text="跨城購"
+                        android:textColor="@android:color/white"
+                        android:textSize="9sp"
+                        android:visibility="gone" />
+
+                    <TextView
                         android:id="@+id/tv_freight_free_left"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -393,6 +406,19 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingTop="3dp">
+
+                    <TextView
+                        android:id="@+id/tv_cross_border_indicator_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:background="@drawable/icon_goods_bargain_bg"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:text="跨城購"
+                        android:textColor="@android:color/white"
+                        android:textSize="9sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_freight_free_right"

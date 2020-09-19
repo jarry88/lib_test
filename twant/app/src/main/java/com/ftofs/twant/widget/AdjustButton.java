@@ -8,8 +8,7 @@ import android.view.MotionEvent;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.cart.SkuStatus;
 import com.ftofs.twant.entity.cart.SpuStatus;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.ToastUtil;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 
 /**

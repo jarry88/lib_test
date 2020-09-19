@@ -9,14 +9,13 @@ import com.ftofs.twant.api.Api
 import com.ftofs.twant.api.UICallback
 import com.ftofs.twant.entity.OrderItem
 import com.ftofs.twant.kotlin.OrderGoodsVoListAdapter
-import com.ftofs.twant.log.SLog
+import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.vo.orders.OrdersGoodsVo
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.CenterPopupView
-import com.lxj.xpopup.interfaces.XPopupCallback
 import okhttp3.Call
 import java.io.IOException
 import java.util.*
@@ -41,7 +40,6 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
         this.order=order
         this.orderList =datas
     }
-
     override fun onCreate() {
         super.onCreate()
 
@@ -121,17 +119,6 @@ class CancelAfterVerificationListPopup(context: Context):CenterPopupView(context
 
         XPopup.Builder(context).
         moveUpToKeyboard(false)
-                .setPopupCallback(
-                        object :XPopupCallback{
-                            override fun onDismiss() {
-                                reloadata()
-                            }
-                            override fun onShow() {
-                                dismiss()
-                            }
-
-                        }
-                )
                 .asCustom(VerificationPopup(context,item,value))
                 .show()
     }

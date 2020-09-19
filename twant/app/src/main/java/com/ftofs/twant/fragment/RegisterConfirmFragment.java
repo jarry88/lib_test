@@ -24,7 +24,8 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -34,7 +35,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -211,7 +211,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
             rlPromotionCodeContainer.setVisibility(promotionCodeVisible ? View.VISIBLE : View.GONE);
         } else if (id == R.id.btn_register) {
             if (Config.PROD) {
-                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.REGISTER);
+                MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.REGISTER);
             }
 
             String fullMobile = areaCode + "," + mobile;
@@ -306,7 +306,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                         ToastUtil.success(_mActivity, "注冊成功");
 
                         if (Config.PROD) {
-                            MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.REGISTER_SUCCESS);
+                            MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.REGISTER_SUCCESS);
                         }
 
                         // 注冊成功，跳到主頁面

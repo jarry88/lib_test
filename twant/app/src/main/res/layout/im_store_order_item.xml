@@ -3,7 +3,7 @@
     <data >
         <variable
             name="vo"
-            type="com.ftofs.twant.entity.ImStoreOrderItem" />
+            type="com.ftofs.lib_net.model.ImStoreOrderItem" />
     </data>
     <LinearLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"

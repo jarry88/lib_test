@@ -11,7 +11,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.EvaluationGoodsItem;
@@ -23,7 +22,7 @@ import com.ftofs.twant.fragment.OrderDetailFragment;
 import com.ftofs.twant.fragment.OrderFragment;
 import com.ftofs.twant.fragment.OrderLogisticsInfoFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.UiUtil;
@@ -32,12 +31,9 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.orders.OrdersGoodsVo;
 import com.ftofs.twant.widget.CancelAfterVerificationListPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
-import com.ftofs.twant.widget.VerificationPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
-
-import org.litepal.util.Const;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -112,14 +108,7 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
 //                         .dismissOnTouchOutside(false)
                                     // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                                    .setPopupCallback(new XPopupCallback() {
-                                        @Override
-                                        public void onShow() {
-                                        }
-                                        @Override
-                                        public void onDismiss() {
-                                        }
-                                    }).asCustom(new TwConfirmPopup(context, "確認收貨嗎?", null, new OnConfirmCallback() {
+                                    .asCustom(new TwConfirmPopup(context, "確認收貨嗎?", null, new OnConfirmCallback() {
                                 @Override
                                 public void onYes() {
                                     SLog.info("onYes");
@@ -168,15 +157,7 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
 //                         .dismissOnTouchOutside(false)
                 // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                .setPopupCallback(new XPopupCallback() {
-                    @Override
-                    public void onShow() {
-                    }
-
-                    @Override
-                    public void onDismiss() {
-                    }
-                }).asCustom(CancelAfterVerificationListPopup.Companion.newInstance(context, null)).show();
+                .asCustom(CancelAfterVerificationListPopup.Companion.newInstance(context, null)).show();
 //        ToastUtil.success(context,"進入新彈窗");
     }
     private void loadGoodsList(OrderItem item) {
@@ -246,13 +227,35 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
 //                         .autoDismiss(false)
                            .setPopupCallback(new XPopupCallback() {
                                @Override
-                               public void onShow() {
+                               public void onCreated(BasePopupView popupView) {
+
                                }
 
                                @Override
-                               public void onDismiss() {
-                                   orderFragment.outReloadData();
+                               public void beforeShow(BasePopupView popupView) {
+
                                }
+
+                               @Override
+                               public void onShow(BasePopupView popupView) {
+
+                               }
+
+                               @Override
+                               public void onDismiss(BasePopupView popupView) {
+                                       orderFragment.outReloadData();
+                               }
+
+                               @Override
+                               public void beforeDismiss(BasePopupView popupView) {
+
+                               }
+
+                               @Override
+                               public boolean onBackPressed(BasePopupView popupView) {
+                                   return false;
+                               }
+
                            }).asCustom(new CancelAfterVerificationListPopup(context, filterList,item))
                            .show();
                 } catch (Exception e) {

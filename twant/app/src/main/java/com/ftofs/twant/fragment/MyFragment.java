@@ -1,7 +1,6 @@
 package com.ftofs.twant.fragment;
 
 
-import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,30 +35,27 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.entity.UniversalMemberItem;
-import com.ftofs.twant.interfaces.CommonCallback;
+import com.gzp.lib_common.base.callback.CommonCallback;
+
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.CameraUtil;
-import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.HawkUtil;
-import com.ftofs.twant.util.PermissionUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.vo.member.MemberVo;
 import com.ftofs.twant.widget.BottomConfirmPopup;
 import com.ftofs.twant.widget.QuickClickButton;
 import com.ftofs.twant.widget.SharePopup;
-import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 import com.yanzhenjie.permission.runtime.Permission;
 
@@ -73,7 +69,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -374,14 +369,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
 //                         .dismissOnTouchOutside(false)
                     // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new BottomConfirmPopup(_mActivity, this))
+                  .asCustom(new BottomConfirmPopup(_mActivity, this))
                     .show();
                 break;
             default:
@@ -751,7 +739,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                 }
             };
 
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            TwantApplication.Companion.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
                     File file = new File(absolutePath);
