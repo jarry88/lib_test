@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-
+apply plugin: "com.github.richardwrq.krouter"
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -46,12 +46,12 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compileOnly rootProject.ext.dependencies["ktx"]
+
+    implementation project(":lib_common")
+    implementation project(":lib_common_ui")
+    implementation project(":lib_net")
+
     testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -61,8 +61,4 @@ dependencies {
     api(name:'crashshield-release', ext:'aar')
     //环境检测
     api(name:'operation-release', ext:'aar')
-    compileOnly project(":lib_common")
-    compileOnly project(":lib_common_ui")
-    compileOnly project(":lib_net")
-
 }

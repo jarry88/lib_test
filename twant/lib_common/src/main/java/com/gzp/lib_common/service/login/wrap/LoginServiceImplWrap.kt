@@ -2,18 +2,19 @@ package com.gzp.lib_common.service.login.wrap
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.alibaba.android.arouter.facade.annotation.Autowired
-import com.alibaba.android.arouter.launcher.ARouter
+import com.github.richardwrq.krouter.annotation.Inject
+import com.github.richardwrq.krouter.annotation.Provider
+import com.github.richardwrq.krouter.api.core.KRouter
 import com.gzp.lib_common.model.User
 import com.gzp.lib_common.service.ConstantsPath
 import com.gzp.lib_common.service.login.LoginService
 
 object LoginServiceImplWrap {
 
-    @Autowired(name = ConstantsPath.LOGIN_SERVICE_PATH)
+    @Inject(name =ConstantsPath.LOGIN_SERVICE_PATH)
     lateinit var service: LoginService
     init {
-        ARouter.getInstance().inject(this)
+        KRouter.inject(this)
     }
 
     fun isLogin():Boolean{

@@ -2,8 +2,8 @@ package com.ftofs.ft_login.service
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.alibaba.android.arouter.facade.annotation.Route
 import com.ftofs.ft_login.UserManager
+import com.github.richardwrq.krouter.annotation.Route
 import com.gzp.lib_common.model.User
 import com.gzp.lib_common.service.ConstantsPath
 import com.gzp.lib_common.service.login.LoginService
@@ -25,7 +25,7 @@ class LoginServiceImpl : LoginService {
         return UserManager.getLoginLiveData()
     }
 
-    override fun init(context: Context?) {
+    override fun init(context: Context) {
 
     }
 }

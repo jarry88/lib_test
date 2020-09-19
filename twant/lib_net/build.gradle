@@ -6,6 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 //apply plugin: 'com.alibaba.arouter'
 
+apply plugin: "com.github.richardwrq.krouter"
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
@@ -34,6 +35,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    //3.4 以後版本自動開了 然後加上這個，不然 sync 抓下來的 Robolectric 的 Resources 會抓舊的，Test Log 會說該 resource 已被 deprecate 了…
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+
+
+    }
 }
 
 dependencies {
@@ -43,17 +52,7 @@ dependencies {
 
     //retrofit
     api rootProject.ext.dependencies["adapter-rxjava2"]
-    api rootProject.ext.dependencies["retrofit"]
-    api rootProject.ext.dependencies["rxandroid"]
     api rootProject.ext.dependencies["converter-gson"]
-
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    api "io.reactivex.rxjava2:rxandroid:2.1.1"
+    api "io.reactivex.rxjava2:rxjava:2.2.13"
 }

@@ -36,10 +36,9 @@ android {
 }
 
 dependencies {
+    implementation project(":lib_common")
     api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation rootProject.ext.dependencies["ktx"]
     implementation rootProject.ext.dependencies["appcompat"]
     implementation  rootProject.ext.dependencies["design"]
     //自定義標題欄
@@ -58,10 +57,4 @@ dependencies {
     kapt rootProject.ext.dependencies["glide-compiler"]
 
 
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
-
-    compileOnly project(":lib_common")
 }

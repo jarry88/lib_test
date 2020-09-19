@@ -1,6 +1,5 @@
 package com.ftofs.ft_login.ui
 
-import androidx.navigation.NavController
 import com.ftofs.ft_login.R
 import com.ftofs.ft_login.databinding.ActivityLoginBinding
 import com.ftofs.lib_common_ui.switchTranslucentMode
@@ -10,8 +9,7 @@ import com.gzp.lib_common.model.User
 import com.gzp.lib_common.utils.SLog
 
 
-class LoginActivity :MBaseActivity<LoginViewModel, ActivityLoginBinding>(), SimpleCallBack {
-    private lateinit var navController: NavController
+class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), SimpleCallBack {
     override fun initData() {
     }
 

@@ -125,7 +125,6 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.github.iamyours.router.annotation.Route;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -134,7 +133,6 @@ import okhttp3.Response;
  * 主Activity
  * @author zwm
  */
-@Route(path = "main/activity")
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces, SimpleCallback {
     long lastBackPressedTime;
 

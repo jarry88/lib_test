@@ -1,19 +1,9 @@
 package com.ftofs.lib_common_ui.ext
 
-import android.graphics.Outline
-import android.graphics.Paint
-import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
 import android.view.View
-import android.view.ViewOutlineProvider
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import anet.channel.util.Utils
 import com.bumptech.glide.Glide
 import com.gzp.lib_common.utils.normalizeImageUrl
 
