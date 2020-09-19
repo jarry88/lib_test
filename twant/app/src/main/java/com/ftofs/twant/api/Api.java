@@ -1599,6 +1599,12 @@ public class Api {
      */
     public static final String PATH_SEC_KILL_GOODS_LIST = "/seckill/goods";
 
+
+    /**
+     * 【跨城購】首頁
+     */
+    public static final String PATH_TARIFF_BUY_INDEX = "/tariff_buy/index";
+
     /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行

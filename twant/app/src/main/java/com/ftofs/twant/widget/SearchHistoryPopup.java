@@ -1,6 +1,7 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -187,7 +189,7 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
                         llSearchHotContainer.setVisibility(View.GONE);
                     }
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
