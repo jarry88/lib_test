@@ -1,9 +1,10 @@
 package com.gzp.lib_common.utils
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.os.Build
 import com.gzp.lib_common.BuildConfig
-import com.gzp.lib_common.constant.Constant
 import com.gzp.lib_common.constant.SPField
 import com.orhanobut.hawk.Hawk
 import java.util.*
@@ -35,8 +36,23 @@ object Util {
 
     fun random(i: Int): Boolean {
         val a =(Math.random()*10).toInt()
-        SLog.info((a>i).toString()+a.toInt())
+        SLog.info((a > i).toString() + a.toInt())
         return a>i
+    }
+
+    /**
+     * 根據context查找Activity
+     * @param context
+     * @return
+     */
+    fun findActivity(context: Context): Activity? {
+        return if (context is Activity) {
+            context
+        } else if (context is ContextWrapper) {
+            findActivity(context.baseContext)
+        } else {
+            null
+        }
     }
 
     /**

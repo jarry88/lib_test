@@ -51,12 +51,7 @@ class MessageFragment(val mobile:String) : BaseTwantFragmentMVVM<MessageLoginLay
                     onBackPressedSupport()
                     KLog.e("数据获取成功--关闭loading")
                 }
-                StateLiveData.StateEnum.Idle -> {
 
-
-                    KLog.e("空闲状态--关闭loading")
-//                    loadingUtil?.hideLoading()
-                }
                 StateLiveData.StateEnum.NoData -> {
 
 
@@ -70,4 +65,12 @@ class MessageFragment(val mobile:String) : BaseTwantFragmentMVVM<MessageLoginLay
             }
         })
 }
+
+    override fun onBackPressedSupport(): Boolean {
+        if (parentFragmentManager.backStackEntryCount <= 1) {
+            (activity as LoginActivity).onBackPressedSupport()
+        }
+        else hideSoftInputPop()
+        return true
+    }
 }

@@ -1,4 +1,4 @@
-package com.ftofs.twant.widget
+package com.ftofs.ft_login.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
-import com.ftofs.twant.R
+import com.ftofs.ft_login.R
 import com.ftofs.lib_net.model.MobileZone
 import com.gzp.lib_common.utils.SLog
 import java.util.regex.Pattern
@@ -40,16 +40,16 @@ val isValidRegex ="^1(([7][0,1])|([6][2,5,7])|[3][4][9])[0-9]{0,10}$"
  * 6、返回false时 查看msg
  */
 @SuppressLint("CustomViewStyleable")
-class CheckPhoneView @JvmOverloads constructor(
+class PhoneView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
     var mobileList= listOf<MobileZone>()
     private val mContext:Context=context
     private val areaArray = arrayOf(
             "",
-            mContext.getString(R.string.text_hongkong),
-            mContext.getString(R.string.text_mainland),
-            mContext.getString(R.string.text_macao)
+            "香港",
+           "内地",
+           "澳門"
     )
 
     private var zoneIndex:Int=0
@@ -59,17 +59,17 @@ class CheckPhoneView @JvmOverloads constructor(
     private var errorText:TextView?=null
     private var llErrorContainer:LinearLayout?=null
     var isRight = false //默认为异常
-    var msg = context.getString(R.string.input_mobile_hint)
+    var msg = "未輸入號碼"
 
 
     init {
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingCheckPhoneView)
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingPhoneView)
         initView()
         typedArray.recycle()
     }
 
     private fun initView() {
-        View.inflate(context,R.layout.wdget_check_phone,this)
+        View.inflate(context,R.layout.wdget_phone,this)
         errorText=rootView.findViewById(R.id.tv_mobile_error)
         llErrorContainer=rootView.findViewById(R.id.ll_container_mobile_error)
         initTextChangedListener()
@@ -100,7 +100,7 @@ class CheckPhoneView @JvmOverloads constructor(
             isRight=true
             if(text==null||text.isEmpty()){
                 isRight=false
-                msg=context.getString(R.string.input_mobile_hint)
+                msg="未輸入號碼"
             }else if(mobileList.size<zoneIndex){
                 isRight=false
                 msg="网络异常"

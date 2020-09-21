@@ -30,7 +30,7 @@ import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.lib_net.model.MobileZone;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.gzp.lib_common.base.BaseFragment;

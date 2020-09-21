@@ -36,7 +36,7 @@ import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.lib_net.model.MobileZone;
 import com.ftofs.twant.entity.PayWayItem;
 import com.ftofs.twant.entity.SoldOutGoodsItem;
 import com.ftofs.twant.entity.StoreAmount;

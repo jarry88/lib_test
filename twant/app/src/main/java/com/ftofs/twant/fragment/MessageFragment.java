@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ftofs.ft_login.UserManager;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.ChatConversationAdapter;
@@ -716,7 +717,8 @@ public class MessageFragment extends MainBaseFragment implements View.OnClickLis
 
         int userId = User.getUserId();
         if (userId < 1) { // 用戶未登錄，顯示登錄頁面
-            Util.showLoginFragment();
+            UserManager.INSTANCE.start(getContext());
+//            Util.showLoginFragment();
             return;
         }
         ((MainActivity) getActivity()).setMessageFragmentsActivity(true);

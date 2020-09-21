@@ -1,4 +1,4 @@
-package com.ftofs.twant.entity;
+package com.ftofs.lib_net.model;
 
 /**
  * 區號結構體

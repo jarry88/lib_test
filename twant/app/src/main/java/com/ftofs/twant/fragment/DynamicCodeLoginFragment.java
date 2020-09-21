@@ -33,7 +33,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
-import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.lib_net.model.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;

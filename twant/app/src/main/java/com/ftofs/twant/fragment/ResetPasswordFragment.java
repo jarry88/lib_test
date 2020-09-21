@@ -29,7 +29,7 @@ import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.lib_net.model.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
@@ -393,7 +393,7 @@ public class ResetPasswordFragment extends BaseFragment implements
 
     private void updataBtnNext() {
         if (checkInfo(false)) {
-            btnNext.setBackgroundResource(R.drawable.blue_button);
+            btnNext.setBackgroundResource(R.drawable.blue_button1);
         } else {
             btnNext.setBackgroundResource(R.drawable.grey_button);
 

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="one_key_secret_keys">gg+CTOzZf+lDYnx+JNodeuceDBDHIef/DjPospYtY8puMEuVeUJM8lS7elL36rSB+oeAV1Rli9rGMnrMxnbJ4kCNEEo46l/l1VzH+q92nrd4du5f9KHBZ+e6uFt9i7WznSBR1s+/0LLl8CCD9F10NpH4yPa5xkY0LvDP1xgCNPZDn70mPq0Dl3vZz7TdGEaZ3euShG5sa04hFZiMN34YidOfHwr6SVRu37Mz9ehOHsLnoeCzgx9IkICa3KI2nPTjlniBi+bkj9CDq6iK6u6NNlODVfsrZcar</string>
+    <string name="text_login_and_agree">登入即表明同意</string>
+    <string name="input_login_password_hint">請輸入密碼</string>
 </resources>

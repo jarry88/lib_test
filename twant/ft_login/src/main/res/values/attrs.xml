@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="Title">
-        <attr name="title" format="string|reference"/>
+        <attr name="text_title" format="string|reference"/>
         <attr name="login_info" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="ThirdLogin">
     </declare-styleable>
+    <declare-styleable name="SettingPhoneView"></declare-styleable>
 </resources>

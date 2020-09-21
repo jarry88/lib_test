@@ -71,7 +71,7 @@ import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
-import com.ftofs.twant.widget.TwLoadingPopup;
+import com.ftofs.lib_common_ui.popup.TwLoadingPopup;
 import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -1473,21 +1473,6 @@ public class Util {
     }
 
 
-    /**
-     * 根據context查找Activity
-     * @param context
-     * @return
-     */
-    @Nullable
-    public static Activity findActivity(@NonNull Context context) {
-        if (context instanceof Activity) {
-            return (Activity) context;
-        } else if (context instanceof ContextWrapper) {
-            return findActivity(((ContextWrapper) context).getBaseContext());
-        } else {
-            return null;
-        }
-    }
 
 
 

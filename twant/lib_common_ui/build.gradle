@@ -42,6 +42,8 @@ dependencies {
     implementation rootProject.ext.dependencies["appcompat"]
     implementation  rootProject.ext.dependencies["design"]
     //自定義標題欄
+    api 'com.lxj:xpopup:2.0.8-rc7'
+
     api rootProject.ext.dependencies["recyclerview"] //
     api rootProject.ext.dependencies["constraint-layout"]
     api 'de.hdodenhof:circleimageview:3.0.0' //後面可以考慮移除

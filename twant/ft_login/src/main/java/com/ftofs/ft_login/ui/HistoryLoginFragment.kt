@@ -24,9 +24,10 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     }
 
     override fun initData() {
-        binding.tvOneStep.setOnClickListener { parentFragmentManager.beginTransaction().addToBackStack("OneStepLoginFragment").replace(R.id.container,OneStepLoginFragment()).commit() }
-        binding.tvTwoStep.setOnClickListener { start(OneStepLoginFragment()) }
-        binding.btnLogin.setOnClickListener {loginAction() }
+        binding.llOtherLogin.setOnClickListener { start(OneStepLoginFragment()) }
+        binding.btnOneStep.setOnClickListener {loginAction() }
+        //原始跳轉方法 僅供參考，廢棄代碼
+//        binding.tvOneStep.setOnClickListener { parentFragmentManager.beginTransaction().addToBackStack("OneStepLoginFragment").replace(R.id.container,OneStepLoginFragment()).commit() }
     }
 
     private fun loginAction() {

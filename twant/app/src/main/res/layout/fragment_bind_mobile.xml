@@ -234,7 +234,7 @@
             android:layout_marginBottom="25dp"
 
             android:layout_centerHorizontal="true"
-            android:background="@drawable/blue_button"
+            android:background="@drawable/blue_button1"
             android:text="確認"
             android:textSize="16sp"
             android:textColor="#fff"

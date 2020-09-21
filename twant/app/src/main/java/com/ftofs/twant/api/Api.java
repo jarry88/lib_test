@@ -15,7 +15,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.lib_net.model.MobileZone;
 import com.ftofs.twant.entity.ToastData;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.task.TaskObservable;

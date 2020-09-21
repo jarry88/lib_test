@@ -33,8 +33,4 @@
         <attr name="ContextTitle_titleScrllo" format="boolean"/>
     </declare-styleable>
 
-    <declare-styleable name="Title">
-        <attr name="title" format="string|reference"/>
-        <attr name="login_info" format="boolean"/>
-    </declare-styleable>
 </resources>

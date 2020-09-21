@@ -75,12 +75,16 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,OneKe
 
     }
 
+    /**
+     * 拿到token ，成功后跳出阿里登錄頁
+     */
     private fun getResultWithToken(token: String?) {
         token?.let {
             ExecutorManager.run{
                 (activity as LoginActivity).runOnUiThread{
 //                    mTvResult.setText("登陆成功：$result")
-                    ToastUtil.success(context, MockRequest.getPhoneNumber(it))
+//                    SLog.info(MockRequest.getPhoneNumber(it))
+//                    ToastUtil.success(context, MockRequest.getPhoneNumber(it))
                     mPhoneNumberAuthHelper!!.quitLoginPage()
                 }
             }
@@ -95,6 +99,7 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,OneKe
     override fun initData() {
 
         sdkInit()
+        oneKeyLogin()
         binding.tvOneStep.setOnClickListener{
             oneKeyLogin()
         }
@@ -143,17 +148,6 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding,OneKe
 
                     onBackPressedSupport()
                     KLog.e("数据获取成功--关闭loading")
-                }
-                StateLiveData.StateEnum.Idle -> {
-
-
-                    KLog.e("空闲状态--关闭loading")
-//                    loadingUtil?.hideLoading()
-                }
-                StateLiveData.StateEnum.NoData -> {
-
-
-                    KLog.e("空闲状态--关闭loading")
                 }
                 else -> {
 

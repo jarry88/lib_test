@@ -43,11 +43,14 @@ object UserManager {
     }
 
     fun start(context: Context): LiveData<User> {
-        val r = Util.random(6)
+        getUser()?.let {
+            val intent=
+                    Intent(context,LoginActivity::class.java).apply { putExtra("user",it)
+                        SLog.info(it.toString())
+                    }
+            context.startActivity(intent)
+        }?:OneStepLogin.start(context)
 
-        val intent=
-            Intent(context,LoginActivity::class.java).apply {if(r)putExtra("user",User("00853,61234567","abc123456",2,"1","1",1,"s","dd"))}
-        context.startActivity(intent)
         return liveData
     }
 }
