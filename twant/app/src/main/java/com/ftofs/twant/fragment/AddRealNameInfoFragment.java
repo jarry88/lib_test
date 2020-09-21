@@ -37,12 +37,9 @@ import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 import com.yanzhenjie.permission.runtime.Permission;
 
-<<<<<<< HEAD
 import org.jetbrains.annotations.NotNull;
 
-=======
 import java.io.File;
->>>>>>> 99788120f4e1a10914e9c5522825917865d9ec0b
 import java.io.IOException;
 
 import cn.snailpad.easyjson.EasyJSONObject;

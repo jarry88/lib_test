@@ -213,8 +213,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     @Nullable
     @Override
     public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_confirm_order, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_new_confirm_order, container, false);
     }
 
     @Override
