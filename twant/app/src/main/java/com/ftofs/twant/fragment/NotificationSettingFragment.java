@@ -17,6 +17,8 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.kyleduo.switchbutton.SwitchButton;
 
+import org.jetbrains.annotations.NotNull;
+
 public class NotificationSettingFragment extends BaseFragment implements View.OnClickListener {
 
     private SwitchButton sbReceiveNews;
@@ -31,7 +33,7 @@ public class NotificationSettingFragment extends BaseFragment implements View.On
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_notification_fragment, container, false);
         return view;
     }

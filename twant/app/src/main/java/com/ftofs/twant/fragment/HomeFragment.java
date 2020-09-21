@@ -13,12 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ftofs.ft_login.service.LoginServiceImpl;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
-import com.ftofs.twant.activity.TestActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.appserver.AppServiceImpl;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -27,8 +28,10 @@ import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
+import com.github.richardwrq.krouter.annotation.Inject;
+import com.github.richardwrq.krouter.api.core.KRouter;
 import com.gzp.lib_common.base.BaseFragment;
-import com.gzp.lib_common.service.login.wrap.LoginServiceImplWrap;
+import com.gzp.lib_common.service.ConstantsPath;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
@@ -45,10 +48,12 @@ import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
 import com.tmall.wireless.tangram.structure.BaseCell;
+import com.wzq.mvvmsmart.utils.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -60,10 +65,9 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends MainBaseFragment implements View.OnClickListener {
     RecyclerView rvList;
     TangramEngine tangramEngine;
-
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
     LinearLayout llFloatButtonContainer;
     private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800; // 浮動按鈕滑動顯示與隱藏效果的延遲時間(毫秒)
@@ -79,6 +83,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     boolean newArrivalsLoaded = false;
 
     BasePopupView popupViewAd;
+    @Inject(name = ConstantsPath.LOGIN_SERVICE_PATH)
+    LoginServiceImpl loginService;
+
 
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -90,7 +97,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         return view;
     }
@@ -98,7 +105,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        KRouter.INSTANCE.inject(this);
         EventBus.getDefault().register(this);
 
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
@@ -378,7 +385,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
-            LoginServiceImplWrap.INSTANCE.start(requireContext());
+//            LoginServiceImplWrap.INSTANCE.start(requireContext());
+            loginService.start(requireContext());
         }
     }
 

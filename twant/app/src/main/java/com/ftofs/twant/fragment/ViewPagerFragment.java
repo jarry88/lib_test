@@ -21,6 +21,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.HackyViewPager;
 import com.github.chrisbanes.photoview.PhotoView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +59,7 @@ public class ViewPagerFragment extends BaseFragment implements View.OnClickListe
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.activity_view_pager,container,false);
         return view;
     }

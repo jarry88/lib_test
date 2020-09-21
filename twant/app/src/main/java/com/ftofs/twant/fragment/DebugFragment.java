@@ -28,6 +28,8 @@ import com.ftofs.twant.util.Util;
 import com.orhanobut.hawk.Hawk;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -61,7 +63,7 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_debug, container, false);
         return view;
     }

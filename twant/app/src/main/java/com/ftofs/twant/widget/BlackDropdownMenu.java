@@ -11,10 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.appserver.AppServiceImpl;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.AddFriendFragment;
+import com.github.richardwrq.krouter.annotation.Inject;
 import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.fragment.CartFragment;
 import com.ftofs.twant.fragment.CategoryFragment;
@@ -31,6 +33,7 @@ import com.ftofs.twant.fragment.ShopCustomerServiceFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.seller.fragment.SellerFeaturesFragment;
 import com.ftofs.twant.util.Util;
+import com.gzp.lib_common.service.ConstantsPath;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.AttachPopupView;
 
@@ -84,6 +87,9 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
 
     Context context;
     BaseFragment baseFragment;
+
+    @Inject(name = ConstantsPath.APP_SERVICE_PATH)
+    AppServiceImpl appService;
     int type;
     public BlackDropdownMenu(@NonNull Context context, BaseFragment baseFragment, int type) {
         super(context);
@@ -109,7 +115,6 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     @Override
     protected void onCreate() {
         super.onCreate();
-
         if (type == TYPE_MESSAGE) {
             ((ImageView) findViewById(R.id.icon_item_1)).setImageResource(R.drawable.icon_contact_white);
             ((TextView) findViewById(R.id.tv_item_1)).setText(R.string.text_contact);
@@ -318,7 +323,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
         switch (type) {
             case TYPE_MESSAGE:
                 // 掃一掃
-                baseFragment.startCaptureActivity();
+                baseFragment.startCaptureActivity(AppServiceImpl.Companion.getCaptureIntent());
                 break;
             case TYPE_STORE:
             case TYPE_GOODS:
@@ -368,7 +373,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 break;
             case TYPE_CONTACT:
                 // 掃一掃
-                baseFragment.startCaptureActivity();
+                baseFragment.startCaptureActivity(AppServiceImpl.Companion.getCaptureIntent());
                 break;
             case TYPE_CHAT:
                 // 查看資料 個人信息頁

@@ -12,8 +12,8 @@ import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getColor
 import androidx.databinding.BindingAdapter
-import anet.channel.util.Utils
 import com.bumptech.glide.Glide
 import com.ftofs.twant.R
 import com.ftofs.twant.constant.Constant
@@ -22,6 +22,8 @@ import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.Util
+import com.gzp.lib_common.service.AppService
+import com.gzp.lib_common.utils.BaseContext
 
 
 @BindingAdapter(value = ["imageUrl","defaultDrawable"],requireAll = false)
@@ -102,7 +104,7 @@ fun setSpText(v: TextView, fir:Int,len:Int,pointSize:Int,defaultSize:Int,textInp
 @BindingAdapter("radius")
 fun setBackRadius(v: View, radius: Float) {
     v.run {
-        Utils.getAppContext().run out@{
+        BaseContext.instance.getContext().run out@{
             background=ColorDrawable(getColor(R.color.white))
             outlineProvider= object:ViewOutlineProvider(){
                 override fun getOutline(view: View?, outline: Outline?) {
@@ -111,7 +113,7 @@ fun setBackRadius(v: View, radius: Float) {
                     }
                 }
         }
-        background=ColorDrawable(Utils.getAppContext().getColor(R.color.white))
+        background=ColorDrawable( BaseContext.instance.getContext().getColor(R.color.white))
         clipToOutline=true
 
         }

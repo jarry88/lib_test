@@ -8,6 +8,8 @@ import com.gzp.lib_common.model.User
 import com.tencent.mmkv.MMKV
 import com.ftofs.ft_login.ui.LoginActivity
 import com.alibaba.fastjson.JSON
+import com.gzp.lib_common.utils.SLog
+import com.gzp.lib_common.utils.Util
 import com.wzq.mvvmsmart.utils.KLog
 
 object UserManager {
@@ -41,10 +43,10 @@ object UserManager {
     }
 
     fun start(context: Context): LiveData<User> {
-        val r=Math.random()>0.4
-        KLog.a("aaaaaadsfdsfdfdf$r")
+        val r = Util.random(6)
+
         val intent=
-            Intent(context,LoginActivity::class.java).apply {if(r)putExtra("user",JSON.toJSONString(User(2,"1","1",1,"s")))}
+            Intent(context,LoginActivity::class.java).apply {if(r)putExtra("user",User("00853,61234567","abc123456",2,"1","1",1,"s","dd"))}
         context.startActivity(intent)
         return liveData
     }

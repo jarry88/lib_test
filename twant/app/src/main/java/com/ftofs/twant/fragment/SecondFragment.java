@@ -14,6 +14,8 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.TestAdapter;
 import com.gzp.lib_common.base.BaseFragment;
 
+import org.jetbrains.annotations.NotNull;
+
 public class SecondFragment extends BaseFragment {
     RecyclerView rvList;
     TestAdapter testAdapter;
@@ -29,7 +31,7 @@ public class SecondFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
 
         return view;

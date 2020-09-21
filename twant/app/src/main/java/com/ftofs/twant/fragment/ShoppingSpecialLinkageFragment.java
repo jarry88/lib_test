@@ -24,6 +24,8 @@ import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.AssetsUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_first, container, false);
 
         return view;

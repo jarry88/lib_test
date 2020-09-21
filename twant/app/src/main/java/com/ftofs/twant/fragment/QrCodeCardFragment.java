@@ -26,6 +26,8 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -49,7 +51,7 @@ public class QrCodeCardFragment extends BaseFragment implements View.OnClickList
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_qr_code_card, container, false);
         return view;
     }

@@ -8,7 +8,7 @@ import okhttp3.RequestBody
 import retrofit2.http.*
 
 /**
- * created 王志强 2020.04.30
+ * created 志鵬 2020.09.30
  */
 interface DemoApiService {
 //    @GET("action/apiv2/banner")
@@ -22,6 +22,11 @@ interface DemoApiService {
 //    @POST("AppNews/getNewsList/type/1/p/1")
 //    fun doPostServerNews(@Body requestBody: RequestBody): Observable<BaseResponse<ArrayList<NewsData>>>
 
+    //post接口测试用
+    @POST("member/resume/info")
+    suspend fun testPost(@Body body: RequestBody): TwantResponse<ZoneInfo>
+    @POST("member/resume/info")
+    suspend fun testPost1(@Query("token") token: String): TwantResponse<ZoneInfo>
     //  获取商家商品列表
     @GET("member/seller/goods/list")
     fun doSellerGoodsList(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ): Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>>
@@ -71,12 +76,26 @@ interface DemoApiService {
     @GET("app/home/random/member/list")
     suspend fun getRandomMemberList(@Query("token")token:String?): TwantResponse<RandomFriendInfo>
 
+    //【登錄模塊】
+    //賬號密碼登錄
+    @POST("v2/login")
+    suspend fun getLogin(@Query("mobile")mobile:String,@Query("password")password:String,@Query("clientType")clientType:String):TwantResponse<LoginInfo>
+    //發送動態驗證嘛
+    @POST("v2/mobile/findpwd")
+    suspend fun getLoginFindPwd(@Query("mobile")mobile:String):TwantResponse<AuthCodeInfo>
 
-    //post接口测试用
-    @POST("member/resume/info")
-    suspend fun testPost(@Body body: RequestBody): TwantResponse<ZoneInfo>
-    @POST("member/resume/info")
-    suspend fun testPost1(@Query("token") token: String): TwantResponse<ZoneInfo>
+    //驗證碼登錄
+    @POST("v2/mobile/login")
+    suspend fun getMessage(queryParams: Map<String, String?>): TwantResponse<LoginInfo>
+    //阿里雲一鍵登錄
+    @POST("v2/mobile/loginOne")
+    suspend fun getLoginOne(@Query("aliYunToken")aliYunToken:String,@Query("clientType")clientType:String): TwantResponse<LoginInfo>
+
+
+
+
+
+
 
 //@Field
 }

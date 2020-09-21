@@ -13,6 +13,7 @@ import com.ftofs.twant.R;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -36,7 +37,7 @@ public class SetFeatureListFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.set_feature_fragment, container, false);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         view.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {

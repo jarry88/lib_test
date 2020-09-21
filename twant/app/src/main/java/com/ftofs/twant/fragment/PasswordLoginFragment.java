@@ -45,6 +45,8 @@ import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 import com.umeng.analytics.MobclickAgent;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -102,7 +104,7 @@ public class PasswordLoginFragment extends BaseFragment implements
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_password_login, container, false);
         return view;
     }

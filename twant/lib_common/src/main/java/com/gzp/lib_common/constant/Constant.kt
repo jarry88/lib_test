@@ -2,6 +2,7 @@ package com.gzp.lib_common.constant
 
 object Constant {
 
+
     /**
      * 增刪查改 -- 動作定義
      */
@@ -9,8 +10,6 @@ object Constant {
     const val ACTION_EDIT = 2
 
     const val UMENG_ALIAS_TYPE = "twant"
-
-
     /*
     "promotionType": 0,  #0無促銷活動 1限時折扣 2全款預售 3定金預售 4多人拼團 5優惠套裝 6秒殺活動 7砍價活動
      */

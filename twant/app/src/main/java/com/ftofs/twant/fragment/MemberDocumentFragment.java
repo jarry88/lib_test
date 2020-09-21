@@ -18,6 +18,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
+import org.jetbrains.annotations.NotNull;
+
 public class MemberDocumentFragment extends BaseFragment implements View.OnClickListener {
     public static MemberDocumentFragment newInstance(){
         MemberDocumentFragment item = new MemberDocumentFragment();
@@ -29,7 +31,7 @@ public class MemberDocumentFragment extends BaseFragment implements View.OnClick
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_document, container,false);
         return view;
     }

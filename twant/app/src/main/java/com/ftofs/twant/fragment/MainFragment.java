@@ -25,6 +25,7 @@ import com.orhanobut.hawk.Hawk;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -81,7 +82,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         instance = this;
         return view;
@@ -183,6 +184,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         if (!isAdded()) {
             return;
         }
+        SLog.info("切換【%s】",index);
         showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
 
         // 切換未選中圖標

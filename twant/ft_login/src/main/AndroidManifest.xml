@@ -25,6 +25,22 @@
 <!--         android:configChanges="orientation|keyboardHidden|screenSize"-->
 <!--         android:exported="false"-->
 <!--         android:launchMode="singleTop" />-->
+        <!--重点关注！！！！！！！-->
+        <!--客户在使用全屏模式时不需要使用authsdk_activity_dialog主题，会出现异常动画-->
+        <activity
+            android:name="com.mobile.auth.gatewayauth.LoginAuthActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="behind"
+            android:theme="@style/authsdk_activity_dialog" />
+
+        <activity
+            android:name="com.mobile.auth.gatewayauth.activity.AuthWebVeiwActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="behind" />
 
     </application>
 </manifest>

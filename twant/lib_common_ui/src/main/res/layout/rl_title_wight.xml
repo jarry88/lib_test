@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout android:id="@+id/titlebar_root"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@drawable/border_type_d"
-    android:gravity="center_vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <RelativeLayout android:id="@+id/titlebar_root"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/border_type_d"
+        android:gravity="center_vertical"
+        >
 
         <RelativeLayout
             android:id="@+id/titlebar_leftlayout"
             android:layout_width="50dip"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:clickable="true" >
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
-                android:id="@+id/titlebar_leftimage"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:id="@+id/titlebarLeftImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/ic_baseline_close_24"
                 />
         </RelativeLayout>
 
@@ -31,8 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textColor="@color/tw_black"
+            android:textSize="18sp" />
 
         <RelativeLayout
             android:id="@+id/titlebar_rightlayout"
@@ -46,8 +51,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center"
+                android:text="幫助"
+                android:textColor="@color/tw_blue"
+                android:layout_marginEnd="15dp"
                 android:scaleType="centerInside"
-                android:textSize="16sp"/>
+                android:textSize="14sp"/>
 
             <ImageView
                 android:id="@+id/titlebar_rightimage"
@@ -61,3 +69,21 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_info"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/tw_blue"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:paddingStart="13dp"
+        android:paddingEnd="7dp"
+        android:textSize="12sp"
+        android:background="@color/tw_blue"
+        android:alpha="@integer/percent_10"
+        android:textStyle=""
+        android:text="@string/tv_login_info"
+        />
+</LinearLayout>

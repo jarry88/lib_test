@@ -13,7 +13,6 @@ import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.base.IBaseViewMVVM
 import com.wzq.mvvmsmart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
-
 abstract class BaseTwantActivityMVVM< VM: BaseViewModelMVVM,V:ViewDataBinding>:BaseActivity(),IBaseViewMVVM {
 
     protected lateinit var binding: V
@@ -56,6 +55,7 @@ abstract class BaseTwantActivityMVVM< VM: BaseViewModelMVVM,V:ViewDataBinding>:B
     /**
      * 注入绑定
      */
+    @SuppressWarnings("unchecked")
     private fun initViewDataBinding(savedInstanceState: Bundle?) {
         //DataBindingUtil类需要在project的build中配置 dataBinding {enabled true }, 同步后会自动关联android.binding包
         binding = DataBindingUtil.setContentView(this, initContentView(savedInstanceState))

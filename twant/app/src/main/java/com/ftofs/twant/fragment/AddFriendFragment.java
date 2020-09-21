@@ -22,14 +22,21 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.AddFriendSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.appserver.AppServiceImpl;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.AddFriendSearchResultItem;
+import com.github.richardwrq.krouter.annotation.Inject;
 import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.base.callback.IntentCallBack;
+import com.gzp.lib_common.service.AppService;
+import com.gzp.lib_common.service.ConstantsPath;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,7 +67,7 @@ public class AddFriendFragment extends BaseFragment implements View.OnClickListe
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_friend, container, false);
         return view;
     }
@@ -74,24 +81,21 @@ public class AddFriendFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view, R.id.btn_scan_qr_code, this);
 
         etKeyword = view.findViewById(R.id.et_keyword);
-        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                SLog.info("onEditorAction");
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String keyword = etKeyword.getText().toString().trim();
+        etKeyword.setOnEditorActionListener((v, actionId, event) -> {
+            SLog.info("onEditorAction");
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String keyword = etKeyword.getText().toString().trim();
 
-                    if (StringUtil.isEmpty(keyword)) {
-                        ToastUtil.error(_mActivity, "請輸入" + getString(R.string.input_search_friend_hint));
-                        return true;
-                    }
-
-                    hideSoftInput();
-                    doSearch(keyword);
+                if (StringUtil.isEmpty(keyword)) {
+                    ToastUtil.error(_mActivity, "請輸入" + getString(R.string.input_search_friend_hint));
                     return true;
                 }
-                return false;
+
+                hideSoftInput();
+                doSearch(keyword);
+                return true;
             }
+            return false;
         });
 
         RecyclerView rvList = view.findViewById(R.id.rv_list);
@@ -173,7 +177,7 @@ public class AddFriendFragment extends BaseFragment implements View.OnClickListe
         } else if (id == R.id.btn_my_qr_code) {
             Util.startFragment(QrCodeCardFragment.newInstance());
         } else if (id == R.id.btn_scan_qr_code) {
-            startCaptureActivity();
+            startCaptureActivity(AppServiceImpl.Companion.getCaptureIntent());
         }
     }
 

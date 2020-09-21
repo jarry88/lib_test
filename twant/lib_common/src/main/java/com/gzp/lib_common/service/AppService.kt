@@ -2,11 +2,9 @@ package com.gzp.lib_common.service
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import com.github.richardwrq.krouter.api.interfaces.IProvider
 import com.gzp.lib_common.base.BaseFragment
-interface AppService {
-
-    fun getCaptureIntent(): Intent
+interface AppService :IProvider{
 
     // start Activity from app module
     fun startActivityOfApp(context: Context)

@@ -15,7 +15,6 @@ import com.muddzdev.styleabletoast.StyleableToast;
 import java.io.IOException;
 
 import cn.snailpad.easyjson.EasyJSONObject;
-import io.github.prototypez.appjoint.AppJoint;
 
 import static com.gzp.lib_common.utils.StringUtilKt.isEmpty;
 
@@ -86,9 +85,8 @@ public class ToastUtil {
                     if (code == ResponseCode.NOT_LOGIN) {
                         // 如果是未登錄，則刪除Token
                         User.logout();
-                        AppService appService = AppJoint.service(AppService.class);
-                        appService.errorPopToMainFragment(context);
-                        //todo 这里要核实下怎么替换
+//                        AppService appService = AppJoint.service(AppService.class);
+//                        appService.errorPopToMainFragment(context);
 
                     }
                 } catch (Exception e) {

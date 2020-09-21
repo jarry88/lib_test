@@ -36,6 +36,8 @@ import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +78,7 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_edit_receiver_info, container, false);
         return view;
     }

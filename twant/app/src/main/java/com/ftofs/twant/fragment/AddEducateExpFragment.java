@@ -30,6 +30,8 @@ import com.ftofs.twant.widget.DateSelectPopup;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -82,7 +84,7 @@ public class AddEducateExpFragment extends BaseFragment implements View.OnClickL
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_educate_exp, container, false);
         return view;
     }

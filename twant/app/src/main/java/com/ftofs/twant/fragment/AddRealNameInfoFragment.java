@@ -37,6 +37,8 @@ import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -104,7 +106,7 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_real_name_info, container, false);
         return view;
     }

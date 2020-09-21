@@ -41,6 +41,8 @@ import com.ftofs.twant.widget.ScaledButton;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.core.BasePopupView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -76,7 +78,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_goods_other_edit, container, false);
         return view;
     }

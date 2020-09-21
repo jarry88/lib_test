@@ -13,6 +13,8 @@ import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 常用語、常用版式設置Fragment
  * @author zwm
@@ -29,7 +31,7 @@ public class CommonUsedSpeechSettingFragment extends BaseFragment implements Vie
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common_used_speech_setting, container, false);
         return view;
     }

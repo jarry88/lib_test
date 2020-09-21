@@ -30,8 +30,6 @@ import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.UnreadCount;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
-import com.gzp.lib_common.base.BaseFragment;
-import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ApiUtil;
@@ -49,6 +47,7 @@ import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.MaxHeightRecyclerView;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
+import com.gzp.lib_common.utils.SLog;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -58,6 +57,7 @@ import com.lxj.xpopup.interfaces.OnSelectListener;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ import okhttp3.Call;
  * 消息
  * @author zwm
  */
-public class MessageFragment extends BaseFragment implements View.OnClickListener {
+public class MessageFragment extends MainBaseFragment implements View.OnClickListener {
     /**
      * 是否獨立的Fragment，還是依附于MainFragment
      */
@@ -133,7 +133,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message, container, false);
         return view;
     }
@@ -141,7 +141,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         EventBus.getDefault().register(this);
 
         Bundle args = getArguments();

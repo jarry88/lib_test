@@ -33,8 +33,6 @@ import com.ftofs.twant.entity.SearchHistoryItem;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.gzp.lib_common.base.BaseFragment;
-import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -45,6 +43,7 @@ import com.ftofs.twant.widget.PostFilterDrawerPopupView;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.TouchEditText;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupPosition;
@@ -53,6 +52,7 @@ import com.nex3z.flowlayout.FlowLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ import static com.ftofs.twant.widget.SearchHistoryPopup.SEARCH_HISTORY_ITEM;
  * 想要圈
  * @author zwm
  */
-public class CircleFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener,
+public class CircleFragment extends MainBaseFragment implements View.OnClickListener, OnSelectedListener,
         BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener, SimpleCallback {
     List<PostCategory> postCategoryList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
@@ -128,7 +128,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_circle, container, false);
         return view;
     }

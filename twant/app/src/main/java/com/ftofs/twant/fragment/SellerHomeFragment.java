@@ -43,6 +43,8 @@ import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
 import com.rd.PageIndicatorView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -281,7 +283,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_home, container, false);
         imgSellerAvatar = (CircleImageView) view.findViewById(R.id.img_seller_avatar);
         tvOrderWaitSendCount = (TextView) view.findViewById(R.id.tv_orders_wait_send_count);

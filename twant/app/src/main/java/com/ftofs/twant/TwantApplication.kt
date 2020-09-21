@@ -1,6 +1,5 @@
 package com.ftofs.twant
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -10,9 +9,9 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Process
 import android.os.StrictMode
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import cn.snailpad.easyjson.EasyJSONObject
-import com.alibaba.android.arouter.launcher.ARouter
 import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
@@ -42,6 +41,8 @@ import com.hyphenate.chat.EMOptions
 import com.hyphenate.push.EMPushConfig
 import com.macau.pay.sdk.MPaySdk
 import com.macau.pay.sdk.base.ConstantBase
+import com.mobile.auth.gatewayauth.PhoneNumberAuthHelper
+import com.mobile.auth.gatewayauth.TokenResultListener
 import com.orhanobut.hawk.Hawk
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
@@ -50,7 +51,6 @@ import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.uuzuche.lib_zxing.activity.ZXingLibrary
-import com.wzq.mvvmsmart.utils.KLog
 import me.yokeyword.fragmentation.Fragmentation
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -112,15 +112,26 @@ class TwantApplication :BaseApplication(){
         super.onCreate()
         instance=this
         BaseContext.instance.init(this)//初始話instance
-        ARouter.init(this)
 
-        AppUtil.app=this
+        PhoneNumberAuthHelper.getInstance(this,object :TokenResultListener{
+            override fun onTokenFailed(p0: String?) {
+                Log.e("init", "onTokenFaild: $p0")
+            }
+
+            override fun onTokenSuccess(p0: String?) {
+                Log.e("init", "onTokenSuccess: $p0")
+            }
+
+        }).apply { setAuthSDKInfo("gg+CTOzZf+lDYnx+JNodeuceDBDHIef/DjPospYtY8puMEuVeUJM8lS7elL36rSB+oeAV1Rli9rGMnrMxnbJ4kCNEEo46l/l1VzH+q92nrd4du5f9KHBZ+e6uFt9i7WznSBR1s+/0LLl8CCD9F10NpH4yPa5xkY0LvDP1xgCNPZDn70mPq0Dl3vZz7TdGEaZ3euShG5sa04hFZiMN34YidOfHwr6SVRu37Mz9ehOHsLnoeCzgx9IkICa3KI2nPTjlniBi+bkj9CDq6iK6u6NNlODVfsrZcar")
+            reporter.setLoggerEnable(BuildConfig.DEBUG)
+        }
 
         initUmeng(this){MainFragment.getInstance()?.let { it.handleUmengCustomAction() }}
         startKoin {
             androidLogger()
             androidContext(this@TwantApplication)
-            modules(koinModule)
+            koin.loadModules(koinModule)
+            koin.createRootScope()
         }
         SLog.info("Launch performance...")
 

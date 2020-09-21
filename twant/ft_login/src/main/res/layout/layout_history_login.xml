@@ -1,27 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vo"
+            type="com.gzp.lib_common.model.User" />
+    </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical">
-        <com.ftofs.lib_common_ui.toolbar.TitleBar
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <com.ftofs.ft_login.widget.Title
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:login_info="true"
+            android:id="@+id/title"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="78dp"
+            android:layout_height="78dp"
+            android:layout_marginTop="42dp"
+            imageUrl="{vo.avatar}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:id="@+id/tv_nickname"/>
+
         <TextView
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="一鍵登錄"
+            android:text="歷史登錄頁"
+            android:textSize="@dimen/dp_40"
             android:background="@color/upsdk_white"
             android:id="@+id/tv_one_step"/>
         <TextView
+            android:gravity="center"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/dp_40"
             android:text="二鍵登錄"
             android:background="@color/upsdk_white"
             android:id="@+id/tv_two_step"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dp_40"
+            android:id="@+id/btn_login"
+            android:text="賬號登錄"/>
     </LinearLayout>
 </layout>

@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import com.ftofs.twant.R;
 import com.gzp.lib_common.base.BaseFragment;
 
+import org.jetbrains.annotations.NotNull;
+
 
 /**
  * 如何參與砍價說明頁面
@@ -27,7 +29,7 @@ public class BargainInstructionFragment extends BaseFragment implements View.OnC
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bargain_instruction, container, false);
         return view;
     }

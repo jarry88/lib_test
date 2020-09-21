@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ftofs.twant.R
 import com.ftofs.twant.fragment.LabFragment
 import com.gzp.lib_common.base.BaseActivity
-import com.umeng.message.UmengNotifyClickActivity
 
 class TestActivity : BaseActivity() {
 

@@ -17,6 +17,8 @@ import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SquareGridLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 public class DragFragment extends BaseFragment implements View.OnClickListener {
     SquareGridLayout imageContainer;
 
@@ -36,7 +38,7 @@ public class DragFragment extends BaseFragment implements View.OnClickListener {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_drag, container, false);
         return view;
     }

@@ -15,6 +15,10 @@ object ConstantsPath {
      * 登录页面
      */
     const val LOGIN_SERVICE_PATH = "/login/login_service"
+    /**
+     * 登录页面
+     */
+    const val APP_SERVICE_PATH = "/app/app_service"
 
 
     /**

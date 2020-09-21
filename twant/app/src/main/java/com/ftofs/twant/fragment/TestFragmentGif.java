@@ -14,6 +14,8 @@ import com.ftofs.twant.util.Util;
 
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import cn.snailpad.easyjson.EasyJSONObject;
 
 public class TestFragmentGif extends BaseFragment implements View.OnClickListener{
@@ -29,7 +31,7 @@ public class TestFragmentGif extends BaseFragment implements View.OnClickListene
     @Nullable
     //這裡為什麼知己ctrl+o 搜不到重載方法以及android.support.annotation.
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_test_layout, container,false);
 
         return view;

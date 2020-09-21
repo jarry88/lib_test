@@ -5,26 +5,37 @@ import android.os.Parcelable
 import com.orhanobut.hawk.Hawk
 
 data class User(
+        val mobile: String?,
+        val password: String?,
         val userId:Int=0,
         val token:String,
         val nickname:String,
         val lastLoginTime:Int=0,
-        val memberToken:String
+        val memberToken:String,
+        val avatar:String?
 ):Parcelable {
+
     constructor(parcel: Parcel) : this(
+            parcel.readString(),
+            parcel.readString(),
             parcel.readInt(),
             parcel.readString()!!,
             parcel.readString()!!,
             parcel.readInt(),
-            parcel.readString()!!) {
+            parcel.readString()!!,
+            parcel.readString()
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(mobile)
+        parcel.writeString(password)
         parcel.writeInt(userId)
         parcel.writeString(token)
         parcel.writeString(nickname)
         parcel.writeInt(lastLoginTime)
         parcel.writeString(memberToken)
+        parcel.writeString(avatar)
     }
 
     override fun describeContents(): Int {

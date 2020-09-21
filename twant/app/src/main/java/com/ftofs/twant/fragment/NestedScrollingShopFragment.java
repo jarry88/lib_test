@@ -14,6 +14,8 @@ import com.ftofs.twant.adapter.TestAdapter;
 import com.ftofs.twant.interfaces.ScrollableContainer;
 import com.gzp.lib_common.base.BaseFragment;
 
+import org.jetbrains.annotations.NotNull;
+
 
 /**
  * @author linmeizhen
@@ -31,7 +33,7 @@ public class NestedScrollingShopFragment extends BaseFragment implements Scrolla
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shop_nested_scroll,null);
         recyclerview = (RecyclerView) view.findViewById(R.id.recyclerview);
 
