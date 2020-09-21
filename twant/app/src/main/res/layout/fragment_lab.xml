@@ -9,6 +9,10 @@
 
         tools:context=".activity.MainActivity"
         android:orientation="vertical">
+        <com.ftofs.lib_common_ui.AAA
+            app:bbb="意思"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <com.ftofs.lib_common_ui.toolbar.TitleBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

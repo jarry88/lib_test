@@ -1,28 +1,34 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.api.Api;
-import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.LogUtil;
-import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.adapter.CrossBorderHomeAdapter;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.CrossBorderHomeItem;
+import com.gzp.lib_common.base.BaseFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-import java.io.IOException;
-
-import cn.snailpad.easyjson.EasyJSONObject;
-import okhttp3.Call;
-
+/**
+ * 跨城購主頁
+ * @author zwm
+ */
 public class CrossBorderHomeFragment extends BaseFragment implements View.OnClickListener {
+    RecyclerView rvList;
+    CrossBorderHomeAdapter adapter;
+    List<CrossBorderHomeItem> crossBorderHomeItemList = new ArrayList<>();
+
     public static CrossBorderHomeFragment newInstance() {
         CrossBorderHomeFragment fragment = new CrossBorderHomeFragment();
         Bundle args = new Bundle();
@@ -44,40 +50,25 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        loadData();
-    }
+        CrossBorderHomeItem header = new CrossBorderHomeItem();
+        header.itemType = Constant.ITEM_TYPE_HEADER;
 
-    private void loadData() {
-        // String url = Api.PATH_TARIFF_BUY_INDEX;
-        String url = "https://test.weshare.team/tmp/test3.json";
+        crossBorderHomeItemList.add(header);
 
-        Api.getUI(url, null, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogUtil.uploadAppLog(url, "", "", e.getMessage());
-                ToastUtil.showNetworkError(_mActivity, e);
-            }
+        for (int i = 0; i < 20; i++) {
+            CrossBorderHomeItem item = new CrossBorderHomeItem();
+            item.itemType = Constant.ITEM_TYPE_NORMAL;
+            crossBorderHomeItemList.add(item);
+        }
 
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        LogUtil.uploadAppLog(url, "", responseStr, "");
-                        return;
-                    }
-
-
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                }
-            }
-        });
+        rvList = view.findViewById(R.id.rv_list);
+        rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        adapter = new CrossBorderHomeAdapter(_mActivity, crossBorderHomeItemList);
+        rvList.setAdapter(adapter);
     }
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
-        SLog.info("id[%d]", id);
+
     }
 }

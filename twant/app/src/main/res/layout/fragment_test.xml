@@ -9,12 +9,30 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="vertical">
+        <com.ftofs.lib_common_ui.AAA
+            app:bbb="意思"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <ImageView
             android:id="@+id/img_test"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:contentDescription="TODO">
         </ImageView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="#019AA7">
+            </View>
+            <com.ftofs.twant.widget.CrossBorderDrawView
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+            </com.ftofs.twant.widget.CrossBorderDrawView>
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

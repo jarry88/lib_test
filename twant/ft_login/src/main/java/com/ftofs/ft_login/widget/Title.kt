@@ -22,9 +22,9 @@ class Title @JvmOverloads constructor(
     private val titlebarLeftImage by lazy {findViewById<ImageView>(R.id.titlebarLeftImage)  }
     private val titlebarRight by lazy {findViewById<RelativeLayout>(R.id.titlebar_rightlayout)  }
     private fun initView(attrs: AttributeSet?) {
-//        val rootView=View.inflate(context,R.layout.rl_title_wight,this)
-        val rootView=(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                .inflate(R.layout.rl_title_wight, this, true)
+        val rootView=View.inflate(context,R.layout.rl_title_wight,this)
+      //  val rootView=(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+              //  .inflate(R.layout.rl_title_wight, this, true)
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.Title)
 
 //        typedArray.getString(R.attr.title)?.let { rootView.findViewById<TextView>(R.id.titlebar_title)?.text=it }

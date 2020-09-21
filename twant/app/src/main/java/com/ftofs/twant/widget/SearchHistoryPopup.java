@@ -2,10 +2,8 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,18 +19,17 @@ import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.impl.PartShadowPopupView;
 import com.nex3z.flowlayout.FlowLayout;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
