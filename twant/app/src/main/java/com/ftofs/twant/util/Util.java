@@ -284,28 +284,30 @@ public class Util {
 
     public static String formatCount(int count) {
         /*
-        1）顯示格式：nnnK, nnnM；
-        2）當時數字達到十萬級時，數字顯示時，應格式化；以千級單位K為單位進行數字格式化；
-        3）當時數字達到千萬級時，數字顯示時，應格式化；以百萬級單位M為單位進行數字格式化；
-           最多保留1位小數，並且4舍5入，例： 1749 -> 1.7K  1750 -> 1.8K
-           如果小數位為0，就不要小數  例： 2.0K -> 2K
+        數字達到萬級以上，需要對數字進行顯示格式化。
+        1）顯示格式：nnn.n萬，nn.n億；n代表數字，萬億代表顯示格式化后的單位。
+        2）當數字達到萬級時，則進行顯示格式化，以萬級單位“萬”為結尾；
+        3）當數字達到億級時，則進行顯示格式化，以億級單位“億”為結尾；
+        4）格式化保留一位小數，且四舍五入；例： 211749格式化后顯示為21.2萬, 999978格式化后顯示為100萬；
+        5）格式化后小數的尾數0去掉，例： 格式化之后為5.0萬，則顯示為5萬；
+        6）範例：比如102,564，格式化后顯示為10.3萬；如：187,945,612，格式化后顯示為1.9億；
          */
-        if (count < 100000) {
+        if (count < 10000) { // 1萬以下原樣返回
             return String.valueOf(count);
-        } else if (count < 10000000) {
-            return formatNumber(count, 1000) + "K";
-        } else {
-            return formatNumber(count, 1000000) + "M";
+        } else if (count < 100000000) { // 1萬或以上，1億以下
+            return formatNumber(count, 10000) + "萬";
+        } else { // 1億或以上
+            return formatNumber(count, 100000000) + "億";
         }
     }
 
 
     public static String formatNumber(double n, int unit) {
         // 4舍5入運算
-        if (unit == 1000) {
-            n += 50;
-        } else if (unit == 1000000) {
-            n += 50000;
+        if (unit == 10000) {
+            n += 500;
+        } else if (unit == 100000000) {
+            n += 5000000;
         } else {
             // 不支持這種單位
             return null;
