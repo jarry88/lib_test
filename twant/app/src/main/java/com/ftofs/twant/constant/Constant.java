@@ -94,6 +94,16 @@ public class Constant {
      */
     public static final int ITEM_TYPE_NO_STORE_DATA = 6;
 
+    /**
+     * Header類型
+     */
+    public static final int ITEM_TYPE_HEADER = 7;
+
+    /**
+     * Footer類型
+     */
+    public static final int ITEM_TYPE_FOOTER = 8;
+
 
 
     /**

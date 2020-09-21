@@ -1519,6 +1519,12 @@ public class Api {
      */
     public static final String PATH_SEC_KILL_GOODS_LIST = "/seckill/goods";
 
+
+    /**
+     * 【跨城購】首頁
+     */
+    public static final String PATH_TARIFF_BUY_INDEX = "/tariff_buy/index";
+
     /**
      * 【跨城購實名認證】添加認證
      */

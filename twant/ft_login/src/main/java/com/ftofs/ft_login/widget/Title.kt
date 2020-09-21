@@ -3,14 +3,12 @@ package com.ftofs.ft_login.widget
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.ftofs.ft_login.R
-import com.gzp.lib_common.utils.SLog
 
 class Title @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -23,10 +21,14 @@ class Title @JvmOverloads constructor(
     private val titlebarRight by lazy {findViewById<RelativeLayout>(R.id.titlebar_rightlayout)  }
     @SuppressLint("ResourceType")
     private fun initView(attrs: AttributeSet?) {
-      View.inflate(context,R.layout.rl_title_wight,this)
+      View.inflate(context,R.layout.layout_login_tilte,this)
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.Title)
-        rootView.findViewById<TextView>(R.id.titlebar_title)?.text="it"
-//        typedArray.getString(R.attr.title)?.let {SLog.info(it)}
+        typedArray.getString(R.styleable.Title_text_title)?.let {
+            rootView.findViewById<TextView>(R.id.titlebar_title)?.text=it
+        }
+        typedArray.getBoolean(R.styleable.Title_login_info,false).takeIf { it }?.let {
+            rootView.findViewById<View>(R.id.tv_info)?.visibility=View.VISIBLE
+        }
 //        typedArray.getBoolean(R.attr.login_info,false).let {
 //            if(it) rootView.findViewById<TextView>(R.id.tv_info)?.visibility= VISIBLE
 //        }

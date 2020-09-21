@@ -48,6 +48,11 @@ import com.ftofs.lib_net.model.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.fragment.BargainDetailFragment;
+import com.ftofs.twant.fragment.CommitFeedbackFragment;
+import com.ftofs.twant.fragment.CrossBorderHomeFragment;
+
+import com.ftofs.twant.fragment.CrossBorderMainFragment;
+
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.HomeFragment;
@@ -57,8 +62,8 @@ import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
-import com.ftofs.twant.fragment.SecKillFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
+import com.ftofs.twant.fragment.TestFragment;
 import com.ftofs.twant.handler.StackViewTouchListener;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
@@ -495,19 +500,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                 } else if (position == 8) {
                                     MainActivity.this.getSupportDelegate().showFragmentStackHierarchyView();
                                 } else if (position == 9) { // 測試1
-                                    Api.getUI("https://test.weshare.team/tmp/test.php", null, new UICallback() {
-                                        @Override
-                                        public void onFailure(Call call, IOException e) {
-
-                                        }
-
-                                        @Override
-                                        public void onResponse(Call call, String responseStr) throws IOException {
-                                            SLog.info("responseStr[%s]", responseStr);
-                                        }
-                                    });
+                                    Util.startFragment(TestFragment.newInstance());
                                 } else if (position == 10) { // 測試2
-                                    Util.startFragment(LabFragment.newInstance());
+                                    Util.startFragment(CrossBorderMainFragment.newInstance());
                                 }else if (position == 11) { // 開發寫死的數值通道開關
                                     Config.USE_DEVELOPER_TEST_DATA = !Config.USE_DEVELOPER_TEST_DATA;
                                     ToastUtil.success(getApplicationContext(),Config.USE_DEVELOPER_TEST_DATA?"使用寫死的數據":"使用服務器數據");

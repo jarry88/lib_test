@@ -23,7 +23,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="15dp"
                 android:layout_marginStart="15dp"
@@ -37,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/tw_black"
+            android:text="登入後享受更多服務"
             android:textSize="18sp" />
 
         <RelativeLayout

@@ -9,10 +9,6 @@
 
         tools:context=".activity.MainActivity"
         android:orientation="vertical">
-        <com.ftofs.twant.widget.TestToolView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="这是一个标题栏"/>
         <Button
             android:id="@+id/btn_test1"
             android:layout_width="match_parent"
