@@ -52,7 +52,7 @@ class PhoneView @JvmOverloads constructor(
            "澳門"
     )
 
-    private var zoneIndex:Int=0
+    private var zoneIndex:Int=0//弹窗位置序号
     private val etMobile:EditText by lazy {
         rootView.findViewById(R.id.et_mobile)
     }
@@ -82,7 +82,7 @@ class PhoneView @JvmOverloads constructor(
         if( mobileList.size<=index)return
         zoneIndex=mobileList[index].areaId
         etMobile.text=etMobile.text
-        tvZone?.text=String.format("${areaArray[index]}(+%s)",mobileList[index].areaCode)
+        tvZone?.text=mobileList[index].areaName
     }
     fun setZoneSelect(listener: OnClickListener){llZoneSelect?.setOnClickListener(listener)}
 

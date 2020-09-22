@@ -7,6 +7,7 @@ import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import kotlinx.coroutines.launch
 import  com.gzp.lib_common.constant.Result
+import com.gzp.lib_common.utils.SLog
 
 /**
  *
@@ -43,6 +44,7 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                 is Result.Success ->success(re.datas)
                 is Result.DataError->{
                     errorMessage="数据加载失败"
+                    SLog.info(re.datas.toString())
                     error(re.datas)
 //                    errorMessage=re
                     stateLiveData.postError()

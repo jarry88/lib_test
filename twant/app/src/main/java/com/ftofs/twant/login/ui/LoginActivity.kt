@@ -1,8 +1,10 @@
 package com.ftofs.twant.login.ui
 
+import android.content.Intent
+import com.facebook.CallbackManager
+import com.ftofs.lib_common_ui.switchTranslucentMode
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.ActivityLoginBinding
-import com.ftofs.lib_common_ui.switchTranslucentMode
 import com.gzp.lib_common.base.MBaseActivity
 import com.gzp.lib_common.base.callback.SimpleCallBack
 import com.gzp.lib_common.model.User
@@ -11,7 +13,7 @@ import com.gzp.lib_common.utils.SLog
 
 class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), SimpleCallBack {
 
-
+        val callbackManager by lazy { CallbackManager.Factory.create() }
         override fun initData() {
     //        TODO("Not yet implemented")
         }
@@ -31,8 +33,8 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
                 loadRootFragment(R.id.container, findFragment(HistoryLoginFragment::class.java)
                         ?: HistoryLoginFragment(user))
             } else {
-                loadRootFragment(R.id.container ,findFragment(MessageFragment::class.java)
-                            ?: MessageFragment("11"))
+                loadRootFragment(R.id.container, findFragment(MessageFragment::class.java)
+                        ?: MessageFragment("11"))
             }
 
         }
@@ -45,6 +47,11 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
             onBackPressedSupport()
         }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
 //    }
 }

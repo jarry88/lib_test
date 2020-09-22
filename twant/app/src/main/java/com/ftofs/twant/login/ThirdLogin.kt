@@ -18,7 +18,7 @@ class ThirdLogin @JvmOverloads constructor(
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ThirdLogin)
         View.inflate(context, R.layout.third_login_wighet, this)
         btnWechat=rootView.findViewById<CircleImageView>(R.id.btn_wechat)
-        btnFaceBook=rootView.findViewById(R.id.btn_wechat)
+        btnFaceBook=rootView.findViewById(R.id.btn_facebook)
         typedArray.recycle()
     }
 

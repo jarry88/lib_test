@@ -1,6 +1,10 @@
 package com.ftofs.twant.constant;
 
 
+import org.jetbrains.annotations.NotNull;
+
+import kotlin.Pair;
+
 /**
  * 常量定義
  * @author zwm
@@ -401,4 +405,6 @@ public class Constant {
         1575, 959,1598
     };
     public static final int MOON_ZONE_ID=69;
+    @NotNull
+    public static final Pair<String, String> CLIENT_TYPE_PAIR=new Pair("clientType",CLIENT_TYPE_ANDROID);
 }

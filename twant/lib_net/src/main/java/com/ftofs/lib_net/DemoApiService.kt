@@ -1,5 +1,6 @@
 package com.ftofs.lib_net
 
+import android.util.Log
 import com.ftofs.lib_net.model.*
 import com.ftofs.lib_net.net.TwantResponse
 import com.wzq.mvvmsmart.net.base.BaseResponse
@@ -92,6 +93,10 @@ interface DemoApiService {
     suspend fun getLoginOne(@Query("aliYunToken")aliYunToken:String,@Query("clientType")clientType:String): TwantResponse<LoginInfo>
     @GET("app/mobile/zone")
     suspend fun getMobileZoneList(): TwantResponse<AdminMobileAreaList>
+    @POST("loginconnect/facebook/login")
+    suspend fun doFaceLogin(@Query("accessToken")accessToken:String,@Query("userId")userId:String,@Query("clientType")clientType:String): TwantResponse<LoginInfo>
+    @POST("v2/login")
+    suspend fun passwordLogin(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
 
 
 //@Field
