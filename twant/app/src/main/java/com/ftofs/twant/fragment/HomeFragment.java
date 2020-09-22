@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ftofs.ft_login.service.LoginServiceImpl;
+import com.ftofs.twant.login.service.LoginServiceImpl;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
@@ -29,6 +29,7 @@ import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
+import com.ftofs.twant.util.UiUtil;
 import com.github.richardwrq.krouter.annotation.Inject;
 import com.github.richardwrq.krouter.api.core.KRouter;
 import com.gzp.lib_common.service.ConstantsPath;
@@ -64,6 +65,7 @@ import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
+import kotlin.reflect.jvm.internal.UtilKt;
 import okhttp3.Call;
 
 import static com.ftofs.twant.util.Util.dip2px;
@@ -71,6 +73,8 @@ import static com.ftofs.twant.util.Util.dip2px;
 public class HomeFragment extends MainBaseFragment implements View.OnClickListener {
     RecyclerView rvList;
     TangramEngine tangramEngine;
+    BasePopupView mLoading;
+
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
     LinearLayout llFloatButtonContainer;
     private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800; // 浮動按鈕滑動顯示與隱藏效果的延遲時間(毫秒)
@@ -109,6 +113,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mLoading=  Util.createLoadingPopup(requireContext());
         KRouter.INSTANCE.inject(this);
         EventBus.getDefault().register(this);
 
@@ -159,8 +164,8 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         if (message.messageType == EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP) {
             showPopupAd();
         }
-        if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS) {
-
+        if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS&&mLoading!=null) {
+            mLoading.dismiss();
         }
     }
 
@@ -393,16 +398,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         } else if (id == R.id.btn_test) {
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
-            htLoading=new HTLoading(requireContext()).setLoadingView(View.inflate(requireContext(),com.ftofs.lib_common_ui.R.layout.tw_loading_popup,null)).setDialogBackground(R.color.tw_no_color).setInterceptBack(false);
-            htLoading.showCustomLoading();
-            BaseContextKt.getBaseApplication().setMHandler(new Handler(Looper.getMainLooper()){
-                @Override
-                public void handleMessage(@NonNull Message msg) {
-                    super.handleMessage(msg);
-                }
-            });
-//            if(getActivity())
-//            ((MainActivity) getActivity()).loading = UiUtilsKt.createLoadingPopup(requireContext()).show();
+            mLoading.show();
             loginService.start(_mActivity);
         }
     }

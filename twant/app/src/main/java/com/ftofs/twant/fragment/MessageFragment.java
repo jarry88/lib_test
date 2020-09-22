@@ -17,7 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.ftofs.ft_login.UserManager;
+import com.ftofs.twant.login.UserManager;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.ChatConversationAdapter;

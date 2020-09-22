@@ -6,14 +6,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ftofs.ft_login.service.LoginServiceImpl;
 import com.ftofs.twant.appserver.AppServiceImpl;
-import com.ftofs.twant.constant.Constant;
-import com.github.richardwrq.krouter.annotation.Inject;
-import com.github.richardwrq.krouter.api.core.KRouter;
 import com.gzp.lib_common.base.BaseFragment;
-import com.gzp.lib_common.service.AppService;
-import com.gzp.lib_common.service.ConstantsPath;
 import com.gzp.lib_common.utils.SLog;
 
 public class MainBaseFragment extends BaseFragment {

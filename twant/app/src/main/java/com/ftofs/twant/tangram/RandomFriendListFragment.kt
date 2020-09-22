@@ -57,7 +57,7 @@ class RandomFriendListFragment: BaseTwantFragmentMVVM<RandomFriendListLayoutBind
     }}
     override fun initData() {
         binding.rvList.adapter= mAdapter
-        binding.rlTools.tvTitle.text="城友過客"
+        binding.rlTools.tvTitle.text="遇見..."
         binding.rlTools.btnBack.setOnClickListener { onBackPressedSupport() }
         viewModel.getMemberList()
     }

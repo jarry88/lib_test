@@ -3,7 +3,7 @@
     package="com.ftofs.ft_login">
     <application>
 
-        <activity android:name=".ui.LoginActivity">
+        <activity android:name="com.ftofs.twant.login.ui.LoginActivity">
 
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->

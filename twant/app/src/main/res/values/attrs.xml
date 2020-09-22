@@ -17,6 +17,7 @@
     </declare-styleable>
 
 
+    <declare-styleable name="ThirdLogin"/>
     <!-- ScaledButton -->
     <attr name="icon_src" format="reference"></attr>
     <attr name="icon_width" format="dimension"></attr>

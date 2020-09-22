@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ftofs.ft_login.UserManager;
+import com.ftofs.twant.login.UserManager;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
