@@ -1,78 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="12dp"
-    android:paddingEnd="12dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="10dp"
     android:background="@android:color/white"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="home_item"
-        android:gravity="center">
 
-    </TextView>
 
-    <com.ftofs.twant.widget.StoreDesktop
-        android:layout_width="match_parent"
-        android:layout_height="9dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginEnd="3dp">
-    </com.ftofs.twant.widget.StoreDesktop>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="77dp"
-        android:orientation="horizontal"
-        android:background="@drawable/cross_border_row_pane_bg">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="148dp"
+        android:orientation="vertical">
+        <com.ftofs.twant.widget.StoreDesktop
+            android:layout_width="match_parent"
+            android:layout_height="9dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp">
+        </com.ftofs.twant.widget.StoreDesktop>
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="77dp"
+            android:orientation="horizontal"
+            android:background="@drawable/cross_border_row_pane_bg">
+            <!-- 左邊 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_goods_name_left"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="9dp"
-                android:layout_marginTop="11dp"
-                android:textSize="12sp"
-                android:textColor="@color/tw_black"
-                android:text="小動物奶油童趣蛋糕糕小動物奶油童趣蛋糕糕"
-                android:singleLine="true"
-                android:ellipsize="end">
-            </TextView>
+                <TextView
+                    android:id="@+id/tv_goods_name_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="11dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/tw_black"
+                    android:text="小動物奶油童趣蛋糕糕小動物奶油童趣蛋糕糕"
+                    android:singleLine="true"
+                    android:ellipsize="end">
+                </TextView>
 
-            <TextView
-                android:id="@+id/tv_goods_jingle_left"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="9dp"
-                android:textSize="10sp"
-                android:textColor="#636363"
-                android:text="植物油奶油提煉無添加純天然植物油奶油提煉無添加純天然"
-                android:singleLine="true"
-                android:ellipsize="end">
-            </TextView>
+                <TextView
+                    android:id="@+id/tv_goods_jingle_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:textSize="10sp"
+                    android:textColor="#636363"
+                    android:text="植物油奶油提煉無添加純天然植物油奶油提煉無添加純天然"
+                    android:singleLine="true"
+                    android:ellipsize="end">
+                </TextView>
 
-            <!--
-            <TextView
-                android:id="@+id/tv_conform_left"
-                android:layout_width="wrap_content"
-                android:layout_height="14dp"
-                android:layout_marginStart="9dp"
-                android:layout_marginTop="4dp"
-                android:paddingStart="6dp"
-                android:paddingEnd="6dp"
-                android:text=""
-                android:textSize=""
-                android:gravity="center">
 
-            </TextView>
-            -->
+                <TextView
+                    android:id="@+id/tv_conform_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="4dp"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:text="滿399減20"
+                    android:textSize="9sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:background="@drawable/yellow_r7dp_bg">
+                </TextView>
 
+            </LinearLayout>
+            <!-- END OF 左邊 -->
+            <!-- 右邊 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_goods_name_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="11dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/tw_black"
+                    android:text="小動物奶油童趣蛋糕糕小動物奶油童趣蛋糕糕"
+                    android:singleLine="true"
+                    android:ellipsize="end">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_goods_jingle_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:textSize="10sp"
+                    android:textColor="#636363"
+                    android:text="植物油奶油提煉無添加純天然植物油奶油提煉無添加純天然"
+                    android:singleLine="true"
+                    android:ellipsize="end">
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/tv_conform_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="4dp"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:text="滿399減20"
+                    android:textSize="9sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:background="@drawable/yellow_r7dp_bg">
+                </TextView>
+            </LinearLayout>
+            <!-- END OF 右邊 -->
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="152dp"
+            android:layout_weight="1">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/goods_image_left"
+                android:layout_width="152dp"
+                android:layout_height="152dp"
+                android:layout_centerHorizontal="true"
+                app:riv_corner_radius="4dp"
+                android:src="@drawable/cs_avatar_160">
+            </com.makeramen.roundedimageview.RoundedImageView>
+
+            <TextView
+                android:id="@+id/tv_goods_price_left"
+                android:layout_width="133dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/price_grey_bg"
+                android:gravity="center"
+                android:text="$320"
+                android:textColor="@android:color/white"
+                android:textSize="16sp">
+
+            </TextView>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="152dp"
+            android:layout_weight="1">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/goods_image_right"
+                android:layout_width="152dp"
+                android:layout_height="152dp"
+                android:layout_centerHorizontal="true"
+                app:riv_corner_radius="4dp"
+                android:src="@drawable/cs_avatar_160">
+            </com.makeramen.roundedimageview.RoundedImageView>
+
+            <TextView
+                android:id="@+id/tv_goods_price_right"
+                android:layout_width="133dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/price_grey_bg"
+                android:gravity="center"
+                android:text="$320"
+                android:textColor="@android:color/white"
+                android:textSize="16sp">
+
+            </TextView>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

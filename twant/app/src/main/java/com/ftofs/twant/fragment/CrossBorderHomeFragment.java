@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CrossBorderHomeAdapter;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
+import com.ftofs.twant.entity.CrossBorderNavItem;
+import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.gzp.lib_common.base.BaseFragment;
 
 import java.util.ArrayList;
@@ -29,10 +32,20 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     CrossBorderHomeAdapter adapter;
     List<CrossBorderHomeItem> crossBorderHomeItemList = new ArrayList<>();
 
-    public static CrossBorderHomeFragment newInstance() {
+    List<CrossBorderBannerItem> bannerItemList;
+    List<CrossBorderNavItem> navItemList;
+    List<CrossBorderShoppingZoneItem> shoppingZoneList;
+
+    public static CrossBorderHomeFragment newInstance(List<CrossBorderBannerItem> bannerItemList,
+                                                      List<CrossBorderNavItem> navItemList,
+                                                      List<CrossBorderShoppingZoneItem> shoppingZoneList) {
         CrossBorderHomeFragment fragment = new CrossBorderHomeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+
+        fragment.bannerItemList = bannerItemList;
+        fragment.navItemList = navItemList;
+        fragment.shoppingZoneList = shoppingZoneList;
         return fragment;
     }
 
@@ -51,6 +64,9 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         super.onViewCreated(view, savedInstanceState);
 
         CrossBorderHomeItem header = new CrossBorderHomeItem();
+        header.bannerItemList = bannerItemList;
+        header.navItemList = navItemList;
+        header.shoppingZoneList = shoppingZoneList;
         header.itemType = Constant.ITEM_TYPE_HEADER;
 
         crossBorderHomeItemList.add(header);

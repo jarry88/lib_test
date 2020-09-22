@@ -10,6 +10,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.ftofs.twant.R;
 import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.utils.SLog;
 
@@ -35,7 +36,7 @@ public class CrossBorderDrawView extends View {
     private void init() {
         // 创建画笔
         p = new Paint();
-        p.setColor(Color.parseColor("#019AA7"));
+        p.setColor(getContext().getColor(R.color.tw_cross_border_home_page_bg_color));
         p.setAntiAlias(true);
     }
 
