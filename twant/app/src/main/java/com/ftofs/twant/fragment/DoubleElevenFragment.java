@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.Util;
 
 import org.jetbrains.annotations.NotNull;

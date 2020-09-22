@@ -1,6 +1,5 @@
 package com.ftofs.twant.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,14 +16,11 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.ft_login.service.LoginServiceImpl;
-import com.ftofs.lib_common_ui.UiUtilsKt;
-import com.ftofs.lib_common_ui.popup.TwLoadingPopup;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.appserver.AppServiceImpl;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -33,17 +29,14 @@ import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
-import com.ftofs.twant.util.UiUtil;
 import com.github.richardwrq.krouter.annotation.Inject;
 import com.github.richardwrq.krouter.api.core.KRouter;
-import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.service.ConstantsPath;
-import com.gzp.lib_common.utils.BaseContext;
 import com.gzp.lib_common.utils.BaseContextKt;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -57,7 +50,6 @@ import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
 import com.tmall.wireless.tangram.structure.BaseCell;
-import com.wzq.mvvmsmart.utils.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

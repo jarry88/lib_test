@@ -3,16 +3,22 @@ package com.gzp.lib_common.utils
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
+import android.util.Log
 import com.gzp.lib_common.BuildConfig
 import com.gzp.lib_common.constant.SPField
 import com.orhanobut.hawk.Hawk
+import java.io.File
 import java.util.*
 
 object Util {
     fun inDev(): Boolean {
         return BuildConfig.DEBUG
     }
+    const val DATA_IMAGE_PNG_PREFIX = "data:image/png;base64,"
 
     /**
      * dp和pixel转换
@@ -91,4 +97,44 @@ object Util {
         Hawk.put(SPField.FIELD_DEVICE_UUID, uuid)
         return uuid
     }
+    fun makeParentDirectory(absolutePath: String?): Boolean {
+        return makeParentDirectory(File(absolutePath))
+    }
+
+    /**
+     * 創建file的父目錄（如果不存在的話)
+     * @param file
+     * @return 如果創建成功或已經存在，返回 true; 創建失敗返回 false
+     */
+    fun makeParentDirectory(file: File): Boolean {
+        val parentFile = file.parentFile
+        return if (parentFile.exists()) {
+            true
+        } else parentFile.mkdirs()
+    }
+
+    /**
+     * 將圖片文件添加到系統相冊
+     * 參考:
+     * android 保存图片到相册并正常显示
+     * https://blog.csdn.net/a394268045/article/details/51645411
+     * @param context
+     * @param file
+     */
+    fun addImageToGallery(context: Context, file: File) {
+        // 其次把文件插入到系统图库
+        val path = file.absolutePath
+        try {
+            MediaStore.Images.Media.insertImage(context.contentResolver, path, file.name, null)
+        } catch (e: java.lang.Exception) {
+            SLog.info("Error!message[%s], trace[%s]", e.message, Log.getStackTraceString(e))
+        }
+        // 最后通知图库更新
+        val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        val uri = Uri.fromFile(file)
+        intent.data = uri
+        context.sendBroadcast(intent)
+        SLog.info("HERE")
+    }
 }
+

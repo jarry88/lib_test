@@ -86,6 +86,7 @@ dependencies {
     api rootProject.ext.dependencies["rxandroid"]
 
     api rootProject.ext.dependencies["room-runtime"]
+    api 'top.zibin:Luban:1.1.8'
 
 //baseFragment,baseActivity
     api 'me.yokeyword:fragmentationx:1.0.2'

@@ -26,7 +26,7 @@ import com.ftofs.twant.entity.SecKillZoneItem;
 import com.ftofs.twant.entity.TimeInfo;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;

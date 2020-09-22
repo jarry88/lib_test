@@ -11,11 +11,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.PostItem;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Util;
-
-import org.litepal.util.Const;
 
 import java.util.List;
 

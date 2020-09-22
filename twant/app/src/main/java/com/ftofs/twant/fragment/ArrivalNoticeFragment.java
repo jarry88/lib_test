@@ -20,7 +20,7 @@ import com.ftofs.lib_net.model.MobileZone;
 import com.gzp.lib_common.base.callback.OnSelectedListener;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.task.TaskObserver;
+import com.gzp.lib_common.task.TaskObserver;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;

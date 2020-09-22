@@ -52,7 +52,7 @@ import com.ftofs.twant.seller.widget.NoScrollViewPager;
 import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
 import com.ftofs.twant.util.AssetsUtil;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;

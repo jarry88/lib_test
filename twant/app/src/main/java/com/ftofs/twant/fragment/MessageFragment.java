@@ -36,7 +36,7 @@ import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.BadgeUtil;
 import com.ftofs.twant.util.ChatUtil;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;

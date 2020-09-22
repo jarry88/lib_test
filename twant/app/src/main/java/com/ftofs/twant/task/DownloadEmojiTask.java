@@ -5,8 +5,8 @@ import com.ftofs.twant.api.Api;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.UserStatus;
-import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.PathUtil;
+import com.gzp.lib_common.utils.FileUtil;
+import com.gzp.lib_common.utils.PathUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 

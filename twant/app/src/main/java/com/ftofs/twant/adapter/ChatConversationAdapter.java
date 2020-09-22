@@ -19,7 +19,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ChatConversation;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ChatUtil;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.ArrayList;
