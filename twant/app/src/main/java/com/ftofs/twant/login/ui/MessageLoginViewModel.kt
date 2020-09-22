@@ -36,7 +36,8 @@ class MessageLoginViewModel(application: Application):BaseViewModel(application)
     fun getSmsAuthCode(mobile: String) {
         launch(stateLiveData,
                 {repository.run { simpleGet(api.getLoginFindPwd(mobile)) }},
-                {  }
+                { stateLiveData.postSuccess() },
+                final = {}
         )
     }
 

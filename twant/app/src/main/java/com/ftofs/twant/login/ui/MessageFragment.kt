@@ -58,7 +58,9 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
         override fun onFinish() {
             binding.btnRefreshCaptcha.apply {
                 background=resources.getDrawable(com.ftofs.lib_common_ui.R.drawable.bg_refresh_captcha, null)
-                text="重新獲取" }
+                text="重新獲取"
+                canSendSMS=true
+            }
 
         }
     } }
@@ -89,7 +91,6 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
             binding.icPromotionCodeVisibility.setImageResource(if (promotionCodeVisible) R.drawable.ic_baseline_arrow_drop_up_24 else R.drawable.ic_baseline_arrow_drop_down_24)
             binding.rlPromotionCodeContainer.visibility=(if (promotionCodeVisible) View.VISIBLE else View.GONE)
         }
-        SLog.info(listOf<Int>().isNullOrEmpty().toString())
         binding.etPhoneView.apply {
             setZoneSelect{
                 mobileList.takeUnless { it.isNullOrEmpty() }?.let {
@@ -117,7 +118,7 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
                     if (Config.PROD) {
                         MobclickAgent.onEvent(get(), UmengAnalyticsActionName.WECHAT_LOGIN)
                     }
-                    (_mActivity as MainActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_LOGIN)
+                    (_mActivity as LoginActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_LOGIN)
                 }
             }
             setFaceBook{
@@ -131,7 +132,6 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
 
 
         }
-        // 回调
         // 回调
         LoginManager.getInstance().registerCallback((_mActivity as LoginActivity).callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
@@ -175,27 +175,15 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
             binding.etPhoneView.apply {
                 it.forEach{a->SLog.info(a.toString())}
                 mobileList=it
-                setZoneIndex(1)
+                setZoneIndex(0)
             }
             if (it.isNotEmpty()) canSendSMS = true
         })
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
             when (it) {
-                StateLiveData.StateEnum.Loading -> {
-//                    loadingUtil?.showLoading("加载中..")
-
-
-                    KLog.e("请求数据中--显示loading")
-                }
                 StateLiveData.StateEnum.Success -> {
-                    onBackPressedSupport()
+//                    onBackPressedSupport()
                     KLog.e("数据获取成功--关闭loading")
-                }
-
-                StateLiveData.StateEnum.NoData -> {
-
-
-                    KLog.e("空闲状态--关闭loading")
                 }
                 else -> {
 
