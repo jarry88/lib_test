@@ -9,12 +9,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.adapter.CrossBorderCategoryListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.entity.CrossBorderBannerItem;
+import com.ftofs.twant.entity.CrossBorderCategoryItem;
+import com.ftofs.twant.entity.CrossBorderNavItem;
+import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -26,6 +34,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -35,6 +45,10 @@ import okhttp3.Call;
  * @author zwm
  */
 public class CrossBorderMainFragment extends BaseFragment implements View.OnClickListener {
+    RecyclerView rvCategoryList;
+    CrossBorderCategoryListAdapter categoryListAdapter;
+    List<CrossBorderCategoryItem> categoryList = new ArrayList<>();
+
     ViewPager viewPager;
 
     private List<String> titleList = new ArrayList<>();
@@ -61,6 +75,21 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        rvCategoryList = view.findViewById(R.id.rv_category_list);
+        rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
+        categoryListAdapter = new CrossBorderCategoryListAdapter(_mActivity, R.layout.cross_border_category_item, categoryList);
+        categoryListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CrossBorderCategoryItem item = categoryList.get(position);
+                SLog.info("position[%d], item[%s]", position, item);
+
+                viewPager.setCurrentItem(position);
+            }
+        });
+        rvCategoryList.setAdapter(categoryListAdapter);
+
+
         viewPager = view.findViewById(R.id.vp_category_list);
 
         Util.setOnClickListener(view, R.id.btn_test, this);
@@ -69,19 +98,50 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         loadData();
     }
 
-    private void initViewPager() {
-        titleList.add("首頁");
-        titleList.add("美妝");
-        titleList.add("母嬰");
-        titleList.add("數碼");
-        titleList.add("保健");
+    private void initViewPager(EasyJSONObject responseObj) {
+        try {
+            // 獲取Banner圖數據
+            List<CrossBorderBannerItem> bannerItemList = new ArrayList<>();
+            EasyJSONArray bannerArray = responseObj.getSafeArray("datas.bannerList");
+            for (Object object : bannerArray) {
+                CrossBorderBannerItem bannerItem = (CrossBorderBannerItem) EasyJSONBase.jsonDecode(CrossBorderBannerItem.class, object.toString());
+                bannerItemList.add(bannerItem);
+            }
 
-        fragmentList.add(CrossBorderHomeFragment.newInstance());
-        fragmentList.add(CrossBorderCategoryFragment.newInstance("美妝"));
-        fragmentList.add(CrossBorderCategoryFragment.newInstance("母嬰"));
-        fragmentList.add(CrossBorderCategoryFragment.newInstance("數碼"));
-        fragmentList.add(CrossBorderCategoryFragment.newInstance("保健"));
+            // 獲取導航區數據
+            List<CrossBorderNavItem> navItemList = new ArrayList<>();
+            EasyJSONArray navArray = responseObj.getSafeArray("datas.navList");
+            for (Object object : navArray) {
+                CrossBorderNavItem navItem = (CrossBorderNavItem) EasyJSONBase.jsonDecode(CrossBorderNavItem.class, object.toString());
+                SLog.info("navItem[%s]", navItem);
+                navItemList.add(navItem);
+            }
 
+            // 獲取購物專場數據
+            List<CrossBorderShoppingZoneItem> shoppingZoneList = new ArrayList<>();
+            EasyJSONArray shoppingZoneArray = responseObj.getSafeArray("datas.zoneList");
+            for (Object object : shoppingZoneArray) {
+                CrossBorderShoppingZoneItem shoppingZoneItem = (CrossBorderShoppingZoneItem) EasyJSONBase.jsonDecode(CrossBorderShoppingZoneItem.class, object.toString());
+                shoppingZoneList.add(shoppingZoneItem);
+            }
+
+
+            titleList.add("首頁");
+            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemList, shoppingZoneList));
+            categoryList.add(new CrossBorderCategoryItem(0, "首頁", "#019AA7"));
+
+            EasyJSONArray catList = responseObj.getSafeArray("datas.catList");
+            for (Object object : catList) {
+                CrossBorderCategoryItem item = (CrossBorderCategoryItem) EasyJSONBase.jsonDecode(CrossBorderCategoryItem.class, object.toString());
+
+                titleList.add(item.catName);
+                fragmentList.add(CrossBorderCategoryFragment.newInstance(item.catName));
+                categoryList.add(item);
+            }
+            categoryListAdapter.setNewData(categoryList);
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
@@ -90,8 +150,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     }
 
     private void loadData() {
-        // String url = Api.PATH_TARIFF_BUY_INDEX;
-        String url = "https://test.weshare.team/tmp/test3.json";
+        String url = Api.PATH_TARIFF_BUY_INDEX;
+        // String url = "https://test.weshare.team/tmp/test4.json";
 
         Api.getUI(url, null, new UICallback() {
             @Override
@@ -103,13 +163,17 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
+                    SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    SLog.info("responseObj[%s]", responseObj);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         LogUtil.uploadAppLog(url, "", responseStr, "");
                         return;
                     }
 
-                    initViewPager();
+
+
+                    initViewPager(responseObj);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -121,7 +185,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_test) {
-            initViewPager();
+            // initViewPager();
         } else if (id == R.id.btn_back) {
             hideSoftInputPop();
         }

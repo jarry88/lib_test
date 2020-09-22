@@ -16,7 +16,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
-                android:background="#019AA7">
+                android:background="@color/tw_cross_border_home_page_bg_color">
             </View>
             <com.ftofs.twant.widget.CrossBorderDrawView
                 android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#019AA7"
+            android:background="@color/tw_cross_border_home_page_bg_color"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -60,57 +60,11 @@
                     app:icon_src="@drawable/icon_shop_goods_search">
                 </com.ftofs.twant.widget.ScaledButton>
             </RelativeLayout>
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_category_list"
                 android:layout_width="match_parent"
-                android:layout_height="33dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="首頁"
-                    android:textColor="@android:color/white"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:gravity="center">
-                </TextView>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="美妝"
-                    android:textColor="@android:color/white"
-                    android:textSize="15sp"
-                    android:gravity="center">
-                </TextView>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="母嬰"
-                    android:textColor="@android:color/white"
-                    android:textSize="15sp"
-                    android:gravity="center">
-                </TextView>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="數碼"
-                    android:textColor="@android:color/white"
-                    android:textSize="15sp"
-                    android:gravity="center">
-                </TextView>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="保健"
-                    android:textColor="@android:color/white"
-                    android:textSize="15sp"
-                    android:gravity="center">
-                </TextView>
-            </LinearLayout>
+                android:layout_height="33dp">
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </RelativeLayout>
 

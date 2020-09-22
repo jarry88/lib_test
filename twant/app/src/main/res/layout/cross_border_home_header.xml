@@ -10,16 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp">
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/img_banner"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_banner_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintDimensionRatio="351:154"
-            app:riv_corner_radius="4dp">
-        </com.makeramen.roundedimageview.RoundedImageView>
+            app:layout_constraintDimensionRatio="351:154">
+        </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Slogan -->
@@ -109,11 +108,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
-        android:background="@drawable/white_r4dp_bg">
+        android:background="@drawable/white_r4dp_bg"
+        android:orientation="vertical">
         <com.ftofs.twant.widget.GridLayout
+            android:id="@+id/gl_nav_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:gl_column_count="5">
+            <!--
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -134,110 +136,11 @@
                     android:text="圖標名稱">
                 </TextView>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <ImageView
-                    android:layout_width="51dp"
-                    android:layout_height="51dp"
-                    android:src="@drawable/cs_avatar_160">
-                </ImageView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:textSize="10sp"
-                    android:textColor="#BBB"
-                    android:text="圖標名稱">
-                </TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <ImageView
-                    android:layout_width="51dp"
-                    android:layout_height="51dp"
-                    android:src="@drawable/cs_avatar_160">
-                </ImageView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:textSize="10sp"
-                    android:textColor="#BBB"
-                    android:text="圖標名稱">
-                </TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <ImageView
-                    android:layout_width="51dp"
-                    android:layout_height="51dp"
-                    android:src="@drawable/cs_avatar_160">
-                </ImageView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:textSize="10sp"
-                    android:textColor="#BBB"
-                    android:text="圖標名稱">
-                </TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <ImageView
-                    android:layout_width="51dp"
-                    android:layout_height="51dp"
-                    android:src="@drawable/cs_avatar_160">
-                </ImageView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:textSize="10sp"
-                    android:textColor="#BBB"
-                    android:text="圖標名稱">
-                </TextView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-                <ImageView
-                    android:layout_width="51dp"
-                    android:layout_height="51dp"
-                    android:src="@drawable/cs_avatar_160">
-                </ImageView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:textSize="10sp"
-                    android:textColor="#BBB"
-                    android:text="圖標名稱">
-                </TextView>
-            </LinearLayout>
+            -->
         </com.ftofs.twant.widget.GridLayout>
     </LinearLayout>
 
-
+    <!-- 領取新人紅包，暫時不需要
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/btn_receive_newbie_red_packet"
         android:layout_width="match_parent"
@@ -253,6 +156,7 @@
             android:src="@drawable/img_receive_newbie_red_packet">
         </ImageView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    -->
 
     <!-- 轉到購物專場 -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -260,16 +164,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
-        <com.ftofs.twant.widget.RoundedDataImageView
-            android:id="@+id/img_shopping_zone"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_shopping_zone_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintDimensionRatio="351:86"
-            app:riv_corner_radius="4dp">
-        </com.ftofs.twant.widget.RoundedDataImageView>
+            app:layout_constraintDimensionRatio="351:86">
+        </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <!-- END OF 轉到購物專場 -->
 
@@ -328,15 +231,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/expand_button_big">
+                    android:src="@drawable/expand_button">
                 </ImageView>
             </LinearLayout>
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_bargain_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp">
-
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
     <!-- END OF 砍價 -->
@@ -396,15 +299,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/expand_button_big">
+                    android:src="@drawable/expand_button">
                 </ImageView>
             </LinearLayout>
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_group_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp">
-
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
     <!-- END OF 拼團 -->
@@ -414,6 +317,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:paddingBottom="15dp"
         android:orientation="vertical"
         android:background="@drawable/white_r4dp_bg">
         <RelativeLayout
@@ -464,16 +368,85 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/expand_button_big">
+                    android:src="@drawable/expand_button">
                 </ImageView>
             </LinearLayout>
         </RelativeLayout>
-        <androidx.recyclerview.widget.RecyclerView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp">
+            android:orientation="horizontal">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <LinearLayout
+                    android:layout_width="158dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80.35dp"
+                    android:orientation="vertical"
+                    android:layout_centerHorizontal="true">
+                    <com.ftofs.twant.widget.StoreDesktop
+                        android:layout_width="match_parent"
+                        android:layout_height="6.65dp">
+                    </com.ftofs.twant.widget.StoreDesktop>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:text="創薈軒有限公司"
+                        android:textSize="10sp"
+                        android:textColor="#666"
+                        android:gravity="center"
+                        android:background="@drawable/border_type_a">
+                    </TextView>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="147dp"
+                    android:layout_height="83dp"
+                    android:src="@drawable/del"
+                    android:layout_centerHorizontal="true">
+                </ImageView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <LinearLayout
+                    android:layout_width="158dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80.35dp"
+                    android:orientation="vertical"
+                    android:layout_centerHorizontal="true">
+                    <com.ftofs.twant.widget.StoreDesktop
+                        android:layout_width="match_parent"
+                        android:layout_height="6.65dp">
+                    </com.ftofs.twant.widget.StoreDesktop>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:text="創薈軒有限公司"
+                        android:textSize="10sp"
+                        android:textColor="#666"
+                        android:gravity="center"
+                        android:background="@drawable/border_type_a">
+                    </TextView>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="147dp"
+                    android:layout_height="83dp"
+                    android:src="@drawable/del"
+                    android:layout_centerHorizontal="true">
+                </ImageView>
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
     <!-- END OF 優選好店 -->
 
@@ -532,7 +505,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/expand_button_big">
+                    android:src="@drawable/expand_button">
                 </ImageView>
             </LinearLayout>
         </RelativeLayout>
