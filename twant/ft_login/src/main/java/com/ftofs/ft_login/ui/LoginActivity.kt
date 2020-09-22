@@ -1,31 +1,12 @@
 package com.ftofs.ft_login.ui
 
-import android.content.Intent
-import android.content.pm.ActivityInfo
-import android.graphics.Color
-import android.os.Build
-import android.os.Message
-import android.util.Log
-import android.util.TypedValue
-import android.view.View
-import android.widget.RelativeLayout
-import android.widget.TextView
-import androidx.lifecycle.Observer
-import com.alibaba.fastjson.JSON
 import com.ftofs.ft_login.R
 import com.ftofs.ft_login.databinding.ActivityLoginBinding
-import com.ftofs.ft_login.utils.ExecutorManager
 import com.ftofs.lib_common_ui.switchTranslucentMode
 import com.gzp.lib_common.base.MBaseActivity
 import com.gzp.lib_common.base.callback.SimpleCallBack
 import com.gzp.lib_common.model.User
 import com.gzp.lib_common.utils.SLog
-import com.gzp.lib_common.utils.ToastUtil
-import com.mobile.auth.gatewayauth.*
-import com.mobile.auth.gatewayauth.model.TokenRet
-import com.qmuiteam.qmui.util.QMUIDisplayHelper.dp2px
-import com.wzq.mvvmsmart.event.StateLiveData
-import com.wzq.mvvmsmart.utils.KLog
 
 
 class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), SimpleCallBack {

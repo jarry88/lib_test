@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
+import com.ftofs.lib_common_ui.R
 import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.activity.TwantCaptureActivity
 import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.entity.EBMessage
+import com.ftofs.twant.fragment.H5GameFragment
 import com.ftofs.twant.fragment.MainFragment
 import com.ftofs.twant.util.Util
 import com.github.richardwrq.krouter.annotation.Provider
@@ -27,6 +29,7 @@ class AppServiceImpl:AppService {
         fun getCaptureIntent(): Intent {
             return Intent(BaseContext.instance.getContext(), TwantCaptureActivity::class.java)
         }
+
     }
     override fun startActivityOfApp(context: Context) {
         //可以在这里启动mainactivity
@@ -54,4 +57,5 @@ class AppServiceImpl:AppService {
             mainFragment.selectedFragmentIndex = selectedFragmentIndex;
         }
     }
+
 }

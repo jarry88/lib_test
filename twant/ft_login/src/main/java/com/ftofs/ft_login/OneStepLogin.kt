@@ -1,31 +1,31 @@
 package com.ftofs.ft_login
 
-import android.app.Activity
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Build
+import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.alibaba.fastjson.JSON
 import com.ftofs.ft_login.ui.LoginActivity
 import com.ftofs.ft_login.utils.ExecutorManager
 import com.ftofs.lib_common_ui.createLoadingPopup
 import com.ftofs.lib_net.BaseRepository
+import com.github.richardwrq.krouter.annotation.Inject
 import com.gzp.lib_common.constant.Result
+import com.gzp.lib_common.service.AppService
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
 import com.gzp.lib_common.utils.Util.dip2px
 import com.gzp.lib_common.utils.Util.findActivity
-import com.gzp.lib_common.utils.getBaseApplication
 import com.lxj.xpopup.core.BasePopupView
-import com.lxj.xpopup.util.XPopupUtils
 import com.mobile.auth.gatewayauth.*
 import com.mobile.auth.gatewayauth.model.TokenRet
 import kotlinx.coroutines.CoroutineScope
@@ -43,12 +43,16 @@ object OneStepLogin:CoroutineScope{
     fun login(aliYunToken: String) {
         launch {
             try {
-                val re=repository.run{simpleGet(api.getLoginOne(aliYunToken, "android"))}
-                when (re) {
+                when (val re=repository.run{simpleGet(api.getLoginOne(aliYunToken, "android"))}) {
                     is Result.Success -> {
                         SLog.info("数据加载成功${re.datas.nickName}")
-                        ToastUtil.success(mContext,"登入成功")
                         getResultWithToken(aliYunToken)
+                        Thread {
+                            Looper.prepare()
+                            Toast.makeText(mContext, "msg", Toast.LENGTH_SHORT).show()
+                            Looper.loop()
+                        }.start()
+                        ToastUtil.success(mContext, "登入成功")
                     }
                     else -> {
                         goLoginActivity()
@@ -195,6 +199,7 @@ object OneStepLogin:CoroutineScope{
         switchTV.setTextColor(-0x666667)
         switchTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13.0f)
         switchTV.layoutParams = mLayoutParams2
+        switchTV.visibility=View.GONE
         return switchTV
     }
     private val mTokenResultListener by lazy {

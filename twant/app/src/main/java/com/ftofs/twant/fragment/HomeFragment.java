@@ -74,6 +74,8 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
+import static com.ftofs.twant.util.Util.dip2px;
+
 public class HomeFragment extends MainBaseFragment implements View.OnClickListener {
     RecyclerView rvList;
     TangramEngine tangramEngine;
@@ -94,6 +96,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
     BasePopupView popupViewAd;
     @Inject(name = ConstantsPath.LOGIN_SERVICE_PATH)
     LoginServiceImpl loginService;
+    private HTLoading htLoading;
 
 
     public static HomeFragment newInstance() {
@@ -398,7 +401,8 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         } else if (id == R.id.btn_test) {
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
-            new HTLoading(requireContext()).setLoadingView(View.inflate(requireContext(),com.ftofs.lib_common_ui.R.layout.loading_view,null)).show();
+            htLoading=new HTLoading(requireContext()).setLoadingView(View.inflate(requireContext(),com.ftofs.lib_common_ui.R.layout.tw_loading_popup,null)).setDialogBackground(R.color.tw_no_color).setInterceptBack(false);
+            htLoading.showCustomLoading();
             BaseContextKt.getBaseApplication().setMHandler(new Handler(Looper.getMainLooper()){
                 @Override
                 public void handleMessage(@NonNull Message msg) {
@@ -417,7 +421,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         }
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
+        layoutParams.rightMargin = dip2px(_mActivity, 0);
         llFloatButtonContainer.setLayoutParams(layoutParams);
         floatButtonShown = true;
     }
@@ -428,7 +432,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         }
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
+        layoutParams.rightMargin = dip2px(_mActivity,  -30.25f);
         llFloatButtonContainer.setLayoutParams(layoutParams);
         floatButtonShown = false;
     }
@@ -438,7 +442,9 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         super.onSupportVisible();
 
         updateMainSelectedFragment(MainFragment.HOME_FRAGMENT);
-
+        if (htLoading != null) {
+            htLoading.dismiss();
+        }
         SLog.info("carouselLoaded[%s]", carouselLoaded);
         // 加載輪播圖片
         if (!carouselLoaded) {
