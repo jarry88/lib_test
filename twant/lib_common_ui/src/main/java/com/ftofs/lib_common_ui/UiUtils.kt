@@ -60,7 +60,7 @@ fun getStatusbarHeight(context: Context?): Int {
  * @param context
  * @return loading view
  */
-fun createLoadingPopup(context: Context): BasePopupView? {
+fun createLoadingPopup(context: Context): BasePopupView {
     return XPopup.Builder(context)
             .hasShadowBg(false)
             .asCustom(TwLoadingPopup(context))

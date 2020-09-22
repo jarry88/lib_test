@@ -2,6 +2,9 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.ft_login.service.LoginServiceImpl;
+import com.ftofs.lib_common_ui.UiUtilsKt;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
@@ -28,10 +32,13 @@ import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
+import com.ftofs.twant.util.UiUtil;
 import com.github.richardwrq.krouter.annotation.Inject;
 import com.github.richardwrq.krouter.api.core.KRouter;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.service.ConstantsPath;
+import com.gzp.lib_common.utils.BaseContext;
+import com.gzp.lib_common.utils.BaseContextKt;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
@@ -154,6 +161,9 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP) {
             showPopupAd();
+        }
+        if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS) {
+
         }
     }
 
@@ -386,7 +396,15 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         } else if (id == R.id.btn_test) {
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
-            loginService.start(requireContext());
+            BaseContextKt.getBaseApplication().setMHandler(new Handler(Looper.getMainLooper()){
+                @Override
+                public void handleMessage(@NonNull Message msg) {
+                    super.handleMessage(msg);
+                }
+            });
+//            if(getActivity())
+//            ((MainActivity) getActivity()).loading = UiUtilsKt.createLoadingPopup(requireContext()).show();
+            loginService.start(_mActivity);
         }
     }
 

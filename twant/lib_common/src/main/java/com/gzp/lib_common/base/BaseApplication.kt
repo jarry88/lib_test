@@ -6,6 +6,7 @@ import android.app.Application
 import android.app.Notification
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.os.Process
 import android.util.Log
 import cat.ereza.customactivityoncrash.config.CaocConfig
@@ -37,7 +38,7 @@ open class BaseApplication:Application() {
 
     var mPushAgent: PushAgent? = null
     var umengDeviceToken:String?=""
-
+    var mHandler:Handler?=null
     override fun onCreate() {
         super.onCreate()
         KRouter.openDebug();//打开KRouter调试日志

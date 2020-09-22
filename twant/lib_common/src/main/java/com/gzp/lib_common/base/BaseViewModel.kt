@@ -31,7 +31,10 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                         error:(d:D)->Unit={},
                         others:()->Unit ={liveData.postNoNet()},
                         catchError: suspend (Throwable) -> Unit={ e:Throwable-> KLog.e("catch exception : $e")},
-                        isShowLoading:Boolean = true) = viewModelScope.launch {
+                        isShowLoading:Boolean = true,
+                        final:()->Unit={liveData.postSuccess()}
+
+    ) = viewModelScope.launch {
         try {
             if(isShowLoading){
                 liveData.postLoading()
@@ -51,7 +54,7 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
             liveData.postError()
             catchError(e)
         }finally {
-            liveData.postSuccess()
+            final()
         }
     }
 }

@@ -101,7 +101,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 helper.setText(R.id.tv_goods_name, goods.name);
                 if (Util.noPrice(goods.goodsModal)) {
                     helper.getView(R.id.btn_add_to_cart).setVisibility(View.GONE);
-                    helper.setText(R.id.tv_goods_price_left, "詢價");
+                    helper.setText(R.id.tv_goods_price_left, "問價");
                 } else {
                     helper.getView(R.id.btn_add_to_cart).setVisibility(View.VISIBLE);
 

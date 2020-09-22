@@ -42,7 +42,7 @@ public class SellerGoodsAdapter extends BaseQuickAdapter<SellerGoodsItem, BaseVi
         Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageName)).centerCrop().into(goodsImage);
         String priceRange;
         if (item.goodsModal == Constant.GOODS_TYPE_CONSULT) {
-            priceRange = "詢價";
+            priceRange = "問價";
         } else if (Math.abs(item.appPriceMin - item.batchPrice0) < 0.000001d) { // 如果只有1個價格
             priceRange = item.appPriceMin + " MOP";
         } else { // 各個SKU有不同的價格，則要顯示價格範圍

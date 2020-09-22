@@ -96,6 +96,7 @@ import com.ftofs.twant.widget.NewWordPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.gzp.lib_common.base.BaseActivity;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
@@ -140,7 +141,6 @@ import okhttp3.Response;
  */
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces, SimpleCallback {
     long lastBackPressedTime;
-
     /*
     需求
     http://ftofs.zentaopm.com/story-view-1050.html

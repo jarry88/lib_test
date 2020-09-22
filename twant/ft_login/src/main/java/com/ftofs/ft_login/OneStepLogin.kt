@@ -12,21 +12,21 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import com.alibaba.fastjson.JSON
-import com.ftofs.ft_login.service.LoginServiceImpl
 import com.ftofs.ft_login.ui.LoginActivity
 import com.ftofs.ft_login.utils.ExecutorManager
 import com.ftofs.lib_common_ui.createLoadingPopup
 import com.ftofs.lib_net.BaseRepository
 import com.gzp.lib_common.constant.Result
+import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.Util.dip2px
 import com.gzp.lib_common.utils.Util.findActivity
+import com.gzp.lib_common.utils.getBaseApplication
 import com.lxj.xpopup.core.BasePopupView
+import com.lxj.xpopup.util.XPopupUtils
 import com.mobile.auth.gatewayauth.*
 import com.mobile.auth.gatewayauth.model.TokenRet
-import com.qmuiteam.qmui.util.QMUIDisplayHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -86,6 +86,33 @@ object OneStepLogin:CoroutineScope{
 
             }
         }
+    }
+
+    fun start(context: Context) {
+        mContext=context
+        createLoadingPopup(BaseContext.instance.getContext()).show()
+//        getBaseApplication().mHandler?.post{"a"}
+//        ToastUtil.success(context,"顯示加載")
+        SLog.info("加載中")
+
+        sdkInit()
+
+        if (sdkAvailable) {
+//                    loadRootFragment(R.id.container, mPhoneNumberAuthHelper.
+            configLoginTokenPort()
+            getLoginToken(context, 5000)
+        } else {
+            loadingPopup?.dismiss()
+            //如果环境检查失败 使用其他登录方式
+//                    val pIntent = Intent(this@LoginActivity, MessageActivity::class.java)
+//                    startActivityForResult(pIntent, 1002)
+//                    mUIConfig.release()
+//            loadRootFragment(R.id.container ,findFragment(MessageFragment::class.java)
+//                    ?: MessageFragment("11"))
+        }
+    }
+    private fun sdkInit() {
+        mPhoneNumberAuthHelper?.checkEnvAvailable(PhoneNumberAuthHelper.SERVICE_TYPE_LOGIN)
     }
     /**
      * 在不是一进app就需要登录的场景 建议调用此接口 加速拉起一键登录页面
@@ -155,9 +182,9 @@ object OneStepLogin:CoroutineScope{
     }
     private fun initDynamicView(): View? {
         val switchTV = TextView(mContext)
-        val mLayoutParams2 = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, dip2px(mContext,50f))
+        val mLayoutParams2 = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, dip2px(mContext, 50f))
         mLayoutParams2.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE)
-        mLayoutParams2.setMargins(0,dip2px(mContext,450f), 0, 0)
+        mLayoutParams2.setMargins(0, dip2px(mContext, 450f), 0, 0)
         switchTV.text = "-----  自定义view  -----"
         switchTV.setTextColor(-0x666667)
         switchTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13.0f)
@@ -199,7 +226,7 @@ object OneStepLogin:CoroutineScope{
                     } else {
 //                        ToastUtil.error(this@LoginActivity, "一键登录失败切换到其他登录方式")
 //                        start(MessageFragment(""))
-                        mContext.startActivity(Intent(mContext,LoginActivity::class.java))
+                        mContext.startActivity(Intent(mContext, LoginActivity::class.java))
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -207,13 +234,8 @@ object OneStepLogin:CoroutineScope{
             }
         }
     }
-    private fun sdkInit() {
-        mPhoneNumberAuthHelper?.checkEnvAvailable(PhoneNumberAuthHelper.SERVICE_TYPE_LOGIN)
-    }
-    init {
-//        sdkInit()
 
-    }
+
     /**
      * 拉起授权页
      * @param timeout 超时时间
@@ -224,28 +246,7 @@ object OneStepLogin:CoroutineScope{
         mPhoneNumberAuthHelper!!.getLoginToken(context, timeout)
 //            showLoadingDialog("正在唤起授权页")
     }
-
-    fun start(context: Context) {
-        mContext=context
-        loadingPopup = createLoadingPopup(context)?.show()
-
-        sdkInit()
-
-        if (sdkAvailable) {
-//                    loadRootFragment(R.id.container, mPhoneNumberAuthHelper.
-            configLoginTokenPort()
-            getLoginToken(context, 5000)
-        } else {
-            loadingPopup?.dismiss()
-            //如果环境检查失败 使用其他登录方式
-//                    val pIntent = Intent(this@LoginActivity, MessageActivity::class.java)
-//                    startActivityForResult(pIntent, 1002)
-//                    mUIConfig.release()
-//            loadRootFragment(R.id.container ,findFragment(MessageFragment::class.java)
-//                    ?: MessageFragment("11"))
-        }
-    }
-    fun getActivity(c:Context): Activity? {
+    fun getActivity(c: Context): Activity? {
         var context=c
         while (context is ContextWrapper) {
             if (context is Activity) {

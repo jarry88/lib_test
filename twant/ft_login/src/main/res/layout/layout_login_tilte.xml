@@ -72,7 +72,7 @@
 
     <TextView
         android:id="@+id/tv_info"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/tw_blue"
@@ -81,8 +81,7 @@
         android:paddingStart="13dp"
         android:paddingEnd="7dp"
         android:textSize="12sp"
-        android:background="@color/tw_blue"
-        android:alpha="@integer/percent_10"
+        android:background="@color/bg_blue"
         android:textStyle=""
         android:text="@string/tv_login_info"
         />

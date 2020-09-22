@@ -50,7 +50,7 @@ fun setDelayBackground(v: View, bg: Drawable?) {
 //fun setTextPriceWithModel(v: TextView, vo: Goods) {
 //    SLog.info(vo.goodsModal.toString())
 //    if (vo.goodsModal == Constant.GOODS_TYPE_CONSULT) {
-//        v.text="詢價"
+//        v.text="問價"
 //    } else {
 //        setTextPrice(v, vo.appPriceMin)
 //    }

@@ -53,8 +53,8 @@ class PhoneView @JvmOverloads constructor(
     )
 
     private var zoneIndex:Int=0
-    val etMobile:EditText by lazy {
-        rootView.findViewById<EditText>(R.id.et_mobile)
+    private val etMobile:EditText by lazy {
+        rootView.findViewById(R.id.et_mobile)
     }
     private var errorText:TextView?=null
     private var llErrorContainer:LinearLayout?=null

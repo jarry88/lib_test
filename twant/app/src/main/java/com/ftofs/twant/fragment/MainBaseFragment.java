@@ -17,6 +17,7 @@ import com.gzp.lib_common.service.ConstantsPath;
 import com.gzp.lib_common.utils.SLog;
 
 public class MainBaseFragment extends BaseFragment {
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

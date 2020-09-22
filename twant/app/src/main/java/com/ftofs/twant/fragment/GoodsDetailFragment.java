@@ -953,7 +953,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     return;
                 }
-                if (Util.noPrice(goodsModel)) {//如果是詢價也不讓選規格
+                if (Util.noPrice(goodsModel)) {//如果是問價也不讓選規格
                     return;
                 }
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);

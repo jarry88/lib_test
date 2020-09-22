@@ -194,7 +194,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     contentView.findViewById(R.id.cross_border_indicator).setVisibility(tariffEnable == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
                     String priceRange;
                     if (StringUtil.safeModel(goodsVo) == Constant.GOODS_TYPE_CONSULT) {
-                        priceRange = "詢價";
+                        priceRange = "問價";
                     } else {
                      priceRange= String.format("%s MOP - %s MOP", StringUtil.formatFloat(goodsVo.getDouble("appPriceMin")), StringUtil.formatFloat(goodsVo.getDouble("batchPrice0")));
                     }

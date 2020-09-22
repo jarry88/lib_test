@@ -128,7 +128,7 @@ public enum EBMessageType {
     /**
      * (關閉了APP升級彈窗後)可以顯示其它類型的彈窗
      */
-    MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP,
+    MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP, LOADING_POPUP_DISMISS
 }
 
 

@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.ftofs.ft_login.R
 import com.ftofs.ft_login.BR
 import com.ftofs.ft_login.databinding.MessageLoginLayoutBinding
@@ -11,8 +14,11 @@ import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
 import org.koin.android.ext.android.bind
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.ext.getOrCreateScope
 
-class MessageFragment(val mobile:String) : BaseTwantFragmentMVVM<MessageLoginLayoutBinding,MessageLoginViewModel>() {
+class MessageFragment(val mobile:String,val sdkAvailable:Boolean=true,val firstPage:Boolean =false) : BaseTwantFragmentMVVM<MessageLoginLayoutBinding,MessageLoginViewModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.message_login_layout
     }
@@ -20,12 +26,23 @@ class MessageFragment(val mobile:String) : BaseTwantFragmentMVVM<MessageLoginLay
     override fun initVariableId(): Int {
         return BR.viewModel
     }
+    private val aViewModel by lazy { ViewModelProviders.of(activity) }
 
     override fun initData() {
+        binding.title.apply {
+            setLeftImageResource(if(firstPage)R.drawable.ic_baseline_close_24 else R.drawable.icon_back)
+            setLeftLayoutClickListener{onBackPressedSupport()}
+            setRightLayoutClickListener{}
+        }
+//        binding.title.setRightLayoutClickListener{start()}
         binding.btnGetMessage.setOnClickListener { messageAction() }
         binding.btnLogin.setOnClickListener { loginAction() }
         binding.btnPasswordLogin.setOnClickListener{passwordAction()}
+        aViewModel?.apply { ge() }
     }
+
+
+
 
     private fun passwordAction() {
         start(PasswordLoginFragment(binding.etNumber.text.toString()))
