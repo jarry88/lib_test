@@ -18,7 +18,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.lib_common_ui.entity.ListPopupItem;
 import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.gzp.lib_common.utils.SLog;

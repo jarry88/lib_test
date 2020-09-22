@@ -20,6 +20,7 @@ import com.ftofs.lib_net.BaseRepository
 import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
+import com.gzp.lib_common.utils.ToastUtil
 import com.gzp.lib_common.utils.Util.dip2px
 import com.gzp.lib_common.utils.Util.findActivity
 import com.gzp.lib_common.utils.getBaseApplication
@@ -46,9 +47,13 @@ object OneStepLogin:CoroutineScope{
                 when (re) {
                     is Result.Success -> {
                         SLog.info("数据加载成功${re.datas.nickName}")
+                        ToastUtil.success(mContext,"登入成功")
+                        getResultWithToken(aliYunToken)
                     }
                     else -> {
+                        goLoginActivity()
                         SLog.info("数据加载失败%s ", if (re is Result.DataError) re.datas.toString() else " ")
+
 //                    errorMessage=re
 
                     }
@@ -84,6 +89,21 @@ object OneStepLogin:CoroutineScope{
                 SLog.info("checkEnvAvailable：$p0")
                 Log.e(TAG, "checkEnvAvailable：$p0")
 
+            }
+        }
+    }
+    /**
+     * 拿到token ，成功后跳出阿里登錄頁
+     */
+    private fun getResultWithToken(token: String?) {
+        token?.let {
+            ExecutorManager.run{
+                findActivity(mContext)?.runOnUiThread{
+//                    mTvResult.setText("登陆成功：$result")
+//                    SLog.info(MockRequest.getPhoneNumber(it))
+//                    ToastUtil.success(context, MockRequest.getPhoneNumber(it))
+                    mPhoneNumberAuthHelper!!.quitLoginPage()
+                }
             }
         }
     }
@@ -136,21 +156,7 @@ object OneStepLogin:CoroutineScope{
 
     }
 
-    /**
-     * 拿到token ，成功后跳出阿里登錄頁
-     */
-    private fun getResultWithToken(token: String?) {
-        token?.let {
-            ExecutorManager.run{
-                findActivity(mContext)?.runOnUiThread{
-//                    mTvResult.setText("登陆成功：$result")
-//                    SLog.info(MockRequest.getPhoneNumber(it))
-//                    ToastUtil.success(context, MockRequest.getPhoneNumber(it))
-                    mPhoneNumberAuthHelper!!.quitLoginPage()
-                }
-            }
-        }
-    }
+
 
     /**
      * 配置竖屏样式
@@ -204,7 +210,7 @@ object OneStepLogin:CoroutineScope{
                     }
                     if (ResultCode.CODE_GET_TOKEN_SUCCESS == tokenRet.code) {
                         Log.i("TAG", "获取token成功：$s")
-                        getResultWithToken(tokenRet.token)
+                        actionOneKeyLogin(tokenRet.token)
 //                    mUIConfig.release()
                     }
                 } catch (e: Exception) {
@@ -213,7 +219,7 @@ object OneStepLogin:CoroutineScope{
             }
 
             override fun onTokenFailed(s: String) {
-                SLog.info("獲取失败$s")
+                //其他方式進入這裏
                 Log.e("OneKeyLoginActivity.TAG", "获取token失败：$s")
                 var tokenRet: TokenRet? = null
                 mPhoneNumberAuthHelper?.quitLoginPage()
@@ -224,15 +230,21 @@ object OneStepLogin:CoroutineScope{
                         SLog.info("模拟的是必须登录 否则直接退出app的场景")
 //                        finish()
                     } else {
+                        SLog.info("token 獲取失敗，前往登錄頁")
+
 //                        ToastUtil.error(this@LoginActivity, "一键登录失败切换到其他登录方式")
 //                        start(MessageFragment(""))
-                        mContext.startActivity(Intent(mContext, LoginActivity::class.java))
+                        goLoginActivity()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
+    }
+
+    private fun goLoginActivity() {
+        mContext.startActivity(Intent(mContext, LoginActivity::class.java))
     }
 
 
@@ -245,16 +257,6 @@ object OneStepLogin:CoroutineScope{
         mPhoneNumberAuthHelper!!.setAuthListener(mTokenResultListener)
         mPhoneNumberAuthHelper!!.getLoginToken(context, timeout)
 //            showLoadingDialog("正在唤起授权页")
-    }
-    fun getActivity(c: Context): Activity? {
-        var context=c
-        while (context is ContextWrapper) {
-            if (context is Activity) {
-                return context as Activity?
-            }
-            context = context.baseContext
-        }
-        return null
     }
 
     override val coroutineContext: CoroutineContext

@@ -47,6 +47,8 @@ import com.orhanobut.hawk.Hawk
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
+import com.superlht.htloading.manager.HTLoadingManager
+import com.superlht.htloading.view.HTLoading
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
@@ -125,6 +127,7 @@ class TwantApplication :BaseApplication(){
         }).apply { setAuthSDKInfo("gg+CTOzZf+lDYnx+JNodeuceDBDHIef/DjPospYtY8puMEuVeUJM8lS7elL36rSB+oeAV1Rli9rGMnrMxnbJ4kCNEEo46l/l1VzH+q92nrd4du5f9KHBZ+e6uFt9i7WznSBR1s+/0LLl8CCD9F10NpH4yPa5xkY0LvDP1xgCNPZDn70mPq0Dl3vZz7TdGEaZ3euShG5sa04hFZiMN34YidOfHwr6SVRu37Mz9ehOHsLnoeCzgx9IkICa3KI2nPTjlniBi+bkj9CDq6iK6u6NNlODVfsrZcar")
             reporter.setLoggerEnable(BuildConfig.DEBUG)
         }
+//        HTLoading().setl
 
         initUmeng(this){MainFragment.getInstance()?.let { it.handleUmengCustomAction() }}
         startKoin {

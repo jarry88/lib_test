@@ -38,7 +38,7 @@ import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.enums.PopupPosition;
-import com.ftofs.twant.constant.PopupType;
+import com.gzp.lib_common.constant.PopupType;
 
 import org.jetbrains.annotations.NotNull;
 

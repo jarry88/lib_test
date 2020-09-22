@@ -43,13 +43,26 @@
                 android:src="@drawable/captcha"
                 />
 
-            <ImageView
+<!--            <ImageView-->
+<!--                android:id="@+id/btn_refresh_captcha"-->
+<!--                android:layout_width="90dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                />-->
+            <TextView
                 android:id="@+id/btn_refresh_captcha"
                 android:layout_width="90dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="5dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:background="@drawable/bg_refresh_captcha"
+                android:gravity="center"
+                android:textColor="@color/tw_blue"
+                android:textSize="@dimen/sp_14"
+                android:text="@string/get_captcha"
                 />
 
             <EditText
@@ -69,59 +82,185 @@
                 android:textSize="16sp"
                 />
         </RelativeLayout>
-        <TextView
-            android:layout_width="wrap_content"
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ll_recommend"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rl_captcha_container"
+            android:layout_marginBottom="20dp">
+
+            <!-- 已發送提示 -->
+            <TextView
+                android:id="@+id/tv_sms_code_hint"
+                android:layout_width="wrap_content"
+                android:lines="2"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/btn_password_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="密碼登入"
+                android:textColor="@color/tw_blue"
+                android:layout_marginEnd="15dp"
+                />
+        </LinearLayout>
+        <!-- 推荐码 -->
+        <LinearLayout
+            android:id="@+id/ll_recommend"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_get_message"
-            android:text="驗證碼登錄"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-        <TextView
-            android:id="@+id/btn_password_login"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="70dp"
+            android:layout_marginStart="@dimen/toolbar_margin_left"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/rl_captcha_container">
+            <LinearLayout
+                android:id="@+id/btn_switch_promotion_code_visibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我有推薦碼"
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_black">
+
+                </TextView>
+                <ImageView
+                    android:id="@+id/ic_promotion_code_visibility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_arrow_drop_down_24">
+
+                </ImageView>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_promotion_code_container"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/border_type_d"
+                android:visibility="gone">
+                <ImageView
+                    android:layout_marginStart="@dimen/permission_dp_15"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_pen"
+                    />
+
+                <EditText
+                    android:id="@+id/et_promotion_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="41dp"
+                    android:background="@null"
+                    android:textColor="@color/tw_black"
+                    android:textColorHint="@color/tw_grey"
+                    android:hint="請輸入您的推薦碼"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
+                    android:textSize="15sp"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="@id/thirdLogin_container"
+            android:orientation="vertical"
+
+            >
+            <TextView
+                android:id="@+id/btn_message_login"
+                android:layout_width="265dp"
+                android:layout_height="44dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/grey_button"
+                android:text="@string/text_login_now"
+                android:textSize="16sp"
+                android:textColor="#fff"
+                android:gravity="center"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:visibility="gone"
+                    android:padding="5dp"
+                    android:id="@+id/img_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </ImageView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/text_login_and_agree"
+                    android:textColor="#CBCBCB"
+                    android:textSize="12sp">
+                </TextView>
+                <TextView
+                    android:id="@+id/btn_view_tos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="《服務協議》"
+                    android:textSize="12sp"
+                    android:textColor="@color/tw_blue">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="與"
+                    android:textColor="#CBCBCB"
+                    android:textSize="12sp">
+                </TextView>
+                <TextView
+                    android:id="@+id/btn_view_private_terms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="《私隱條款》"
+                    android:textSize="12sp"
+                    android:textColor="@color/tw_blue">
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+        <com.ftofs.ft_login.widget.ThirdLogin
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="密碼登入"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btn_get_message"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-        <EditText
-            android:id="@+id/et_number"
-            android:layout_width="200dp"
-            android:layout_height="48dp"
-            android:inputType="phone"
-            android:hint="请输入手机号"
-            app:layout_constraintTop_toBottomOf="@id/btn_get_message"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-        <EditText
-            android:id="@+id/et_recommend_number"
-            android:layout_width="200dp"
-            android:layout_height="48dp"
-            android:inputType="phone"
-            android:hint="请输入推薦碼"
-            app:layout_constraintTop_toBottomOf="@id/btn_get_message"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-        <TextView
-            android:id="@+id/btn_login"
-            android:layout_width="200dp"
-            android:layout_height="48dp"
-            android:inputType="phone"
-            android:hint="请输入手机号"
-            app:layout_constraintTop_toBottomOf="@id/et_number"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+            android:id="@+id/thirdLogin_container"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

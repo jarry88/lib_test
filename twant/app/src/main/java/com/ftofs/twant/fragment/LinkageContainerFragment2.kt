@@ -14,10 +14,10 @@ import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.adapter.ZoneCategoryListAdapter
 import com.ftofs.twant.constant.Constant
-import com.ftofs.twant.constant.PopupType
+import com.gzp.lib_common.constant.PopupType
 import com.ftofs.twant.databinding.LinkageContainerLayout2Binding
 import com.ftofs.lib_net.model.Goods
-import com.ftofs.twant.interfaces.OnSelectedListener
+import com.gzp.lib_common.base.callback.OnSelectedListener
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.BuyerGoodsListAdapter
 import com.ftofs.twant.kotlin.LinkageContainerViewModel2
@@ -78,7 +78,7 @@ class LinkageContainerFragment2 : BaseTwantFragmentMVVM<LinkageContainerLayout2B
         binding.adapter = mAdapter
 
 
-        mCategoryAdapter = ZoneCategoryListAdapter(context,R.layout.store_category_list_item,ArrayList<ZoneCategory>(), OnSelectedListener(fun (_:PopupType, id:Int, extra:Any){
+        mCategoryAdapter = ZoneCategoryListAdapter(context,R.layout.store_category_list_item,ArrayList<ZoneCategory>(), OnSelectedListener(fun(_: PopupType, id: Int, extra: Any) {
             val subCategory = extra as ZoneCategory
 //            ToastUtils.showShort("位置$id,name ${subCategory.categoryName},选中${subCategory.fold}")
             if (viewModel.currCategoryId.value != subCategory.categoryId) {

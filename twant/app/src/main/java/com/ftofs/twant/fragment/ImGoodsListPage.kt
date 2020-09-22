@@ -14,7 +14,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
-import com.ftofs.twant.constant.PopupType
+import com.gzp.lib_common.constant.PopupType
 import com.ftofs.twant.databinding.FragmentImGoodsPageBinding
 import com.ftofs.twant.databinding.ImGoodsListItemBinding
 import com.ftofs.lib_net.model.StoreLabel

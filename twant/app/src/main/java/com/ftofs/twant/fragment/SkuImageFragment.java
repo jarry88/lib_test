@@ -16,7 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SkuImageListAdapter;
 import com.ftofs.twant.adapter.SkuSpecListAdapter;
-import com.ftofs.twant.constant.PopupType;
+import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.entity.SkuGalleryItem;
 import com.ftofs.twant.entity.SkuSpecViewItem;
 import com.ftofs.twant.interfaces.SimpleCallback;

@@ -2,7 +2,6 @@ package com.ftofs.twant.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -24,7 +23,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -54,7 +52,7 @@ import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.DownloadImageResult;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.lib_common_ui.entity.ListPopupItem;
 import com.ftofs.twant.entity.Location;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.AddPostFragment;

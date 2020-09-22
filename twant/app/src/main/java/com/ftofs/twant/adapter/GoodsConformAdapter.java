@@ -8,11 +8,11 @@ import android.widget.LinearLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.constant.PopupType;
+import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.entity.GiftVo;
 import com.ftofs.twant.entity.GoodsConformItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.gzp.lib_common.base.callback.OnSelectedListener;
 import com.ftofs.twant.util.Util;
 
 import java.util.List;

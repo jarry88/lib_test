@@ -22,7 +22,7 @@ import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
 import com.ftofs.twant.entity.GiftItem;
-import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.lib_common_ui.entity.ListPopupItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.EditTextUtil;

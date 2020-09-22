@@ -12,6 +12,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.ftofs.ft_login.R
 import com.ftofs.lib_net.model.MobileZone
 import com.gzp.lib_common.utils.SLog
+import com.gzp.lib_common.utils.StringUtil
 import java.util.regex.Pattern
 
 const val text_invalid_mobile="你輸入的%s手機號碼有誤，請重新輸入"
@@ -57,7 +58,9 @@ class PhoneView @JvmOverloads constructor(
         rootView.findViewById(R.id.et_mobile)
     }
     private var errorText:TextView?=null
+    private var tvZone:TextView?=null
     private var llErrorContainer:LinearLayout?=null
+    private var llZoneSelect:LinearLayout?=null
     var isRight = false //默认为异常
     var msg = "未輸入號碼"
 
@@ -72,13 +75,17 @@ class PhoneView @JvmOverloads constructor(
         View.inflate(context,R.layout.wdget_phone,this)
         errorText=rootView.findViewById(R.id.tv_mobile_error)
         llErrorContainer=rootView.findViewById(R.id.ll_container_mobile_error)
+        llZoneSelect=rootView.findViewById(R.id.ll_zone_select)
+        tvZone=rootView.findViewById(R.id.tv_zone)
         initTextChangedListener()
     }
     fun setZoneIndex(index:Int){
         if( mobileList.size<=index)return
         zoneIndex=mobileList[index].areaId
         etMobile.text=etMobile.text
+        tvZone?.text=String.format("${areaArray[index]}(+%s)",mobileList[index].areaCode)
     }
+    fun setZoneSelect(listener: OnClickListener){llZoneSelect?.setOnClickListener(listener)}
 
     /**
      * 有异常返回true

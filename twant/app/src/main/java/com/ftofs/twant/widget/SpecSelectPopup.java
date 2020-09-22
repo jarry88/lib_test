@@ -20,7 +20,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
-import com.ftofs.twant.constant.PopupType;
+import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;

@@ -3,16 +3,14 @@ package com.ftofs.ft_login.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import com.ftofs.ft_login.R
 import com.ftofs.ft_login.BR
+import com.ftofs.ft_login.R
 import com.ftofs.ft_login.databinding.PasswordFindLayoutBinding
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
-class PassWordFindFragment : BaseTwantFragmentMVVM<PasswordFindLayoutBinding,PasswordFindViewModel>() {
+class PassWordFindFragment(val number:String) : BaseTwantFragmentMVVM<PasswordFindLayoutBinding,PasswordFindViewModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.password_find_layout
     }
@@ -22,6 +20,7 @@ class PassWordFindFragment : BaseTwantFragmentMVVM<PasswordFindLayoutBinding,Pas
 
     override fun initData() {
         val a=activity
+        binding.findPasswordInfo.text= String.format(getString(R.string.text_find_password_info),number)
         activity?.getViewModel<LoginViewModel>()?.add()
     }
 }

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.ft_login.service.LoginServiceImpl;
 import com.ftofs.lib_common_ui.UiUtilsKt;
+import com.ftofs.lib_common_ui.popup.TwLoadingPopup;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
@@ -51,6 +52,7 @@ import com.ftofs.twant.widget.ActivityPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.orhanobut.hawk.Hawk;
+import com.superlht.htloading.view.HTLoading;
 import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
@@ -396,6 +398,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         } else if (id == R.id.btn_test) {
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
+            new HTLoading(requireContext()).setLoadingView(View.inflate(requireContext(),com.ftofs.lib_common_ui.R.layout.loading_view,null)).show();
             BaseContextKt.getBaseApplication().setMHandler(new Handler(Looper.getMainLooper()){
                 @Override
                 public void handleMessage(@NonNull Message msg) {

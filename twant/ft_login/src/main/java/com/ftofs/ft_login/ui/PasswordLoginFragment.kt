@@ -10,6 +10,7 @@ import com.ftofs.ft_login.BR
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.ft_login.databinding.PasswordLoginLayoutBinding
 import com.ftofs.lib_net.model.MobileZone
+import kotlinx.android.synthetic.main.message_login_layout.view.*
 
 class PasswordLoginFragment(mobile: String) : BaseTwantFragmentMVVM<PasswordLoginLayoutBinding,PasswordLoginViewModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
@@ -21,7 +22,7 @@ class PasswordLoginFragment(mobile: String) : BaseTwantFragmentMVVM<PasswordLogi
     }
 
     override fun initData() {
-        binding.btnPasswordFind.setOnClickListener { start(PassWordFindFragment()) }
+        binding.btnPasswordFind.setOnClickListener { start(PassWordFindFragment(binding.etPhoneView.getPhone())) }
     }
     /**
      * 保存賬號密碼到db

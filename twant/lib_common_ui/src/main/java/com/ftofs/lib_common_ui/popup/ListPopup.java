@@ -1,17 +1,18 @@
-package com.ftofs.twant.widget;
+package com.ftofs.lib_common_ui.popup;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.ListPopupAdapter;
-import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.interfaces.OnSelectedListener;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.ftofs.lib_common_ui.R;
+import com.ftofs.lib_common_ui.adapter.ListPopupAdapter;
+import com.ftofs.lib_common_ui.entity.ListPopupItem;
+import com.gzp.lib_common.base.callback.OnSelectedListener;
+import com.gzp.lib_common.constant.PopupType;
 import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;

@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SoldOutGoodsAdapter;
-import com.ftofs.twant.constant.PopupType;
+import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.entity.SoldOutGoodsItem;
-import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.gzp.lib_common.base.callback.OnSelectedListener;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;

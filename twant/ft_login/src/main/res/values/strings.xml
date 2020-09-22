@@ -6,4 +6,7 @@
     <string name="input_captcha_hint">請輸入手機驗證碼</string>
     <string name="tv_login_info">想要城平台的定位是「真實」，為了保證平台信息的真實有效性，用戶在使用平台服務時要求保持資訊同步真實的「真實承諾」。</string>
     <string name="input_mobile_hint">請輸入手機號碼</string>
+    <string name="get_captcha">獲取驗證碼</string>
+    <string name="text_login_now">立即登入</string>
+    <string name="text_find_password_info">動態碼已通過短信發送至%s，有效期為10分 鐘。密碼為8～20位的，支持數字、字母、符號。</string>
 </resources>

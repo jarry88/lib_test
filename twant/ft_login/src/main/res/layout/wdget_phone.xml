@@ -3,14 +3,22 @@
     android:layout_width="match_parent"   android:layout_height="75dp"
     android:layout_marginStart="@dimen/toolbar_margin_left"
     android:layout_marginEnd="@dimen/toolbar_margin_right">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/ll_container_mobile"
-        android:id="@+id/tv_tip"
-        android:textColor="@color/tw_grey"
-        android:textSize="12sp"
-        android:text="未註冊手機號驗證後自動登入"/>
+    <LinearLayout
+        android:id="@+id/ll_tip_info"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/ll_container_mobile"
+            android:id="@+id/tv_tip"
+            android:textColor="@color/tw_grey"
+            android:textSize="12sp"
+            android:text="未註冊手機號驗證後自動登入"/>
+        ll_tip_info
+    </LinearLayout>
     <!-- 手機號 -->
     <LinearLayout
         android:id="@+id/ll_container_mobile"
@@ -21,9 +29,9 @@
         android:background="@drawable/border_type_d"
         >
         <LinearLayout
+            android:id="@+id/ll_zone_select"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/ll_zone_select"
             android:gravity="center_vertical"
             android:layout_marginEnd="@dimen/dp_10"
             >
@@ -65,37 +73,6 @@
             android:singleLine="true"
             android:text=""
             android:textSize="16sp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_below="@id/ll_container_mobile"
-        android:id="@+id/ll_container_mobile_error"
-        android:visibility="invisible"
-        >
-        <ImageView
-            android:layout_width="12dp"
-            android:layout_marginBottom="-1dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="42dp"
-
-            android:src="@drawable/icon_red_error"
-            />
-
-        <TextView
-            android:id="@+id/tv_mobile_error"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:background="@null"
-            android:textColorHint="@color/tw_red"
-            android:hint="@string/input_mobile_hint"
-            android:singleLine="true"
-            android:text=""
-            android:textSize="12sp"
             />
     </LinearLayout>
 </RelativeLayout>

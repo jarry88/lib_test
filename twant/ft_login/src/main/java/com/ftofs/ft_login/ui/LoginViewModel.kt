@@ -22,7 +22,7 @@ class LoginViewModel(application: Application=BaseContext.instance.getContext() 
                 {stateLiveData.postSuccess()}
         )
     }
-    private fun getMobileZoneList() {
+    fun getMobileAreaZoneList() {
         //這裏後續要塞到綫程池處理
         launch(stateLiveData,
                 {repository.run {

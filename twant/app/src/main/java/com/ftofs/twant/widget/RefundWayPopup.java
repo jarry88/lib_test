@@ -7,9 +7,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.constant.PopupType;
+import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.gzp.lib_common.base.callback.OnSelectedListener;
 import com.ftofs.twant.util.User;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
