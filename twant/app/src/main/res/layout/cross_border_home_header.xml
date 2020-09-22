@@ -376,8 +376,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <RelativeLayout
+                android:id="@+id/rl_store1_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -394,6 +394,7 @@
                         android:layout_height="6.65dp">
                     </com.ftofs.twant.widget.StoreDesktop>
                     <TextView
+                        android:id="@+id/tv_store1_name"
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:text="創薈軒有限公司"
@@ -405,14 +406,15 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/img_store1_figure"
                     android:layout_width="147dp"
                     android:layout_height="83dp"
                     android:src="@drawable/del"
                     android:layout_centerHorizontal="true">
                 </ImageView>
             </RelativeLayout>
-
             <RelativeLayout
+                android:id="@+id/rl_store2_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -429,6 +431,7 @@
                         android:layout_height="6.65dp">
                     </com.ftofs.twant.widget.StoreDesktop>
                     <TextView
+                        android:id="@+id/tv_store2_name"
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:text="創薈軒有限公司"
@@ -440,6 +443,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/img_store2_figure"
                     android:layout_width="147dp"
                     android:layout_height="83dp"
                     android:src="@drawable/del"

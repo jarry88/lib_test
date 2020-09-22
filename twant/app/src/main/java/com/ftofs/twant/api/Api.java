@@ -1545,6 +1545,11 @@ public class Api {
      */
     public static final String PATH_MEMBER_AUTH_DELETE = "/member/auth/delete/";
 
+    /**
+     * 【跨城購】首頁爲你推薦商品
+     */
+    public static final String PATH_TARIFF_BUY_INDEX_GOODS = "/tariff_buy/index/goods";
+
 
 
     /**

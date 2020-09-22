@@ -16,13 +16,18 @@ import androidx.viewpager.widget.ViewPager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.adapter.CrossBorderActivityGoodsAdapter;
 import com.ftofs.twant.adapter.CrossBorderCategoryListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.BargainItem;
+import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderCategoryItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
+import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -125,9 +130,54 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 shoppingZoneList.add(shoppingZoneItem);
             }
 
+            // 獲取砍價數據
+            List<CrossBorderActivityGoods> bargainGoodsList = new ArrayList<>();
+            EasyJSONArray bargainGoodsArray = responseObj.getSafeArray("datas.bargainGoodsList");
+            for (Object object : bargainGoodsArray) {
+                EasyJSONObject bargainGoodsObject = (EasyJSONObject) object;
+
+                CrossBorderActivityGoods bargainGoods = new CrossBorderActivityGoods(
+                        Constant.PROMOTION_TYPE_BARGAIN,
+                        bargainGoodsObject.optInt("goodsId"),
+                        bargainGoodsObject.optInt("commonId"),
+                        bargainGoodsObject.optString("imageSrc"),
+                        bargainGoodsObject.optString("goodsName"),
+                        bargainGoodsObject.optDouble("bottomPrice")
+                );
+
+                bargainGoods.bargainId = bargainGoodsObject.optInt("bargainId");
+                bargainGoodsList.add(bargainGoods);
+            }
+
+            // 獲取拼團數據
+            List<CrossBorderActivityGoods> groupGoodsList = new ArrayList<>();
+            EasyJSONArray groupGoodsArray = responseObj.getSafeArray("datas.groupGoodsList");
+            for (Object object : groupGoodsArray) {
+                EasyJSONObject groupGoodsObject = (EasyJSONObject) object;
+
+                CrossBorderActivityGoods groupGoods = new CrossBorderActivityGoods(
+                        Constant.PROMOTION_TYPE_GROUP,
+                        groupGoodsObject.optInt("goodsId"),
+                        groupGoodsObject.optInt("commonId"),
+                        groupGoodsObject.optString("imageName"),
+                        groupGoodsObject.optString("goodsName"),
+                        groupGoodsObject.optDouble("groupPrice")
+                );
+
+                groupGoods.groupId = groupGoodsObject.optInt("groupId");
+                groupGoodsList.add(groupGoods);
+            }
+
+            // 獲取【優選好店】數據
+            List<Store> storeList = new ArrayList<>();
+            EasyJSONArray storeArray = responseObj.getSafeArray("datas.storeList");
+            for (Object object : storeArray) {
+                Store store = (Store) EasyJSONBase.jsonDecode(Store.class, object.toString());
+                storeList.add(store);
+            }
 
             titleList.add("首頁");
-            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemList, shoppingZoneList));
+            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemList, shoppingZoneList, bargainGoodsList, groupGoodsList, storeList));
             categoryList.add(new CrossBorderCategoryItem(0, "首頁", "#019AA7"));
 
             EasyJSONArray catList = responseObj.getSafeArray("datas.catList");
@@ -135,7 +185,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 CrossBorderCategoryItem item = (CrossBorderCategoryItem) EasyJSONBase.jsonDecode(CrossBorderCategoryItem.class, object.toString());
 
                 titleList.add(item.catName);
-                fragmentList.add(CrossBorderCategoryFragment.newInstance(item.catName));
+                fragmentList.add(CrossBorderCategoryFragment.newInstance(item.categoryId, item.catName));
                 categoryList.add(item);
             }
             categoryListAdapter.setNewData(categoryList);
@@ -170,8 +220,6 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                         LogUtil.uploadAppLog(url, "", responseStr, "");
                         return;
                     }
-
-
 
                     initViewPager(responseObj);
                 } catch (Exception e) {

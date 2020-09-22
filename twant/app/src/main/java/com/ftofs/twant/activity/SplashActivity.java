@@ -152,7 +152,7 @@ public class SplashActivity extends BaseActivity {
                                     "host", host,
                                     "postId", Integer.valueOf(postId));
                         }
-                    } else if ("activityindex".equals(host) || "home".equals(host)) { // 7 購物專場 8 商城首页
+                    } else if ("activityindex".equals(host) || "home".equals(host) || "crossCity".equals(host)) { // 7 購物專場 8 商城首页
                         launchAppParams = EasyJSONObject.generate(
                                 "host", host);
                     } else if ("bargain".equals(host)) {
