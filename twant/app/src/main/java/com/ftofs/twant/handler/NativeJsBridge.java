@@ -1,4 +1,4 @@
-package com.ftofs.lib_net.handler;
+package com.ftofs.twant.handler;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,22 +7,34 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentationMagician;
 
 import com.facebook.share.model.ShareLinkContent;
-import com.github.richardwrq.krouter.annotation.Inject;
-import com.github.richardwrq.krouter.api.core.KRouter;
+import com.facebook.share.widget.ShareDialog;
+import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.fragment.AddPostFragment;
+import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.fragment.H5GameFragment;
+import com.ftofs.twant.fragment.LoginFragment;
 import com.gzp.lib_common.base.callback.CommonCallback;
-import com.gzp.lib_common.service.AppService;
-import com.gzp.lib_common.service.ConstantsPath;
+
 import com.gzp.lib_common.utils.FileUtil;
-import com.gzp.lib_common.utils.PermissionUtil;
 import com.gzp.lib_common.utils.SLog;
-import com.gzp.lib_common.utils.ToastUtil;
-import com.gzp.lib_common.utils.Util;
+import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.util.ChatUtil;
+import com.gzp.lib_common.utils.PermissionUtil;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -38,13 +50,12 @@ public class NativeJsBridge {
     SupportFragment supportFragment;
 
     public NativeJsBridge(Context context, SupportFragment supportFragment) {
-        KRouter.INSTANCE.inject(this);
         this.context = context;
         this.supportFragment = supportFragment;
     }
 
-    @Inject(name=ConstantsPath.APP_SERVICE_PATH)
-    AppService appService;
+
+
     /**
      * 雙11活動
      * @param data js傳進來的數據
@@ -52,8 +63,8 @@ public class NativeJsBridge {
     @JavascriptInterface
     public void activity11(String data) {
         SLog.info("activity11[%s]", data);
-        appService.startActivityShopping();
-//        Util.startActivityShopping();
+
+        Util.startActivityShopping();
     }
 
     /**
@@ -83,7 +94,7 @@ public class NativeJsBridge {
                     .build();
 
             //调用分享弹窗
-            appService.shareDialog(title,desc,Uri.parse(url));
+            ShareDialog.show(MainActivity.getInstance(), content);
         } catch (Exception e) {
 
         }
@@ -114,7 +125,29 @@ public class NativeJsBridge {
 
             SLog.info("title[%s], url[%s], isNeedLogin[%s]", title, url, isNeedLogin);
 
-            appService.startH5Fragment(title,url,isNeedLogin);
+            if ("1".equals(isNeedLogin)) {
+                String token = User.getToken();
+                String memberToken = User.getUserInfo(SPField.FIELD_MEMBER_TOKEN, "");
+                if (StringUtil.isEmpty(token)) {
+                    Util.showLoginFragment();
+                    return;
+                }
+
+                if (url.contains("?")) {
+                    SLog.info("!!!HERE");
+//                    url += "&token=" + token;
+                    url += "&token=" + memberToken;
+                } else {
+//                    url += "?token=" + token;
+                    url += "?token=" + memberToken;
+                    SLog.info("!!!HERE");
+                }
+
+            }
+//            url = url + "#/20191226/index";
+//            SLog.info("url[%s]",url);
+
+            Util.startFragment(H5GameFragment.newInstance(url, true, true, title, H5GameFragment.ARTICLE_ID_INVALID));
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -127,7 +160,8 @@ public class NativeJsBridge {
     @JavascriptInterface
     public void sendWant(String data) {
         SLog.info("sendWant[%s]", data);
-        appService.sendWant();
+
+        Util.startFragment(AddPostFragment.newInstance(true));
     }
 
 
@@ -157,8 +191,12 @@ public class NativeJsBridge {
             String nickname = params.getSafeString("nickName");
             String avatarUrl = params.getSafeString("avatarUrl");
 
-
-            appService.startChatFragment(memberName, nickname, avatarUrl);
+            FriendInfo friendInfo = new FriendInfo();
+            friendInfo.memberName = memberName;
+            friendInfo.nickname = nickname;
+            friendInfo.avatarUrl = avatarUrl;
+            friendInfo.role = ChatUtil.ROLE_MEMBER;
+            Util.startFragment(ChatFragment.newInstance(ChatUtil.getConversation(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER), friendInfo));
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -175,7 +213,42 @@ public class NativeJsBridge {
     public void activityHome(String data) {
         SLog.info("activityHome[%s]", data);
 
-        appService.goActivityHome();
+        MainActivity mainActivity = MainActivity.getInstance();
+        if (mainActivity == null) {
+            return;
+        }
+
+        String packageName = mainActivity.getPackageName();
+        List<SupportFragment> popFragmentList = new ArrayList<>(); // 需要pop出去的Fragment
+
+        boolean enqueueFlag = false;
+        List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(mainActivity.getSupportFragmentManager());
+        for (Fragment fragment : fragmentList) {
+            String className = fragment.getClass().getName();
+            SLog.info("className[%s], packageName[%s]", className, packageName);
+            if (!className.startsWith(packageName)) {
+                continue;
+            }
+
+            if (!(fragment instanceof H5GameFragment)) {
+                continue;
+            }
+
+            H5GameFragment h5GameFragment = (H5GameFragment) fragment;
+            String url = h5GameFragment.getUrl();
+            SLog.info("url[%s]", url);
+            if (url != null && url.contains(Util.CHRISTMAS_APP_GAME)) {  // 根據Url來確定是要pop出去
+                enqueueFlag = true;
+            }
+
+            if (enqueueFlag) {
+                popFragmentList.add(h5GameFragment);
+            }
+        }
+
+        for (int i = popFragmentList.size() - 1; i > 0; i--) {
+            popFragmentList.get(i).pop();
+        }
     }
 
 
@@ -199,7 +272,14 @@ public class NativeJsBridge {
     @JavascriptInterface
     public void login(String data) {
         SLog.info("login data[%s]", data);
-        appService.goLogin(supportFragment,data);
+        String memberToken = User.getUserInfo(SPField.FIELD_MEMBER_TOKEN, null);
+        if (StringUtil.isEmpty(memberToken)) {
+            Util.startFragment(LoginFragment.newInstance());
+        }
+        H5GameFragment fragment = (H5GameFragment) supportFragment;
+        SLog.info(fragment.getUrl());
+        String url = String.format("%s?memberToken=%s", fragment.getUrl(), memberToken);
+        fragment.loadUrl(url);
     }
 
 
@@ -242,7 +322,7 @@ public class NativeJsBridge {
                     String base64Code = imageUrl.substring(22);
                     byte[] buffer = Base64.decode(base64Code, Base64.DEFAULT);
                     String filename = FileUtil.getAppDataRoot() + "/download/" + System.currentTimeMillis() + ".jpg";
-                    if (!Util.INSTANCE.makeParentDirectory(filename)) {
+                    if (!Util.makeParentDirectory(filename)) {
                         SLog.info("Error!創建文件[%s]的父目錄失敗", filename);
                         return null;
                     }
@@ -253,7 +333,7 @@ public class NativeJsBridge {
                         out.write(buffer);
                         out.close();
 
-                        Util.INSTANCE.addImageToGallery(context, new File(filename));
+                        Util.addImageToGallery(context, new File(filename));
 
                         ToastUtil.success(context, "保存成功");
                     } catch (Exception e) {

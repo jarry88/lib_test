@@ -23,7 +23,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.lib_net.handler.NativeJsBridge;
+import com.ftofs.twant.handler.NativeJsBridge;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.base.callback.CommonCallback;
