@@ -181,8 +181,8 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             if (index == MESSAGE_FRAGMENT || index == CART_FRAGMENT || index == MY_FRAGMENT) {
                 // 如果是查看【消息】、【購物袋】或【我的】，先檢查是否已經登錄
                 if (User.getUserId()<1) {
-                    Util.showLoginFragment(requireContext());
                     SLog.info("前往啓動頁");
+                    Util.showLoginFragment(requireContext());
 //                    UserManager.INSTANCE.start(getContext());
                     return;
                 }

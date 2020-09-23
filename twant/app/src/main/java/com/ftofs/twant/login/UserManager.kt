@@ -41,12 +41,14 @@ object UserManager {
 
     fun start(context: Context): LiveData<User> {
         getUser()?.let {
+            SLog.info("跳轉至啓動頁")
             val intent=
                     Intent(context, LoginActivity::class.java).apply { putExtra("user",it)
                         SLog.info(it.toString())
                     }
             context.startActivity(intent)
-        }?: OneStepLogin.start(context)
+        }?: OneStepLogin.start(context).apply { SLog.info("沒有歷史登錄跳轉至啓動頁")
+        }
 
         return liveData
     }

@@ -251,7 +251,9 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
                 }
                 StateLiveData.StateEnum.Error -> {
                     SLog.info("獲取數據失敗")
-                    ToastUtil.error(context, viewModel.errorMessage)
+                    viewModel.errorMessage?.apply {
+                        if(this.isNotEmpty()) ToastUtil.error(context, viewModel.errorMessage)
+                    }
                     mLoadingPopup?.dismiss()
 
                 }

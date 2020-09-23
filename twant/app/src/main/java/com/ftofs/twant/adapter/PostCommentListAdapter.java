@@ -7,7 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CommentItem;
@@ -15,11 +19,13 @@ import com.ftofs.twant.interfaces.SimpleCallback;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 
+import java.util.List;
+
 /**
  * 想要帖評論列表Adapter
  * @author zwm
  */
-public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> implements SimpleCallback {
+public class PostCommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHolder> implements SimpleCallback {
     Context context;
     int twBlue;
     boolean isComeTrue;
@@ -27,20 +33,32 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> implem
     /**
      * 構造方法
      *
-     * @param context
-     * @param container    容器
      * @param itemLayoutId itemView的布局Id
      */
-    public PostCommentListAdapter(Context context, ViewGroup container, int itemLayoutId) {
-        super(context, container, itemLayoutId);
+    public PostCommentListAdapter( Context context,int itemLayoutId,List<CommentItem> data) {
+        super(itemLayoutId,data);
 
         this.context = context;
         twBlue = context.getResources().getColor(R.color.tw_blue, null);
-        addClickableChildrenId(R.id.image_view, R.id.btn_reply, R.id.btn_thumb, R.id.img_commenter_avatar, R.id.btn_make_true);
+    }
+
+
+    public void setComeTrue(boolean isComeTrue) {
+        this.isComeTrue = isComeTrue;
     }
 
     @Override
-    public void bindView(int position, View itemView, CommentItem itemData) {
+    public void onSimpleCall(Object data) {
+        SLog.info("data[%s]", data);
+
+        String url = (String) data;
+        StringUtil.parseCustomUrl(context, url);
+    }
+
+    @Override
+    protected void convert(@NonNull BaseViewHolder helper, CommentItem itemData) {
+        helper.addOnClickListener(R.id.image_view, R.id.btn_reply, R.id.btn_thumb, R.id.img_commenter_avatar, R.id.btn_make_true);
+        View itemView = helper.itemView;
         ImageView imgCommenterAvatar = itemView.findViewById(R.id.img_commenter_avatar);
         if (StringUtil.isEmpty(itemData.commenterAvatar)) {
             Glide.with(context).load(R.drawable.grey_default_avatar).centerCrop().into(imgCommenterAvatar);
@@ -68,13 +86,13 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> implem
         }
         btnReply.setText(commentReply);
 
-        setText(itemView, R.id.tv_commenter_nickname, itemData.nickname);
-        setText(itemView, R.id.tv_comment_time, itemData.commentTime);
-        setText(itemView, R.id.btn_reply, commentReply);
+        helper.setText(R.id.tv_commenter_nickname, itemData.nickname);
+        helper.setText(R.id.tv_comment_time, itemData.commentTime);
+        helper.setText( R.id.btn_reply, commentReply);
         if (itemData.commentLike > 0) {
-            setText(itemView, R.id.tv_thumb_count, String.valueOf(itemData.commentLike));
+            helper.setText( R.id.tv_thumb_count, String.valueOf(itemData.commentLike));
         } else {
-            setText(itemView, R.id.tv_thumb_count, "");
+            helper.setText( R.id.tv_thumb_count, "");
         }
 
         if (itemData.commentType == Constant.COMMENT_TYPE_TEXT || StringUtil.isEmpty(itemData.imageUrl)) {
@@ -121,17 +139,5 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> implem
                 break;
 
         }
-    }
-
-    public void setComeTrue(boolean isComeTrue) {
-        this.isComeTrue = isComeTrue;
-    }
-
-    @Override
-    public void onSimpleCall(Object data) {
-        SLog.info("data[%s]", data);
-
-        String url = (String) data;
-        StringUtil.parseCustomUrl(context, url);
     }
 }

@@ -42,6 +42,10 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
         int itemViewType = helper.getItemViewType();
 
         if (itemViewType == Constant.ITEM_TYPE_NORMAL) {
+            helper.addOnClickListener(R.id.img_right_goods,R.id.btn_add_to_cart_right);
+            helper.addOnClickListener(R.id.img_left_goods,R.id.btn_add_to_cart_left);
+
+
             if (goodsPair.leftGoods != null) {
                 Goods leftGoods = goodsPair.leftGoods;
                 ImageView goodsImage = helper.getView(R.id.img_left_goods);
@@ -57,7 +61,6 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                     UiUtil.toPriceUI(leftPrice,12);
 
                 }
-                helper.addOnClickListener(R.id.img_left_goods,R.id.btn_add_to_cart_left);
             }
             if (goodsPair.rightGoods != null) {
                 Goods rightGoods = goodsPair.rightGoods;
@@ -78,7 +81,6 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 helper.setGone(R.id.img_right_goods, true)
                         .setVisible(R.id.ll_right_goods_container, true);
 
-                helper.addOnClickListener(R.id.btn_add_to_cart_right,R.id.btn_add_to_cart_right);
             } else {
                 helper.setGone(R.id.img_right_goods, false)
                         .setVisible(R.id.ll_right_goods_container, false);
