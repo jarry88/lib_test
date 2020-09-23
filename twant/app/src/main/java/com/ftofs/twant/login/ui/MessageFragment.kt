@@ -29,6 +29,7 @@ import com.ftofs.twant.fragment.H5GameFragment
 import com.ftofs.twant.util.LogUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
+import com.ftofs.twant.util.Util
 import com.ftofs.twant.widget.HwLoadingPopup
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.base.callback.OnSelectedListener
@@ -52,8 +53,14 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
         return BR.viewModel
     }
     private var canSendSMS= false
-    private var  mLoading: HwLoadingPopup?=null
+    private var  mLoadingPopup: BasePopupView?=null
+    fun showLoading(){
+        if (mLoadingPopup == null) {
+            mLoadingPopup= Util.createLoadingPopup(requireContext())
+        }
+        mLoadingPopup?.show()
 
+    }
     private var promotionCodeVisible=false
     private var selectedMobileZoneIndex=0
     private val aViewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
@@ -145,6 +152,11 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
         aViewModel?.apply {this.getMobileAreaZoneList() }
     }
 
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        SLog.info("重新監視model")
+//        initViewObservable()
+    }
 
     override fun initViewObservable() {
         aViewModel.logUtilInfo.observe(this, { LogUtil.uploadAppLog("/loginconnect/facebook/login", it, "", "") })
@@ -185,6 +197,7 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
                 (activity as LoginActivity).onBackPressedSupport()
         }
         aViewModel.mobileZoneList.observe(this, {
+            mLoadingPopup?.dismiss()
             binding.etPhoneView.apply {
                 it.forEach { a -> SLog.info(a.toString()) }
                 mobileList = it
@@ -195,7 +208,7 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
         viewModel.authCodeInfo.observe(this){
             binding.tvSmsCodeHint.text= String.format(getString(R.string.text_find_password_info), binding.etPhoneView.getPhone(), it.authCodeValidTime)
             binding.rlCaptchaContainer.btnCaptchaView?.apply {
-                mLoading?.dismiss()
+                mLoadingPopup?.dismiss()
                 ToastUtil.success(context, "獲取驗證碼成功")
                 if(it.authCodeResendTime!=null&&countTime.toInt()!=it.authCodeResendTime)countTime=it.authCodeResendTime!!.toLong() }
             if (it.isRegister == Constant.FALSE_INT) {
@@ -208,18 +221,18 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
             when (it) {
                 StateLiveData.StateEnum.Success -> {
 //                    onBackPressedSupport()
-                    mLoading?.dismiss()
+                    mLoadingPopup?.dismiss()
 
                     KLog.e("数据获取成功--关闭loading")
                 }
                 StateLiveData.StateEnum.Error -> {
                     SLog.info("獲取數據失敗")
                     ToastUtil.error(context, viewModel.errorMessage)
-                    mLoading?.dismiss()
+                    mLoadingPopup?.dismiss()
 
                 }
                 else -> {
-                    mLoading?.dismiss()
+                    mLoadingPopup?.dismiss()
                     KLog.e("其他状态--关闭loading")
 //                    loadingUtil?.hideLoading()
                 }

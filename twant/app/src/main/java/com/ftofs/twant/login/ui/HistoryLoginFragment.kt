@@ -1,8 +1,10 @@
 package com.ftofs.twant.login.ui
 
 import android.os.Bundle
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ftofs.twant.BR
@@ -33,12 +35,9 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     override fun initVariableId(): Int {
         return BR.viewModel
     }
-    var mLoadingPopup: BasePopupView?=null
+    lateinit var mLoadingPopup: BasePopupView
     fun showLoading(){
-        if (mLoadingPopup == null) {
-            mLoadingPopup= Util.createLoadingPopup(requireContext())
-        }
-        mLoadingPopup?.show()
+        mLoadingPopup.show()
 
     }
     private val aViewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
@@ -47,16 +46,13 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     fun onEBMessage(message: EBMessage) {
         if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS ) {
             SLog.info("接受到關閉的消息")
-            mLoadingPopup?.dismiss()
+
         }
     }
 
     override fun onSupportInvisible() {
         super.onSupportInvisible()
-        mLoadingPopup?.let {
-            SLog.info("loading還活著")
-        }?: SLog.info("loading已經消失")
-        mLoadingPopup?.dismiss()
+        mLoadingPopup.dismiss()
     }
 
     override fun onDestroy() {
@@ -64,18 +60,17 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
         EventBus.getDefault().unregister(this)
     }
     override fun initData() {
+        mLoadingPopup= Util.createLoadingPopup(requireContext())
         binding.vo=historyUser
         EventBus.getDefault().register(this)
         EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
 
-        SLog.info(historyUser.toString())
         binding.title.setLeftLayoutClickListener{onBackPressedSupport()}
         binding.llOtherLogin.setOnClickListener {
 //
 //            (activity as LoginActivity).onBackPressedSupport()
 //            com.ftofs.twant.login.UserManager.start(requireContext())
             showLoading()
-            Util.createLoadingPopup(requireContext()).show()
             OneStepLogin.start(requireContext())
         }
         binding.btnOneStep.setOnClickListener {loginAction() }

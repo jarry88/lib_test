@@ -12,6 +12,8 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.ftofs.ft_login.BR
 import com.ftofs.lib_common_ui.createLoadingPopup
+import com.ftofs.lib_common_ui.entity.ListPopupItem
+import com.ftofs.lib_common_ui.popup.ListPopup
 import com.ftofs.twant.R
 import com.ftofs.twant.TwantApplication
 import com.ftofs.twant.config.Config
@@ -27,6 +29,7 @@ import com.gzp.lib_common.base.callback.OnSelectedListener
 import com.gzp.lib_common.constant.PopupType
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
+import com.lxj.xpopup.XPopup
 import com.umeng.analytics.MobclickAgent
 import java.util.ArrayList
 
@@ -58,10 +61,23 @@ class PasswordLoginFragment(val mobile: String,var selectedMobileZoneIndex:Int?)
         binding.btnPasswordFind.setOnClickListener {
             if(binding.etPhoneView.isRight){
             start(PassWordFindFragment(binding.etPhoneView.getPhone()))
-            binding.etPhoneView.showError()
                 }
+            binding.etPhoneView.showError()
         }
         binding.etPhoneView.setPhone(mobile)
+        binding.etPhoneView.apply {
+            setZoneSelect{
+                mobileList.takeUnless { it.isNullOrEmpty() }?.let {
+                    hideSoftInput()
+                    XPopup.Builder(_mActivity) // 如果不加这个，评论弹窗会移动到软键盘上面
+                            .moveUpToKeyboard(false)
+                            .asCustom(ListPopup(_mActivity, resources.getString(R.string.mobile_zone_text),
+                                    PopupType.MOBILE_ZONE,
+                                    it.map { m -> ListPopupItem(m.areaId, m.areaName, null) }, selectedMobileZoneIndex?:0, this@PasswordLoginFragment))
+                            .show()
+                }
+            }
+        }
         binding.thirdLoginContainer.apply {
             setBtnWeChat{
                 if (!TwantApplication.get().wxApi!!.isWXAppInstalled) { // 未安裝微信
@@ -158,8 +174,7 @@ class PasswordLoginFragment(val mobile: String,var selectedMobileZoneIndex:Int?)
                 User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE,it)
                 SLog.info("登錄成功")
                 com.ftofs.twant.util.Util.getMemberToken(_mActivity)
-                hideSoftInputPop()
-                (activity as LoginActivity).onBackPressedSupport()
+                activity?.finish()
             }
             mobileZoneList.observe(this@PasswordLoginFragment, {
                 binding.etPhoneView.apply {

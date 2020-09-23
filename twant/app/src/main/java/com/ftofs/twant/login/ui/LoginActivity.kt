@@ -6,13 +6,19 @@ import com.facebook.CallbackManager
 import com.ftofs.lib_common_ui.switchTranslucentMode
 import com.ftofs.twant.R
 import com.ftofs.twant.TwantApplication.Companion.get
+import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.constant.EBMessageType
+import com.ftofs.twant.constant.LoginType
 import com.ftofs.twant.databinding.ActivityLoginBinding
 import com.ftofs.twant.entity.EBMessage
+import com.ftofs.twant.fragment.BindMobileFragment
+import com.ftofs.twant.util.ToastUtil
+import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.MBaseActivity
 import com.gzp.lib_common.base.callback.SimpleCallBack
 import com.gzp.lib_common.model.User
 import com.gzp.lib_common.utils.SLog
+import com.lxj.xpopup.core.BasePopupView
 import com.tencent.mm.opensdk.modelmsg.SendAuth
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -21,9 +27,14 @@ import org.greenrobot.eventbus.ThreadMode
 
 class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), SimpleCallBack {
 
-        val callbackManager by lazy { CallbackManager.Factory.create() }
+    val callbackManager by lazy { CallbackManager.Factory.create() }
+    lateinit var mLoadingPopup: BasePopupView
+    fun showLoading(){
+        mLoadingPopup.show()
 
-        override fun initData() {
+    }
+    override fun initData() {
+            SLog.info("啓動activiy")
     //        TODO("Not yet implemented")
         }
 
@@ -37,6 +48,8 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
     }
         override fun initView() {
             setContentView(R.layout.activity_login)
+            mLoadingPopup = Util.createLoadingPopup(this)
+
             EventBus.getDefault().register(this)
 
             switchTranslucentMode(this, false)
@@ -56,9 +69,40 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
                 loadRootFragment(R.id.container, findFragment(MessageFragment::class.java)
                         ?: MessageFragment("", false, true))
             }
+            mViewModel.weChatInfo.observe(this){
+                SLog.info("檢測到了wechatInfo")
+                mLoadingPopup.dismiss()
+                if (it.isBind == Constant.FALSE_INT) {
+                    SLog.info("進入綁定頁")
 
+                    start(BindMobileFragment.newInstance(BindMobileFragment.BIND_TYPE_WEIXIN, it.accessToken, it.accessToken))}
+                else// 未綁定
+                {
+                    SLog.info("未進入綁定頁")
+                    com.ftofs.twant.util.User.onNewLoginSuccess(it.memberId
+                            ?: 0, LoginType.WEIXIN, it)
+                    ToastUtil.success(this, "微信登入成功")
+                    finish()
+                }
+            }
+            mViewModel.faceBookInfo.observe(this){
+                if (it.isBind == Constant.FALSE_INT) start(BindMobileFragment.newInstance(BindMobileFragment.BIND_TYPE_FACEBOOK, mViewModel.faceBookAccessToken?.token, mViewModel.faceBookAccessToken?.userId))
+                else// 未綁定
+                {
+                    com.ftofs.twant.util.User.onNewLoginSuccess(it.memberId
+                            ?: 0, LoginType.FACEBOOK, it)
+
+                    ToastUtil.success(this, "Facebook登入成功")
+                    finish()
+                }
+            }
         }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+        mLoadingPopup.dismiss()
+    }
         override fun getLayoutResId(): Int {
             return R.layout.activity_login
         }
@@ -72,6 +116,7 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
      * @param usage 微信授權用于什么用途
      */
     fun doWeixinLogin(usage: Int) {
+        showLoading()
         val req = SendAuth.Req()
         req.scope = "snsapi_userinfo"
         req.state = EasyJSONObject.generate(

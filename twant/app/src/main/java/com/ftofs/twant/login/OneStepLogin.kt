@@ -260,7 +260,7 @@ object OneStepLogin:CoroutineScope{
     private fun goLoginActivity() {
         if (UserManager.getUser() != null && findActivity(mContext) is LoginActivity) {
             (findActivity(mContext) as LoginActivity).getHistoryFragment()?.start(MessageFragment("", sdkAvailable))
-                    ?:mContext.startActivity(Intent(mContext, LoginActivity::class.java))
+                    ?:mContext.startActivity(Intent(mContext, LoginActivity::class.java)).apply {findActivity(mContext)?.finish() }
 
         } else {
             mContext.startActivity(Intent(mContext, LoginActivity::class.java))

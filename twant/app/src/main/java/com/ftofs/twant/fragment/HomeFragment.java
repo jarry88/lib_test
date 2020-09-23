@@ -119,7 +119,6 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         KRouter.INSTANCE.inject(this);
         EventBus.getDefault().register(this);
-
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         Util.setOnClickListener(view, R.id.btn_test, this);
         view.findViewById(R.id.btn_test).setVisibility(Config.PROD?View.GONE:View.VISIBLE);
@@ -405,7 +404,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            showLoadingPopup();
+            loadPopup.dismiss();
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
 //            final BasePopupView load=Util.createLoadingPopup(requireContext()).show();
