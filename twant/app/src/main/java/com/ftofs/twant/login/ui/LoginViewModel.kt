@@ -70,6 +70,7 @@ class LoginViewModel(application: Application = BaseContext.instance.getContext(
         launch(stateLiveData,
                 {repository.run { simpleGet(api.getWXLoginStepOne(params)) }},
                 {   SLog.info("獲取微信登錄")
+
                     weChatInfo.value=it},
                 final = {}
         )

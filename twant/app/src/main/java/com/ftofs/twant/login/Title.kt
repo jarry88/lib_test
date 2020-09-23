@@ -26,6 +26,7 @@ class Title @JvmOverloads constructor(
         typedArray.getString(R.styleable.Title_text_title)?.let {
             rootView.findViewById<TextView>(R.id.titlebar_title)?.text=it
         }
+        //不設置的時候是顯示的
         typedArray.getBoolean(R.styleable.Title_login_info,false).takeIf { it }?.let {
             rootView.findViewById<View>(R.id.tv_info)?.visibility=View.VISIBLE
         }

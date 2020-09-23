@@ -38,6 +38,7 @@ class PassWordFindFragment(val mobile:String) : BaseTwantFragmentMVVM<PasswordFi
         binding.findPasswordInfo.text= String.format(getString(R.string.text_find_password_info),mobile,10)
         binding.rlCaptchaContainer.btnCaptchaView?.apply {
             mListener={pwdMessageAction()}
+            postDelayed({performClick()},200)
         }
         binding.btnFindPassword.setOnClickListener {
             if (binding.rlCaptchaContainer.isRight) {
