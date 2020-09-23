@@ -1,5 +1,6 @@
 package com.ftofs.twant.util;
 
+import com.ftofs.lib_net.model.LoginInfo;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.config.Config;
@@ -138,6 +139,27 @@ public class User {
     public static void onLoginSuccess(int userId, LoginType loginType, EasyJSONObject responseObj) {
         SLog.info("loginType[%s],responseObj[%s]",loginType.toString(),responseObj.toString());
         SharedPreferenceUtil.saveUserInfo(loginType, responseObj);
+        TwantApplication.Companion.get().setUmengAlias(Constant.ACTION_ADD);
+//        TwantApplication.Companion.get().updateCurrMemberInfo();
+        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+
+        MainActivity mainActivity = MainActivity.getInstance();
+        if (mainActivity != null) {
+            mainActivity.checkWordCoupon();
+        }
+
+        SqliteUtil.switchUserDB(userId);
+        SqliteUtil.imLogin();
+    }
+    /**
+     * 用戶登錄成功后的統一處理
+     * @param userId 用戶Id
+     * @param loginType
+     * @param loginInfo 服務器端返回的數據
+     */
+    public static void onNewLoginSuccess(int userId, LoginType loginType, LoginInfo loginInfo) {
+        SLog.info("loginType[%s],responseObj[%s]",loginType.toString(),loginInfo.toString());
+        SharedPreferenceUtil.saveNewUserInfo(loginType, loginInfo);
         TwantApplication.Companion.get().setUmengAlias(Constant.ACTION_ADD);
 //        TwantApplication.Companion.get().updateCurrMemberInfo();
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);

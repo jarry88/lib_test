@@ -17,7 +17,9 @@ class LoginViewModel(application: Application = BaseContext.instance.getContext(
     private val repository by lazy { object :BaseRepository(){} }
     val mobileZoneList by lazy {MutableLiveData<List<MobileZone>>() }
     val faceBookInfo by lazy { MutableLiveData<LoginInfo>() }
+    val WeChatInfo by lazy { MutableLiveData<LoginInfo>() }
     val logUtilInfo = MutableLiveData(String())
+    val msgError = MutableLiveData(String())
     val successLoginInfo by lazy { MutableLiveData<LoginInfo>() }
     val loginLiveData = MutableLiveData<User>()
     fun add(){}
@@ -33,7 +35,8 @@ class LoginViewModel(application: Application = BaseContext.instance.getContext(
             {   SLog.info("前往调取密码登陆接口")
                 repository.run { simpleGet(api.passwordLogin(mapOf("mobile" to mobile,"password" to password,Constant.CLIENT_TYPE_PAIR))) }},
             {loginLiveData.value=User(mobile,password,it.memberId?:0,it.memberToken?:"",it.nickName?:"",0,it.memberToken?:"",it.memberVo?.avatar)
-                successLoginInfo.value =it}
+                successLoginInfo.value =it},
+                {msgError.postValue(it.error)}
         )
     }
     fun getMobileAreaZoneList() {
@@ -51,12 +54,21 @@ class LoginViewModel(application: Application = BaseContext.instance.getContext(
 
     fun doFacebookLogin(accessToken: String?, userId: String?) {
         val clientType=Constant.CLIENT_TYPE_ANDROID
-        val params= mapOf("accessToken" to (accessToken?:""),"userId" to (userId?:""),"clientType" to clientType)
+        val params= mapOf("accessToken" to (accessToken?:""),"userId" to (userId?:""),Constant.CLIENT_TYPE_PAIR)
         launch(stateLiveData,
                 { repository.run { simpleGet(api.doFaceLogin(accessToken?:"",userId?:"",clientType)) }},
                 {faceBookInfo.postValue(it) },
                 error = {logUtilInfo.postValue(params.toString())},
                 others = {logUtilInfo.postValue(params.toString())},
+                final = {}
+        )
+    }
+
+    fun getWXLoginStepOne(code: String) {
+        val params = mapOf("code" to code,Constant.CLIENT_TYPE_PAIR)
+        launch(stateLiveData,
+                {repository.run { simpleGet(api.getWXLoginStepOne(params)) }},
+                {WeChatInfo.postValue(it)},
                 final = {}
         )
     }

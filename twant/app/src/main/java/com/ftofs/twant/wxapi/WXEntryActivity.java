@@ -64,6 +64,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
                     }
                     if (usage == Constant.WEIXIN_AUTH_USAGE_LOGIN) {
+                        SLog.info("發送了衛星信息%s", code);
+
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WEIXIN_LOGIN, code);
                     } else if (usage == Constant.WEIXIN_AUTH_USAGE_UNBIND) {
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WEIXIN_UNBIND, code);

@@ -21,7 +21,7 @@
             android:layout_width="78dp"
             android:layout_height="78dp"
             android:layout_marginTop="42dp"
-            imageUrl="{vo.avatar}"
+            imageUrl="@{vo.avatar}"
             android:layout_marginBottom="12dp"
             />
 
@@ -31,6 +31,7 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             android:lines="1"
+            android:text="@{vo.nickname}"
             android:id="@+id/tv_nickname"
             android:layout_marginBottom="36dp"
             />
@@ -92,7 +93,7 @@
                 android:textColor="@color/tw_blue">
             </TextView>
         </LinearLayout>
-        <view
+        <View
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"/>

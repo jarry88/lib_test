@@ -8,6 +8,12 @@ data class LoginInfo (
     val memberName:String?,
     val memberVo:MemberVo?,
     val memberToken:String?,
+    val accessToken:String?,
+    val error:String?,
+    val weixinNickName:String?,
+    val weixinAvatarUrl:String?,
+    val facebookNickName:String?,
+    val facebookAvatarUrl:String?,
     val memberId:Int?,
     val token:String?,
     val isBind:Int?

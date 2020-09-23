@@ -123,7 +123,7 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding, OneK
             SLog.info("進行一鍵登錄")
             //拉起授权页 timeout 超时时间
             it.getLoginToken(context,5000)
-        }?:start(MessageFragment("61234567"))//否則直接拉起驗證碼登錄頁
+        }?:start(MessageFragment("",false,true))//否則直接拉起驗證碼登錄頁
     }
 
     override fun onBackPressedSupport(): Boolean {

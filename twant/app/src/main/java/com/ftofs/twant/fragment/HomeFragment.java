@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ftofs.lib_common_ui.UiUtilsKt;
 import com.ftofs.twant.login.service.LoginServiceImpl;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
@@ -30,6 +31,7 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.util.UiUtil;
+import com.ftofs.twant.widget.HwLoadingPopup;
 import com.github.richardwrq.krouter.annotation.Inject;
 import com.github.richardwrq.krouter.api.core.KRouter;
 import com.gzp.lib_common.service.ConstantsPath;
@@ -68,12 +70,13 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import kotlin.reflect.jvm.internal.UtilKt;
 import okhttp3.Call;
 
+import static com.ftofs.twant.util.Util.createLoadingPopup;
 import static com.ftofs.twant.util.Util.dip2px;
 
 public class HomeFragment extends MainBaseFragment implements View.OnClickListener {
     RecyclerView rvList;
     TangramEngine tangramEngine;
-    BasePopupView mLoading;
+    HwLoadingPopup mLoading;
 
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
     LinearLayout llFloatButtonContainer;
@@ -113,7 +116,6 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mLoading=  Util.createLoadingPopup(requireContext());
         KRouter.INSTANCE.inject(this);
         EventBus.getDefault().register(this);
 
@@ -398,7 +400,9 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         } else if (id == R.id.btn_test) {
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
-            mLoading.show();
+//            final BasePopupView load=Util.createLoadingPopup(requireContext()).show();
+
+//            UiUtilsKt.createLoadingPopup(requireContext()).show();
             loginService.start(_mActivity);
         }
     }

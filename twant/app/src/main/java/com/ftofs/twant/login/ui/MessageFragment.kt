@@ -2,7 +2,6 @@ package com.ftofs.twant.login.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,27 +17,31 @@ import com.ftofs.lib_common_ui.popup.ListPopup
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.TwantApplication.Companion.get
-import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
+import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.constant.LoginType
 import com.ftofs.twant.constant.UmengAnalyticsActionName
 import com.ftofs.twant.databinding.MessageLoginLayoutBinding
+import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.fragment.BindMobileFragment
 import com.ftofs.twant.fragment.H5GameFragment
 import com.ftofs.twant.util.LogUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
+import com.ftofs.twant.widget.HwLoadingPopup
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.base.callback.OnSelectedListener
 import com.gzp.lib_common.constant.PopupType
 import com.gzp.lib_common.utils.SLog
 import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.core.BasePopupView
 import com.umeng.analytics.MobclickAgent
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
-import kotlin.math.roundToInt
 
 class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, private val firstPage: Boolean = false) : BaseTwantFragmentMVVM<MessageLoginLayoutBinding, MessageLoginViewModel>(),OnSelectedListener {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
@@ -49,21 +52,8 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
         return BR.viewModel
     }
     private var canSendSMS= false
-    private val countDownTimer by lazy {object :CountDownTimer(60 * 1000, 1000){
-        override fun onTick(millisUntilFinished: Long) {
-            binding.btnRefreshCaptcha.text= (millisUntilFinished / 1000).toDouble().roundToInt().toString().plus("s后重試")
-        }
+    private var  mLoading: HwLoadingPopup?=null
 
-        @SuppressLint("UseCompatLoadingForDrawables")
-        override fun onFinish() {
-            binding.btnRefreshCaptcha.apply {
-                background=resources.getDrawable(com.ftofs.lib_common_ui.R.drawable.bg_refresh_captcha, null)
-                text="重新獲取"
-                canSendSMS=true
-            }
-
-        }
-    } }
     private var promotionCodeVisible=false
     private var selectedMobileZoneIndex=0
     private val aViewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
@@ -75,14 +65,8 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
             setLeftLayoutClickListener{onBackPressedSupport()}
 //            setRightLayoutClickListener{}
         }
-        binding.btnRefreshCaptcha.apply {
-            setOnClickListener {
-                if(canSendSMS) {
-                    this.background=resources.getDrawable(com.ftofs.lib_common_ui.R.drawable.bg_grey_captcha)
-                    canSendSMS =false
-                    messageAction()
-                    countDownTimer.start()
-                } }
+        binding.rlCaptchaContainer.btnCaptchaView?.apply {
+            mListener={messageAction()}
         }
         binding.btnMessageLogin.setOnClickListener { loginAction() }
         binding.btnPasswordLogin.setOnClickListener{passwordAction()}
@@ -166,27 +150,59 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
             if (it.isBind == Constant.FALSE_INT) start(BindMobileFragment.newInstance(BindMobileFragment.BIND_TYPE_FACEBOOK, aViewModel.faceBookAccessToken?.token, aViewModel.faceBookAccessToken?.userId))
             else// 未綁定
             {
-                User.onLoginSuccess(it.memberId?:0, LoginType.FACEBOOK, EasyJSONObject.generate("datas", it))
-                hideSoftInputPop()
+                User.onNewLoginSuccess(it.memberId
+                        ?: 0, LoginType.FACEBOOK, it)
+
                 ToastUtil.success(_mActivity, "Facebook登入成功")
+                (activity as LoginActivity).onBackPressedSupport()
             }
         })
+        aViewModel.WeChatInfo.observe(this){
+            if (it.isBind == Constant.FALSE_INT) {
+                SLog.info("進入綁定頁")
+
+                start(BindMobileFragment.newInstance(BindMobileFragment.BIND_TYPE_WEIXIN, aViewModel.WeChatInfo.value?.accessToken, aViewModel.WeChatInfo.value?.accessToken))}
+            else// 未綁定
+            {
+                SLog.info("未進入綁定頁")
+                User.onNewLoginSuccess(it.memberId
+                        ?: 0, LoginType.WEIXIN, it)
+                ToastUtil.success(_mActivity, "微信登入成功")
+                (activity as LoginActivity).onBackPressedSupport()
+            }
+        }
         aViewModel.mobileZoneList.observe(this, {
             binding.etPhoneView.apply {
-                it.forEach{a->SLog.info(a.toString())}
-                mobileList=it
+                it.forEach { a -> SLog.info(a.toString()) }
+                mobileList = it
                 setZoneIndex(0)
             }
             if (it.isNotEmpty()) canSendSMS = true
         })
+        viewModel.authCodeInfo.observe(this){
+            binding.tvSmsCodeHint.text= String.format(getString(R.string.text_find_password_info), binding.etPhoneView.getPhone(), it.authCodeValidTime)
+            binding.rlCaptchaContainer.btnCaptchaView?.apply {
+                mLoading?.dismiss()
+                ToastUtil.success(context, "獲取驗證碼成功")
+                if(it.authCodeResendTime!=null&&countTime.toInt()!=it.authCodeResendTime)countTime=it.authCodeResendTime!!.toLong() }
+        }
+        viewModel.msgError.observe(this){               if(it.isNotEmpty())     ToastUtil.error(context,it) }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
             when (it) {
                 StateLiveData.StateEnum.Success -> {
 //                    onBackPressedSupport()
+                    mLoading?.dismiss()
+
                     KLog.e("数据获取成功--关闭loading")
                 }
-                else -> {
+                StateLiveData.StateEnum.Error -> {
+                    SLog.info("獲取數據失敗")
+                    ToastUtil.error(context, viewModel.errorMessage)
+                    mLoading?.dismiss()
 
+                }
+                else -> {
+                    mLoading?.dismiss()
                     KLog.e("其他状态--关闭loading")
 //                    loadingUtil?.hideLoading()
                 }
@@ -195,15 +211,29 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
     }
 
     private fun passwordAction() {
-        start(PasswordLoginFragment(binding.etPhoneView.getPhone()))
+
+        start(PasswordLoginFragment(binding.etPhoneView.getEditMobile(), binding.etPhoneView.getIndex()?.let { selectedMobileZoneIndex }))
     }
 
-    private fun loginAction() {
-        viewModel.getMessageLogin(mobile, binding.etPhoneView.getPhone(), binding.etPromotionCode.text.toString())
+    private fun loginAction() {//短信登錄
+        if (binding.etPhoneView.isRight && binding.rlCaptchaContainer.isRight) {
+
+            viewModel.getMessageLogin(binding.etPhoneView.getPhone(), binding.rlCaptchaContainer.getCaptcha()
+                    ?: "", binding.etPromotionCode.text.toString())
+        }
+        binding.etPhoneView.showError()
+        binding.rlCaptchaContainer.showError()
+
     }
 
-    private fun messageAction() {
-        viewModel.getSmsAuthCode(mobile)
+    private fun messageAction():Boolean {
+        binding.etPhoneView.apply {
+            if (isRight) {
+                viewModel.getSmsAuthCode(getPhone())
+            }
+            showError()
+            return isRight
+        }
     }
 
     override fun onBackPressedSupport(): Boolean {

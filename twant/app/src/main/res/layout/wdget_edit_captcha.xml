@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:id="@+id/ll_container_mobile_error"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/dp_15"
+        >
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+
+            android:src="@drawable/icon_red_error"
+            />
+
+        <TextView
+            android:id="@+id/tv_mobile_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:background="@null"
+            android:textColor="@color/tw_red"
+            android:hint="@string/input_mobile_hint"
+            android:singleLine="true"
+            android:text="驗證碼錯誤"
+            android:textSize="12sp"
+            />
+    </LinearLayout>
+    <RelativeLayout android:id="@+id/rl_captcha_container"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="@dimen/toolbar_margin_left"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
+        android:layout_marginTop="@dimen/dp_10"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/border_type_d"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/toolbar_margin_left"
+
+            android:layout_centerVertical="true"
+            android:src="@drawable/captcha"
+            />
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/btn_refresh_captcha"-->
+        <!--                android:layout_width="90dp"-->
+        <!--                android:layout_height="30dp"-->
+        <!--                android:layout_marginEnd="5dp"-->
+        <!--                android:layout_alignParentEnd="true"-->
+        <!--                android:layout_centerVertical="true"-->
+        <!--                />-->
+        <com.ftofs.twant.login.CaptchaView
+            android:id="@+id/btn_refresh_captcha"
+            android:layout_width="90dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/sp_14"
+            android:text="@string/get_captcha"
+            />
+
+        <EditText
+            android:id="@+id/et_captcha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/btn_refresh_captcha"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="41dp"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_captcha_hint"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textSize="16sp"
+            />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- 驗證碼 -->

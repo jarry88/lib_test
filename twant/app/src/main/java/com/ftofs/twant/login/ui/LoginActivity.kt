@@ -6,12 +6,17 @@ import com.facebook.CallbackManager
 import com.ftofs.lib_common_ui.switchTranslucentMode
 import com.ftofs.twant.R
 import com.ftofs.twant.TwantApplication.Companion.get
+import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.databinding.ActivityLoginBinding
+import com.ftofs.twant.entity.EBMessage
 import com.gzp.lib_common.base.MBaseActivity
 import com.gzp.lib_common.base.callback.SimpleCallBack
 import com.gzp.lib_common.model.User
 import com.gzp.lib_common.utils.SLog
 import com.tencent.mm.opensdk.modelmsg.SendAuth
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), SimpleCallBack {
@@ -21,8 +26,19 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
         override fun initData() {
     //        TODO("Not yet implemented")
         }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEBMessage(message: EBMessage) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_WEIXIN_LOGIN) {
+            val code = message.data as String
+            SLog.info("接受到了衛星信息$code")
+            mViewModel.getWXLoginStepOne(code)
+        }
+    }
         override fun initView() {
             setContentView(R.layout.activity_login)
+            EventBus.getDefault().register(this)
+
             switchTranslucentMode(this, false)
 
 //            mUIType = intent.getSerializableExtra(THEME_KEY) as Constant.UI_TYPE
@@ -38,7 +54,7 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
                         ?: HistoryLoginFragment(user))
             } else {
                 loadRootFragment(R.id.container, findFragment(MessageFragment::class.java)
-                        ?: MessageFragment("11"))
+                        ?: MessageFragment("", false, true))
             }
 
         }
@@ -68,6 +84,10 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
         callbackManager.onActivityResult(requestCode, resultCode, data)
 
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun getHistoryFragment():HistoryLoginFragment? {
+        return findFragment(HistoryLoginFragment::class.java)
     }
 
 //    }

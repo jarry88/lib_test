@@ -43,6 +43,7 @@ val isValidRegex ="^1(([7][0,1])|([6][2,5,7])|[3][4][9])[0-9]{0,10}$"
 class PhoneView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+    private var currAreaCode: String?=null
     var mobileList= listOf<MobileZone>()
     private val mContext:Context=context
     private val areaArray = arrayOf(
@@ -83,6 +84,7 @@ class PhoneView @JvmOverloads constructor(
         zoneIndex=mobileList[index].areaId
         etMobile.text=etMobile.text
         tvZone?.text=mobileList[index].areaName
+        currAreaCode=mobileList[index].areaCode
     }
     fun setZoneSelect(listener: OnClickListener){llZoneSelect?.setOnClickListener(listener)}
 
@@ -94,19 +96,33 @@ class PhoneView @JvmOverloads constructor(
         return Pair(isRight,msg)
     }
     fun getPhone():String{
-        etMobile.text?:return ""
-        return etMobile.text.toString()
+        return if(mobileList.isEmpty()) ""
+        else currAreaCode?.plus(",")?.plus(etMobile.text?:"") ?:""
+    }
+    fun getEditMobile():String{
+        return etMobile.text?.toString()?:""
     }
     fun setPhone(phone:String?){
         etMobile.setText(phone)
     }
     private fun initTextChangedListener(){
+        etMobile.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                llErrorContainer?.apply {
+                    if (!isRight) {
+                        this.visibility = View.VISIBLE
+                        errorText?.text = msg
+
+                    } else this.visibility = View.GONE
+                }
+            } else llErrorContainer?.visibility=View.GONE
+        }
         etMobile.doAfterTextChanged { text->
             SLog.info(regex[zoneIndex]+areaArray[zoneIndex]+text)
             isRight=true
             if(text==null||text.isEmpty()){
                 isRight=false
-                msg="未輸入號碼"
+                msg="手機號碼錯誤"
             }else if(mobileList.size<zoneIndex){
                 isRight=false
                 msg="网络异常"
@@ -124,16 +140,16 @@ class PhoneView @JvmOverloads constructor(
                     isRight=false
                 }
              }
-            llErrorContainer?.apply {
-                if(!isRight) {
-                    this.visibility=View.VISIBLE
-                    errorText?.text=msg
-
-                }
-                else this.visibility=View.GONE
-            }
 
         }
+    }
+
+    fun getIndex(): Int? {
+        return if(mobileList.isEmpty()) null else 0
+    }
+
+    fun showError() {
+        llErrorContainer?.visibility=if (isRight) GONE else VISIBLE
     }
 
 }

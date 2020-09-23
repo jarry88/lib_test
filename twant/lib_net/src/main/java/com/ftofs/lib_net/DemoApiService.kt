@@ -1,6 +1,7 @@
 package com.ftofs.lib_net
 
 import android.util.Log
+import com.facebook.login.Login
 import com.ftofs.lib_net.model.*
 import com.ftofs.lib_net.net.TwantResponse
 import com.wzq.mvvmsmart.net.base.BaseResponse
@@ -82,12 +83,17 @@ interface DemoApiService {
     @POST("v2/login")
     suspend fun getLogin(@Query("mobile")mobile:String,@Query("password")password:String,@Query("clientType")clientType:String):TwantResponse<LoginInfo>
     //發送動態驗證嘛
+    @POST("v2/smscode/send")
+    suspend fun getSmsCodeSend(@Query("mobile")mobile:String):TwantResponse<AuthCodeInfo>
     @POST("v2/mobile/findpwd")
     suspend fun getLoginFindPwd(@Query("mobile")mobile:String):TwantResponse<AuthCodeInfo>
+    //【找回密碼】密碼設置
+    @POST("v2/mobile/findpwd/second")
+    suspend fun getPwdSet(@QueryMap queryParams: Map<String, String?>):TwantResponse<CommonInfo>
 
     //驗證碼登錄
     @POST("v2/mobile/login")
-    suspend fun getMessage(queryParams: Map<String, String?>): TwantResponse<LoginInfo>
+    suspend fun getMessage(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
     //阿里雲一鍵登錄
     @POST("v2/mobile/loginOne")
     suspend fun getLoginOne(@Query("aliYunToken")aliYunToken:String,@Query("clientType")clientType:String): TwantResponse<LoginInfo>
@@ -97,6 +103,8 @@ interface DemoApiService {
     suspend fun doFaceLogin(@Query("accessToken")accessToken:String,@Query("userId")userId:String,@Query("clientType")clientType:String): TwantResponse<LoginInfo>
     @POST("v2/login")
     suspend fun passwordLogin(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
+    @POST("loginconnect/new/weixin/login")
+    suspend fun getWXLoginStepOne(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
 
 
 //@Field

@@ -13,14 +13,14 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.alibaba.fastjson.JSON
-import com.ftofs.twant.login.ui.LoginActivity
-import com.ftofs.twant.login.utils.ExecutorManager
-import com.ftofs.lib_common_ui.createLoadingPopup
+import com.facebook.login.Login
 import com.ftofs.lib_net.BaseRepository
 import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.entity.EBMessage
+import com.ftofs.twant.login.ui.LoginActivity
+import com.ftofs.twant.login.ui.MessageFragment
+import com.ftofs.twant.login.utils.ExecutorManager
 import com.gzp.lib_common.constant.Result
-import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
 import com.gzp.lib_common.utils.Util.dip2px
@@ -28,11 +28,9 @@ import com.gzp.lib_common.utils.Util.findActivity
 import com.lxj.xpopup.core.BasePopupView
 import com.mobile.auth.gatewayauth.*
 import com.mobile.auth.gatewayauth.model.TokenRet
-import com.tmall.wireless.vaf.virtualview.event.EventManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 import kotlin.coroutines.CoroutineContext
 
 
@@ -116,7 +114,6 @@ object OneStepLogin:CoroutineScope{
 
     fun start(context: Context) {
         mContext =context
-        createLoadingPopup(BaseContext.instance.getContext()).show()
 //        getBaseApplication().mHandler?.post{"a"}
 //        ToastUtil.success(context,"顯示加載")
         SLog.info("加載中")
@@ -257,7 +254,13 @@ object OneStepLogin:CoroutineScope{
     }
 
     private fun goLoginActivity() {
-        mContext.startActivity(Intent(mContext, LoginActivity::class.java))
+        if (UserManager.getUser() != null && findActivity(mContext) is LoginActivity) {
+            (findActivity(mContext) as LoginActivity).getHistoryFragment()?.start(MessageFragment("", sdkAvailable))
+                    ?:mContext.startActivity(Intent(mContext, LoginActivity::class.java))
+
+        } else {
+            mContext.startActivity(Intent(mContext, LoginActivity::class.java))
+        }
     }
 
 

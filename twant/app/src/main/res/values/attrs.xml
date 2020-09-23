@@ -107,4 +107,5 @@
             <enum name="hongkong" value="1"/>
         </attr>
     </declare-styleable>
+    <declare-styleable name="SettingCaptchaView"/>
 </resources>

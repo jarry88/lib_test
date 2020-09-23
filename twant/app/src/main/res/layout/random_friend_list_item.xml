@@ -149,8 +149,9 @@
         </LinearLayout>
         <ImageView
             android:id="@+id/img_shop_avatar"
-            android:layout_width="@dimen/dp_20"
-            android:layout_height="@dimen/dp_20"
+            android:layout_width="40dp"
+            android:layout_height="@dimen/dp_40"
+            android:padding="10dp"
             android:src="@drawable/icon_shop"
             visible="@{vo.isSeller}"
             />
