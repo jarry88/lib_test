@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -77,6 +78,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 }
             });
             rvBannerList.setAdapter(bannerAdapter);
+            // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
+            // https://www.jianshu.com/p/e54db232df62
+            (new PagerSnapHelper()).attachToRecyclerView(rvBannerList);
 
 
             // 導航區
@@ -104,6 +108,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 }
             });
             rvNavList.setAdapter(navAdapter);
+            // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
+            // https://www.jianshu.com/p/e54db232df62
+            // (new PagerSnapHelper()).attachToRecyclerView(rvNavList);
 
 
             // 購物專場(最多顯示4個)

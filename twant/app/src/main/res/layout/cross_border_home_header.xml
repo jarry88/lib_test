@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:attrs="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:paddingStart="12dp"
     android:paddingEnd="12dp">
@@ -109,7 +110,7 @@
     </LinearLayout>
     <!-- END OF Slogan -->
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
@@ -118,9 +119,27 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_nav_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
         </androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
+        <com.rd.PageIndicatorView
+            android:id="@+id/pageIndicatorView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/rv_nav_list"
+            app:piv_animationType="thinWorm"
+            app:piv_interactiveAnimation="true"
+            app:piv_selectedColor="@color/tw_blue"
+            app:piv_unselectedColor="@color/tw_light_grey_EDED"
+            attrs:piv_padding="9dp"
+            attrs:piv_radius="2dp"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 領取新人紅包，暫時不需要
     <androidx.constraintlayout.widget.ConstraintLayout
