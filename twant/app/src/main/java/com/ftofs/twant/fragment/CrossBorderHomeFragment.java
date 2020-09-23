@@ -114,7 +114,11 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                 int id = view.getId();
                 CrossBorderHomeItem item = crossBorderHomeItemList.get(position);
 
-                if (id == R.id.cl_container_left) {
+                if (id == R.id.btn_view_more_bargain) {
+                    Util.startFragment(BargainListFragment.newInstance());
+                } else if (id == R.id.btn_view_more_group) {
+                    Util.startFragment(GroupInfoListFragment.newInstance());
+                } else if (id == R.id.cl_container_left) {
                     if (item.goodsPair != null && item.goodsPair.left != null) {
                         Util.startFragment(GoodsDetailFragment.newInstance(item.goodsPair.left.commonId, 0));
                     }

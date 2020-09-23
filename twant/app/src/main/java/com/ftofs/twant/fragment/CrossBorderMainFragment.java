@@ -21,6 +21,7 @@ import com.ftofs.twant.adapter.CrossBorderCategoryListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.BargainItem;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
@@ -130,6 +131,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
         Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_search, this);
 
         loadData();
     }
@@ -275,6 +277,9 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             // initViewPager();
         } else if (id == R.id.btn_back) {
             hideSoftInputPop();
+        } else if (id == R.id.btn_search) {
+            Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                    EasyJSONObject.generate("keyword", "").toString()));
         }
     }
 

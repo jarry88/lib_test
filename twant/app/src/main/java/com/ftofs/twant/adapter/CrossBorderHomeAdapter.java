@@ -22,10 +22,12 @@ import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
+import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
@@ -59,8 +61,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         int itemType = item.getItemType();
 
         if (itemType == Constant.ITEM_TYPE_HEADER) {
-            helper.addOnClickListener(R.id.btn_goto_shopping_zone,
-                    R.id.btn_view_more_bargain, R.id.btn_view_more_group, R.id.btn_view_more_best_store);
+            helper.addOnClickListener(R.id.btn_view_more_bargain, R.id.btn_view_more_group);
 
 
             // Banner圖列表
@@ -105,13 +106,80 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             rvNavList.setAdapter(navAdapter);
 
 
-            // 購物專場
-            RecyclerView rvShoppingZoneList = helper.getView(R.id.rv_shopping_zone_list);
-            rvShoppingZoneList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-            CrossBorderShoppingZoneAdapter shoppingZoneAdapter =
-                    new CrossBorderShoppingZoneAdapter(context, R.layout.cross_border_shopping_zone_item, item.shoppingZoneList);
-            rvShoppingZoneList.setAdapter(shoppingZoneAdapter);
+            // 購物專場(最多顯示4個)
+            int shoppingZoneCount = item.shoppingZoneList.size();
+            SLog.info("shoppingZoneCount[%d]", shoppingZoneCount);
+            LinearLayout llShoppingZoneContainer = helper.getView(R.id.ll_shopping_zone_container);
+            if (shoppingZoneCount > 0) {
+                llShoppingZoneContainer.setVisibility(View.VISIBLE);
+            } else { // 如果沒有，則隱藏購物專場
+                llShoppingZoneContainer.setVisibility(View.GONE);
+            }
 
+            int resId = 0;
+            if (shoppingZoneCount == 1) {
+                resId = R.layout.cross_border_shopping_zone_1;
+            } else if (shoppingZoneCount == 2) {
+                resId = R.layout.cross_border_shopping_zone_2;
+            } else if (shoppingZoneCount == 3) {
+                resId = R.layout.cross_border_shopping_zone_3;
+            } else {
+                resId = R.layout.cross_border_shopping_zone_4;
+            }
+            View zoneContainer = LayoutInflater.from(context).inflate(resId, llShoppingZoneContainer, false);
+
+            // shoppingZoneCount = 1;
+            if (shoppingZoneCount >= 1) {
+                CrossBorderShoppingZoneItem shoppingZoneItem1 = item.shoppingZoneList.get(0);
+                ImageView zone1 = zoneContainer.findViewById(R.id.img_shopping_zone_1);
+                zone1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Util.startFragment(NewShoppingSpecialFragment.newInstance(shoppingZoneItem1.zoneId));
+                    }
+                });
+                Glide.with(context).load(StringUtil.normalizeImageUrl(shoppingZoneItem1.appLogo)).centerCrop().into(zone1);
+
+                if (shoppingZoneCount >= 2) {
+                    CrossBorderShoppingZoneItem shoppingZoneItem2 = item.shoppingZoneList.get(1);
+                    ImageView zone2 = zoneContainer.findViewById(R.id.img_shopping_zone_2);
+                    zone2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Util.startFragment(NewShoppingSpecialFragment.newInstance(shoppingZoneItem2.zoneId));
+                        }
+                    });
+                    Glide.with(context).load(StringUtil.normalizeImageUrl(shoppingZoneItem2.appLogo)).centerCrop().into(zone2);
+                    if (shoppingZoneCount >= 3) {
+                        CrossBorderShoppingZoneItem shoppingZoneItem3 = item.shoppingZoneList.get(2);
+                        ImageView zone3 = zoneContainer.findViewById(R.id.img_shopping_zone_3);
+                        zone3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Util.startFragment(NewShoppingSpecialFragment.newInstance(shoppingZoneItem3.zoneId));
+                            }
+                        });
+                        Glide.with(context).load(StringUtil.normalizeImageUrl(shoppingZoneItem3.appLogo)).centerCrop().into(zone3);
+
+                        if (shoppingZoneCount >= 4) {
+                            CrossBorderShoppingZoneItem shoppingZoneItem4 = item.shoppingZoneList.get(3);
+                            ImageView zone4 = zoneContainer.findViewById(R.id.img_shopping_zone_4);
+                            zone3.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Util.startFragment(NewShoppingSpecialFragment.newInstance(shoppingZoneItem4.zoneId));
+                                }
+                            });
+                            Glide.with(context).load(StringUtil.normalizeImageUrl(shoppingZoneItem4.appLogo)).centerCrop().into(zone4);
+                        }
+                    }
+                }
+            }
+            llShoppingZoneContainer.removeAllViews();
+            llShoppingZoneContainer.addView(zoneContainer);
+
+
+            // 砍價
             RecyclerView rvBargainList = helper.getView(R.id.rv_bargain_list);
             rvBargainList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             CrossBorderActivityGoodsAdapter bargainGoodsAdapter =
