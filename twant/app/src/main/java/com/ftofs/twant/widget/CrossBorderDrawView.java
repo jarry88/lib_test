@@ -58,4 +58,9 @@ public class CrossBorderDrawView extends View {
         // 画弧，第一个参数是RectF：该类是第二个参数是角度的开始，第三个参数是多少度，第四个参数是真的时候画扇形，是假的时候画弧线
         canvas.drawArc(oval, 0, 180, true, p);
     }
+
+    public void setColor(int color) {
+        p.setColor(color);
+        invalidate();
+    }
 }

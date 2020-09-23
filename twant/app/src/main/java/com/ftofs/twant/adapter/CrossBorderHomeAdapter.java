@@ -55,7 +55,8 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         this.context = context;
 
         addItemType(Constant.ITEM_TYPE_HEADER, R.layout.cross_border_home_header);
-        addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.cross_border_home_item);
+        addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.cross_border_home_item); // 商品分頁加載Item
+        addItemType(Constant.ITEM_TYPE_FOOTER, R.layout.cross_border_home_footer);
     }
 
     @Override
@@ -64,7 +65,6 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
         if (itemType == Constant.ITEM_TYPE_HEADER) {
             helper.addOnClickListener(R.id.btn_view_more_bargain, R.id.btn_view_more_group);
-
 
             // Banner圖列表
             RecyclerView rvBannerList = helper.getView(R.id.rv_banner_list);
@@ -392,7 +392,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     .setGone(R.id.btn_goto_store_right, rightHandSideVisible)
                     .setGone(R.id.tv_freight_free_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_price_right, rightHandSideVisible);
-            if (item.goodsPair != null) {
+            if (item.goodsPair != null && goodsPair.right != null) {
                 TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);
                 if (StringUtil.isEmpty(goodsPair.right.jingle)) {
                     tvGoodsJingleRight.setVisibility(View.GONE);
@@ -401,6 +401,8 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     tvGoodsJingleRight.setVisibility(View.VISIBLE);
                 }
             }
+        } else {
+
         }
     }
 
