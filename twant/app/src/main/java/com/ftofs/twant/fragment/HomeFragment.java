@@ -404,13 +404,13 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            loadPopup.dismiss();
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
 //            final BasePopupView load=Util.createLoadingPopup(requireContext()).show();
 
 //            UiUtilsKt.createLoadingPopup(requireContext()).show();
-            loginService.start(_mActivity);
+            start(LoginFragment.newInstance());
+//            loginService.start(_mActivity);
         }
     }
 

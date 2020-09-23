@@ -2,6 +2,7 @@ package com.ftofs.twant.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -42,6 +43,7 @@ import com.bumptech.glide.request.target.Target;
 import com.facebook.AccessToken;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.activity.YoutubeActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -87,6 +89,7 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 
+import org.greenrobot.eventbus.EventBus;
 import org.urllib.Query;
 import org.urllib.Urls;
 
@@ -267,7 +270,26 @@ public class Util {
         return (int) ((pxValue / scale) + 0.5f);
     }
 
+    /**
+     * 根據context查找Activity
+     * @param context
+     * @return
+     */
+    public static Activity findActivity( Context context){
+         if (context instanceof Activity) {
+             return  (Activity)context;
+        } else if (context instanceof ContextWrapper) {
+             return findActivity(((ContextWrapper) context).getBaseContext());
+        } else {
+             return null;
+        }
+    }
     public static void showLoginFragment(Context context) {
+        if (!isFastClick()) {
+            //過快點擊不響應
+            return;
+        }
+        EBMessage.postMessage(EBMessageType.SHOW_LOADING,null);
         UserManager.INSTANCE.start(context);
 //        Util.startFragment(LoginFragment.newInstance());
     }
@@ -293,7 +315,19 @@ public class Util {
         }
         return sb.toString();
     }
+    // 两次点击按钮之间的点击间隔不能少于1000毫秒
+    private static final int MIN_CLICK_DELAY_TIME = 1300;
+    private static long lastClickTime;
 
+    public static boolean isFastClick() {
+        boolean flag = false;
+        long curClickTime = System.currentTimeMillis();
+        if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
+            flag = true;
+        }
+        lastClickTime = curClickTime;
+        return flag;
+    }
 
     public static String formatCount(int count) {
         /*

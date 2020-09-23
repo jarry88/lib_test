@@ -93,6 +93,7 @@ import com.ftofs.twant.widget.NewWordPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.gzp.lib_common.base.BaseActivity;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
@@ -163,6 +164,19 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
     MainFragment mainFragment;
 
     CallbackManager callbackManager;
+    BasePopupView mloading;
+
+    public void showLoading() {
+        if (mloading == null) {
+            mloading = Util.createLoadingPopup(this);
+        }
+        mloading.show();
+    }
+    public void hideLoading() {
+        if (mloading != null) {
+            mloading.dismiss();
+        }
+    }
 
     private int keyboardState = Constant.KEYBOARD_HIDDEN;
 
@@ -272,7 +286,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mloading = Util.createLoadingPopup(this);
         instance = this;
 
         EventBus.getDefault().register(this);
@@ -1091,6 +1105,13 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
             } else if (toastData.type == ToastData.TYPE_INFO) {
                 ToastUtil.info(this, toastData.text);
             }
+        } else if (message.messageType == EBMessageType.SHOW_DEBUG_ICON) {
+            showDebugIcon();
+        }else if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS) {
+            hideLoading();
+        } else if (message.messageType == EBMessageType.SHOW_LOADING) {
+            SLog.info("main顯示loading");
+            showLoading();
         }
     }
 

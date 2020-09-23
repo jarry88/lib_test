@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import cn.snailpad.easyjson.EasyJSONObject
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
@@ -17,6 +16,7 @@ import com.ftofs.lib_common_ui.popup.ListPopup
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.TwantApplication.Companion.get
+import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.constant.EBMessageType
@@ -30,7 +30,6 @@ import com.ftofs.twant.util.LogUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
-import com.ftofs.twant.widget.HwLoadingPopup
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.base.callback.OnSelectedListener
 import com.gzp.lib_common.constant.PopupType
@@ -40,8 +39,6 @@ import com.lxj.xpopup.core.BasePopupView
 import com.umeng.analytics.MobclickAgent
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
 class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, private val firstPage: Boolean = false) : BaseTwantFragmentMVVM<MessageLoginLayoutBinding, MessageLoginViewModel>(),OnSelectedListener {
@@ -52,6 +49,9 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
     override fun initVariableId(): Int {
         return BR.viewModel
     }
+
+    private var lastClickStamp: Long = 0
+    private var tabClickCount=0
     private var canSendSMS= false
     private var  mLoadingPopup: BasePopupView?=null
     fun showLoading(){
@@ -67,8 +67,24 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun initData() {
-        EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
-        binding.title.performClick()
+        EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS, null)
+        binding.thirdLoginContainer.setTopLineClickListener{
+            if (tabClickCount > 5) {
+                EBMessage.postMessage(EBMessageType.SHOW_DEBUG_ICON, null)
+                tabClickCount = 0
+
+            } else {
+                val currClickStamp = System.currentTimeMillis()
+                if (currClickStamp - lastClickStamp < 1100) {
+                    tabClickCount++
+                } else {
+                    tabClickCount = 0
+                }
+                lastClickStamp = currClickStamp
+            }
+
+
+        }
         binding.title.apply {
             setLeftImageResource(if (firstPage) R.drawable.ic_baseline_close_24 else R.drawable.icon_back)
             setLeftLayoutClickListener{onBackPressedSupport()}
@@ -189,7 +205,7 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
         aViewModel.successLoginInfo.observe(this){
                 com.gzp.lib_common.utils.ToastUtil.success(context, "登入成功")
                 com.ftofs.twant.login.UserManager.saveUser(aViewModel.loginLiveData.value)
-                User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE,it)
+                User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE, it)
                 hideSoftInput()
 
                 SLog.info("登錄成功")
@@ -215,8 +231,16 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
                 binding.llRecommend.visibility=View.VISIBLE
             }
         }
+        viewModel.successLoginInfo.observe(this){
+            ToastUtil.success(context, "登入成功")
+            User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE, it)
+            hideSoftInput()
+
+            SLog.info("登錄成功")
+            activity?.finish()
+        }
         viewModel.msgError.observe(this){
-            if(it.isNotEmpty())     ToastUtil.error(context,it) }
+            if(it.isNotEmpty())     ToastUtil.error(context, it) }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
             when (it) {
                 StateLiveData.StateEnum.Success -> {
