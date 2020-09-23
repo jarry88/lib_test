@@ -14,20 +14,21 @@
             android:layout_height="150dp"
             android:layout_alignParentBottom="true">
             <View
+                android:id="@+id/vw_top_bg"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:background="@color/tw_cross_border_home_page_bg_color">
+                android:layout_height="75dp">
             </View>
             <com.ftofs.twant.widget.CrossBorderDrawView
+                android:id="@+id/vw_bottom_bg"
                 android:layout_width="match_parent"
                 android:layout_height="150dp">
             </com.ftofs.twant.widget.CrossBorderDrawView>
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/ll_app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/tw_cross_border_home_page_bg_color"
             android:orientation="vertical">
 
             <RelativeLayout

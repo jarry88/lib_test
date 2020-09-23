@@ -45,7 +45,7 @@ import okhttp3.Call;
  * 跨城購主頁
  * @author zwm
  */
-public class CrossBorderHomeFragment extends BaseFragment implements View.OnClickListener {
+public class CrossBorderHomeFragment extends BaseFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
     RecyclerView rvList;
     CrossBorderHomeAdapter adapter;
     List<CrossBorderHomeItem> crossBorderHomeItemList = new ArrayList<>();
@@ -57,6 +57,10 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     List<CrossBorderActivityGoods> bargainGoodsList;
     List<CrossBorderActivityGoods> groupGoodsList;
     List<Store> storeList;
+
+    // 當前要加載第幾頁(從1開始）
+    int currPage = 0;
+    boolean hasMore;
 
     public static CrossBorderHomeFragment newInstance(List<CrossBorderBannerItem> bannerItemList,
                                                       int navItemCount,
@@ -108,13 +112,20 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         adapter = new CrossBorderHomeAdapter(_mActivity, crossBorderHomeItemList);
+        adapter.setEnableLoadMore(true);
+        adapter.setOnLoadMoreListener(this, rvList);
+
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
                 CrossBorderHomeItem item = crossBorderHomeItemList.get(position);
 
-                if (id == R.id.cl_container_left) {
+                if (id == R.id.btn_view_more_bargain) {
+                    Util.startFragment(BargainListFragment.newInstance());
+                } else if (id == R.id.btn_view_more_group) {
+                    Util.startFragment(GroupInfoListFragment.newInstance());
+                } else if (id == R.id.cl_container_left) {
                     if (item.goodsPair != null && item.goodsPair.left != null) {
                         Util.startFragment(GoodsDetailFragment.newInstance(item.goodsPair.left.commonId, 0));
                     }
@@ -127,39 +138,43 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         });
         rvList.setAdapter(adapter);
 
-        loadData(1);
+        loadData(currPage + 1);
     }
 
     private void loadData(int page) {
         String url = Api.PATH_TARIFF_BUY_INDEX_GOODS;
         EasyJSONObject params = EasyJSONObject.generate(
-                "page", page
+                "page", page,
+                "pageSize", 20
         );
 
+        SLog.info("url[%s], params[%s]", url, params);
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
                 ToastUtil.showNetworkError(_mActivity, e);
+
+                adapter.loadMoreFail();
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
-                /*
-                for (int i = 0; i < 20; i++) {
-                    CrossBorderHomeItem item = new CrossBorderHomeItem();
-                    item.itemType = Constant.ITEM_TYPE_NORMAL;
-                    crossBorderHomeItemList.add(item);
-                }
-
-                 */
-
                 try {
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+
+                        adapter.loadMoreFail();
                         return;
+                    }
+
+                    hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                    SLog.info("hasMore[%s]", hasMore);
+                    if (!hasMore) {
+                        adapter.loadMoreEnd();
+                        adapter.setEnableLoadMore(false);
                     }
 
                     int index = 0;
@@ -191,12 +206,31 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                         ++index;
                     }
 
+                    if (!hasMore) {
+                        CrossBorderHomeItem footer = new CrossBorderHomeItem();
+                        footer.itemType = Constant.ITEM_TYPE_FOOTER;
+                        crossBorderHomeItemList.add(footer);
+                    }
+
+                    adapter.loadMoreComplete();
                     adapter.setNewData(crossBorderHomeItemList);
+                    currPage++;
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        SLog.info("onLoadMoreRequested");
+
+        if (!hasMore) {
+            adapter.setEnableLoadMore(false);
+            return;
+        }
+        loadData(currPage + 1);
     }
 
     @Override

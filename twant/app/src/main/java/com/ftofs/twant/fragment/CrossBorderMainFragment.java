@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +23,7 @@ import com.ftofs.twant.adapter.CrossBorderCategoryListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.BargainItem;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
@@ -32,6 +35,7 @@ import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 
@@ -60,13 +64,16 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
+    LinearLayout llAppBar;
+    View vwTopBg;
+    CrossBorderDrawView vwBottomBg;
+
     public static CrossBorderMainFragment newInstance() {
         CrossBorderMainFragment fragment = new CrossBorderMainFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
-
 
 
     @Nullable
@@ -80,6 +87,10 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        llAppBar = view.findViewById(R.id.ll_app_bar);
+        vwTopBg = view.findViewById(R.id.vw_top_bg);
+        vwBottomBg = view.findViewById(R.id.vw_bottom_bg);
 
         rvCategoryList = view.findViewById(R.id.rv_category_list);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
@@ -100,6 +111,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 categoryListAdapter.notifyItemChanged(position);
 
                 viewPager.setCurrentItem(position);
+
+                changeBackgroundColor(Color.parseColor(item.backgroundColor));
             }
         });
         rvCategoryList.setAdapter(categoryListAdapter);
@@ -114,7 +127,10 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
             @Override
             public void onPageSelected(int position) {
-                SLog.info( "position[%d]" ,position);
+                CrossBorderCategoryItem item = categoryList.get(position);
+                SLog.info("position[%d], item[%s]", position, item);
+
+                changeBackgroundColor(Color.parseColor(item.backgroundColor));
 
                 int prevSelectedIndex = categoryListAdapter.getSelectedIndex();
                 categoryListAdapter.setSelectedIndex(position);
@@ -130,6 +146,9 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
         Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_search, this);
+
+        changeBackgroundColor(_mActivity.getColor(R.color.tw_cross_border_home_page_bg_color));
 
         loadData();
     }
@@ -268,13 +287,23 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         });
     }
 
+    private void changeBackgroundColor(int color) {
+        llAppBar.setBackgroundColor(color);
+        vwTopBg.setBackgroundColor(color);
+        vwBottomBg.setColor(color);
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_test) {
             // initViewPager();
+            changeBackgroundColor(Color.RED);
         } else if (id == R.id.btn_back) {
             hideSoftInputPop();
+        } else if (id == R.id.btn_search) {
+            Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                    EasyJSONObject.generate("keyword", "").toString()));
         }
     }
 
