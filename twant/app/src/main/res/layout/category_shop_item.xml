@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
+
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/img_cover"
             android:layout_width="0dp"
@@ -24,6 +25,39 @@
             />
 
 
+        <LinearLayout
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/dp_15"
+            android:background="@drawable/left_f3_circle"
+            android:paddingStart="4dp"
+            android:id="@+id/tv_category_name_english"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_shop_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#666666"
+
+                android:textSize="11sp"
+                android:text="10閒"
+                android:singleLine="true"
+                android:layout_marginEnd="@dimen/dp_4"
+                />
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_commodity_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/tw_dark_grey"
+                android:textSize="10sp"
+                />
+        </LinearLayout>
         <com.ftofs.twant.widget.StoreDesktop
             android:layout_width="match_parent"
             android:layout_marginTop="-6dp"
@@ -40,10 +74,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:paddingLeft="13dp"
+        android:gravity="center"
         android:paddingBottom="8dp"
         android:paddingTop="1dp"
-        android:background="@drawable/new_arrivals_pane_bg">
+        android:background="@drawable/new_arrivals_pane_bg"
+        >
         <TextView
             android:id="@+id/tv_shop_parent_name"
             android:layout_width="wrap_content"
@@ -57,33 +92,5 @@
             android:textColor="#525556"
             android:layout_marginEnd="@dimen/margin8"
             />
-        <LinearLayout
-            android:background="@drawable/left_f3_circle"
-            android:paddingStart="@dimen/margin8"
-            android:id="@+id/tv_category_name_english"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_shop_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#666666"
-                android:textSize="11sp"
-                android:text="10"
-                android:singleLine="true"
-                />
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/tv_commodity_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:textColor="@color/tw_dark_grey"
-                android:textSize="10sp"
-                />
-        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
