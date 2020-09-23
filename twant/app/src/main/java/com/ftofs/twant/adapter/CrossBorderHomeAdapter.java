@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
+import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -27,6 +29,7 @@ import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.gzp.lib_common.utils.SLog;
@@ -59,6 +62,8 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             helper.addOnClickListener(R.id.btn_goto_shopping_zone,
                     R.id.btn_view_more_bargain, R.id.btn_view_more_group, R.id.btn_view_more_best_store);
 
+
+            // Banner圖列表
             RecyclerView rvBannerList = helper.getView(R.id.rv_banner_list);
             rvBannerList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             CrossBorderBannerAdapter bannerAdapter =
@@ -72,18 +77,35 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             });
             rvBannerList.setAdapter(bannerAdapter);
 
-            GridLayout glNavContainer = helper.getView(R.id.gl_nav_container);
-            glNavContainer.removeAllViews();
-            for (CrossBorderNavItem navItem : item.navItemList) {
-                View navItemView = LayoutInflater.from(context).inflate(R.layout.cross_border_nav_item, glNavContainer, false);
-                ImageView imgIcon = navItemView.findViewById(R.id.img_icon);
-                SLog.info("img_icon[%s]", navItem.icon);
-                Glide.with(context).load(StringUtil.normalizeImageUrl(navItem.icon)).centerCrop().into(imgIcon);
-                ((TextView) navItemView.findViewById(R.id.tv_name)).setText(navItem.navName);
 
-                glNavContainer.addView(navItemView);
-            }
+            // 導航區
+            RecyclerView rvNavList = helper.getView(R.id.rv_nav_list);
+            rvNavList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            CrossBorderNavAdapter navAdapter = new CrossBorderNavAdapter(context, R.layout.cross_border_nav_pane, item.navItemCount, item.navPaneList);
+            navAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+                @Override
+                public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                    int id = view.getId();
+                    CrossBorderNavPane navPane = item.navPaneList.get(position);
 
+                    int[] itemIdArr = new int[] {R.id.nav_1, R.id.nav_2, R.id.nav_3, R.id.nav_4, R.id.nav_5,
+                            R.id.nav_6, R.id.nav_7, R.id.nav_8, R.id.nav_9, R.id.nav_10, };
+
+                    for (int i = 0; i < itemIdArr.length; i++) {
+                        int itemId = itemIdArr[i];
+                        if (id == itemId) {
+                            CrossBorderNavItem navItem = navPane.crossBorderNavItemList.get(0);
+                            SLog.info("navItem[%s]", navItem);
+                            Util.handleClickLink(navItem.linkTypeApp, navItem.linkValueApp);
+                            break;
+                        }
+                    }
+                }
+            });
+            rvNavList.setAdapter(navAdapter);
+
+
+            // 購物專場
             RecyclerView rvShoppingZoneList = helper.getView(R.id.rv_shopping_zone_list);
             rvShoppingZoneList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             CrossBorderShoppingZoneAdapter shoppingZoneAdapter =

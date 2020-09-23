@@ -26,6 +26,7 @@ import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderCategoryItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
+import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
@@ -89,6 +90,15 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 CrossBorderCategoryItem item = categoryList.get(position);
                 SLog.info("position[%d], item[%s]", position, item);
 
+                int prevSelectedIndex = categoryListAdapter.getSelectedIndex();
+                if (position == prevSelectedIndex) {
+                    return;
+                }
+
+                categoryListAdapter.setSelectedIndex(position);
+                categoryListAdapter.notifyItemChanged(prevSelectedIndex);
+                categoryListAdapter.notifyItemChanged(position);
+
                 viewPager.setCurrentItem(position);
             }
         });
@@ -96,6 +106,27 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
 
         viewPager = view.findViewById(R.id.vp_category_list);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                SLog.info( "position[%d]" ,position);
+
+                int prevSelectedIndex = categoryListAdapter.getSelectedIndex();
+                categoryListAdapter.setSelectedIndex(position);
+                categoryListAdapter.notifyItemChanged(prevSelectedIndex);
+                categoryListAdapter.notifyItemChanged(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -114,12 +145,20 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             }
 
             // 獲取導航區數據
-            List<CrossBorderNavItem> navItemList = new ArrayList<>();
+            CrossBorderNavPane navPane = null;
+            List<CrossBorderNavPane> navPaneList = new ArrayList<>();
             EasyJSONArray navArray = responseObj.getSafeArray("datas.navList");
+            int navItemCount = 0;
             for (Object object : navArray) {
+                if (navItemCount % 10 == 0) {
+                    navPane = new CrossBorderNavPane();
+                    navPaneList.add(navPane);
+                }
+
                 CrossBorderNavItem navItem = (CrossBorderNavItem) EasyJSONBase.jsonDecode(CrossBorderNavItem.class, object.toString());
-                SLog.info("navItem[%s]", navItem);
-                navItemList.add(navItem);
+                navPane.crossBorderNavItemList.add(navItem);
+
+                navItemCount++;
             }
 
             // 獲取購物專場數據
@@ -177,7 +216,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             }
 
             titleList.add("首頁");
-            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemList, shoppingZoneList, bargainGoodsList, groupGoodsList, storeList));
+            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemCount, navPaneList, shoppingZoneList, bargainGoodsList, groupGoodsList, storeList));
             categoryList.add(new CrossBorderCategoryItem(0, "首頁", "#019AA7"));
 
             EasyJSONArray catList = responseObj.getSafeArray("datas.catList");

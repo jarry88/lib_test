@@ -9,7 +9,8 @@ public class CrossBorderHomeItem implements MultiItemEntity {
 
     // HEADER用到以下數據
     public List<CrossBorderBannerItem> bannerItemList;
-    public List<CrossBorderNavItem> navItemList;
+    public int navItemCount;
+    public List<CrossBorderNavPane> navPaneList;
     public List<CrossBorderShoppingZoneItem> shoppingZoneList;
     public List<CrossBorderActivityGoods> bargainGoodsList;
     public List<CrossBorderActivityGoods> groupGoodsList;

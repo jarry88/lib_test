@@ -498,6 +498,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                 } else if (position == 9) { // 測試1
                                     Util.startFragment(TestFragment.newInstance());
                                 } else if (position == 10) { // 測試2
+                                    // EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WEIXIN_LOGIN, null);
+
                                     Util.startFragment(CrossBorderMainFragment.newInstance());
                                 }else if (position == 11) { // 開發寫死的數值通道開關
                                     Config.USE_DEVELOPER_TEST_DATA = !Config.USE_DEVELOPER_TEST_DATA;
