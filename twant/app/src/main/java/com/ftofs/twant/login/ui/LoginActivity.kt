@@ -52,7 +52,7 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
 
             EventBus.getDefault().register(this)
 
-            switchTranslucentMode(this, false)
+//            switchTranslucentMode(this, false)
 
 //            mUIType = intent.getSerializableExtra(THEME_KEY) as Constant.UI_TYPE
 //

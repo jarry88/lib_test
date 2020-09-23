@@ -1,5 +1,7 @@
 package com.ftofs.twant.constant;
 
+import org.jetbrains.annotations.Nullable;
+
 public enum EBMessageType {
     /**
      * 添加購物袋完成的消息
@@ -128,7 +130,9 @@ public enum EBMessageType {
     /**
      * (關閉了APP升級彈窗後)可以顯示其它類型的彈窗
      */
-    MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP, LOADING_POPUP_DISMISS
+    MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP, LOADING_POPUP_DISMISS,SHOW_DEBUG_ICON,
+    SHOW_LOADING
+    ;
 }
 
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.model.AuthCodeInfo
 import com.ftofs.lib_net.model.CommonInfo
+import com.ftofs.lib_net.model.LoginInfo
 import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.Util
@@ -14,6 +15,7 @@ class MessageLoginViewModel(application: Application):BaseViewModel(application)
     var getMessageSuccess=false
     private val repository by lazy { object :BaseRepository(){} }
     val msgError by lazy { MutableLiveData(String()) }
+    val successLoginInfo by lazy { MutableLiveData<LoginInfo>() }
     val commonInfo by lazy { MutableLiveData<CommonInfo>() }
     fun getMessageLogin(mobile:String, smsAuthCode:String, recommendNumber:String?=null) {
         val queryParams = mapOf(
@@ -33,6 +35,7 @@ class MessageLoginViewModel(application: Application):BaseViewModel(application)
                 )) }},
                 {
                     //success
+                    successLoginInfo.postValue(it)
                     stateLiveData.postSuccess()
                 },
                 {  msgError.postValue(it.error)

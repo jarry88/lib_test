@@ -26,6 +26,7 @@ import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.lxj.xpopup.core.BasePopupView;
 import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,7 +53,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     public static final int CART_FRAGMENT = 3;
     /** 專頁 */
     public static final int MY_FRAGMENT = 4;
-
+    BasePopupView mLoading;
     TextView tvMessageItemCount; // 顯示未讀消息條數的紅點
     TextView tvCartItemCount;    // 顯示購物袋中產品數的紅點
 
@@ -238,6 +239,15 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
                     start(PaySuccessFragment.newInstance(payId));
                 }
             }, 250);
+        } else if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS) {
+            if (mLoading != null) {
+                mLoading.dismiss();
+            }
+        }else if(message.messageType==EBMessageType.SHOW_LOADING){
+            if (mLoading == null) {
+                mLoading = Util.createLoadingPopup(getContext());
+            }
+            mLoading.show();
         }
     }
 
