@@ -99,7 +99,7 @@ public class SharedPreferenceUtil {
                 Hawk.put(SPField.FIELD_FB_BINDING_STATUS, Constant.TRUE_INT);
             }
             Hawk.put(SPField.FIELD_MEMBER_TOKEN, loginInfo.getMemberToken());
-            SLog.info("FIELD_USER_ID[%s]", loginInfo.getMemberToken());
+            SLog.info("FIELD_USER_Token[%s]", loginInfo.getMemberToken());
             Hawk.put(SPField.FIELD_USER_ID, loginInfo.getMemberId());
             SLog.info("FIELD_USER_ID[%d]", loginInfo.getMemberId());
             String token = loginInfo.getToken();

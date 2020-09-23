@@ -145,7 +145,7 @@ public class StoreWantedPopup extends BottomPopupView implements View.OnClickLis
         } else if (id == R.id.btn_follow) {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
-                Util.showLoginFragment();
+                Util.showLoginFragment(context);
                 dismiss();
                 return;
             }

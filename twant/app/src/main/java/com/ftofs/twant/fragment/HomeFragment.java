@@ -76,7 +76,8 @@ import static com.ftofs.twant.util.Util.dip2px;
 public class HomeFragment extends MainBaseFragment implements View.OnClickListener {
     RecyclerView rvList;
     TangramEngine tangramEngine;
-    HwLoadingPopup mLoading;
+
+    BasePopupView loadPopup;
 
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
     LinearLayout llFloatButtonContainer;
@@ -160,14 +161,20 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 
         loadNewArrivals();
     }
+    private void showLoadingPopup() {
+        if (loadPopup == null) {
+            loadPopup = Util.createLoadingPopup(_mActivity);
+        }
+        loadPopup.show();
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP) {
             showPopupAd();
         }
-        if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS&&mLoading!=null) {
-            mLoading.dismiss();
+        if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS&&loadPopup!=null) {
+            loadPopup.dismiss();
         }
     }
 
@@ -398,6 +405,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
+            showLoadingPopup();
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
 //            final BasePopupView load=Util.createLoadingPopup(requireContext()).show();

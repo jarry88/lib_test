@@ -7,16 +7,23 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
+import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.constant.LoginType
 import com.ftofs.twant.databinding.LayoutHistoryLoginBinding
+import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.fragment.H5GameFragment
 import com.ftofs.twant.login.OneStepLogin
+import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.model.User
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
+import com.lxj.xpopup.core.BasePopupView
 import com.wzq.mvvmsmart.event.StateLiveData
 import com.wzq.mvvmsmart.utils.KLog
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<LayoutHistoryLoginBinding, HistoryLoginViewModel>(){
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
@@ -26,12 +33,51 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     override fun initVariableId(): Int {
         return BR.viewModel
     }
+    var mLoadingPopup: BasePopupView?=null
+    fun showLoading(){
+        if (mLoadingPopup == null) {
+            mLoadingPopup= Util.createLoadingPopup(requireContext())
+        }
+        mLoadingPopup?.show()
+
+    }
     private val aViewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEBMessage(message: EBMessage) {
+        if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS ) {
+            SLog.info("接受到關閉的消息")
+            mLoadingPopup?.dismiss()
+        }
+    }
+
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+        mLoadingPopup?.let {
+            SLog.info("loading還活著")
+        }?: SLog.info("loading已經消失")
+        mLoadingPopup?.dismiss()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
     override fun initData() {
         binding.vo=historyUser
+        EventBus.getDefault().register(this)
+        EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
+
         SLog.info(historyUser.toString())
-        binding.llOtherLogin.setOnClickListener { OneStepLogin.start(requireContext()) }
+        binding.title.setLeftLayoutClickListener{onBackPressedSupport()}
+        binding.llOtherLogin.setOnClickListener {
+//
+//            (activity as LoginActivity).onBackPressedSupport()
+//            com.ftofs.twant.login.UserManager.start(requireContext())
+            showLoading()
+            Util.createLoadingPopup(requireContext()).show()
+            OneStepLogin.start(requireContext())
+        }
         binding.btnOneStep.setOnClickListener {loginAction() }
         //原始跳轉方法 僅供參考，廢棄代碼
 //        binding.tvOneStep.setOnClickListener { parentFragmentManager.beginTransaction().addToBackStack("OneStepLoginFragment").replace(R.id.container,OneStepLoginFragment()).commit() }
@@ -46,6 +92,12 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
         viewModel.login(historyUser)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        EventBus.getDefault().unregister(this)
+
+    }
+
     override fun onBackPressedSupport(): Boolean {
         if (parentFragmentManager.backStackEntryCount <= 1) {
 //            call.onCall()
@@ -57,48 +109,53 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     }
 
     override fun initViewObservable() {
+        viewModel.apply {
+            successLoginInfo.observe(this@HistoryLoginFragment){
+                ToastUtil.success(context, "登入成功")
+                viewModel.loginLiveData.value?.let {a->
+                    SLog.info("保存用戶信息")
+                    com.ftofs.twant.login.UserManager.saveUser(a)
+                }
+
+                com.ftofs.twant.util.User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE, it)
+                hideSoftInput()
+
+                SLog.info("登錄成功")
+                Util.getMemberToken(_mActivity)
+                (activity as LoginActivity).onBackPressedSupport()
+            }
+            msgError.observe(this@HistoryLoginFragment){if(it.isNotEmpty()) {ToastUtil.error(context, it)
+                com.ftofs.twant.login.UserManager.removeUser()
+                (activity as LoginActivity).onBackPressedSupport()
+                OneStepLogin.start(requireContext())
+//                (activity as LoginActivity).ch
+            }}
+        }
         aViewModel.apply {
 
             successLoginInfo.observe(this@HistoryLoginFragment){
                 ToastUtil.success(context, "登入成功")
                 com.ftofs.twant.login.UserManager.saveUser(aViewModel.loginLiveData.value)
-                com.ftofs.twant.util.User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE,it)
+                com.ftofs.twant.util.User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE, it)
                 hideSoftInput()
 
                 SLog.info("登錄成功")
                 com.ftofs.twant.util.Util.getMemberToken(_mActivity)
                 (activity as LoginActivity).onBackPressedSupport()
             }
-            msgError.observe(this@HistoryLoginFragment){if(it.isNotEmpty()) ToastUtil.error(context,it)}
+            msgError.observe(this@HistoryLoginFragment){if(it.isNotEmpty()) ToastUtil.error(context, it)}
 
         //登陆成功才会保存账号信息
 
     }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
-            when(it){
-                StateLiveData.StateEnum.Loading -> {
-//                    loadingUtil?.showLoading("加载中..")
-
-
-                    KLog.e("请求数据中--显示loading")
-                }
+            when (it) {
                 StateLiveData.StateEnum.Success -> {
-                    onBackPressedSupport()
+                    mLoadingPopup?.dismiss()
                     KLog.e("数据获取成功--关闭loading")
                 }
-                StateLiveData.StateEnum.Idle -> {
-
-
-                    KLog.e("空闲状态--关闭loading")
-//                    loadingUtil?.hideLoading()
-                }
-                StateLiveData.StateEnum.NoData -> {
-
-
-                    KLog.e("空闲状态--关闭loading")
-                }
                 else -> {
-
+                    mLoadingPopup?.dismiss()
                     KLog.e("其他状态--关闭loading")
 //                    loadingUtil?.hideLoading()
                 }

@@ -62,7 +62,7 @@ class PhoneView @JvmOverloads constructor(
     private var llErrorContainer:LinearLayout?=null
     private var llZoneSelect:LinearLayout?=null
     var isRight = false //默认为异常
-    var msg = "未輸入號碼"
+    var msg = "手機號碼錯誤"
 
 
     init {

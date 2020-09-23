@@ -128,16 +128,16 @@ class PasswordLoginFragment(val mobile: String,var selectedMobileZoneIndex:Int?)
                 com.ftofs.twant.util.ToastUtil.success(_mActivity, "Facebook登入成功")
             }
         })
-        aViewModel.WeChatInfo.observe(this){
+        aViewModel.weChatInfo.observe(this){
             if (it.isBind == Constant.FALSE_INT) {
                 SLog.info("進入綁定頁")
 
-                start(BindMobileFragment.newInstance(BindMobileFragment.BIND_TYPE_WEIXIN, aViewModel.WeChatInfo.value?.accessToken, aViewModel.WeChatInfo.value?.accessToken))}
+                start(BindMobileFragment.newInstance(BindMobileFragment.BIND_TYPE_WEIXIN, aViewModel.weChatInfo.value?.accessToken, aViewModel.weChatInfo.value?.accessToken))}
             else// 未綁定
             {
                 SLog.info("未進入綁定頁")
-                User.onLoginSuccess(it.memberId
-                        ?: 0, LoginType.WEIXIN, EasyJSONObject.generate("datas", it))
+                User.onNewLoginSuccess(it.memberId
+                        ?: 0, LoginType.WEIXIN, it)
                 com.ftofs.twant.util.ToastUtil.success(_mActivity, "微信登入成功")
                 (activity as LoginActivity).onBackPressedSupport()
             }
@@ -156,10 +156,9 @@ class PasswordLoginFragment(val mobile: String,var selectedMobileZoneIndex:Int?)
                 ToastUtil.success(context, "登入成功")
                 com.ftofs.twant.login.UserManager.saveUser(aViewModel.loginLiveData.value)
                 User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE,it)
-                hideSoftInput()
-
                 SLog.info("登錄成功")
                 com.ftofs.twant.util.Util.getMemberToken(_mActivity)
+                hideSoftInputPop()
                 (activity as LoginActivity).onBackPressedSupport()
             }
             mobileZoneList.observe(this@PasswordLoginFragment, {

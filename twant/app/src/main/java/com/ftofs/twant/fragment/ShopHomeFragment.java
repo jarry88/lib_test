@@ -1188,7 +1188,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private void switchThumbState() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 
@@ -1232,7 +1232,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private void switchFavoriteState() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 

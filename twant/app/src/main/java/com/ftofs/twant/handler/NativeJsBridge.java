@@ -129,7 +129,7 @@ public class NativeJsBridge {
                 String token = User.getToken();
                 String memberToken = User.getUserInfo(SPField.FIELD_MEMBER_TOKEN, "");
                 if (StringUtil.isEmpty(token)) {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(context);
                     return;
                 }
 

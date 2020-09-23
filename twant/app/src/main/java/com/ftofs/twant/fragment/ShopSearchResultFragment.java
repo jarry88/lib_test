@@ -159,7 +159,7 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
                     if (userId > 0) {
                         showSpecSelectPopup(commonId);
                     } else {
-                        Util.showLoginFragment();
+                        Util.showLoginFragment(requireContext());
                     }
                     return;
                 }

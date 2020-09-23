@@ -146,7 +146,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                     }
                     if (User.getUserId() <= 0) {
-                        Util.showLoginFragment();
+                        Util.showLoginFragment(mContext);
                         return;
                     }
                     new XPopup.Builder(mContext)

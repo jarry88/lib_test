@@ -16,10 +16,12 @@ import com.alibaba.fastjson.JSON
 import com.facebook.login.Login
 import com.ftofs.lib_net.BaseRepository
 import com.ftofs.twant.constant.EBMessageType
+import com.ftofs.twant.constant.LoginType
 import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.login.ui.LoginActivity
 import com.ftofs.twant.login.ui.MessageFragment
 import com.ftofs.twant.login.utils.ExecutorManager
+import com.ftofs.twant.util.User
 import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
@@ -49,10 +51,12 @@ object OneStepLogin:CoroutineScope{
                         getResultWithToken(aliYunToken)
                         Thread {
                             Looper.prepare()
-                            Toast.makeText(mContext, "msg", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(mContext, "登入成功", Toast.LENGTH_SHORT).show()
                             Looper.loop()
                         }.start()
-                        ToastUtil.success(mContext, "登入成功")
+                        User.onNewLoginSuccess(re.datas.memberId!!, LoginType.MOBILE,re.datas)
+
+                        SLog.info("登錄成功")
                     }
                     else -> {
                         goLoginActivity()

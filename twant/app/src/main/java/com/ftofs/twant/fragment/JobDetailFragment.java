@@ -311,7 +311,7 @@ public class JobDetailFragment extends BaseFragment implements View.OnClickListe
     private void applyJob() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 
@@ -349,7 +349,7 @@ public class JobDetailFragment extends BaseFragment implements View.OnClickListe
     private void followJob() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 

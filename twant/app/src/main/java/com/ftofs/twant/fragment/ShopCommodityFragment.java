@@ -387,7 +387,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     if (userId > 0) {
                         showSpecSelectPopup(commonId);
                     } else {
-                        Util.showLoginFragment();
+                        Util.showLoginFragment(requireContext());
                     }
                     return;
                 }
@@ -432,7 +432,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     if (userId > 0) {
                         showSpecSelectPopup(commonId);
                     } else {
-                        Util.showLoginFragment();
+                        Util.showLoginFragment(requireContext());
                     }
                 }
             }

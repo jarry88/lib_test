@@ -619,7 +619,7 @@ public class MyFragment extends MainBaseFragment implements View.OnClickListener
 
         int userId = User.getUserId();
         if (userId < 1) { // 用戶未登錄，顯示登錄頁面
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 
@@ -661,7 +661,7 @@ public class MyFragment extends MainBaseFragment implements View.OnClickListener
         SLog.info("switchInteractiveState[%d]", position);
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 

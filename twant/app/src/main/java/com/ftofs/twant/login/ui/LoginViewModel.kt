@@ -7,6 +7,7 @@ import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.model.LoginInfo
 import com.ftofs.lib_net.model.MobileZone
 import com.ftofs.twant.constant.Constant
+import com.ftofs.twant.tangram.SloganView
 import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.model.User
 import com.gzp.lib_common.utils.BaseContext
@@ -17,7 +18,7 @@ class LoginViewModel(application: Application = BaseContext.instance.getContext(
     private val repository by lazy { object :BaseRepository(){} }
     val mobileZoneList by lazy {MutableLiveData<List<MobileZone>>() }
     val faceBookInfo by lazy { MutableLiveData<LoginInfo>() }
-    val WeChatInfo by lazy { MutableLiveData<LoginInfo>() }
+    val weChatInfo by lazy { MutableLiveData<LoginInfo>() }
     val logUtilInfo = MutableLiveData(String())
     val msgError = MutableLiveData(String())
     val successLoginInfo by lazy { MutableLiveData<LoginInfo>() }
@@ -68,7 +69,8 @@ class LoginViewModel(application: Application = BaseContext.instance.getContext(
         val params = mapOf("code" to code,Constant.CLIENT_TYPE_PAIR)
         launch(stateLiveData,
                 {repository.run { simpleGet(api.getWXLoginStepOne(params)) }},
-                {WeChatInfo.postValue(it)},
+                {   SLog.info("獲取微信登錄")
+                    weChatInfo.value=it},
                 final = {}
         )
     }

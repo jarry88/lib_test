@@ -717,8 +717,9 @@ public class MessageFragment extends MainBaseFragment implements View.OnClickLis
 
         int userId = User.getUserId();
         if (userId < 1) { // 用戶未登錄，顯示登錄頁面
-            UserManager.INSTANCE.start(getContext());
-//            Util.showLoginFragment();
+            SLog.info("用戶未登錄");
+//            UserManager.INSTANCE.start(getContext());
+            Util.showLoginFragment(requireContext());
             return;
         }
         ((MainActivity) getActivity()).setMessageFragmentsActivity(true);

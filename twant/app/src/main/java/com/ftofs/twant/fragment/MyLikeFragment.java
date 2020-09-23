@@ -177,7 +177,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                     String url = Util.makeSpringH5Url();
                     SLog.info("sprint_url[%s]", url);
                     if (url == null) {
-                        Util.showLoginFragment();
+                        Util.showLoginFragment(requireContext());
                         return;
                     }
                     start(H5GameFragment.newInstance(url, true));

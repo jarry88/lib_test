@@ -836,7 +836,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_comment:
                 if (userId == 0) {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                     return;
                 }
                 Util.startFragmentForResult(AddCommentFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS), RequestCode.ADD_COMMENT.ordinal());
@@ -861,7 +861,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 if (userId > 0) {
                     showSpecSelectPopup(Constant.ACTION_ADD_TO_CART);
                 } else {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                 }
                 break;
             case R.id.btn_bargain_cart:
@@ -869,7 +869,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 if (userId > 0) {
                     Util.startFragment(CartFragment.newInstance(true));
                 } else {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                 }
                 break;
             case R.id.btn_buy:
@@ -942,7 +942,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
                     showSpecSelectPopup(Constant.ACTION_BUY);
                 } else {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                 }
                 break;
             case R.id.btn_join_group:
@@ -962,7 +962,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 if (userId > 0) {
                     startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
                 } else {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                 }
                 break;
             case R.id.btn_bottom_bar_follow:
@@ -1036,7 +1036,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_quick_join_group_1:
             case R.id.btn_quick_join_group_2:
                 if (!User.isLogin()) {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                     return;
                 }
                 SLog.info("goId1[%d], goId2[%d]", goId1, goId2);
@@ -1106,7 +1106,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         }
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 
@@ -1149,7 +1149,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private void switchThumbState() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 
@@ -1342,7 +1342,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         SLog.info("砍一刀");
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
         EasyJSONObject params = EasyJSONObject.generate(

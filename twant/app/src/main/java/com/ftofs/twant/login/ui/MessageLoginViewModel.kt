@@ -23,7 +23,7 @@ class MessageLoginViewModel(application: Application):BaseViewModel(application)
         ).apply {
             recommendNumber?.let {
                 plus("recommendNumber" to recommendNumber)
-                plus("clientUuid" to Util.getUUID())
+                plus("clientUuid" to com.ftofs.twant.util.Util.getUUID())
             }
         }
         SLog.info("messageLogin$queryParams")

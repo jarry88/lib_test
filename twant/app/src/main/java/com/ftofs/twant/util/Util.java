@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -44,6 +45,7 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.YoutubeActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.appserver.AppServiceImpl;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -72,6 +74,7 @@ import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.login.UserManager;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
@@ -264,8 +267,15 @@ public class Util {
         return (int) ((pxValue / scale) + 0.5f);
     }
 
-    public static void showLoginFragment() {
-        Util.startFragment(LoginFragment.newInstance());
+    public static void showLoginFragment(Context context) {
+        UserManager.INSTANCE.start(context);
+//        Util.startFragment(LoginFragment.newInstance());
+    }
+
+    public static void showLoginFragmentWithoutContext(ISupportFragment fragment) {
+        MainFragment.getInstance().goLogin(fragment);
+
+//        Util.startFragment(LoginFragment.newInstance());
     }
 
     public static String formatSpecString(List<SpecPair> specPairList) {
@@ -502,15 +512,15 @@ public class Util {
 //        SLog.bt();
         SLog.info("fragmentClassName[%s]", fragmentClassName);
 
+        MainFragment mainFragment = MainFragment.getInstance();
         if (needLoginFragmentName.contains(fragmentClassName)) {
             // 需要登錄才能顯示的Fragment，判斷用戶是否已經登錄，如果未登錄，則顯示登錄對話框
             if (!User.isLogin()) {
-                showLoginFragment();
+                mainFragment.goLogin(fragment);
                 return;
             }
         }
 
-        MainFragment mainFragment = MainFragment.getInstance();
         if (mainFragment == null) {
             ToastUtil.error(TwantApplication.Companion.get(), "MainFragment為空");
             return;

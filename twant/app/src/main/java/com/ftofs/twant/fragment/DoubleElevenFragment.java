@@ -71,7 +71,7 @@ public class DoubleElevenFragment extends BaseFragment implements View.OnClickLi
         } else if (id == R.id.btn_play_game) {
             String url = Util.makeDoubleElevenH5Url(1);
             if (url == null) {
-                Util.showLoginFragment();
+                Util.showLoginFragment(requireContext());
                 return;
             }
             start(H5GameFragment.newInstance(url, true));
@@ -79,7 +79,7 @@ public class DoubleElevenFragment extends BaseFragment implements View.OnClickLi
             String url = Util.makeDoubleElevenH5Url(2);
             // url = "https://www.snailpad.cn/302.php";
             if (url == null) {
-                Util.showLoginFragment();
+                Util.showLoginFragment(requireContext());
                 return;
             }
             start(H5GameFragment.newInstance(url, true));

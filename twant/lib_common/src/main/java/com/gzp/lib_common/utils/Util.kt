@@ -12,7 +12,6 @@ import com.gzp.lib_common.BuildConfig
 import com.gzp.lib_common.constant.SPField
 import com.orhanobut.hawk.Hawk
 import java.io.File
-import java.util.*
 
 object Util {
     fun inDev(): Boolean {
@@ -61,42 +60,6 @@ object Util {
         }
     }
 
-    /**
-     * 獲取UUID
-     * 參考：
-     * Android Q 适配指南 让你少走一堆弯路  #设备唯一标识符
-     * https://juejin.im/post/5cad5b7ce51d456e5a0728b0#heading-8
-     * @return
-     */
-    fun getUUID(): String? {
-        // 優先從SharedPreferences中取
-        var uuid = Hawk.get<String>(SPField.FIELD_DEVICE_UUID)
-        SLog.info("device_uuid[%s]", uuid)
-        if (!uuid.isNullOrEmpty()) {
-            return uuid
-        }
-
-        // 如果SharedPreferences中沒有，才生成
-        var serial: String? = null
-        val m_szDevIDShort = "35" + Build.BOARD.length % 10 + Build.BRAND.length % 10 + Build.CPU_ABI.length % 10 + Build.DEVICE.length % 10 + Build.DISPLAY.length % 10 + Build.HOST.length % 10 + Build.ID.length % 10 + Build.MANUFACTURER.length % 10 + Build.MODEL.length % 10 + Build.PRODUCT.length % 10 + Build.TAGS.length % 10 + Build.TYPE.length % 10 + Build.USER.length % 10 //13 位
-        try {
-            serial = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                android.os.Build.getSerial()
-            } else {
-                Build.getSerial()
-            }
-            //API>=9 使用serial号
-            return UUID(m_szDevIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
-        } catch (exception: Exception) {
-            //serial需要一个初始化
-            serial = "serial" // 随便一个初始化
-        }
-        //使用硬件信息拼凑出来的15位号码
-        uuid = UUID(m_szDevIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
-        SLog.info("device_uuid[%s]", uuid)
-        Hawk.put(SPField.FIELD_DEVICE_UUID, uuid)
-        return uuid
-    }
     fun makeParentDirectory(absolutePath: String?): Boolean {
         return makeParentDirectory(File(absolutePath))
     }

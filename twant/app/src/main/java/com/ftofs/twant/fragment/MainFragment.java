@@ -16,7 +16,12 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.login.service.LoginServiceImpl;
+import com.github.richardwrq.krouter.annotation.Inject;
+import com.github.richardwrq.krouter.api.core.KRouter;
 import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.service.ConstantsPath;
+import com.gzp.lib_common.service.login.LoginService;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.User;
@@ -29,6 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
 import cn.snailpad.easyjson.EasyJSONObject;
+import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -67,6 +73,8 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     private static MainFragment instance;
 
 
+    @Inject(name = ConstantsPath.LOGIN_SERVICE_PATH)
+    LoginServiceImpl loginService;
     public static MainFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -94,7 +102,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         EventBus.getDefault().register(this);
-
+        KRouter.INSTANCE.inject(this);
         tvMessageItemCount = view.findViewById(R.id.tv_message_item_count);
         tvCartItemCount = view.findViewById(R.id.tv_cart_item_count);
 
@@ -171,10 +179,10 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
             if (index == MESSAGE_FRAGMENT || index == CART_FRAGMENT || index == MY_FRAGMENT) {
                 // 如果是查看【消息】、【購物袋】或【我的】，先檢查是否已經登錄
-                if (!UserManager.INSTANCE.isLogin()) {
-//                    Util.showLoginFragment();
+                if (User.getUserId()<1) {
+                    Util.showLoginFragment(requireContext());
                     SLog.info("前往啓動頁");
-                    UserManager.INSTANCE.start(getContext());
+//                    UserManager.INSTANCE.start(getContext());
                     return;
                 }
             }
@@ -320,12 +328,16 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
                 if (User.isLogin()) {
                     start(CouponFragment.newInstance());
                 } else {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                 }
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+
+    public void goLogin(ISupportFragment fragment) {
+        loginService.start(requireContext());
     }
 }
 

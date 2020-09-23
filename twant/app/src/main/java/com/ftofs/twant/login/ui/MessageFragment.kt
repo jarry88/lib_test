@@ -60,6 +60,8 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun initData() {
+        EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
+        binding.title.performClick()
         binding.title.apply {
             setLeftImageResource(if (firstPage) R.drawable.ic_baseline_close_24 else R.drawable.icon_back)
             setLeftLayoutClickListener{onBackPressedSupport()}
@@ -157,11 +159,12 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
                 (activity as LoginActivity).onBackPressedSupport()
             }
         })
-        aViewModel.WeChatInfo.observe(this){
+        aViewModel.weChatInfo.observe(this){
+            SLog.info("檢測到了wechatInfo")
             if (it.isBind == Constant.FALSE_INT) {
                 SLog.info("進入綁定頁")
 
-                start(BindMobileFragment.newInstance(BindMobileFragment.BIND_TYPE_WEIXIN, aViewModel.WeChatInfo.value?.accessToken, aViewModel.WeChatInfo.value?.accessToken))}
+                start(BindMobileFragment.newInstance(BindMobileFragment.BIND_TYPE_WEIXIN, aViewModel.weChatInfo.value?.accessToken, aViewModel.weChatInfo.value?.accessToken))}
             else// 未綁定
             {
                 SLog.info("未進入綁定頁")
@@ -170,6 +173,16 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
                 ToastUtil.success(_mActivity, "微信登入成功")
                 (activity as LoginActivity).onBackPressedSupport()
             }
+        }
+        aViewModel.successLoginInfo.observe(this){
+                com.gzp.lib_common.utils.ToastUtil.success(context, "登入成功")
+                com.ftofs.twant.login.UserManager.saveUser(aViewModel.loginLiveData.value)
+                User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE,it)
+                hideSoftInput()
+
+                SLog.info("登錄成功")
+                com.ftofs.twant.util.Util.getMemberToken(_mActivity)
+                (activity as LoginActivity).onBackPressedSupport()
         }
         aViewModel.mobileZoneList.observe(this, {
             binding.etPhoneView.apply {
@@ -185,8 +198,12 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
                 mLoading?.dismiss()
                 ToastUtil.success(context, "獲取驗證碼成功")
                 if(it.authCodeResendTime!=null&&countTime.toInt()!=it.authCodeResendTime)countTime=it.authCodeResendTime!!.toLong() }
+            if (it.isRegister == Constant.FALSE_INT) {
+                binding.llRecommend.visibility=View.VISIBLE
+            }
         }
-        viewModel.msgError.observe(this){               if(it.isNotEmpty())     ToastUtil.error(context,it) }
+        viewModel.msgError.observe(this){
+            if(it.isNotEmpty())     ToastUtil.error(context,it) }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
             when (it) {
                 StateLiveData.StateEnum.Success -> {

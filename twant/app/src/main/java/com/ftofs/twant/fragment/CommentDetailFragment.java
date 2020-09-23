@@ -324,7 +324,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 // 如果點擊輸入區域，將圖標切換為表情輸入圖標
                 if (!popLogined&&!User.isLogin()) {
                     popLogined = true;
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                 } else {
                     btnEmoji.setSelected(false);
                     btnEmoji.setImageResource(R.drawable.icon_emoji);

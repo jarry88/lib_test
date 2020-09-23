@@ -556,7 +556,7 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
             if (userId > 0) {
                 Util.startFragment(CartFragment.newInstance(true));
             } else {
-                Util.showLoginFragment();
+                Util.showLoginFragment(requireContext());
             }
 
         } else if (id == R.id.btn_goto_top) {

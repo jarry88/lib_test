@@ -136,7 +136,7 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
             String token = User.getToken();
 
             if (StringUtil.isEmpty(token)) {
-                Util.showLoginFragment();
+                Util.showLoginFragment(context);
                 dismiss();
                 return;
             }

@@ -504,7 +504,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
             if (userId > 0) {
                 Util.startFragment(CartFragment.newInstance(true));
             } else {
-                Util.showLoginFragment();
+                Util.showLoginFragment(requireContext());
             }
 
         } else if (id == R.id.btn_goto_top) {

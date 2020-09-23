@@ -644,7 +644,7 @@ public class CircleFragment extends MainBaseFragment implements View.OnClickList
         SLog.info("switchInteractiveState[%d]", position);
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 

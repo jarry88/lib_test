@@ -183,7 +183,7 @@ public class CartFragment extends MainBaseFragment implements View.OnClickListen
 
         int userId = User.getUserId();
         if (userId < 1) { // 用戶未登錄，顯示登錄頁面
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 

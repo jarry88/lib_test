@@ -891,7 +891,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                 // url=xx&isNeedLogin=yy&title=zz
                 int isNeedLogin = params.getInt("isNeedLogin");
                 if (isNeedLogin == Constant.TRUE_INT && !User.isLogin()) {
-                    Util.showLoginFragment();
+                    Util.showLoginFragmentWithoutContext(null);
                     return;
                 }
 

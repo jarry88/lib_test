@@ -474,7 +474,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
         if (!User.isLogin()) {
             dismiss();
-            Util.showLoginFragment();
+            Util.showLoginFragment(context);
             return;
         }
 

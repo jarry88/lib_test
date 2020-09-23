@@ -40,7 +40,7 @@ override val layoutId: Int
                         .asCustom(SpecSelectPopup(context, Constant.ACTION_ADD_TO_CART, item.commonId , null, null, null, 1, null, null, 0, 2, null))
                         .show()
             } else {
-                Util.showLoginFragment();
+                Util.showLoginFragment(context);
             }
         }
         binding.root.setOnClickListener{

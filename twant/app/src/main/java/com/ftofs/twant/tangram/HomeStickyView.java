@@ -173,7 +173,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             searchPostParams.keyword = "";
             MainFragment mainFragment = MainFragment.getInstance();
             if (StringUtil.isEmpty(User.getToken())) {
-                Util.showLoginFragment();
+                Util.showLoginFragment(context);
             } else {
                 mainFragment.showHideFragment(MainFragment.MESSAGE_FRAGMENT);
             }

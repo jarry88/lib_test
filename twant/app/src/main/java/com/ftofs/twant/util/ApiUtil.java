@@ -135,7 +135,7 @@ public class ApiUtil {
             EasyJSONObject params = EasyJSONObject.generate();
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
-                Util.showLoginFragment();
+                Util.showLoginFragment(context);
                 return;
             }
             params.set("token", User.getToken());

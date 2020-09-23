@@ -367,7 +367,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
                 if (User.getUserId() > 0) {
                     Util.startFragment(MessageFragment.newInstance(true));
                 } else {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                 }
                 break;
             case R.id.btn_expand_history:

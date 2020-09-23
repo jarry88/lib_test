@@ -176,7 +176,7 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
         if (id == R.id.btn_comment) {
             int userId = User.getUserId();
             if (userId == 0) {
-                Util.showLoginFragment();
+                Util.showLoginFragment(requireContext());
                 return;
             }
             Util.startFragmentForResult(AddCommentFragment.newInstance(storeId, commentChannel), RequestCode.ADD_COMMENT.ordinal());

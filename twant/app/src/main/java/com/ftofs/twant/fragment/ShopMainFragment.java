@@ -223,7 +223,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             if (User.getUserId() > 0) {
                 Util.startFragment(CartFragment.newInstance(true));
             } else {
-                Util.showLoginFragment();
+                Util.showLoginFragment(requireContext());
             }
         }));
         initCustomerList(view);
@@ -446,7 +446,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         } else if(id==R.id.btn_comment){
             int userId = User.getUserId();
             if (userId == 0) {
-                Util.showLoginFragment();
+                Util.showLoginFragment(requireContext());
                 return;
             }
             Util.startFragmentForResult(AddCommentFragment.newInstance(storeId, commentChannel), RequestCode.ADD_COMMENT.ordinal());
@@ -523,7 +523,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         }else if(index == ACTIVITY_FRAGMENT) {
             // 如果是點擊【商店活動】的按鈕，檢查用戶是否已經登錄,未登录时允许查看
 //            if (!User.isLogin()) {
-//                Util.showLoginFragment();
+//                Util.showLoginFragment(requireContext());
 //                return;
 //            }
         }else if(index==HOME_FRAGMENT){

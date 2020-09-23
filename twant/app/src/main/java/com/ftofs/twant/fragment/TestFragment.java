@@ -22,6 +22,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
 import com.donkingliang.imageselector.utils.ImageSelector;
+import com.ftofs.twant.BlankFragment;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
@@ -32,6 +33,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.login.UserManager;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
@@ -243,6 +245,9 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         if (id == R.id.btn_test) {
             SLog.info("onClick()");
             showLoadingPopup();
+            start(BlankFragment.newInstance("",""));
+            loadPopup.dismiss();
+            UserManager.INSTANCE.removeUser();
         } else if (id == R.id.btn_test2) {
             Util.popToMainFragment(_mActivity);
         } else if (id == R.id.test_im) {

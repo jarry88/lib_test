@@ -89,7 +89,7 @@ class AppServiceImpl:AppService {
             val token: String = User.getToken()
             val memberToken: String = User.getUserInfo(SPField.FIELD_MEMBER_TOKEN, "")
             if (token.isEmpty()) {
-                Util.showLoginFragment()
+                Util.showLoginFragmentWithoutContext(null)
                 return
             }
             if (url.contains("?")) {
@@ -153,7 +153,7 @@ class AppServiceImpl:AppService {
 
         val memberToken: String = User.getUserInfo(SPField.FIELD_MEMBER_TOKEN, null)!!
         if (memberToken.isNullOrEmpty()) {
-            Util.showLoginFragment()
+            Util.showLoginFragmentWithoutContext(supportFragment)
         }
         val fragment = supportFragment as H5GameFragment
         SLog.info(fragment.url)

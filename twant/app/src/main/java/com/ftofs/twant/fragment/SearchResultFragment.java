@@ -580,7 +580,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     String url = Util.makeSpringH5Url();
                     SLog.info("sprint_url[%s]", url);
                     if (url == null) {
-                        Util.showLoginFragment();
+                        Util.showLoginFragment(requireContext());
                         return;
                     }
                     start(H5GameFragment.newInstance(url, true));
@@ -1096,7 +1096,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 if (User.isLogin()) {
                     Util.startFragment(CartFragment.newInstance(true));
                 } else {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                 }
 
                 break;

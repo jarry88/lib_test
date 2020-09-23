@@ -301,7 +301,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
-                Util.showLoginFragment();
+                Util.showLoginFragment(requireContext());
                 return;
             }
 
@@ -363,7 +363,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     private void commentMakeTrue(int commentId) {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 
@@ -394,7 +394,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     private void deletePost() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            Util.showLoginFragment();
+            Util.showLoginFragment(requireContext());
             return;
         }
 

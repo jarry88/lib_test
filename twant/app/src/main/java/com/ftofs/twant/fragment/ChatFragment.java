@@ -339,7 +339,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 EasyJSONObject params = EasyJSONObject.generate();
                 String token = User.getToken();
                 if (StringUtil.isEmpty(token)) {
-                    Util.showLoginFragment();
+                    Util.showLoginFragment(requireContext());
                     return;
                 }
                 params.set("token", token);
