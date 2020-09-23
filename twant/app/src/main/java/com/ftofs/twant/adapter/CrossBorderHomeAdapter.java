@@ -12,13 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.CrossBorderActivityGoods;
+import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.Store;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
+import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
@@ -58,6 +63,13 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             rvBannerList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             CrossBorderBannerAdapter bannerAdapter =
                     new CrossBorderBannerAdapter(context, R.layout.cross_border_banner_item, item.bannerItemList);
+            bannerAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
+                    Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp);
+                }
+            });
             rvBannerList.setAdapter(bannerAdapter);
 
             GridLayout glNavContainer = helper.getView(R.id.gl_nav_container);
@@ -82,6 +94,13 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             rvBargainList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             CrossBorderActivityGoodsAdapter bargainGoodsAdapter =
                     new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_BARGAIN, R.layout.cross_border_activity_goods_item, item.bargainGoodsList);
+            bargainGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
+                    Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                }
+            });
             rvBargainList.setAdapter(bargainGoodsAdapter);
 
 
@@ -89,6 +108,13 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             rvGroupList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             CrossBorderActivityGoodsAdapter groupGoodsAdapter =
                     new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_GROUP, R.layout.cross_border_activity_goods_item, item.groupGoodsList);
+            groupGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
+                    Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                }
+            });
             rvGroupList.setAdapter(groupGoodsAdapter);
 
             helper.setVisible(R.id.rl_store2_container, item.storeList.size() > 1);
@@ -98,14 +124,28 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 ImageView imgStore1Figure = helper.getView(R.id.img_store1_figure);
                 Glide.with(context).load(StringUtil.normalizeImageUrl(store.storeFigureImage)).centerCrop().into(imgStore1Figure);
                 helper.setText(R.id.tv_store1_name, store.storeName);
+                helper.getView(R.id.rl_store1_container).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Util.startFragment(ShopMainFragment.newInstance(store.storeId));
+                    }
+                });
             }
             if (item.storeList.size() > 1) {
                 Store store = item.storeList.get(1);
                 ImageView imgStore1Figure = helper.getView(R.id.img_store2_figure);
                 Glide.with(context).load(StringUtil.normalizeImageUrl(store.storeFigureImage)).centerCrop().into(imgStore1Figure);
                 helper.setText(R.id.tv_store_name, store.storeName);
+                helper.getView(R.id.rl_store1_container).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Util.startFragment(ShopMainFragment.newInstance(store.storeId));
+                    }
+                });
             }
         } else if (itemType == Constant.ITEM_TYPE_NORMAL) {
+            helper.addOnClickListener(R.id.cl_container_left, R.id.cl_container_right);
+
             if (item.goodsPair == null) {
                 return;
             }

@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ftofs.lib_net.model.Goods;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CrossBorderHomeAdapter;
 import com.ftofs.twant.api.Api;
@@ -103,6 +103,23 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         adapter = new CrossBorderHomeAdapter(_mActivity, crossBorderHomeItemList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                CrossBorderHomeItem item = crossBorderHomeItemList.get(position);
+
+                if (id == R.id.cl_container_left) {
+                    if (item.goodsPair != null && item.goodsPair.left != null) {
+                        Util.startFragment(GoodsDetailFragment.newInstance(item.goodsPair.left.commonId, 0));
+                    }
+                } else if (id == R.id.cl_container_right) {
+                    if (item.goodsPair != null && item.goodsPair.right != null) {
+                        Util.startFragment(GoodsDetailFragment.newInstance(item.goodsPair.right.commonId, 0));
+                    }
+                }
+            }
+        });
         rvList.setAdapter(adapter);
 
         loadData(1);
