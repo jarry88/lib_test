@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tv_login_info">想要城平台的定位是「真實」，為了保證平台信息的真實有效性，用戶在使用平台服務時要求保持資訊同步真實的「真實承諾」。</string>
+    <string name="mobile_zone_text">地區選擇</string>
+    <string name="text_new_sms_code_validate_hint">驗證碼已通發送至%s,&#x000A;有效期為10分鐘。</string>
+    <string name="login_service_info">服務協議</string>
+    <string name="secret_info">私隱條款</string>
+
 </resources>

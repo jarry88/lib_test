@@ -37,7 +37,6 @@ public abstract class BaseFragment extends SupportFragment {
     protected Context _mContext;
     protected ViewDataBinding simpleBind;
     private IntentCallBack mCapureCallBack;
-
     @Inject(name = ConstantsPath.APP_SERVICE_PATH)
     AppService appService;
     @Override

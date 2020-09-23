@@ -4,13 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.view.View
+import com.ftofs.lib_common_ui.popup.TwLoadingPopup
 import com.gzp.lib_common.constant.SPField
 import com.gzp.lib_common.utils.SLog
 import com.jaeger.library.StatusBarUtil
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.core.BasePopupView
 import com.orhanobut.hawk.Hawk
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 
-fun switchTranslucentMode(activity: Activity,isImageMode: Boolean){
+fun switchTranslucentMode(activity: Activity, isImageMode: Boolean){
     val contentView = activity.findViewById<View>(android.R.id.content);
     if (isImageMode) {
         contentView.setPadding(0, 0, 0, 0)
@@ -51,3 +54,15 @@ fun getStatusbarHeight(context: Context?): Int {
     }
     return 0
 }
+
+/**
+ * 后面用这种方式实现全局laading效果
+ * @param context
+ * @return loading view
+ */
+fun createLoadingPopup(context: Context): BasePopupView {
+    return XPopup.Builder(context)
+            .hasShadowBg(false)
+            .asCustom(TwLoadingPopup(context))
+}
+

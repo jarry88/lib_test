@@ -105,8 +105,8 @@ public class NewWordPopup extends CenterPopupView implements View.OnClickListene
 
             int goodsModel = extra.optInt("goodsCommon.goodsModal");
             // SLog.info("goodsModel[%d]", goodsModel);
-            if (goodsModel == Constant.GOODS_TYPE_CONSULT) { // 如果是諮詢類商品，價格顯示【詢價】
-                tvGoodsPrice.setText("詢價");
+            if (goodsModel == Constant.GOODS_TYPE_CONSULT) { // 如果是諮詢類商品，價格顯示【問價】
+                tvGoodsPrice.setText("問價");
             }
 
             if ("goods".equals(commandType)) { // 如果是普通商品，没有折扣，则隐藏原价

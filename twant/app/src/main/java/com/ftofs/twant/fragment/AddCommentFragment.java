@@ -39,7 +39,7 @@ import com.ftofs.twant.entity.UnicodeEmojiItem;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.util.FileUtil;
+import com.gzp.lib_common.utils.FileUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;

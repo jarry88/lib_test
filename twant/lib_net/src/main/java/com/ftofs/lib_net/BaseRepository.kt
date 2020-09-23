@@ -20,6 +20,7 @@ open class BaseRepository() {
 //        return call.invoke()
 //    }
     val api by lazy { MRequest.getInstance().service }
+    fun getBase()=MRequest.getInstance().retrofit.baseUrl()
     suspend fun <T : Any> safeApiCall(call: suspend () -> Result<T>, errorMessage: String="网络错误"): Result<T> {
         return try {
             call()

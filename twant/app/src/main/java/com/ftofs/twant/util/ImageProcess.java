@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.gzp.lib_common.utils.PathUtil;
+
 import java.io.File;
 
 /**

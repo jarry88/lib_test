@@ -9,15 +9,6 @@
 
         tools:context=".activity.MainActivity"
         android:orientation="vertical">
-        <com.ftofs.lib_common_ui.AAA
-            app:bbb="意思"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <com.ftofs.lib_common_ui.toolbar.TitleBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleBar_leftImage="@drawable/ic_arrow_back_white_24dp"
-            app:titleBar_title="这是一个标题栏"/>
         <Button
             android:id="@+id/btn_test1"
             android:layout_width="match_parent"

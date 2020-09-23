@@ -11,8 +11,10 @@ import android.os.Process
 import android.os.StrictMode
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import cat.ereza.customactivityoncrash.config.CaocConfig
 import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.twant.activity.MainActivity
+import com.ftofs.twant.appserver.AppServiceImpl
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.constant.EBMessageType
@@ -47,6 +49,8 @@ import com.orhanobut.hawk.Hawk
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
+import com.superlht.htloading.manager.HTLoadingManager
+import com.superlht.htloading.view.HTLoading
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
@@ -125,6 +129,7 @@ class TwantApplication :BaseApplication(){
         }).apply { setAuthSDKInfo("gg+CTOzZf+lDYnx+JNodeuceDBDHIef/DjPospYtY8puMEuVeUJM8lS7elL36rSB+oeAV1Rli9rGMnrMxnbJ4kCNEEo46l/l1VzH+q92nrd4du5f9KHBZ+e6uFt9i7WznSBR1s+/0LLl8CCD9F10NpH4yPa5xkY0LvDP1xgCNPZDn70mPq0Dl3vZz7TdGEaZ3euShG5sa04hFZiMN34YidOfHwr6SVRu37Mz9ehOHsLnoeCzgx9IkICa3KI2nPTjlniBi+bkj9CDq6iK6u6NNlODVfsrZcar")
             reporter.setLoggerEnable(BuildConfig.DEBUG)
         }
+//        HTLoading().setl
 
         initUmeng(this){MainFragment.getInstance()?.let { it.handleUmengCustomAction() }}
         startKoin {
@@ -133,6 +138,8 @@ class TwantApplication :BaseApplication(){
             koin.loadModules(koinModule)
             koin.createRootScope()
         }
+
+
         SLog.info("Launch performance...")
 
         val processAppName=getAppName(android.os.Process.myPid())
@@ -269,8 +276,27 @@ class TwantApplication :BaseApplication(){
 
         // 將應用注冊到微信
         regToWx()
+        initCrash()
     }
+    /**
+     * app 崩溃重启的配置
+     */
+     fun initCrash() {
+//        val appService=AppJoint.service(AppService::class.java)
 
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT) //背景模式,开启沉浸式
+                .enabled(true) //是否启动全局异常捕获
+                .showErrorDetails(true) //是否显示错误详细信息
+                .showRestartButton(true) //是否显示重启按钮
+                .trackActivities(true) //是否跟踪Activity
+                .minTimeBetweenCrashesMs(2000) //崩溃的间隔时间(毫秒)
+                .errorDrawable(com.gzp.lib_common.R.mipmap.ic_launcher) //错误图标
+                //todo 设置重启activity
+                .restartActivity(AppServiceImpl.instance.getMainActivity()) //重新启动后的activity
+                //                                .errorActivity(YourCustomErrorActivity.class) //崩溃后的错误activity
+                //                                .eventListener(new YourCustomEventListener()) //崩溃后的错误监听
+                .apply()
+    }
     private fun initNotification() {
         //创建自定义通知渠道，和全局通知管理器
         if (!Hawk.contains(SPField.USER_RECEIVE_NEWS)) {

@@ -10,7 +10,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.ImGoodsLayoutBinding
-import com.ftofs.twant.interfaces.OnSelectedListener
+import com.gzp.lib_common.base.callback.OnSelectedListener
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.ImGoodsViewModel
 import com.ftofs.twant.kotlin.ui.ImGoodsSearch.ImGoodsEnum

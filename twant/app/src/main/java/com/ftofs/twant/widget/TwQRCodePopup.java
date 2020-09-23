@@ -17,7 +17,7 @@ import com.ftofs.twant.entity.DownloadImageResult;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.gzp.lib_common.base.callback.CommonCallback;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.util.FileUtil;
+import com.gzp.lib_common.utils.FileUtil;
 import com.gzp.lib_common.utils.PermissionUtil;
 import com.ftofs.twant.util.QRCode;
 import com.ftofs.twant.util.StringUtil;

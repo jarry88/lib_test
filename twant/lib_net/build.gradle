@@ -49,7 +49,12 @@ dependencies {
     implementation project(":lib_common")
     implementation project(":lib_common_ui")
 
-
+    api('com.facebook.android:facebook-login:[4,5)') {
+        exclude group: 'com.google.zxing', module: 'core'
+    }
+    api('com.facebook.android:facebook-share:[4,5)') {
+        exclude group: 'com.google.zxing', module: 'core'
+    }
     //retrofit
     api rootProject.ext.dependencies["adapter-rxjava2"]
     api rootProject.ext.dependencies["converter-gson"]

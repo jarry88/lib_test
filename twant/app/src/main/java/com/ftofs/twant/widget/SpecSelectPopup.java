@@ -20,7 +20,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
-import com.ftofs.twant.constant.PopupType;
+import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
@@ -173,11 +173,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         btnOk = findViewById(R.id.btn_ok);
         btnOk.setOnClickListener(this);
         if (action == Constant.ACTION_ADD_TO_CART) {
-            btnOk.setBackgroundResource(R.drawable.blue_button);
+            btnOk.setBackgroundResource(R.drawable.blue_button1);
         } else if (action == Constant.ACTION_BUY) {
-            btnOk.setBackgroundResource(R.drawable.blue_button);
+            btnOk.setBackgroundResource(R.drawable.blue_button1);
         } else if (action == Constant.ACTION_SELECT_SPEC) {
-            btnOk.setBackgroundResource(R.drawable.blue_button);
+            btnOk.setBackgroundResource(R.drawable.blue_button1);
         }
 
         skuImage = findViewById(R.id.sku_image);

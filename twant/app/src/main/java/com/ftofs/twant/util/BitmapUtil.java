@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.util.Log;
 
+import com.gzp.lib_common.utils.FileUtil;
+import com.gzp.lib_common.utils.PathUtil;
 import com.gzp.lib_common.utils.SLog;
 
 import java.io.ByteArrayOutputStream;

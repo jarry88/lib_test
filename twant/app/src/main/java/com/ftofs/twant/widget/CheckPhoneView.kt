@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
 import com.ftofs.twant.R
-import com.ftofs.twant.entity.MobileZone
+import com.ftofs.lib_net.model.MobileZone
 import com.gzp.lib_common.utils.SLog
 import java.util.regex.Pattern
 

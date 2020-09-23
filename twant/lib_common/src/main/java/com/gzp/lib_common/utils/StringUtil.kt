@@ -16,7 +16,7 @@ fun normalizeImageUrl(imageUrl:String?,params:String?=null):String?{
 
 }
 /**
- * 詢價涉及頁面：首頁banner ，搜索結果列表頁，想要貼發表選擇商品頁，貼文詳情頁,店鋪首頁,店鋪產品頁，我的關注頁,商品詳情頁
+ * 問價涉及頁面：首頁banner ，搜索結果列表頁，想要貼發表選擇商品頁，貼文詳情頁,店鋪首頁,店鋪產品頁，我的關注頁,商品詳情頁
  * 商品詳情頁規格
  * @param goods
  * @return

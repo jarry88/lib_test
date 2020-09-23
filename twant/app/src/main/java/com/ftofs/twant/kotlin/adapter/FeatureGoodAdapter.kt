@@ -31,7 +31,7 @@ class FeatureGoodAdapter : DataBoundAdapter<SellerGoodsVO, SellerGoodsItemUnswip
     override fun initView(binding: SellerGoodsItemUnswipeBinding, item: SellerGoodsVO) {
         binding.vo = SellerGoodsItem()
         if (item.goodsModal == Constant.GOODS_TYPE_CONSULT) {
-            binding.tvPriceRange.text = "詢價"
+            binding.tvPriceRange.text = "問價"
         }
         binding.btnMore.setOnClickListener{
                     var params = EasyJSONObject.generate("token", User.getToken(), "commonId", item.commonId)

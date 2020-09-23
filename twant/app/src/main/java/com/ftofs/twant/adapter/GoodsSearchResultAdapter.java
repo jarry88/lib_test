@@ -16,7 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;

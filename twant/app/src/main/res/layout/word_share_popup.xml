@@ -37,6 +37,6 @@
         android:textColor="@android:color/white"
         android:textSize="15sp"
         android:gravity="center"
-        android:background="@drawable/blue_button">
+        android:background="@drawable/blue_button1">
     </TextView>
 </LinearLayout>

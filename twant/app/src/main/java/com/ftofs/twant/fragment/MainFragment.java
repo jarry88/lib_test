@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.ftofs.twant.login.UserManager;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
@@ -170,8 +171,10 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
             if (index == MESSAGE_FRAGMENT || index == CART_FRAGMENT || index == MY_FRAGMENT) {
                 // 如果是查看【消息】、【購物袋】或【我的】，先檢查是否已經登錄
-                if (!User.isLogin()) {
-                    Util.showLoginFragment();
+                if (!UserManager.INSTANCE.isLogin()) {
+//                    Util.showLoginFragment();
+                    SLog.info("前往啓動頁");
+                    UserManager.INSTANCE.start(getContext());
                     return;
                 }
             }

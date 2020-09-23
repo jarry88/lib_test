@@ -1,7 +1,9 @@
 package com.ftofs.twant.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ftofs.ft_login.service.LoginServiceImpl;
+import com.ftofs.twant.login.service.LoginServiceImpl;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.appserver.AppServiceImpl;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -28,14 +29,15 @@ import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
+import com.ftofs.twant.util.UiUtil;
 import com.github.richardwrq.krouter.annotation.Inject;
 import com.github.richardwrq.krouter.api.core.KRouter;
-import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.service.ConstantsPath;
+import com.gzp.lib_common.utils.BaseContextKt;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -44,11 +46,11 @@ import com.ftofs.twant.widget.ActivityPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.orhanobut.hawk.Hawk;
+import com.superlht.htloading.view.HTLoading;
 import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
 import com.tmall.wireless.tangram.structure.BaseCell;
-import com.wzq.mvvmsmart.utils.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -63,11 +65,16 @@ import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
+import kotlin.reflect.jvm.internal.UtilKt;
 import okhttp3.Call;
+
+import static com.ftofs.twant.util.Util.dip2px;
 
 public class HomeFragment extends MainBaseFragment implements View.OnClickListener {
     RecyclerView rvList;
     TangramEngine tangramEngine;
+    BasePopupView mLoading;
+
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
     LinearLayout llFloatButtonContainer;
     private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800; // 浮動按鈕滑動顯示與隱藏效果的延遲時間(毫秒)
@@ -85,6 +92,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
     BasePopupView popupViewAd;
     @Inject(name = ConstantsPath.LOGIN_SERVICE_PATH)
     LoginServiceImpl loginService;
+    private HTLoading htLoading;
 
 
     public static HomeFragment newInstance() {
@@ -105,6 +113,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mLoading=  Util.createLoadingPopup(requireContext());
         KRouter.INSTANCE.inject(this);
         EventBus.getDefault().register(this);
 
@@ -154,6 +163,9 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP) {
             showPopupAd();
+        }
+        if (message.messageType == EBMessageType.LOADING_POPUP_DISMISS&&mLoading!=null) {
+            mLoading.dismiss();
         }
     }
 
@@ -386,7 +398,8 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         } else if (id == R.id.btn_test) {
 //            requireContext().startActivity(new Intent(_mActivity, TestActivity.class));
 //            LoginServiceImplWrap.INSTANCE.start(requireContext());
-            loginService.start(requireContext());
+            mLoading.show();
+            loginService.start(_mActivity);
         }
     }
 
@@ -396,7 +409,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         }
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
+        layoutParams.rightMargin = dip2px(_mActivity, 0);
         llFloatButtonContainer.setLayoutParams(layoutParams);
         floatButtonShown = true;
     }
@@ -407,7 +420,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         }
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
+        layoutParams.rightMargin = dip2px(_mActivity,  -30.25f);
         llFloatButtonContainer.setLayoutParams(layoutParams);
         floatButtonShown = false;
     }
@@ -417,7 +430,9 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         super.onSupportVisible();
 
         updateMainSelectedFragment(MainFragment.HOME_FRAGMENT);
-
+        if (htLoading != null) {
+            htLoading.dismiss();
+        }
         SLog.info("carouselLoaded[%s]", carouselLoaded);
         // 加載輪播圖片
         if (!carouselLoaded) {

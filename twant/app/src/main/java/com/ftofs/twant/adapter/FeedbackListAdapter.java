@@ -14,7 +14,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.entity.FeedbackItem;
 import com.ftofs.twant.fragment.ImageViewerFragment;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SquareGridLayout;

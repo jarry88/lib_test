@@ -12,19 +12,19 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
-import com.ftofs.twant.constant.PopupType;
+import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.domain.Area;
-import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.entity.MobileZone;
-import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.lib_common_ui.entity.ListPopupItem;
+import com.ftofs.lib_net.model.MobileZone;
+import com.gzp.lib_common.base.callback.OnSelectedListener;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.task.TaskObserver;
+import com.gzp.lib_common.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AreaPopup;
-import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.lib_common_ui.popup.ListPopup;
 import com.lxj.xpopup.XPopup;
 
 import org.jetbrains.annotations.NotNull;

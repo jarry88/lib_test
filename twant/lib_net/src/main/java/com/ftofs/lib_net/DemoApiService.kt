@@ -90,11 +90,8 @@ interface DemoApiService {
     //阿里雲一鍵登錄
     @POST("v2/mobile/loginOne")
     suspend fun getLoginOne(@Query("aliYunToken")aliYunToken:String,@Query("clientType")clientType:String): TwantResponse<LoginInfo>
-
-
-
-
-
+    @GET("app/mobile/zone")
+    suspend fun getMobileZoneList(): TwantResponse<AdminMobileAreaList>
 
 
 //@Field

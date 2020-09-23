@@ -22,6 +22,7 @@
     <color name="main_theme_dark">#975401</color>
 
     <color name="dark">#141414</color>
+    <color name="tw_grey">#BBBBBB</color>
 
     <!--<color name="colorAccent">@color/gray_da</color>-->
 
@@ -187,6 +188,9 @@
 
     <color name="theme_disable">#FFFC9B89</color>
     <color name="tw_light_grey_EDED">#EDEDED</color>
+    <color name="tw_red">#F50057</color>
+    <color name="bg_blue">#1A00B0FF</color>
+
 
 
 </resources>

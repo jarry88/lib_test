@@ -5,8 +5,8 @@ import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.gzp.lib_common.constant.PopupType;
+import com.gzp.lib_common.base.callback.OnSelectedListener;
 import com.lxj.xpopup.core.BottomPopupView;
 
 public class BottomConfirmPopup extends BottomPopupView implements View.OnClickListener {

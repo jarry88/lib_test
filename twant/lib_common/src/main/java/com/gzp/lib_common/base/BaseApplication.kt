@@ -6,6 +6,7 @@ import android.app.Application
 import android.app.Notification
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.os.Process
 import android.util.Log
 import cat.ereza.customactivityoncrash.config.CaocConfig
@@ -37,7 +38,7 @@ open class BaseApplication:Application() {
 
     var mPushAgent: PushAgent? = null
     var umengDeviceToken:String?=""
-
+    var mHandler:Handler?=null
     override fun onCreate() {
         super.onCreate()
         KRouter.openDebug();//打开KRouter调试日志
@@ -51,32 +52,12 @@ open class BaseApplication:Application() {
         //是否开启打印日志
 //        KLog.init(BuildConfig.DEBUG);
         //初始化全局异常崩溃
-        initCrash()
         LiveEventBus // 事件儿总线通信
                 .config().supportBroadcast(this) // 配置支持跨进程、跨APP通信，传入Context，需要在application onCreate中配置
                 .lifecycleObserverAlwaysActive(true) //    整个生命周期（从onCreate到onDestroy）都可以实时收到消息
         setActivityLifecycle(this)
     }
 
-    /**
-     * app 崩溃重启的配置
-     */
-    open fun initCrash() {
-//        val appService=AppJoint.service(AppService::class.java)
-
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT) //背景模式,开启沉浸式
-                .enabled(true) //是否启动全局异常捕获
-                .showErrorDetails(true) //是否显示错误详细信息
-                .showRestartButton(true) //是否显示重启按钮
-                .trackActivities(true) //是否跟踪Activity
-                .minTimeBetweenCrashesMs(2000) //崩溃的间隔时间(毫秒)
-                .errorDrawable(R.mipmap.ic_launcher) //错误图标
-                //todo 设置重启activity
-//                .restartActivity(appService.getMainActivity()) //重新启动后的activity
-                //                                .errorActivity(YourCustomErrorActivity.class) //崩溃后的错误activity
-                //                                .eventListener(new YourCustomEventListener()) //崩溃后的错误监听
-                .apply()
-    }
 
     /**
      * 当主工程没有继承BaseApplication时，可以使用setApplication方法初始化BaseApplication

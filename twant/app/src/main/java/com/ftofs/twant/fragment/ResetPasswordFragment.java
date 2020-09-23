@@ -24,22 +24,22 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.PopupType;
+import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
-import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.entity.MobileZone;
-import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.lib_common_ui.entity.ListPopupItem;
+import com.ftofs.lib_net.model.MobileZone;
+import com.gzp.lib_common.base.callback.OnSelectedListener;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.task.TaskObserver;
+import com.gzp.lib_common.task.TaskObserver;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CheckPhoneView;
-import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.lib_common_ui.popup.ListPopup;
 import com.lxj.xpopup.XPopup;
 import com.umeng.analytics.MobclickAgent;
 
@@ -393,7 +393,7 @@ public class ResetPasswordFragment extends BaseFragment implements
 
     private void updataBtnNext() {
         if (checkInfo(false)) {
-            btnNext.setBackgroundResource(R.drawable.blue_button);
+            btnNext.setBackgroundResource(R.drawable.blue_button1);
         } else {
             btnNext.setBackgroundResource(R.drawable.grey_button);
 

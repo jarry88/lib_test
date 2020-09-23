@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.StoreDiscount;
 import com.gzp.lib_common.utils.SLog;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 
 public class StoreDiscountListAdapter extends ViewGroupAdapter<StoreDiscount> {

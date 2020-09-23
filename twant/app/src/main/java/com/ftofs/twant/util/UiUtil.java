@@ -101,6 +101,6 @@ public class UiUtil {
 
 
     public static void toConsultUI(TextView textView) {
-        textView.setText("詢價");
+        textView.setText("問價");
     }
 }

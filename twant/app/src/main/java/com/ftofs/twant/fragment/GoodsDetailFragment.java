@@ -66,7 +66,7 @@ import com.ftofs.twant.interfaces.SimpleCallback;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ClipboardUtils;
-import com.ftofs.twant.util.Jarbon;
+import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
@@ -953,7 +953,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     return;
                 }
-                if (Util.noPrice(goodsModel)) {//如果是詢價也不讓選規格
+                if (Util.noPrice(goodsModel)) {//如果是問價也不讓選規格
                     return;
                 }
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);

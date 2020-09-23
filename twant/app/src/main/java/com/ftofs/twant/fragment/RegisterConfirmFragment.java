@@ -199,7 +199,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
         if (StringUtil.isEmpty(nickname)) {
             return;
         }
-        btnRegister.setBackgroundResource(R.drawable.blue_button);
+        btnRegister.setBackgroundResource(R.drawable.blue_button1);
     }
 
     @Override

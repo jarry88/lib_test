@@ -139,7 +139,7 @@
                             android:textColor="@color/tw_white"
                             android:layout_alignParentEnd="true"
                             android:gravity="center"
-                            android:background="@drawable/blue_button"
+                            android:background="@drawable/blue_button1"
                             android:text="發給商家"
                             />
                     </RelativeLayout>
