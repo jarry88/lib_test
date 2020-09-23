@@ -21,6 +21,7 @@ import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
+import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
@@ -50,14 +51,16 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     List<CrossBorderHomeItem> crossBorderHomeItemList = new ArrayList<>();
 
     List<CrossBorderBannerItem> bannerItemList;
-    List<CrossBorderNavItem> navItemList;
+    int navItemCount;
+    List<CrossBorderNavPane> navPaneList;
     List<CrossBorderShoppingZoneItem> shoppingZoneList;
     List<CrossBorderActivityGoods> bargainGoodsList;
     List<CrossBorderActivityGoods> groupGoodsList;
     List<Store> storeList;
 
     public static CrossBorderHomeFragment newInstance(List<CrossBorderBannerItem> bannerItemList,
-                                                      List<CrossBorderNavItem> navItemList,
+                                                      int navItemCount,
+                                                      List<CrossBorderNavPane> navPaneList,
                                                       List<CrossBorderShoppingZoneItem> shoppingZoneList,
                                                       List<CrossBorderActivityGoods> bargainGoodsList,
                                                       List<CrossBorderActivityGoods> groupGoodsList,
@@ -67,7 +70,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         fragment.setArguments(args);
 
         fragment.bannerItemList = bannerItemList;
-        fragment.navItemList = navItemList;
+        fragment.navItemCount = navItemCount;
+        fragment.navPaneList = navPaneList;
         fragment.shoppingZoneList = shoppingZoneList;
         fragment.bargainGoodsList = bargainGoodsList;
         fragment.groupGoodsList = groupGoodsList;
@@ -91,7 +95,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
 
         CrossBorderHomeItem header = new CrossBorderHomeItem();
         header.bannerItemList = bannerItemList;
-        header.navItemList = navItemList;
+        header.navItemCount = navItemCount;
+        header.navPaneList = navPaneList;
         header.shoppingZoneList = shoppingZoneList;
         header.bargainGoodsList = bargainGoodsList;
         header.groupGoodsList = groupGoodsList;
