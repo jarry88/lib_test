@@ -28,7 +28,7 @@
         <LinearLayout
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginTop="5dp"
             android:background="@drawable/left_f3_circle"
             android:paddingStart="4dp"
             android:id="@+id/tv_category_name_english"
@@ -80,6 +80,8 @@
         android:background="@drawable/new_arrivals_pane_bg"
         >
         <TextView
+
+            android:paddingTop="@dimen/dp_4"
             android:id="@+id/tv_shop_parent_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
