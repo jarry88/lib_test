@@ -58,15 +58,21 @@ import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.fragment.CrossBorderMainFragment;
 import com.ftofs.twant.fragment.DoubleElevenFragment;
+import com.ftofs.twant.fragment.ExplorerFragment;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.MessageFragment;
+import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
+import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.lib_common_ui.popup.TwLoadingPopup;
@@ -1678,6 +1684,74 @@ public class Util {
             }
         }
         return false;
+    }
+
+    public static void handleClickLink(String linkType, String linkValue) {
+        switch (linkType) {
+            case "none":
+                // 无操作
+                break;
+            case "url":
+                // 外部鏈接
+                Util.startFragment(ExplorerFragment.newInstance(linkValue, true));
+                break;
+            case "keyword":
+                // 关键字
+                String keyword = linkValue;
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                        EasyJSONObject.generate("keyword", keyword).toString()));
+                break;
+            case "goods":
+                // 產品
+                int commonId = Integer.parseInt(linkValue);
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                break;
+            case "store":
+                // 店铺
+                int storeId = Integer.parseInt(linkValue);
+                Util.startFragment(ShopMainFragment.newInstance(storeId));
+                break;
+            case "category":
+                // 產品搜索结果页(分类)
+                String cat = linkValue;
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                        EasyJSONObject.generate("cat", cat).toString()));
+                break;
+            case "brandList":
+                // 品牌列表
+                break;
+            case "voucherCenter":
+                // 领券中心
+                break;
+            case "activityUrl":
+                Util.startFragment(H5GameFragment.newInstance(linkValue, true));
+                break;
+            case "postId":
+                int postId = Integer.parseInt(linkValue);
+                Util.startFragment(PostDetailFragment.newInstance(postId));
+                break;
+            case "shopping":
+                Util.startFragment(ShoppingSessionFragment.newInstance());
+                break;
+            case "shoppingZone":
+                //購物新專場
+                int zoneId = Integer.parseInt(linkValue);
+                Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId));
+                break;
+            case "wantPost":
+                MainFragment mainFragment = MainFragment.getInstance();
+                if (mainFragment == null) {
+                    ToastUtil.error(TwantApplication.Companion.get(), "MainFragment為空");
+                    return;
+                }
+                mainFragment.showHideFragment(MainFragment.CIRCLE_FRAGMENT);
+                break;
+            case "tariffBuy":
+                Util.startFragment(CrossBorderMainFragment.newInstance());
+                break;
+            default:
+                break;
+        }
     }
 }
 

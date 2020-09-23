@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.fragment.CrossBorderMainFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.MainFragment;
@@ -147,6 +148,8 @@ public class ActivityPopup extends CenterPopupView implements View.OnClickListen
                 } else if ("postId".equals(appPopupAdLinkType)) {
                     int postId = Integer.parseInt(appPopupAdLinkValue);
                     Util.startFragment(PostDetailFragment.newInstance(postId));
+                } else if ("tariffBuy".equals(appPopupAdLinkType)) {
+                    Util.startFragment(CrossBorderMainFragment.newInstance());
                 }
                 dismiss();
             } else if (id == R.id.btn_close) {

@@ -36,7 +36,7 @@ public class Config {
 
 
     public static boolean PROD = true;//true不能進入調試頁面，false，可以進入調試頁面切換環境
-    public static boolean DEVELOPER_MODE = true;//線上模式：false,調試模式true
+    public static boolean DEVELOPER_MODE = false;//線上模式：false,調試模式true
 
     public static boolean USE_28 = false;   // 開發模式下: true -- 使用28服務器  false -- 使用29服務器
     public static final boolean USE_F2 = true;  // 生產模式下: true -- 使用F2服務器  false -- 使用www服務器
@@ -46,7 +46,7 @@ public class Config {
      * 日誌開關
      */
 
-    public static boolean SLOGENABLE = false;
+    public static boolean SLOGENABLE = true;
 
     public static String OSS_BASE_URL = DEVELOPER_MODE ?
             "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com"

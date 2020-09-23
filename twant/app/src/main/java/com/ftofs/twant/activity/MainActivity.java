@@ -937,6 +937,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
             } else if ("activityindexNew".equals(host)) { // 購物專場
                 int zoneId = params.getInt("zoneId");
                 Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId));
+            } else if ("crossCity".equals(host)) {
+                Util.startFragment(CrossBorderMainFragment.newInstance());
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginStart="5dp"
@@ -8,22 +8,33 @@
     android:orientation="vertical"
     android:gravity="center_horizontal">
 
-    <com.ftofs.twant.widget.RoundedDataImageView
-        android:id="@+id/goods_image"
-        android:layout_width="103dp"
-        android:layout_height="103dp"
-        app:riv_corner_radius="2dp"
-        android:src="@drawable/cs_avatar_160">
-    </com.ftofs.twant.widget.RoundedDataImageView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.ftofs.twant.widget.RoundedDataImageView
+            android:id="@+id/goods_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:riv_corner_radius="2dp"
+            android:src="@drawable/cs_avatar_160">
+        </com.ftofs.twant.widget.RoundedDataImageView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <TextView
         android:id="@+id/tv_goods_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:textColor="@color/tw_black"
         android:textSize="12sp"
         android:text="助腸胃消化餅乾"
-        android:layout_marginTop="8dp">
+        android:singleLine="true"
+        android:ellipsize="end">
     </TextView>
 
     <LinearLayout

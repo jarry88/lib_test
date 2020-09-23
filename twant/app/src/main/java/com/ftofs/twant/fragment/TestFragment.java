@@ -41,6 +41,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.member.MemberVo;
+import com.lxj.xpopup.core.BasePopupView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -66,7 +67,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     EditText etUrlWithToken;
 
 
-
+    BasePopupView loadPopup;
 
 
     TextView textView;
@@ -228,20 +229,20 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+    private void showLoadingPopup() {
+        if (loadPopup == null) {
+            loadPopup = Util.createLoadingPopup(_mActivity);
+        }
+        loadPopup.show();
+    }
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
         String url;
         if (id == R.id.btn_test) {
             SLog.info("onClick()");
-            ArrayList<String> selected = new ArrayList<>();
-            //限数量的多选(比如最多9张)
-            ImageSelector.builder()
-                    .useCamera(true) // 设置是否使用拍照
-                    .setSingle(false)  //设置是否单选
-                    .setMaxSelectCount(9) // 图片的最大选择数量，小于等于0时，不限数量。
-                    .setSelected(selected) // 把已选的图片传入默认选中。
-                    .start(this, RequestCode.SELECT_MULTI_IMAGE.ordinal()); // 打开相册
+            showLoadingPopup();
         } else if (id == R.id.btn_test2) {
             Util.popToMainFragment(_mActivity);
         } else if (id == R.id.test_im) {
