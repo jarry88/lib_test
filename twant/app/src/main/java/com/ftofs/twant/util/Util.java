@@ -58,6 +58,7 @@ import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.fragment.CrossBorderMainFragment;
 import com.ftofs.twant.fragment.DoubleElevenFragment;
 import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -1744,6 +1745,9 @@ public class Util {
                     return;
                 }
                 mainFragment.showHideFragment(MainFragment.CIRCLE_FRAGMENT);
+                break;
+            case "tariffBuy":
+                Util.startFragment(CrossBorderMainFragment.newInstance());
                 break;
             default:
                 break;
