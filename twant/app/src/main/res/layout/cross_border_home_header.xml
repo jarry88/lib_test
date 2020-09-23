@@ -128,7 +128,7 @@
             android:id="@+id/pageIndicatorView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="5dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/rv_nav_list"
@@ -137,7 +137,7 @@
             app:piv_selectedColor="@color/tw_blue"
             app:piv_unselectedColor="@color/tw_light_grey_EDED"
             attrs:piv_padding="9dp"
-            attrs:piv_radius="2dp"
+            attrs:piv_radius="3dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

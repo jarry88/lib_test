@@ -36,6 +36,7 @@ import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.gzp.lib_common.utils.SLog;
+import com.rd.PageIndicatorView;
 
 import java.util.List;
 
@@ -78,6 +79,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 }
             });
             rvBannerList.setAdapter(bannerAdapter);
+            rvBannerList.setOnFlingListener(null); // 參考：https://stackoverflow.com/questions/44043501/an-instance-of-onflinglistener-already-set-in-recyclerview
             // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
             // https://www.jianshu.com/p/e54db232df62
             (new PagerSnapHelper()).attachToRecyclerView(rvBannerList);
@@ -108,10 +110,35 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 }
             });
             rvNavList.setAdapter(navAdapter);
+            rvNavList.setOnFlingListener(null); // 參考：https://stackoverflow.com/questions/44043501/an-instance-of-onflinglistener-already-set-in-recyclerview
             // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
             // https://www.jianshu.com/p/e54db232df62
-            // (new PagerSnapHelper()).attachToRecyclerView(rvNavList);
+            (new PagerSnapHelper()).attachToRecyclerView(rvNavList);
 
+            int navPaneCount = item.navPaneList.size();
+            PageIndicatorView pageIndicatorView = helper.getView(R.id.pageIndicatorView);
+            if (navPaneCount < 1) {
+                pageIndicatorView.setVisibility(View.GONE);
+            } else {
+                pageIndicatorView.setRadius(3);
+                pageIndicatorView.setCount(navPaneCount);
+                rvNavList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            int position = getCurrPosition(rvNavList);
+                            pageIndicatorView.setSelection(position);
+                        }
+                    }
+
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                    }
+                });
+            }
 
             // 購物專場(最多顯示4個)
             int shoppingZoneCount = item.shoppingZoneList.size();
@@ -375,5 +402,16 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 }
             }
         }
+    }
+
+    /**
+     * 获取当前显示的图片的position
+     *
+     * @return
+     */
+    private int getCurrPosition(RecyclerView rvList) {
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) rvList.getLayoutManager();
+        int position = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+        return position;
     }
 }
