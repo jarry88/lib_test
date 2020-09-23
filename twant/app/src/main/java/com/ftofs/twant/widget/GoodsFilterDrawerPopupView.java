@@ -42,6 +42,8 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
     boolean giftEnable;
     boolean discountEnable;
     boolean videoEnable;
+    boolean crossBorderEnable;
+    boolean consultantEnable;
     private boolean disFreeShipping;
     // 當前選中的category的Id
     int categoryId;
@@ -61,6 +63,8 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
     int twBlack;
     private TextView btnFilterShip;
     TextView btnFilterVideo;
+    TextView btnFilterCrossBorder;
+    TextView btnFilterConsultant;
 
     public GoodsFilterDrawerPopupView(@NonNull Context context, List<FilterCategoryGroup> filterCategoryGroupList,
                                       OnSelectedListener onSelectedListener) {
@@ -99,6 +103,10 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
 
         btnFilterVideo = findViewById(R.id.btn_filter_video);
         btnFilterVideo.setOnClickListener(this);
+        btnFilterCrossBorder = findViewById(R.id.btn_filter_cross_border);
+        btnFilterCrossBorder.setOnClickListener(this);
+        btnFilterConsultant = findViewById(R.id.btn_filter_consultant);
+        btnFilterConsultant.setOnClickListener(this);
 
         btnOk = findViewById(R.id.btn_ok);
         btnOk.setOnClickListener(this);
@@ -148,9 +156,13 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
         discountEnable = false;
         disFreeShipping = false;
         videoEnable = false;
+        crossBorderEnable = false;
+        consultantEnable = false;
         setActivityButton(btnFilterGift, false);
         setActivityButton(btnFilterDiscount, false);
         setActivityButton(btnFilterVideo, false);
+        setActivityButton(btnFilterCrossBorder, false);
+        setActivityButton(btnFilterConsultant, false);
 
         categoryId = -1;
         categoryIndex = -1;
@@ -235,6 +247,20 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
         } else if (id == R.id.btn_filter_video) {
             setActivityButton(btnFilterVideo, !videoEnable);
             videoEnable = !videoEnable;
+        } else if (id == R.id.btn_filter_cross_border) {
+            setActivityButton(btnFilterCrossBorder, !crossBorderEnable);
+            crossBorderEnable = !crossBorderEnable;
+            if (crossBorderEnable && consultantEnable) { // 互斥操作
+                setActivityButton(btnFilterConsultant, false);
+                consultantEnable = false;
+            }
+        } else if (id == R.id.btn_filter_consultant) {
+            setActivityButton(btnFilterConsultant, !consultantEnable);
+            consultantEnable = !consultantEnable;
+            if (consultantEnable && crossBorderEnable) { // 互斥操作
+                setActivityButton(btnFilterCrossBorder, false);
+                crossBorderEnable = false;
+            }
         } else if (id == R.id.btn_reset) {
             reset();
         } else if (id == R.id.btn_ok) {
@@ -286,6 +312,11 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
                 }
                 if (videoEnable) {
                     params.set("hasVideo", 1);
+                }
+                if (crossBorderEnable) {
+                    params.set("modal", Constant.GOODS_TYPE_CROSS_BORDER);
+                } else if (consultantEnable) {
+                    params.set("modal", Constant.GOODS_TYPE_CONSULT);
                 }
                 if (disFreeShipping) {
                     params.set("express", 1);

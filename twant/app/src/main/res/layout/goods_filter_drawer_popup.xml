@@ -157,7 +157,28 @@
             android:textSize="14sp"
             android:background="@drawable/price_room_edit_text_bg"
             />
-
+        <TextView
+            android:id="@+id/btn_filter_cross_border"
+            android:layout_width="88dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"
+            android:text="跨城購"
+            android:textColor="@color/tw_black"
+            android:textSize="14sp"
+            android:background="@drawable/price_room_edit_text_bg"
+            />
+        <TextView
+            android:id="@+id/btn_filter_consultant"
+            android:layout_width="88dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"
+            android:text="資訊"
+            android:textColor="@color/tw_black"
+            android:textSize="14sp"
+            android:background="@drawable/price_room_edit_text_bg"
+            />
 
 
     </LinearLayout>
