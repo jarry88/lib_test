@@ -76,6 +76,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     CrossBorderDrawView vwBottomBg;
     public int homeBgColor; // 首頁頂部背景色
 
+    LinearLayout llMoreCategoryContainer;
+
     public static CrossBorderMainFragment newInstance() {
         CrossBorderMainFragment fragment = new CrossBorderMainFragment();
         Bundle args = new Bundle();
@@ -101,6 +103,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         llAppBar = view.findViewById(R.id.ll_app_bar);
         vwTopBg = view.findViewById(R.id.vw_top_bg);
         vwBottomBg = view.findViewById(R.id.vw_bottom_bg);
+
+        llMoreCategoryContainer = view.findViewById(R.id.ll_more_category_container);
 
         rvCategoryList = view.findViewById(R.id.rv_category_list);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
@@ -272,6 +276,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 categoryList.add(item);
             }
             categoryListAdapter.setNewData(categoryList);
+
+            llMoreCategoryContainer.setVisibility(categoryList.size() > 5 ? View.VISIBLE : View.GONE);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -338,7 +344,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             hideSoftInputPop();
         } else if (id == R.id.btn_search) {
             Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
-                    EasyJSONObject.generate("keyword", "").toString()));
+                    EasyJSONObject.generate("keyword", "", "isFromCrossBorderHome", true).toString()));
         }
     }
 

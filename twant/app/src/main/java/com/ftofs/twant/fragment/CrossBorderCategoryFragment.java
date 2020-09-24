@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
@@ -54,6 +56,8 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
     int currPage = 0;
     boolean hasMore;
 
+    LinearLayout llFloatButtonContainer;
+
     public static CrossBorderCategoryFragment newInstance(int categoryId, String categoryName) {
         CrossBorderCategoryFragment fragment = new CrossBorderCategoryFragment();
         Bundle args = new Bundle();
@@ -76,6 +80,10 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
+        Util.setOnClickListener(view, R.id.btn_goto_cart, this);
+        Util.setOnClickListener(view, R.id.btn_goto_top, this);
 
         rvSearchResultList = view.findViewById(R.id.rv_goods_list);
         rvSearchResultList.setLayoutManager(new LinearLayoutManager(_mActivity));
@@ -110,6 +118,25 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
             }
         });
         rvSearchResultList.setAdapter(mGoodsAdapter);
+        rvSearchResultList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    hideFloatButton();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    showFloatButton();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
 
         loadData(currPage + 1);
     }
@@ -268,8 +295,25 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
         loadData(currPage + 1);
     }
 
+    private void showFloatButton() {
+        llFloatButtonContainer.setTranslationX(0);
+    }
+    private void hideFloatButton() {
+        llFloatButtonContainer.setTranslationX(Util.dip2px(_mActivity, 30.5f));
+    }
+
     @Override
     public void onClick(View v) {
-
+        int id = v.getId();
+        if (id == R.id.btn_goto_cart) {
+            if (User.isLogin()) {
+                Util.startFragment(CartFragment.newInstance(true));
+            } else {
+                Util.showLoginFragment(requireContext());
+            }
+        } else if (id == R.id.btn_goto_top) {
+            rvSearchResultList.scrollToPosition(0);
+        }
     }
 }
+

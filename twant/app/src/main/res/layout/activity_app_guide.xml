@@ -14,12 +14,21 @@
         android:visibility="gone">
     </com.ftofs.twant.widget.HwLoadingView>
 
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_app_guide"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </androidx.viewpager.widget.ViewPager>
+
+    <View
+        android:id="@+id/vw_single_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00ffffaa"
+        android:visibility="gone">
+    </View>
 
     <!-- 【跳過】按鈕 -->
     <LinearLayout

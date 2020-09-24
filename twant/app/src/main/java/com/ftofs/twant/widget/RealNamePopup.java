@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.LogUtil;
@@ -190,15 +191,14 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
                 return;
             }
 
-            String url = Api.PATH_SAVE_REAL_NAME_INFO;
+            String url = Api.PATH_MEMBER_AUTH_ADD;
             EasyJSONObject params = EasyJSONObject.generate(
-                    "token", token,
-                    "consigneeName", name,
-                    "idCartNumber", idNum
+                    "authConsigneeName", name,
+                    "idCardNumber", idNum
             );
 
             SLog.info("url[%s], params[%s]", url, params);
-            Api.postUI(url, params, new UICallback() {
+            Api.postJsonUi(url, params.toString(), new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());

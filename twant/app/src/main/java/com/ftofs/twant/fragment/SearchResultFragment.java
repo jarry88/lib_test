@@ -209,6 +209,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     private int associateSearchTime;
     private FrameLayout btnClearKeyWord;
 
+    boolean isFromCrossBorderHome;  // 是否來自跨城購首頁
+
     public static SearchResultFragment newInstance(String searchTypeStr, String paramsStr) {
         Bundle args = new Bundle();
 
@@ -237,6 +239,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         searchType = SearchType.valueOf(searchTypeStr);
         String paramsStr = args.getString("paramsStr");
         paramsObj = EasyJSONObject.parse(paramsStr);
+
+        isFromCrossBorderHome = paramsObj.optBoolean("isFromCrossBorderHome");
 
         twBlack = getResources().getColor(R.color.tw_black, null);
         twRed = getResources().getColor(R.color.tw_red, null);
@@ -626,6 +630,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                 if (isActivityShopping) {
                     url = Api.PATH_SEARCH_PROMOTION;
+                }
+
+                if (isFromCrossBorderHome) {
+                    params.set("modal", Constant.GOODS_TYPE_CROSS_BORDER);
                 }
 
                 final String finalUrl = url;
