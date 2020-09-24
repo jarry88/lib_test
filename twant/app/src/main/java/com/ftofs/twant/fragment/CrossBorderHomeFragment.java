@@ -97,6 +97,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SLog.info("CrossBorderHomeFragment::onViewCreated()");
+
         CrossBorderHomeItem header = new CrossBorderHomeItem();
         header.bannerItemList = bannerItemList;
         header.navItemCount = navItemCount;
@@ -107,6 +109,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         header.storeList = storeList;
         header.itemType = Constant.ITEM_TYPE_HEADER;
 
+        crossBorderHomeItemList.clear();
         crossBorderHomeItemList.add(header);
 
         rvList = view.findViewById(R.id.rv_list);
@@ -122,9 +125,9 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                 CrossBorderHomeItem item = crossBorderHomeItemList.get(position);
 
                 if (id == R.id.btn_view_more_bargain) {
-                    Util.startFragment(BargainListFragment.newInstance());
+                    Util.startFragment(BargainListFragment.newInstance(true));
                 } else if (id == R.id.btn_view_more_group) {
-                    Util.startFragment(GroupInfoListFragment.newInstance());
+                    Util.startFragment(GroupInfoListFragment.newInstance(true));
                 } else if (id == R.id.cl_container_left) {
                     if (item.goodsPair != null && item.goodsPair.left != null) {
                         Util.startFragment(GoodsDetailFragment.newInstance(item.goodsPair.left.commonId, 0));
@@ -189,6 +192,11 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                         goods.goodsName = goodsObject.optString("goodsName");
                         goods.jingle = goodsObject.optString("jingle");
                         goods.price = Util.getSpuPrice(goodsObject);
+                        goods.tariffEnable = goodsObject.optInt("tariffEnable");
+                        goods.storeName = goodsObject.optString("storeName");
+                        goods.storeAvatarUrl = goodsObject.optString("storeAvatar");
+                        goods.isFreightFree = (goodsObject.optInt("isPinkage") == Constant.TRUE_INT);
+                        goods.nationalFlag = goodsObject.optString("adminCountry.nationalFlag");
 
                         if (index % 2 == 0) {
                             CrossBorderHomeItem item = new CrossBorderHomeItem();

@@ -252,11 +252,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/dp_4"
-                        android:background="@drawable/icon_goods_bargain_bg"
+                        android:background="@drawable/goods_cross_border_indicator"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
                         android:text="跨城購"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/tw_blue"
                         android:textSize="9sp"
                         android:visibility="gone" />
 
@@ -415,11 +415,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/dp_4"
-                        android:background="@drawable/icon_goods_bargain_bg"
+                        android:background="@drawable/goods_cross_border_indicator"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
                         android:text="跨城購"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/tw_blue"
                         android:textSize="9sp"
                         android:visibility="gone" />
 

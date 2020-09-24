@@ -33,6 +33,7 @@
                     android:id="@+id/img_cross_border_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/icon_among_city_with_text">
                 </ImageView>
 

@@ -717,6 +717,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                                 int promotionState = goods.getInt("promotionState");
                                 int promotionType = goods.getInt("promotionType");
+                                int tariffEnable = goods.optInt("tariffEnable");
 
                                 /*
                                     限時折扣條件
@@ -728,7 +729,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                                 String nationalFlag = "";
                                 if (goods.exists("adminCountry.nationalFlag")) {
-                                    StringUtil.normalizeImageUrl(goods.getSafeString("adminCountry.nationalFlag"));
+                                    nationalFlag = StringUtil.normalizeImageUrl(goods.getSafeString("adminCountry.nationalFlag"));
                                 }
                                 GoodsSearchItem goodsSearchItem = new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
                                         storeName, commonId, goodsName, jingle, price, nationalFlag);
@@ -737,6 +738,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 goodsSearchItem.batchPrice0 = batchPrice0;
                                 goodsSearchItem.showDiscountLabel = showDiscountLabel;
                                 goodsSearchItem.goodsModel = StringUtil.safeModel(goods);
+                                goodsSearchItem.tariffEnable = tariffEnable;
 
 
                                 int isPinkage = goods.getInt("isPinkage");

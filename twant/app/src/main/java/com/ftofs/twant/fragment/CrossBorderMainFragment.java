@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.CrossBorderActivityGoodsAdapter;
@@ -23,6 +24,7 @@ import com.ftofs.twant.adapter.CrossBorderCategoryListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.BargainItem;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
@@ -31,6 +33,7 @@ import com.ftofs.twant.entity.CrossBorderCategoryItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -39,6 +42,10 @@ import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +74,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     LinearLayout llAppBar;
     View vwTopBg;
     CrossBorderDrawView vwBottomBg;
+    public int homeBgColor; // 首頁頂部背景色
 
     public static CrossBorderMainFragment newInstance() {
         CrossBorderMainFragment fragment = new CrossBorderMainFragment();
@@ -87,6 +95,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        EventBus.getDefault().register(this);
 
         llAppBar = view.findViewById(R.id.ll_app_bar);
         vwTopBg = view.findViewById(R.id.vw_top_bg);
@@ -130,7 +140,12 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 CrossBorderCategoryItem item = categoryList.get(position);
                 SLog.info("position[%d], item[%s]", position, item);
 
-                changeBackgroundColor(Color.parseColor(item.backgroundColor));
+                if (position == 0) { // 如果是回到首頁，恢復原先的顏色
+                    changeBackgroundColor(homeBgColor);
+                } else {
+                    changeBackgroundColor(Color.parseColor(item.backgroundColor));
+                }
+
 
                 int prevSelectedIndex = categoryListAdapter.getSelectedIndex();
                 categoryListAdapter.setSelectedIndex(position);
@@ -148,6 +163,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_search, this);
 
+        // 先設置默認顏色
         changeBackgroundColor(_mActivity.getColor(R.color.tw_cross_border_home_page_bg_color));
 
         loadData();
@@ -156,11 +172,18 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     private void initViewPager(EasyJSONObject responseObj) {
         try {
             // 獲取Banner圖數據
+            int index = 0;
             List<CrossBorderBannerItem> bannerItemList = new ArrayList<>();
             EasyJSONArray bannerArray = responseObj.getSafeArray("datas.bannerList");
             for (Object object : bannerArray) {
                 CrossBorderBannerItem bannerItem = (CrossBorderBannerItem) EasyJSONBase.jsonDecode(CrossBorderBannerItem.class, object.toString());
                 bannerItemList.add(bannerItem);
+                if (index == 0) {
+                    homeBgColor = Color.parseColor(bannerItem.backgroundColorApp);
+                    changeBackgroundColor(homeBgColor);
+                }
+
+                index++;
             }
 
             // 獲取導航區數據
@@ -239,6 +262,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             categoryList.add(new CrossBorderCategoryItem(0, "首頁", "#019AA7"));
 
             EasyJSONArray catList = responseObj.getSafeArray("datas.catList");
+            SLog.info("catList.length[%d]", catList.length());
+            viewPager.setOffscreenPageLimit(catList.length());  // 不要减1，因为额外加了【首页】
             for (Object object : catList) {
                 CrossBorderCategoryItem item = (CrossBorderCategoryItem) EasyJSONBase.jsonDecode(CrossBorderCategoryItem.class, object.toString());
 
@@ -287,6 +312,16 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR) {
+            String colorStr = (String) message.data;
+            SLog.info("colorStr[%s]", colorStr);
+            homeBgColor = Color.parseColor(colorStr);
+            changeBackgroundColor(homeBgColor);
+        }
+    }
+
     private void changeBackgroundColor(int color) {
         llAppBar.setBackgroundColor(color);
         vwTopBg.setBackgroundColor(color);
@@ -298,7 +333,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         int id = v.getId();
         if (id == R.id.btn_test) {
             // initViewPager();
-            changeBackgroundColor(Color.RED);
+            // changeBackgroundColor(Color.RED);
         } else if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_search) {
@@ -312,5 +347,12 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         SLog.info("onBackPressedSupport");
         hideSoftInputPop();
         return true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
     }
 }

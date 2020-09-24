@@ -18,6 +18,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GroupGoodsListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GroupGoods;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
@@ -81,11 +82,18 @@ public class GroupInfoListFragment extends BaseFragment implements View.OnClickL
 
     View btnGotoTop;
 
+    boolean isCrossBorder;
+
     public static GroupInfoListFragment newInstance() {
+        return newInstance(false);
+    }
+
+    public static GroupInfoListFragment newInstance(boolean isCrossBorder) {
         Bundle args = new Bundle();
 
         GroupInfoListFragment fragment = new GroupInfoListFragment();
         fragment.setArguments(args);
+        fragment.isCrossBorder = isCrossBorder;
         return fragment;
     }
 
@@ -169,87 +177,91 @@ public class GroupInfoListFragment extends BaseFragment implements View.OnClickL
     }
 
     private void loadData(int page) {
-        EasyJSONObject params = EasyJSONObject.generate("page", page);
+        try {
+            EasyJSONObject params = EasyJSONObject.generate("page", page);
 
-        if (!StringUtil.isEmpty(sortParam)) {
-            try {
+            if (!StringUtil.isEmpty(sortParam)) {
                 params.set("sort", sortParam);
-            } catch (Exception e) {
-                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-            }
-        }
-
-        String url = Api.PATH_GROUP_GOODS_LIST;
-        SLog.info("url[%s], params[%s]", url, params);
-
-        Api.getUI(url, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(_mActivity, e);
-                adapter.loadMoreFail();
             }
 
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                SLog.info("responseStr[%s]", responseStr);
+            if (isCrossBorder) {
+                params.set("modal", Constant.GOODS_TYPE_CROSS_BORDER);
+            }
 
-                try {
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+            String url = Api.PATH_GROUP_GOODS_LIST;
+            SLog.info("url[%s], params[%s]", url, params);
 
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        adapter.loadMoreFail();
-                        return;
-                    }
-
-                    if (emptyViewSet) {
-                        // 設置空頁面
-                        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.layout_placeholder_no_data, null, false);
-                        // 設置空頁面的提示語
-                        TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
-                        tvEmptyHint.setText(R.string.no_data_hint);
-                        adapter.setEmptyView(emptyView);
-
-                        emptyViewSet = true;
-                    }
-
-                    hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
-                    SLog.info("hasMore[%s]", hasMore);
-                    if (!hasMore) {
-                        adapter.loadMoreEnd();
-                        adapter.setEnableLoadMore(false);
-                    }
-
-                    if (page == 1) {
-                        groupGoodsList.clear();
-                    }
-                    EasyJSONArray groupList = responseObj.getArray("datas.groupList");
-                    for (Object object : groupList) {
-                        EasyJSONObject group = (EasyJSONObject) object;
-
-                        GroupGoods groupGoods = new GroupGoods();
-                        groupGoods.commonId = group.getInt("commonId");
-                        if (group.exists("goodsId")) {
-                            groupGoods.goodsId = group.getInt("goodsId");
-                        }
-                        groupGoods.imageName = group.getSafeString("imageName");
-                        groupGoods.goodsName = group.getSafeString("goodsName");
-                        groupGoods.jingle = group.getSafeString("jingle");
-                        groupGoods.groupPrice = group.getDouble("groupPrice");
-                        groupGoods.goodsPrice = group.getDouble("goodsPrice");
-                        groupGoods.joinedNum = group.getInt("joinedNum");
-                        groupGoods.groupRequireNum = group.getInt("groupRequireNum");
-
-                        groupGoodsList.add(groupGoods);
-                    }
-
-                    adapter.loadMoreComplete();
-                    adapter.setNewData(groupGoodsList);
-                    currPage++;
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            Api.getUI(url, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                    adapter.loadMoreFail();
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    try {
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            adapter.loadMoreFail();
+                            return;
+                        }
+
+                        if (emptyViewSet) {
+                            // 設置空頁面
+                            View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.layout_placeholder_no_data, null, false);
+                            // 設置空頁面的提示語
+                            TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
+                            tvEmptyHint.setText(R.string.no_data_hint);
+                            adapter.setEmptyView(emptyView);
+
+                            emptyViewSet = true;
+                        }
+
+                        hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                        SLog.info("hasMore[%s]", hasMore);
+                        if (!hasMore) {
+                            adapter.loadMoreEnd();
+                            adapter.setEnableLoadMore(false);
+                        }
+
+                        if (page == 1) {
+                            groupGoodsList.clear();
+                        }
+                        EasyJSONArray groupList = responseObj.getArray("datas.groupList");
+                        for (Object object : groupList) {
+                            EasyJSONObject group = (EasyJSONObject) object;
+
+                            GroupGoods groupGoods = new GroupGoods();
+                            groupGoods.commonId = group.getInt("commonId");
+                            if (group.exists("goodsId")) {
+                                groupGoods.goodsId = group.getInt("goodsId");
+                            }
+                            groupGoods.imageName = group.getSafeString("imageName");
+                            groupGoods.goodsName = group.getSafeString("goodsName");
+                            groupGoods.jingle = group.getSafeString("jingle");
+                            groupGoods.groupPrice = group.getDouble("groupPrice");
+                            groupGoods.goodsPrice = group.getDouble("goodsPrice");
+                            groupGoods.joinedNum = group.getInt("joinedNum");
+                            groupGoods.groupRequireNum = group.getInt("groupRequireNum");
+
+                            groupGoodsList.add(groupGoods);
+                        }
+
+                        adapter.loadMoreComplete();
+                        adapter.setNewData(groupGoodsList);
+                        currPage++;
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 
     @Override

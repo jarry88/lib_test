@@ -114,7 +114,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 helper.addOnClickListener(R.id.btn_goto_store_left, R.id.cl_container_left);
 
                 // 設置是否顯示【跨城購】標籤
-                helper.setGone(R.id.tv_cross_border_indicator_left, item.left.goodsModel == Constant.GOODS_TYPE_CROSS_BORDER);
+                helper.setGone(R.id.tv_cross_border_indicator_left, item.left.tariffEnable == Constant.TRUE_INT);
             }
             // 設置右邊item的可見性
 
@@ -169,7 +169,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 helper.addOnClickListener(R.id.btn_goto_store_right, R.id.cl_container_right);
 
                 // 設置是否顯示【跨城購】標籤
-                helper.setGone(R.id.tv_cross_border_indicator_right, item.right.goodsModel == Constant.GOODS_TYPE_CROSS_BORDER);
+                helper.setGone(R.id.tv_cross_border_indicator_right, item.right.tariffEnable == Constant.TRUE_INT);
             }
             boolean rightHandSideVisible = (item.right != null);
             helper.setGone(R.id.cl_container_right, rightHandSideVisible)
@@ -177,7 +177,6 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     .setGone(R.id.tv_goods_jingle_right, rightHandSideVisible)
                     .setGone(R.id.vw_right_bottom_separator, rightHandSideVisible)
                     .setGone(R.id.btn_goto_store_right, rightHandSideVisible)
-                    .setGone(R.id.tv_freight_free_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_price_right, rightHandSideVisible);
             if (item.right != null) {
                 TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);

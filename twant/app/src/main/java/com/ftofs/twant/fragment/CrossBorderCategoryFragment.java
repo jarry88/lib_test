@@ -45,7 +45,7 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
     String categoryName;
 
 
-    SearchResultFragment searchResultFragment;
+    // SearchResultFragment searchResultFragment;
 
     RecyclerView rvSearchResultList;
     GoodsSearchResultAdapter mGoodsAdapter;
@@ -120,7 +120,8 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
         String url = Api.PATH_SEARCH_GOODS;
         EasyJSONObject params = EasyJSONObject.generate(
                 "cat", categoryId,
-                "page", page
+                "page", page,
+                "modal", Constant.GOODS_TYPE_CROSS_BORDER
         );
 
         SLog.info("url[%s], params[%s]", url, params);
@@ -201,7 +202,7 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
 
                         String nationalFlag = "";
                         if (goods.exists("adminCountry.nationalFlag")) {
-                            StringUtil.normalizeImageUrl(goods.getSafeString("adminCountry.nationalFlag"));
+                            nationalFlag = StringUtil.normalizeImageUrl(goods.getSafeString("adminCountry.nationalFlag"));
                         }
                         GoodsSearchItem goodsSearchItem = new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
                                 storeName, commonId, goodsName, jingle, price, nationalFlag);
@@ -210,6 +211,7 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
                         goodsSearchItem.batchPrice0 = batchPrice0;
                         goodsSearchItem.showDiscountLabel = showDiscountLabel;
                         goodsSearchItem.goodsModel = StringUtil.safeModel(goods);
+                        SLog.info("nationalFlag[%s]", goodsSearchItem.nationalFlag);
 
 
                         int isPinkage = goods.getInt("isPinkage");
@@ -217,6 +219,7 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
                         goodsSearchItem.isFreightFree = (isPinkage == 1);
                         goodsSearchItem.hasGift = (isGift == 1);
                         goodsSearchItem.hasDiscount = (appUsable == 1);
+                        goodsSearchItem.tariffEnable = goods.optInt("tariffEnable");
 
                         if (pair == null) {
                             pair = new GoodsSearchItemPair(Constant.ITEM_TYPE_NORMAL);

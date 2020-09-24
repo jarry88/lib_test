@@ -150,7 +150,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 goodsName.setText(confirmOrderSkuItem.goodsName);
                 ImageView imgCrossBorderIndicator = skuItemView.findViewById(R.id.img_cross_border_indicator);
                 imgCrossBorderIndicator.setVisibility(
-                            confirmOrderSkuItem.goodsModel == Constant.GOODS_TYPE_CROSS_BORDER ? View.VISIBLE : View.GONE);
+                            confirmOrderSkuItem.tariffEnable == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
 
                 TextView tvFullSpecs = skuItemView.findViewById(R.id.tv_goods_full_specs);
                 tvFullSpecs.setText(confirmOrderSkuItem.goodsFullSpecs);

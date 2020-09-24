@@ -18,12 +18,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -83,6 +85,25 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
             // https://www.jianshu.com/p/e54db232df62
             (new PagerSnapHelper()).attachToRecyclerView(rvBannerList);
+            rvBannerList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        int position = getCurrPosition(rvBannerList);
+                        SLog.info("currPosition[%d]", position);
+                        CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
+
+                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, bannerItem.backgroundColorApp);
+                    }
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                }
+            });
 
 
             // 導航區
@@ -101,7 +122,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     for (int i = 0; i < itemIdArr.length; i++) {
                         int itemId = itemIdArr[i];
                         if (id == itemId) {
-                            CrossBorderNavItem navItem = navPane.crossBorderNavItemList.get(0);
+                            CrossBorderNavItem navItem = navPane.crossBorderNavItemList.get(i);
                             SLog.info("navItem[%s]", navItem);
                             Util.handleClickLink(navItem.linkTypeApp, navItem.linkValueApp);
                             break;
@@ -327,7 +348,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 helper.addOnClickListener(R.id.btn_goto_store_left, R.id.cl_container_left);
 
                 // 設置是否顯示【跨城購】標籤
-                helper.setGone(R.id.tv_cross_border_indicator_left, goodsPair.left.goodsModel == Constant.GOODS_TYPE_CROSS_BORDER);
+                helper.setGone(R.id.tv_cross_border_indicator_left, goodsPair.left.tariffEnable == Constant.TRUE_INT);
             }
             // 設置右邊item的可見性
 
@@ -382,7 +403,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 helper.addOnClickListener(R.id.btn_goto_store_right, R.id.cl_container_right);
 
                 // 設置是否顯示【跨城購】標籤
-                helper.setGone(R.id.tv_cross_border_indicator_right, goodsPair.right.goodsModel == Constant.GOODS_TYPE_CROSS_BORDER);
+                helper.setGone(R.id.tv_cross_border_indicator_right, goodsPair.right.tariffEnable == Constant.TRUE_INT);
             }
             boolean rightHandSideVisible = (goodsPair.right != null);
             helper.setGone(R.id.cl_container_right, rightHandSideVisible)
@@ -390,7 +411,6 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     .setGone(R.id.tv_goods_jingle_right, rightHandSideVisible)
                     .setGone(R.id.vw_right_bottom_separator, rightHandSideVisible)
                     .setGone(R.id.btn_goto_store_right, rightHandSideVisible)
-                    .setGone(R.id.tv_freight_free_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_price_right, rightHandSideVisible);
             if (item.goodsPair != null && goodsPair.right != null) {
                 TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);

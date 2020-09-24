@@ -58,10 +58,12 @@ import com.ftofs.twant.entity.DownloadImageResult;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.lib_common_ui.entity.ListPopupItem;
 import com.ftofs.twant.entity.Location;
+import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.CrossBorderMainFragment;
 import com.ftofs.twant.fragment.DoubleElevenFragment;
 import com.ftofs.twant.fragment.ExplorerFragment;
@@ -1783,12 +1785,18 @@ public class Util {
                 Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId));
                 break;
             case "wantPost":
+                /*
                 MainFragment mainFragment = MainFragment.getInstance();
                 if (mainFragment == null) {
                     ToastUtil.error(TwantApplication.Companion.get(), "MainFragment為空");
                     return;
                 }
                 mainFragment.showHideFragment(MainFragment.CIRCLE_FRAGMENT);
+
+                 */
+                SearchPostParams searchPostParams = new SearchPostParams();
+                searchPostParams.keyword = "";
+                Util.startFragment(CircleFragment.newInstance(true, searchPostParams));
                 break;
             case "tariffBuy":
                 Util.startFragment(CrossBorderMainFragment.newInstance());

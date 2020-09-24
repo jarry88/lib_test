@@ -51,11 +51,18 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
     int currPage = 0;
     boolean hasMore;
 
+    boolean isCrossBorder;
+
     public static BargainListFragment newInstance() {
+        return newInstance(false);
+    }
+
+    public static BargainListFragment newInstance(boolean isCrossBorder) {
         Bundle args = new Bundle();
 
         BargainListFragment fragment = new BargainListFragment();
         fragment.setArguments(args);
+        fragment.isCrossBorder = isCrossBorder;
 
         return fragment;
     }
@@ -105,80 +112,88 @@ public class BargainListFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void loadData(int page) {
-        EasyJSONObject params = EasyJSONObject.generate(
-                "page", page);
+        try {
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "page", page);
 
-        String url = Api.PATH_BARGAIN_LIST;
-        SLog.info("url[%s], params[%s]", url, params);
-        Api.getUI(url, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
-                ToastUtil.showNetworkError(_mActivity, e);
-                adapter.loadMoreFail();
+            if (isCrossBorder) {
+                params.set("modal", Constant.GOODS_TYPE_CROSS_BORDER);
             }
 
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
+            String url = Api.PATH_BARGAIN_LIST;
+            SLog.info("url[%s], params[%s]", url, params);
+            Api.getUI(url, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
+                    ToastUtil.showNetworkError(_mActivity, e);
+                    adapter.loadMoreFail();
+                }
 
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
 
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
-                        adapter.loadMoreFail();
-                        return;
-                    }
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
-                    hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
-                    SLog.info("hasMore[%s]", hasMore);
-                    if (!hasMore) {
-                        adapter.loadMoreEnd();
-                        adapter.setEnableLoadMore(false);
-                    }
-
-                    if (page == 1) { // 如果是第1頁，添加banner圖
-                        String bargainImageWap = responseObj.getSafeString("datas.bargainImageWap");
-                        BargainItem bargainItem = new BargainItem(Constant.ITEM_TYPE_BANNER);
-                        bargainItem.bannerUrl = bargainImageWap;
-
-                        bargainItemList.add(bargainItem);
-                    }
-
-                    EasyJSONArray bargainGoodsVoList = responseObj.getSafeArray("datas.bargainGoodsVoList");
-                    for (Object object : bargainGoodsVoList) {
-                        EasyJSONObject bargainGoodsVo = (EasyJSONObject) object;
-                        BargainItem bargainItem = new BargainItem(Constant.ITEM_TYPE_NORMAL);
-                        bargainItem.commonId = bargainGoodsVo.getInt("commonId");
-                        bargainItem.goodsId = bargainGoodsVo.getInt("goodsId");
-                        bargainItem.bargainId = bargainGoodsVo.getInt("bargainId");
-                        String startTimeStr = bargainGoodsVo.getSafeString("startTime");
-                        bargainItem.startTime = Jarbon.parse(startTimeStr).getTimestampMillis();
-                        bargainItem.bargainState = bargainGoodsVo.getInt("bargainState");
-                        bargainItem.imageSrc = bargainGoodsVo.getSafeString("imageSrc");
-                        bargainItem.goodsName = bargainGoodsVo.getSafeString("goodsName");
-                        bargainItem.jingle = bargainGoodsVo.getSafeString("jingle");
-
-                        EasyJSONArray bargainOpenList = bargainGoodsVo.getSafeArray("bargainOpenList");
-                        for (Object object2 : bargainOpenList) {
-                            EasyJSONObject bargainOpenItem = (EasyJSONObject) object2;
-                            bargainItem.bargainOpenList.add(bargainOpenItem.getSafeString("avatar"));
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+                            adapter.loadMoreFail();
+                            return;
                         }
 
-                        bargainItem.bottomPrice = bargainGoodsVo.getDouble("bottomPrice");
+                        hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                        SLog.info("hasMore[%s]", hasMore);
+                        if (!hasMore) {
+                            adapter.loadMoreEnd();
+                            adapter.setEnableLoadMore(false);
+                        }
 
-                        bargainItemList.add(bargainItem);
+                        if (page == 1) { // 如果是第1頁，添加banner圖
+                            String bargainImageWap = responseObj.getSafeString("datas.bargainImageWap");
+                            BargainItem bargainItem = new BargainItem(Constant.ITEM_TYPE_BANNER);
+                            bargainItem.bannerUrl = bargainImageWap;
+
+                            bargainItemList.add(bargainItem);
+                        }
+
+                        EasyJSONArray bargainGoodsVoList = responseObj.getSafeArray("datas.bargainGoodsVoList");
+                        for (Object object : bargainGoodsVoList) {
+                            EasyJSONObject bargainGoodsVo = (EasyJSONObject) object;
+                            BargainItem bargainItem = new BargainItem(Constant.ITEM_TYPE_NORMAL);
+                            bargainItem.commonId = bargainGoodsVo.getInt("commonId");
+                            bargainItem.goodsId = bargainGoodsVo.getInt("goodsId");
+                            bargainItem.bargainId = bargainGoodsVo.getInt("bargainId");
+                            String startTimeStr = bargainGoodsVo.getSafeString("startTime");
+                            bargainItem.startTime = Jarbon.parse(startTimeStr).getTimestampMillis();
+                            bargainItem.bargainState = bargainGoodsVo.getInt("bargainState");
+                            bargainItem.imageSrc = bargainGoodsVo.getSafeString("imageSrc");
+                            bargainItem.goodsName = bargainGoodsVo.getSafeString("goodsName");
+                            bargainItem.jingle = bargainGoodsVo.getSafeString("jingle");
+
+                            EasyJSONArray bargainOpenList = bargainGoodsVo.getSafeArray("bargainOpenList");
+                            for (Object object2 : bargainOpenList) {
+                                EasyJSONObject bargainOpenItem = (EasyJSONObject) object2;
+                                bargainItem.bargainOpenList.add(bargainOpenItem.getSafeString("avatar"));
+                            }
+
+                            bargainItem.bottomPrice = bargainGoodsVo.getDouble("bottomPrice");
+
+                            bargainItemList.add(bargainItem);
+                        }
+
+                        adapter.loadMoreComplete();
+                        adapter.setNewData(bargainItemList);
+                        currPage++;
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
-
-                    adapter.loadMoreComplete();
-                    adapter.setNewData(bargainItemList);
-                    currPage++;
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 
 

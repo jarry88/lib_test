@@ -114,6 +114,11 @@ public enum EBMessageType {
     MESSAGE_TYPE_WEIXIN_BIND,
 
     /**
+     * 更新跨城購首頁主題顏色
+     */
+    MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR,
+
+    /**
      * 選擇想要帖產品
      */
     MESSAGE_TYPE_SELECT_POST_GOODS,
