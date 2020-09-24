@@ -128,6 +128,7 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding, OneK
 
     override fun onBackPressedSupport(): Boolean {
         if (parentFragmentManager.backStackEntryCount <= 1) {
+            hideSoftInput()
             (activity as LoginActivity).onBackPressedSupport()
         } else {
             hideSoftInputPop()

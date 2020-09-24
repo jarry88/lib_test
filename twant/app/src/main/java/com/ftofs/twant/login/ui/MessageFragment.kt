@@ -2,6 +2,7 @@ package com.ftofs.twant.login.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.UserManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -204,13 +205,15 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
             }
         }
         aViewModel.successLoginInfo.observe(this){
-                com.gzp.lib_common.utils.ToastUtil.success(context, "登入成功")
-                com.ftofs.twant.login.UserManager.saveUser(aViewModel.loginLiveData.value)
+                ToastUtil.success(context, "登入成功")
+//                com.ftofs.twant.login.UserManager.saveUser(aViewModel.loginLiveData.value)
+                com.ftofs.twant.login.UserManager.removeUser()
+
                 User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE, it)
                 hideSoftInput()
 
                 SLog.info("登錄成功")
-                com.ftofs.twant.util.Util.getMemberToken(_mActivity)
+                Util.getMemberToken(_mActivity)
                 (activity as LoginActivity).onBackPressedSupport()
         }
         aViewModel.mobileZoneList.observe(this, {
@@ -295,6 +298,7 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
 
     override fun onBackPressedSupport(): Boolean {
         if (parentFragmentManager.backStackEntryCount <= 1) {
+            hideSoftInput()
             (activity as LoginActivity).onBackPressedSupport()
         }
         else hideSoftInputPop()

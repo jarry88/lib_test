@@ -71,6 +71,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
 //            (activity as LoginActivity).onBackPressedSupport()
 //            com.ftofs.twant.login.UserManager.start(requireContext())
             showLoading()
+            SLog.info("由歷史頁啓動")
             OneStepLogin.start(requireContext(),true)
         }
         binding.btnOneStep.setOnClickListener {loginAction() }
@@ -96,6 +97,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     override fun onBackPressedSupport(): Boolean {
         if (parentFragmentManager.backStackEntryCount <= 1) {
 //            call.onCall()
+            hideSoftInput()
             (activity as LoginActivity).onBackPressedSupport()
         }else{
             hideSoftInputPop()

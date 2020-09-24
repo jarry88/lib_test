@@ -150,7 +150,12 @@ class PhoneView @JvmOverloads constructor(
                     msg = text_invalid_mobile.format(areaArray[zoneIndex])
                     isRight=false
                 }
-             }
+
+            }
+            if (!isRight) {//更新錯誤消息
+                errorText?.apply {
+                    if(msg!=this.text) this.text=msg }
+            }
 
         }
     }

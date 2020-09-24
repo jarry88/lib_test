@@ -81,6 +81,8 @@ object OneStepLogin{
                         SLog.info( "是不是歷史登錄頁 %s",this is LoginActivity)
                     }
                     EBMessage.postMessage(EBMessageType.LOGIN_SUCCESS_TOAST, null)
+                    //不是用賬號密碼登錄 的都消除記錄
+                    UserManager.removeUser()
                     getResultWithToken(aliYunToken)
 
                     User.onLoginSuccess(responseObj.getInt("datas.memberId"), LoginType.MOBILE, responseObj)
