@@ -36,7 +36,9 @@
             android:layout_gravity="center"
             android:layout_marginTop="6dp"
             android:scaleType="fitXY"
-            android:src="@drawable/icon_sendwant" />
+            android:src="@drawable/icon_sendwant"
+            android:visibility="gone"
+            />
 
         <ImageView
             android:id="@+id/btn_goto_top"
