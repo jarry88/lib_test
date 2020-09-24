@@ -47,7 +47,8 @@ class MessageLoginViewModel(application: Application):BaseViewModel(application)
         launch(stateLiveData,
                 {repository.run { simpleGet(api.getSmsCodeSend(mobile)) }},
                 {   authCodeInfo.postValue(it)},
-                { errorMessage="驗證碼獲取失敗"},
+                {SLog.info(it.toString())
+                    errorMessage="驗證碼獲取失敗"},
                 final = {}
         )
     }

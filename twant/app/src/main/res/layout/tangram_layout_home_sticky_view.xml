@@ -134,8 +134,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
                     android:layout_weight="1">
 
                     <LinearLayout
@@ -144,7 +144,7 @@
                         android:layout_height="0dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toLeftOf="@id/btn_category_goods"
                         app:layout_constraintTop_toTopOf="parent">
@@ -186,7 +186,7 @@
                             android:text="25555552"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
-                            android:translationX="@dimen/home_page_badge_translation_x"
+                            android:layout_marginLeft="@dimen/home_page_badge_translation_x"
                             android:visibility="gone"
 
                             />
@@ -241,7 +241,7 @@
                             android:text="185555555"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
-                            android:translationX="@dimen/home_page_badge_translation_x"
+                            android:layout_marginLeft="@dimen/home_page_badge_translation_x"
                             android:visibility="gone"
 
                             />
@@ -296,7 +296,7 @@
                             android:text="123333"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
-                            android:translationX="@dimen/home_page_badge_translation_x"
+                            android:layout_marginLeft="@dimen/home_page_badge_translation_x"
                             android:visibility="gone" />
                     </LinearLayout>
 
@@ -348,7 +348,7 @@
                             android:text="123333"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
-                            android:translationX="@dimen/home_page_badge_translation_x"
+                            android:layout_marginLeft="@dimen/home_page_badge_translation_x"
                             android:visibility="gone" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>

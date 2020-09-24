@@ -141,30 +141,32 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
                 Goods goods;
                 int commonId = -1;
                 int id = view.getId();
-                if (id == R.id.img_left_goods || id == R.id.btn_add_to_cart_left) {
+                if (id == R.id.img_left_goods ) {
                     goods = goodsPair.leftGoods;
-//                    SLog.info(goods.goodsName);
-//                    SLog.info("%s",commonId);
-                    commonId = goods.id;
-                } else if (id == R.id.img_right_goods || id == R.id.btn_add_to_cart_right) {
-                    goods = goodsPair.rightGoods;
-//                    SLog.info(goods.goodsName);
                     SLog.info("%s",commonId);
                     commonId = goods.id;
-                }
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
 
+                }else if(id==R.id.img_right_goods){
+                    goods = goodsPair.rightGoods;
+                    SLog.info("%s",commonId);
+                    commonId = goods.id;
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                }
                 int userId = User.getUserId();
 
                 if (id == R.id.btn_add_to_cart_left || id == R.id.btn_add_to_cart_right) {
+                    if (id == R.id.btn_add_to_cart_left) {
+                        commonId = goodsPair.leftGoods.commonId;
+                    }else {
+                        commonId = goodsPair.rightGoods.commonId;
+
+                    }
                     if (userId > 0) {
                         showSpecSelectPopup(commonId);
                     } else {
                         Util.showLoginFragment(requireContext());
                     }
-                    return;
-                }
-                if (commonId != -1) {
-                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                 }
             }
         });

@@ -14,8 +14,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ftofs.lib_net.model.StoreLabel;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.PostCommentListAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
@@ -42,6 +46,8 @@ import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.sxu.shadowdrawable.ShadowDrawable;
 
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +66,7 @@ import okhttp3.Call;
  * 想要帖詳情Fragment
  * @author zwm
  */
-public class PostDetailFragment extends BaseFragment implements View.OnClickListener {
+public class PostDetailFragment extends BaseFragment implements View.OnClickListener  ,BaseQuickAdapter.RequestLoadMoreListener{
     public static final int STATE_TYPE_THUMB = 1;
     public static final int STATE_TYPE_LIKE = 2;
 
@@ -122,6 +128,10 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     Map<Integer, Integer> rvPositionToImageIndexMap = new HashMap<>();
     // 圖片列表
     List<String> imageList = new ArrayList<>();
+    private int currPage=0;
+    boolean hasMore;
+    private RecyclerView rvCommentContainer;
+
 
     public static PostDetailFragment newInstance(int postId) {
         Bundle args = new Bundle();
@@ -181,17 +191,20 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         tvViewCount = view.findViewById(R.id.tv_view_count);
         tvReplyCount = view.findViewById(R.id.tv_reply_count);
         llCommentContainer = view.findViewById(R.id.ll_comment_container);
-        adapter = new PostCommentListAdapter(_mActivity, llCommentContainer, R.layout.post_comment_item);
-        adapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(ViewGroupAdapter adapter, View view, int position) {
-                CommentItem commentItem = commentItemList.get(position);
-                start(CommentDetailFragment.newInstance(commentItem,Constant.COMMENT_CHANNEL_POST,authorMemberName));
-            }
+        rvCommentContainer = view.findViewById(R.id.rl_comment_container);
+        rvCommentContainer.setLayoutManager(new LinearLayoutManager(requireContext()));
+        adapter = new PostCommentListAdapter(_mActivity,  R.layout.post_comment_item,commentItemList);
+        rvCommentContainer.setAdapter(adapter);
+        adapter.setOnItemClickListener((adapter, view1, position) -> {
+            CommentItem commentItem = commentItemList.get(position);
+            start(CommentDetailFragment.newInstance(commentItem,Constant.COMMENT_CHANNEL_POST,authorMemberName));
         });
-        adapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+        adapter.setEnableLoadMore(true);
+        adapter.setOnLoadMoreListener(this,rvCommentContainer);
+
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
 
                 SLog.info("id[%d]", id);
@@ -205,7 +218,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     start(MemberInfoFragment.newInstance(commentItem.memberName));
                 } else if (id == R.id.btn_reply) {
                     SLog.info("id[%d]", id);
-                    start(CommentDetailFragment.newInstance(commentItem,Constant.COMMENT_CHANNEL_POST,authorMemberName));
+                    start(CommentDetailFragment.newInstance(commentItem, Constant.COMMENT_CHANNEL_POST, authorMemberName));
                 } else if (id == R.id.btn_thumb) {
                     switchThumbState(position);
                 } else if (id == R.id.btn_make_true) {
@@ -218,6 +231,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 }
             }
         });
+
         imgThumb = view.findViewById(R.id.img_thumb);
         tvThumbCount = view.findViewById(R.id.tv_thumb_count);
         imgLike = view.findViewById(R.id.img_like);
@@ -231,7 +245,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         Util.setOnClickListener(view, R.id.btn_share, this);
 
         loadData();
-        loadCommentList();
+        loadCommentList(currPage+1);
     }
 
     @Override
@@ -357,7 +371,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         iconComeTrue.setVisibility(View.VISIBLE);
 
         adapter.setComeTrue(true);
-        adapter.setData(adapter.getDataList());
+        adapter.notify();
     }
 
     private void commentMakeTrue(int commentId) {
@@ -664,7 +678,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                         tvThumbCount.setText("");
                     }
 
-                    adapter.setData(adapter.getDataList());
+//                    adapter.setData(adapter.getDataList());
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -690,12 +704,13 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         }
     }
 
-    private void loadCommentList() {
+    private void loadCommentList(int page) {
         String token = User.getToken();
 
         EasyJSONObject params = EasyJSONObject.generate(
                 "channel", Constant.COMMENT_CHANNEL_POST,
-                "bindId", postId);
+                "bindId", postId,
+                "page",currPage);
 
         if (!StringUtil.isEmpty(token)) {
             try {
@@ -722,8 +737,16 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 }
 
                 try {
-                    commentItemList.clear();
+                    if (page == 1) {
+                        commentItemList.clear();
+                    }
+                    hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                    if (!hasMore) {
+                        adapter.loadMoreEnd();
+                        adapter.setEnableLoadMore(false);
+                    }
                     EasyJSONArray comments = responseObj.getSafeArray("datas.comments");
+                    List<CommentItem> list = new ArrayList<CommentItem>();
                     for (Object object : comments) {
                         EasyJSONObject comment = (EasyJSONObject) object;
                         EasyJSONObject memberVo = comment.getSafeObject("memberVo");
@@ -761,11 +784,13 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                             }
                         }
 
-                        commentItemList.add(item);
+                        list.add(item);
                     }
 
                     adapter.setComeTrue(isComeTrue);
-                    adapter.setData(commentItemList);
+                    adapter.addData(list);
+                    adapter.loadMoreComplete();
+                    currPage++;
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -773,6 +798,13 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         });
     }
 
+    private void reloadData() {
+        currPage = 0;
+        loadCommentList(currPage + 1);
+    }
+    /**
+     * 上滑加載更多
+     */
     private void switchThumbState(final int position) {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
@@ -845,11 +877,23 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
             tvPostTitle.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    loadCommentList();
+                    currPage = 0;
+                    loadCommentList(1);
                     postComment++;
                     updatePostCommentCount();
                 }
             }, 1500); // 有時候重新加載的時候，也沒有從服務端加載到最新的數據，延遲個1500毫秒
         }
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        SLog.info("onLoadMoreRequested");
+
+        if (!hasMore) {
+            adapter.setEnableLoadMore(false);
+            return;
+        }
+        loadCommentList(currPage + 1);
     }
 }

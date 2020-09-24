@@ -29,7 +29,7 @@ class EtCaptchaView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val minLength=4
+    private val needLength=6
     private val etCaptcha:EditText by lazy {
         rootView.findViewById(R.id.et_captcha)
     }
@@ -81,7 +81,7 @@ class EtCaptchaView @JvmOverloads constructor(
     }
     fun updateRight() {
         isRight= getCaptcha()?.run {
-            length>=minLength
+            length==needLength
         }?:false
     }
 }

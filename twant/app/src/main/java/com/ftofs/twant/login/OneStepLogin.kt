@@ -12,9 +12,12 @@ import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import cn.snailpad.easyjson.EasyJSONException
+import cn.snailpad.easyjson.EasyJSONObject
 import com.alibaba.fastjson.JSON
-import com.facebook.login.Login
 import com.ftofs.lib_net.BaseRepository
+import com.ftofs.twant.api.Api
+import com.ftofs.twant.api.UICallback
 import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.constant.LoginType
 import com.ftofs.twant.entity.EBMessage
@@ -22,6 +25,7 @@ import com.ftofs.twant.login.ui.LoginActivity
 import com.ftofs.twant.login.ui.MessageFragment
 import com.ftofs.twant.login.utils.ExecutorManager
 import com.ftofs.twant.util.User
+import com.ftofs.twant.util.Util
 import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
@@ -30,52 +34,60 @@ import com.gzp.lib_common.utils.Util.findActivity
 import com.lxj.xpopup.core.BasePopupView
 import com.mobile.auth.gatewayauth.*
 import com.mobile.auth.gatewayauth.model.TokenRet
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.runBlocking
+import okhttp3.Call
+import java.io.IOException
 
 
-object OneStepLogin:CoroutineScope{
+object OneStepLogin{
+    private var lastClickTime=0.toLong()
     private var loadingPopup: BasePopupView?=null
     private val TAG: String = this::class.java.simpleName
     private var sdkAvailable = true
     private val repository by lazy { object : BaseRepository(){} }
     private lateinit var mContext:Context
     fun login(aliYunToken: String) {
-        launch {
-            try {
-                when (val re= repository.run{simpleGet(api.getLoginOne(aliYunToken, "android"))}) {
-                    is Result.Success -> {
-                        SLog.info("数据加载成功${re.datas.nickName}")
-                        getResultWithToken(aliYunToken)
-                        Thread {
-                            Looper.prepare()
-                            Toast.makeText(mContext, "登入成功", Toast.LENGTH_SHORT).show()
-                            Looper.loop()
-                        }.start()
-                        User.onNewLoginSuccess(re.datas.memberId!!, LoginType.MOBILE,re.datas)
 
-                        SLog.info("登錄成功")
-                    }
-                    else -> {
-                        goLoginActivity()
-                        SLog.info("数据加载失败%s ", if (re is Result.DataError) re.datas.toString() else " ")
-
-//                    errorMessage=re
-
-                    }
-                }
-            } catch (e: Throwable) {
-                SLog.info(e.toString())
-            }finally {
-
+        SLog.info(User.getToken().plus(aliYunToken))
+        Api.postUI("/v2/mobile/loginOne", EasyJSONObject.generate("aliYunToken", aliYunToken, "clientType", "android"), object : UICallback() {
+            override fun onFailure(call: Call, e: IOException) {
+                ToastUtil.showNetworkError(mContext, e)
             }
-        }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, responseStr: String) {
+                SLog.info("responeStr[%s]", responseStr)
+                val responseObj = EasyJSONObject.parse<EasyJSONObject>(responseStr)
+                if (ToastUtil.checkError(mContext, responseObj)) {
+                    return
+                }
+                try {
+
+                    Thread {
+                        Looper.prepare()
+                        Toast.makeText(mContext, "登入成功", Toast.LENGTH_SHORT).show()
+                        Looper.loop()
+                    }.start()
+                    getResultWithToken(aliYunToken)
+
+                    User.onLoginSuccess(responseObj.getInt("datas.memberId"), LoginType.MOBILE, responseObj)
+                } catch (e: EasyJSONException) {
+                    SLog.info("Error!message[%s], trace[%s]", e.message, Log.getStackTraceString(e))
+                    mPhoneNumberAuthHelper.hideLoginLoading()
+                    Thread {
+                        Looper.prepare()
+                        Toast.makeText(mContext, "一鍵登入失敗", Toast.LENGTH_SHORT).show()
+                        Looper.loop()
+                    }.start()
+//                    goLoginActivity()
+                }
+            }
+
+        })
     }
 
-    private val mPhoneNumberAuthHelper by lazy { PhoneNumberAuthHelper.getInstance(mContext, mCheckListener)
-    }
+    private val mPhoneNumberAuthHelper by lazy { PhoneNumberAuthHelper.getInstance(mContext, mCheckListener) }
     private val mCheckListener by lazy {
         object : TokenResultListener {
             override fun onTokenSuccess(p0: String?) {
@@ -118,8 +130,6 @@ object OneStepLogin:CoroutineScope{
 
     fun start(context: Context) {
         mContext =context
-//        getBaseApplication().mHandler?.post{"a"}
-//        ToastUtil.success(context,"顯示加載")
         SLog.info("加載中")
 
         sdkInit()
@@ -160,10 +170,42 @@ object OneStepLogin:CoroutineScope{
     }
     private fun actionOneKeyLogin(token: String) {
         login(token)
+//        login2(token)
 
     }
 
+    fun login2(aliYunToken: String) = runBlocking{
+            launch {
+                try {
+                    SLog.info("aliYunToken  $aliYunToken")
+                    when (val re = repository.run { simpleGet(api.getLoginOne(aliYunToken, "android")) }) {
+                        is Result.Success -> {
+                            SLog.info("数据加载成功${re.datas.nickName}")
+                            getResultWithToken(aliYunToken)
+                            Thread {
+                                Looper.prepare()
+                                Toast.makeText(mContext, "登入成功", Toast.LENGTH_SHORT).show()
+                                Looper.loop()
+                            }.start()
+                            User.onNewLoginSuccess(re.datas.memberId!!, LoginType.MOBILE, re.datas)
 
+                            SLog.info("登錄成功")
+                        }
+                        else -> {
+                            goLoginActivity()
+                            SLog.info("数据加载失败%s ", if (re is Result.DataError) re.datas.toString() else " ")
+                        }
+                    }
+                } catch (e: Throwable) {
+                    SLog.info(e.toString())
+
+                    goLoginActivity()
+                    mPhoneNumberAuthHelper?.quitLoginPage()
+                } finally {
+
+                }
+            }
+    }
 
     /**
      * 配置竖屏样式
@@ -180,12 +222,12 @@ object OneStepLogin:CoroutineScope{
         val url =BaseRepository().getBase().toString().plus("/article/info_h5/3")
         SLog.info(url)
         mPhoneNumberAuthHelper!!.setAuthUIConfig(AuthUIConfig.Builder()
-                .setAppPrivacyOne("《私隱條款》",url )
+                .setAppPrivacyOne("《私隱條款》", url)
                 .setAppPrivacyColor(Color.GRAY, Color.parseColor("#002E00"))
                 .setPrivacyState(false)
                 .setCheckboxHidden(true)
                 .setStatusBarColor(Color.TRANSPARENT)
-                .setStatusBarUIFlag(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+                .setStatusBarUIFlag(View.SYSTEM_UI_FLAG_LOW_PROFILE)
                 .setLightColor(true)
                 .setAuthPageActIn("in_activity", "out_activity")
                 .setAuthPageActOut("in_activity", "out_activity")
@@ -211,7 +253,7 @@ object OneStepLogin:CoroutineScope{
         object : TokenResultListener {
             override fun onTokenSuccess(s: String) {
                 SLog.info("獲取成功")
-                EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
+                EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS, null)
 
                 var tokenRet: TokenRet? = null
                 try {
@@ -232,7 +274,7 @@ object OneStepLogin:CoroutineScope{
 
             override fun onTokenFailed(s: String) {
                 //其他方式進入這裏
-                EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
+                EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS, null)
 
                 Log.e("OneKeyLoginActivity.TAG", "获取token失败：$s")
                 var tokenRet: TokenRet? = null
@@ -244,11 +286,17 @@ object OneStepLogin:CoroutineScope{
                         SLog.info("模拟的是必须登录 否则直接退出app的场景")
 //                        finish()
                     } else {
+                        tokenRet?.apply {
+                            Thread {
+                                Looper.prepare()
+                                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show()
+                                Looper.loop()
+                            }.start()
+                        }
                         SLog.info("token 獲取失敗，前往登錄頁")
-
 //                        ToastUtil.error(this@LoginActivity, "一键登录失败切换到其他登录方式")
 //                        start(MessageFragment(""))
-                        goLoginActivity()
+                        if(isFastClick()) goLoginActivity()
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -256,7 +304,15 @@ object OneStepLogin:CoroutineScope{
             }
         }
     }
-
+    fun isFastClick(): Boolean {
+        var flag = false
+        val curClickTime = System.currentTimeMillis()
+        if (curClickTime -lastClickTime >= 810) {
+            flag = true
+        }
+        lastClickTime = curClickTime
+        return flag
+    }
     private fun goLoginActivity() {
         if (UserManager.getUser() != null && findActivity(mContext) is LoginActivity) {
             (findActivity(mContext) as LoginActivity).getHistoryFragment()?.start(MessageFragment("", sdkAvailable))
@@ -279,9 +335,6 @@ object OneStepLogin:CoroutineScope{
 //            showLoadingDialog("正在唤起授权页")
     }
 
-    override val coroutineContext: CoroutineContext
-        get() = job
-    private val job= Job()
 //    fun initViewObservable() {
 //        mViewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
 //            when(it){
