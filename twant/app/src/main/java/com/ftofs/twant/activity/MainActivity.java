@@ -47,6 +47,7 @@ import com.ftofs.twant.entity.Location;
 import com.ftofs.lib_net.model.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
+import com.ftofs.twant.fragment.AddRealNameInfoFragment;
 import com.ftofs.twant.fragment.BargainDetailFragment;
 
 import com.ftofs.twant.fragment.CrossBorderMainFragment;
@@ -511,8 +512,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                     MainActivity.this.getSupportDelegate().showFragmentStackHierarchyView();
                                 } else if (position == 9) { // 測試1
                                     // Util.startFragment(TestFragment.newInstance());
-                                    Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_DATE);
-                                    Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_VERSION);
+                                    // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_DATE);
+                                    // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_VERSION);
+                                    Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));
                                 } else if (position == 10) { // 測試2
                                     // EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WEIXIN_LOGIN, null);
 

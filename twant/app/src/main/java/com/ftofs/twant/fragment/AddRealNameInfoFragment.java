@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,9 +33,11 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.HwLoadingPopup;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.base.callback.CommonCallback;
+import com.gzp.lib_common.utils.FileUtil;
 import com.gzp.lib_common.utils.PermissionUtil;
 import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import org.jetbrains.annotations.NotNull;
@@ -393,9 +396,30 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
             etId.setText("");
         } else if (id == R.id.btn_import_front_id_image) {
             isFrontIdImage = true;
-            takePhoto();
+            showImageSrc();
         } else if (id == R.id.btn_import_back_id_image) {
             isFrontIdImage = false;
+            showImageSrc();
+        }
+    }
+
+    private void showImageSrc() {
+        new XPopup.Builder(getContext())
+//                        .maxWidth(600)
+                .asCenterList("请选择", new String[]{"從手機相冊選擇", "從相機拍攝"},
+                        new OnSelectListener() {
+                            @Override
+                            public void onSelect(int position, String text) {
+                                selectIdImage(position);
+                            }
+                        })
+                .show();
+    }
+
+    private void selectIdImage(int position) {
+        if (position == 0) {
+            openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+        } if (position == 1) {
             takePhoto();
         }
     }
@@ -424,8 +448,16 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
         }
 
         // 上傳圖片到OSS
-        if (requestCode == RequestCode.CAMERA_IMAGE.ordinal()) {
-            String absolutePath = captureImageFile.getAbsolutePath();  // 拍照得到的文件路徑
+        if (requestCode == RequestCode.CAMERA_IMAGE.ordinal() || requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
+            String absolutePath;  // 拍照得到的文件路徑
+
+            if (requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
+                Uri uri = data.getData();
+                absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
+                captureImageFile = new File(absolutePath);
+            } else {
+                absolutePath = captureImageFile.getAbsolutePath();  // 拍照得到的文件路徑
+            }
             SLog.info("absolutePath[%s]", absolutePath);
 
             showLoadingPopup("正在上載，請稍候...");
