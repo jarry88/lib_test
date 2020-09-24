@@ -338,7 +338,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             hideSoftInputPop();
         } else if (id == R.id.btn_search) {
             Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
-                    EasyJSONObject.generate("keyword", "").toString()));
+                    EasyJSONObject.generate("keyword", "", "isFromCrossBorderHome", true).toString()));
         }
     }
 

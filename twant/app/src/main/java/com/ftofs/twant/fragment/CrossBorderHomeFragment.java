@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
@@ -61,6 +63,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     // 當前要加載第幾頁(從1開始）
     int currPage = 0;
     boolean hasMore;
+
+    LinearLayout llFloatButtonContainer;
 
     public static CrossBorderHomeFragment newInstance(List<CrossBorderBannerItem> bannerItemList,
                                                       int navItemCount,
@@ -98,6 +102,10 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         super.onViewCreated(view, savedInstanceState);
 
         SLog.info("CrossBorderHomeFragment::onViewCreated()");
+
+        llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
+        Util.setOnClickListener(view, R.id.btn_goto_cart, this);
+        Util.setOnClickListener(view, R.id.btn_goto_top, this);
 
         CrossBorderHomeItem header = new CrossBorderHomeItem();
         header.bannerItemList = bannerItemList;
@@ -140,6 +148,26 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
             }
         });
         rvList.setAdapter(adapter);
+
+        rvList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    hideFloatButton();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    showFloatButton();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
 
         loadData(currPage + 1);
     }
@@ -241,8 +269,25 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         loadData(currPage + 1);
     }
 
+    private void showFloatButton() {
+        llFloatButtonContainer.setTranslationX(0);
+    }
+    private void hideFloatButton() {
+        llFloatButtonContainer.setTranslationX(Util.dip2px(_mActivity, 30.5f));
+    }
+
     @Override
     public void onClick(View v) {
+        int id = v.getId();
 
+        if (id == R.id.btn_goto_cart) {
+            if (User.isLogin()) {
+                Util.startFragment(CartFragment.newInstance(true));
+            } else {
+                Util.showLoginFragment(requireContext());
+            }
+        } else if (id == R.id.btn_goto_top) {
+            rvList.scrollToPosition(0);
+        }
     }
 }
