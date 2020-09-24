@@ -97,6 +97,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SLog.info("CrossBorderHomeFragment::onViewCreated()");
+
         CrossBorderHomeItem header = new CrossBorderHomeItem();
         header.bannerItemList = bannerItemList;
         header.navItemCount = navItemCount;
@@ -107,6 +109,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         header.storeList = storeList;
         header.itemType = Constant.ITEM_TYPE_HEADER;
 
+        crossBorderHomeItemList.clear();
         crossBorderHomeItemList.add(header);
 
         rvList = view.findViewById(R.id.rv_list);
@@ -189,6 +192,11 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                         goods.goodsName = goodsObject.optString("goodsName");
                         goods.jingle = goodsObject.optString("jingle");
                         goods.price = Util.getSpuPrice(goodsObject);
+                        goods.tariffEnable = goodsObject.optInt("tariffEnable");
+                        goods.storeName = goodsObject.optString("storeName");
+                        goods.storeAvatarUrl = goodsObject.optString("storeAvatar");
+                        goods.isFreightFree = (goodsObject.optInt("isPinkage") == Constant.TRUE_INT);
+                        goods.nationalFlag = goodsObject.optString("adminCountry.nationalFlag");
 
                         if (index % 2 == 0) {
                             CrossBorderHomeItem item = new CrossBorderHomeItem();

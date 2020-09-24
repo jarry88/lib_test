@@ -729,7 +729,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                                 String nationalFlag = "";
                                 if (goods.exists("adminCountry.nationalFlag")) {
-                                    StringUtil.normalizeImageUrl(goods.getSafeString("adminCountry.nationalFlag"));
+                                    nationalFlag = StringUtil.normalizeImageUrl(goods.getSafeString("adminCountry.nationalFlag"));
                                 }
                                 GoodsSearchItem goodsSearchItem = new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
                                         storeName, commonId, goodsName, jingle, price, nationalFlag);
