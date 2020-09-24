@@ -71,7 +71,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
 //            (activity as LoginActivity).onBackPressedSupport()
 //            com.ftofs.twant.login.UserManager.start(requireContext())
             showLoading()
-            OneStepLogin.start(requireContext())
+            OneStepLogin.start(requireContext(),true)
         }
         binding.btnOneStep.setOnClickListener {loginAction() }
         //原始跳轉方法 僅供參考，廢棄代碼
@@ -122,7 +122,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
             msgError.observe(this@HistoryLoginFragment){if(it.isNotEmpty()) {ToastUtil.error(context, it)
                 com.ftofs.twant.login.UserManager.removeUser()
                 (activity as LoginActivity).onBackPressedSupport()
-                OneStepLogin.start(requireContext())
+                OneStepLogin.start(requireContext(),false)
 //                (activity as LoginActivity).ch
             }}
         }

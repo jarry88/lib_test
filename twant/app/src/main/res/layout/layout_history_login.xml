@@ -43,6 +43,7 @@
             android:textSize="16sp"
             android:gravity="center"
             android:background="@drawable/blue_button1"
+            android:textColor="@color/tw_white"
             android:id="@+id/btn_one_step" />
 
         <LinearLayout

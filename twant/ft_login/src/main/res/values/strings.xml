@@ -8,5 +8,5 @@
     <string name="input_mobile_hint">請輸入手機號碼</string>
     <string name="get_captcha">獲取驗證碼</string>
     <string name="text_login_now">立即登入</string>
-    <string name="text_find_password_info">動態碼已通過短信發送至%s，&#x000A;有效期為%s分鐘。</string>
+    <string name="text_find_password_info">驗證碼已通過短信發送至%s，\n有效期為%s分鐘。</string>
 </resources>

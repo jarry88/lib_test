@@ -181,7 +181,7 @@
     <string name="input_mobile_hint">請輸入手機號碼</string>
 
     <string name="input_sms_code_hint">請輸入基因碼</string>
-    <string name="input_captcha_hint">請輸入手機驗證碼</string>
+    <string name="input_captcha_hint">請輸入驗證碼</string>
 
     <string name="input_password_hint">請輸入密碼，8%s20位英文字母，符號或數字</string>
     <string name="input_password_confirm_hint">請再次輸入密碼</string>
@@ -836,4 +836,5 @@
     <string name="text_want_to_consult">想要咨詢</string>
     <string name="text_more_activity_prepare">更多活動正在籌備中</string>
     <string name="text_goods_mannager">商品管理</string>
+    <string name="input_password_hint_less">請輸入密碼</string>
 </resources>

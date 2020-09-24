@@ -35,7 +35,7 @@ class PassWordFindFragment(val mobile:String) : BaseTwantFragmentMVVM<PasswordFi
             setLeftLayoutClickListener{onBackPressedSupport()}
 //            setRightLayoutClickListener{}
         }
-        binding.findPasswordInfo.text= String.format(getString(R.string.text_find_password_info),mobile,10)
+        binding.findPasswordInfo.text= String.format(getString(R.string.text_find_password_info),mobile,10)+"密碼為8～20位的，支持數字、字母、符號。"
         binding.rlCaptchaContainer.btnCaptchaView?.apply {
             mListener={pwdMessageAction()}
             postDelayed({performClick()},200)

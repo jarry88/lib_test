@@ -116,7 +116,7 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
      * @param usage 微信授權用于什么用途
      */
     fun doWeixinLogin(usage: Int) {
-        showLoading()
+//        showLoading()
         val req = SendAuth.Req()
         req.scope = "snsapi_userinfo"
         req.state = EasyJSONObject.generate(

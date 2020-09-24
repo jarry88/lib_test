@@ -409,7 +409,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 //            final BasePopupView load=Util.createLoadingPopup(requireContext()).show();
 
 //            UiUtilsKt.createLoadingPopup(requireContext()).show();
-            start(LoginFragment.newInstance());
+            start(LabFragment.newInstance());
 //            loginService.start(_mActivity);
         }
     }
