@@ -79,7 +79,7 @@
         android:paddingBottom="13dp"
         android:paddingStart="13dp"
         android:paddingEnd="7dp"
-        android:textSize="12sp"
+        android:textSize="12dp"
         android:background="@color/bg_blue"
         android:textStyle=""
         android:text="@string/tv_login_info"

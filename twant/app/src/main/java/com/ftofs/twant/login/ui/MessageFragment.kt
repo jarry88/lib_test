@@ -68,11 +68,12 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun initData() {
         EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS, null)
-        binding.thirdLoginContainer.setTopLineClickListener{
-            if (tabClickCount > 5) {
+        binding.btnTest.setOnClickListener{
+            if (tabClickCount > 6) {
                 EBMessage.postMessage(EBMessageType.SHOW_DEBUG_ICON, null)
+                ToastUtil.success(context,"回到首页")
+                activity?.finish()
                 tabClickCount = 0
-
             } else {
                 val currClickStamp = System.currentTimeMillis()
                 if (currClickStamp - lastClickStamp < 1100) {

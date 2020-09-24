@@ -274,7 +274,7 @@ public class BindMobileFragment extends BaseFragment implements View.OnClickList
                             return;
                         }
 
-                        ToastUtil.success(_mActivity, "基因碼已發送");
+                        ToastUtil.success(_mActivity, "驗證碼已發送");
                         canSendSMS = false;
                         String textSecond = getString(R.string.text_second);
                         // 60秒倒計時
