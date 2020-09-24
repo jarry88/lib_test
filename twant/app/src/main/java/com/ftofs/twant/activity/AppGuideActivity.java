@@ -93,12 +93,17 @@ public class AppGuideActivity extends BaseActivity implements View.OnClickListen
                 String imageUrl = (String) object;
                 imageList.add(imageUrl);
             }
+            if (imageList.size() == 1) {
+                lastPage = true;
+                View vwSingleMask = findViewById(R.id.vw_single_mask);
+                vwSingleMask.setVisibility(View.VISIBLE);
+                vwSingleMask.setOnClickListener(this);
+            }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         showAppGuide();
     }
-
 
     private void showAppGuide() {
         AppGuidePagerAdapter adapter = new AppGuidePagerAdapter(this, showFramework, imageList, this);
@@ -254,6 +259,11 @@ public class AppGuideActivity extends BaseActivity implements View.OnClickListen
         int id = v.getId();
 
         if (id == R.id.btn_skip_app_guide) {
+            startMainActivity();
+        } else if (id == R.id.vp_app_guide) {
+
+        } else if (id == R.id.vw_single_mask) {
+            SLog.info("XXXXXXXXXXXXXXXXX");
             startMainActivity();
         }
     }
