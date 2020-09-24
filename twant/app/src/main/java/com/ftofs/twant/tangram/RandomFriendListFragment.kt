@@ -40,7 +40,7 @@ class RandomFriendListFragment: BaseTwantFragmentMVVM<RandomFriendListLayoutBind
         override fun initView(binding: RandomFriendListItemBinding, item: RandomMemberVo) {
             binding.vo=item
             binding.imgAvatar.setOnClickListener {  }
-            binding.imgShopAvatar.setOnClickListener {ToastUtil.success(context,"需要storeId") }
+            binding.imgShopAvatar.setOnClickListener {Util.startFragment(ShopMainFragment.newInstance(item.storeId)) }
             binding.root.setOnClickListener {
                 try {
                     val friendInfo = FriendInfo()
