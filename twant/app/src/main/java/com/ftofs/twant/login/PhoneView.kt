@@ -8,10 +8,13 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.doOnAttach
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doBeforeTextChanged
 import com.ftofs.ft_login.R
 import com.ftofs.lib_net.model.MobileZone
 import com.gzp.lib_common.utils.SLog
+import com.lyrebirdstudio.croppylib.util.extensions.visible
 import java.util.regex.Pattern
 
 const val text_invalid_mobile="你輸入的%s手機號碼有誤，請重新輸入"
@@ -107,16 +110,23 @@ class PhoneView @JvmOverloads constructor(
     }
     private fun initTextChangedListener(){
         etMobile.setOnFocusChangeListener { v, hasFocus ->
-            if (!hasFocus) {
-                llErrorContainer?.apply {
-                    if (!isRight) {
-                        this.visibility = View.VISIBLE
-                        errorText?.text = msg
-
-                    } else this.visibility = View.GONE
-                }
+            if (!hasFocus) {//失去焦點
+//                llErrorContainer?.apply {
+//                    if (!isRight) {
+//                        this.visibility = View.VISIBLE
+//                        errorText?.text = msg
+//
+//                    } else this.visibility = View.GONE
+//                }
             } else llErrorContainer?.visibility=View.GONE
         }
+//        etMobile.doOnAttach { llErrorContainer?.apply {
+//            if (visibility != GONE) {
+//                visibility= GONE
+//            }
+//        } }
+//        etMobile.seto
+        etMobile.doBeforeTextChanged { text, start, count, after ->   llErrorContainer?.visibility=View.GONE}
         etMobile.doAfterTextChanged { text->
             SLog.info(regex[zoneIndex]+areaArray[zoneIndex]+text)
             isRight=true
@@ -128,8 +138,8 @@ class PhoneView @JvmOverloads constructor(
                 msg="手機號碼錯誤"
             }else{
                 val matchResult=Pattern.compile(regex[zoneIndex]).matcher(text).matches()//首先匹配基本规则
-                SLog.info("執行${areaArray[zoneIndex]}匹配")
-                if (matchResult) {
+                SLog.info("執行${areaArray[zoneIndex]}匹配 $text 結果 $matchResult")
+                if (matchResult) {//基本規則匹配通過
                     if (zoneIndex == LandIndex) {
                         if (Pattern.compile(isValidRegex).matcher(text).matches()) {
                             msg = errorValidTip
@@ -140,7 +150,12 @@ class PhoneView @JvmOverloads constructor(
                     msg = text_invalid_mobile.format(areaArray[zoneIndex])
                     isRight=false
                 }
-             }
+
+            }
+            if (!isRight) {//更新錯誤消息
+                errorText?.apply {
+                    if(msg!=this.text) this.text=msg }
+            }
 
         }
     }

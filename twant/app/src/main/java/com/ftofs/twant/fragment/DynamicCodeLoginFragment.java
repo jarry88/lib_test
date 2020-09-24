@@ -58,7 +58,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 基因碼登入
+ * 驗證碼登入
  * @author zwm
  */
 public class DynamicCodeLoginFragment extends BaseFragment implements
@@ -254,7 +254,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                             return;
                         }
 
-                        ToastUtil.success(_mActivity, "基因碼已發送");
+                        ToastUtil.success(_mActivity, "驗證碼已發送");
                         canSendSMS = false;
                         countDownTimer.start();
                     } catch (Exception e) {

@@ -180,14 +180,14 @@
     <string name="ok">確定</string>
     <string name="input_mobile_hint">請輸入手機號碼</string>
 
-    <string name="input_sms_code_hint">請輸入基因碼</string>
+    <string name="input_sms_code_hint">請輸入驗證碼</string>
     <string name="input_captcha_hint">請輸入驗證碼</string>
 
     <string name="input_password_hint">請輸入密碼，8%s20位英文字母，符號或數字</string>
     <string name="input_password_confirm_hint">請再次輸入密碼</string>
     <string name="input_nickname_hint">請輸入您的暱稱</string>
     <string name="input_login_password_hint">請輸入密碼，8–20位英文字母、符號或數字</string>
-    <string name="get_sms_code">獲取基因碼</string>
+    <string name="get_sms_code">獲取驗證碼</string>
     <string name="text_sms_code_validate_hint">短信已發送至%s，請在%d分鐘內完成驗證</string>
     <string name="text_second">秒</string>
 
@@ -197,7 +197,7 @@
     <string name="weixin_not_installed_hint">使用本功能需要先安裝微信</string>
 
     <string name="login_way_password">密碼</string>
-    <string name="login_way_dynamic_code">基因碼</string>
+    <string name="login_way_dynamic_code">驗證碼</string>
     <string name="input_personal_profile_hint">新增個人簡介，讓大家更了解你</string>
     <string name="member_signature">我還在認真思考我的個性簽名</string>
     <string name="text_popularity">人緣</string>
@@ -256,11 +256,11 @@
     <string name="text_takewant_circle">想要圈</string>
 
     <string name="setting_login_password">登入密碼</string>
-    <string name="setting_login_password_hint">可通過手機基因碼修改登入密碼</string>
+    <string name="setting_login_password_hint">可通過手機驗證碼修改登入密碼</string>
     <string name="setting_change_mobile">手機修改</string>
     <string name="setting_change_mobile_hint">若您的手機已丟失或停用，請立即修改更換</string>
     <string name="setting_payment_password">支付密碼</string>
-    <string name="setting_payment_password_hint">通過手機基因碼可在此設置支付密碼</string>
+    <string name="setting_payment_password_hint">通過手機驗證碼可在此設置支付密碼</string>
 
     <string name="input_custom_package_type_hint">請補充其他物品名稱</string>
     <string name="input_common_used_speech_hint">請輸入常用語</string>

@@ -9,8 +9,10 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.doOnAttach
 import androidx.core.view.get
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doBeforeTextChanged
 import com.ftofs.twant.R
 import com.ftofs.lib_net.model.MobileZone
 import com.gzp.lib_common.utils.SLog
@@ -65,13 +67,14 @@ class EtCaptchaView @JvmOverloads constructor(
         return etCaptcha.text?.toString()
     }
     private fun initTextChangedListener(){
+        etCaptcha.doBeforeTextChanged { text, start, count, after ->   llErrorContainer?.visibility=View.GONE}
         etCaptcha.doAfterTextChanged { updateRight() }
         etCaptcha.setOnFocusChangeListener { v, hasFocus ->
            updateRight()
             if (!hasFocus) {
-                llErrorContainer?.apply {
-                    visibility=if(isRight) GONE else VISIBLE
-                }
+//                llErrorContainer?.apply {
+//                    visibility=if(isRight) GONE else VISIBLE
+//                }
             } else llErrorContainer?.visibility=View.GONE
         }
     }
@@ -79,7 +82,7 @@ class EtCaptchaView @JvmOverloads constructor(
     fun showError() {
         llErrorContainer?.visibility=if (isRight) GONE else VISIBLE
     }
-    fun updateRight() {
+    private fun updateRight() {
         isRight= getCaptcha()?.run {
             length==needLength
         }?:false

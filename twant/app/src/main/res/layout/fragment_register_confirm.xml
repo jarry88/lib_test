@@ -47,7 +47,7 @@
         android:textColor="@color/tw_blue"
         />
 
-    <!-- 基因碼 -->
+    <!-- 驗證碼 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="75dp"

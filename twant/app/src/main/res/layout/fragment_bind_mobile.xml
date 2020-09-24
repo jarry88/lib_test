@@ -122,7 +122,7 @@
             />
     </RelativeLayout>
 
-    <!-- 基因碼 -->
+    <!-- 驗證碼 -->
     <RelativeLayout
         android:id="@+id/rl_dynamic_code_container"
         android:layout_width="match_parent"

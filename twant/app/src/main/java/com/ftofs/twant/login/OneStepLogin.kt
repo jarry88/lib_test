@@ -81,6 +81,8 @@ object OneStepLogin{
                         SLog.info( "是不是歷史登錄頁 %s",this is LoginActivity)
                     }
                     EBMessage.postMessage(EBMessageType.LOGIN_SUCCESS_TOAST, null)
+                    //不是用賬號密碼登錄 的都消除記錄
+                    UserManager.removeUser()
                     getResultWithToken(aliYunToken)
 
                     User.onLoginSuccess(responseObj.getInt("datas.memberId"), LoginType.MOBILE, responseObj)
@@ -251,10 +253,9 @@ object OneStepLogin{
                 .setAppPrivacyOne("《服務協議》", urlService)
                 .setAppPrivacyTwo("《私隱條款》",urlPrivate)
                 .setAppPrivacyColor(mContext.getColor(R.color.tw_grey_CBCB),mContext.getColor(R.color.tw_blue))
-                .setAppPrivacyColor(Color.GRAY, Color.parseColor("#00B0FF"))
                 .setNavTextSize(18)
                 .setSwitchAccTextSize(16)
-                .setSwitchAccTextColor(Color.BLACK)
+                .setSwitchAccTextColor(mContext.getColor(R.color.tw_blue))
                 .setSwitchAccText("其他手機號碼登入")
                 .setNumberSize(26)
                 .setNumFieldOffsetY(104)
@@ -337,11 +338,12 @@ object OneStepLogin{
 //                        finish()
                     } else {
                         tokenRet?.apply {
-                            Thread {
-                                Looper.prepare()
-                                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show()
-                                Looper.loop()
-                            }.start()
+//                            Thread {
+//                                Looper.prepare()
+//                                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show()
+//                                Looper.loop()
+//                            }.start()
+                            SLog.info(msg)
                         }
                         SLog.info("token 獲取失敗，前往登錄頁")
 //                        ToastUtil.error(this@LoginActivity, "一键登录失败切换到其他登录方式")
