@@ -15,6 +15,7 @@ public class ConfirmOrderSkuItem {
     public int allowSend =1;//0时显示 所選地區無貨
     public int joinBigSale;//0表示不参加活动 1表示参加
     public int goodsModel;
+    public int tariffEnable;
 
     public ConfirmOrderSkuItem(String goodsImage, int goodsId, String goodsName, String goodsFullSpecs, int buyNum, double skuPrice, List<GiftItem> giftItemList) {
         this.goodsImage = goodsImage;

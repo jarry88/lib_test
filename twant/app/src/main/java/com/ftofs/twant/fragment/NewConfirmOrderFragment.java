@@ -1458,6 +1458,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                     confirmOrderSkuItem.allowSend = allowSend;
                     confirmOrderSkuItem.joinBigSale = joinBigSale;
                     confirmOrderSkuItem.goodsModel = goodsModel;
+                    confirmOrderSkuItem.tariffEnable = tariffEnable;
                     confirmOrderSkuItemList.add(confirmOrderSkuItem);
 
                     String keyName = "cartId";

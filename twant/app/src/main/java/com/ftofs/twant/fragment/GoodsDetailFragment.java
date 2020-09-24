@@ -1908,7 +1908,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         UiUtil.toPriceUI(tvGoodsPrice,0);
                     }
 
-                    imgCrossBorderIndicator.setVisibility(goodsModel == Constant.GOODS_TYPE_CROSS_BORDER ? VISIBLE : GONE);
 
                     // 是否点赞
                     isLike = goodsDetail.getInt("isLike");
@@ -2391,9 +2390,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     tariffEnable = goodsDetail.getInt("tariffEnable");
                     if (tariffEnable == Constant.TRUE_INT) {
                         iconTariff.setVisibility(VISIBLE);
+                        imgCrossBorderIndicator.setVisibility(VISIBLE);
                     } else {
                         iconTariff.setVisibility(View.INVISIBLE);
+                        imgCrossBorderIndicator.setVisibility(GONE);
                     }
+
 
                     if (goodsDetail.exists("imageSrc")) {
                         goodsSpuImage = goodsDetail.getSafeString("imageSrc");

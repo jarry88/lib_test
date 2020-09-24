@@ -45,6 +45,7 @@ public class GoodsSearchItem implements MultiItemEntity {
     public double extendPrice0; // 折扣數
     public double batchPrice0;  // 原價
     public boolean showDiscountLabel;  // 是否顯示折扣標簽
+    public int tariffEnable;  // 是否跨城購商品
 
 
     @Override
