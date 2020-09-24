@@ -76,7 +76,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     CrossBorderDrawView vwBottomBg;
     public int homeBgColor; // 首頁頂部背景色
 
-    LinearLayout llMoreCategoryContainer;
+    View crossBorderCategoryListMask;
+    View btnViewMoreCategory;
 
     public static CrossBorderMainFragment newInstance() {
         CrossBorderMainFragment fragment = new CrossBorderMainFragment();
@@ -100,11 +101,12 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
         EventBus.getDefault().register(this);
 
+        crossBorderCategoryListMask = view.findViewById(R.id.cross_border_category_list_mask);
+        btnViewMoreCategory = view.findViewById(R.id.btn_view_more_category);
+
         llAppBar = view.findViewById(R.id.ll_app_bar);
         vwTopBg = view.findViewById(R.id.vw_top_bg);
         vwBottomBg = view.findViewById(R.id.vw_bottom_bg);
-
-        llMoreCategoryContainer = view.findViewById(R.id.ll_more_category_container);
 
         rvCategoryList = view.findViewById(R.id.rv_category_list);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
@@ -275,9 +277,9 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 fragmentList.add(CrossBorderCategoryFragment.newInstance(item.categoryId, item.catName));
                 categoryList.add(item);
             }
+            categoryListAdapter.setShowViewMore(categoryList.size() > 5);
+            showViewMoreCategoryIndicator(categoryList.size() > 5);
             categoryListAdapter.setNewData(categoryList);
-
-            llMoreCategoryContainer.setVisibility(categoryList.size() > 5 ? View.VISIBLE : View.GONE);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -286,6 +288,11 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         // ViewPager中Fragment不回調onCreateView的問題
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
         viewPager.setAdapter(adapter);
+    }
+
+    private void showViewMoreCategoryIndicator(boolean show) {
+        btnViewMoreCategory.setVisibility(show ? View.VISIBLE : View.GONE);
+        crossBorderCategoryListMask.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private void loadData() {
@@ -331,6 +338,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     private void changeBackgroundColor(int color) {
         llAppBar.setBackgroundColor(color);
         vwTopBg.setBackgroundColor(color);
+        btnViewMoreCategory.setBackgroundColor(color);
         vwBottomBg.setColor(color);
     }
 
