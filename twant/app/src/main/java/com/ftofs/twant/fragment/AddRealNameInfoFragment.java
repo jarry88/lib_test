@@ -257,20 +257,26 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
                 return;
             }
 
-            if (StringUtil.isEmpty(frontImageUrl)) {
-                ToastUtil.error(_mActivity, "請上傳身份證人像面");
-                return;
+            if (action == Constant.ACTION_EDIT) { // 添加時，可以不上傳身份證，但編輯時，需要上傳
+                if (StringUtil.isEmpty(frontImageUrl)) {
+                    ToastUtil.error(_mActivity, "請上傳身份證人像面");
+                    return;
+                }
+
+                if (StringUtil.isEmpty(backImageUrl)) {
+                    ToastUtil.error(_mActivity, "請上傳身份證國徽面");
+                    return;
+                }
             }
 
-            if (StringUtil.isEmpty(backImageUrl)) {
-                ToastUtil.error(_mActivity, "請上傳身份證國徽面");
-                return;
-            }
+            EasyJSONObject params = EasyJSONObject.generate();
 
-            EasyJSONObject params = EasyJSONObject.generate(
-                    "idCardFrontImage", frontImageUrl,
-                    "idCardBackImage", backImageUrl
-            );
+            if (!StringUtil.isEmpty(frontImageUrl)) {
+                params.set("idCardFrontImage", frontImageUrl);
+            }
+            if (!StringUtil.isEmpty(backImageUrl)) {
+                params.set("idCardBackImage", backImageUrl);
+            }
 
             String url;
             if (action == Constant.ACTION_ADD) {
