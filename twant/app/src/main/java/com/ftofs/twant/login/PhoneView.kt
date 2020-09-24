@@ -53,7 +53,7 @@ class PhoneView @JvmOverloads constructor(
            "澳門"
     )
 
-    private var zoneIndex:Int=0//弹窗位置序号
+    private var zoneIndex:Int=0//areaArray序號
     private val etMobile:EditText by lazy {
         rootView.findViewById(R.id.et_mobile)
     }
@@ -122,12 +122,13 @@ class PhoneView @JvmOverloads constructor(
             isRight=true
             if(text==null||text.isEmpty()){
                 isRight=false
-                msg="手機號碼錯誤"
-            }else if(mobileList.size<zoneIndex){
+                msg="未輸入號碼"
+            }else if(mobileList.isEmpty()){
                 isRight=false
-                msg="网络异常"
+                msg="手機號碼錯誤"
             }else{
                 val matchResult=Pattern.compile(regex[zoneIndex]).matcher(text).matches()//首先匹配基本规则
+                SLog.info("執行${areaArray[zoneIndex]}匹配")
                 if (matchResult) {
                     if (zoneIndex == LandIndex) {
                         if (Pattern.compile(isValidRegex).matcher(text).matches()) {

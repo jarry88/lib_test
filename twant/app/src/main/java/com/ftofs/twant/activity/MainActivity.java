@@ -1112,6 +1112,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
         } else if (message.messageType == EBMessageType.SHOW_LOADING) {
             SLog.info("main顯示loading");
             showLoading();
+        }else if (message.messageType == EBMessageType.LOGIN_SUCCESS_TOAST) {
+           ToastUtil.success(this,"登入成功");
         }
     }
 

@@ -14,6 +14,7 @@ import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.ui.RandomFriendViewModel
 import com.ftofs.lib_net.model.RandomMemberVo
+import com.ftofs.twant.fragment.MemberInfoFragment
 import com.ftofs.twant.fragment.ShopMainFragment
 import com.ftofs.twant.fragment.StoreHomeFragment
 import com.gzp.lib_common.utils.SLog
@@ -39,7 +40,9 @@ class RandomFriendListFragment: BaseTwantFragmentMVVM<RandomFriendListLayoutBind
 
         override fun initView(binding: RandomFriendListItemBinding, item: RandomMemberVo) {
             binding.vo=item
-            binding.imgAvatar.setOnClickListener {  }
+            binding.imgAvatar.setOnClickListener {
+                Util.startFragment(MemberInfoFragment.newInstance(item.memberName))
+            }
             binding.imgShopAvatar.setOnClickListener {Util.startFragment(ShopMainFragment.newInstance(item.storeId)) }
             binding.root.setOnClickListener {
                 try {
@@ -57,6 +60,7 @@ class RandomFriendListFragment: BaseTwantFragmentMVVM<RandomFriendListLayoutBind
                 }
 
         }
+            
         }
 
     }}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="mobile_zone_text">地區選擇</string>
-    <string name="text_new_sms_code_validate_hint">驗證碼已通發送至%s,&#x000A;有效期為10分鐘。</string>
+    <string name="text_new_sms_code_validate_hint">驗證碼已通發送至%s,\n有效期為10分鐘。</string>
     <string name="login_service_info">服務協議</string>
     <string name="secret_info">私隱條款</string>
 

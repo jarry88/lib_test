@@ -38,6 +38,10 @@ public class ToastUtil {
 
     public static void error(Context context, String text) {
         SLog.bt();
+        if (text == null || text.length() == 0) {
+            SLog.info("空text ，現在設置為不彈窗，只輸出日志");
+            return;
+        }
         StyleableToast.makeText(context, text, Toast.LENGTH_SHORT, R.style.tw_toast).show();
     }
 

@@ -243,6 +243,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         int id = view.getId();
         String url;
         if (id == R.id.btn_test) {
+            ToastUtil.success(_mContext,"移除歷史用戶");
             SLog.info("onClick()");
             showLoadingPopup();
             start(BlankFragment.newInstance("",""));
