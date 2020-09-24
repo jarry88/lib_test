@@ -454,6 +454,7 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
             if (requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
                 Uri uri = data.getData();
                 absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
+                captureImageFile = new File(absolutePath);
             } else {
                 absolutePath = captureImageFile.getAbsolutePath();  // 拍照得到的文件路徑
             }

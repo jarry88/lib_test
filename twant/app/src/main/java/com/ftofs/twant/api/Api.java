@@ -2043,14 +2043,15 @@ public class Api {
      * @param file
      */
     public static String syncUploadFile(File file) {
+        SLog.info("_____HERE, file[%s]", file);
         long threadId = Thread.currentThread().getId();
         Context context = TwantApplication.Companion.get();
-
+        SLog.info("_____HERE");
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
             return null;
         }
-
+        SLog.info("_____HERE");
         // 檢查文件大小, 如果待上傳文件大小超過上限，則嘗試壓縮
         if (file.length() > Config.UPLOAD_FILE_SIZE_LIMIT) {
             file = FileUtil.getCompressedImageFile(context, file);
@@ -2059,6 +2060,7 @@ public class Api {
 
             // 壓縮失敗
             if (file == null) {
+                SLog.info("_____HERE");
                 return null;
             }
         }
