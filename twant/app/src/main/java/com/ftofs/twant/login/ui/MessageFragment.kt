@@ -2,7 +2,6 @@ package com.ftofs.twant.login.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.UserManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +26,7 @@ import com.ftofs.twant.databinding.MessageLoginLayoutBinding
 import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.fragment.BindMobileFragment
 import com.ftofs.twant.fragment.H5GameFragment
+import com.ftofs.twant.login.UserManager
 import com.ftofs.twant.util.LogUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
@@ -182,6 +182,8 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
             if (it.isBind == Constant.FALSE_INT) start(BindMobileFragment.newInstance(BindMobileFragment.BIND_TYPE_FACEBOOK, aViewModel.faceBookAccessToken?.token, aViewModel.faceBookAccessToken?.userId))
             else// 未綁定
             {
+                UserManager.removeUser()
+
                 User.onNewLoginSuccess(it.memberId
                         ?: 0, LoginType.FACEBOOK, it)
 
@@ -198,6 +200,8 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
             else// 未綁定
             {
                 SLog.info("未進入綁定頁")
+                UserManager.removeUser()
+
                 User.onNewLoginSuccess(it.memberId
                         ?: 0, LoginType.WEIXIN, it)
                 ToastUtil.success(_mActivity, "微信登入成功")
@@ -207,7 +211,7 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
         aViewModel.successLoginInfo.observe(this){
                 ToastUtil.success(context, "登入成功")
 //                com.ftofs.twant.login.UserManager.saveUser(aViewModel.loginLiveData.value)
-                com.ftofs.twant.login.UserManager.removeUser()
+                UserManager.removeUser()
 
                 User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE, it)
                 hideSoftInput()
@@ -226,7 +230,7 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
             if (it.isNotEmpty()) canSendSMS = true
         })
         viewModel.authCodeInfo.observe(this){
-            binding.tvSmsCodeHint.text= String.format(getString(R.string.text_find_password_info), binding.etPhoneView.getPhone(), it.authCodeValidTime)
+            binding.tvSmsCodeHint.text= String.format(getString(R.string.text_find_password_info), binding.etPhoneView.getPhone(), it.authCodeValidTime).replaceFirst(",","-",)
             binding.rlCaptchaContainer.btnCaptchaView?.apply {
                 mLoadingPopup?.dismiss()
                 ToastUtil.success(context, "獲取驗證碼成功")
@@ -237,6 +241,8 @@ class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, priv
         }
         viewModel.successLoginInfo.observe(this){
             ToastUtil.success(context, "登入成功")
+            UserManager.removeUser()
+
             User.onNewLoginSuccess(it.memberId!!, LoginType.MOBILE, it)
             hideSoftInput()
 

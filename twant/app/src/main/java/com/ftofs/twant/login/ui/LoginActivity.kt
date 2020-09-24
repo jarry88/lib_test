@@ -62,9 +62,9 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
             //如果用户点击登录的时候，checkEnvAvailable和accelerateLoginPage接口还没有完成，不需要等待直接拉起授权页
             val user=intent.getParcelableExtra<User>("user")
             if (user != null) {
-                SLog.info("有歷史數據")
+                SLog.info("有歷史數據"+user.toString())
                 loadRootFragment(R.id.container, findFragment(HistoryLoginFragment::class.java)
-                        ?: HistoryLoginFragment(user))
+                        ?: HistoryLoginFragment(user)).apply {SLog.info("新建歷史頁面") }
             } else {
                 loadRootFragment(R.id.container, findFragment(MessageFragment::class.java)
                         ?: MessageFragment("", false, true))

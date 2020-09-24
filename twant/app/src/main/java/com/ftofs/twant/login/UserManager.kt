@@ -33,7 +33,12 @@ object UserManager {
 
     }
     fun removeUser() {
-        mmkv.encode(USER_DATA, "")
+        try {
+            mmkv.encode(USER_DATA, "")
+            SLog.info("一處成功")
+        } catch (e: Exception) {
+            SLog.info(e.toString())
+        }
 //        if (liveData.hasObservers()) {
 //            liveData.postValue(getUser())
 //        }

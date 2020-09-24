@@ -17,7 +17,7 @@ import com.gzp.lib_common.utils.SLog
 import com.lyrebirdstudio.croppylib.util.extensions.visible
 import java.util.regex.Pattern
 
-const val text_invalid_mobile="你輸入的%s手機號碼有誤，請重新輸入"
+const val text_invalid_mobile="請填寫正確的%s號碼"
 const val errorValidTip="此號碼無法用於進行註冊或登入"
 const val LandIndex=2//内地
 val regex= listOf(
