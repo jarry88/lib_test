@@ -114,6 +114,8 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
                     }
 
                     Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                } else if (id == R.id.icon_publish_want_post) {
+                    ApiUtil.addPost(_mActivity,false);
                 }
             }
         });

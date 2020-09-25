@@ -51,6 +51,7 @@ public class SoldOutPopup extends CenterPopupView implements View.OnClickListene
 
         TextView tvTitle = findViewById(R.id.tv_title);
         TextView btnOk = findViewById(R.id.btn_ok);
+        TextView btnBack = findViewById(R.id.btn_back);
         tvTitle.setText("抱歉，您購買的商品無貨");
 
         // 设置弹窗背景
@@ -58,6 +59,7 @@ public class SoldOutPopup extends CenterPopupView implements View.OnClickListene
         findViewById(R.id.ll_popup_content_view).setBackground(backgroundDrawable);
 
         btnOk.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
 
         LinearLayout llSoldOutListContainer = findViewById(R.id.ll_sold_out_list_container);
         SoldOutGoodsAdapter adapter = new SoldOutGoodsAdapter(context, llSoldOutListContainer, R.layout.sold_out_item);

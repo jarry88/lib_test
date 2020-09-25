@@ -1578,10 +1578,10 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             SLog.info("platformCouponIndex[%d]", platformCouponIndex);
             loadData(STEP_CALC_TOTAL_AMOUNT);
         } else if (type == PopupType.HANDLE_SOLD_OUT_GOODS) { // 處理售罄的商品
-            if (id == 1) { // 返回
-                hideSoftInputPop();
-            } else if (id == 2) { // 重新選擇地址
+            if (id == 1) { // 重新選擇地址
                 startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
+            } else if (id == 2) { // 返回
+                hideSoftInputPop();
             }
         }
     }
