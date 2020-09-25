@@ -18,9 +18,11 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.entity.ChangeColorResult;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
@@ -97,6 +99,8 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             });
 
             if (isFirst) {
+                long changeColorId = System.currentTimeMillis();
+                MainActivity.changeColorId = changeColorId;
                 bannerView.addPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -110,7 +114,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
                         boolean canChangeBackgroundColor = Hawk.get(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR);
                         if (canChangeBackgroundColor) {
-                            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, bannerItem.backgroundColorApp);
+                            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, new ChangeColorResult(bannerItem.backgroundColorApp, changeColorId));
                             SLog.info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                         }
                     }

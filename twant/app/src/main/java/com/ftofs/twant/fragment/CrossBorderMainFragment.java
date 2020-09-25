@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.CrossBorderActivityGoodsAdapter;
 import com.ftofs.twant.adapter.CrossBorderCategoryListAdapter;
@@ -28,6 +29,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.BargainItem;
+import com.ftofs.twant.entity.ChangeColorResult;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderCategoryItem;
@@ -337,9 +339,13 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR) {
-            String colorStr = (String) message.data;
-            SLog.info("colorStr[%s]", colorStr);
-            changeBackgroundColor(Color.parseColor(colorStr));
+            ChangeColorResult changeColorResult = (ChangeColorResult) message.data;
+            String colorStr = changeColorResult.color;
+            SLog.info("changeColorResult[%s]", changeColorResult);
+            if (changeColorResult.id == 9999 || changeColorResult.id == MainActivity.changeColorId) {
+                SLog.info("colorStr[%s]", colorStr);
+                changeBackgroundColor(Color.parseColor(colorStr));
+            }
         }
     }
 
