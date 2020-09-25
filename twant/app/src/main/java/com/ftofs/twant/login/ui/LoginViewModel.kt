@@ -6,6 +6,7 @@ import com.facebook.AccessToken
 import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.model.LoginInfo
 import com.ftofs.lib_net.model.MobileZone
+import com.ftofs.twant.TwantApplication
 import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.tangram.SloganView
 import com.gzp.lib_common.base.BaseViewModel

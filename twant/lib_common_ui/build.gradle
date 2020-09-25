@@ -46,7 +46,10 @@ dependencies {
     api 'com.lxj:xpopup:2.0.8-rc7'
 
     api rootProject.ext.dependencies["recyclerview"] //
-    api rootProject.ext.dependencies["constraint-layout"]
+//    api rootProject.ext.dependencies["constraint-layout"]
+
+    api  "androidx.constraintlayout:constraintlayout:2.0.1"
+    api  "androidx.vectordrawable:vectordrawable-animated:1.0.0"
     api 'de.hdodenhof:circleimageview:3.0.0' //後面可以考慮移除
     api 'com.jaeger.statusbarutil:library:1.5.1'
     api 'com.qmuiteam:qmui:2.0.0-alpha10'
