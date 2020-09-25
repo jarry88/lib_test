@@ -2849,6 +2849,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             }
         } else if (promotionType == Constant.PROMOTION_TYPE_GROUP) {
             rlPriceTag.setVisibility(GONE);
+        } else if (promotionType == Constant.PROMOTION_TYPE_SEC_KILL && COUNT_DOWN_TYPE_BEGIN.equals(promotionCountDownTimeType)) {
+            // 未开始秒杀的商品需要显示价格标签
+            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
+            rlPriceTag.setVisibility(VISIBLE);
         }
     }
 

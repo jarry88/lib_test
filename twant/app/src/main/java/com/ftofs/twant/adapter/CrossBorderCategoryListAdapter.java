@@ -37,7 +37,7 @@ public class CrossBorderCategoryListAdapter extends BaseQuickAdapter<CrossBorder
 
         this.context = context;
         screenWidth = Util.getScreenDimension(context).first;
-
+        recyclerViewWidth = screenWidth;
     }
 
     public void setShowViewMore(boolean show) {

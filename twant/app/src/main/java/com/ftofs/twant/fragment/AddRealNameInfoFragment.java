@@ -82,8 +82,14 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
     TextView tvFragmentTitle;
 
     boolean isFrontIdImage = true;   // 是否為身份證還是背面照
+
+    // 遠程的文件Url
     String frontImageUrl;
     String backImageUrl;
+
+    // 本地的文件路徑
+    String frontImagePath;
+    String backImagePath;
 
     ImageView imgFrontImage;
     ImageView imgBackImage;
@@ -458,6 +464,12 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
             } else {
                 absolutePath = captureImageFile.getAbsolutePath();  // 拍照得到的文件路徑
             }
+
+            if (isFrontIdImage) {
+                frontImagePath = absolutePath;
+            } else {
+                backImagePath = absolutePath;
+            }
             SLog.info("absolutePath[%s]", absolutePath);
 
             showLoadingPopup("正在上載，請稍候...");
@@ -504,10 +516,10 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
                     dismissLoadingPopup();
 
                     if (isFrontIdImage) {
-                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(frontImageUrl)).into(imgFrontImage);
+                        Glide.with(_mActivity).load(frontImagePath).into(imgFrontImage);
                         iconImportFront.setVisibility(View.GONE);
                     } else {
-                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(backImageUrl)).into(imgBackImage);
+                        Glide.with(_mActivity).load(backImagePath).into(imgBackImage);
                         iconImportBack.setVisibility(View.GONE);
                     }
                 }
