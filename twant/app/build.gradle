@@ -35,7 +35,7 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
 
 
-        versionCode 211
+        versionCode 212
 
         versionName "1.2.8.00"
 
