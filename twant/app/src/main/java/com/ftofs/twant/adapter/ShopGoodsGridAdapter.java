@@ -22,15 +22,17 @@ import java.util.List;
 
 public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, BaseViewHolder> {
     Context context;
+    boolean isFromStoreSearch;  // 是否來自店鋪搜索
 
     public void setTitle(String title) {
         this.title = title;
     }
 
     String title;
-    public ShopGoodsGridAdapter(Context context, @Nullable List<GoodsPair> data) {
+    public ShopGoodsGridAdapter(Context context, @Nullable List<GoodsPair> data, boolean isFromStoreSearch) {
         super(data);
         this.context = context;
+        this.isFromStoreSearch = isFromStoreSearch;
 
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.shop_goods_grid_item);
         addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
@@ -44,6 +46,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
         if (itemViewType == Constant.ITEM_TYPE_NORMAL) {
             helper.addOnClickListener(R.id.img_right_goods,R.id.btn_add_to_cart_right);
             helper.addOnClickListener(R.id.img_left_goods,R.id.btn_add_to_cart_left);
+
 
 
             if (goodsPair.leftGoods != null) {
@@ -84,6 +87,11 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
             } else {
                 helper.setGone(R.id.img_right_goods, false)
                         .setVisible(R.id.ll_right_goods_container, false);
+            }
+
+            if (isFromStoreSearch) {
+                helper.setGone(R.id.btn_add_to_cart_left, false)
+                        .setGone(R.id.btn_add_to_cart_right, false);
             }
         }
         else if (itemViewType == Constant.ITEM_TYPE_LOAD_END_HINT){ // 加載完成的提示，顯示即可，不用特別處理

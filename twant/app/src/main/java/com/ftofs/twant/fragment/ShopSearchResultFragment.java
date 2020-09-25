@@ -127,7 +127,7 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
 
         rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        shopGoodsGridAdapter = new ShopGoodsGridAdapter(_mActivity, goodsPairList);
+        shopGoodsGridAdapter = new ShopGoodsGridAdapter(_mActivity, goodsPairList, true);
         shopGoodsGridAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
