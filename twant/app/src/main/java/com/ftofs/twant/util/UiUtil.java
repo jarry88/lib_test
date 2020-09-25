@@ -73,7 +73,7 @@ public class UiUtil {
                     return;
                 }
 
-                Util.handleClickLink(linkType, webSliderItem.linkValue);
+                Util.handleClickLink(linkType, webSliderItem.linkValue, false);
             }
         });
     }

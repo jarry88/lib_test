@@ -370,8 +370,6 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
      * @param show
      */
     private void showGoodsFragment(boolean show) {
-        SLog.bt();
-        SLog.info("顯示鏟平頁 %s",show);
         showBtnCart(show);
         if (show) {
             tvShopTitle.setVisibility(View.GONE);

@@ -77,7 +77,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
-                    Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp);
+                    Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp, true);
                 }
             });
             rvBannerList.setAdapter(bannerAdapter);
@@ -124,7 +124,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                         if (id == itemId) {
                             CrossBorderNavItem navItem = navPane.crossBorderNavItemList.get(i);
                             SLog.info("navItem[%s]", navItem);
-                            Util.handleClickLink(navItem.linkTypeApp, navItem.linkValueApp);
+                            Util.handleClickLink(navItem.linkTypeApp, navItem.linkValueApp, true);
                             break;
                         }
                     }
@@ -418,6 +418,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
                 // 設置是否顯示【跨城購】標籤
                 helper.setGone(R.id.tv_cross_border_indicator_right, goodsPair.right.tariffEnable == Constant.TRUE_INT);
+            } else {
+                helper.setGone(R.id.tv_freight_free_right, false)
+                        .setGone(R.id.tv_cross_border_indicator_right, false);
             }
             boolean rightHandSideVisible = (goodsPair.right != null);
             helper.setGone(R.id.cl_container_right, rightHandSideVisible)

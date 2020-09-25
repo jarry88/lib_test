@@ -170,6 +170,9 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 // 設置是否顯示【跨城購】標籤
                 helper.setGone(R.id.tv_cross_border_indicator_right, item.right.tariffEnable == Constant.TRUE_INT);
+            } else {
+                helper.setGone(R.id.tv_freight_free_right, false)
+                        .setGone(R.id.tv_cross_border_indicator_right, false);
             }
             boolean rightHandSideVisible = (item.right != null);
             helper.setGone(R.id.cl_container_right, rightHandSideVisible)

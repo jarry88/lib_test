@@ -66,12 +66,15 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
     TextView btnFilterCrossBorder;
     TextView btnFilterConsultant;
 
+    boolean isFromCrossBorderHome;  // 是否來自跨城購首頁
+
     public GoodsFilterDrawerPopupView(@NonNull Context context, List<FilterCategoryGroup> filterCategoryGroupList,
-                                      OnSelectedListener onSelectedListener) {
+                                      boolean isFromCrossBorderHome, OnSelectedListener onSelectedListener) {
         super(context);
         this.context = context;
         this.filterCategoryGroupList = filterCategoryGroupList;
         this.onSelectedListener = onSelectedListener;
+        this.isFromCrossBorderHome = isFromCrossBorderHome;
 
         twBlue = getResources().getColor(R.color.tw_blue, null);
         twBlack = getResources().getColor(R.color.tw_black, null);
@@ -107,6 +110,11 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
         btnFilterCrossBorder.setOnClickListener(this);
         btnFilterConsultant = findViewById(R.id.btn_filter_consultant);
         btnFilterConsultant.setOnClickListener(this);
+
+        if (isFromCrossBorderHome) { // 如果是來自跨城購，則隱藏【跨城購】和【資訊】篩選按鈕
+            btnFilterCrossBorder.setVisibility(GONE);
+            btnFilterConsultant.setVisibility(GONE);
+        }
 
         btnOk = findViewById(R.id.btn_ok);
         btnOk.setOnClickListener(this);
