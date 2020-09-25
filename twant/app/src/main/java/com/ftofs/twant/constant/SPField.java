@@ -26,6 +26,9 @@ public class SPField {
     public static final String FIELD_AMAP_LOCATION = "amap_location";
     public static final String FIELD_SHOW_DEBUG_ICON = "show_debug_icon";
 
+    public static final String FIELD_CAN_CHANGE_BACKGROUND_COLOR = "can_change_background_color";
+    public static final String FIELD_CURR_CROSS_BORDER_THEME_COLOR = "curr_cross_border_theme_color";
+
     /**
      * 未讀消息數
      * 內容結構如下:

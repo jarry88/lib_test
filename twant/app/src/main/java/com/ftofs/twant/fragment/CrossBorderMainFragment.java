@@ -25,6 +25,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.BargainItem;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
@@ -36,11 +37,13 @@ import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
+import com.orhanobut.hawk.Hawk;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,6 +58,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
+
 
 
 /**
@@ -74,7 +78,6 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     LinearLayout llAppBar;
     View vwTopBg;
     CrossBorderDrawView vwBottomBg;
-    public int homeBgColor; // 首頁頂部背景色
 
     View crossBorderCategoryListMask;
     View btnViewMoreCategory;
@@ -147,7 +150,10 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 SLog.info("position[%d], item[%s]", position, item);
 
                 if (position == 0) { // 如果是回到首頁，恢復原先的顏色
-                    changeBackgroundColor(homeBgColor);
+                    String colorStr = Hawk.get(SPField.FIELD_CURR_CROSS_BORDER_THEME_COLOR);
+                    if (!StringUtil.isEmpty(colorStr)) {
+                        changeBackgroundColor(Color.parseColor(colorStr));
+                    }
                 } else {
                     changeBackgroundColor(Color.parseColor(item.backgroundColor));
                 }
@@ -176,6 +182,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     }
 
     private void initViewPager(EasyJSONObject responseObj) {
+        String homeDefaultColorStr = "";
         try {
             // 獲取Banner圖數據
             int index = 0;
@@ -185,8 +192,10 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 CrossBorderBannerItem bannerItem = (CrossBorderBannerItem) EasyJSONBase.jsonDecode(CrossBorderBannerItem.class, object.toString());
                 bannerItemList.add(bannerItem);
                 if (index == 0) {
-                    homeBgColor = Color.parseColor(bannerItem.backgroundColorApp);
-                    changeBackgroundColor(homeBgColor);
+                    int color = Color.parseColor(bannerItem.backgroundColorApp);
+                    changeBackgroundColor(color);
+                    homeDefaultColorStr = bannerItem.backgroundColorApp;
+                    SLog.info("homeDefaultColorStr[%s]", homeDefaultColorStr);
                 }
 
                 index++;
@@ -265,7 +274,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
             titleList.add("首頁");
             fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemCount, navPaneList, shoppingZoneList, bargainGoodsList, groupGoodsList, storeList));
-            categoryList.add(new CrossBorderCategoryItem(0, "首頁", "#019AA7"));
+            categoryList.add(new CrossBorderCategoryItem(0, "首頁", homeDefaultColorStr));
 
             EasyJSONArray catList = responseObj.getSafeArray("datas.catList");
             SLog.info("catList.length[%d]", catList.length());
@@ -330,8 +339,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         if (message.messageType == EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR) {
             String colorStr = (String) message.data;
             SLog.info("colorStr[%s]", colorStr);
-            homeBgColor = Color.parseColor(colorStr);
-            changeBackgroundColor(homeBgColor);
+            changeBackgroundColor(Color.parseColor(colorStr));
         }
     }
 

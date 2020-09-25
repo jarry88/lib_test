@@ -46,7 +46,7 @@ public class CrossBorderDrawView extends View {
 
         int height = getHeight();
         int width = getWidth();
-        SLog.info("height[%d], width[%d]", height, width);
+        // SLog.info("height[%d], width[%d]", height, width);
 
         if (oval == null) {
             oval = new RectF(-Util.dip2px(getContext(), 25),

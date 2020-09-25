@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -19,6 +20,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
@@ -34,11 +36,16 @@ import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.view.BannerViewHolder;
 import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.gzp.lib_common.utils.SLog;
+import com.orhanobut.hawk.Hawk;
 import com.rd.PageIndicatorView;
+import com.zhouwei.mzbanner.MZBannerView;
+import com.zhouwei.mzbanner.holder.MZHolderCreator;
+import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import java.util.List;
 
@@ -68,42 +75,53 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         if (itemType == Constant.ITEM_TYPE_HEADER) {
             helper.addOnClickListener(R.id.btn_view_more_bargain, R.id.btn_view_more_group);
 
-            // Banner圖列表
-            RecyclerView rvBannerList = helper.getView(R.id.rv_banner_list);
-            rvBannerList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-            CrossBorderBannerAdapter bannerAdapter =
-                    new CrossBorderBannerAdapter(context, R.layout.cross_border_banner_item, item.bannerItemList);
-            bannerAdapter.setOnItemClickListener(new OnItemClickListener() {
+            // 新Banner圖列表
+            MZBannerView<CrossBorderBannerItem> bannerView = helper.getView(R.id.mz_banner_view);
+            // 设置数据
+            bannerView.setPages(item.bannerItemList, new MZHolderCreator<CrossBorderBannerViewHolder>() {
                 @Override
-                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
+                public CrossBorderBannerViewHolder createViewHolder() {
+                    return new CrossBorderBannerViewHolder();
+                }
+            });
+            bannerView.setIndicatorVisible(false);
+            bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
+                @Override
+                public void onPageClick(View view, int i) {
+                    SLog.info("___i[%d]", i);
+                    CrossBorderBannerItem bannerItem = item.bannerItemList.get(i);
                     Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp, true);
                 }
             });
-            rvBannerList.setAdapter(bannerAdapter);
-            rvBannerList.setOnFlingListener(null); // 參考：https://stackoverflow.com/questions/44043501/an-instance-of-onflinglistener-already-set-in-recyclerview
-            // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
-            // https://www.jianshu.com/p/e54db232df62
-            (new PagerSnapHelper()).attachToRecyclerView(rvBannerList);
-            rvBannerList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            bannerView.addPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        int position = getCurrPosition(rvBannerList);
-                        SLog.info("currPosition[%d]", position);
-                        CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
+                }
 
+                @Override
+                public void onPageSelected(int position) {
+                    SLog.info("currPosition[%d]", position);
+                    CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
+
+                    boolean canChangeBackgroundColor = Hawk.get(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR);
+                    if (canChangeBackgroundColor) {
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, bannerItem.backgroundColorApp);
                     }
                 }
 
                 @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
+                public void onPageScrollStateChanged(int state) {
+
                 }
             });
+            bannerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    bannerView.start();
+                }
+            }, 2000);
+
 
 
             // 導航區
