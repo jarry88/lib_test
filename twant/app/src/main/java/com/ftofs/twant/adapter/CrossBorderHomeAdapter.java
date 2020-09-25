@@ -235,32 +235,46 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
 
             // 砍價
-            RecyclerView rvBargainList = helper.getView(R.id.rv_bargain_list);
-            rvBargainList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-            CrossBorderActivityGoodsAdapter bargainGoodsAdapter =
-                    new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_BARGAIN, R.layout.cross_border_activity_goods_item, item.bargainGoodsList);
-            bargainGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
-                    Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
-                }
-            });
-            rvBargainList.setAdapter(bargainGoodsAdapter);
+            if (item.bargainGoodsList.size() >= 1) {
+                helper.setGone(R.id.ll_bargain_container, true);
+
+                RecyclerView rvBargainList = helper.getView(R.id.rv_bargain_list);
+                rvBargainList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                CrossBorderActivityGoodsAdapter bargainGoodsAdapter =
+                        new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_BARGAIN, R.layout.cross_border_activity_goods_item, item.bargainGoodsList);
+                bargainGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
+                        Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                    }
+                });
+                rvBargainList.setAdapter(bargainGoodsAdapter);
+            } else { // 沒數據，則隱藏
+                helper.setGone(R.id.ll_bargain_container, false);
+            }
 
 
-            RecyclerView rvGroupList = helper.getView(R.id.rv_group_list);
-            rvGroupList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-            CrossBorderActivityGoodsAdapter groupGoodsAdapter =
-                    new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_GROUP, R.layout.cross_border_activity_goods_item, item.groupGoodsList);
-            groupGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
-                    Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
-                }
-            });
-            rvGroupList.setAdapter(groupGoodsAdapter);
+            // 團購
+            if (item.groupGoodsList.size() >= 1) {
+                helper.setGone(R.id.ll_group_container, true);
+
+                RecyclerView rvGroupList = helper.getView(R.id.rv_group_list);
+                rvGroupList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                CrossBorderActivityGoodsAdapter groupGoodsAdapter =
+                        new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_GROUP, R.layout.cross_border_activity_goods_item, item.groupGoodsList);
+                groupGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
+                        Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                    }
+                });
+                rvGroupList.setAdapter(groupGoodsAdapter);
+            } else { // 沒數據，則隱藏
+                helper.setGone(R.id.ll_group_container, false);
+            }
+
 
             helper.setVisible(R.id.rl_store2_container, item.storeList.size() > 1);
 
