@@ -52,6 +52,8 @@ import java.util.List;
 public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorderHomeItem, BaseViewHolder> {
     Context context;
 
+    boolean isFirst = true; // 是否為首次初始化
+
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
@@ -93,34 +95,36 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp, true);
                 }
             });
-            bannerView.addPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                }
+            if (isFirst) {
+                bannerView.addPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                @Override
-                public void onPageSelected(int position) {
-                    SLog.info("currPosition[%d]", position);
-                    CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
-
-                    boolean canChangeBackgroundColor = Hawk.get(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR);
-                    if (canChangeBackgroundColor) {
-                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, bannerItem.backgroundColorApp);
                     }
-                }
 
-                @Override
-                public void onPageScrollStateChanged(int state) {
+                    @Override
+                    public void onPageSelected(int position) {
+                        SLog.info("currPosition[%d]", position);
+                        CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
 
-                }
-            });
-            bannerView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    bannerView.start();
-                }
-            }, 2000);
+                        boolean canChangeBackgroundColor = Hawk.get(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR);
+                        if (canChangeBackgroundColor) {
+                            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, bannerItem.backgroundColorApp);
+                            SLog.info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                        }
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+                isFirst = false;
+            }
+
+            bannerView.start();
+            bannerView.setDelayedTime(3000);
 
 
 
