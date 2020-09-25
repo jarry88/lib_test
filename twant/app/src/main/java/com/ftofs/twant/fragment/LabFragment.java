@@ -18,12 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.BlankFragment;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.TestActivity;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.databinding.FragmentLabBinding;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.StoreVoucher;
-import com.gzp.lib_common.base.BaseFragment;
-import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.CroppyInitUtilKt;
 import com.ftofs.twant.util.RestartApp;
 import com.ftofs.twant.util.ToastUtil;
@@ -31,7 +29,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BackgroundDrawable;
 import com.ftofs.twant.widget.CheckPhoneView;
 import com.ftofs.twant.widget.NineLuckPan;
-
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 import com.lyrebirdstudio.aspectratiorecyclerviewlib.aspectratio.model.AspectRatio;
 import com.lyrebirdstudio.croppylib.Croppy;
@@ -75,7 +74,6 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FragmentLabBinding fragmentLabBinding = (FragmentLabBinding) simpleBind;
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         Util.setOnClickListener(view, R.id.btn_test1, this);
         Util.setOnClickListener(view, R.id.btn_test2, this);
@@ -189,7 +187,9 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         if (id == R.id.btn_test1) {
             // ToastUtil.info(_mActivity, "way1");
             // RestartApp.restartThroughIntentCompatMakeRestartActivityTask(_mActivity);
-            start(TestFragment.newInstance());
+            ToastUtil.success(getContext(),"打開測試activity");
+            startActivity(new Intent(getActivity(), TestActivity.class));
+//            start(TestFragment.newInstance());
         }else if (id == R.id.btn_post1) {
             ToastUtil.info(_mActivity, "btn_post1");
             new XPopup.Builder(getContext()).asCustom(new MoonVoucherListPopup(getContext(),new ArrayList<StoreVoucher>(),"10")).show();

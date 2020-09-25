@@ -19,12 +19,13 @@ class Title @JvmOverloads constructor(
     private val titlebarLeft by lazy {findViewById<RelativeLayout>(R.id.titlebar_leftlayout)  }
     private val titlebarLeftImage by lazy {findViewById<ImageView>(R.id.titlebarLeftImage)  }
     private val titlebarRight by lazy {findViewById<RelativeLayout>(R.id.titlebar_rightlayout)  }
+    private val titleText by lazy {findViewById<TextView>(R.id.titlebar_title)  }
     @SuppressLint("ResourceType")
     private fun initView(attrs: AttributeSet?) {
       View.inflate(context,R.layout.layout_login_tilte,this)
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.Title)
         typedArray.getString(R.styleable.Title_text_title)?.let {
-            rootView.findViewById<TextView>(R.id.titlebar_title)?.text=it
+            text=it
         }
         //不設置的時候是顯示的
         typedArray.getBoolean(R.styleable.Title_login_info,false).takeIf { it }?.let {
@@ -36,7 +37,9 @@ class Title @JvmOverloads constructor(
         typedArray.recycle()
 
     }
-
+    var text:String?
+        get() = ""
+        set(value) {titleText?.text=value}
     //    左侧布局监听
     fun setLeftLayoutClickListener(listener: OnClickListener) {
         titlebarLeft!!.setOnClickListener(listener)

@@ -6,13 +6,9 @@ import com.gzp.lib_common.config.Config
 fun isEmpty(str: String?) :Boolean{
     return str.isNullOrEmpty()
 }
-fun normalizeImageUrl(imageUrl:String?,params:String?=null):String?{
-    if (imageUrl.isNullOrEmpty()) {
-        return imageUrl
-    }
-    return if (imageUrl.run { startsWith("http://")||startsWith("https://") } ) {
-        params?.run { imageUrl+this }?:imageUrl
-    }else Config.OSS_BASE_URL.plus("/").plus(imageUrl).apply { if(!params.isNullOrEmpty()) plus(params) }
+fun normalizeImageUrl(imageUrl:String,params:String?=null):String{
+    return if (imageUrl.run { startsWith("http://")||startsWith("https://") } ) params?.run { imageUrl+this }?:imageUrl
+    else Config.OSS_BASE_URL.plus("/").plus(imageUrl).apply { if(!params.isNullOrEmpty()) plus(params) }
 
 }
 /**

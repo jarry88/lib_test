@@ -33,6 +33,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.ftofs.twant.hot_zone.HotView
+import com.gzp.lib_common.utils.StringUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
@@ -46,6 +49,8 @@ import kotlin.math.abs
 //<editor-fold desc="widget creation function">
 inline fun ViewGroup.TextView(autoAdd: Boolean = true, init: TextView.() -> Unit) =
     TextView(context).apply(init).also { if (autoAdd) addView(it) }
+inline fun ViewGroup.HotView(autoAdd: Boolean=true,init: HotView.() -> Unit)=
+        HotView(context).apply (init).also { if(autoAdd) addView(it) }
 
 inline fun ViewGroup.ImageView(autoAdd: Boolean = true, init: ImageView.() -> Unit) =
     ImageView(context).apply(init).also { if (autoAdd) addView(it) }
@@ -715,6 +720,14 @@ inline var ImageView.src: Int
     set(value) {
         setImageResource(value)
     }
+inline var ImageView.imageUrl: String?
+    get() {
+        return ""
+    }
+    set(value) {
+        Glide.with(context).load(StringUtil.nomvalue)
+
+    }
 
 inline var TextView.maxLength: Int
     get() {
@@ -907,6 +920,14 @@ var View.onClick: (View) -> Unit
     }
     set(value) {
         setOnClickListener { v -> value(v) }
+    }
+var View.onTouchEvent: (View,MotionEvent) -> Boolean
+    get() {
+        return {_,_->true}
+    }
+    set(value) {
+//        onTouch lambda should call View#performClick when a click is detected
+        setOnTouchListener { v,event  ->value(v,event) }
     }
 
 var View.shakelessClick: (View) -> Unit

@@ -1,6 +1,7 @@
 package com.ftofs.twant.kotlin.adapter
 
 import android.content.Context
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -9,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ftofs.twant.R
 import com.ftofs.twant.interfaces.OnItemClickListener
 
-abstract class DataBoundAdapter<T, V : ViewDataBinding> (
+abstract class  DslBoundAdapter<T,V:RecyclerView.ViewHolder> (
+        private var datas:List<T>?=null,
         open val headId:Int=R.layout.category_head_item,
         private val footId:Int=R.layout.rl_foot_item,
         private val emptyId:Int=R.layout.ic_placeholder_no_data
 ) :
-    RecyclerView.Adapter<DataBoundViewHolder<V>>() {
+    RecyclerView.Adapter<V>() {
     abstract val layoutId: Int
 
     protected val mData = ArrayList<T>()
@@ -31,7 +33,7 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> (
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            DataBoundViewHolder<V> {
+            V {
         context = parent.context
         when (viewType) {
             emptyType ->return DataBoundViewHolder(

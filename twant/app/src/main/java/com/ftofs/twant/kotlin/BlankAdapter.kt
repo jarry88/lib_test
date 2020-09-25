@@ -2,7 +2,7 @@ package com.ftofs.twant.kotlin
 
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
-import com.fastloan.app.ui.adapter.DataBoundViewHolder
+import com.ftofs.twant.kotlin.adapter.DataBoundViewHolder
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.VerificationGoodsItemBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter

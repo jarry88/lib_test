@@ -1,4 +1,4 @@
-package com.fastloan.app.ui.adapter
+package com.ftofs.twant.kotlin.adapter
 
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView

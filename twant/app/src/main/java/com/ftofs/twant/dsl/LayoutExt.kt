@@ -4,9 +4,9 @@ import android.content.Context
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ftofs.twant.dsl.dp
-import taylor.com.views.Selector
-import taylor.com.views.LineFeedLayout
+import com.ftofs.twant.dsl.views.LineFeedLayout
 import taylor.com.views.ProgressBar
+import taylor.com.views.Selector
 
 
 /**
