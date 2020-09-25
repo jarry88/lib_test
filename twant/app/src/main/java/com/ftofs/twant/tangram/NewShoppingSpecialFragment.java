@@ -67,10 +67,13 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
+import static com.ftofs.twant.constant.Constant.ZONE_OPEN_TYPE;
+
 /**
  *新購物專場入口頁
  */
 public class NewShoppingSpecialFragment extends BaseFragment implements View.OnClickListener, NestedScrollingCallback {
+
     private MZBannerView bannerView;
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
 
@@ -105,7 +108,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     private boolean showTab=true;
     private LinearLayout llBanner;
     private LinkageContainerFragment2 linkageGoodsFragment2;
-    private int zoneState=1;//專場狀態 0關閉 1開啟 2停用
+    private int zoneState=ZONE_OPEN_TYPE;//專場狀態 0關閉 1開啟 2停用 只有停用才顯示停用頁
     private ConstraintLayout rLcontainer;
     private LinearLayout appBackground;
 
@@ -345,12 +348,12 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     }
     private void updateView(EasyJSONObject responseObj) {
         try {
-            if (Config.USE_DEVELOPER_TEST_DATA) {
-                zoneState = 1;
-            } else {
+//            if (Config.USE_DEVELOPER_TEST_DATA) {
+//                zoneState = 1;
+//            } else {
                 zoneState  = responseObj.getInt("datas.zoneState ");
-            }
-            if(zoneState==Constant.ZONE_CLOSE_TYPE||zoneState==Constant.ZONE_STOP_TYPE){
+//            }
+            if(zoneState==Constant.ZONE_STOP_TYPE){//僅在停用狀態下進入停用頁
                 tvZoneName.setText("活動專場");
                 llFloatButtonContainer.setVisibility(View.GONE);
                 rLcontainer.setVisibility(View.VISIBLE);
@@ -371,9 +374,10 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                     for (Object object : zoneList) {
                         list.add(ZoneItem.parase((EasyJSONObject) object));
                     }
-                } else if(Util.inDev()){
-                    list.add(new ZoneItem(5, "這是在安卓段寫死的測試數據", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
                 }
+//                else if(Util.inDev()){
+//                    list.add(new ZoneItem(5, "這是在安卓段寫死的測試數據", "dd", "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8e/b8/8eb8d7b9a7b1e96ae01b2b27c1663857.png"));
+//                }
 
                 zoneAdapter.addAll(list,true);
                 return;
