@@ -378,7 +378,19 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             return list;
         }
 
+
         list.add(onlineItem);
+
+        // 當用戶下單地址為中國內陸地址時，跨城購產品訂單物流配送方式隱藏【到店自提】方式，僅保留物流配送方式。
+        int districtId1 = Constant.DISTRICT_ID_MACAO;
+        if (mAddrItem != null && mAddrItem.areaIdList.size() > 0) {
+            districtId1 = mAddrItem.areaIdList.get(0);
+        }
+        if (tariffTotalEnable == Constant.TRUE_INT && districtId1 != Constant.DISTRICT_ID_MACAO && districtId1 != Constant.DISTRICT_ID_HONGKONG) {
+            return list;
+        }
+
+
         list.add(fetchItem);
 
         // 只有選擇的收貨人信息是澳門地區才會顯示貨到付款這種交易方式，空地址、香港和內地的地址均不顯示
