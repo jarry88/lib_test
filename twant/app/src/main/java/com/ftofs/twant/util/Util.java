@@ -1732,7 +1732,13 @@ public class Util {
         return false;
     }
 
-    public static void handleClickLink(String linkType, String linkValue) {
+    /**
+     * 處理自定義點擊跳轉
+     * @param linkType
+     * @param linkValue
+     * @param isFromCrossBorderHome 是否來自跨城購
+     */
+    public static void handleClickLink(String linkType, String linkValue, boolean isFromCrossBorderHome) {
         switch (linkType) {
             case "none":
                 // 无操作
@@ -1760,8 +1766,12 @@ public class Util {
             case "category":
                 // 產品搜索结果页(分类)
                 String cat = linkValue;
-                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
-                        EasyJSONObject.generate("cat", cat).toString()));
+                EasyJSONObject params = EasyJSONObject.generate(
+                        "cat", cat,
+                        "isFromCrossBorderHome", isFromCrossBorderHome
+                );
+                String paramsStr = params.toString();
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(), paramsStr));
                 break;
             case "brandList":
                 // 品牌列表

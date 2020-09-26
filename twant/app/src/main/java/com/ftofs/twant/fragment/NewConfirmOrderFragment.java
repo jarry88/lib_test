@@ -378,7 +378,19 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             return list;
         }
 
+
         list.add(onlineItem);
+
+        // 當用戶下單地址為中國內陸地址時，跨城購產品訂單物流配送方式隱藏【到店自提】方式，僅保留物流配送方式。
+        int districtId1 = Constant.DISTRICT_ID_MACAO;
+        if (mAddrItem != null && mAddrItem.areaIdList.size() > 0) {
+            districtId1 = mAddrItem.areaIdList.get(0);
+        }
+        if (tariffTotalEnable == Constant.TRUE_INT && districtId1 != Constant.DISTRICT_ID_MACAO && districtId1 != Constant.DISTRICT_ID_HONGKONG) {
+            return list;
+        }
+
+
         list.add(fetchItem);
 
         // 只有選擇的收貨人信息是澳門地區才會顯示貨到付款這種交易方式，空地址、香港和內地的地址均不顯示
@@ -1578,60 +1590,10 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
             SLog.info("platformCouponIndex[%d]", platformCouponIndex);
             loadData(STEP_CALC_TOTAL_AMOUNT);
         } else if (type == PopupType.HANDLE_SOLD_OUT_GOODS) { // 處理售罄的商品
-            if (soldOutGoodsItemList.size() == totalGoodsCount) { // 如果全部售罄，返回上一面
-                SLog.info("all_sold_out");
+            if (id == 1) { // 重新選擇地址
+                startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
+            } else if (id == 2) { // 返回
                 hideSoftInputPop();
-            } else { // 如果部分售罄，刪除售罄的商品
-                if(currPaymentTypeCode.equals(Constant.PAYMENT_TYPE_CODE_CHAIN)){
-                    SLog.info("后面要重构，参考ios 到店自提及想要食逻辑");
-                    hideSoftInputPop();
-                    return;
-                }
-                SLog.info("partial_sold_out");
-                try {
-                    // 過濾售罄的商品
-                    EasyJSONArray newBuyDataArr = EasyJSONArray.generate();
-                    EasyJSONArray buyDataArr = EasyJSONArray.parse(buyData);
-                    SLog.info("soldOutGoodsItemList.size[%d]", soldOutGoodsItemList.size());
-                    for (Object object : buyDataArr) {
-                        EasyJSONObject buyDataItem = (EasyJSONObject) object;
-
-                        // 遍歷缺貨列表，看該商品是否缺貨
-                        boolean isSoldOut = false;
-                        int goodsId = buyDataItem.getInt("goodsId");
-                        for (SoldOutGoodsItem soldOutGoodsItem : soldOutGoodsItemList) {
-//                            SLog.info("goodsId[%d], soldOutGoodsItem.goodsId[%d]", goodsId, soldOutGoodsItem.goodsId);
-                            int cartId;
-                            if (isFromCart == Constant.TRUE_INT) {
-                                Integer result = goodsIdToCartId.get(soldOutGoodsItem.goodsId);
-                                if (result == null) {
-                                    SLog.info("Error!根據goodsId找不到cartId");
-                                    continue;
-                                }
-                                cartId = result;
-                            } else {
-                                cartId = soldOutGoodsItem.goodsId;
-                            }
-                            if (goodsId == cartId) {
-                                isSoldOut = true;
-                                break;
-                            }
-                        }
-
-                        if (isSoldOut) {
-                            continue;
-                        }
-
-                        newBuyDataArr.append(buyDataItem);
-                    }
-
-                    buyData = newBuyDataArr.toString();
-                    SLog.info("NewBuyData[%s]", buyData);
-
-                    loadData(STEP_DISPLAY);
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                }
             }
         }
     }

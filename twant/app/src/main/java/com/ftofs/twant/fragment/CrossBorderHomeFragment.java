@@ -18,21 +18,27 @@ import com.ftofs.twant.adapter.CrossBorderHomeAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.entity.ChangeColorResult;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
+import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -102,6 +108,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         super.onViewCreated(view, savedInstanceState);
 
         SLog.info("CrossBorderHomeFragment::onViewCreated()");
+        Hawk.get(SPField.FIELD_CURR_CROSS_BORDER_THEME_COLOR, "");
 
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         Util.setOnClickListener(view, R.id.btn_goto_cart, this);
@@ -274,6 +281,25 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     }
     private void hideFloatButton() {
         llFloatButtonContainer.setTranslationX(Util.dip2px(_mActivity, 30.5f));
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        SLog.info("____onSupportVisible");
+        Hawk.put(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR, true);
+
+        String themeColor = Hawk.get(SPField.FIELD_CURR_CROSS_BORDER_THEME_COLOR);
+        if (!StringUtil.isEmpty(themeColor)) {
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, new ChangeColorResult(themeColor, 9999));
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        SLog.info("____onSupportInvisible");
+        Hawk.put(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR, false);
     }
 
     @Override

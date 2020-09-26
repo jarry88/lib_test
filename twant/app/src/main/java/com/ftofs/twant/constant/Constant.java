@@ -346,7 +346,7 @@ public class Constant {
     // public static final int SKU_UNSELECTED_FONT_SIZE = 14;
 
     public static final int DISTRICT_ID_MACAO = 45056;
-
+    public static final int DISTRICT_ID_HONGKONG = 45064;
 
     /**
      * 商品狀態

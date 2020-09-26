@@ -265,7 +265,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         Util.setOnClickListener(view, R.id.btn_sort_goods_sale, this);
         Util.setOnClickListener(view, R.id.btn_sort_goods_price, this);
 
-        Util.setOnClickListener(view, R.id.btn_goto_category, this);
+        View btnGotoCategory = view.findViewById(R.id.btn_goto_category);
+        btnGotoCategory.setOnClickListener(this);
+        if (isFromCrossBorderHome) { // 如果是跨城購，不用跳到分類頁再搜索
+            btnGotoCategory.setVisibility(View.GONE);
+        }
 
         btnPublishWantPost = view.findViewById(R.id.btn_publish_want_post);
         btnPublishWantPost.setOnClickListener(this);
@@ -638,6 +642,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                 final String finalUrl = url;
                 final EasyJSONObject finalParams = EasyJSONObject.parse(params.toString());
+                SLog.info("finalParams[%s]", finalParams);
                 Api.getUI(url, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -1387,7 +1392,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     .popupPosition(PopupPosition.Right)
                     //启用状态栏阴影
                     .hasStatusBarShadow(true)
-                    .asCustom(new GoodsFilterDrawerPopupView(_mActivity, filterCategoryGroupList, this));
+                    .asCustom(new GoodsFilterDrawerPopupView(_mActivity, filterCategoryGroupList, isFromCrossBorderHome, this));
         }
         goodsFilterDrawerPopupView.show();
     }

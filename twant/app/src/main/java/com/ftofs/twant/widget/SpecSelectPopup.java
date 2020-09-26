@@ -619,7 +619,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         int finalStorage = goodsInfo.getFinalStorage();
         SLog.info("goodsInfo.price[%s]", goodsInfo.price);
         if (groupBuyMode && goodsInfo.isGroup == Constant.TRUE_INT) {
-            tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.groupPrice, 0) + " (原價: " + StringUtil.formatPrice(context, goodsInfo.goodsPrice0, 0) + ")");
+            tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.groupPrice, 0) + " (原價: " + StringUtil.formatPrice(context, goodsInfo.appPrice0, 0) + ")");
         } else {
             tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
         }

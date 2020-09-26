@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="羨慕你獲得"
+            android:text="恭喜你獲得"
             android:textSize="18sp"
             android:textColor="@color/tw_black">
         </TextView>

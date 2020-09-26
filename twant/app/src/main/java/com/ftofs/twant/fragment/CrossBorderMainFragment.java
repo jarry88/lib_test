@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.CrossBorderActivityGoodsAdapter;
 import com.ftofs.twant.adapter.CrossBorderCategoryListAdapter;
@@ -25,8 +26,10 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.BargainItem;
+import com.ftofs.twant.entity.ChangeColorResult;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderCategoryItem;
@@ -36,11 +39,13 @@ import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
+import com.orhanobut.hawk.Hawk;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,6 +60,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
+
 
 
 /**
@@ -74,9 +80,9 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     LinearLayout llAppBar;
     View vwTopBg;
     CrossBorderDrawView vwBottomBg;
-    public int homeBgColor; // 首頁頂部背景色
 
-    LinearLayout llMoreCategoryContainer;
+    View crossBorderCategoryListMask;
+    View btnViewMoreCategory;
 
     public static CrossBorderMainFragment newInstance() {
         CrossBorderMainFragment fragment = new CrossBorderMainFragment();
@@ -100,11 +106,12 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
         EventBus.getDefault().register(this);
 
+        crossBorderCategoryListMask = view.findViewById(R.id.cross_border_category_list_mask);
+        btnViewMoreCategory = view.findViewById(R.id.btn_view_more_category);
+
         llAppBar = view.findViewById(R.id.ll_app_bar);
         vwTopBg = view.findViewById(R.id.vw_top_bg);
         vwBottomBg = view.findViewById(R.id.vw_bottom_bg);
-
-        llMoreCategoryContainer = view.findViewById(R.id.ll_more_category_container);
 
         rvCategoryList = view.findViewById(R.id.rv_category_list);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
@@ -145,7 +152,10 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 SLog.info("position[%d], item[%s]", position, item);
 
                 if (position == 0) { // 如果是回到首頁，恢復原先的顏色
-                    changeBackgroundColor(homeBgColor);
+                    String colorStr = Hawk.get(SPField.FIELD_CURR_CROSS_BORDER_THEME_COLOR);
+                    if (!StringUtil.isEmpty(colorStr)) {
+                        changeBackgroundColor(Color.parseColor(colorStr));
+                    }
                 } else {
                     changeBackgroundColor(Color.parseColor(item.backgroundColor));
                 }
@@ -174,6 +184,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     }
 
     private void initViewPager(EasyJSONObject responseObj) {
+        String homeDefaultColorStr = "";
         try {
             // 獲取Banner圖數據
             int index = 0;
@@ -183,8 +194,10 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 CrossBorderBannerItem bannerItem = (CrossBorderBannerItem) EasyJSONBase.jsonDecode(CrossBorderBannerItem.class, object.toString());
                 bannerItemList.add(bannerItem);
                 if (index == 0) {
-                    homeBgColor = Color.parseColor(bannerItem.backgroundColorApp);
-                    changeBackgroundColor(homeBgColor);
+                    int color = Color.parseColor(bannerItem.backgroundColorApp);
+                    changeBackgroundColor(color);
+                    homeDefaultColorStr = bannerItem.backgroundColorApp;
+                    SLog.info("homeDefaultColorStr[%s]", homeDefaultColorStr);
                 }
 
                 index++;
@@ -263,7 +276,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
             titleList.add("首頁");
             fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemCount, navPaneList, shoppingZoneList, bargainGoodsList, groupGoodsList, storeList));
-            categoryList.add(new CrossBorderCategoryItem(0, "首頁", "#019AA7"));
+            categoryList.add(new CrossBorderCategoryItem(0, "首頁", homeDefaultColorStr));
 
             EasyJSONArray catList = responseObj.getSafeArray("datas.catList");
             SLog.info("catList.length[%d]", catList.length());
@@ -275,9 +288,9 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 fragmentList.add(CrossBorderCategoryFragment.newInstance(item.categoryId, item.catName));
                 categoryList.add(item);
             }
+            categoryListAdapter.setShowViewMore(categoryList.size() > 5);
+            showViewMoreCategoryIndicator(categoryList.size() > 5);
             categoryListAdapter.setNewData(categoryList);
-
-            llMoreCategoryContainer.setVisibility(categoryList.size() > 5 ? View.VISIBLE : View.GONE);
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -286,6 +299,11 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         // ViewPager中Fragment不回調onCreateView的問題
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
         viewPager.setAdapter(adapter);
+    }
+
+    private void showViewMoreCategoryIndicator(boolean show) {
+        btnViewMoreCategory.setVisibility(show ? View.VISIBLE : View.GONE);
+        crossBorderCategoryListMask.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private void loadData() {
@@ -321,16 +339,20 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR) {
-            String colorStr = (String) message.data;
-            SLog.info("colorStr[%s]", colorStr);
-            homeBgColor = Color.parseColor(colorStr);
-            changeBackgroundColor(homeBgColor);
+            ChangeColorResult changeColorResult = (ChangeColorResult) message.data;
+            String colorStr = changeColorResult.color;
+            SLog.info("changeColorResult[%s]", changeColorResult);
+            if (changeColorResult.id == 9999 || changeColorResult.id == MainActivity.changeColorId) {
+                SLog.info("colorStr[%s]", colorStr);
+                changeBackgroundColor(Color.parseColor(colorStr));
+            }
         }
     }
 
     private void changeBackgroundColor(int color) {
         llAppBar.setBackgroundColor(color);
         vwTopBg.setBackgroundColor(color);
+        btnViewMoreCategory.setBackgroundColor(color);
         vwBottomBg.setColor(color);
     }
 

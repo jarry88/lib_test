@@ -21,6 +21,7 @@ public class CrossBorderCategoryListAdapter extends BaseQuickAdapter<CrossBorder
     Context context;
 
     int screenWidth;
+    int recyclerViewWidth;
     private int selectedIndex = 0;
 
     public int getSelectedIndex() {
@@ -36,6 +37,13 @@ public class CrossBorderCategoryListAdapter extends BaseQuickAdapter<CrossBorder
 
         this.context = context;
         screenWidth = Util.getScreenDimension(context).first;
+        recyclerViewWidth = screenWidth;
+    }
+
+    public void setShowViewMore(boolean show) {
+        if (show) { // 如果顯示【ViewMore】，則可用寬度等於屏幕寬度減去16DP
+            recyclerViewWidth = screenWidth - Util.dip2px(context, 16); // ViewMore指示的寬度為16DP
+        }
     }
 
     @Override
@@ -54,7 +62,7 @@ public class CrossBorderCategoryListAdapter extends BaseQuickAdapter<CrossBorder
 
 
         ViewGroup.LayoutParams layoutParams = helper.itemView.getLayoutParams();
-        layoutParams.width = screenWidth / visibleItemCount;
+        layoutParams.width = recyclerViewWidth / visibleItemCount;
         helper.itemView.setLayoutParams(layoutParams);
 
         TextView tvCategoryName= helper.getView(R.id.tv_category_name);

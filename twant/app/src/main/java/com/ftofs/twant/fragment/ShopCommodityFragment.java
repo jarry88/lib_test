@@ -359,7 +359,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 }
             }
         });
-        shopGoodsGridAdapter = new ShopGoodsGridAdapter(_mActivity, goodsPairList);
+        shopGoodsGridAdapter = new ShopGoodsGridAdapter(_mActivity, goodsPairList, false);
         shopGoodsGridAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {

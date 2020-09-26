@@ -51,19 +51,15 @@ public class SoldOutPopup extends CenterPopupView implements View.OnClickListene
 
         TextView tvTitle = findViewById(R.id.tv_title);
         TextView btnOk = findViewById(R.id.btn_ok);
-        if (partialAvailable) {
-            tvTitle.setText("抱歉，部分產品已售罄！");
-            btnOk.setText("移除");
-        } else {
-            tvTitle.setText("抱歉，產品已售罄！");
-            btnOk.setText("返回");
-        }
+        TextView btnBack = findViewById(R.id.btn_back);
+        tvTitle.setText("抱歉，您購買的商品無貨");
 
         // 设置弹窗背景
         Drawable backgroundDrawable = BackgroundDrawable.create(Color.WHITE, Util.dip2px(context, 6));
         findViewById(R.id.ll_popup_content_view).setBackground(backgroundDrawable);
 
         btnOk.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
 
         LinearLayout llSoldOutListContainer = findViewById(R.id.ll_sold_out_list_container);
         SoldOutGoodsAdapter adapter = new SoldOutGoodsAdapter(context, llSoldOutListContainer, R.layout.sold_out_item);
@@ -93,7 +89,12 @@ public class SoldOutPopup extends CenterPopupView implements View.OnClickListene
 
         if (id == R.id.btn_ok) {
             if (onSelectedListener != null) {
-                onSelectedListener.onSelected(PopupType.HANDLE_SOLD_OUT_GOODS, 0, null);
+                onSelectedListener.onSelected(PopupType.HANDLE_SOLD_OUT_GOODS, 1, null);
+                dismiss();
+            }
+        } else if (id == R.id.btn_back) {
+            if (onSelectedListener != null) {
+                onSelectedListener.onSelected(PopupType.HANDLE_SOLD_OUT_GOODS, 2, null);
                 dismiss();
             }
         }

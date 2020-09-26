@@ -139,6 +139,7 @@ import okhttp3.Response;
  */
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces, SimpleCallback {
     long lastBackPressedTime;
+    public static long changeColorId;
     /*
     需求
     http://ftofs.zentaopm.com/story-view-1050.html
