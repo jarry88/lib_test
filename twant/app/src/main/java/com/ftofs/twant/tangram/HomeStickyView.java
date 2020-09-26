@@ -117,7 +117,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             if (Config.USE_DEVELOPER_TEST_DATA) {
                 randomFriendCount = "1234567";
             }
-            tvRandomFriendCount.setText(Util.formatCount(stickyCellData.memberCount));
+            tvRandomFriendCount.setText(String.valueOf(stickyCellData.memberCount));
 
             tvStoreCount.setText(Util.formatCount(stickyCellData.storeCount));
             tvStoreCount.setVisibility(VISIBLE);
