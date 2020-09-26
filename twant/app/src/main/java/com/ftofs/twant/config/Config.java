@@ -42,6 +42,23 @@ public class Config {
     public static final boolean USE_F2 = true;  // 生產模式下: true -- 使用F2服務器  false -- 使用www服務器
     public static boolean USE_F3 = false;  // 生產模式下: true -- 使用F3服務器  false -- 使用www服務器
 
+
+    public static final int ENV_28 = 1;
+    public static final String BASE_URL_28 = "http://192.168.5.28";
+    public static final String BASE_URL_API_28 = "http://192.168.5.28/api";
+    public static final String BASE_URL_29 = "https://192.168.5.29";
+    public static final String BASE_URL_API_29 = "https://192.168.5.29/api";
+    public static final String BASE_URL_API_49 = "http://192.168.5.49:8080/api";
+    public static final String BASE_URL_F2 = "https://f2.twant.com";
+    public static final String BASE_URL_API_F2 = "https://f2.twant.com/api";;
+    public static final String BASE_URL_F3 ="https://f3.twant.com";
+    public static final String BASE_URL_API_F3 ="https://f3.twant.com/api";
+
+    public static final String BASE_URL_W3 ="https://www.twant.com";
+    public static final int ENV_29 = 2;
+    public static final int ENV_49 = 5;//楊建測試機
+    public static final int ENV_PROD = 3;
+    public static final int ENV_F3 = 4;
     /**
      * 日誌開關
      */
@@ -54,17 +71,17 @@ public class Config {
 
     public static String API_BASE_URL = DEVELOPER_MODE ?
             (USE_28 ? "http://192.168.5.28/api" : "https://192.168.5.29/api")
-            : (USE_F2 ? (USE_F3 ? "https://f3.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/api");
+            : (USE_F2 ? (USE_F3 ? BASE_URL_API_F3 : BASE_URL_API_F2) : "https://www.twant.com/api");
 
     public static String WEB_BASE_URL = DEVELOPER_MODE ?
             (USE_28 ? "http://192.168.5.28/web" : "https://192.168.5.29/web")
-            : (USE_F2 ? (USE_F3 ? "https://f3.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/web");
+            : (USE_F2 ? (USE_F3 ? BASE_URL_API_F3 : BASE_URL_API_F2) : "https://www.twant.com/web");
     public static String BASE_URL = DEVELOPER_MODE ?
-            (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29")
-            : (USE_F2 ? (USE_F3 ? "https://f3.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com");
+            (USE_28 ? BASE_URL_28 : "https://192.168.5.29")
+            : (USE_F2 ? (USE_F3 ? "https://f3.twant.com/api" : BASE_URL_API_F2) : "https://www.twant.com");
 
     public static String MOBILE_WEB_BASE_URL = DEVELOPER_MODE ?
-            (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29")
+            (USE_28 ? BASE_URL_28 : "https://192.168.5.29")
             : "https://www.twant.com";
 
 
@@ -100,10 +117,6 @@ public class Config {
     public static final String YOUTUBE_DEVELOPER_KEY = "takewant";
 
 
-    public static final int ENV_28 = 1;
-    public static final int ENV_29 = 2;
-    public static final int ENV_PROD = 3;
-    public static final int ENV_F3 = 4;
     public static int currEnv = ENV_PROD;
 
     /**
@@ -141,28 +154,28 @@ public class Config {
         //原有f1 已經作廢
 
         BASE_URL = DEVELOPER_MODE ?
-                (USE_28 ? "http://192.168.5.28" : env == ENV_29 ? "https://192.168.5.29/api" : "https://192.168.5.229/api")
-                : (USE_F2 ? "https://www.twant.com" : "https://www.twant.com");
+                (USE_28 ? BASE_URL_28 : env == ENV_29 ? BASE_URL_API_29 : BASE_URL_API_49)
+                : (USE_F2 ? BASE_URL_F2 :(USE_F3? "https://f3.twant.com":BASE_URL_W3));
 //        BASE_URL = DEVELOPER_MODE ?
-//                (USE_28 ? "http://192.168.5.28" : "http://120.196.113.116:8001/api")
+//                (USE_28 ? BASE_URL_28 : "http://120.196.113.116:8001/api")
 //                : (USE_F2 ? "https://www.twant.com" : "https://www.twant.com");
         OSS_BASE_URL = DEVELOPER_MODE ?
                 "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com"
                 : "https://img.twant.com";
 
         API_BASE_URL = DEVELOPER_MODE ?
-                (USE_28 ? "http://192.168.5.28/api" : env == ENV_29 ? "https://192.168.5.29/api" : "https://192.168.5.229/api")
-                : (USE_F2 ? (USE_F3 ? "https://f3.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/api");
+                (USE_28 ? "http://192.168.5.28/api" : env == ENV_29 ? BASE_URL_API_29 : "https://192.168.5.229/api")
+                : (USE_F2 ? (USE_F3 ? "https://f3.twant.com/api" : BASE_URL_API_F2) : "https://www.twant.com/api");
 //        API_BASE_URL = DEVELOPER_MODE ?
 //               (USE_28 ? "http://192.168.5.28/api" : "http://120.196.113.116:8001/api")
-//                : (USE_F2 ? "https://f2.twant.com/api" : "https://www.twant.com/api");
+//                : (USE_F2 ? BASE_URL_API_F2 : "https://www.twant.com/api");
 
         WEB_BASE_URL = DEVELOPER_MODE ?
                 (USE_28 ? "http://192.168.5.28/web" : env == ENV_29 ? "https://192.168.5.29/web" : "https://192.168.5.229/web")
                 : (USE_F2 ? "https://www.twant.com/web" : "https://www.twant.com/web");
 
         MOBILE_WEB_BASE_URL = DEVELOPER_MODE ?
-                (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29")
+                (USE_28 ? BASE_URL_28 : "https://192.168.5.29")
                 : "https://www.twant.com";
 
 
