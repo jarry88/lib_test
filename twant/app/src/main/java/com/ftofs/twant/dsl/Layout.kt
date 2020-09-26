@@ -36,6 +36,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.ftofs.twant.hot_zone.HotView
 import com.gzp.lib_common.utils.StringUtil
+import com.gzp.lib_common.utils.normalizeImageUrl
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
@@ -725,8 +726,9 @@ inline var ImageView.imageUrl: String?
         return ""
     }
     set(value) {
-        Glide.with(context).load(StringUtil.nomvalue)
-
+        value?.let {
+            Glide.with(context).load(normalizeImageUrl(value)).centerCrop().into(this)
+        }
     }
 
 inline var TextView.maxLength: Int

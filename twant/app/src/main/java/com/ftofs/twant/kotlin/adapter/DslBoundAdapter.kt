@@ -3,6 +3,7 @@ package com.ftofs.twant.kotlin.adapter
 import android.content.Context
 import android.os.IBinder
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -31,131 +32,132 @@ abstract class  DslBoundAdapter<T,V:RecyclerView.ViewHolder> (
 
 
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            V {
-        context = parent.context
-        when (viewType) {
-            emptyType ->return DataBoundViewHolder(
-                    DataBindingUtil.inflate(
-                            LayoutInflater.from(parent.context),
-                            emptyId,
-                            parent,
-                            false
-                    )
-            )
-            footType ->return DataBoundViewHolder(
-                    DataBindingUtil.inflate(
-                            LayoutInflater.from(parent.context),
-                            footId,
-                            parent,
-                            false
-                    )
-            )
-            headType -> {
-                return DataBoundViewHolder(
-                        DataBindingUtil.inflate(
-                                LayoutInflater.from(parent.context),
-                                headId,
-                                parent,
-                                false
-                        )
-                )
-
-            }
-            else ->
-                return DataBoundViewHolder(DataBindingUtil.inflate(
-                                LayoutInflater.from(parent.context),
-                                layoutId,
-                                parent,
-                                false
-                        ))
-        }
-
-    }
-
-    override fun getItemCount(): Int {
-        val count = mData.size
-        return if (count == 0 && showEmptyView) {
-            1
-        }else if (showFootView && showHeadView) {
-            count +2
-        }else if (showFootView || showHeadView) {
-            count + 1
-        } else {
-            count
-        }
-    }
-
-    override fun onBindViewHolder(
-            holder: DataBoundViewHolder<V>,
-            position: Int
-    ) {
-        if (isHeadPosition(position)) {
-            initHeadView(holder.binding)
-        }else
-        if (!isEmptyPosition(position)&&!isFootPosition(position)) {
-            val realPosition=if(showHeadView)position-1 else position
-            if (mData.isNotEmpty()&&realPosition<mData.size) {
-                initView(holder.binding, mData[realPosition])
-            }
-//            onItemClickListener?.let { holder.binding.root.apply {setOnClickListener { _->it.onClick(realPosition,this) }  } }
-
-        }
-        holder.binding.executePendingBindings()//必须调用，否则闪屏
-
-    }
-
-
-    open fun initHeadView(binding: ViewDataBinding) {}
-
-    private fun isFootPosition(position: Int): Boolean {
-        return   (position==itemCount-1)and showFootView
-    }
-
-    private fun isHeadPosition(position: Int): Boolean {
-        return (position==0)and showHeadView
-    }
-
-    abstract fun initView(binding: V, item: T)
-
-    fun addAll(list: List<T>, isFirst: Boolean) {
-        if (isFirst) mData.clear()
-        mData.addAll(list)
-        notifyDataSetChanged()
-    }
-
-    fun getData(): List<T>? {
-        return mData
-    }
-    /**
-     * 判断是否是空布局
-     */
-    private fun isEmptyPosition( position:Int):Boolean {
-        val count = getData()?.size?:0
-        return (position == 0)and (count==0)and showEmptyView
-    }
-    fun showEmptyView(isShow :Boolean) {
-        if (isShow != showEmptyView) {
-            showEmptyView = isShow;
-            notifyDataSetChanged();
-        }
-    }
-    fun showFootView(isShow :Boolean) {
-        if (isShow != showFootView) {
-            showFootView = isShow;
-            notifyDataSetChanged();
-        }
-    }
-    fun showHeadView(isShow: Boolean) {
-        if (isShow != showHeadView) {
-            showHeadView = isShow
-            notifyDataSetChanged()
-        }
-    }
-    override fun getItemViewType(position: Int): Int {
-        return if(isEmptyPosition(position)) emptyType else if(isFootPosition(position))footType else if(isHeadPosition(position)) headType else itemType
-    }
+//
+//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
+//           V{
+//        context = parent.context
+//        when (viewType) {
+//            emptyType ->return V()
+////            DataBoundViewHolder(
+////                    DataBindingUtil.inflate(
+////                            LayoutInflater.from(parent.context),
+////                            emptyId,
+////                            parent,
+////                            false
+////                    )
+//            )
+//            footType ->return DataBoundViewHolder(
+//                    DataBindingUtil.inflate(
+//                            LayoutInflater.from(parent.context),
+//                            footId,
+//                            parent,
+//                            false
+//                    )
+//            )
+//            headType -> {
+//                return DataBoundViewHolder(
+//                        DataBindingUtil.inflate(
+//                                LayoutInflater.from(parent.context),
+//                                headId,
+//                                parent,
+//                                false
+//                        )
+//                )
+//
+//            }
+//            else ->
+//                return DataBoundViewHolder(DataBindingUtil.inflate(
+//                                LayoutInflater.from(parent.context),
+//                                layoutId,
+//                                parent,
+//                                false
+//                        ))
+//        }
+//
+//    }
+//
+//    override fun getItemCount(): Int {
+//        val count = mData.size
+//        return if (count == 0 && showEmptyView) {
+//            1
+//        }else if (showFootView && showHeadView) {
+//            count +2
+//        }else if (showFootView || showHeadView) {
+//            count + 1
+//        } else {
+//            count
+//        }
+//    }
+//
+//    override fun onBindViewHolder(
+//            holder: DataBoundViewHolder<V>,
+//            position: Int
+//    ) {
+//        if (isHeadPosition(position)) {
+//            initHeadView(holder.binding)
+//        }else
+//        if (!isEmptyPosition(position)&&!isFootPosition(position)) {
+//            val realPosition=if(showHeadView)position-1 else position
+//            if (mData.isNotEmpty()&&realPosition<mData.size) {
+//                initView(holder.binding, mData[realPosition])
+//            }
+////            onItemClickListener?.let { holder.binding.root.apply {setOnClickListener { _->it.onClick(realPosition,this) }  } }
+//
+//        }
+//        holder.binding.executePendingBindings()//必须调用，否则闪屏
+//
+//    }
+//
+//
+//    open fun initHeadView(binding: ViewDataBinding) {}
+//
+//    private fun isFootPosition(position: Int): Boolean {
+//        return   (position==itemCount-1)and showFootView
+//    }
+//
+//    private fun isHeadPosition(position: Int): Boolean {
+//        return (position==0)and showHeadView
+//    }
+//
+//    abstract fun initView(binding: V, item: T)
+//
+//    fun addAll(list: List<T>, isFirst: Boolean) {
+//        if (isFirst) mData.clear()
+//        mData.addAll(list)
+//        notifyDataSetChanged()
+//    }
+//
+//    fun getData(): List<T>? {
+//        return mData
+//    }
+//    /**
+//     * 判断是否是空布局
+//     */
+//    private fun isEmptyPosition( position:Int):Boolean {
+//        val count = getData()?.size?:0
+//        return (position == 0)and (count==0)and showEmptyView
+//    }
+//    fun showEmptyView(isShow :Boolean) {
+//        if (isShow != showEmptyView) {
+//            showEmptyView = isShow;
+//            notifyDataSetChanged();
+//        }
+//    }
+//    fun showFootView(isShow :Boolean) {
+//        if (isShow != showFootView) {
+//            showFootView = isShow;
+//            notifyDataSetChanged();
+//        }
+//    }
+//    fun showHeadView(isShow: Boolean) {
+//        if (isShow != showHeadView) {
+//            showHeadView = isShow
+//            notifyDataSetChanged()
+//        }
+//    }
+//    override fun getItemViewType(position: Int): Int {
+//        return if(isEmptyPosition(position)) emptyType else if(isFootPosition(position))footType else if(isHeadPosition(position)) headType else itemType
+//    }
 
     var onItemClickListener: OnItemClickListener?=null
 

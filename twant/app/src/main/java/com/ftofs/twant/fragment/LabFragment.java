@@ -17,12 +17,14 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ftofs.lib_net.model.HotZone;
 import com.ftofs.twant.BlankFragment;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.TestActivity;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.StoreVoucher;
+import com.ftofs.twant.hot_zone.HotZoneFragment;
 import com.ftofs.twant.util.CroppyInitUtilKt;
 import com.ftofs.twant.util.RestartApp;
 import com.ftofs.twant.util.ToastUtil;
@@ -199,7 +201,9 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
             new XPopup.Builder(getContext()).asCustom(new MoonVoucherListPopup(getContext(),new ArrayList<StoreVoucher>(),"10")).show();
         } else if (id == R.id.btn_test2) {
             ToastUtil.info(_mActivity, "way2");
-            RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);
+            //49  8080
+            start(new HotZoneFragment(4));
+//            RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);
         } else if (id == R.id.btn_goto) {
             ToastUtil.info(_mActivity, "way3");
             start(BlankFragment.newInstance("a","b"));

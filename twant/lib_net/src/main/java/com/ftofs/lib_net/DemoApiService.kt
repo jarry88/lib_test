@@ -105,6 +105,9 @@ interface DemoApiService {
     suspend fun passwordLogin(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
     @POST("loginconnect/new/weixin/login")
     suspend fun getWXLoginStepOne(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
+    //【熱區模塊】 熱區首頁
+    @GET("hotzone/index")
+    suspend fun getHotZoneIndex(hotId: Int): TwantResponse<HotZoneInfo>
 
 
 //@Field

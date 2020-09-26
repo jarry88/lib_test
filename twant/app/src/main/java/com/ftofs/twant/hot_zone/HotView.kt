@@ -28,9 +28,9 @@ import com.ftofs.twant.util.ToastUtil
 import com.gzp.lib_common.utils.SLog
 import kotlinx.coroutines.delay
 //實現單張熱區圖邏輯的UI控件
-class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=null,defStyleAttr:Int=0,private val hotZoneVo: HotZoneVo):FrameLayout(context,attrs,defStyleAttr) {
+class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=null,defStyleAttr:Int=0):FrameLayout(context,attrs,defStyleAttr) {
     private val endText= MutableLiveData<String>()
-    private val hotZoneInfo =MutableLiveData<HotZoneInfo>()
+    val hotZoneVo  =MutableLiveData<HotZoneVo>()
     private val contentView by lazy {
         ConstraintLayout {
             layout_width = match_parent
@@ -86,10 +86,10 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
                         else ->performClick()
                     }
                 }
-                bindLiveData= liveDataBinder(hotZoneInfo){
+                bindLiveData= liveDataBinder(hotZoneVo){
                     action ={
                         SLog.info("觀測到之變")
-                        (it as? HotZoneInfo)?.let{ h ->
+                        (it as? HotZoneVo)?.let{ h ->
 //                            text =s
                         }
                     }
@@ -102,11 +102,11 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
                 top_toTopOf= parent_id
 
                 layout_id= "title"
-                bindLiveData= liveDataBinder(hotZoneInfo){
+                bindLiveData= liveDataBinder(hotZoneVo){
                     action ={
                         SLog.info("觀測到之變")
-                        (it as? HotZoneInfo)?.let{ h ->
-                            text =h.hotName
+                        (it as? HotZoneVo)?.let{ h ->
+//                            text =h.hotName
                         }
                     }
                 }
