@@ -44,7 +44,7 @@ dependencies {
     api 'com.superlht:HTLoading:1.0.1'
     //自定義標題欄
     api 'com.lxj:xpopup:2.0.8-rc7'
-
+    api 'com.youth.banner:banner:2.0.8'
     api rootProject.ext.dependencies["recyclerview"] //
 //    api rootProject.ext.dependencies["constraint-layout"]
 

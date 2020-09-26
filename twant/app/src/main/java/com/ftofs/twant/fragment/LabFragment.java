@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -58,6 +59,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
     private CropRequest.Auto cacheCropRequest;
     private CropRequest.Auto externalCropRequest;
     private RecyclerView recyclerView;
+    private TextView btnTest3;
 
     public static LabFragment newInstance() {
         LabFragment fragment = new LabFragment();
@@ -85,6 +87,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_externalCropRequest, this);
         Util.setOnClickListener(view, R.id.btn_post1, this);
 
+        btnTest3 = view.findViewById(R.id.btn_test2);
         recyclerView = view.findViewById(R.id.rv_list);
         luckpan = view.findViewById(R.id.luckpan);
         imageViewCropped = view.findViewById(R.id.imageViewCropped);
@@ -121,6 +124,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
         adapter.addAll(list,true);
+        btnTest3.setText("打開熱區頁");
     }
 
     private void productRequest() {

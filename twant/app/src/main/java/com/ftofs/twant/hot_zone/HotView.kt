@@ -17,7 +17,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.bumptech.glide.Glide
+import com.ftofs.lib_net.model.HotZone
 import com.ftofs.lib_net.model.HotZoneInfo
+import com.ftofs.lib_net.model.HotZoneVo
 import com.ftofs.twant.adapter.BaseBindAdapter
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
@@ -25,8 +27,8 @@ import com.ftofs.twant.login.Title
 import com.ftofs.twant.util.ToastUtil
 import com.gzp.lib_common.utils.SLog
 import kotlinx.coroutines.delay
-
-class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=null,defStyleAttr:Int=0,private val hotId:Int):FrameLayout(context,attrs,defStyleAttr) {
+//實現單張熱區圖邏輯的UI控件
+class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=null,defStyleAttr:Int=0,private val hotZoneVo: HotZoneVo):FrameLayout(context,attrs,defStyleAttr) {
     private val endText= MutableLiveData<String>()
     private val hotZoneInfo =MutableLiveData<HotZoneInfo>()
     private val contentView by lazy {
@@ -72,16 +74,6 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
 //                    }
                 }
             }
-            RecyclerView {
-                layout_width= match_parent
-                layout_height= match_parent
-                layout_id = "rvHot"
-                top_toBottomOf = "title"
-
-                onItemClick = onListItemClick
-                padding = 10
-
-            }
             ImageView {
                 layout_width= match_parent
                 layout_height= match_parent
@@ -124,32 +116,6 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
     init {
         contentView
     }
-    private val onListItemClick = { v: View, i: Int, x: Float, y: Float ->
-        adapter.myBean?.get(i)?.let {
-            nameLiveData.value = SpannableStringBuilder(it.name).apply {
-                setSpan(
-                        ForegroundColorSpan(Color.RED),
-                        0,
-                        it.name.indexOf(" "),
-                        Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-                )
-                val color = if (it.gender == 1) "#b300ff00" else "#b3ff00ff"
-                setSpan(
-                        ForegroundColorSpan(Color.parseColor(color)),
-                        it.name.indexOf(" "),
-                        it.name.lastIndex + 1,
-                        Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-                )
-            }
 
-            if (it.gender == 1) Glide.with(context).load(diamondUrl).asBitmap().into(target)
-            else Glide.with(context).load(coinUrl).asBitmap().into(target)
-        }
-        v.onChildViewClick("tvStart", "tvEnd", x = x, y = y) {
-            Log.v("ttaylor", "tag=adsf, FirstFragment.()  on two child clicked")
-        }
-        Unit
-    }
-    private val adapter by lazy { object :DataBoundAdapter }
 
 }
