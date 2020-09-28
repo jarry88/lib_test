@@ -515,7 +515,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                     // Util.startFragment(TestFragment.newInstance());
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_DATE);
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_VERSION);
-                                    Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));
+                                    // Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));
+                                    SLog.info("STR[%s]", Util.getString(R.string.facebook_app_id));
                                 } else if (position == 10) { // 測試2
                                     // EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WEIXIN_LOGIN, null);
 

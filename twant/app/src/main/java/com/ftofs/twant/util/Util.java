@@ -1815,6 +1815,16 @@ public class Util {
                 break;
         }
     }
+
+    /**
+     * 从资源中获取字符串
+     * 以避免【Fragment ShopSearchFragment{39c1dc4} (2595bf1f-152a-4bc3-8cd0-a6bdf842a450)} not attached to a context.】这类
+     * 报错
+     * @return
+     */
+    public static String getString(int resId) {
+        return TwantApplication.Companion.get().getString(resId);
+    }
 }
 
 
