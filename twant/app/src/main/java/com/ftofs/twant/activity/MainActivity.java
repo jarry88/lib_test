@@ -58,6 +58,7 @@ import com.ftofs.twant.fragment.HomeFragment;
 import com.ftofs.twant.fragment.JobDetailFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
+import com.ftofs.twant.fragment.MyTeamFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
@@ -515,7 +516,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                     // Util.startFragment(TestFragment.newInstance());
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_DATE);
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_VERSION);
-                                    Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));
+                                    Util.startFragment(MyTeamFragment.newInstance());
                                 } else if (position == 10) { // 測試2
                                     // EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WEIXIN_LOGIN, null);
 
