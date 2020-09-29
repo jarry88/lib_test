@@ -15,15 +15,18 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.DistributionMemberAdapter;
 import com.ftofs.twant.adapter.DistributionOrderAdapter;
 import com.ftofs.twant.adapter.DistributionProfitDetailAdapter;
+import com.ftofs.twant.adapter.DistributionWithdrawRecordAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.DistributionMember;
 import com.ftofs.twant.entity.DistributionOrderItem;
 import com.ftofs.twant.entity.DistributionProfitDetail;
+import com.ftofs.twant.entity.DistributionWithdrawRecord;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.gzp.lib_common.base.BaseFragment;
@@ -50,6 +53,9 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
 
     DistributionProfitDetailAdapter profitDetailAdapter;
     List<DistributionProfitDetail> distributionProfitDetailList = new ArrayList<>();
+
+    DistributionWithdrawRecordAdapter withdrawRecordAdapter;
+    List<DistributionWithdrawRecord> distributionWithdrawRecordList = new ArrayList<>();
 
 
     int currSelectedBtnIndex = 0;  // 當前選中的工具欄按鈕的索引
@@ -150,6 +156,22 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
             distributionProfitDetailList.add(new DistributionProfitDetail(Constant.ITEM_TYPE_NORMAL));
         }
         profitDetailAdapter = new DistributionProfitDetailAdapter(distributionProfitDetailList);
+
+
+        for (int i = 0; i < 10; i++) {
+            distributionWithdrawRecordList.add(new DistributionWithdrawRecord());
+        }
+        withdrawRecordAdapter = new DistributionWithdrawRecordAdapter(R.layout.distribution_withdraw_record, distributionWithdrawRecordList);
+        withdrawRecordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                DistributionWithdrawRecord withdrawRecord = distributionWithdrawRecordList.get(position);
+                if (!withdrawRecord.expanded) {
+                    withdrawRecord.expanded = true;
+                    withdrawRecordAdapter.notifyItemChanged(position);
+                }
+            }
+        });
     }
 
     /**
@@ -188,16 +210,21 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
         if (currSelectedBtnIndex == 0) { // 我的團隊
             vwSeparator.setVisibility(View.VISIBLE);
             myTeamTabContainer.setVisibility(View.VISIBLE);
+            rvList.setBackgroundResource(R.drawable.white_r4dp_bg);
             rvList.setAdapter(memberAdapter);
         } else if (currSelectedBtnIndex == 1) { // 推介訂單
             vwSeparator.setVisibility(View.VISIBLE);
             promotingOrderTabContainer.setVisibility(View.VISIBLE);
+            rvList.setBackground(null);
             rvList.setAdapter(orderAdapter);
         } else if (currSelectedBtnIndex == 2) { // 收益明細
+            rvList.setBackgroundResource(R.drawable.white_r4dp_bg);
             rvList.setAdapter(profitDetailAdapter);
         } else if (currSelectedBtnIndex == 3) { // 提現記錄
             vwSeparator.setVisibility(View.VISIBLE);
             withdrawRecordTabContainer.setVisibility(View.VISIBLE);
+            rvList.setBackground(null);
+            rvList.setAdapter(withdrawRecordAdapter);
         } else if (currSelectedBtnIndex == 4) { // 推介商品
             vwSeparator.setVisibility(View.VISIBLE);
             promotionGoodsTabContainer.setVisibility(View.VISIBLE);
