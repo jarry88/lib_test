@@ -76,6 +76,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/btn_show_qr_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
@@ -269,7 +270,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="我的團隊"
+                                android:text="提現紀錄"
                                 android:textSize="12sp"
                                 android:textColor="@color/tw_black">
 
@@ -316,35 +317,160 @@
                 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="32dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                     <!-- 我的團隊Tab -->
                     <LinearLayout
+                        android:id="@+id/my_team_tab_container"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="32dp"
                         android:orientation="horizontal">
                         <com.ftofs.twant.widget.SimpleTabButton
                             android:id="@+id/stb_all"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:stb_text="全部">
+                            app:stb_text="全部"
+                            app:stb_text_size="12sp">
                         </com.ftofs.twant.widget.SimpleTabButton>
                         <com.ftofs.twant.widget.SimpleTabButton
                             android:id="@+id/stb_first_level"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:stb_text="一級同伴">
+                            app:stb_text="一級同伴"
+                            app:stb_text_size="12sp">
                         </com.ftofs.twant.widget.SimpleTabButton>
                         <com.ftofs.twant.widget.SimpleTabButton
                             android:id="@+id/stb_second_level"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:stb_text="二級同伴">
+                            app:stb_text="二級同伴"
+                            app:stb_text_size="12sp">
                         </com.ftofs.twant.widget.SimpleTabButton>
                     </LinearLayout>
                     <!-- END OF 我的團隊Tab -->
+
+                    <!-- 推介訂單Tab -->
+                    <LinearLayout
+                        android:id="@+id/promoting_order_tab_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+                        <com.ftofs.twant.widget.SimpleTabButton
+                            android:id="@+id/stb_promoting_order_all"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:stb_text="全部"
+                            app:stb_text_size="12sp">
+                        </com.ftofs.twant.widget.SimpleTabButton>
+                        <com.ftofs.twant.widget.SimpleTabButton
+                            android:id="@+id/stb_promoting_order_ongoing"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:stb_text="進行中"
+                            app:stb_text_size="12sp">
+                        </com.ftofs.twant.widget.SimpleTabButton>
+                        <com.ftofs.twant.widget.SimpleTabButton
+                            android:id="@+id/stb_promoting_order_finished"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:stb_text="已完成"
+                            app:stb_text_size="12sp">
+                        </com.ftofs.twant.widget.SimpleTabButton>
+                        <com.ftofs.twant.widget.SimpleTabButton
+                            android:id="@+id/stb_promoting_order_canceled"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:stb_text="已取消"
+                            app:stb_text_size="12sp">
+                        </com.ftofs.twant.widget.SimpleTabButton>
+                    </LinearLayout>
+                    <!-- END OF 推介訂單Tab -->
+
+                    <!-- 提現記錄Tab -->
+                    <LinearLayout
+                        android:id="@+id/withdraw_record_tab_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+                        <com.ftofs.twant.widget.SimpleTabButton
+                            android:id="@+id/stb_withdraw_all"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:stb_text="全部"
+                            app:stb_text_size="12sp">
+                        </com.ftofs.twant.widget.SimpleTabButton>
+                        <com.ftofs.twant.widget.SimpleTabButton
+                            android:id="@+id/stb_withdraw_unprocessed"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:stb_text="未處理"
+                            app:stb_text_size="12sp">
+                        </com.ftofs.twant.widget.SimpleTabButton>
+                        <com.ftofs.twant.widget.SimpleTabButton
+                            android:id="@+id/stb_withdraw_success"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:stb_text="提現成功"
+                            app:stb_text_size="12sp">
+                        </com.ftofs.twant.widget.SimpleTabButton>
+                        <com.ftofs.twant.widget.SimpleTabButton
+                            android:id="@+id/stb_withdraw_fail"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:stb_text="提現失敗"
+                            app:stb_text_size="12sp">
+                        </com.ftofs.twant.widget.SimpleTabButton>
+                    </LinearLayout>
+                    <!-- END OF 提現記錄Tab -->
+
+                    <!-- 推介商品Tab -->
+                    <FrameLayout
+                        android:id="@+id/promotion_goods_tab_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:visibility="gone">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:text="商品名稱"
+                            android:textSize="12sp"
+                            android:textColor="@color/tw_black">
+                        </TextView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="72dp"
+                            android:layout_gravity="center_vertical|end"
+                            android:text="佣金比例"
+                            android:textSize="12sp"
+                            android:textColor="@color/tw_black">
+                        </TextView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
+                            android:layout_gravity="center_vertical|end"
+                            android:text="分享"
+                            android:textSize="12sp"
+                            android:textColor="@color/tw_black">
+                        </TextView>
+                    </FrameLayout>
+                    <!-- END OF 推介商品Tab -->
                 </LinearLayout>
             </LinearLayout>
 
@@ -352,8 +478,7 @@
                 android:id="@+id/rv_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/white_r4dp_bg">
+                android:layout_marginTop="8dp">
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </ScrollView>

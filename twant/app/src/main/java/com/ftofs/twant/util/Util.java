@@ -1815,6 +1815,15 @@ public class Util {
                 break;
         }
     }
+
+    /**
+     * 從資源中獲取顏色
+     * @param resId
+     * @return
+     */
+    public static int getColor(int resId) {
+        return TwantApplication.Companion.get().getColor(resId);
+    }
 }
 
 

@@ -15,6 +15,8 @@ import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 
+import static android.util.TypedValue.COMPLEX_UNIT_PX;
+
 /**
  * 更完善的Tab按鈕
  * @author zwm
@@ -35,6 +37,7 @@ public class SimpleTabButton extends RelativeLayout {
     int textWidth;
     int horizontalPaddingPx;
     int paddingBottomPx;
+    int textSizePx;
 
     public SimpleTabButton(Context context) {
         this(context, null);
@@ -52,6 +55,7 @@ public class SimpleTabButton extends RelativeLayout {
         useCap = array.getBoolean(R.styleable.SimpleTabButton_stb_use_cap, false);
         horizontalPaddingPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_horizontal_padding, 0);
         text = array.getString(R.styleable.SimpleTabButton_stb_text);
+        textSizePx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_text_size, 0);
         paddingBottomPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_padding_bottom, 0);
         selectedColor = array.getColor(R.styleable.SimpleTabButton_stb_selected_color, getResources().getColor(R.color.tw_blue, null));
         unselectedColor = array.getColor(R.styleable.SimpleTabButton_stb_unselected_color, getResources().getColor(R.color.tw_black, null));
@@ -65,6 +69,9 @@ public class SimpleTabButton extends RelativeLayout {
 
         tvTitle = new TextView(context);
         tvTitle.setTextColor(unselectedColor);
+        if (textSizePx > 0) {
+            tvTitle.setTextSize(COMPLEX_UNIT_PX, textSizePx);
+        }
 
         if (!StringUtil.isEmpty(text)) {
             tvTitle.setText(text);
