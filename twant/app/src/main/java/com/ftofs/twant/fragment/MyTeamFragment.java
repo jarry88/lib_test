@@ -21,11 +21,13 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.DistributionMemberAdapter;
 import com.ftofs.twant.adapter.DistributionOrderAdapter;
 import com.ftofs.twant.adapter.DistributionProfitDetailAdapter;
+import com.ftofs.twant.adapter.DistributionPromotionGoodsAdapter;
 import com.ftofs.twant.adapter.DistributionWithdrawRecordAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.DistributionMember;
 import com.ftofs.twant.entity.DistributionOrderItem;
 import com.ftofs.twant.entity.DistributionProfitDetail;
+import com.ftofs.twant.entity.DistributionPromotionGoods;
 import com.ftofs.twant.entity.DistributionWithdrawRecord;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
@@ -56,6 +58,9 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
 
     DistributionWithdrawRecordAdapter withdrawRecordAdapter;
     List<DistributionWithdrawRecord> distributionWithdrawRecordList = new ArrayList<>();
+
+    DistributionPromotionGoodsAdapter promotionGoodsAdapter;
+    List<DistributionPromotionGoods> distributionPromotionGoodsList = new ArrayList<>();
 
 
     int currSelectedBtnIndex = 0;  // 當前選中的工具欄按鈕的索引
@@ -172,6 +177,20 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
                 }
             }
         });
+
+
+        for (int i = 0; i < 10; i++) {
+            distributionPromotionGoodsList.add(new DistributionPromotionGoods());
+        }
+        promotionGoodsAdapter = new DistributionPromotionGoodsAdapter(R.layout.distribution_promotion_goods, distributionPromotionGoodsList);
+        promotionGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                DistributionPromotionGoods promotionGoods = distributionPromotionGoodsList.get(position);
+                promotionGoods.selected = !promotionGoods.selected;
+                promotionGoodsAdapter.notifyItemChanged(position);
+            }
+        });
     }
 
     /**
@@ -228,6 +247,8 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
         } else if (currSelectedBtnIndex == 4) { // 推介商品
             vwSeparator.setVisibility(View.VISIBLE);
             promotionGoodsTabContainer.setVisibility(View.VISIBLE);
+            rvList.setBackground(null);
+            rvList.setAdapter(promotionGoodsAdapter);
         }
 
         return true;
@@ -238,9 +259,9 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
         int id = v.getId();
         if (id == R.id.btn_back) {
             hideSoftInputPop();
-        } else if (id == R.id.btn_show_qr_code) {
+        } else if (id == R.id.btn_show_qr_code) { // 二維碼
 
-        } else if (id == R.id.btn_withdraw) {
+        } else if (id == R.id.btn_withdraw) { // 提現
 
         }
 
@@ -256,3 +277,5 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
         return true;
     }
 }
+
+
