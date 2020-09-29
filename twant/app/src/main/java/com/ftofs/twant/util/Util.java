@@ -1825,6 +1825,30 @@ public class Util {
     public static String getString(int resId) {
         return TwantApplication.Companion.get().getString(resId);
     }
+
+
+    /**
+     * 先禁用View的点击，然后经过millis毫秒后恢复可点击
+     * @param view  目标View
+     * @param millis 多少毫秒后可以点击
+     */
+    public static void clickableAfter(View view, long millis) {
+        if (view == null || millis <= 0) {
+            return;
+        }
+
+        if (!view.isClickable()) {
+            return;
+        }
+
+        view.setClickable(false);
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setClickable(true);
+            }
+        }, millis);
+    }
 }
 
 
