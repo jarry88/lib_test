@@ -27,7 +27,7 @@ import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.viewmodel.ImGoodsPageModel
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.wzq.mvvmsmart.event.StateLiveData
-import com.wzq.mvvmsmart.utils.KLog
+import com.gzp.lib_common.smart.utils.KLog
 
 class ImGoodsListPage(val type: ImGoodsEnum, val parent :ImGoodsFragment) : BaseTwantFragmentMVVM<FragmentImGoodsPageBinding, ImGoodsPageModel>(){
 

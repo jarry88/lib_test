@@ -19,7 +19,7 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.viewmodel.ImOrdersPageModel
 import com.wzq.mvvmsmart.event.StateLiveData
-import com.wzq.mvvmsmart.utils.KLog
+import com.gzp.lib_common.smart.utils.KLog
 
 class ImOrdersFragment(val imName: String, val sendOrder: OnSelectedListener) : BaseTwantFragmentMVVM<ImOrdersLayoutBinding, ImOrdersPageModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {

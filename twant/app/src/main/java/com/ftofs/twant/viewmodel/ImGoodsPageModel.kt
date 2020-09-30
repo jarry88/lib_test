@@ -9,14 +9,14 @@ import com.ftofs.lib_net.BaseRepository
 import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.User
-import com.wzq.mvvmsmart.base.BaseViewModelMVVM
+import com.gzp.lib_common.smart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
-class ImGoodsPageModel(application: Application) :BaseViewModelMVVM(application) {
+class ImGoodsPageModel(application: Application) : BaseViewModelMVVM(application) {
     var pageNum:Int=1
     var hasMore:Boolean=false
     var isRefresh: Boolean=true

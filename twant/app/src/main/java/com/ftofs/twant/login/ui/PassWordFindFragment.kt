@@ -4,22 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.facebook.login.LoginManager
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
-import com.ftofs.twant.TwantApplication
-import com.ftofs.twant.config.Config
-import com.ftofs.twant.constant.Constant
-import com.ftofs.twant.constant.UmengAnalyticsActionName
 import com.ftofs.twant.databinding.PasswordFindLayoutBinding
 import com.ftofs.twant.util.ToastUtil
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
-import com.umeng.analytics.MobclickAgent
 import com.wzq.mvvmsmart.event.StateLiveData
-import com.wzq.mvvmsmart.utils.KLog
-import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.util.ArrayList
+import com.gzp.lib_common.smart.utils.KLog
 
 
 class PassWordFindFragment(val mobile:String) : BaseTwantFragmentMVVM<PasswordFindLayoutBinding, MessageLoginViewModel>() {

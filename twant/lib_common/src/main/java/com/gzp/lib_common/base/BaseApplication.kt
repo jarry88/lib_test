@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Process
 import android.util.Log
-import cat.ereza.customactivityoncrash.config.CaocConfig
 import cn.snailpad.easyjson.EasyJSONObject
 import com.github.richardwrq.krouter.api.core.KRouter
 import com.gzp.lib_common.R
@@ -29,7 +28,7 @@ import com.umeng.message.PushAgent
 import com.umeng.message.UmengMessageHandler
 import com.umeng.message.UmengNotificationClickHandler
 import com.umeng.message.entity.UMessage
-import com.wzq.mvvmsmart.base.AppManagerMVVM
+import com.gzp.lib_common.smart.base.AppManagerMVVM
 import com.wzq.mvvmsmart.net.net_utils.Utils
 import com.wzq.mvvmsmart.utils.Tasks
 import org.android.agoo.huawei.HuaWeiRegister

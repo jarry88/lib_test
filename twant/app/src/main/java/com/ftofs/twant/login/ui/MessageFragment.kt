@@ -16,7 +16,6 @@ import com.ftofs.lib_common_ui.popup.ListPopup
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.TwantApplication.Companion.get
-import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.constant.EBMessageType
@@ -39,7 +38,7 @@ import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.umeng.analytics.MobclickAgent
 import com.wzq.mvvmsmart.event.StateLiveData
-import com.wzq.mvvmsmart.utils.KLog
+import com.gzp.lib_common.smart.utils.KLog
 import java.util.*
 
 class MessageFragment(val mobile: String, val sdkAvailable: Boolean = true, private val firstPage: Boolean = false) : BaseTwantFragmentMVVM<MessageLoginLayoutBinding, MessageLoginViewModel>(),OnSelectedListener {

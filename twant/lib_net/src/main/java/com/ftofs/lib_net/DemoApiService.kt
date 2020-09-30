@@ -107,7 +107,7 @@ interface DemoApiService {
     suspend fun getWXLoginStepOne(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
     //【熱區模塊】 熱區首頁
     @GET("hotzone/index")
-    suspend fun getHotZoneIndex(hotId: Int): TwantResponse<HotZoneInfo>
+    suspend fun getHotZoneIndex(@Query("hotId")hotId: Int?): TwantResponse<HotZoneInfo>
 
 
 //@Field

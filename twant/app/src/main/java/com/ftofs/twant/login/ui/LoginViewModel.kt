@@ -34,7 +34,7 @@ class LoginViewModel(application: Application = BaseContext.instance.getContext(
     }
     fun passwordLogin(mobile:String,password:String){//账号密码登陆
         launch(stateLiveData,
-            {   SLog.info("前往调取密码登陆接口")
+            {   SLog.info("前往调取密码登陆接口  mobile: $mobile,password: $password")
                 repository.run { simpleGet(api.passwordLogin(mapOf("mobile" to mobile,"password" to password,Constant.CLIENT_TYPE_PAIR))) }},
             {loginLiveData.value=User(mobile,password,it.memberId?:0,it.memberToken?:"",it.nickName?:"",0,it.memberToken?:"",it.memberVo?.avatar)
                 successLoginInfo.value =it},

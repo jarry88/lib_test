@@ -1,10 +1,8 @@
 package com.ftofs.twant.login.ui
 
 import android.os.Bundle
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ftofs.twant.BR
@@ -22,7 +20,7 @@ import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
 import com.lxj.xpopup.core.BasePopupView
 import com.wzq.mvvmsmart.event.StateLiveData
-import com.wzq.mvvmsmart.utils.KLog
+import com.gzp.lib_common.smart.utils.KLog
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

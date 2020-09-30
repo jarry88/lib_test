@@ -1,6 +1,7 @@
 package com.ftofs.twant.login.ui
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
@@ -32,7 +33,7 @@ import com.gzp.lib_common.utils.ToastUtil
 import com.lxj.xpopup.XPopup
 import com.umeng.analytics.MobclickAgent
 import java.util.ArrayList
-
+fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
 class PasswordLoginFragment(val mobile: String,var selectedMobileZoneIndex:Int?) : BaseTwantFragmentMVVM<PasswordLoginLayoutBinding, PasswordLoginViewModel>() ,OnSelectedListener{
     private val aViewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
     private val mLoading  by lazy { createLoadingPopup(requireContext()) }
@@ -49,6 +50,13 @@ class PasswordLoginFragment(val mobile: String,var selectedMobileZoneIndex:Int?)
         binding.title.apply {
             setLeftImageResource(R.drawable.icon_back)
             setLeftLayoutClickListener{onBackPressedSupport()}
+        }
+        binding.btnTest.setOnClickListener{
+            if (Config.DEVELOPER_MODE) {
+                binding.etPhoneView.setPhone("61234567")
+                binding.etPassword.text="abc123456".toEditable()
+
+            }
         }
         binding.btnPasswordLogin.setOnClickListener {
             SLog.info("执行登陆")

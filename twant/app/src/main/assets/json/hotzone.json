@@ -1,0 +1,59 @@
+{
+  "code": 200,
+  "datas": {
+    "hotZoneVoList": [
+      {
+        "url": "image/d0/5a/d05a2f67bc5e2cac21e0ab186549bf12.jpg",
+        "xProportion": "2.4",
+        "yProportion": "1.3",
+        "originalWidth": "412",
+        "originalHeight": "412",
+        "hotZoneList": [
+          {
+            "x": "31.7",
+            "y": "44.6",
+            "width": "104.6",
+            "height": "292.3",
+            "linkType": "url",
+            "linkValue": "1"
+          },
+          {
+            "x": "188.8",
+            "y": "50.8",
+            "width": "120.8",
+            "height": "263.8",
+            "linkType": "goods",
+            "linkValue": "2"
+          }
+        ]
+      },
+      {
+        "url": "image/1c/86/1c8666a059071d0ebf72194a84a1fc89.jpg",
+        "xProportion": "2.4",
+        "yProportion": "1.3",
+        "originalWidth": "412",
+        "originalHeight": "412",
+        "hotZoneList": [
+          {
+            "x": "100.4",
+            "y": "28.5",
+            "width": "208.8",
+            "height": "86.9",
+            "linkType": "url",
+            "linkValue": "a"
+          },
+          {
+            "x": "98.8",
+            "y": "136.2",
+            "width": "210.8",
+            "height": "93.1",
+            "linkType": "goods",
+            "linkValue": "b"
+          }
+        ]
+      }
+    ],
+    "hotId": 12,
+    "hotName": "777"
+  }
+}

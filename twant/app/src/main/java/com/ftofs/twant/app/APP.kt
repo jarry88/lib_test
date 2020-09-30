@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import cat.ereza.customactivityoncrash.config.CaocConfig
-import com.ftofs.twant.BuildConfig
 import com.ftofs.twant.R
 import com.ftofs.twant.activity.MainActivity
 import com.jeremyliao.liveeventbus.LiveEventBus
@@ -14,7 +13,7 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.tencent.mmkv.MMKV
 import com.wzq.mvvmsmart.base.AppManagerMVVM
 import com.wzq.mvvmsmart.net.net_utils.Utils
-import com.wzq.mvvmsmart.utils.KLog
+import com.gzp.lib_common.smart.utils.KLog
 import com.wzq.mvvmsmart.utils.Tasks
 
 class App : Application() {
@@ -23,7 +22,7 @@ class App : Application() {
         Tasks.init()
         Utils.init(this)
         //是否开启打印日志
-        KLog.init(BuildConfig.DEBUG)
+        KLog.init(true)
         //初始化全局异常崩溃
         initCrash()
         MMKV.initialize(this)   // 替换sp

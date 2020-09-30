@@ -18,7 +18,7 @@ import com.ftofs.twant.kotlin.SellerGoodsListAdapter
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.Util
 import com.wzq.mvvmsmart.event.StateLiveData
-import com.wzq.mvvmsmart.utils.KLog
+import com.gzp.lib_common.smart.utils.KLog
 import com.wzq.mvvmsmart.utils.ToastUtils
 
 /**

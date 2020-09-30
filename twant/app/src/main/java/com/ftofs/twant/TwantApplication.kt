@@ -29,7 +29,6 @@ import com.ftofs.twant.vo.member.MemberVo
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.gzp.lib_common.base.BaseApplication
-import com.gzp.lib_common.utils.AppUtil
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
 import com.hyphenate.EMConnectionListener
@@ -49,12 +48,11 @@ import com.orhanobut.hawk.Hawk
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
-import com.superlht.htloading.manager.HTLoadingManager
-import com.superlht.htloading.view.HTLoading
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.uuzuche.lib_zxing.activity.ZXingLibrary
+import com.gzp.lib_common.smart.utils.KLog
 import me.yokeyword.fragmentation.Fragmentation
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -116,7 +114,8 @@ class TwantApplication :BaseApplication(){
         super.onCreate()
         instance=this
         BaseContext.instance.init(this)//初始話instance
-
+        KLog.init(Config.DEVELOPER_MODE)
+        SLog.info("打开Klog %s",BuildConfig.DEBUG)
         PhoneNumberAuthHelper.getInstance(this,object :TokenResultListener{
             override fun onTokenFailed(p0: String?) {
                 Log.e("init", "onTokenFaild: $p0")

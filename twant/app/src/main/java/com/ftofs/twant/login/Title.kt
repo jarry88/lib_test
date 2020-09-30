@@ -48,6 +48,10 @@ class Title @JvmOverloads constructor(
     fun setLeftImageResource(resId: Int) {
         titlebarLeftImage!!.setImageResource(resId)
     }
+    //   通过资源id设置左侧图片样式
+    fun setTitleClickListener(listener: OnClickListener) {
+        titleText.setOnClickListener(listener)
+    }
     //   右侧布局监听
     fun setRightLayoutClickListener(listener: OnClickListener) {
         titlebarRight!!.setOnClickListener(listener)

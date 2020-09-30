@@ -1,6 +1,5 @@
 package com.gzp.lib_common.base
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.wzq.mvvmsmart.base.BaseViewModelMVVM
-import com.wzq.mvvmsmart.base.IBaseViewMVVM
-import com.wzq.mvvmsmart.utils.KLog
+import com.gzp.lib_common.smart.base.BaseViewModelMVVM
+import com.gzp.lib_common.smart.base.IBaseViewMVVM
+import com.gzp.lib_common.smart.utils.KLog
 import com.wzq.mvvmsmart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
 abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> :BaseFragment(), IBaseViewMVVM {

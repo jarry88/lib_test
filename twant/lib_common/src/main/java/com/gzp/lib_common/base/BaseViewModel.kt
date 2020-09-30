@@ -2,9 +2,9 @@ package com.gzp.lib_common.base
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
-import com.wzq.mvvmsmart.base.BaseViewModelMVVM
+import com.gzp.lib_common.smart.base.BaseViewModelMVVM
 import com.wzq.mvvmsmart.event.StateLiveData
-import com.wzq.mvvmsmart.utils.KLog
+import com.gzp.lib_common.smart.utils.KLog
 import kotlinx.coroutines.launch
 import  com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
@@ -41,8 +41,10 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                 liveData.postLoading()
             }
             when (val re=result()) {
-                is Result.Success ->success(re.datas)
-                is Result.DataError->{
+                is Result.Success ->{//200
+                    SLog.info("數據獲取成功 ${re.datas.toString()}")
+                    success(re.datas)}
+                is Result.DataError->{//400參數錯誤。401登陸錯誤
                     errorMessage="数据加载失败"
                     SLog.info(re.datas.toString())
                     error(re.datas)
@@ -50,9 +52,12 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                     stateLiveData.postError()
 
                 }
-                else ->others()
+                else ->{
+                    SLog.info("拉取專場數據 異常 ，405")
+                    others()}
             }
-        } catch (e: Throwable) {
+        } catch (e: Throwable) {//檢查404
+            SLog.info(e.toString())
             liveData.postError()
             catchError(e)
         }finally {

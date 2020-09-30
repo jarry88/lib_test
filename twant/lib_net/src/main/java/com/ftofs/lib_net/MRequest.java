@@ -3,7 +3,7 @@ package com.ftofs.lib_net;
 import android.annotation.SuppressLint;
 
 import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil;
-import com.wzq.mvvmsmart.utils.KLog;
+import com.gzp.lib_common.smart.utils.KLog;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +40,10 @@ public class MRequest {
         this.service = retrofit.create(DemoApiService.class);
         KLog.INSTANCE.e(retrofit.baseUrl());
 //        KLog.retrofit.baseUrl();
+    }
+    public void updateRetrofit(){
+        this.retrofit = RetrofitUtil.getInstance().getRetrofit();
+
     }
     //下方為參考代碼，後面會逐步移除-----------------------
     //--------------------------------

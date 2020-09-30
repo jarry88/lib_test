@@ -460,9 +460,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
         new XPopup.Builder(this)
 //                        .maxWidth(600)
                 .asCenterList("請選擇操作", new String[]{"隱藏浮動按鈕",
-                                "prod/線上，並重啟",
-                                "29，並重啟",
-                                "229，並重啟",
+                                "prod/線上，並重啟",//1
+                                "29，並重啟",//2
+                                "49，並重啟",//3
                                 "28，並重啟",
                                 "驗收/F3，並重啟",
                                 "打開日誌",
