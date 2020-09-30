@@ -162,6 +162,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             // https://www.jianshu.com/p/e54db232df62
             (new PagerSnapHelper()).attachToRecyclerView(rvNavList);
 
+            if (item.navPaneList == null) {
+                return;
+            }
+
             int navPaneCount = item.navPaneList.size();
             PageIndicatorView pageIndicatorView = helper.getView(R.id.pageIndicatorView);
             if (navPaneCount < 1) {
