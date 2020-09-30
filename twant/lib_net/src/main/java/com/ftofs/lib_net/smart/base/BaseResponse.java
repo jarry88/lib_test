@@ -1,4 +1,4 @@
-package com.wzq.mvvmsmart.net.base;
+package com.ftofs.lib_net.smart.base;
 
 /**
  * created 王志强 2020.04.30

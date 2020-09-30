@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON
 import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.DemoApiService
 import com.ftofs.lib_net.model.HotZoneInfo
+import com.ftofs.lib_net.model.HotZoneVo
 import com.ftofs.lib_net.net.TwantResponse
 import com.ftofs.twant.TwantApplication
 import com.ftofs.twant.config.Config
@@ -16,7 +17,7 @@ import com.ftofs.twant.util.AssetsUtil
 import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
-import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil
+import com.ftofs.lib_net.smart.net_utils.RetrofitUtil
 import okhttp3.OkHttpClient
 import org.koin.dsl.koinApplication
 import retrofit2.Retrofit
@@ -53,8 +54,15 @@ class HotZoneViewModel(application: Application = BaseContext.instance.getContex
     fun getTestData():TwantResponse<HotZoneInfo>{
         GsonConverterFactory.create()
         val json= JSON.parseObject(AssetsUtil.loadText(getApplication(),"json/hotzone.json"))
-        val hotZoneInfo=json.getObject("datas",HotZoneInfo::class.java)
-        return TwantResponse<HotZoneInfo>(hotZoneInfo)
+        val a =json.getObject("datas",HotZoneInfo::class.java)
+        val hotZoneInfo=HotZoneInfo(
+                hotName = a.hotName.toString(),
+                hotZoneVoList= a.hotZoneVoList,
+                hotId = a.hotId,
+
+        )
+
+        return TwantResponse(hotZoneInfo)
 
     }
 

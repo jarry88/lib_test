@@ -5,8 +5,8 @@ import com.ftofs.twant.constant.SPField;
 import com.macau.pay.sdk.MPaySdk;
 import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
-import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
-import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil;
+import com.ftofs.lib_net.smart.net_utils.MmkvUtils;
+import com.ftofs.lib_net.smart.net_utils.RetrofitUtil;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.wzq.mvvmsmart.event
+package com.gzp.lib_common.smart.event
 
 import android.util.Log
 import androidx.annotation.MainThread

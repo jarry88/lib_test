@@ -17,7 +17,7 @@ import com.mobile.auth.gatewayauth.PhoneNumberAuthHelper
 import com.mobile.auth.gatewayauth.ResultCode
 import com.mobile.auth.gatewayauth.TokenResultListener
 import com.mobile.auth.gatewayauth.model.TokenRet
-import com.wzq.mvvmsmart.event.StateLiveData
+import com.gzp.lib_common.smart.event.StateLiveData
 import com.gzp.lib_common.smart.utils.KLog
 
 class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding, OneKeyLoginViewModel>(){
@@ -30,9 +30,8 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding, OneK
         override fun onTokenSuccess(s: String) {
             ToastUtil.success(context,"獲取成功")
             SLog.info("獲取成功")
-            var tokenRet: TokenRet? = null
             try {
-                tokenRet = JSON.parseObject(s, TokenRet::class.java)
+                val tokenRet = JSON.parseObject(s, TokenRet::class.java)
                 if (ResultCode.CODE_START_AUTHPAGE_SUCCESS == tokenRet.code) {
                     Log.i("TAG", "唤起授权页成功：$s")
                 }
@@ -50,10 +49,9 @@ class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding, OneK
             SLog.info("獲取失败$s")
 
             Log.e("OneKeyLoginActivity.TAG", "获取token失败：$s")
-            var tokenRet: TokenRet? = null
             mPhoneNumberAuthHelper?.quitLoginPage()
             try {
-                tokenRet = JSON.parseObject(s, TokenRet::class.java)
+                val tokenRet = JSON.parseObject(s, TokenRet::class.java)
                 if (ResultCode.CODE_ERROR_USER_CANCEL == tokenRet?.code) {
                     //模拟的是必须登录 否则直接退出app的场景
                     activity?.finish()

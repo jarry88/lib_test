@@ -1,16 +1,18 @@
-package com.gzp.lib_common.smart.net.base;
+package com.ftofs.lib_net.smart.base;
 
 import android.accounts.NetworkErrorException;
+import android.app.Activity;
 
+import com.ftofs.lib_net.smart.net_utils.MmkvUtils;
+import com.gzp.lib_common.smart.Utils;
 import com.gzp.lib_common.R;
 import com.gzp.lib_common.smart.utils.KLog;
-import com.wzq.mvvmsmart.net.base.BaseResponse;
-import com.wzq.mvvmsmart.net.net_utils.Utils;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -89,11 +91,28 @@ public abstract class BaseObserver<T> implements Observer<BaseResponse<T>> {
                     || baseResponse.getCode() == USERNAME_NOT_FOUND
                     || baseResponse.getCode() == ACCESS_DENIED_AUTHORITY_EXPIRED) {
                 KLog.INSTANCE.e("responseCode--异常");
-                Utils.toLogin(); // 无效token,跳转到登陆
+                toLogin(); // 无效token,跳转到登陆
             }
         }
     }
 
+    /**
+     * 退出到登录页面
+     */
+    public static void toLogin() {
+        String account = MmkvUtils.getStringValue("account");
+//        MMKV.defaultMMKV().clearAll();
+        List<Activity> mList = Utils.ACTIVITY_LIFECYCLE.mActivityList;
+        for (Activity activity : mList) {
+            if (activity != null) {
+                activity.finish();
+            }
+        }
+        MmkvUtils.putStringValue("account", account);
+//        ARouter.getInstance().build(ComponentPath.LOGIN_ENTRANCE).navigation();
+
+
+    }
     @Override
     public void onError(Throwable e) {
         KLog.INSTANCE.e("进入--BaseObserver--Error");

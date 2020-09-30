@@ -18,7 +18,7 @@ import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.viewmodel.ImOrdersPageModel
-import com.wzq.mvvmsmart.event.StateLiveData
+import com.gzp.lib_common.smart.event.StateLiveData
 import com.gzp.lib_common.smart.utils.KLog
 
 class ImOrdersFragment(val imName: String, val sendOrder: OnSelectedListener) : BaseTwantFragmentMVVM<ImOrdersLayoutBinding, ImOrdersPageModel>() {

@@ -15,7 +15,9 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import com.wzq.mvvmsmart.net.net_utils.Utils;
+
+import com.gzp.lib_common.smart.Utils;
+
 import java.lang.ref.WeakReference;
 
 /**

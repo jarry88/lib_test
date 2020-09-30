@@ -1,12 +1,13 @@
-package com.wzq.mvvmsmart.net.token;
+package com.ftofs.lib_net.smart.token;
 
 import android.os.ConditionVariable;
 
+import com.ftofs.lib_net.token.TokenBean;
 import com.google.gson.reflect.TypeToken;
-import com.wzq.mvvmsmart.net.base.BaseResponse;
-import com.wzq.mvvmsmart.net.net_utils.GsonUtil;
-import com.wzq.mvvmsmart.net.net_utils.MetaDataUtil;
-import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
+import com.ftofs.lib_net.smart.base.BaseResponse;
+import com.ftofs.lib_net.smart.net_utils.GsonUtil;
+import com.ftofs.lib_net.smart.net_utils.MetaDataUtil;
+import com.ftofs.lib_net.smart.net_utils.MmkvUtils;
 import com.gzp.lib_common.smart.utils.KLog;
 
 import java.io.IOException;

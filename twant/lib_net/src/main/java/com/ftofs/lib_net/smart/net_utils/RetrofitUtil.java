@@ -10,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * created 王志强 2020.04.30
  **/
 public class RetrofitUtil<T> {
-
     private Retrofit retrofit;
 
     private RetrofitUtil() {

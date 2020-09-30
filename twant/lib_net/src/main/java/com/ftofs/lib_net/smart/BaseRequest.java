@@ -1,6 +1,6 @@
 package com.ftofs.lib_net.smart;
 
-import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil;
+import com.ftofs.lib_net.smart.net_utils.RetrofitUtil;
 import retrofit2.Retrofit;
 
 /**

@@ -9,8 +9,8 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 
-import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
-import com.wzq.mvvmsmart.utils.KLog;
+import com.ftofs.lib_net.smart.net_utils.MmkvUtils;
+import com.ftofs.lib_common.smartutils.KLog;
 import java.lang.reflect.InvocationTargetException;
 
 public class MetaDataUtil {

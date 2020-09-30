@@ -29,8 +29,6 @@ import com.umeng.message.UmengMessageHandler
 import com.umeng.message.UmengNotificationClickHandler
 import com.umeng.message.entity.UMessage
 import com.gzp.lib_common.smart.base.AppManagerMVVM
-import com.wzq.mvvmsmart.net.net_utils.Utils
-import com.wzq.mvvmsmart.utils.Tasks
 import org.android.agoo.huawei.HuaWeiRegister
 
 open class BaseApplication:Application() {
@@ -43,18 +41,6 @@ open class BaseApplication:Application() {
         KRouter.openDebug();//打开KRouter调试日志
         KRouter.init(this);
         MMKV.initialize(this) // 替换sp
-        initMVVM()
-    }
-    private fun initMVVM() {
-        Tasks.init()
-        Utils.init(this)
-        //是否开启打印日志
-//        KLog.init(BuildConfig.DEBUG);
-        //初始化全局异常崩溃
-        LiveEventBus // 事件儿总线通信
-                .config().supportBroadcast(this) // 配置支持跨进程、跨APP通信，传入Context，需要在application onCreate中配置
-                .lifecycleObserverAlwaysActive(true) //    整个生命周期（从onCreate到onDestroy）都可以实时收到消息
-        setActivityLifecycle(this)
     }
 
 

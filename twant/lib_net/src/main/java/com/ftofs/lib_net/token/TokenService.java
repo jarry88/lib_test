@@ -1,7 +1,7 @@
 package com.ftofs.lib_net.token;
 
 
-import com.wzq.mvvmsmart.net.base.BaseResponse;
+import com.ftofs.lib_net.smart.base.BaseResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

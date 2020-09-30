@@ -155,6 +155,7 @@ dependencies {
     implementation project(":lib_common_ui")
     implementation project(":lib_net")
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     //android 測試桶
     testImplementation  rootProject.ext.dependencies["robolectric"] // 測試框架
     // Required for local unit tests (JUnit 4 framework)
@@ -165,7 +166,6 @@ dependencies {
 
     api rootProject.ext.dependencies["room-runtime"]
     kapt rootProject.ext.dependencies["room-compiler"]  //  room
-
     //jetpack 全家桶裝填完畢
     //3.9.0版本是使用Java写的，从4.0.0后改用的Kotlin写的
     api rootProject.ext.dependencies["okhttp"] //

@@ -1,4 +1,4 @@
-package com.wzq.mvvmsmart.net.params;
+package com.ftofs.lib_net.smart.params;
 
 import java.util.Iterator;
 import java.util.Map;

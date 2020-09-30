@@ -3,7 +3,7 @@ package com.gzp.lib_common.base
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.gzp.lib_common.smart.base.BaseViewModelMVVM
-import com.wzq.mvvmsmart.event.StateLiveData
+import com.gzp.lib_common.smart.event.StateLiveData
 import com.gzp.lib_common.smart.utils.KLog
 import kotlinx.coroutines.launch
 import  com.gzp.lib_common.constant.Result
@@ -42,11 +42,11 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
             }
             when (val re=result()) {
                 is Result.Success ->{//200
-                    SLog.info("數據獲取成功 ${re.datas.toString()}")
+                    SLog.info("數據獲取成功 ")
                     success(re.datas)}
                 is Result.DataError->{//400參數錯誤。401登陸錯誤
                     errorMessage="数据加载失败"
-                    SLog.info(re.datas.toString())
+                    SLog.info("400、401")
                     error(re.datas)
 //                    errorMessage=re
                     stateLiveData.postError()
@@ -57,7 +57,7 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                     others()}
             }
         } catch (e: Throwable) {//檢查404
-            SLog.info(e.toString())
+           SLog.info(e.toString())
             liveData.postError()
             catchError(e)
         }finally {

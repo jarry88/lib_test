@@ -17,6 +17,8 @@ import android.text.TextUtils;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 
+import com.gzp.lib_common.smart.Utils;
+
 /**
  * created 王志强 2020.04.30
  * 一般header中需要的参数获取工具类

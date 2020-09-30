@@ -1,9 +1,9 @@
-package com.wzq.mvvmsmart.net.observer;
+package com.ftofs.lib_net.smart.observer;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.wzq.mvvmsmart.net.base.BaseObserver;
-import com.wzq.mvvmsmart.net.base.BaseResponse;
+import com.ftofs.lib_net.smart.base.BaseObserver;
+import com.ftofs.lib_net.smart.base.BaseResponse;
 import com.gzp.lib_common.smart.utils.KLog;
 import io.reactivex.disposables.Disposable;
 import java.lang.reflect.Type;

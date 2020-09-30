@@ -2,7 +2,7 @@ package com.ftofs.lib_net;
 
 import android.annotation.SuppressLint;
 
-import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil;
+import com.ftofs.lib_net.smart.net_utils.RetrofitUtil;
 import com.gzp.lib_common.smart.utils.KLog;
 
 import org.jetbrains.annotations.NotNull;

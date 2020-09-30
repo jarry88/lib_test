@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.gzp.lib_common.smart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
 
 /**

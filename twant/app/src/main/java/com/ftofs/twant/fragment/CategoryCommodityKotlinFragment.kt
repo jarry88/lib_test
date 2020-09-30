@@ -18,7 +18,7 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.util.Util
 import com.ftofs.lib_net.model.CategoryNavVo
-import com.wzq.mvvmsmart.event.StateLiveData
+import com.gzp.lib_common.smart.event.StateLiveData
 import com.gzp.lib_common.smart.utils.KLog
 
 //

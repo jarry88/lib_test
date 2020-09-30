@@ -3,7 +3,7 @@ package com.gzp.lib_common.smart.viewadapter.image
 import android.text.TextUtils
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.wzq.mvvmsmart.utils.GlideLoadUtils
+import com.gzp.lib_common.smart.utils.GlideLoadUtils
 
 object ViewAdapter {
     @kotlin.jvm.JvmStatic

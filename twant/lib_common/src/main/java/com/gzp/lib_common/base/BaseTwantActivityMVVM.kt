@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.gzp.lib_common.smart.base.BaseViewModelMVVM
 import com.gzp.lib_common.smart.base.IBaseViewMVVM
-import com.wzq.mvvmsmart.widget.EmptyViewHelper
+import com.gzp.lib_common.smart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
 abstract class BaseTwantActivityMVVM< VM: BaseViewModelMVVM,V:ViewDataBinding>:BaseActivity(), IBaseViewMVVM {
 

@@ -1,4 +1,4 @@
-package com.ftofs.lib_net.smart.net_utils;
+package com.gzp.lib_common.smart;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -459,21 +459,4 @@ public final class Utils {
         }
     }
 
-    /**
-     * 退出到登录页面
-     */
-    public static void toLogin() {
-        String account = MmkvUtils.getStringValue("account");
-//        MMKV.defaultMMKV().clearAll();
-        List<Activity> mList = Utils.ACTIVITY_LIFECYCLE.mActivityList;
-        for (Activity activity : mList) {
-            if (activity != null) {
-                activity.finish();
-            }
-        }
-        MmkvUtils.putStringValue("account", account);
-//        ARouter.getInstance().build(ComponentPath.LOGIN_ENTRANCE).navigation();
-
-
-    }
 }

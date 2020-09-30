@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import cn.snailpad.easyjson.EasyJSONObject
+import com.gzp.lib_common.smart.Utils
 import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.appserver.AppServiceImpl
 import com.ftofs.twant.config.Config
@@ -53,6 +54,8 @@ import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.uuzuche.lib_zxing.activity.ZXingLibrary
 import com.gzp.lib_common.smart.utils.KLog
+import com.gzp.lib_common.smart.utils.Tasks
+import com.jeremyliao.liveeventbus.LiveEventBus
 import me.yokeyword.fragmentation.Fragmentation
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -116,6 +119,8 @@ class TwantApplication :BaseApplication(){
         BaseContext.instance.init(this)//初始話instance
         KLog.init(Config.DEVELOPER_MODE)
         SLog.info("打开Klog %s",BuildConfig.DEBUG)
+        initMVVM()
+
         PhoneNumberAuthHelper.getInstance(this,object :TokenResultListener{
             override fun onTokenFailed(p0: String?) {
                 Log.e("init", "onTokenFaild: $p0")
@@ -276,6 +281,18 @@ class TwantApplication :BaseApplication(){
         // 將應用注冊到微信
         regToWx()
         initCrash()
+    }
+
+    private fun initMVVM() {
+        Tasks.init()
+        Utils.init(this)
+        //是否开启打印日志
+//        KLog.init(BuildConfig.DEBUG);
+        //初始化全局异常崩溃
+        LiveEventBus // 事件儿总线通信
+                .config().supportBroadcast(this) // 配置支持跨进程、跨APP通信，传入Context，需要在application onCreate中配置
+                .lifecycleObserverAlwaysActive(true) //    整个生命周期（从onCreate到onDestroy）都可以实时收到消息
+        setActivityLifecycle(this)
     }
     /**
      * app 崩溃重启的配置

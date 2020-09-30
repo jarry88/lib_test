@@ -1,7 +1,7 @@
-package com.wzq.mvvmsmart.net.listener;
+package com.ftofs.lib_net.smart.listener;
 
 
-import com.wzq.mvvmsmart.net.base.BaseResponse;
+import com.ftofs.lib_net.smart.base.BaseResponse;
 
 /**
  * created 王志强 2020.04.30

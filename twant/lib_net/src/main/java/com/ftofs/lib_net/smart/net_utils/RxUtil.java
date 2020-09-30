@@ -1,6 +1,6 @@
 package com.ftofs.lib_net.smart.net_utils;
 
-import com.wzq.mvvmsmart.net.exception.ExceptionInterceptorHandle;
+import com.ftofs.lib_net.smart.exception.ExceptionInterceptorHandle;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

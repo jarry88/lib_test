@@ -1,4 +1,4 @@
-package com.wzq.mvvmsmart.event
+package com.gzp.lib_common.smart.event
 
 import androidx.lifecycle.MutableLiveData
 

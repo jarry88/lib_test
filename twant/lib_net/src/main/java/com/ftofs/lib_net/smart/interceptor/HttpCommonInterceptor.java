@@ -1,15 +1,15 @@
-package com.wzq.mvvmsmart.net.interceptor;
+package com.ftofs.lib_net.smart.interceptor;
 
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import com.wzq.mvvmsmart.BuildConfig;
-import com.wzq.mvvmsmart.net.net_utils.OkHttpUtil;
-import com.wzq.mvvmsmart.net.cookie.CookieUtils;
-import com.wzq.mvvmsmart.net.net_utils.BaseCommonUtils;
-import com.wzq.mvvmsmart.net.net_utils.MetaDataUtil;
-import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
-import com.wzq.mvvmsmart.net.net_utils.Utils;
+import com.ftofs.lib_net.smart.net_utils.OkHttpUtil;
+import com.ftofs.lib_net.smart.cookie.CookieUtils;
+import com.ftofs.lib_net.smart.net_utils.BaseCommonUtils;
+import com.ftofs.lib_net.smart.net_utils.MetaDataUtil;
+import com.ftofs.lib_net.smart.net_utils.MmkvUtils;
+import com.gzp.lib_common.smart.Utils;
 import com.gzp.lib_common.smart.utils.KLog;
 import java.io.IOException;
 import java.nio.charset.Charset;

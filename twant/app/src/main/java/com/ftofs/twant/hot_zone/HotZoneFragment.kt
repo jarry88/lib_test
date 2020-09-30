@@ -12,7 +12,7 @@ import com.ftofs.twant.BR
 import com.ftofs.twant.databinding.FragmentHotzoneBinding
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
-import com.wzq.mvvmsmart.event.StateLiveData
+import com.gzp.lib_common.smart.event.StateLiveData
 import retrofit2.http.GET
 
 class HotZoneFragment(private val hotId:Int) :BaseTwantFragmentMVVM<FragmentHotzoneBinding,HotZoneViewModel> (){
@@ -61,9 +61,10 @@ class HotZoneFragment(private val hotId:Int) :BaseTwantFragmentMVVM<FragmentHotz
         viewModel.hotZoneInfo.observe(this){
             SLog.info("观测到hotZoneInfo数据")
             binding.title.text=it.hotName
-            it.hotZoneVoList.takeIf { it.isNotEmpty() }?.apply {
-                mAdapter.setNewData(this)
-            }
+            SLog.info(it.hotZoneVoList.toString())
+//            it.hotZoneVoList.takeIf { it.isNotEmpty() }?.apply {
+//                mAdapter.setNewData(this)
+//            }
         }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
             when(it){

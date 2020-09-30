@@ -10,7 +10,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.wzq.mvvmsmart.widget.EmptyViewHelper
+import com.gzp.lib_common.smart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> : Fragment(), IBaseViewMVVM {
@@ -25,6 +25,28 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> : F
         initParam()
     }
 
+    protected fun showNormalLayout(view: View?) {
+        if (emptyViewHelper == null) {
+            emptyViewHelper = EmptyViewHelper(activity)
+            emptyViewHelper?.setReloadCallBack(this)
+        }
+        emptyViewHelper?.loadNormallLayout(view)
+    }
+
+    /***
+     * 加载无数据、无网络、数据异常布局
+     * @param target 被替换的view
+     * @param text 显示的文字
+     * @param imgId 占位图
+     * @param reload 是否显示重新加载按钮
+     */
+    protected fun showEmptyLayout(target: View?, text: String?, imgId: Int, reload: Boolean) {
+        if (emptyViewHelper == null) {
+            emptyViewHelper = EmptyViewHelper(activity)
+            emptyViewHelper?.setReloadCallBack(this)
+        }
+        emptyViewHelper?.loadPlaceLayout(target, text, imgId, reload)
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         //如果fragment的view已经创建则不再重新创建
         if (lastView == null) {
@@ -154,27 +176,5 @@ abstract class BaseFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> : F
         }
     }
 
-    protected fun showNormalLayout(view: View?) {
-        if (emptyViewHelper == null) {
-            emptyViewHelper = EmptyViewHelper(activity)
-            emptyViewHelper?.setReloadCallBack(this)
-        }
-        emptyViewHelper?.loadNormallLayout(view)
-    }
-
-    /***
-     * 加载无数据、无网络、数据异常布局
-     * @param target 被替换的view
-     * @param text 显示的文字
-     * @param imgId 占位图
-     * @param reload 是否显示重新加载按钮
-     */
-    protected fun showEmptyLayout(target: View?, text: String?, imgId: Int, reload: Boolean) {
-        if (emptyViewHelper == null) {
-            emptyViewHelper = EmptyViewHelper(activity)
-            emptyViewHelper?.setReloadCallBack(this)
-        }
-        emptyViewHelper?.loadPlaceLayout(target, text, imgId, reload)
-    }
 
 }
