@@ -57,6 +57,7 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                     others()}
             }
         } catch (e: Throwable) {//檢查404
+            e.printStackTrace()
            SLog.info(e.toString())
             liveData.postError()
             catchError(e)

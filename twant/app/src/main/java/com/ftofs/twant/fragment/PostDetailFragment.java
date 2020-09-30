@@ -209,7 +209,8 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
                 SLog.info("id[%d]", id);
                 if (!User.isLogin()) {
-                    start(LoginFragment.newInstance());
+                    Util.showLoginFragment(getContext());
+
                     return;
                 }
                 SLog.info("id[%d]", id);

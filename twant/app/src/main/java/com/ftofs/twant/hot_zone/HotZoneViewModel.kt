@@ -9,6 +9,7 @@ import com.ftofs.lib_net.DemoApiService
 import com.ftofs.lib_net.model.HotZoneInfo
 import com.ftofs.lib_net.model.HotZoneVo
 import com.ftofs.lib_net.net.TwantResponse
+import com.ftofs.lib_net.smart.net_utils.GsonUtil
 import com.ftofs.twant.TwantApplication
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
@@ -18,6 +19,8 @@ import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.lib_net.smart.net_utils.RetrofitUtil
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import org.koin.dsl.koinApplication
 import retrofit2.Retrofit
@@ -51,19 +54,26 @@ class HotZoneViewModel(application: Application = BaseContext.instance.getContex
 //    GsonConverterFactory.create().
         return  JSON.parseObject(jsonStr,T::class.java)
     }
+    inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
     fun getTestData():TwantResponse<HotZoneInfo>{
-        GsonConverterFactory.create()
-        val json= JSON.parseObject(AssetsUtil.loadText(getApplication(),"json/hotzone.json"))
-        val a =json.getObject("datas",HotZoneInfo::class.java)
-        val hotZoneInfo=HotZoneInfo(
-                hotName = a.hotName.toString(),
-                hotZoneVoList= a.hotZoneVoList,
-                hotId = a.hotId,
+//        GsonConverterFactory.create()
+        val json= AssetsUtil.loadText(getApplication(),"json/hotzone.json")
+//        val datas =json.getJSONObject("datas")
+//        val a =GsonUtil.g
+//        val hotZoneInfo=HotZoneInfo(
+//                hotName = a.hotName.toString(),
+//                hotZoneVoList= JSON.parseArray(
+//                        json.getString("datas.hotZoneVoList"),
+//                        HotZoneVo::class.java
+//                ),
+//                hotId = a.hotId,
+//        )
+        val gson =Gson()
+        val a =Gson().fromJson<TwantResponse<HotZoneInfo>>(json)
+        SLog.info( a.datas.toString())
+//        SLog.info(hotZoneInfo.hotZoneVoList.size.toString())
 
-        )
-
-        return TwantResponse(hotZoneInfo)
-
+        return a
     }
 
     private fun <T> TwantResponse(hotZoneInfo: T): TwantResponse<T> {

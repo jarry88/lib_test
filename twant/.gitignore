@@ -10,10 +10,3 @@
 .idea/misc.xml
 /twant/*.log
 
-*.class
-twant/caches/
-twant/wrapper/
-*.log
-*.lock
-twant/native/
-twant/daemon/
