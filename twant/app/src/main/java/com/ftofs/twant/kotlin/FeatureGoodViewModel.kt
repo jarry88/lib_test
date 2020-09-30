@@ -2,7 +2,6 @@ package com.ftofs.twant.kotlin
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.model.SellerGoodsItem
 import com.gzp.lib_common.base.BaseViewModel
 import com.ftofs.lib_net.model.SellerPageVO
@@ -10,7 +9,7 @@ import com.ftofs.twant.util.User
 import com.wzq.mvvmsmart.net.base.BaseResponse
 import com.wzq.mvvmsmart.net.net_utils.RxUtil
 import com.wzq.mvvmsmart.net.observer.DefaultObserver
-import com.wzq.mvvmsmart.utils.KLog
+import com.gzp.lib_common.smart.utils.KLog
 import com.wzq.mvvmsmart.utils.ToastUtils
 import io.reactivex.disposables.Disposable
 
@@ -48,13 +47,14 @@ class FeatureGoodViewModel(application: Application) : BaseViewModel(application
                         super.onNext(baseResponse)
                         // 请求成功
                         if (baseResponse.code == 200) {  // 接口返回code=200 代表成功
-                            val goodsList = baseResponse.datas.goodsList
+                            val goodsList = baseResponse.data.goodsList
 
                             //自定义处理
                             if (goodsList != null) {
                                 if (goodsList.size > 0) {
                                     liveData.postValue(goodsList)
                                 } else {
+
                                     //    showShortToast("没有更多数据了")
                                     KLog.e("请求到数据students.size" + goodsList.size)
                                 }

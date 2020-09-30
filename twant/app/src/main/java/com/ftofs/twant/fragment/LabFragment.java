@@ -17,16 +17,13 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ftofs.lib_net.model.HotZone;
 import com.ftofs.twant.BlankFragment;
 import com.ftofs.twant.R;
-import com.ftofs.twant.activity.TestActivity;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.hot_zone.HotZoneFragment;
 import com.ftofs.twant.util.CroppyInitUtilKt;
-import com.ftofs.twant.util.RestartApp;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BackgroundDrawable;
@@ -42,6 +39,7 @@ import com.lyrebirdstudio.croppylib.main.CroppyTheme;
 import com.lyrebirdstudio.croppylib.main.StorageType;
 import com.lyrebirdstudio.croppylib.util.file.FileCreator;
 import com.lyrebirdstudio.croppylib.util.file.FileOperationRequest;
+import com.gzp.lib_common.smart.utils.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +51,8 @@ import java.util.List;
  */
 public class LabFragment extends BaseFragment implements View.OnClickListener {
     private static final int RC_CROP_IMAGE = 2;
+    private static final String TAG = LabFragment.class.getSimpleName();
+
     private NineLuckPan luckpan;
     private AppCompatImageView imageViewCropped;
     private CropRequest.Manual themeCropRequest;
@@ -191,18 +191,22 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         int id = v.getId();
 
         if (id == R.id.btn_test1) {
-            // ToastUtil.info(_mActivity, "way1");
+            ToastUtil.info(_mActivity, "拉起登陆页");
+            SLog.info(TAG);
+            KLog.INSTANCE.e(TAG, "4");
+//            start(new MessageFragment("18578276310",false,false));
             // RestartApp.restartThroughIntentCompatMakeRestartActivityTask(_mActivity);
-            ToastUtil.success(getContext(),"打開測試activity");
-            startActivity(new Intent(getActivity(), TestActivity.class));
+//            ToastUtil.success(getContext(),"打開測試activity");
+//            startActivity(new Intent(getActivity(), TestActivity.class));
 //            start(TestFragment.newInstance());
         }else if (id == R.id.btn_post1) {
             ToastUtil.info(_mActivity, "btn_post1");
             new XPopup.Builder(getContext()).asCustom(new MoonVoucherListPopup(getContext(),new ArrayList<StoreVoucher>(),"10")).show();
         } else if (id == R.id.btn_test2) {
-            ToastUtil.info(_mActivity, "way2");
+            ToastUtil.info(_mActivity, "進入熱區頁 12");
+            KLog.INSTANCE.e("進入熱區頁");
             //49  8080
-            start(new HotZoneFragment(4));
+            start(new HotZoneFragment(12));
 //            RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);
         } else if (id == R.id.btn_goto) {
             ToastUtil.info(_mActivity, "way3");

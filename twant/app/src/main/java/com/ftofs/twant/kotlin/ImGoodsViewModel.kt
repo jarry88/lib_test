@@ -4,9 +4,9 @@ import android.app.Application
 import com.ftofs.lib_net.model.ZoneInfo
 import com.ftofs.lib_net.BaseRepository
 import com.gzp.lib_common.constant.Result
-import com.wzq.mvvmsmart.base.BaseViewModelMVVM
+import com.gzp.lib_common.smart.base.BaseViewModelMVVM
 
-class ImGoodsViewModel(application:Application):BaseViewModelMVVM(application){
+class ImGoodsViewModel(application:Application): BaseViewModelMVVM(application){
 
 
     suspend fun api()=object : BaseRepository(){

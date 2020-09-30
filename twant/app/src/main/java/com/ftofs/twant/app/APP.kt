@@ -11,7 +11,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.tencent.mmkv.MMKV
-import com.wzq.mvvmsmart.base.AppManagerMVVM
+import com.gzp.lib_common.smart.base.AppManagerMVVM
 import com.wzq.mvvmsmart.net.net_utils.Utils
 import com.gzp.lib_common.smart.utils.KLog
 import com.wzq.mvvmsmart.utils.Tasks
