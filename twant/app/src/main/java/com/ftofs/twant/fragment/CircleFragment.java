@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.PostListAdapter;
@@ -376,7 +377,9 @@ public class CircleFragment extends MainBaseFragment implements View.OnClickList
         } else if (id == R.id.history_popup_layout) {
             // 屏蔽點擊事件，不要刪除
         } else if (id == R.id.tv_title) {
-            // ((MainActivity) _mActivity).showDebugIcon();
+            if ("debug".equals(BuildConfig.BUILD_TYPE)) {
+                ((MainActivity) _mActivity).showDebugIcon();
+            }
         }
     }
 
