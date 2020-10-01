@@ -20,12 +20,15 @@ import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.HotZone
 import com.ftofs.lib_net.model.HotZoneInfo
 import com.ftofs.lib_net.model.HotZoneVo
+import com.ftofs.twant.R
 import com.ftofs.twant.adapter.BaseBindAdapter
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.login.Title
 import com.ftofs.twant.util.ToastUtil
+import com.ftofs.twant.util.Util
 import com.gzp.lib_common.utils.SLog
+import kotlinx.android.synthetic.main.seller_edit_features_layout.view.*
 import kotlinx.coroutines.delay
 //實現單張熱區圖邏輯的UI控件
 class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=null,defStyleAttr:Int=0):FrameLayout(context,attrs,defStyleAttr) {
@@ -75,11 +78,14 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
                 }
             }
             ImageView {
-                layout_width= match_parent
-                layout_height= match_parent
+                layout_width= wrap_content
+                layout_height= wrap_content
+                src = R.drawable._xpopup_shadow
                 onTouchEvent={v,e->
                     when (e.action) {
-                        MotionEvent.ACTION_DOWN->{SLog.info("點擊了"+e.run { "x :$x,$xPrecision,\n$rawX,y: $y,$yPrecision,\n$rawY" })
+                        MotionEvent.ACTION_DOWN->{
+                            SLog.info("點擊了"+e.run { "x :$x,$xPrecision,\n$rawX,y: $y,$yPrecision,\n$rawY" })
+                            onClickAction(e.rawX,e.rawY)
                             true
                         }
                         MotionEvent.ACTION_UP ->v.performClick()
@@ -90,29 +96,31 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
                     action ={
                         SLog.info("觀測到之變")
                         (it as? HotZoneVo)?.let{ h ->
-//                            text =s
+                            imageUrl=h.url
+//                            h.originalHeight?.let {
+//                                layout_height=it.toInt()
+//                            }
                         }
                     }
                 }
+                top_toTopOf = parent_id
             }
-            Title(context
-            ).apply {
-                layout_width = match_parent
-                layout_height= wrap_content
-                top_toTopOf= parent_id
 
-                layout_id= "title"
-                bindLiveData= liveDataBinder(hotZoneVo){
-                    action ={
-                        SLog.info("觀測到之變")
-                        (it as? HotZoneVo)?.let{ h ->
-//                            text =h.hotName
-                        }
-                    }
-                }
+        }
+    }
+
+    private fun onClickAction(rawX: Float, rawY: Float) {
+        hotZoneVo.value?.apply {
+            hotZoneList?.filter {
+                during(rawX,x,width.toFloat())&&during(rawY,y,height.toFloat())
+            }?.first()?.apply {
+                Util.onLinkTypeAction(linkType,linkValue)
             }
         }
     }
+//rawX是不是在区间范围内
+    private fun during(rawX: Float, x: Float, width: Float)=rawX>=x&&rawX<=x+width
+
     init {
         contentView
     }

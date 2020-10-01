@@ -17,3 +17,4 @@ twant/wrapper/
 *.lock
 twant/native/
 twant/daemon/
+*.profile

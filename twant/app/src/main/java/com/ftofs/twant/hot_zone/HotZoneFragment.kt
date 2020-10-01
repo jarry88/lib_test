@@ -10,6 +10,7 @@ import com.ftofs.lib_net.model.HotZoneVo
 import com.ftofs.lib_net.model.ZoneVO
 import com.ftofs.twant.R
 import com.ftofs.twant.BR
+import com.ftofs.twant.config.Config
 import com.ftofs.twant.databinding.FragmentHotzoneBinding
 import com.ftofs.twant.databinding.ItemHotZoneVoBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
@@ -25,7 +26,9 @@ class HotZoneFragment(private val hotId:Int) :BaseTwantFragmentMVVM<FragmentHotz
                 get() = R.layout.item_hot_zone_vo
 
             override fun initView(binding: ItemHotZoneVoBinding, item: HotZoneVo) {
-//                TODO("Not yet implemented")
+                binding.hotZoneItem.apply {
+                    hotZoneVo.value=item
+                }
             }
 
         }
@@ -51,21 +54,11 @@ class HotZoneFragment(private val hotId:Int) :BaseTwantFragmentMVVM<FragmentHotz
         SLog.info("here")
         binding.rvList.adapter=mAdapter
         binding.title.setLeftLayoutClickListener{hideSoftInputPop()}
-        binding.test.setOnClickListener {
-//            GlobalScope.launch {
-////                val re=testApi.getHotZoneIndex(12)
-////                SLog.info(re.toString())
-////                SLog.info(re.datas.toString())
-//
-//            }
-            SLog.info("测试")
-
-            viewModel.getHotTestZoneData(hotId)
-//            viewModel.getHotZoneData(hotId)
-
-
+        if (Config.DEVELOPER_MODE) {
+            binding.title.setTitleClickListener{
+                viewModel.getHotTestZoneData(12)
+            }
         }
-
         viewModel.getHotZoneData(hotId)
     }
 

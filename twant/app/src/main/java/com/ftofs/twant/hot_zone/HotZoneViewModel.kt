@@ -68,7 +68,7 @@ class HotZoneViewModel(application: Application = BaseContext.instance.getContex
 //                ),
 //                hotId = a.hotId,
 //        )
-        val gson =Gson()
+//        val gson =Gson()
         val a =Gson().fromJson<TwantResponse<HotZoneInfo>>(json)
         SLog.info( a.datas.toString())
 //        SLog.info(hotZoneInfo.hotZoneVoList.size.toString())
@@ -103,9 +103,8 @@ class HotZoneViewModel(application: Application = BaseContext.instance.getContex
         launch(
                 stateLiveData,
                 {
-                    SLog.info("base Url ${repository.getBase()}拉取热区數據 $hotId")
+                    SLog.info("正常流程：base Url ${repository.getBase()}拉取热区數據 $hotId")
                     repository.run {
-                        SLog.info("pro")
                         simpleGet(api.getHotZoneIndex(hotId)) }
                 },
 

@@ -77,6 +77,7 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
+import com.ftofs.twant.hot_zone.HotZoneFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.login.UserManager;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
@@ -1810,6 +1811,62 @@ public class Util {
                 break;
             case "tariffBuy":
                 Util.startFragment(CrossBorderMainFragment.newInstance());
+                break;
+            case "hotZone":
+                Util.startFragment(new HotZoneFragment(Integer.parseInt(linkValue)));
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 后续响应后端配置link跳转事件，统一用这个入口
+     * @param linkType 类型
+     * @param linkValue 页面起始传递值
+     */
+    public static void onLinkTypeAction(String linkType, String linkValue) {
+        switch (linkType) {
+            case "none":
+                // 无操作
+                break;
+            case "url":
+                // 外部鏈接
+                Util.startFragment(ExplorerFragment.newInstance(linkValue, true));
+                break;
+            case "keyword":
+                // 关键字
+                String keyword = linkValue;
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                        EasyJSONObject.generate("keyword", keyword).toString()));
+                break;
+            case "goods":
+                // 產品
+                int commonId = Integer.valueOf(linkValue);
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                break;
+            case "store":
+                // 店铺
+                int storeId = Integer.valueOf(linkValue);
+                Util.startFragment(ShopMainFragment.newInstance(storeId));
+                break;
+            case "category":
+                // 產品搜索结果页(分类)
+                String cat = linkValue;
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                        EasyJSONObject.generate("cat", cat).toString()));
+                break;
+            case "brandList":
+                // 品牌列表
+                break;
+            case "voucherCenter":
+                // 领券中心
+                break;
+            case "activityUrl":
+                Util.startFragment(H5GameFragment.newInstance(linkValue, true));
+                break;
+            case "hotZone":
+                Util.startFragment(new HotZoneFragment(Integer.parseInt(linkValue)));
                 break;
             default:
                 break;

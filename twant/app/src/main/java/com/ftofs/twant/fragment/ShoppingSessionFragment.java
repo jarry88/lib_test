@@ -154,48 +154,7 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
                 if (StringUtil.isEmpty(linkType)) {
                     return;
                 }
-                switch (linkType) {
-                    case "none":
-                        // 无操作
-                        break;
-                    case "url":
-                        // 外部鏈接
-                        Util.startFragment(ExplorerFragment.newInstance(webSliderItem.linkValue, true));
-                        break;
-                    case "keyword":
-                        // 关键字
-                        String keyword = webSliderItem.linkValue;
-                        Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
-                                EasyJSONObject.generate("keyword", keyword).toString()));
-                        break;
-                    case "goods":
-                        // 產品
-                        int commonId = Integer.valueOf(webSliderItem.linkValue);
-                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                        break;
-                    case "store":
-                        // 店铺
-                        int storeId = Integer.valueOf(webSliderItem.linkValue);
-                        Util.startFragment(ShopMainFragment.newInstance(storeId));
-                        break;
-                    case "category":
-                        // 產品搜索结果页(分类)
-                        String cat = webSliderItem.linkValue;
-                        Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
-                                EasyJSONObject.generate("cat", cat).toString()));
-                        break;
-                    case "brandList":
-                        // 品牌列表
-                        break;
-                    case "voucherCenter":
-                        // 领券中心
-                        break;
-                    case "activityUrl":
-                        Util.startFragment(H5GameFragment.newInstance(webSliderItem.linkValue, true));
-                        break;
-                    default:
-                        break;
-                }
+                Util.onLinkTypeAction(linkType,webSliderItem.linkValue);
             }
         });
 

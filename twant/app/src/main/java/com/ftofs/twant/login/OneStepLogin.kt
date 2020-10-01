@@ -101,7 +101,6 @@ object OneStepLogin{
         })
     }
 
-    private val mPhoneNumberAuthHelper by lazy { PhoneNumberAuthHelper.getInstance(mContext, mCheckListener) }
     private val mCheckListener by lazy {
         object : TokenResultListener {
             override fun onTokenSuccess(p0: String?) {
@@ -126,6 +125,7 @@ object OneStepLogin{
             }
         }
     }
+    private val mPhoneNumberAuthHelper by lazy { PhoneNumberAuthHelper.getInstance(mContext, mCheckListener) }
     /**
      * 拿到token ，成功后跳出阿里登錄頁
      */
@@ -133,6 +133,8 @@ object OneStepLogin{
         token?.let {
             ExecutorManager.run{
                 findActivity(mContext)?.runOnUiThread{
+                    mPhoneNumberAuthHelper.hideLoginLoading()
+
 //                    mTvResult.setText("登陆成功：$result")
 //                    SLog.info(MockRequest.getPhoneNumber(it))
 //                    ToastUtil.success(context, MockRequest.getPhoneNumber(it))
