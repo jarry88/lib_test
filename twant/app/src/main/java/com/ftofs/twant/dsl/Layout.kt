@@ -249,7 +249,26 @@ inline var View.layout_height: Int
         val h = if (value > 0) value.dp else value
         layoutParams = ViewGroup.MarginLayoutParams(w, h)
     }
+inline var View.ll_height: Int
+    get() {
+        return 0
+    }
+    set(value) {
 
+        val h = layoutParams?.height ?: 0
+        val w = if (value > 0) value.dp else value
+        layoutParams = LinearLayout.LayoutParams(w, h)
+    }
+inline var View.ll_width: Int
+    get() {
+        return 0
+    }
+    set(value) {
+
+        val w = layoutParams?.width ?: 0
+        val h = if (value > 0) value.dp else value
+        layoutParams = LinearLayout.LayoutParams(w, h)
+    }
 inline var View.alignParentStart: Boolean
     get() {
         return false
