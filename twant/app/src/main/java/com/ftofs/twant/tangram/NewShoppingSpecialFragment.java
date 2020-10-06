@@ -234,7 +234,6 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 updateTabTextView(tab ,false);
-
             }
 
             @Override

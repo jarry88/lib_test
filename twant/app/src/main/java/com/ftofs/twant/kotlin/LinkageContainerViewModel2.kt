@@ -95,13 +95,17 @@ class LinkageContainerViewModel2(application:Application) : BaseViewModel(applic
     }
 
     fun doGetGoodsItems(zoneId:Int) {
-        viewModelScope.launch (Dispatchers.Default){
-            withContext(Dispatchers.Main){
-//                val result = viewModel.getShoppingGoodsList(zoneId)
-                val result = viewModel.getShoppingGoodsList1(zoneId)
-                SLog.info(result.toString())
-            }
-        }
+//        viewModelScope.launch (Dispatchers.Default){
+//            withContext(Dispatchers.Main){
+////                val result = viewModel.getShoppingGoodsList(zoneId)
+//                val result = viewModel.getShoppingGoodsList1(zoneId)
+//                SLog.info(result.toString())
+//            }
+//        }
+        launch(stateLiveData,
+                {viewModel.getShoppingGoodsList1(zoneId)},
+                {SLog.info(it.toString())}
+        )
     }
     fun doGetZoneGoodsItems() {
         viewModelScope.launch (Dispatchers.Default){

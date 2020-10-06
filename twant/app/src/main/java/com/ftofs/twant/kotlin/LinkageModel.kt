@@ -6,13 +6,17 @@ import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.MRequest
 import com.ftofs.lib_net.model.SellerPageVO
 import com.gzp.lib_common.constant.Result
+import com.gzp.lib_common.utils.SLog
+
 class LinkageModel : BaseRepository(){
     suspend fun getShoppingGoodsList1(zoneId:Int): Result<SellerPageVO<SellerGoodsItem>> {
 
         return safeApiCall(call ={requestSearch1(zoneId)},errorMessage = "网络错误")
     }
     private suspend fun requestSearch1(zoneId:Int): Result<SellerPageVO<SellerGoodsItem>> =
-            executeResponse(MRequest.getInstance().service.getShoppingZone(zoneId))
+            executeResponse(MRequest.getInstance().service.run {
+                SLog.info(getBase().toString())
+                getShoppingZone(zoneId)})
 
 
     suspend fun getZoneCategoryList(zoneId: Int): Result<ZoneInfo> {

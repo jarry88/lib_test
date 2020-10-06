@@ -221,6 +221,7 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
         } else if (id == R.id.btn_buy_now) {
             if (isOwner != Constant.TRUE_INT) { // 幫他砍價
                 if (!User.isLogin()) {
+//                    startActivityForResult();
                     startForResult(LoginFragment.newInstance(), RequestCode.USER_LOGIN.ordinal());
                     return;
                 }

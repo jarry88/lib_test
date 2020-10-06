@@ -1,7 +1,7 @@
 package com.gzp.lib_common.smart.utils
 
 import android.app.Activity
-import com.wzq.mvvmsmart.widget.BaseLoadingDialog
+import com.gzp.lib_common.smart.widget.BaseLoadingDialog
 
 /**
  *<p>作者：王志强<p>

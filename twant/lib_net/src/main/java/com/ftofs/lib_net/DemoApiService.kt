@@ -1,7 +1,5 @@
 package com.ftofs.lib_net
 
-import android.util.Log
-import com.facebook.login.Login
 import com.ftofs.lib_net.model.*
 import com.ftofs.lib_net.net.TwantResponse
 import com.ftofs.lib_net.smart.base.BaseResponse

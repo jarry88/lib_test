@@ -23,6 +23,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.hot_zone.HotZoneFragment;
+import com.ftofs.twant.kotlin.BlackTestFragment;
 import com.ftofs.twant.util.CroppyInitUtilKt;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -206,7 +207,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
             ToastUtil.info(_mActivity, "進入熱區頁 12");
             KLog.INSTANCE.e("進入熱區頁");
             //49  8080
-            start(new HotZoneFragment(12));
+            start(new BlackTestFragment());
 //            RestartApp.restartThroughPendingIntentAlarmManager(_mActivity);
         } else if (id == R.id.btn_goto) {
             ToastUtil.info(_mActivity, "way3");
