@@ -15,6 +15,7 @@
         <com.ftofs.twant.login.Title
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:login_info="true"
             android:id="@+id/title"/>
         <de.hdodenhof.circleimageview.CircleImageView
             imageUrl="@{vo.avatar}"

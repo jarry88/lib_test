@@ -25,65 +25,67 @@ class HotView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private var mImageView:ImageView?=null
     private val endText= MutableLiveData<String>()
     val hotZoneVo  =MutableLiveData<HotZoneVo>()
-//    private val contentView by lazy {
-//        LinearLayout {
-//            layout_width = match_parent
-//            layout_height= wrap_content
-//            margin_top = 10
-//            onClick= {
-//                SLog.info("點擊了" + it.run { "x :$x,y:$y,\n rotationX $rotationX,,rotationY:$rotationY  \n  " })
-//            }
-//            gravity = gravity_center
-//            orientation= vertical
-//            ImageView {
-//                background = ColorDrawable(resources.getColor(R.color.black))
-//                layout_width= wrap_content
-//                layout_height= wrap_content
-//                scaleType = scale_fit_xy
-//                //保持比例
-//                adjustViewBounds =true
-////                onClick={
-////                    onClickAction(clickX,clickY)
-////                }
-//
-//                onTouchEvent={ v, e->
-//                    when (e.action) {
-//                        MotionEvent.ACTION_UP -> {
-//                            updateP(width, height)
-//                            clickX = x
-//                            clickY = y
-//                            SLog.info("點擊了" + e.run { "x :$x,y: $y" })
-//                            e.run { onClickAction(x, y) }
-////                            performClick()
-//                            true
-//                        }
-//                        else ->true
-//                    }
+    private val contentView by lazy {
+        ConstraintLayout {
+            layout_width = match_parent
+            layout_height= match_parent
+            onClick= {
+                SLog.info("點擊了" + it.run { "x :$x,y:$y,\n rotationX $rotationX,,rotationY:$rotationY  \n  " })
+            }
+            ImageView {
+                src =R.drawable.activity_discount_label_bg
+                layout_width= wrap_content
+                layout_height= wrap_content
+                start_toStartOf= parent_id
+                start_toEndOf= parent_id
+                top_toTopOf= parent_id
+                scaleType = scale_fit_xy
+                //保持比例
+                adjustViewBounds =true
+//                onClick={
+//                    onClickAction(clickX,clickY)
 //                }
-//                bindLiveData= liveDataBinder(hotZoneVo){
-//                    action ={
-//                        SLog.info("觀測到之變")
-//                        (it as? HotZoneVo)?.let{ h ->
-//                            try {
-//
-//                                imageUrl=h.url
-////                                ImageView@layout_width= h.originalWidth?.toInt()?:0
-//////                            layout_height=h.run { originalHeight?.toInt()?:0*(originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first  }
-////                                ImageView@layout_height=h.originalHeight?.toInt()?:0
-//                            }catch (e:Exception){
-//                                SLog.info(e.toString())
-//                            }
-////                            SLog.info("點擊了:sumx :$width,sumy: $height" )
-//
-//                        }
-//                    }
-//                }
-//                mImageView=this@ImageView
-////                top_toTopOf = parent_id
-//            }
-//
-//        }
-//    }
+
+                onTouchEvent={ v, e->
+                    when (e.action) {
+                        MotionEvent.ACTION_UP -> {
+                            updateP(width, height)
+                            clickX = x
+                            clickY = y
+                            SLog.info("點擊了" + e.run { "x :$x,y: $y" })
+                            e.run { onClickAction(x, y) }
+//                            performClick()
+                            true
+                        }
+                        else ->true
+                    }
+                }
+                bindLiveData= liveDataBinder(hotZoneVo){
+                    action ={
+                        (it as? HotZoneVo)?.let{ h ->
+                            val imgHeight=h.originalHeight?.toInt()?:0*(h.originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first
+                            SLog.info("觀測到之變 $imgHeight")
+
+                            try {
+
+                                imageUrl=h.url
+                                ImageView@layout_width= match_parent
+////                            layout_height=h.run { originalHeight?.toInt()?:0*(originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first  }
+//                                ImageView@layout_height=h.originalHeight?.toInt()?:0
+                            }catch (e:Exception){
+                                SLog.info(e.toString())
+                            }
+//                            SLog.info("點擊了:sumx :$width,sumy: $height" )
+
+                        }
+                    }
+                }
+                mImageView=this@ImageView
+//                top_toTopOf = parent_id
+            }
+
+        }
+    }
     private fun updateP(width: Int, height: Int) {
         val h= hotZoneVo.value
         h?.originalWidth?.let { it ->
@@ -123,54 +125,7 @@ class HotView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     this>=x&&this<=x+width
 }
     init {
-//        contentView
-        View.inflate(context,R.layout.hot_item_view,this)
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.Title)
-//        typedArray.getString(R.styleable.Title_text_title)?.let {
-//            text=it
-//        }
-        //不設置的時候是顯示的
-        mImageView=rootView.findViewById(R.id.hot_image)
-        mImageView?.apply {
-            onTouchEvent={ v, e->
-                when (e.action) {
-                    MotionEvent.ACTION_UP -> {
-                        updateP(width, height)
-                        clickX = x
-                        clickY = y
-                        SLog.info("點擊了" + e.run { "x :$x,y: $y" })
-                        e.run { onClickAction(x, y) }
-//                            performClick()
-                        true
-                    }
-                    else ->true
-                }
-            }
-            bindLiveData= liveDataBinder(hotZoneVo){
-                action ={
-                    SLog.info("觀測到之變")
-                    (it as? HotZoneVo)?.let{ h ->
-                        try {
-                            imageUrl=h.url
-//                                ImageView@layout_width= h.originalWidth?.toInt()?:0
-////                            layout_height=h.run { originalHeight?.toInt()?:0*(originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first  }
-//                                ImageView@layout_height=h.originalHeight?.toInt()?:0
-                        }catch (e:Exception){
-                            SLog.info(e.toString())
-                        }
-//                            SLog.info("點擊了:sumx :$width,sumy: $height" )
-
-                    }
-                }
-            }
-        }
-        typedArray.getBoolean(R.styleable.Title_login_info,false).takeIf { it }?.let {
-            rootView.findViewById<View>(R.id.tv_info)?.visibility= View.VISIBLE
-        }
-//        typedArray.getBoolean(R.attr.login_info,false).let {
-//            if(it) rootView.findViewById<TextView>(R.id.tv_info)?.visibility= VISIBLE
-//        }
-        typedArray.recycle()
+        contentView
     }
 
 
