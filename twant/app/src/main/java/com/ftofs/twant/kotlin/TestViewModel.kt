@@ -12,7 +12,7 @@ class TestViewModel(application:Application):BaseViewModel(application) {
         launch(stateLiveData,
                 {repository.run {
                      SLog.info(getBase().toString())
-                    simpleGet(api.getShoppingZone(12))}},
+                    simpleGet(api.doZoneCategoryList(12))}},
                     {SLog.info(it.toString())}
         )
     }

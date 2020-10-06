@@ -40,6 +40,7 @@ interface DemoApiService {
     //  获取购物专场数据
     @GET("shoppingzone/info/{zoneId}")
     suspend fun doZoneCategoryList(@Path("zoneId") zoneId: Int ): TwantResponse<ZoneInfo>
+//    suspend fun doZoneCategoryList(@Path("zoneId") zoneId: Int ): TwantResponse<ZoneInfo>
 
     //  获取购物专场商品数据
     //  shoppingzone
