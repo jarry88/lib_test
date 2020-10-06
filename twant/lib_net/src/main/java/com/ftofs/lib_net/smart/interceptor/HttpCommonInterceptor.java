@@ -9,8 +9,11 @@ import com.ftofs.lib_net.smart.net_utils.BaseCommonUtils;
 import com.ftofs.lib_net.smart.net_utils.MetaDataUtil;
 import com.ftofs.lib_net.smart.net_utils.MmkvUtils;
 import com.gzp.lib_common.BuildConfig;
+import com.gzp.lib_common.config.Config;
 import com.gzp.lib_common.smart.Utils;
 import com.gzp.lib_common.smart.utils.KLog;
+import com.gzp.lib_common.utils.BaseContext;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Iterator;
@@ -43,13 +46,14 @@ public class HttpCommonInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response response = null;
-        Context context = MetaDataUtil.getApp().getApplicationContext();
+//        Context context = MetaDataUtil.getApp().getApplicationContext();
+        Context context = BaseContext.Companion.getInstance().getContext();
         Request request = chain.request();
         request = addHeader(request);
         addCookie(context, request);
         response = chain.proceed(request);
 
-        if (BuildConfig.DEBUG) {
+        if (Config.INSTANCE.getDEVELOPER_MODE()) {
             ResponseBody responseBody = response.body();
             KLog.INSTANCE.e(TAG, "网络请求--#" + response.request().url());
             BufferedSource source = responseBody.source();

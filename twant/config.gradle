@@ -16,7 +16,7 @@ ext {
     def room ="2.2.5"
     def retrofit ="2.6.0"
     def lifecycle ="2.2.0"
-    def okhttp ="4.0.0"
+    def okhttp ="3.12.1"
     def koinVersion ='2.1.6'
 
     dependencies = [

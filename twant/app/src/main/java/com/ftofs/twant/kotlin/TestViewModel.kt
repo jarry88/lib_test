@@ -11,6 +11,7 @@ class TestViewModel(application:Application):BaseViewModel(application) {
     fun getData() {
         launch(stateLiveData,
                 {repository.run {
+                     SLog.info(getBase().toString())
                     simpleGet(api.getShoppingZone(12))}},
                     {SLog.info(it.toString())}
         )

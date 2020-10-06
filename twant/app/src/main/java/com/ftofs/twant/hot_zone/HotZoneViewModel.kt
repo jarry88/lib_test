@@ -33,7 +33,7 @@ class HotZoneViewModel(application: Application = BaseContext.instance.getContex
 
     fun retrofit(): Retrofit = Retrofit.Builder().
     client(OkHttpClient().newBuilder().addInterceptor{ chain->
-        val newUrl = chain.request().url
+        val newUrl = chain.request().url()
                 .newBuilder()
 //                        .addQueryParameter("api_key", AppConstants.tmdbApiKey)
                 .build()
