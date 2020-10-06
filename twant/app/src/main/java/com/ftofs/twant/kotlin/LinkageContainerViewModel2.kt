@@ -11,7 +11,7 @@ import com.ftofs.lib_net.model.ZoneCategory
 import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
-import com.gzp.lib_common.smart.utils.ToastUtils
+import com.wzq.mvvmsmart.utils.ToastUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

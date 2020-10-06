@@ -1,7 +1,5 @@
 package com.ftofs.lib_net.model
 
-import com.ftofs.lib_net.model.PageEntity
-import com.ftofs.lib_net.model.ZoneVO
 import java.io.Serializable
 import kotlin.collections.ArrayList
 

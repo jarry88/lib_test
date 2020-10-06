@@ -7,10 +7,10 @@ import com.gzp.lib_common.base.BaseViewModel
 import com.ftofs.lib_net.model.SellerPageVO
 import com.ftofs.twant.util.User
 import com.ftofs.lib_net.smart.base.BaseResponse
-import com.ftofs.lib_net.smart.net_utils.RxUtil
 import com.ftofs.lib_net.smart.observer.DefaultObserver
-import com.gzp.lib_common.smart.utils.KLog
-import com.gzp.lib_common.smart.utils.ToastUtils
+import com.wzq.mvvmsmart.net.net_utils.RxUtil
+import com.wzq.mvvmsmart.utils.KLog
+import com.wzq.mvvmsmart.utils.ToastUtils
 import io.reactivex.disposables.Disposable
 
 class FeatureGoodViewModel(application: Application) : BaseViewModel(application) {

@@ -4,7 +4,7 @@ import android.app.Application
 import com.ftofs.lib_net.model.ZoneInfo
 import com.ftofs.lib_net.BaseRepository
 import com.gzp.lib_common.constant.Result
-import com.gzp.lib_common.smart.base.BaseViewModelMVVM
+import com.wzq.mvvmsmart.base.BaseViewModelMVVM
 
 class ImGoodsViewModel(application:Application): BaseViewModelMVVM(application){
 

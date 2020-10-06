@@ -1,7 +1,7 @@
 package com.ftofs.lib_net.smart.download
 
 import com.ftofs.lib_net.smart.interceptor.ProgressInterceptor
-import com.ftofs.lib_net.smart.net_utils.NetworkUtil
+import com.wzq.mvvmsmart.net.net_utils.NetworkUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

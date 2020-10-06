@@ -26,6 +26,9 @@ interface DemoApiService {
     suspend fun testPost(@Body body: RequestBody): TwantResponse<ZoneInfo>
     @POST("member/resume/info")
     suspend fun testPost1(@Query("token") token: String): TwantResponse<ZoneInfo>
+
+    @GET("shoppingzone/info/{zoneId}")
+    suspend fun doTest(@Path("zoneId") zoneId: Int ): BaseResponse<ZoneInfo>
     //  获取商家商品列表
     @GET("member/seller/goods/list")
     fun doSellerGoodsList(@QueryMap map:@JvmSuppressWildcards Map<String ,Any> ): Observable<BaseResponse<SellerPageVO<SellerGoodsItem>>>
@@ -40,6 +43,7 @@ interface DemoApiService {
     //  获取购物专场数据
     @GET("shoppingzone/info/{zoneId}")
     suspend fun doZoneCategoryList(@Path("zoneId") zoneId: Int ): TwantResponse<ZoneInfo>
+//    suspend fun doZoneCategoryList(@Path("zoneId") zoneId: Int ): TwantResponse<ZoneInfo>
 
     //  获取购物专场商品数据
     //  shoppingzone

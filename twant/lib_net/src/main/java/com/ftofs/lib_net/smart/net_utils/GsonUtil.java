@@ -3,10 +3,10 @@ package com.ftofs.lib_net.smart.net_utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.ftofs.lib_net.smart.net_utils.gsontypeadapter.IntegerTypeAdapter;
-import com.ftofs.lib_net.smart.net_utils.gsontypeadapter.LongTypeAdapter;
-import com.ftofs.lib_net.smart.net_utils.gsontypeadapter.DoubleTypeAdapter;
-import com.ftofs.lib_net.smart.net_utils.gsontypeadapter.FloatTypeAdapter;
+import com.wzq.mvvmsmart.net.net_utils.gsontypeadapter.IntegerTypeAdapter;
+import com.wzq.mvvmsmart.net.net_utils.gsontypeadapter.LongTypeAdapter;
+import com.wzq.mvvmsmart.net.net_utils.gsontypeadapter.DoubleTypeAdapter;
+import com.wzq.mvvmsmart.net.net_utils.gsontypeadapter.FloatTypeAdapter;
 
 import java.util.List;
 import java.util.Map;

@@ -5,7 +5,7 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
-import com.gzp.lib_common.smart.utils.KLog;
+import com.wzq.mvvmsmart.utils.KLog;
 import java.lang.reflect.InvocationTargetException;
 
 /**

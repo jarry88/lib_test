@@ -17,7 +17,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 
-import com.gzp.lib_common.smart.Utils;
+import com.wzq.mvvmsmart.net.net_utils.Utils;
 
 /**
  * created 王志强 2020.04.30

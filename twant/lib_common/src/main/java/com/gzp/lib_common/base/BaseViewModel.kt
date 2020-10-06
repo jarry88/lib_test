@@ -2,9 +2,9 @@ package com.gzp.lib_common.base
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
-import com.gzp.lib_common.smart.base.BaseViewModelMVVM
-import com.gzp.lib_common.smart.event.StateLiveData
-import com.gzp.lib_common.smart.utils.KLog
+import com.wzq.mvvmsmart.base.BaseViewModelMVVM
+import com.wzq.mvvmsmart.event.StateLiveData
+import com.wzq.mvvmsmart.utils.KLog
 import kotlinx.coroutines.launch
 import  com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog

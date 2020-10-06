@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ftofs.lib_net.model.HotZoneInfo
 import com.ftofs.lib_net.model.HotZoneVo
-import com.ftofs.lib_net.smart.net_utils.RetrofitUtil
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.config.Config
@@ -13,8 +12,9 @@ import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.databinding.FragmentHotzoneBinding
 import com.ftofs.twant.kotlin.adapter.DslAdapter
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
-import com.gzp.lib_common.smart.event.StateLiveData
+import com.wzq.mvvmsmart.event.StateLiveData
 import com.gzp.lib_common.utils.SLog
+import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil
 import retrofit2.http.GET
 import kotlin.reflect.full.primaryConstructor
 
@@ -60,23 +60,23 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
         SLog.info("here")
         binding.rvList.adapter=mAdapter
         binding.title.setLeftLayoutClickListener{hideSoftInputPop()}
-        if (Config.DEVELOPER_MODE) {
-            binding.title.setTitleClickListener{
-                viewModel.getHotTestZoneData(12)
-            }
-        }
+//        if (Config.DEVELOPER_MODE) {
+//            binding.title.setTitleClickListener{
+//                viewModel.getHotTestZoneData(12)
+//            }
+//        }
         viewModel.getHotZoneData(hotId)
     }
 
     override fun onSupportInvisible() {
         super.onSupportInvisible()
         if (Config.DEVELOPER_MODE) {
-            if (Config.currEnv == Config.ENV_28) {
-                RetrofitUtil.getInstance().changeBaseApiUrl(Config.BASE_URL_API_28)
-
-            } else {
-                RetrofitUtil.getInstance().changeBaseApiUrl(Config.BASE_URL_API_29)
-            }
+//            if (Config.currEnv == Config.ENV_28) {
+//                RetrofitUtil.getInstance().changeBaseApiUrl(Config.BASE_URL_API_28)
+//
+//            } else {
+//                RetrofitUtil.getInstance().changeBaseApiUrl(Config.BASE_URL_API_29)
+//            }
             SLog.info("測試環境api切換到28,29環境")
         }
     }

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ftofs.lib_net.smart.base.BaseObserver;
 import com.ftofs.lib_net.smart.base.BaseResponse;
-import com.gzp.lib_common.smart.utils.KLog;
+import com.wzq.mvvmsmart.utils.KLog;
 import io.reactivex.disposables.Disposable;
 import java.lang.reflect.Type;
 import okhttp3.ResponseBody;

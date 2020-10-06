@@ -865,7 +865,7 @@ public class StringUtil {
      * @return  如果匹配，返回口令；如果不匹配，返回null
      */
     public static String getCouponWord(String str) {
-        Pattern pattern = Pattern.compile("\\$.+\\$");
+        Pattern pattern = Pattern.compile("€.+€");
         String word = null;
         Matcher matcher = pattern.matcher(str);
         if (matcher.find()) {
@@ -875,7 +875,7 @@ public class StringUtil {
                 return null;
             }
 
-            word = word.substring(1, word.length() - 1) // 去掉前後的$符
+            word = word.substring(1, word.length() - 1) // 去掉前後的€符
                     .trim(); // 去掉前後空格
         }
         SLog.info("word[%s]", word);

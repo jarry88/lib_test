@@ -9,7 +9,6 @@ import com.ftofs.lib_net.DemoApiService
 import com.ftofs.lib_net.model.HotZoneInfo
 import com.ftofs.lib_net.model.HotZoneVo
 import com.ftofs.lib_net.net.TwantResponse
-import com.ftofs.lib_net.smart.net_utils.GsonUtil
 import com.ftofs.twant.TwantApplication
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.Constant
@@ -18,7 +17,6 @@ import com.ftofs.twant.util.AssetsUtil
 import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
-import com.ftofs.lib_net.smart.net_utils.RetrofitUtil
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
@@ -110,7 +108,7 @@ class HotZoneViewModel(application: Application = BaseContext.instance.getContex
 
                 {
                     SLog.info("拉取專場數據 成功${it.toString()}")
-//                    hotZoneInfo.postValue(it)
+                    hotZoneInfo.postValue(it)
                 },
         )
     }

@@ -41,7 +41,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.facebook.AccessToken;
-import com.ftofs.lib_net.smart.net_utils.RetrofitUtil;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
@@ -92,6 +91,7 @@ import com.lxj.xpopup.core.BasePopupView;
 import com.orhanobut.hawk.Hawk;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
+import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -1816,7 +1816,7 @@ public class Util {
                 break;
             case "hotZone":
                 if (Config.DEVELOPER_MODE) {
-                    RetrofitUtil.getInstance().changeBaseApiUrl(Config.BASE_URL_API_49_229);
+//                    RetrofitUtil.getInstance().changeBaseApiUrl(Config.BASE_URL_API_49_229);
                     SLog.info("測試環境切換到229環境");
                 }
                 Util.startFragment(new HotZoneFragment(Integer.parseInt(linkValue)));

@@ -13,7 +13,7 @@ import com.gzp.lib_common.utils.SLog;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.orhanobut.hawk.Hawk;
-import com.ftofs.lib_net.smart.net_utils.MmkvUtils;
+import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
 
 import org.jetbrains.annotations.NotNull;
 
