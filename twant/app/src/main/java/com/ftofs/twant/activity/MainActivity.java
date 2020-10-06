@@ -61,6 +61,7 @@ import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
+import com.ftofs.twant.fragment.Test2Fragment;
 import com.ftofs.twant.fragment.TestFragment;
 import com.ftofs.twant.handler.StackViewTouchListener;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -139,7 +140,6 @@ import okhttp3.Response;
  */
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces, SimpleCallback {
     long lastBackPressedTime;
-    public static long changeColorId;
     /*
     需求
     http://ftofs.zentaopm.com/story-view-1050.html
@@ -512,7 +512,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                 } else if (position == 8) {
                                     MainActivity.this.getSupportDelegate().showFragmentStackHierarchyView();
                                 } else if (position == 9) { // 測試1
-                                    Util.startFragment(TestFragment.newInstance());
+                                    Util.startFragment(Test2Fragment.newInstance());
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_DATE);
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_VERSION);
                                     // Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));

@@ -11,18 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.entity.ChangeColorResult;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
@@ -38,16 +35,16 @@ import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.view.BannerViewHolder;
-import com.ftofs.twant.widget.BackgroundDrawable;
-import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.gzp.lib_common.utils.SLog;
 import com.orhanobut.hawk.Hawk;
 import com.rd.PageIndicatorView;
-import com.zhouwei.mzbanner.MZBannerView;
-import com.zhouwei.mzbanner.holder.MZHolderCreator;
-import com.zhouwei.mzbanner.holder.MZViewHolder;
+import com.youth.banner.Banner;
+import com.youth.banner.adapter.BannerImageAdapter;
+import com.youth.banner.holder.BannerImageHolder;
+import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.listener.OnPageChangeListener;
 
 import java.util.List;
 
@@ -79,58 +76,48 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         if (itemType == Constant.ITEM_TYPE_HEADER) {
             helper.addOnClickListener(R.id.btn_view_more_bargain, R.id.btn_view_more_group);
 
-            // 新Banner圖列表
-            MZBannerView<CrossBorderBannerItem> bannerView = helper.getView(R.id.mz_banner_view);
-            // 设置数据
-            bannerView.setPages(item.bannerItemList, new MZHolderCreator<CrossBorderBannerViewHolder>() {
+
+            Banner<CrossBorderBannerItem, BannerImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
+            banner.setAdapter(new BannerImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
                 @Override
-                public CrossBorderBannerViewHolder createViewHolder() {
-                    return new CrossBorderBannerViewHolder();
+                public void onBindView(BannerImageHolder holder, CrossBorderBannerItem data, int position, int size) {
+                    //图片加载自己实现
+                    Glide.with(holder.itemView).load(StringUtil.normalizeImageUrl(data.image)).centerCrop().into(holder.imageView);
+                }
+            })
+                    // .addBannerLifecycleObserver(this)//添加生命周期观察者
+                    .setIndicator(new CircleIndicator(context));
+            banner.addOnPageChangeListener(new OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    SLog.info("currPosition[%d]", position);
+                    CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
+
+                    boolean canChangeBackgroundColor = Hawk.get(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR);
+                    if (canChangeBackgroundColor) {
+                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, bannerItem.backgroundColorApp);
+                        SLog.info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
                 }
             });
-            bannerView.setIndicatorVisible(false);
-            bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
+            banner.setOnBannerListener(new OnBannerListener() {
                 @Override
-                public void onPageClick(View view, int i) {
-                    SLog.info("___i[%d]", i);
-                    CrossBorderBannerItem bannerItem = item.bannerItemList.get(i);
+                public void OnBannerClick(Object data, int position) {
+                    SLog.info("OnBannerClick[%d]", position);
+                    CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
                     Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp, true);
                 }
             });
-
-            if (isFirst) {
-                long changeColorId = System.currentTimeMillis();
-                MainActivity.changeColorId = changeColorId;
-                bannerView.addPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                    }
-
-                    @Override
-                    public void onPageSelected(int position) {
-                        SLog.info("currPosition[%d]", position);
-                        CrossBorderBannerItem bannerItem = item.bannerItemList.get(position);
-
-                        boolean canChangeBackgroundColor = Hawk.get(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR);
-                        if (canChangeBackgroundColor) {
-                            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, new ChangeColorResult(bannerItem.backgroundColorApp, changeColorId));
-                            SLog.info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-                        }
-                    }
-
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-
-                    }
-                });
-                isFirst = false;
-            }
-
-            bannerView.start();
-            bannerView.setDelayedTime(3000);
-
-
 
             // 導航區
             RecyclerView rvNavList = helper.getView(R.id.rv_nav_list);
@@ -482,5 +469,24 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) rvList.getLayoutManager();
         int position = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
         return position;
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull BaseViewHolder holder) {
+        super.onViewRecycled(holder);
+
+        SLog.info("onViewRecycled, position[%d]", holder.getAdapterPosition());
+    }
+
+    @Override
+    public void onViewAttachedToWindow(BaseViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        SLog.info("onViewAttachedToWindow, position[%d]", holder.getAdapterPosition());
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull BaseViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        SLog.info("onViewDetachedFromWindow, position[%d]", holder.getAdapterPosition());
     }
 }
