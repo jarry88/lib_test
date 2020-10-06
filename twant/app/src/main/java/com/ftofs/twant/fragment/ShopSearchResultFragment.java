@@ -21,11 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ShopGoodsGridAdapter;
+import com.ftofs.twant.adapter.ShopGoodsSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.entity.GoodsPair;
+import com.ftofs.twant.entity.GoodsSearchItem;
+import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ApiUtil;
@@ -58,9 +61,8 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
     String keyword;
 
     RecyclerView rvList;
-    ShopGoodsGridAdapter shopGoodsGridAdapter;
-    List<GoodsPair> goodsPairList = new ArrayList<>();  // 每行顯示兩個產品
-    GoodsPair currGoodsPair;  // 當前處理的goodsPair，考慮到分頁時，加載到奇數個產品，所以要預存一下GoodsPair
+    ShopGoodsSearchResultAdapter shopGoodsGridAdapter;
+    List<GoodsSearchItemPair> goodsPairList = new ArrayList<>();  // 每行顯示兩個產品
 
     // 當前加載第幾頁
     int currPage = 0;
@@ -127,51 +129,48 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
 
         rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        shopGoodsGridAdapter = new ShopGoodsGridAdapter(_mActivity, goodsPairList, true);
+        shopGoodsGridAdapter = new ShopGoodsSearchResultAdapter(_mActivity, goodsPairList);
         shopGoodsGridAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                GoodsPair goodsPair = goodsPairList.get(position);
-                // padding忽略點擊
-                if (goodsPair.getItemType() == Constant.ITEM_TYPE_LOAD_END_HINT) {
-                    ApiUtil.addPost(_mActivity,false);
+                GoodsSearchItemPair pair = goodsPairList.get(position);
+                // 點擊加載完成提示，忽略
+                if (pair.getItemType() == Constant.ITEM_TYPE_FOOTER) {
                     return;
                 }
 
-                Goods goods;
-                int commonId = -1;
                 int id = view.getId();
-                if (id == R.id.img_left_goods ) {
-                    goods = goodsPair.leftGoods;
-                    SLog.info("%s",commonId);
-                    commonId = goods.id;
-                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-
-                }else if(id==R.id.img_right_goods){
-                    goods = goodsPair.rightGoods;
-                    SLog.info("%s",commonId);
-                    commonId = goods.id;
-                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                }
-                int userId = User.getUserId();
-
-                if (id == R.id.btn_add_to_cart_left || id == R.id.btn_add_to_cart_right) {
-                    if (id == R.id.btn_add_to_cart_left) {
-                        commonId = goodsPair.leftGoods.commonId;
-                    }else {
-                        commonId = goodsPair.rightGoods.commonId;
-
-                    }
-                    if (userId > 0) {
-                        showSpecSelectPopup(commonId);
+                if (id == R.id.btn_goto_store_left || id == R.id.btn_goto_store_right) {
+                    int storeId;
+                    if (id == R.id.btn_goto_store_left) {
+                        storeId = pair.left.storeId;
                     } else {
-                        Util.showLoginFragment(requireContext());
+                        storeId = pair.right.storeId;
                     }
+
+                    Util.startFragment(ShopMainFragment.newInstance(storeId));
+                } else if (id == R.id.cl_container_left || id == R.id.cl_container_right) {
+                    int commonId;
+                    if (id == R.id.cl_container_left) {
+                        commonId = pair.left.commonId;
+                    } else {
+                        commonId = pair.right.commonId;
+                    }
+
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                 }
             }
         });
         shopGoodsGridAdapter.setEnableLoadMore(true);
         shopGoodsGridAdapter.setOnLoadMoreListener(this, rvList);
+
+        // 設置空頁面
+        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.layout_placeholder_no_data, null, false);
+        // 設置空頁面的提示語
+        TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
+        tvEmptyHint.setText(R.string.no_data_hint);
+        shopGoodsGridAdapter.setEmptyView(emptyView);
+
         rvList.setAdapter(shopGoodsGridAdapter);
 
 
@@ -297,40 +296,51 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
                             goodsPairList.clear();
                         }
                         EasyJSONArray goodsArray = responseObj.getSafeArray("datas.goodsCommonList");
+                        GoodsSearchItemPair pair = null;
                         for (Object object : goodsArray) {
                             EasyJSONObject goodsObject = (EasyJSONObject) object;
 
-                            int id = goodsObject.getInt("commonId");
+                            int commonId = goodsObject.getInt("commonId");
                             // 產品圖片
                             String goodsImageUrl = goodsObject.getSafeString("imageSrc");
+                            String storeAvatarUrl = ""; // 本店的不需要店鋪頭像
+                            String storeName = ""; // 本店的不需要店鋪名
                             // 產品名稱
                             String goodsName = goodsObject.getSafeString("goodsName");
                             // 賣點
                             String jingle = goodsObject.getSafeString("jingle");
                             // 獲取價格
                             double price = Util.getSpuPrice(goodsObject);
-
-                            Goods goods = new Goods(id, goodsImageUrl, goodsName, jingle, price);
-                            goods.goodsModal = StringUtil.safeModel(goodsObject);
-
-                            if (currGoodsPair == null) {
-                                currGoodsPair = new GoodsPair();
+                            String nationalFlag = "";
+                            if (goodsObject.exists("adminCountry.nationalFlag")) {
+                                nationalFlag = StringUtil.normalizeImageUrl(goodsObject.getSafeString("adminCountry.nationalFlag"));
                             }
 
-                            if (currGoodsPair.leftGoods == null) {
-                                currGoodsPair.leftGoods = goods;
-                            } else {
-                                currGoodsPair.rightGoods = goods;
-                                goodsPairList.add(currGoodsPair);
+                            GoodsSearchItem goods = new GoodsSearchItem(goodsImageUrl, storeAvatarUrl, storeId,
+                                    storeName, commonId, goodsName, jingle, price, nationalFlag);
+                            goods.goodsModel = StringUtil.safeModel(goodsObject);
 
-                                currGoodsPair = null;
+                            int appUsable = goodsObject.optInt("appUsable");
+                            int isPinkage = goodsObject.optInt("isPinkage");
+                            int isGift = goodsObject.optInt("isGift");
+                            goods.isFreightFree = (isPinkage == 1);
+                            goods.hasGift = (isGift == 1);
+                            goods.hasDiscount = (appUsable == 1);
+                            goods.tariffEnable = goodsObject.optInt("tariffEnable");
+
+                            if (pair == null) {
+                                pair = new GoodsSearchItemPair(Constant.ITEM_TYPE_NORMAL);
+                                pair.left = goods;
+                                goodsPairList.add(pair);
+                            } else {
+                                pair.right = goods;
+                                pair = null;
                             }
                         }
 
-                        // 如果剛好奇數個，可能沒添加到列表中
-                        if (currGoodsPair != null) {
-                            goodsPairList.add(currGoodsPair);
-                            currGoodsPair = null;
+                        if (!hasMore && goodsPairList.size() > 0) {
+                            // 如果全部加載完畢，添加加載完畢的提示
+                            goodsPairList.add(new GoodsSearchItemPair(Constant.ITEM_TYPE_FOOTER));
                         }
 
                         shopGoodsGridAdapter.setNewData(goodsPairList);
@@ -345,14 +355,6 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
-    }
-
-    private void showSpecSelectPopup(int commonId) {
-        new XPopup.Builder(_mActivity)
-                // 如果不加这个，评论弹窗会移动到软键盘上面
-                .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0,2, null))
-                .show();
     }
 
     /**
