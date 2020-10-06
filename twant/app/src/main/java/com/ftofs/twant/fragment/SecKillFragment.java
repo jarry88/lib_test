@@ -192,7 +192,6 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                 if (timeInfo == null) {
                     return;
                 }
-                SLog.info(String.format("%d天", timeInfo.day));
 
                 if (timeInfo.day > 0) {
                     tvCountDownDay.setVisibility(View.VISIBLE);
