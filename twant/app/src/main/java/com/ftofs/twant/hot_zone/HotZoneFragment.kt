@@ -2,7 +2,10 @@ package com.ftofs.twant.hot_zone
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ftofs.lib_net.model.HotZoneInfo
@@ -14,21 +17,33 @@ import com.ftofs.twant.config.Config
 import com.ftofs.twant.databinding.FragmentHotzoneBinding
 import com.ftofs.twant.databinding.ItemHotZoneVoBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
+import com.ftofs.twant.kotlin.adapter.DslAdapter
+import com.ftofs.twant.kotlin.adapter.DslViewHolder
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.smart.event.StateLiveData
+import com.gzp.lib_common.utils.BaseContext
+import kotlinx.android.synthetic.main.item_hot_zone_vo.*
 import retrofit2.http.GET
+import kotlin.reflect.full.primaryConstructor
 
 class HotZoneFragment(private val hotId:Int) :BaseTwantFragmentMVVM<FragmentHotzoneBinding,HotZoneViewModel> (){
     private val mAdapter by lazy {
-        object :DataBoundAdapter<HotZoneVo,ItemHotZoneVoBinding>(){
-            override val layoutId: Int
-                get() = R.layout.item_hot_zone_vo
-
-            override fun initView(binding: ItemHotZoneVoBinding, item: HotZoneVo) {
-                binding.hotZoneItem.apply {
-                    hotZoneVo.value=item
-                }
+//        object :DataBoundAdapter<HotZoneVo,ItemHotZoneVoBinding>(){
+//            override val layoutId: Int
+//                get() = R.layout.item_hot_zone_vo
+//
+//            override fun initView(binding: ItemHotZoneVoBinding, item: HotZoneVo) {
+//                binding.hotZoneItem.apply {
+//                    hotZoneVo.value=item
+//                }
+//                Glide.with(context).load(item.url).centerCrop().into(binding.test)
+//            }
+//
+//        }
+        object : DslAdapter<HotZoneVo,HotView>(HotView::class.primaryConstructor) {
+            override fun initView(view: HotView, item: HotZoneVo) {
+                view.hotZoneVo.value=item
             }
 
         }

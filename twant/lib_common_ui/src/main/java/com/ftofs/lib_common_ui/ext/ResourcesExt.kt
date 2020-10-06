@@ -44,9 +44,15 @@ fun View.dimen(@DimenRes dimen: Int): Int {
 fun dp2px(dpValue: Float?): Float {
     return dpValue?.run { 0.5f + dpValue * Resources.getSystem().displayMetrics.density } ?: 0f
 }
+fun px2dp(pxValue: Float?): Float {
+    return pxValue?.run { (this-0.5f)/Resources.getSystem().displayMetrics.density } ?: 0f
+}
 
 fun dp2px(dpValue: Int?): Int {
     return dp2px(dpValue?.toFloat()).toInt()
+}
+fun px2dp(pxValue: Int?): Int {
+    return px2dp(pxValue?.toFloat()).toInt()
 }
 
 fun sp2px(dpValue: Float?): Float {

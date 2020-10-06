@@ -1,55 +1,37 @@
 package com.ftofs.twant.hot_zone
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.GradientDrawable
-import android.icu.lang.UCharacter
-import android.icu.text.CaseMap
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
-import android.view.View
 import android.widget.FrameLayout
-import android.widget.Toast
-import androidx.lifecycle.LiveData
+import androidx.core.view.marginTop
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
-import com.bumptech.glide.Glide
-import com.ftofs.lib_net.model.HotZone
-import com.ftofs.lib_net.model.HotZoneInfo
 import com.ftofs.lib_net.model.HotZoneVo
 import com.ftofs.twant.R
-import com.ftofs.twant.adapter.BaseBindAdapter
 import com.ftofs.twant.dsl.*
-import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.login.Title
-import com.ftofs.twant.util.ToastUtil
-import com.ftofs.twant.util.UiUtil
 import com.ftofs.twant.util.Util
-import com.gzp.lib_common.smart.utils.KLog
-import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
-import com.qmuiteam.qmui.kotlin.onClick
-import kotlinx.android.synthetic.main.seller_edit_features_layout.view.*
-import kotlinx.coroutines.delay
+import java.lang.Exception
+
 //實現單張熱區圖邏輯的UI控件
 class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=null,defStyleAttr:Int=0):FrameLayout(context,attrs,defStyleAttr) {
 
     private var clickX: Float=0f
     private var clickY: Float=0f
+    private var xP: Float=0f
+    private var yP: Float=0f
     private val endText= MutableLiveData<String>()
     val hotZoneVo  =MutableLiveData<HotZoneVo>()
     private val contentView by lazy {
         LinearLayout {
             layout_width = match_parent
             layout_height= wrap_content
+            margin_top = 10
             onClick= {
                 SLog.info("點擊了"+it.run { "x :$x, $rotationX,y:$y" })
             }
+            gravity = gravity_center
             orientation= vertical
 //            onTouchEvent={v,e->
 //                when (e.action) {
@@ -62,36 +44,9 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
 //                    else ->performClick()
 //                }
 //            }
-            TextView {
-                layout_width= wrap_content
-                layout_height= wrap_content
-                text="commit"
-                textSize=30f
-                padding=10
-                shape {
-                    shape= GradientDrawable.RECTANGLE
-                    cornerRadius=10f
-
-                }
-                top_toTopOf= parent_id
-                onClick = { ToastUtil.success(context,"here")
-                    val a=liveData { delay(5000)
-                        emit("延時5秒后")
-                        endText.postValue("更新后的值")
-                    }
-                    a.value.apply {
-                        SLog.info("延時a秒后")
-                        endText.postValue("更新值")
-
-                    }
-//                    Thread{
-//                        endText.postValue("10")
-//                    }
-                }
-            }
             ImageView {
                 background = ColorDrawable(resources.getColor(R.color.black))
-                layout_width= match_parent
+                layout_width= wrap_content
                 layout_height= wrap_content
                 scaleType = scale_fit_xy
                 //保持比例
@@ -103,10 +58,12 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
                 onTouchEvent={v,e->
                     when (e.action) {
                         MotionEvent.ACTION_UP -> {
-                            SLog.info("點擊了"+e.run { "x :$rawX,y: $rawY" })
-                            clickX=e.rawX
-                            clickY=e.rawY
-                            onClickAction(e.rawX,e.rawY)
+                            updateP(width,height)
+                            clickX = e.rawX - this@HotView.x
+                            clickY = e.rawY - this@HotView.y - marginTop
+                            SLog.info("點擊了" + e.run { "x :$rawX,y: $rawY" })
+                            SLog.info("點擊了" + e.run { "x :$x,y: $y" })
+                            onClickAction(e.rawX, e.rawY)
                             true
                         }
                         else ->true
@@ -118,20 +75,21 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
                         SLog.info("觀測到之變")
                         (it as? HotZoneVo)?.let{ h ->
                             imageUrl=h.url
-                            h.originalHeight?.let {
-//                                ll_height=2*it.toInt()*(h.originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first
-                                ll_height=it.toInt()
-
-
-//                                ll_width=
-                            }
-                            h.originalWidth?.let {
-//                                ll_height=2*it.toInt()*(h.originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first
-                                ll_width=it.toInt()
-
-
-//                                ll_width=
-                            }
+                            SLog.info("點擊了:sumx :$width,sumy: $height" )
+//                            h.originalHeight?.let {
+////                                ll_height=2*it.toInt()*(h.originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first
+//                                ll_height=it.toInt()
+//
+//
+////                                ll_width=
+//                            }
+//                            h.originalWidth?.let {
+////                                ll_height=2*it.toInt()*(h.originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first
+//                                ll_width=it.toInt()
+//
+//
+////                                ll_width=
+//                            }
                         }
                     }
                 }
@@ -141,19 +99,41 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
         }
     }
 
+    private fun updateP(width:Int,height:Int) {
+        val h= hotZoneVo.value
+        h?.originalWidth?.let { it ->
+            xP=width/it.toFloat()
+        }
+        h?.originalHeight?.let { it ->
+            yP=height/it.toFloat()
+        }
+    }
+
     private fun onClickAction(rawX: Float=clickX, rawY: Float=clickY) {
-        SLog.info("  ")
+        SLog.info("點擊了"+"clickX :${clickX/xP},clickY: ${clickY/yP}" )
+
         hotZoneVo.value?.apply {
+            try {
+                hotZoneList?.forEach { it.toString() }
+                SLog.info("  ${hotZoneList?.size}")
             hotZoneList?.filter {
-                during(rawX,x,width.toFloat())&&during(rawY,y,height.toFloat())
-            }?.first()?.apply {
-                SLog.info(linkType)
+
+                    during(rawX,x,it.width?.toFloat()?:0f,xP)&&during(rawY,y,it.height?.toFloat()?:0f,yP)
+
+            }?.apply { forEach{it.toString()} }?.firstOrNull()?.apply {
+                SLog.info(linkType+" x${x},xw ${x?.toFloat()?:0f+width!!.toFloat()},y $y,h,$height")
                 Util.onLinkTypeAction(linkType,linkValue)
             }
+            }catch (e:Exception){
+            SLog.info("%s",e.toString())
+        }
         }
     }
 //rawX是不是在区间范围内
-    private fun during(rawX: Float, x: Float, width: Float)=rawX>=x&&rawX<=x+width
+    private fun during(rawX: Float, x: Float, width: Float,p:Float)=(rawX/p).run {
+    SLog.info(this.toString()+"${x}+ ${x+width}")
+    this>=x&&this<=x+width
+}
 
     init {
         contentView

@@ -1,5 +1,7 @@
 package com.ftofs.lib_net.model
 
+import java.io.Serializable
+
 data class HotZoneVo(
         val url:String?,
         val xProportion:String?,
@@ -7,7 +9,7 @@ data class HotZoneVo(
         val originalWidth:String?,
         val originalHeight	:String?,
         val hotZoneList:List<HotZone>?,
-)
+):Serializable
 
 data class HotZone(
         val x:String?,
