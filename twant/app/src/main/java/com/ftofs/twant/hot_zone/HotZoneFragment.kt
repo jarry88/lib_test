@@ -4,32 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.HotZoneInfo
 import com.ftofs.lib_net.model.HotZoneVo
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.config.Config
-import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.databinding.FragmentHotzoneBinding
 import com.ftofs.twant.databinding.ItemHotZoneVoBinding
 import com.ftofs.twant.dsl.onTouchEvent
 import com.ftofs.twant.dsl.scale_fit_xy
+import com.ftofs.twant.interfaces.SimpleCallback
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.kotlin.adapter.DslAdapter
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
-import com.wzq.mvvmsmart.event.StateLiveData
 import com.gzp.lib_common.utils.SLog
-import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil
+import com.wzq.mvvmsmart.event.StateLiveData
 import retrofit2.http.GET
-import kotlin.reflect.full.primaryConstructor
 
 class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHotzoneBinding, HotZoneViewModel> (){
     private val mAdapter by lazy {
-        object : DataBoundAdapter<HotZoneVo, ItemHotZoneVoBinding>(){
+        object : DataBoundAdapter<HotZoneVo, ItemHotZoneVoBinding>(parentFragment = this),SimpleCallback{
             override val layoutId: Int
                 get() = R.layout.item_hot_zone_vo
 
@@ -61,6 +57,8 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
              fun onClickAction(hotZoneVo:HotZoneVo?,imgX: Float, imgY: Float,w:Int,h:Int) {
                 hotZoneVo?.apply {
                     try {
+                        var type:String?=null
+                        var value:String?=null
                         hotZoneList?.forEach {
                             val xP= originalWidth?.let { it ->
                                 w/it.toFloat()
@@ -68,27 +66,30 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
                             val yP= originalHeight?.let { it ->
                                 h/it.toFloat()
                             }?:1f
-                            SLog.info("點擊   了${imgX/xP},${imgY/yP}")
-
+                            SLog.info("點擊   了${imgX/xP},   y:${imgY/yP}\n")
                             SLog.info(it.linkType + it.x + " " + it.width + "y," + it.y + " " + it.height)
-                            if (during(imgX, it.x?.toFloat() ?: 0f, it.width?.toFloat()
-                                            ?: 0f, xP) && during(imgY, it.y?.toFloat()
+                            if (during(imgX, it.x?.toFloat() ?: 0f, it.width?.toFloat() ?: 0f, xP) &&
+                                    during(imgY, it.y?.toFloat()
                                             ?: 0f, it.height?.toFloat() ?: 0f, yP)) {
                                 Util.onLinkTypeAction(it.linkType, it.linkValue)
-                                return
+                                return@forEach
                             } else {
                                 SLog.info("  dd")
                             }
 
                         }
                     }catch (e: Exception){
-                        SLog.info("%s", e.toString())
+                        SLog.info("有異常%s", e.toString())
                     }
                 }
             }
             fun during(rawX: Float, x: Float, width: Float, p: Float)=(rawX/p).run {
                 SLog.info(this.toString() + "  ${x}+ ${x + width}")
                 this>=x&&this<=x+width}
+
+            override fun onSimpleCall(data: Any?) {
+                TODO("Not yet implemented")
+            }
 
         }
 //        object : DslAdapter<HotZoneVo, HotView>(HotView::class.primaryConstructor) {
@@ -110,14 +111,12 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
     override fun initVariableId(): Int {
         return BR.viewModel
     }
-    interface TestHotApi{
-        @GET("hotzone/index?hotId=12")
-        fun getPopularMovie(): HotZoneInfo
-    }
-
     override fun initData() {
         SLog.info("here")
         binding.rvList.adapter=mAdapter
+//        binding.title.setTitleClickListener{
+//            Util.onLinkTypeAction("postId","2687")
+//        }
         binding.title.setLeftLayoutClickListener{hideSoftInputPop()}
 //        if (Config.DEVELOPER_MODE) {
 //            binding.title.setTitleClickListener{

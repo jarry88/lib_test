@@ -8,11 +8,13 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.ftofs.twant.R
 import com.ftofs.twant.interfaces.OnItemClickListener
+import com.gzp.lib_common.base.BaseFragment
 
 abstract class DataBoundAdapter<T, V : ViewDataBinding> (
         open val headId:Int=R.layout.category_head_item,
         private val footId:Int=R.layout.rl_foot_item,
-        private val emptyId:Int=R.layout.ic_placeholder_no_data
+        private val emptyId:Int=R.layout.ic_placeholder_no_data,
+        private val parentFragment:BaseFragment?=null
 ) :
     RecyclerView.Adapter<DataBoundViewHolder<V>>() {
     abstract val layoutId: Int
