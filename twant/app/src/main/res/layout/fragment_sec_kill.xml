@@ -95,7 +95,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:orientation="horizontal"
             android:gravity="center_vertical">
@@ -103,9 +103,19 @@
                 android:id="@+id/tv_count_down_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
+                android:layout_marginEnd="4dp"
                 android:text="距活動結束"
                 android:textColor="#A2A1A1"
+                android:textSize="13sp">
+            </TextView>
+            <TextView
+                android:id="@+id/tv_count_down_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:textColor="@color/tw_yellow"
+                android:visibility="gone"
+                android:text="距活動結束"
                 android:textSize="13sp">
             </TextView>
 

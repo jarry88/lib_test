@@ -63,6 +63,7 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
     List<Long> endTimeList = new ArrayList<>();  // 活動結束的時間戳
 
     ViewPager viewPager;
+    private TextView tvCountDownDay;
 
     public static SecKillFragment newInstance() {
         Bundle args = new Bundle();
@@ -112,6 +113,7 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
         int twYellow = getResources().getColor(R.color.tw_yellow, null);
         Drawable countDownDrawable = BackgroundDrawable.create(twYellow, Util.dip2px(_mActivity, 2));
         tvCountDownHour = view.findViewById(R.id.tv_count_down_hour);
+        tvCountDownDay = view.findViewById(R.id.tv_count_down_days);
         tvCountDownHour.setBackground(countDownDrawable);
         tvCountDownMinute = view.findViewById(R.id.tv_count_down_minute);
         tvCountDownMinute.setBackground(countDownDrawable);
@@ -177,6 +179,7 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
         viewPager.setCurrentItem(index);
 
         if (remainTime <= 0) {  // 如果已經開始，則不需要倒計時
+            tvCountDownDay.setVisibility(View.GONE);
             tvCountDownHour.setText("00");
             tvCountDownMinute.setText("00");
             tvCountDownSecond.setText("00");
@@ -189,12 +192,21 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
                 if (timeInfo == null) {
                     return;
                 }
+                SLog.info(String.format("%d天", timeInfo.day));
 
+                if (timeInfo.day > 0) {
+                    tvCountDownDay.setVisibility(View.VISIBLE);
+                    tvCountDownDay.setText(String.format("%d天", timeInfo.day));//新增天數顯示
+
+                } else {
+                    tvCountDownDay.setVisibility(View.GONE);
+                }
                 tvCountDownHour.setText(String.format("%02d", timeInfo.hour));
                 tvCountDownMinute.setText(String.format("%02d", timeInfo.minute));
                 tvCountDownSecond.setText(String.format("%02d", timeInfo.second));
             }
             public void onFinish() {
+                tvCountDownDay.setVisibility(View.GONE);
                 tvCountDownHour.setText("00");
                 tvCountDownMinute.setText("00");
                 tvCountDownSecond.setText("00");

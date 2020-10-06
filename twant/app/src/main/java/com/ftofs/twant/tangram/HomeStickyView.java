@@ -222,6 +222,6 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
 //        }
         String linkType = stickyCellData.appIndexNavigationLinkType;
         String linkValue = stickyCellData.appIndexNavigationLinkValue;
-        Util.onLinkTypeAction(linkType,linkValue);
+        Util.handleClickLink(linkType,linkValue,false);
     }
 }

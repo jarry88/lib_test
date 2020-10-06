@@ -154,7 +154,7 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
                 if (StringUtil.isEmpty(linkType)) {
                     return;
                 }
-                Util.onLinkTypeAction(linkType,webSliderItem.linkValue);
+                Util.handleClickLink(linkType,webSliderItem.linkValue,false);
             }
         });
 

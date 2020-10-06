@@ -41,7 +41,7 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
 //                                updateP(width, height)
 //                                clickX = x
 //                                clickY = y
-                                SLog.info("點擊了"+item.originalWidth +" h "+item.originalHeight + e.run { "x :$x,y: $y" })
+//                                SLog.info("點擊了"+item.originalWidth +" h "+item.originalHeight + e.run { "x :$x,y: $y" })
                                 e.run { onClickAction(item,x, y,width,height) }
 
 //                            performClick()
@@ -69,12 +69,9 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
                             SLog.info("點擊   了${imgX/xP},   y:${imgY/yP}\n")
                             SLog.info(it.linkType + it.x + " " + it.width + "y," + it.y + " " + it.height)
                             if (during(imgX, it.x?.toFloat() ?: 0f, it.width?.toFloat() ?: 0f, xP) &&
-                                    during(imgY, it.y?.toFloat()
-                                            ?: 0f, it.height?.toFloat() ?: 0f, yP)) {
-                                Util.onLinkTypeAction(it.linkType, it.linkValue)
+                                    during(imgY, it.y?.toFloat() ?: 0f, it.height?.toFloat() ?: 0f, yP)) {
+                                Util.handleClickLink(it.linkType, it.linkValue,false)
                                 return@forEach
-                            } else {
-                                SLog.info("  dd")
                             }
 
                         }

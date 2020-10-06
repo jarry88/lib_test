@@ -121,11 +121,13 @@ public class Time {
         int dint = (int) (d / 1000);
         // SLog.info("dint[%d]", dint);
         TimeInfo timeInfo = new TimeInfo();
+        timeInfo.day = dint / 86400;
+        int hint =  dint % 86400;
 
-        timeInfo.hour = dint / 3600;
-        dint = dint % 3600;
-        timeInfo.minute = dint / 60;
-        timeInfo.second = dint % 60;
+        timeInfo.hour = hint/ 3600;
+        hint = hint % 3600;
+        timeInfo.minute = hint / 60;
+        timeInfo.second = hint % 60;
         // SLog.info("hour[%d], minute[%d], second[%d]", timeInfo.hour, timeInfo.minute, timeInfo.second);
 
         return timeInfo;
