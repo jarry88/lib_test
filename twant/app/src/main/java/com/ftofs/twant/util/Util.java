@@ -1878,6 +1878,40 @@ public class Util {
                 break;
         }
     }
+
+    /**
+     * 从资源中获取字符串
+     * 以避免【Fragment ShopSearchFragment{39c1dc4} (2595bf1f-152a-4bc3-8cd0-a6bdf842a450)} not attached to a context.】这类
+     * 报错
+     * @return
+     */
+    public static String getString(int resId) {
+        return TwantApplication.Companion.get().getString(resId);
+    }
+
+
+    /**
+     * 先禁用View的点击，然后经过millis毫秒后恢复可点击
+     * @param view  目标View
+     * @param millis 多少毫秒后可以点击
+     */
+    public static void clickableAfter(View view, long millis) {
+        if (view == null || millis <= 0) {
+            return;
+        }
+
+        if (!view.isClickable()) {
+            return;
+        }
+
+        view.setClickable(false);
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setClickable(true);
+            }
+        }, millis);
+    }
 }
 
 

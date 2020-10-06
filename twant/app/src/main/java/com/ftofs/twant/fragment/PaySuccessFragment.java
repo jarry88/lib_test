@@ -319,7 +319,7 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
                         storeInfoItem.goodsSpec = ordersGoods.getSafeString("goodsFullSpecs");
                         storeInfoItem.selfTakeCode = String.valueOf(storeVo.getInt("takeCode"));
 
-                        storeInfoItem.storePhone = storeVo.getSafeString("contactsPhone");
+                        storeInfoItem.storePhone = storeVo.getSafeString("chainPhone");
                         storeInfoItem.storeBusInfo = storeVo.getSafeString("chainTrafficLine");
                         storeInfoItem.storeAddress = storeVo.getSafeString("chainAreaInfo") + " " + storeVo.getSafeString("chainAddress");
                         storeInfoItem.storeLatitude = storeVo.getDouble("lat");

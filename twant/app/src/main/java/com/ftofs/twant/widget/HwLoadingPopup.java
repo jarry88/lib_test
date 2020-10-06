@@ -13,6 +13,7 @@ import com.lxj.xpopup.util.XPopupUtils;
 public class HwLoadingPopup extends CenterPopupView implements View.OnClickListener {
     Context context;
 
+    TextView tvInfo;
     String info;
 
     public HwLoadingPopup(@NonNull Context context, String info) {
@@ -29,14 +30,15 @@ public class HwLoadingPopup extends CenterPopupView implements View.OnClickListe
     protected void onCreate() {
         super.onCreate();
 
-        TextView tvInfo = findViewById(R.id.tv_info);
-        tvInfo.setText(info);
+        tvInfo = findViewById(R.id.tv_info);
     }
 
     //完全可见执行
     @Override
     protected void onShow() {
         super.onShow();
+
+        tvInfo.setText(info);
     }
 
     //完全消失执行
@@ -52,6 +54,10 @@ public class HwLoadingPopup extends CenterPopupView implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }
 

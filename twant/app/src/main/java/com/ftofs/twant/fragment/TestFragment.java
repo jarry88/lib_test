@@ -79,6 +79,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     private NotificationManager mNotificationManager;
 
     ImageView imgTest;
+    View btnTest;
 
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
@@ -103,6 +104,8 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         EventBus.getDefault().register(this);
         mNotificationManager = (NotificationManager) _mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
         createNotificationChanel();
+
+        btnTest = view.findViewById(R.id.btn_test);
 
 
         Util.setOnClickListener(view,R.id.tv_28,this);
@@ -243,12 +246,9 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         int id = view.getId();
         String url;
         if (id == R.id.btn_test) {
-            ToastUtil.success(_mContext,"移除歷史用戶");
+
             SLog.info("onClick()");
-            showLoadingPopup();
-            start(BlankFragment.newInstance("",""));
-            loadPopup.dismiss();
-            UserManager.INSTANCE.removeUser();
+            Util.clickableAfter(btnTest, 3000);
         } else if (id == R.id.btn_test2) {
             Util.popToMainFragment(_mActivity);
         } else if (id == R.id.test_im) {

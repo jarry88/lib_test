@@ -66,6 +66,12 @@
             android:textColor="@color/tw_black"
             />
 
+        <!--
+        加入 android:imeOptions="actionDone" 这个属性
+        预防 java.lang.IllegalStateException: focus search returned a view that wasn't able to take focus! 这个问题
+        参考：
+        https://stackoverflow.com/questions/13614101/fatal-crash-focus-search-returned-a-view-that-wasnt-able-to-take-focus/47991577#47991577
+        -->
         <EditText
             android:id="@+id/et_leave_message"
             android:layout_width="match_parent"
@@ -77,6 +83,7 @@
             android:background="@null"
             android:singleLine="true"
             android:ellipsize="end"
+            android:imeOptions="actionDone"
             />
     </LinearLayout>
 

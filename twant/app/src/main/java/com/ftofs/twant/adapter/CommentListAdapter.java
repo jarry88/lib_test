@@ -15,6 +15,8 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.util.StringUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 
@@ -23,9 +25,7 @@ import java.util.List;
  * @author zwm
  */
 public class CommentListAdapter extends BaseMultiItemQuickAdapter<CommentItem, BaseViewHolder> {
-
-
-    public CommentListAdapter( @Nullable List<CommentItem> data) {
+    public CommentListAdapter(@Nullable List<CommentItem> data) {
         super( data);
 
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.comment_item);
@@ -33,7 +33,7 @@ public class CommentListAdapter extends BaseMultiItemQuickAdapter<CommentItem, B
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, CommentItem item) {
+    protected void convert(@NotNull BaseViewHolder helper, CommentItem item) {
         if (item.itemType == Constant.ITEM_TYPE_NO_DATA) {
             return;
         }
@@ -103,7 +103,12 @@ public class CommentListAdapter extends BaseMultiItemQuickAdapter<CommentItem, B
             ImageView imageView2 = helper.getView(R.id.img_comment2);
             ImageView imageView3 = helper.getView(R.id.img_comment3);
 
-            if (item.images.length >0) {
+            if (item.images == null) {
+                // 預防item.images為null
+                item.images = new String[0];
+            }
+
+            if (item.images.length > 0) {
                 Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.images[0])).centerCrop().into(imageView1);
                 helper.addOnClickListener(R.id.image_view);
                 helper.addOnClickListener(R.id.image_view);
@@ -125,7 +130,7 @@ public class CommentListAdapter extends BaseMultiItemQuickAdapter<CommentItem, B
         }
 
         ImageView iconThumb = helper.getView(R.id.icon_thumb);
-        if (item.isLike == 1) {
+        if (item.isLike == Constant.TRUE_INT) {
             iconThumb.setImageResource(R.drawable.icon_thumb_red_60);
         } else {
             iconThumb.setImageResource(R.drawable.icon_comment_thumb_grey);

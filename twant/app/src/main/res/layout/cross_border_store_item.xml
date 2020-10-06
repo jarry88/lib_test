@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_store_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="158dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80.35dp"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true">
+        <com.ftofs.twant.widget.StoreDesktop
+            android:layout_width="match_parent"
+            android:layout_height="6.65dp">
+        </com.ftofs.twant.widget.StoreDesktop>
+        <TextView
+            android:id="@+id/tv_store_name"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="創薈軒有限公司"
+            android:textSize="10sp"
+            android:textColor="#666"
+            android:gravity="center"
+            android:background="@drawable/border_type_a">
+        </TextView>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_store_figure"
+        android:layout_width="147dp"
+        android:layout_height="83dp"
+        android:src="@drawable/del"
+        android:layout_centerHorizontal="true">
+    </ImageView>
+</RelativeLayout>
+

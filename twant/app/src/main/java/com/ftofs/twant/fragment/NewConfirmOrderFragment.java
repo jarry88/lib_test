@@ -725,14 +725,18 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 path = Api.PATH_COMMIT_BILL_DATA;
             }
             SLog.info("url[%s],params[%s]",path,params.toString());
+
+            showLoadingPopup("正在提交訂單，請稍候...");
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
+                    dismissLoadingPopup();
                 }
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
+                    dismissLoadingPopup();
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
@@ -1684,6 +1688,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                     .asCustom(new HwLoadingPopup(_mActivity, info));
         }
 
+        loadingPopup.setInfo(info);
         loadingPopup.show();
     }
 
