@@ -47,7 +47,7 @@ class LoginActivity : MBaseActivity<LoginViewModel, ActivityLoginBinding>(), Sim
         }
     }
         override fun initView() {
-            setContentView(R.layout.activity_login)
+//            setContentView(R.layout.activity_login)
             mLoadingPopup = Util.createLoadingPopup(this)
 
             EventBus.getDefault().register(this)
