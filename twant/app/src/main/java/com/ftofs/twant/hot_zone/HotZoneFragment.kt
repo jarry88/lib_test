@@ -45,7 +45,7 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
 //                                updateP(width, height)
 //                                clickX = x
 //                                clickY = y
-                                SLog.info("點擊了" + e.run { "x :$x,y: $y" })
+                                SLog.info("點擊了"+item.originalWidth +" h "+item.originalHeight + e.run { "x :$x,y: $y" })
                                 e.run { onClickAction(item,x, y,width,height) }
 
 //                            performClick()
@@ -68,6 +68,8 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
                             val yP= originalHeight?.let { it ->
                                 h/it.toFloat()
                             }?:1f
+                            SLog.info("點擊   了${imgX/xP},${imgY/yP}")
+
                             SLog.info(it.linkType + it.x + " " + it.width + "y," + it.y + " " + it.height)
                             if (during(imgX, it.x?.toFloat() ?: 0f, it.width?.toFloat()
                                             ?: 0f, xP) && during(imgY, it.y?.toFloat()

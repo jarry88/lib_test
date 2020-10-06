@@ -976,7 +976,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.ll_voucher_container:
                 if (userId < 1) {
-                    start(LoginFragment.newInstance());
+                   Util.showLoginFragment(requireContext());
                     return;
                 }
                 new XPopup.Builder(_mActivity)
@@ -988,7 +988,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_show_conform:
                 // 顯示促銷信息
                 if (userId < 1) {
-                    start(LoginFragment.newInstance());
+                    Util.showLoginFragment(requireContext());
                     return;
                 }
                 // 顯示哪個Tab

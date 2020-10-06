@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.PostListAdapter;
@@ -26,6 +25,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.gzp.lib_common.BuildConfig;
 import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
@@ -482,7 +482,7 @@ public class CircleFragment extends MainBaseFragment implements View.OnClickList
                             public void onClick(View v) {
                                 int id = v.getId();
                                 if (id==-2&&!User.isLogin()) {
-                                    Util.startFragment(LoginFragment.newInstance());
+                                    Util.showLoginFragment(requireContext());
                                     return;
                                 }
                                 boolean isRepeat = onSelect(v);

@@ -116,7 +116,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             public void onClick(ViewGroupAdapter adapter, View view, int position) {
                 String token = User.getToken();
                 if (StringUtil.isEmpty(token)) {
-                    Util.startFragment(LoginFragment.newInstance());
+                    Util.showLoginFragment(requireContext());
                     return;
                 }
                 StoreVoucher storeVoucher = storeVoucherList.get(position);

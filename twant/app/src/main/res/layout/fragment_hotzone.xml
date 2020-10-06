@@ -19,7 +19,6 @@
             tools:listitem="@layout/item_hot_zone_vo"
 
 
-            android:padding="10dp"
             android:id="@+id/rv_list"/>
     </LinearLayout>
 </layout>
