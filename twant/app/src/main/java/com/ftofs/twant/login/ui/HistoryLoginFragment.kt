@@ -64,6 +64,14 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
         EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
 
         binding.title.setLeftLayoutClickListener{onBackPressedSupport()}
+//
+//        <com.ftofs.twant.login.Title
+//        android:layout_width="match_parent"
+//        android:layout_height="wrap_content"
+//        app:login_info="true"
+//        app:title="登入後享受更多服務"
+//        android:id="@+id/title"
+//        avi/>
         binding.llOtherLogin.setOnClickListener {
 //
 //            (activity as LoginActivity).onBackPressedSupport()
