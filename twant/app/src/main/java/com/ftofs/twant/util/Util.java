@@ -41,6 +41,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.facebook.AccessToken;
+import com.ftofs.lib_net.smart.net_utils.RetrofitUtil;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
@@ -81,6 +82,7 @@ import com.ftofs.twant.hot_zone.HotZoneFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.login.UserManager;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
+import com.ftofs.twant.tangram.SloganView;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.lib_common_ui.popup.TwLoadingPopup;
@@ -1813,6 +1815,10 @@ public class Util {
                 Util.startFragment(CrossBorderMainFragment.newInstance());
                 break;
             case "hotZone":
+                if (Config.DEVELOPER_MODE) {
+                    RetrofitUtil.getInstance().changeBaseApiUrl(Config.BASE_URL_API_49_229);
+                    SLog.info("測試環境切換到229環境");
+                }
                 Util.startFragment(new HotZoneFragment(Integer.parseInt(linkValue)));
                 break;
             default:

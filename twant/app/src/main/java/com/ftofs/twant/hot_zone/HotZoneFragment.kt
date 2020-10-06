@@ -2,32 +2,23 @@ package com.ftofs.twant.hot_zone
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import com.ftofs.lib_net.model.HotZoneInfo
 import com.ftofs.lib_net.model.HotZoneVo
-import com.ftofs.lib_net.model.ZoneVO
-import com.ftofs.twant.R
+import com.ftofs.lib_net.smart.net_utils.RetrofitUtil
 import com.ftofs.twant.BR
+import com.ftofs.twant.R
 import com.ftofs.twant.config.Config
+import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.databinding.FragmentHotzoneBinding
-import com.ftofs.twant.databinding.ItemHotZoneVoBinding
-import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.adapter.DslAdapter
-import com.ftofs.twant.kotlin.adapter.DslViewHolder
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
-import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.smart.event.StateLiveData
-import com.gzp.lib_common.utils.BaseContext
-import kotlinx.android.synthetic.main.item_hot_zone_vo.*
+import com.gzp.lib_common.utils.SLog
 import retrofit2.http.GET
 import kotlin.reflect.full.primaryConstructor
 
-class HotZoneFragment(private val hotId:Int) :BaseTwantFragmentMVVM<FragmentHotzoneBinding,HotZoneViewModel> (){
+class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHotzoneBinding, HotZoneViewModel> (){
     private val mAdapter by lazy {
 //        object :DataBoundAdapter<HotZoneVo,ItemHotZoneVoBinding>(){
 //            override val layoutId: Int
@@ -41,7 +32,7 @@ class HotZoneFragment(private val hotId:Int) :BaseTwantFragmentMVVM<FragmentHotz
 //            }
 //
 //        }
-        object : DslAdapter<HotZoneVo,HotView>(HotView::class.primaryConstructor) {
+        object : DslAdapter<HotZoneVo, HotView>(HotView::class.primaryConstructor) {
             override fun initView(view: HotView, item: HotZoneVo) {
                 view.hotZoneVo.value=item
             }
@@ -77,13 +68,26 @@ class HotZoneFragment(private val hotId:Int) :BaseTwantFragmentMVVM<FragmentHotz
         viewModel.getHotZoneData(hotId)
     }
 
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+        if (Config.DEVELOPER_MODE) {
+            if (Config.currEnv == Config.ENV_28) {
+                RetrofitUtil.getInstance().changeBaseApiUrl(Config.BASE_URL_API_28)
+
+            } else {
+                RetrofitUtil.getInstance().changeBaseApiUrl(Config.BASE_URL_API_29)
+            }
+            SLog.info("測試環境api切換到28,29環境")
+        }
+    }
+
     override fun initViewObservable() {
         viewModel.hotZoneInfo.observe(this){
             SLog.info("观测到hotZoneInfo数据")
             binding.title.text=it.hotName
             SLog.info(it.hotZoneVoList.toString())
             it.hotZoneVoList.takeIf { it.isNotEmpty() }?.apply {
-                mAdapter.addAll(this,true)
+                mAdapter.addAll(this, true)
             }
         }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){

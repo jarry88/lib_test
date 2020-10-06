@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.core.view.marginTop
 import androidx.lifecycle.MutableLiveData
 import com.ftofs.lib_net.model.HotZoneVo
@@ -21,6 +22,7 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
     private var clickY: Float=0f
     private var xP: Float=0f
     private var yP: Float=0f
+    private var mImageView:ImageView?=null
     private val endText= MutableLiveData<String>()
     val hotZoneVo  =MutableLiveData<HotZoneVo>()
     private val contentView by lazy {
@@ -29,7 +31,7 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
             layout_height= wrap_content
             margin_top = 10
             onClick= {
-                SLog.info("點擊了"+it.run { "x :$x, $rotationX,y:$y" })
+                SLog.info("點擊了"+it.run { "x :$x,y:$y,\n rotationX $rotationX,,rotationY:$rotationY  \n  " })
             }
             gravity = gravity_center
             orientation= vertical
@@ -51,19 +53,21 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
                 scaleType = scale_fit_xy
                 //保持比例
                 adjustViewBounds =true
-                onClick={
-                    onClickAction()
-                }
+//                onClick={
+//                    onClickAction(clickX,clickY)
+//                }
 
                 onTouchEvent={v,e->
                     when (e.action) {
                         MotionEvent.ACTION_UP -> {
                             updateP(width,height)
-                            clickX = e.rawX - this@HotView.x
-                            clickY = e.rawY - this@HotView.y - marginTop
-                            SLog.info("點擊了" + e.run { "x :$rawX,y: $rawY" })
+                            clickX = x
+                            clickY = y
+//                            SLog.info("點擊了" + e.run { "x :$rawX,y: $rawY" })
                             SLog.info("點擊了" + e.run { "x :$x,y: $y" })
-                            onClickAction(e.rawX, e.rawY)
+//                            SLog.info("點擊了" + e.run { "x :$x,y: $y" })
+                            e.run { onClickAction(x,y) }
+//                            performClick()
                             true
                         }
                         else ->true
@@ -76,23 +80,11 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
                         (it as? HotZoneVo)?.let{ h ->
                             imageUrl=h.url
                             SLog.info("點擊了:sumx :$width,sumy: $height" )
-//                            h.originalHeight?.let {
-////                                ll_height=2*it.toInt()*(h.originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first
-//                                ll_height=it.toInt()
-//
-//
-////                                ll_width=
-//                            }
-//                            h.originalWidth?.let {
-////                                ll_height=2*it.toInt()*(h.originalWidth?.toInt()?:0)/Util.getScreenDimension(BaseContext.instance.getContext()).first
-//                                ll_width=it.toInt()
-//
-//
-////                                ll_width=
-//                            }
+
                         }
                     }
                 }
+                mImageView=this@ImageView
 //                top_toTopOf = parent_id
             }
 
@@ -107,23 +99,25 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
         h?.originalHeight?.let { it ->
             yP=height/it.toFloat()
         }
+        SLog.info("更新了xP $xP,yP $yP")
     }
 
-    private fun onClickAction(rawX: Float=clickX, rawY: Float=clickY) {
-        SLog.info("點擊了"+"clickX :${clickX/xP},clickY: ${clickY/yP}" )
+    private fun onClickAction(imgX: Float, imgY: Float) {
+        SLog.info("點擊了"+",clickX :${imgX/xP}, imgY: ${imgY/yP}" )
 
         hotZoneVo.value?.apply {
             try {
-                hotZoneList?.forEach { it.toString() }
-                SLog.info("  ${hotZoneList?.size}")
-            hotZoneList?.filter {
+                hotZoneList?.forEach { it.linkType+it.x }
+                hotZoneList?.forEach {
+                    if (during(imgX, x, it.width?.toFloat()
+                                    ?: 0f, xP) && during(imgY, y, it.height?.toFloat() ?: 0f, yP)) {
+                        Util.onLinkTypeAction(it.linkType, it.linkValue)
+                        return
+                    } else {
+                        SLog.info("  dd")
+                    }
 
-                    during(rawX,x,it.width?.toFloat()?:0f,xP)&&during(rawY,y,it.height?.toFloat()?:0f,yP)
-
-            }?.apply { forEach{it.toString()} }?.firstOrNull()?.apply {
-                SLog.info(linkType+" x${x},xw ${x?.toFloat()?:0f+width!!.toFloat()},y $y,h,$height")
-                Util.onLinkTypeAction(linkType,linkValue)
-            }
+                }
             }catch (e:Exception){
             SLog.info("%s",e.toString())
         }
@@ -131,7 +125,7 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
     }
 //rawX是不是在区间范围内
     private fun during(rawX: Float, x: Float, width: Float,p:Float)=(rawX/p).run {
-    SLog.info(this.toString()+"${x}+ ${x+width}")
+    SLog.info(this.toString()+"  ${x}+ ${x+width}")
     this>=x&&this<=x+width
 }
 
