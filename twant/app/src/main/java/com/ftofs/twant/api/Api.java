@@ -1512,7 +1512,7 @@ public class Api {
     /**
      * 秒殺場次列表
      */
-    public static final String PATH_SEC_KILL = "/seckill";
+    public static final String PATH_SEC_KILL = "/seckill/v2";
 
     /**
      * 秒殺場次商品列表
