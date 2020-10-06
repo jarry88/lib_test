@@ -313,6 +313,7 @@
 
     <!-- 優選好店 -->
     <LinearLayout
+        android:id="@+id/ll_best_store_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
