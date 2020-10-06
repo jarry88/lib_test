@@ -3,6 +3,7 @@ package com.ftofs.twant.adapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.gzp.lib_common.utils.SLog;
 import com.orhanobut.hawk.Hawk;
@@ -292,32 +294,26 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 helper.setGone(R.id.ll_group_container, false);
             }
 
-            helper.setGone(R.id.ll_store_container, item.storeList.size() > 0);  // 如果沒有店鋪，則隱藏
-            helper.setVisible(R.id.rl_store2_container, item.storeList.size() > 1);
+            helper.setGone(R.id.gl_store_container, item.storeList.size() > 0);  // 如果沒有店鋪，則隱藏
+            GridLayout glStoreContainer = helper.getView(R.id.gl_store_container);
+            glStoreContainer.removeAllViews();
+            for (Store store : item.storeList) {
+                View storeItemView = LayoutInflater.from(context).inflate(R.layout.cross_border_store_item, glStoreContainer, false);
+                ImageView imgStoreFigure = storeItemView.findViewById(R.id.img_store_figure);
+                SLog.info("store.storeFigureImage[%s]", store.storeFigureImage);
+                Glide.with(context).load(StringUtil.normalizeImageUrl(store.storeFigureImage)).centerCrop().into(imgStoreFigure);
+                ((TextView) storeItemView.findViewById(R.id.tv_store_name)).setText(store.storeName);
+                storeItemView.findViewById(R.id.rl_store_container).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Util.startFragment(ShopMainFragment.newInstance(store.storeId));
+                    }
+                });
 
-            if (item.storeList.size() > 0) {
-                Store store = item.storeList.get(0);
-                ImageView imgStore1Figure = helper.getView(R.id.img_store1_figure);
-                Glide.with(context).load(StringUtil.normalizeImageUrl(store.storeFigureImage)).centerCrop().into(imgStore1Figure);
-                helper.setText(R.id.tv_store1_name, store.storeName);
-                helper.getView(R.id.rl_store1_container).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Util.startFragment(ShopMainFragment.newInstance(store.storeId));
-                    }
-                });
-            }
-            if (item.storeList.size() > 1) {
-                Store store = item.storeList.get(1);
-                ImageView imgStore1Figure = helper.getView(R.id.img_store2_figure);
-                Glide.with(context).load(StringUtil.normalizeImageUrl(store.storeFigureImage)).centerCrop().into(imgStore1Figure);
-                helper.setText(R.id.tv_store_name, store.storeName);
-                helper.getView(R.id.rl_store1_container).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Util.startFragment(ShopMainFragment.newInstance(store.storeId));
-                    }
-                });
+                TextView tvTest = new TextView(context);
+                tvTest.setText("aaaaaabbb");
+                ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Util.dip2px(context, 127));
+                glStoreContainer.addView(storeItemView, layoutParams);
             }
         } else if (itemType == Constant.ITEM_TYPE_NORMAL) {
             helper.addOnClickListener(R.id.cl_container_left, R.id.cl_container_right);

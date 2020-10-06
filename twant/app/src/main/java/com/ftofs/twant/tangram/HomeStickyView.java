@@ -21,6 +21,8 @@ import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.fragment.CategoryFragment;
 import com.ftofs.twant.fragment.CircleFragment;
+import com.ftofs.twant.fragment.CrossBorderHomeFragment;
+import com.ftofs.twant.fragment.CrossBorderMainFragment;
 import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
@@ -81,6 +83,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         contentView.findViewById(R.id.btn_category_goods).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_brand).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_friend).setOnClickListener(this);
+        contentView.findViewById(R.id.btn_goto_cross_border).setOnClickListener(this);
         contentView.findViewById(R.id.btn_random_friend).setOnClickListener(this);
         contentView.findViewById(R.id.icon_takewant).setOnClickListener(this);
 
@@ -178,7 +181,9 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                 mainFragment.showHideFragment(MainFragment.MESSAGE_FRAGMENT);
             }
 
-        }else if (id == R.id.btn_random_friend) {
+        } else if (id == R.id.btn_goto_cross_border) {
+            Util.startFragment(CrossBorderMainFragment.newInstance());
+        } else if (id == R.id.btn_random_friend) {
             Util.startFragment(new RandomFriendListFragment());
 //            Util.startFragment(new Test2Fragment());
 
