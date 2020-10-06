@@ -2786,7 +2786,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         currSKUGroupBuy = (goodsInfo.isGroup == Constant.TRUE_INT);
         if (currGroupBuyStatus != GroupBuyStatus.CLOSED && currSKUGroupBuy) {
             tvGroupPrice.setText(StringUtil.formatFloat(goodsInfo.groupPrice));
-            tvGroupOriginalPrice.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.appPrice0, 0));
+            tvGroupOriginalPrice.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
             tvGroupDiscountAmount.setText("拼團立減 " + StringUtil.formatPrice(_mActivity, goodsInfo.groupDiscountAmount, 0));
 
             showHideGroupBuyView(true);
