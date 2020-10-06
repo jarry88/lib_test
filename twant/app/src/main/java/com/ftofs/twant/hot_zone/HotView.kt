@@ -79,7 +79,7 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
                         SLog.info("觀測到之變")
                         (it as? HotZoneVo)?.let{ h ->
                             imageUrl=h.url
-                            SLog.info("點擊了:sumx :$width,sumy: $height" )
+//                            SLog.info("點擊了:sumx :$width,sumy: $height" )
 
                         }
                     }
@@ -99,7 +99,7 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
         h?.originalHeight?.let { it ->
             yP=height/it.toFloat()
         }
-        SLog.info("更新了xP $xP,yP $yP")
+//        SLog.info("更新了xP $xP,yP $yP")
     }
 
     private fun onClickAction(imgX: Float, imgY: Float) {
@@ -107,10 +107,10 @@ class HotView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=nul
 
         hotZoneVo.value?.apply {
             try {
-                hotZoneList?.forEach { it.linkType+it.x }
                 hotZoneList?.forEach {
-                    if (during(imgX, x, it.width?.toFloat()
-                                    ?: 0f, xP) && during(imgY, y, it.height?.toFloat() ?: 0f, yP)) {
+                    SLog.info(it.linkType+it.x +" "+it.width+"y,"+it.y+" "+it.height)
+                    if (during(imgX, it.x?.toFloat()?:0f, it.width?.toFloat()
+                                    ?: 0f, xP) && during(imgY, it.y?.toFloat()?:0f, it.height?.toFloat() ?: 0f, yP)) {
                         Util.onLinkTypeAction(it.linkType, it.linkValue)
                         return
                     } else {

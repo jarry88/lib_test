@@ -63,6 +63,7 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.TestFragment;
 import com.ftofs.twant.handler.StackViewTouchListener;
+import com.ftofs.twant.hot_zone.HotZoneFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.gzp.lib_common.base.callback.CommonCallback;
@@ -515,7 +516,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                     // Util.startFragment(TestFragment.newInstance());
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_DATE);
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_VERSION);
-                                    Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));
+//                                    Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));
+                                    Util.startFragment(new HotZoneFragment(12));
                                 } else if (position == 10) { // 測試2
                                     // EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WEIXIN_LOGIN, null);
 
