@@ -933,9 +933,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String createTime = ordersVo.getSafeString("createTime");
                     String paymentTime = ordersVo.getSafeString("paymentTime");
                     String sendTime = ordersVo.getSafeString("sendTime");
-                    if (responseObj.exists("datas.sellerMobile")) {
-                        storePhone = responseObj.getSafeString("datas.sellerMobile");
-                    }
+                    storePhone = responseObj.optString("datas.ordersVo.storePhone");
                     tvReceiverName.setText(receiverName);
                     tvMobile.setText(mobile);
                     tvAddress.setText(address);

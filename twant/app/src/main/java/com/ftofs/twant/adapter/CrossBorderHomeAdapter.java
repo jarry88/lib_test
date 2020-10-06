@@ -294,7 +294,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 helper.setGone(R.id.ll_group_container, false);
             }
 
-            helper.setGone(R.id.gl_store_container, item.storeList.size() > 0);  // 如果沒有店鋪，則隱藏
+            helper.setGone(R.id.ll_best_store_container, item.storeList.size() > 0);  // 如果沒有店鋪，則隱藏
             GridLayout glStoreContainer = helper.getView(R.id.gl_store_container);
             glStoreContainer.removeAllViews();
             for (Store store : item.storeList) {
