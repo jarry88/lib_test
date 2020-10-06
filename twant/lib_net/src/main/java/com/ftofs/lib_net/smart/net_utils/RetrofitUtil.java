@@ -13,7 +13,7 @@ public class RetrofitUtil<T> {
     private Retrofit retrofit;
 
     private RetrofitUtil() {
-       changeBaseApiUrl("http://192.168.5.28/api/");
+       changeBaseApiUrl("https://f2.twant.com/api/");
     }
 
     public void changeBaseApiUrl(String baseUrl) {
@@ -24,8 +24,8 @@ public class RetrofitUtil<T> {
         OkHttpClient okHttpClient = OkHttpUtil.getInstance().okHttpsCacheClient();
         retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                //.addConverterFactory(GsonConverterFactory.create(GsonUtil.getGson()))
+//                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(GsonUtil.getGson()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(baseUrl)
                 .build();

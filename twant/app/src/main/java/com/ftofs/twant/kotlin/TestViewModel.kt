@@ -30,7 +30,8 @@ class TestViewModel(application: Application):BaseViewModel(application) {
 
         chain.proceed(newRequest)
 
-    }.run { build() }).baseUrl(Config.API_BASE_URL+"/")
+    }.run { build() })
+            .baseUrl(Config.API_BASE_URL+"/")
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
     .addConverterFactory(GsonConverterFactory.create()).build()
     val tApi =retrofit.create(DemoApiService::class.java)
