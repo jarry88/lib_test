@@ -50,7 +50,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         super.onViewCreated(view, savedInstanceState);
 
         tvAppVersion = view.findViewById(R.id.tv_app_version);
-        tvAppVersion.setText("Version " + BuildConfig.VERSION_NAME + " - build" + BuildConfig.VERSION_CODE + " - " +  BuildConfig.FLAVOR);
+        tvAppVersion.setText(BuildConfig.VERSION_NAME + " - build" + BuildConfig.VERSION_CODE + " - " +  BuildConfig.FLAVOR + " - " +  BuildConfig.BUILD_TYPE);
 
         Util.setOnClickListener(view, R.id.btn_view_takewant_introduction, this);
         Util.setOnClickListener(view, R.id.btn_view_secret_terms, this);

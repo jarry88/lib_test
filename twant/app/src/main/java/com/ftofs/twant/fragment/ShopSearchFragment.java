@@ -188,7 +188,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
 
         try {
             // 最新產品
-            searchItemList.add(new SearchItem(SearchItem.ITEM_TYPE_CATEGORY, SearchItem.CATEGORY_ID_NEW, getString(R.string.text_new_in_chinese)));
+            searchItemList.add(new SearchItem(SearchItem.ITEM_TYPE_CATEGORY, SearchItem.CATEGORY_ID_NEW, Util.getString(R.string.text_new_in_chinese)));
             EasyJSONArray newGoodsVoList = responseObj.getSafeArray("datas.newGoodsVoList");
             for (Object object : newGoodsVoList) {
                 EasyJSONObject newGoodsVo = (EasyJSONObject) object;

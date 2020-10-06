@@ -25,6 +25,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SPField;
 import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.AddrItem;
@@ -58,6 +59,7 @@ import com.ftofs.twant.widget.RealNamePopup;
 import com.ftofs.twant.widget.SoldOutPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
+import com.orhanobut.hawk.Hawk;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -718,6 +720,10 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 return;
             }
 
+            if (Constant.PAYMENT_TYPE_CODE_OFFLINE.equals(paymentTypeCode)) { // 如果是【货到付款】，记录一下订单金额
+                Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, totalPrice);
+            }
+
             String path;
             if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) { // 门店自提
                 path = Api.PATH_SELF_TAKE;
@@ -725,14 +731,18 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 path = Api.PATH_COMMIT_BILL_DATA;
             }
             SLog.info("url[%s],params[%s]",path,params.toString());
+
+            showLoadingPopup("正在提交訂單，請稍候...");
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
+                    dismissLoadingPopup();
                 }
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
+                    dismissLoadingPopup();
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
@@ -1684,6 +1694,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                     .asCustom(new HwLoadingPopup(_mActivity, info));
         }
 
+        loadingPopup.setInfo(info);
         loadingPopup.show();
     }
 

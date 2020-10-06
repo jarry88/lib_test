@@ -20,11 +20,9 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.entity.ChangeColorResult;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
-import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.EBMessage;
@@ -291,7 +289,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
 
         String themeColor = Hawk.get(SPField.FIELD_CURR_CROSS_BORDER_THEME_COLOR);
         if (!StringUtil.isEmpty(themeColor)) {
-            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, new ChangeColorResult(themeColor, 9999));
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, themeColor);
         }
     }
 

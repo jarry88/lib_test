@@ -35,7 +35,7 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
 
 
-        versionCode 213
+        versionCode 214
 
         versionName "1.2.8.01"
 
@@ -176,6 +176,8 @@ dependencies {
     implementation 'com.isseiaoki:simplecropview:1.1.8'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'org.litepal.android:java:3.0.0'
+
+    implementation 'com.youth.banner:banner:2.1.0'
 
     implementation 'com.github.lyrebirdstudio:Croppy:0.2'
     //    implementation 'com.github.pinguo-zhouwei:MZBannerView:v2.0.2'
