@@ -17,8 +17,8 @@ import com.mobile.auth.gatewayauth.PhoneNumberAuthHelper
 import com.mobile.auth.gatewayauth.ResultCode
 import com.mobile.auth.gatewayauth.TokenResultListener
 import com.mobile.auth.gatewayauth.model.TokenRet
-import com.gzp.lib_common.smart.event.StateLiveData
-import com.gzp.lib_common.smart.utils.KLog
+import com.wzq.mvvmsmart.event.StateLiveData
+import com.wzq.mvvmsmart.utils.KLog
 
 class OneStepLoginFragment:BaseTwantFragmentMVVM<OneStepLoginLayoutBinding, OneKeyLoginViewModel>(){
 

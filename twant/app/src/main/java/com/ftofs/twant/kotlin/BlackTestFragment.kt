@@ -10,9 +10,9 @@ import com.ftofs.twant.databinding.TestBlackFragmentBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
-import com.gzp.lib_common.smart.base.BaseFragmentMVVM
-import com.gzp.lib_common.smart.utils.KLog
-import com.gzp.lib_common.smart.utils.ToastUtils
+import com.wzq.mvvmsmart.base.BaseFragmentMVVM
+import com.wzq.mvvmsmart.utils.KLog
+import com.wzq.mvvmsmart.utils.ToastUtils
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
 

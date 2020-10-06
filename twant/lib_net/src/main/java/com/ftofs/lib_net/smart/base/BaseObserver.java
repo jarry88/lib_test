@@ -3,10 +3,10 @@ package com.ftofs.lib_net.smart.base;
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
 
-import com.ftofs.lib_net.smart.net_utils.MmkvUtils;
-import com.gzp.lib_common.smart.Utils;
+import com.wzq.mvvmsmart.net.net_utils.MmkvUtils;
 import com.gzp.lib_common.R;
-import com.gzp.lib_common.smart.utils.KLog;
+import com.wzq.mvvmsmart.net.net_utils.Utils;
+import com.wzq.mvvmsmart.utils.KLog;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;

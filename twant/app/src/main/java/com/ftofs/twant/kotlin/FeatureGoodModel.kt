@@ -3,7 +3,7 @@ package com.ftofs.twant.kotlin
 import com.ftofs.lib_net.model.SellerGoodsItem
 import com.ftofs.lib_net.MRequest
 import com.ftofs.lib_net.model.SellerPageVO
-import com.gzp.lib_common.smart.base.BaseModelMVVM
+import com.wzq.mvvmsmart.base.BaseModelMVVM
 import com.ftofs.lib_net.smart.base.BaseResponse
 import io.reactivex.Observable
 

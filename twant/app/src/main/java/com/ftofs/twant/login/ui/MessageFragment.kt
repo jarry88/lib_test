@@ -37,8 +37,8 @@ import com.gzp.lib_common.utils.SLog
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.umeng.analytics.MobclickAgent
-import com.gzp.lib_common.smart.event.StateLiveData
-import com.gzp.lib_common.smart.utils.KLog
+import com.wzq.mvvmsmart.event.StateLiveData
+import com.wzq.mvvmsmart.utils.KLog
 import java.util.*
 
 class MessageFragment @JvmOverloads constructor(val mobile: String="", val sdkAvailable: Boolean = true, private val firstPage: Boolean = false) : BaseTwantFragmentMVVM<MessageLoginLayoutBinding, MessageLoginViewModel>(),OnSelectedListener {

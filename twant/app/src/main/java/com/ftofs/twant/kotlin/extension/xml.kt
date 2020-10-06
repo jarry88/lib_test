@@ -5,7 +5,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.ftofs.twant.util.StringUtil
-import com.gzp.lib_common.smart.utils.KLog
+import com.wzq.mvvmsmart.utils.KLog
 
 @BindingAdapter("imgUrl")
 fun setImgUrl(view: ImageView, url: String) {

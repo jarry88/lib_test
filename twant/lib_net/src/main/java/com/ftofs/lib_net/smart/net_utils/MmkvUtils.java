@@ -1,7 +1,7 @@
 package com.ftofs.lib_net.smart.net_utils;
 
 import com.tencent.mmkv.MMKV;
-import com.gzp.lib_common.smart.utils.KLog;
+import com.wzq.mvvmsmart.utils.KLog;
 
 /**
  * created 王志强 2020.04.30

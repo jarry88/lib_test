@@ -10,7 +10,7 @@ import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.widget.SpecSelectPopup
 import com.lxj.xpopup.XPopup
-import com.gzp.lib_common.smart.utils.ToastUtils
+import com.wzq.mvvmsmart.utils.ToastUtils
 
 /**
  * author : 谷志鹏

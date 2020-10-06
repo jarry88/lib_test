@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
-import com.ftofs.lib_net.smart.net_utils.MetaDataUtil;
+import com.wzq.mvvmsmart.net.net_utils.MetaDataUtil;
 
 /**
  * @author   created 王志强 2020.04.30

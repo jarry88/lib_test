@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.gzp.lib_common.smart.base.BaseViewModelMVVM
-import com.gzp.lib_common.smart.base.IBaseViewMVVM
-import com.gzp.lib_common.smart.utils.KLog
-import com.gzp.lib_common.smart.widget.EmptyViewHelper
+import com.wzq.mvvmsmart.base.BaseViewModelMVVM
+import com.wzq.mvvmsmart.base.IBaseViewMVVM
+import com.wzq.mvvmsmart.utils.KLog
+import com.wzq.mvvmsmart.widget.EmptyViewHelper
 import java.lang.reflect.ParameterizedType
 abstract class BaseTwantFragmentMVVM<V : ViewDataBinding, VM : BaseViewModelMVVM> :BaseFragment(), IBaseViewMVVM {
     protected lateinit var mActivity: FragmentActivity
