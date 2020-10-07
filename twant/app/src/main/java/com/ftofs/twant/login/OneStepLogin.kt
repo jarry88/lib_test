@@ -307,10 +307,9 @@ object OneStepLogin{
                 SLog.info("獲取成功")
                 EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS, null)
 
-                var tokenRet: TokenRet? = null
                 try {
                     loadingPopup?.dismiss()
-                    tokenRet = JSON.parseObject(s, TokenRet::class.java)
+                    val tokenRet = JSON.parseObject(s, TokenRet::class.java)
                     if (ResultCode.CODE_START_AUTHPAGE_SUCCESS == tokenRet.code) {
                         Log.i("TAG", "唤起授权页成功：$s")
                     }
@@ -330,10 +329,10 @@ object OneStepLogin{
                 EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS, null)
 
                 Log.e("OneKeyLoginActivity.TAG", "获取token失败：$s")
-                var tokenRet: TokenRet? = null
+
                 mPhoneNumberAuthHelper?.quitLoginPage()
                 try {
-                    tokenRet = JSON.parseObject(s, TokenRet::class.java)
+                    val tokenRet = JSON.parseObject(s, TokenRet::class.java)
                     if (ResultCode.CODE_ERROR_USER_CANCEL == tokenRet?.code) {
                         //模拟的是必须登录 否则直接退出app的场景
                         SLog.info("模拟的是必须登录 否则直接退出app的场景")

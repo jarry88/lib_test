@@ -46,7 +46,7 @@ class HotView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 //                    onClickAction(clickX,clickY)
 //                }
 
-                onTouchEvent={ v, e->
+                onTouchEvent={ _, e->
                     when (e.action) {
                         MotionEvent.ACTION_UP -> {
                             updateP(width, height)
