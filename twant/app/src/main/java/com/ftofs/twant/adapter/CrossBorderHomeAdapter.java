@@ -285,8 +285,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 groupGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
-                        Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                        if (position < item.bargainGoodsList.size()) {
+                            CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
+                            Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                        }
                     }
                 });
                 rvGroupList.setAdapter(groupGoodsAdapter);
