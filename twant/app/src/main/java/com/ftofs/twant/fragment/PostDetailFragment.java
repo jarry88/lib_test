@@ -868,14 +868,14 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
             return;
         }
         if (requestCode == RequestCode.ADD_COMMENT.ordinal()) {
-            if (data.get("voucherList") != null) {
-                String zoneId=data.getString("zoneId");
-                ArrayList<StoreVoucher> vouchers = data.getParcelableArrayList("voucherList");
-                new XPopup.Builder(_mActivity)
-                        .moveUpToKeyboard(false)
-                        .asCustom(new MoonVoucherListPopup(_mActivity,vouchers,zoneId))
-                        .show();
-            }
+//            if (data.get("voucherList") != null) {//屏蔽中秋活动弹窗
+//                String zoneId=data.getString("zoneId");
+//                ArrayList<StoreVoucher> vouchers = data.getParcelableArrayList("voucherList");
+//                new XPopup.Builder(_mActivity)
+//                        .moveUpToKeyboard(false)
+//                        .asCustom(new MoonVoucherListPopup(_mActivity,vouchers,zoneId))
+//                        .show();
+//            }
 
             tvPostTitle.postDelayed(new Runnable() {
                 @Override

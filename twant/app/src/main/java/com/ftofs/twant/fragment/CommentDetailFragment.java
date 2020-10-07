@@ -453,20 +453,20 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 //                        silMainContainer.closeInputPane();
 //
 //                        quoteReply.isQuoteReply = false;
-                        if (chanel == Constant.COMMENT_CHANNEL_POST && responseObj.exists("datas.voucherList")) {
-                            ArrayList<StoreVoucher> voucherList = new ArrayList<>();
-                            for (Object o : responseObj.getSafeArray("datas.voucherList")) {
-                                EasyJSONObject voucher = (EasyJSONObject) o;
-                                voucherList.add(StoreVoucher.parse(voucher));
-                            }
-                            if (voucherList.size() > 0) {
-                                String zoneId = responseObj.getSafeString("datas.zoneId");
-                                hideSoftInput();
-                                new XPopup.Builder(_mActivity)
-                                        .moveUpToKeyboard(false)
-                                        .asCustom(new MoonVoucherListPopup(_mActivity,voucherList,zoneId))
-                                        .show();
-                            }
+                        if (chanel == Constant.COMMENT_CHANNEL_POST && responseObj.exists("datas.voucherList")) {//屏蔽中秋活动弹窗代码
+//                            ArrayList<StoreVoucher> voucherList = new ArrayList<>();
+//                            for (Object o : responseObj.getSafeArray("datas.voucherList")) {
+//                                EasyJSONObject voucher = (EasyJSONObject) o;
+//                                voucherList.add(StoreVoucher.parse(voucher));
+//                            }
+//                            if (voucherList.size() > 0) {
+//                                String zoneId = responseObj.getSafeString("datas.zoneId");
+//                                hideSoftInput();
+//                                new XPopup.Builder(_mActivity)
+//                                        .moveUpToKeyboard(false)
+//                                        .asCustom(new MoonVoucherListPopup(_mActivity,voucherList,zoneId))
+//                                        .show();
+//                            }
                         }
                     } catch (Exception e) {
                         SLog.info("Error!%s", e);
