@@ -385,7 +385,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
 
         // 當用戶下單地址為中國內陸地址時，跨城購產品訂單物流配送方式隱藏【到店自提】方式，僅保留物流配送方式。
         int districtId1 = Constant.DISTRICT_ID_MACAO;
-        if (mAddrItem != null && mAddrItem.areaIdList.size() > 0) {
+        if (mAddrItem != null && mAddrItem.areaIdList != null && mAddrItem.areaIdList.size() > 0) {
             districtId1 = mAddrItem.areaIdList.get(0);
         }
         if (tariffTotalEnable == Constant.TRUE_INT && districtId1 != Constant.DISTRICT_ID_MACAO && districtId1 != Constant.DISTRICT_ID_HONGKONG) {
