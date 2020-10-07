@@ -347,13 +347,14 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         } else if (id == R.id.btn_thumb) {
             if (!User.isLogin()) {
                 SLog.info("登錄");
-                start(LoginFragment.newInstance());
+                Util.showLoginFragment(requireContext());
                 return;
             }
             switchThumbState();
         } else if (id == R.id.btn_commit) {
             if (!User.isLogin()) {
-                start(LoginFragment.newInstance());
+                Util.showLoginFragment(requireContext());
+
                 return;
             }
 
@@ -489,7 +490,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             }
         } else if (id == R.id.img_commenter_avatar) {
             if (!User.isLogin()) {
-                start(LoginFragment.newInstance());
+                Util.showLoginFragment(requireContext());
                 return;
             }
             start(MemberInfoFragment.newInstance(commentItem.memberName));

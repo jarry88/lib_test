@@ -226,7 +226,8 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
                         popTo(MainFragment.class, false);
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.MY_FRAGMENT);
                     } else {
-                        popTo(LoginFragment.class, false);
+                        hideSoftInput();
+                        Util.showLoginFragment(requireContext());
                     }
 
 

@@ -289,19 +289,21 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     })).show();
         } else if (id == R.id.btn_add_post_comment) {
             if (!User.isLogin()) {
-                start(LoginFragment.newInstance());
+                Util.showLoginFragment(requireContext());
                 return;
             }
             startForResult(AddCommentFragment.newInstance(postId, Constant.COMMENT_CHANNEL_POST,authorMemberName), RequestCode.ADD_COMMENT.ordinal());
         } else if (id == R.id.btn_thumb) {
             if (!User.isLogin()) {
-                start(LoginFragment.newInstance());
+                Util.showLoginFragment(requireContext());
+
                 return;
             }
             switchInteractiveState(STATE_TYPE_THUMB);
         } else if (id == R.id.btn_like) {
             if (!User.isLogin()) {
-                start(LoginFragment.newInstance());
+                Util.showLoginFragment(requireContext());
+
                 return;
             }
             switchInteractiveState(STATE_TYPE_LIKE);
@@ -354,7 +356,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     }
                     //start(MemberInfoFragment.newInstance(authorMemberName));
                 } else {
-                    start(LoginFragment.newInstance());
+                    Util.showLoginFragment(requireContext());
                 }
             }
         } else if (id == R.id.ll_post_goods_container) {
