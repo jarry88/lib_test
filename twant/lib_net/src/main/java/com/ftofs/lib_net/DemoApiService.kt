@@ -79,7 +79,7 @@ interface DemoApiService {
     @GET("app/home/random/member/list")
     suspend fun getRandomMemberList(@Query("token")token:String?): TwantResponse<RandomFriendInfo>
 
-    //【登錄模塊】
+//【登錄模塊】
     //賬號密碼登錄
     @POST("v2/login")
     suspend fun getLogin(@Query("mobile")mobile:String,@Query("password")password:String,@Query("clientType")clientType:String):TwantResponse<LoginInfo>
@@ -106,9 +106,23 @@ interface DemoApiService {
     suspend fun passwordLogin(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
     @POST("loginconnect/new/weixin/login")
     suspend fun getWXLoginStepOne(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
-    //【熱區模塊】 熱區首頁
+//【登錄模塊】結束
+
+//【熱區模塊】 熱區首頁
     @GET("hotzone/index")
     suspend fun getHotZoneIndex(@Query("hotId")hotId: Int?): TwantResponse<HotZoneInfo>
+//【熱區模塊】 熱區結束
+
+//【GOEFT】房產信息模塊
+
+    @GET("goeft/property/propertyId")//房產詳情
+    suspend fun getPropertyInfoList(@Query("propertyId")propertyId: Int?): TwantResponse<GoeftDetailInfo>
+    @GET("goeft/property/list")//房產信息列表
+    suspend fun getPropertynfoList(@QueryMap queryParams: Map<String, Any?>): TwantResponse<GoeftInfo>
+    @GET("goeft/user/uid")//房產用戶列表
+    suspend fun getGoeftUserUid(@QueryMap queryParams: Map<String, Int?>): TwantResponse<GoeftInfo>
+//【GOEFT】房產模塊結束
+
 
 
 //@Field

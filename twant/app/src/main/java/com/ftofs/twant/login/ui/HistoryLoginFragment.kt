@@ -33,9 +33,9 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     override fun initVariableId(): Int {
         return BR.viewModel
     }
-    lateinit var mLoadingPopup: BasePopupView
+    private var mLoadingPopup: BasePopupView?=null
     fun showLoading(){
-        mLoadingPopup.show()
+        mLoadingPopup?.show()
 
     }
     private val aViewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
@@ -50,7 +50,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
 
     override fun onSupportInvisible() {
         super.onSupportInvisible()
-        mLoadingPopup.dismiss()
+        mLoadingPopup?.dismiss()
     }
 
     override fun onDestroy() {
@@ -143,7 +143,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
                 hideSoftInput()
 
                 SLog.info("登錄成功")
-                com.ftofs.twant.util.Util.getMemberToken(_mActivity)
+                Util.getMemberToken(_mActivity)
                 (activity as LoginActivity).onBackPressedSupport()
             }
             msgError.observe(this@HistoryLoginFragment){if(it.isNotEmpty()) ToastUtil.error(context, it)}
@@ -151,7 +151,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
         //登陆成功才会保存账号信息
 
     }
-        viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
+        viewModel.stateLiveData.stateEnumMutableLiveData.observe(this) {
             when (it) {
                 StateLiveData.StateEnum.Success -> {
                     mLoadingPopup?.dismiss()
@@ -163,7 +163,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
 //                    loadingUtil?.hideLoading()
                 }
             }
-        })
+        }
     }
 
 
