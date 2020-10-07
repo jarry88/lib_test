@@ -253,7 +253,7 @@
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
                         android:text="跨城購"
-                        android:textColor="@color/tw_blue"
+                        android:textColor="@android:color/white"
                         android:textSize="9sp"
                         android:visibility="gone" />
 
@@ -416,7 +416,7 @@
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
                         android:text="跨城購"
-                        android:textColor="@color/tw_blue"
+                        android:textColor="@android:color/white"
                         android:textSize="9sp"
                         android:visibility="gone" />
 
