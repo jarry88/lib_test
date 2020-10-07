@@ -21,7 +21,7 @@
 
 
     <!-- 秒杀进度条的宽度 -->
-    <dimen name="sec_kill_progress_bar_width">118dp</dimen>
+    <dimen name="sec_kill_progress_bar_width">148dp</dimen>
 
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_42">42dp</dimen>

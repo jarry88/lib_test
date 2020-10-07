@@ -536,6 +536,7 @@ public class Util {
                     String memberName = result.substring(10);
                     SLog.info("memberName[%s]", memberName);
 
+
                     Util.startFragment(MemberInfoFragment.newInstance(memberName));
                 } else {
                     ToastUtil.error(context, "無效的二維碼");
@@ -1832,6 +1833,7 @@ public class Util {
      * @param linkValue 页面起始传递值
      */
     public static void onLinkTypeAction(String linkType, String linkValue) {
+        SLog.info("執行條轉" +linkType +"   "+linkValue);
         switch (linkType) {
             case "none":
                 // 无操作
@@ -1839,6 +1841,15 @@ public class Util {
             case "url":
                 // 外部鏈接
                 Util.startFragment(ExplorerFragment.newInstance(linkValue, true));
+                break;
+
+            case "tariffBuy":
+                Util.startFragment(CrossBorderMainFragment.newInstance());
+                break;
+
+            case "postId":
+                int postId = Integer.parseInt(linkValue);
+                Util.startFragment(PostDetailFragment.newInstance(postId));
                 break;
             case "keyword":
                 // 关键字

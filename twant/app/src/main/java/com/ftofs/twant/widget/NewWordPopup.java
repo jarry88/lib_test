@@ -112,7 +112,11 @@ public class NewWordPopup extends CenterPopupView implements View.OnClickListene
             if ("goods".equals(commandType)) { // 如果是普通商品，没有折扣，则隐藏原价
                 findViewById(R.id.ll_original_price_container).setVisibility(GONE);
             } else { // 如果是活动商品，则设置原价
-                double originalPrice = Double.parseDouble(extra.optString("appPriceMax"));
+                double originalPrice = 0;
+                String appPriceMax=extra.optString("appPriceMax");
+                if(appPriceMax!=null&&!appPriceMax.isEmpty()){
+                    originalPrice=Double.parseDouble(appPriceMax);
+                }
                 TextView tvOriginalPrice = findViewById(R.id.tv_original_price);
                 tvOriginalPrice.setText(StringUtil.formatFloat(originalPrice));
             }

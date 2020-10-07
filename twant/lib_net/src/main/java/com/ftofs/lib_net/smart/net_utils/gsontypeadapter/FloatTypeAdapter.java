@@ -1,4 +1,4 @@
-package com.wzq.mvvmsmart.net.net_utils.gsontypeadapter;
+package com.ftofs.lib_net.smart.net_utils.gsontypeadapter;
 
 import android.util.Log;
 
