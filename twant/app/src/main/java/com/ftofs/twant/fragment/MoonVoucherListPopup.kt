@@ -22,6 +22,9 @@ import com.lxj.xpopup.core.CenterPopupView
 import com.lxj.xpopup.util.XPopupUtils
 import kotlinx.coroutines.*
 
+/**
+ * 中秋活动已过期，无用代码
+ */
 class MoonVoucherListPopup(context: Context, private val voucherList: MutableList<out StoreVoucher>, val zoneId: String):CenterPopupView(context),CoroutineScope by MainScope(){
     override fun getImplLayoutId(): Int {
         return R.layout.popup_moon_voucher_list

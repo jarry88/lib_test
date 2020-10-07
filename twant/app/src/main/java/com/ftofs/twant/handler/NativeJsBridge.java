@@ -17,7 +17,6 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.fragment.ChatFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
-import com.ftofs.twant.fragment.LoginFragment;
 import com.gzp.lib_common.base.callback.CommonCallback;
 
 import com.gzp.lib_common.utils.FileUtil;
@@ -274,7 +273,8 @@ public class NativeJsBridge {
         SLog.info("login data[%s]", data);
         String memberToken = User.getUserInfo(SPField.FIELD_MEMBER_TOKEN, null);
         if (StringUtil.isEmpty(memberToken)) {
-            Util.startFragment(LoginFragment.newInstance());
+            Util.showLoginFragment(context);
+
         }
         H5GameFragment fragment = (H5GameFragment) supportFragment;
         SLog.info(fragment.getUrl());

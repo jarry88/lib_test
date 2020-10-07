@@ -60,6 +60,7 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
     String shareCoverUrl;
 
     TextView btnInviteFriend;
+    private boolean needLoadDataAgain=false;
 
     public static BargainDetailFragment newInstance(int openId, int commonId, int goodsId) {
         Bundle args = new Bundle();
@@ -206,7 +207,8 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
         } else if (id == R.id.btn_invite_friend) {
             if (isOwner != Constant.TRUE_INT) { // 我也要買
                 if (!User.isLogin()) {
-                    startForResult(LoginFragment.newInstance(), RequestCode.USER_LOGIN.ordinal());
+                    Util.showLoginFragment(requireContext());
+                    needLoadDataAgain = true;
                     return;
                 }
 
@@ -222,7 +224,9 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
             if (isOwner != Constant.TRUE_INT) { // 幫他砍價
                 if (!User.isLogin()) {
 //                    startActivityForResult();
-                    startForResult(LoginFragment.newInstance(), RequestCode.USER_LOGIN.ordinal());
+//                    startForResult(LoginFragment.newInstance(), RequestCode.USER_LOGIN.ordinal());
+                    Util.showLoginFragment(requireContext());
+                    needLoadDataAgain = true;
                     return;
                 }
                 bargainHelp();
@@ -293,6 +297,15 @@ public class BargainDetailFragment extends BaseFragment implements View.OnClickL
         SLog.info("onBackPressedSupport");
         hideSoftInputPop();
         return true;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (needLoadDataAgain) {
+            needLoadDataAgain = false;
+            loadData();
+        }
     }
 
     @Override

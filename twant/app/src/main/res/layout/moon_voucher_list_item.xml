@@ -14,7 +14,6 @@
         <LinearLayout
             android:layout_width="230dp"
             android:layout_height="62dp"
-            android:background="@drawable/moon_voucher_item_bg"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -62,8 +61,7 @@
 
             <ImageView
                 android:layout_width="70.5dp"
-                android:layout_height="64dp"
-                android:src="@{vo.memberIsReceive==1?@drawable/moon_voucher_get:@drawable/moon_voucher_unreceived,default=@drawable/moon_voucher_unreceived}" />
+                android:layout_height="64dp"/>
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

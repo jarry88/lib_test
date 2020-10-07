@@ -202,7 +202,6 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
 //            start(TestFragment.newInstance());
         }else if (id == R.id.btn_post1) {
             ToastUtil.info(_mActivity, "btn_post1");
-            new XPopup.Builder(getContext()).asCustom(new MoonVoucherListPopup(getContext(),new ArrayList<StoreVoucher>(),"10")).show();
         } else if (id == R.id.btn_test2) {
             ToastUtil.info(_mActivity, "進入熱區頁 12");
             KLog.INSTANCE.e("進入熱區頁");

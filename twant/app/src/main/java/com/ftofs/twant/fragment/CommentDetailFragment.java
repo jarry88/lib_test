@@ -347,13 +347,14 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         } else if (id == R.id.btn_thumb) {
             if (!User.isLogin()) {
                 SLog.info("登錄");
-                start(LoginFragment.newInstance());
+                Util.showLoginFragment(requireContext());
                 return;
             }
             switchThumbState();
         } else if (id == R.id.btn_commit) {
             if (!User.isLogin()) {
-                start(LoginFragment.newInstance());
+                Util.showLoginFragment(requireContext());
+
                 return;
             }
 
@@ -452,20 +453,20 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 //                        silMainContainer.closeInputPane();
 //
 //                        quoteReply.isQuoteReply = false;
-                        if (chanel == Constant.COMMENT_CHANNEL_POST && responseObj.exists("datas.voucherList")) {
-                            ArrayList<StoreVoucher> voucherList = new ArrayList<>();
-                            for (Object o : responseObj.getSafeArray("datas.voucherList")) {
-                                EasyJSONObject voucher = (EasyJSONObject) o;
-                                voucherList.add(StoreVoucher.parse(voucher));
-                            }
-                            if (voucherList.size() > 0) {
-                                String zoneId = responseObj.getSafeString("datas.zoneId");
-                                hideSoftInput();
-                                new XPopup.Builder(_mActivity)
-                                        .moveUpToKeyboard(false)
-                                        .asCustom(new MoonVoucherListPopup(_mActivity,voucherList,zoneId))
-                                        .show();
-                            }
+                        if (chanel == Constant.COMMENT_CHANNEL_POST && responseObj.exists("datas.voucherList")) {//屏蔽中秋活动弹窗代码
+//                            ArrayList<StoreVoucher> voucherList = new ArrayList<>();
+//                            for (Object o : responseObj.getSafeArray("datas.voucherList")) {
+//                                EasyJSONObject voucher = (EasyJSONObject) o;
+//                                voucherList.add(StoreVoucher.parse(voucher));
+//                            }
+//                            if (voucherList.size() > 0) {
+//                                String zoneId = responseObj.getSafeString("datas.zoneId");
+//                                hideSoftInput();
+//                                new XPopup.Builder(_mActivity)
+//                                        .moveUpToKeyboard(false)
+//                                        .asCustom(new MoonVoucherListPopup(_mActivity,voucherList,zoneId))
+//                                        .show();
+//                            }
                         }
                     } catch (Exception e) {
                         SLog.info("Error!%s", e);
@@ -489,7 +490,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             }
         } else if (id == R.id.img_commenter_avatar) {
             if (!User.isLogin()) {
-                start(LoginFragment.newInstance());
+                Util.showLoginFragment(requireContext());
                 return;
             }
             start(MemberInfoFragment.newInstance(commentItem.memberName));
