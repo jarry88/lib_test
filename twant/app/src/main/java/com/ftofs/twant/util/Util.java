@@ -536,6 +536,7 @@ public class Util {
                     String memberName = result.substring(10);
                     SLog.info("memberName[%s]", memberName);
 
+
                     Util.startFragment(MemberInfoFragment.newInstance(memberName));
                 } else {
                     ToastUtil.error(context, "無效的二維碼");

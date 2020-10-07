@@ -866,8 +866,12 @@ public class StringUtil {
      */
     public static String getCouponWord(String str) {
         Pattern pattern = Pattern.compile("€.+€");
+        Pattern pattern1 = Pattern.compile("\\$.+\\$");//兼容舊版口令
         String word = null;
         Matcher matcher = pattern.matcher(str);
+        if(!matcher.find()){
+            matcher = pattern1.matcher(str);
+        }
         if (matcher.find()) {
             word = matcher.group(0);
 
