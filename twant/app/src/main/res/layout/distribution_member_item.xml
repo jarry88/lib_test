@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="@drawable/white_r4dp_bg">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_member_avatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="12dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/avatar_female">
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_alignTop="@id/img_member_avatar"
+        android:layout_alignBottom="@id/img_member_avatar"
+        android:layout_toEndOf="@id/img_member_avatar"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_member_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tw_black"
+            android:text="Constantin Flatley"
+            android:textSize="15sp">
+        </TextView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提成："
+                android:textSize="12sp"
+                android:textColor="@color/tw_medium_grey">
+            </TextView>
+            <TextView
+                android:id="@+id/tv_commission_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.00"
+                android:textSize="12sp"
+                android:textColor="@color/tw_black">
+
+            </TextView>
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@id/img_member_avatar"
+        android:layout_alignBottom="@id/img_member_avatar">
+        <TextView
+            android:id="@+id/tv_member_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="層級：一級"
+            android:textColor="@color/tw_yellow"
+            android:textSize="12sp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_upper_level_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="上級：想要城用戶0"
+            android:textColor="@color/tw_medium_grey"
+            android:textSize="12sp">
+        </TextView>
+    </FrameLayout>
+
+
+    <!-- 每一項的分隔線 -->
+    <View
+        android:id="@+id/vw_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/tw_light_grey">
+
+    </View>
+</RelativeLayout>

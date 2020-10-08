@@ -58,6 +58,7 @@ import com.ftofs.twant.fragment.HomeFragment;
 import com.ftofs.twant.fragment.JobDetailFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
+import com.ftofs.twant.fragment.MyTeamFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
@@ -516,9 +517,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                     // Util.startFragment(Test2Fragment.newInstance());
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_DATE);
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_VERSION);
+                                    Util.startFragment(MyTeamFragment.newInstance());
 
-//                                    Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));
-                                    Util.startFragment(new HotZoneFragment(12));
 
                                     // Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));
                                     // SLog.info("STR[%s]", Util.getString(R.string.facebook_app_id));
