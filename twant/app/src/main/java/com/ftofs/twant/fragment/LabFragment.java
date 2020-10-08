@@ -204,7 +204,6 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         }else if (id == R.id.btn_post1) {
             ToastUtil.info(_mActivity, "btn_post1");
         } else if (id == R.id.btn_test2) {
-            ToastUtil.info(_mActivity, "進入熱區頁 12");
             KLog.INSTANCE.e("進入熱區頁");
             //49  8080
             start(new BlackTestFragment());

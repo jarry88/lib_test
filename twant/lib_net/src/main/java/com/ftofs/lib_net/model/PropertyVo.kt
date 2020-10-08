@@ -77,7 +77,11 @@ data class PropertyVo(
         val unit: String,
         val unitPrice: Int,
         val photoList:List<GoPhoto>
-):Serializable
+):Serializable{
+    fun getTypeName():String=when(isType){
+        else ->"住宅"
+    }
+}
 data class GoPhoto(
         val isDefault: Int,
         val monthPic: Int,

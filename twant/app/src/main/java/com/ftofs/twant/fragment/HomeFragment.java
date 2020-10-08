@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.lib_common_ui.UiUtilsKt;
+import com.ftofs.twant.go853.Go853HouseListFragment;
 import com.ftofs.twant.login.service.LoginServiceImpl;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
@@ -409,7 +410,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 //            final BasePopupView load=Util.createLoadingPopup(requireContext()).show();
 
 //            UiUtilsKt.createLoadingPopup(requireContext()).show();
-            start(LabFragment.newInstance());
+            start(new Go853HouseListFragment());
 //            loginService.start(_mActivity);
         }
     }

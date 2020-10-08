@@ -140,11 +140,12 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
         viewModel.hotZoneInfo.observe(this){
             SLog.info("观测到hotZoneInfo数据")
             binding.title.text=it.hotName
-            SLog.info(it.hotZoneVoList.toString())
-            it.hotZoneVoList.takeIf { it.isNotEmpty() }?.apply {
+            SLog.info(it.hotZoneVoList?.toString())
+            it.hotZoneVoList?.takeIf { it.isNotEmpty() }?.apply {
                 mAdapter.addAll(this, true)
             }
         }
+
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
             when(it){
                 StateLiveData.StateEnum.Error -> SLog.info("异常")

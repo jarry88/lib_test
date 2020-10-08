@@ -37,6 +37,10 @@
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal"
                 android:layout_marginBottom="4dp">
+<!--                android:background="@{vo.saleType ==1?@color/tw_yellow:vo.saleType==2?@color/tw_red:@color/tw_blue}"-->
+
+<!--                android:text="@{vo.saleType ==1?@string/rent:vo.saleType==2?@string/onsale:@string/onsale_rent,default=`出售`}"-->
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,11 +51,10 @@
                     android:padding="@dimen/dp_2"
                     android:paddingStart="4dp"
                     android:paddingEnd="4dp"
-                    android:background="@{vo.saleType ==1?@color/tw_yellow:vo.saleType==2?@color/tw_red:@color/tw_blue}"
-                    android:text="@{vo.saleType ==1?@string/rent:vo.saleType==2?@string/onsale:@string/onsale_rent,default=`出售`}"
-
-                    radius="@{3f}"
+                radius="@{3f}"
                     />
+<!--                android:text="@{vo.detail,default =` 金峰南岸 高層 \r\n兩房兩廁1176呎 \r\n東南光猛 品味生活\r\n吉租 14000HKD \r\n\r\n何生63038005歡迎合作`}"-->
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -60,7 +63,7 @@
                     android:textSize="15sp"
                     android:lines="1"
                     android:ellipsize="end"
-                    android:text="@{vo.detail,default =` 金峰南岸 高層 \r\n兩房兩廁1176呎 \r\n東南光猛 品味生活\r\n吉租 14000HKD \r\n\r\n何生63038005歡迎合作`}"/>
+                />
 
 
             </LinearLayout>
@@ -77,54 +80,63 @@
                     android:textColor="@color/tw_black"
                     android:layout_marginEnd="10dp"
                     android:lines="1"/>
+<!--                android:text="@{vo.intervalStoreRooms>0?String.valueOf(vo.intervalStoreRooms)+`舖`:``+vo.intervalRoom>0?String.valueOf(vo.intervalRoom)+`房`:``+vo.intervalHall>0?String.valueOf(vo.intervalHall)+`廳`:``+vo.intervalTerrace>0?String.valueOf(vo.intervalTerrace)+`露臺`:``+vo.intervalToilet>0?String.valueOf(vo.intervalToilet)+`厠`:`` ,default =`3舖5房8客廳6露臺7厠所`}"-->
+<!--                android:text="@{String.valueOf(vo.buildingArea)+` 呎`,default =`385 呎`}"-->
+
                 <TextView
+                    android:id="@+id/room_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vo.intervalStoreRooms>0?String.valueOf(vo.intervalStoreRooms)+`舖`:``+vo.intervalRoom>0?String.valueOf(vo.intervalRoom)+`房`:``+vo.intervalHall>0?String.valueOf(vo.intervalHall)+`廳`:``+vo.intervalTerrace>0?String.valueOf(vo.intervalTerrace)+`露臺`:``+vo.intervalToilet>0?String.valueOf(vo.intervalToilet)+`厠`:`` ,default =`3舖5房8客廳6露臺7厠所`}"
                     android:textSize="12sp"
                     android:textColor="@color/tw_black"
                     android:layout_marginEnd="10dp"
-                    android:lines="1"/>
+
+                android:lines="1"/>
+<!--                android:text="@{vo.saleType==1?`$`+vo.rentalPrice+`元/月`:vo.saleType==2?`$`+vo.sellingPrice+`萬`:`售`+`$`+vo.sellingPrice+`萬`+`  `+`租`+`$`+vo.rentalPrice+`元/月`,default=`萬`}"-->
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(vo.buildingArea)+` 呎`,default =`385 呎`}"
                     android:textSize="12sp"
                     android:textColor="@color/tw_black"
                     android:layout_marginEnd="10dp"
-                    android:lines="1"/>
+
+                android:lines="1"/>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@{vo.saleType==1?`$`+vo.rentalPrice+`元/月`:vo.saleType==2?`$`+vo.sellingPrice+`萬`:`售`+`$`+vo.sellingPrice+`萬`+`  `+`租`+`$`+vo.rentalPrice+`元/月`,default=`萬`}"
-                android:textSize="15sp"
-                android:textColor="@color/tw_red"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
+<!--                                android:text="@{vo.isType==1?`住宅`:vo.isType==2?`商鋪`:vo.isType==3?`車位`:vo.isType==4?`工業`:vo.isType==5?`地皮`:vo.isType==6?`寫字樓`:vo.isType==7?`別墅`:``,default =`住宅`}"
+-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vo.isType==1?`住宅`:vo.isType==2?`商鋪`:vo.isType==3?`車位`:vo.isType==4?`工業`:vo.isType==5?`地皮`:vo.isType==6?`寫字樓`:vo.isType==7?`別墅`:``,default =`住宅`}"
                     android:textSize="12sp"
                     android:textColor="@color/tw_black"
                     android:layout_marginEnd="10dp"
-                    android:lines="1"/>
+
+                android:lines="1"/>
+<!--                android:text="@{vo.editDate.length()>10?vo.editDate.substring(0,10):``,default =`2020-09-21`}"-->
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vo.editDate.length()>10?vo.editDate.substring(0,10):``,default =`2020-09-21`}"
                     android:textSize="12sp"
                     android:textColor="@color/tw_black"
                     android:layout_marginEnd="10dp"
                     android:lines="1"/>
             </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/tw_red"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

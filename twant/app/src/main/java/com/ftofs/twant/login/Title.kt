@@ -2,6 +2,7 @@ package com.ftofs.twant.login
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.opengl.Visibility
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -17,7 +18,8 @@ class Title @JvmOverloads constructor(
         initView(attrs)
     }
     private val titlebarLeft by lazy {findViewById<RelativeLayout>(R.id.titlebar_leftlayout)  }
-    private val titlebarLeftImage by lazy {findViewById<ImageView>(R.id.titlebarLeftImage)  }
+    private val titlebarLeftImage by lazy {findViewById<ImageView>(R.id.titlebar_leftimage)  }
+    private val titlebarFollowImage by lazy {findViewById<ImageView>(R.id.follow_img)  }
     private val titlebarRight by lazy {findViewById<RelativeLayout>(R.id.titlebar_rightlayout)  }
     private val titleText by lazy {findViewById<TextView>(R.id.titlebar_title)  }
     @SuppressLint("ResourceType")
@@ -47,6 +49,12 @@ class Title @JvmOverloads constructor(
     //   通过资源id设置左侧图片样式
     fun setLeftImageResource(resId: Int) {
         titlebarLeftImage!!.setImageResource(resId)
+    }//   通过资源id设置左侧图片样式
+    fun setFollowImageResource(resId: Int) {
+        titlebarFollowImage!!.setImageResource(resId)
+    }
+    fun setFollowImageClickListener(listener: OnClickListener){
+        titlebarFollowImage!!.setOnClickListener(listener)
     }
     //   通过资源id设置左侧图片样式
     fun setTitleClickListener(listener: OnClickListener) {
