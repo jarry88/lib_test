@@ -1,36 +1,29 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.StudentAdapter;
-import com.ftofs.twant.entity.CrossBorderBannerItem;
+import com.ftofs.twant.util.BitmapUtil;
+import com.ftofs.twant.util.ImageProcess;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.Poster;
 import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.base.Jarbon;
 import com.gzp.lib_common.utils.SLog;
-import com.youth.banner.Banner;
-import com.youth.banner.adapter.BannerImageAdapter;
-import com.youth.banner.holder.BannerImageHolder;
-import com.youth.banner.indicator.CircleIndicator;
-import com.youth.banner.listener.OnBannerListener;
-import com.youth.banner.listener.OnPageChangeListener;
+import com.qmuiteam.qmui.util.QMUIDrawableHelper;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Test2Fragment extends BaseFragment implements View.OnClickListener {
-    RecyclerView rvList;
+    Poster poster;
 
     public static Test2Fragment newInstance() {
         Bundle args = new Bundle();
@@ -52,66 +45,10 @@ public class Test2Fragment extends BaseFragment implements View.OnClickListener 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        poster = view.findViewById(R.id.poster);
+
         Util.setOnClickListener(view, R.id.btn_back, this);
-
-        List<String> studentList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            studentList.add("Student:" + i);
-        }
-
-        rvList = view.findViewById(R.id.rv_list);
-        rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        StudentAdapter studentAdapter = new StudentAdapter(studentList);
-        rvList.setAdapter(studentAdapter);
-
-
-        List<CrossBorderBannerItem> bannerItemList = new ArrayList<>();
-        CrossBorderBannerItem bannerItem = new CrossBorderBannerItem();
-        bannerItem.image = "https://gfile.oss-cn-hangzhou.aliyuncs.com/img/0159525979bab9a8012193a329c12d.jpg";
-        bannerItemList.add(bannerItem);
-
-        bannerItem = new CrossBorderBannerItem();
-        bannerItem.image = "https://gfile.oss-cn-hangzhou.aliyuncs.com/img/5f24336176dd4a80d94ba96d937992ca.png";
-        bannerItemList.add(bannerItem);
-
-        bannerItem = new CrossBorderBannerItem();
-        bannerItem.image = "https://gfile.oss-cn-hangzhou.aliyuncs.com/img/v2-e2aa8d9c5237173c11954db9cc8b9c5b_1200x500.jpg";
-        bannerItemList.add(bannerItem);
-
-        Banner<CrossBorderBannerItem, BannerImageAdapter<CrossBorderBannerItem>> banner = view.findViewById(R.id.banner);
-        banner.setAdapter(new BannerImageAdapter<CrossBorderBannerItem>(bannerItemList) {
-            @Override
-            public void onBindView(BannerImageHolder holder, CrossBorderBannerItem data, int position, int size) {
-                //图片加载自己实现
-                Glide.with(holder.itemView)
-                        .load(data.image)
-                        .into(holder.imageView);
-            }
-        })
-                .addBannerLifecycleObserver(this)//添加生命周期观察者
-                .setIndicator(new CircleIndicator(_mActivity));
-        banner.addOnPageChangeListener(new OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                SLog.info("xxxxxx[%d]", position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        banner.setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(Object data, int position) {
-                SLog.info("OnBannerClick[%d]", position);
-            }
-        });
+        Util.setOnClickListener(view, R.id.btn_test, this);
     }
 
     @Override
@@ -120,6 +57,11 @@ public class Test2Fragment extends BaseFragment implements View.OnClickListener 
 
         if (id == R.id.btn_back) {
             hideSoftInputPop();
+        } else if (id == R.id.btn_test) {
+            Bitmap bitmap = QMUIDrawableHelper.createBitmapFromView(poster);
+            String path = Environment.getExternalStorageDirectory() + "/1/" + (new Jarbon()).format("Y-m-d H-i-s") + ".jpg";
+            SLog.info("path[%s]", path);
+            BitmapUtil.Bitmap2File(bitmap, path, Bitmap.CompressFormat.JPEG,75);
         }
     }
 
