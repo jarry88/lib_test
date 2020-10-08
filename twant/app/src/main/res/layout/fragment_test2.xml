@@ -29,16 +29,26 @@
     </RelativeLayout>
     <!-- END OF 工具欄 -->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_list"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="#ffc">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="test">
+            </Button>
+            <com.ftofs.twant.widget.Poster
+                android:id="@+id/poster"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.ftofs.twant.widget.Poster>
+        </LinearLayout>
+    </ScrollView>
 
-    <com.youth.banner.Banner
-        android:id="@+id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        />
+
 </LinearLayout>
