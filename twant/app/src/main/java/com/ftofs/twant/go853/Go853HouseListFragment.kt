@@ -1,20 +1,24 @@
 package com.ftofs.twant.go853
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import com.ftofs.lib_net.model.PropertyVo
-import com.ftofs.twant.R
 import com.ftofs.twant.BR
+import com.ftofs.twant.R
 import com.ftofs.twant.databinding.GoHouseListFragmentBinding
 import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
-import com.ftofs.twant.util.Util
-import com.google.android.material.tabs.TabLayout
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
+import com.gzp.lib_common.utils.SLog
+import com.lyrebirdstudio.croppylib.util.extensions.visible
 
-class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding,GoHouseViewModel>(){
+class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, GoHouseViewModel>(){
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.go_house_list_fragment
     }
@@ -23,7 +27,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding,G
         return BR.viewModel
     }
     private val mAdapter by lazy {
-        object :DataBoundAdapter<PropertyVo,ItemHouseVoBinding>(){
+        object :DataBoundAdapter<PropertyVo, ItemHouseVoBinding>(){
             override val layoutId: Int
                 get() = R.layout.item_house_vo
 
@@ -48,26 +52,42 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding,G
         }
         binding.tabLayout.apply {
             addTab(newTab().apply {
-                customView=LinearLayout {
-                    layout_width= match_parent
-                    layout_height= match_parent
-                    orientation= horizontal
-                    center_vertical=true
-                    TextView {  }
-                    ImageView { src=R.drawable.ic_arrow_drop_down_black_24dp }
-                }
+                customView =tagViewFactory("房產",true)
+//                customView=android.widget.LinearLayout(context)
             })
             addTab(newTab().apply {
-                text="租售"
+                customView = tagViewFactory("租售")
             })
-            addTab(TabLayout.Tab().apply {
-                text="區域"
+            addTab(newTab().apply {
+                customView = tagViewFactory("區域")
+
             })
-            addTab(TabLayout.Tab().apply {
-                text="價格"
+            addTab(newTab().apply {
+                customView = tagViewFactory("價格")
+
             })
         }
         binding.rvList.adapter=mAdapter
+        viewModel.getPropertyList()
     }
 
+    override fun initViewObservable() {
+        viewModel.propertyList.observe(this){
+            SLog.info("觀測到數據變化")
+            it.propertyList?.apply {
+                SLog.info("觀測到數據變化${it.propertyList?.size}")
+
+                mAdapter.addAll(this,it.pageEntity.curPage==1)
+            }
+        }
+    }
+    private fun tagViewFactory(tagText:String,visible:Boolean=true)=with(LayoutInflater.from(context).inflate(R.layout.tab_red_count_item, null, false)) {
+        findViewById<TextView>(R.id.tag_text)?.apply {
+            text=tagText
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15.0f)
+            setTextColor(resources.getColor(R.color.tw_black))
+        }
+        if(visible)findViewById<ImageView>(R.id.icon_exp)?.visibility=View.VISIBLE
+        this
+    }
 }

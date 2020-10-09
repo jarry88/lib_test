@@ -1,14 +1,11 @@
 package com.ftofs.lib_net
 
 import com.alibaba.fastjson.JSON
-import com.gzp.lib_common.constant.Result
 import com.ftofs.lib_net.net.TwantResponse
-import com.google.gson.JsonParser
-import com.gzp.lib_common.utils.PathUtil
+import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 /**

@@ -222,8 +222,8 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
 
         tabRefund.setCustomView(tabRefundView);
         tabReTurn.setCustomView(R.layout.tab_red_count_item);
-        ((TextView)(tabRefund.getCustomView().findViewById(R.id.text1))).setText(getResources().getString(R.string.text_refund_tab));
-        ((TextView)(tabReTurn.getCustomView().findViewById(R.id.text1))).setText(getResources().getString(R.string.text_refund_return_tab));
+        ((TextView)(tabRefund.getCustomView().findViewById(R.id.tag_text))).setText(getResources().getString(R.string.text_refund_tab));
+        ((TextView)(tabReTurn.getCustomView().findViewById(R.id.tag_text))).setText(getResources().getString(R.string.text_refund_return_tab));
         tabLayout.setTabTextColors(Color.parseColor("#00B0FF"),Color.parseColor("#2A292A"));
         tabLayout.addTab(tabRefund);
         tabLayout.addTab(tabReTurn);
@@ -233,12 +233,12 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             public void onTabSelected(TabLayout.Tab tab) {
                 reloadDataWithFilter(null);
                 viewPager.setCurrentItem(tab.getPosition());
-                ((TextView)(tab.getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_blue));
+                ((TextView)(tab.getCustomView().findViewById(R.id.tag_text))).setTextColor(getResources().getColor(R.color.tw_blue));
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                ((TextView)(tab.getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_black));
+                ((TextView)(tab.getCustomView().findViewById(R.id.tag_text))).setTextColor(getResources().getColor(R.color.tw_black));
 
             }
 
@@ -323,8 +323,8 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             @Override
             public void onPageSelected(int position) {
                 tabLayout.setScrollPosition(position, 0f, true);
-                ((TextView)(tabLayout.getTabAt(position).getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_blue));
-                ((TextView)(tabLayout.getTabAt(1-position).getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_black));
+                ((TextView)(tabLayout.getTabAt(position).getCustomView().findViewById(R.id.tag_text))).setTextColor(getResources().getColor(R.color.tw_blue));
+                ((TextView)(tabLayout.getTabAt(1-position).getCustomView().findViewById(R.id.tag_text))).setTextColor(getResources().getColor(R.color.tw_black));
             }
 
             @Override

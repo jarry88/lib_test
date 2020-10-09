@@ -116,9 +116,9 @@ interface DemoApiService {
 //【GOEFT】房產信息模塊
 
     @GET("goeft/property/propertyId")//房產詳情
-    suspend fun getPropertyInfoList(@Query("propertyId")propertyId: Int?): TwantResponse<GoeftDetailInfo>
+    suspend fun getPropertyInfo(@Query("propertyId")propertyId: Int?): TwantResponse<PropertyVo>
     @GET("goeft/property/list")//房產信息列表
-    suspend fun getPropertynfoList(@QueryMap queryParams: Map<String, Any?>): TwantResponse<GoeftInfo>
+    suspend fun getPropertyInfoList(@QueryMap queryParams: Map<String, Any?>): TwantResponse<GoeftInfo>
     @GET("goeft/user/uid")//房產用戶列表
     suspend fun getGoeftUserUid(@QueryMap queryParams: Map<String, Int?>): TwantResponse<GoeftInfo>
 //【GOEFT】房產模塊結束

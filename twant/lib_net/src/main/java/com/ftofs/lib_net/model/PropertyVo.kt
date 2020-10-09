@@ -17,7 +17,7 @@ data class PropertyVo(
         val cover: String,
         val coverkey: Int,
         val decoration: Int,
-        val decorationDescription: String,
+        val decorationDescription: String,//裝修描述
         val detail: String,
         val developers: String,
         val direction: Int,
@@ -44,7 +44,7 @@ data class PropertyVo(
         val landscapeDescription: String,
         val lease: Int,
         val linkMan: String,
-        val loftDescribe: Int,
+        val loftDescribe: Int,//閣樓
         val mHandPick: Int,
         val map_X: String,
         val map_Y: String,
@@ -74,12 +74,86 @@ data class PropertyVo(
         val ui_Other: Int,
         val ui_isStatus: Int,
         val uid: Int,
-        val unit: String,
+        val unit: String,//單位：
         val unitPrice: Int,
         val photoList:List<GoPhoto>
 ):Serializable{
-    fun getTypeName():String=when(isType){
-        else ->"住宅"
+    fun getTypeName():String=when(isType){//房產類型（用整形數填寫）：1 : 住宅 2 : 商鋪 3 : 車位 4 : 工業 5 : 地皮 6 : 寫字樓 7 : 別墅
+        1->"住宅"
+        2->"商鋪"
+        3->"車位"
+        4->"工業"
+        5->"地皮"
+        6->"寫字樓"
+        7->"別墅"
+        else ->""
+    }
+    fun getLiftString():String=when(isLift){//是否有電梯，0：否，1：是
+        0 ->"否"
+        1 ->"是"
+        else ->""
+    }
+    fun getLoftString():String=when(loftDescribe){//是否有閣樓，0：無，1：有
+        0 ->"無"
+        1 ->"有"
+        else ->""
+    }
+    //todo 待確定補全的屬性
+    fun getDirectionString():String=when(loftDescribe){//座向，0：未知，1：是
+        0 ->"未知"
+        1 ->"有"
+        else ->""
+    }
+    fun getNewString():String=when(loftDescribe){//新舊，0：不詳，1：新裝
+        0 ->"不詳"
+        1 ->"新裝"
+        else ->""
+    }
+    fun getAgeString():String="${age}年"
+    fun getIntervalName():String=(if(intervalRoom>0)"${intervalRoom}房" else "").apply {
+        plus(if(intervalRoom>0)"${intervalRoom}房" else "")
+    }.apply {
+        plus(if(intervalHall>0)"${intervalHall}廳" else "")
+    }.apply {
+        intervalStoreRooms.takeIf { it>0 }?.let { this.plus("${it}雜物") }
+    }.apply {
+        intervalTerrace.takeIf { it>0 }?.let { this.plus("${it}露臺") }
+    }.apply {
+        intervalToilet.takeIf { it>0 }?.let { this.plus("${it}衛") }
+    }
+    fun getSaleType():String=when(saleType){//租售，1：租，2：售
+        1 ->"租"
+        2 ->"售"
+
+        else ->""
+    }
+    //todo 待確定補全的屬性
+    fun getParkingString():String=when(isParkingSpaces){//車位，0：無，1：有
+        0 ->"無"
+        1 ->"有"
+        else ->""
+    }
+    //todo 待確定補全的屬性
+    fun getRentalPrice():String=when(rentalPrice){//租價，0：面議，1：有
+        0 ->"面議"
+        else ->""
+    }
+    //todo 待確定補全的屬性
+    fun getSellingPrice():String=when(sellingPrice){//租價，0：面議，1：**萬
+        0 ->"面議"
+        else ->"${sellingPrice}萬"
+    }
+    //todo 待確定補全的屬性
+    fun getLeaseString():String=when(lease){//帶租約：，0：不帶，1：帶
+        0 ->"不帶"
+        1 ->"帶"
+        else ->""
+    }
+    //todo 待確定補全的屬性
+    fun getSourc():String=when(source){//樓盤來源：：，0：不帶，1：帶
+        0 ->" GO853 "
+        1 ->"帶"
+        else ->"GO853"
     }
 }
 data class GoPhoto(
