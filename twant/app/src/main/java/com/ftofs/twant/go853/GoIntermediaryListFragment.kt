@@ -18,7 +18,11 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
     }
 
     override fun initData() {
-        binding.title.setLeftLayoutClickListener() { onBackPressedSupport() }
+        binding.title.apply {
+            setLeftLayoutClickListener() { onBackPressedSupport() }
+            setLeftImageResource(R.drawable.icon_back)
+            text=""
+        }
     }
 
 }

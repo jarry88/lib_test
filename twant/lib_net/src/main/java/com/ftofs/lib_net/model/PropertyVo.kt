@@ -24,7 +24,7 @@ data class PropertyVo(
         val editDate: String,
         val email: String,
         val expireDate: String,
-        val floor: String,
+        val floor: String?,
         val furniture: String,
         val goodPick: Int,
         val handPick: Int,
@@ -69,18 +69,23 @@ data class PropertyVo(
         val sellingPrice: Int,
         val sequence: Int,
         val source: Int,
-        val street: String,
+        val street: String?,
         val tel: String,
         val tid: Int,
         val ui_Other: Int,
         val ui_isStatus: Int,
         val uid: Int,
-        val unit: String,//單位：
+        val unit: String?,//單位：
         val unitPrice: Int,
         val photoList:List<GoPhoto>,
         val pingJunPrice:Double
 ):Serializable{
-    fun getItemTitle():String=propertyName
+    fun getItemTitle():String=propertyName.plus(floor?.let { " $it" }?:"").plus(unit?.let { " $it" }?:"").plus(street?.let { " $it" }?:"").plus(street?.let { " $it" }?:"")
+//    {
+//        floor?.takeIf{it.isNotEmpty()}?.let { this.plus(" $it") }
+//        unit?.takeIf{it.isNotEmpty()}?.let { this.plus(" $it") }
+//        street?.takeIf{it.isNotEmpty()}?.let { this.plus(" $it") }
+//    }
     fun getTypeName():String=when(isType){//房產類型（用整形數填寫）：1 : 住宅 2 : 商鋪 3 : 車位 4 : 工業 5 : 地皮 6 : 寫字樓 7 : 別墅
         1->"住宅"
         2->"商鋪"
@@ -170,9 +175,9 @@ data class PropertyVo(
         1 ->"帶"
         else ->"GO853"
     }
-    fun getBuildingAreaString():String="$buildingArea  呎"  //建築面積
-    fun getSalableAreaString():String="$salableArea  呎"  //實用面積
-    fun getAveragePrice():String="$pingJunPrice 元"  //實用面積
+    fun getBuildingAreaString():String=if(buildingArea>0) "$buildingArea 呎" else ""  //建築面積
+    fun getSalableAreaString():String=if(salableArea>0) "$salableArea 呎" else ""  //實用面積
+    fun getAveragePrice():String=if(pingJunPrice>0)"$pingJunPrice 元" else ""  //實用面積
 }
 data class GoPhoto(
         val isDefault: Int,
@@ -182,5 +187,13 @@ data class GoPhoto(
         val rollShow: Int,
         val sortimg: Int,
         val title: String
+):Serializable
+data class GoeftUser(
+        val userPhoto: String?,
+        val tel: String?,
+        val propertyCorp: String?,//銷售商、地產公司
+        val mobile: String?,//聯繫手機號
+        val email: String?,//聯繫郵箱
+        val linkMan: String?//聯繫人
 ):Serializable
 

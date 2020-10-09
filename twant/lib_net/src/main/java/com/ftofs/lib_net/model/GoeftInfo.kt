@@ -4,5 +4,6 @@ import java.io.Serializable
 
 data class GoeftInfo(
         val pageEntity:PageEntity,
-        val propertyList:List<PropertyVo>?
+        val propertyList:List<PropertyVo>?,
+        val user:GoeftUser?
 ):Serializable
