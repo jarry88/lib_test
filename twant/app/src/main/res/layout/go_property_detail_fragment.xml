@@ -17,6 +17,940 @@
             android:id="@+id/title"
             app:layout_constraintTop_toTopOf="parent"
            />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintBottom_toTopOf="@id/ll_bottom">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.zhouwei.mzbanner.MZBannerView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintDimensionRatio="375:138"
+                    android:id="@+id/banner"
+
+                    app:open_mz_mode="true"
+                    />
+                <ImageView
+                    android:layout_width="177dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:src="@drawable/go_banner_logo"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/banner"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dp_15"
+
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="2"
+                            android:textStyle="bold"
+                            android:textSize="23sp"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="@dimen/dp_10"
+                            />
+                    </LinearLayout>
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal"-->
+<!--                            android:layout_marginBottom="@dimen/dp_10">-->
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="15sp"-->
+<!--                                android:textStyle="bold"-->
+<!--                                android:text="售價 "/>-->
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:textColor="@color/tw_red"-->
+<!--                                text="@{vo.getSellingPriceString()}"-->
+<!--                                android:textSize="21sp"/>-->
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="萬"-->
+<!--                                android:textColor="@color/tw_red"-->
+<!--                                android:textSize="15sp"/>-->
+
+<!--                            <TextView-->
+<!--                                android:layout_marginStart="30dp"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="15sp"-->
+<!--                                android:textStyle="bold"-->
+<!--                                android:text="租金 "/>-->
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="@{vo.rentalPrice}"-->
+<!--                                android:textSize="21sp"/>-->
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="元/月"-->
+<!--                                android:textColor="@color/tw_red"-->
+<!--                                android:textSize="15sp"/>-->
+<!--                        </LinearLayout>-->
+<!--                        面積-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal"-->
+<!--                            android:layout_marginBottom="@dimen/dp_10">-->
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="15sp"-->
+<!--                                android:textStyle="bold"-->
+<!--                                android:text="面積 "/>-->
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                text="@{vo.getBuildingAreaString()}"-->
+<!--                                android:textSize="21sp"/>-->
+
+
+<!--                        </LinearLayout>-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="vertical">-->
+<!--                            &lt;!&ndash;                        第一行&ndash;&gt;-->
+
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="horizontal">-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="屋苑："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.propertyName}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="1.2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="類型："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.getTypeName()}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                            </LinearLayout>-->
+<!--                            &lt;!&ndash;                        第二行&ndash;&gt;-->
+
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="horizontal">-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="地區："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.area}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="1.2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="樓層："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.floor}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                            </LinearLayout>-->
+<!--                            &lt;!&ndash;                        第三行&ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="horizontal">-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="間隔："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.getIntervalName()}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="1.2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="電梯："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.getLiftString()}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                            </LinearLayout>-->
+<!--                            &lt;!&ndash;                        第四行&ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="horizontal">-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="閣樓："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.getLoftString()}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="1.2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="新舊："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.getNewString()}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                            </LinearLayout>-->
+
+<!--                            &lt;!&ndash;                        第五行&ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="horizontal">-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="裝修："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.getDecorationString()}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="1.2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="座向："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.getDirectionString()}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                            </LinearLayout>-->
+<!--                            &lt;!&ndash;                        第六行&ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="horizontal">-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="單位："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.unit}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_weight="1.2"-->
+
+<!--                                    android:layout_height="wrap_content">-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="樓齡："-->
+<!--                                        android:textSize="14sp"-->
+<!--                                        android:lines="1"-->
+
+<!--                                        android:textColor="@color/gray_66"/>-->
+
+<!--                                    <TextView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:text="@{vo.getAgeString()}"-->
+<!--                                        android:textColor="@color/tw_black"-->
+<!--                                        android:lines="1"/>-->
+<!--                                </LinearLayout>-->
+<!--                            </LinearLayout>-->
+
+<!--                        </LinearLayout>-->
+
+<!--                    </LinearLayout>-->
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:background="@color/tw_grey_F3F3"/>
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:padding="@dimen/dp_15"-->
+<!--                        android:orientation="vertical">-->
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="@dimen/dp_3"-->
+<!--                            android:layout_marginBottom="6dp"-->
+<!--                            android:text="詳細信息"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:textSize="18sp"-->
+<!--                            android:textColor="@color/tw_black"/>-->
+
+<!--                        &lt;!&ndash;                        第一行&ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="租/售："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.getSaleType()}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="1.2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="車位: "-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.getParkingString()}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
+
+<!--                        &lt;!&ndash;                        第二行&ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="租價："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.getRentalPrice()}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="1.2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="車位編號: "-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.parkingSpaces}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
+<!--                        &lt;!&ndash;                        第三行&ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="售價："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.getSellingPrice()}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="1.2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="帶租約："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.getLeaseString()}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
+<!--                        &lt;!&ndash;                        第四行&ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="建築面積："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.getBuildingArea()}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="1.2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="樓盤來源："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.getSource()}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
+<!--                        &lt;!&ndash;                        第五行&ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="實用面積："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.getSalableAreaString()}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
+<!--                        &lt;!&ndash;                        第六行&ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="呎價："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.getAveragePrice()}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
+
+<!--                    </LinearLayout>-->
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:padding="@dimen/dp_15"-->
+<!--                        android:orientation="vertical">-->
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="@dimen/dp_3"-->
+<!--                            android:layout_marginBottom="6dp"-->
+<!--                            android:text="景觀信息"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:textSize="18sp"-->
+<!--                            android:textColor="@color/tw_black"/>-->
+
+<!--                        &lt;!&ndash;                        第一行&ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="景觀："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.landscape}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
+<!--                        &lt;!&ndash;                        第二行&ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="裝修描述："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.decorationDescription}"-->
+<!--                                    android:textColor="@color/tw_black"-->
+<!--                                    android:lines="1"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
+
+<!--                    </LinearLayout>-->
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:padding="@dimen/dp_15"-->
+<!--                        android:orientation="vertical">-->
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="@dimen/dp_3"-->
+<!--                            android:layout_marginBottom="6dp"-->
+<!--                            android:text="詳細介紹"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:textSize="18sp"-->
+<!--                            android:textColor="@color/tw_black"/>-->
+
+<!--                        &lt;!&ndash;                        第一行&ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_weight="2"-->
+
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="景觀："-->
+<!--                                    android:textSize="14sp"-->
+<!--                                    android:lines="1"-->
+
+<!--                                    android:textColor="@color/gray_66"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@{vo.detail}"-->
+<!--                                    android:textColor="@color/tw_black"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
+<!--                    </LinearLayout>-->
+                    <!--                        聯係方式-->
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dp_15"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tv_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_3"
+                            android:layout_marginBottom="6dp"
+                            android:layout_alignParentTop="true"
+
+                            android:text="物業信息"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:textColor="@color/tw_black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btn_about_owner"
+                            android:background="@drawable/bg_button_go"
+                            android:text="查看該用戶所有樓盤"
+                            android:textSize="14sp"
+                            android:layout_alignParentEnd="true"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:layout_below="@id/tv_title"/>
+                        <!--                        第一行-->
+                        <LinearLayout
+                            android:layout_below="@id/tv_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="2"
+
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{vo.propertyCorp}"
+                                    android:textColor="@color/tw_black"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2"
+
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="聯繫人："
+                                        android:textSize="14sp"
+                                        android:lines="1"
+
+                                        android:textColor="@color/gray_66"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{vo.linkMan}"
+                                        android:textColor="@color/tw_black"
+                                        android:lines="1"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2"
+
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="電話："
+                                        android:textSize="14sp"
+                                        android:lines="1"
+
+                                        android:textColor="@color/gray_66"/>
+
+                                    <TextView
+                                        android:id="@+id/btn_mobile"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{vo.mobile}"
+                                        android:textColor="@color/tw_blue"
+                                        android:lines="1"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:background="@color/tw_grey_F3F3"/>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 <!--底部電話聯係-->
         <LinearLayout
             android:id="@+id/ll_bottom"

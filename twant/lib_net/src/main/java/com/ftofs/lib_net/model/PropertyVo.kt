@@ -6,7 +6,7 @@ import java.io.Serializable
 data class PropertyVo(
         val additionalFeaturesType: String,
         val age: Int,
-        val area: String,
+        val area: String,//City的細分，如：澳門再分：澳門半島、南灣、皇朝
         val brokeragePercent: Int,
         val brokerageType: Int,
         val building: String,
@@ -91,6 +91,7 @@ data class PropertyVo(
         7->"別墅"
         else ->""
     }
+    fun getEditTimeString():String =editDate.let { if(it.length>10)it.substring(0,10) else it }
     fun getLiftString():String=when(isLift){//是否有電梯，0：否，1：是
         0 ->"否"
         1 ->"是"
@@ -136,10 +137,15 @@ data class PropertyVo(
         1 ->"有"
         else ->""
     }
+    fun getPriceText():String=when(saleType){
+        1->"租 $"+getRentalPriceString()
+        2->"售 $" +getSellingPriceString()
+        else ->""
+    }
     //todo 待確定補全的屬性
     fun getRentalPriceString():String=when(rentalPrice){//租價，0：面議，1：有
         0 ->"面議"
-        else ->""
+        else ->"${rentalPrice}元/月"
     }
     //todo 待確定補全的屬性
     fun getSellingPriceString():String=when(sellingPrice){//租價，0：面議，1：**萬

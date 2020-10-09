@@ -8,6 +8,7 @@ import com.ftofs.twant.R
 import com.ftofs.twant.BR
 import com.ftofs.twant.databinding.GoHouseListFragmentBinding
 import com.ftofs.twant.databinding.GoPropertyDetailFragmentBinding
+import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 
 class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int=-1,private val propertyVo: PropertyVo?=null) : BaseTwantFragmentMVVM<GoPropertyDetailFragmentBinding,GoHouseViewModel>() {
@@ -32,6 +33,14 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int=-1
         propertyVo?.let{
             viewModel.currPropertyInfo.postValue(it)
         }?: viewModel.getPropertyDetail(pid)
+        binding.btnAboutOwner.setOnClickListener{
+            Util.startFragment(GoIntermediaryListFragment(viewModel.currPropertyInfo.value?.uid))
+        }
+        binding.btnMobile.setOnClickListener{
+            viewModel.currPropertyInfo.value?.mobile?.let {
+                Util.callPhone(activity,it)
+            }
+        }
     }
 
     override fun initViewObservable() {

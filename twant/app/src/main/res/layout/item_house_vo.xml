@@ -16,7 +16,7 @@
             android:layout_width="100dp"
             android:layout_height="@dimen/dp_90"
             android:layout_marginBottom="@dimen/margin_16dp"
-            radius="@{2f}"
+            radius="@{4f}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -82,7 +82,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vo.area,default =`路環島`}"
+                    android:text="@{vo.area}"
                     android:textSize="12sp"
                     android:textColor="@color/tw_black"
                     android:layout_marginEnd="10dp"
@@ -92,16 +92,14 @@
 
                 <TextView
                     android:id="@+id/room_info"
+                    android:text="@{vo.getIntervalName()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:textColor="@color/tw_black"
-                    android:layout_marginEnd="10dp"
-
-                android:lines="1"/>
-<!--                android:text="@{vo.saleType==1?`$`+vo.rentalPrice+`元/月`:vo.saleType==2?`$`+vo.sellingPrice+`萬`:`售`+`$`+vo.sellingPrice+`萬`+`  `+`租`+`$`+vo.rentalPrice+`元/月`,default=`萬`}"-->
-
+                    android:layout_marginEnd="10dp"/>
                 <TextView
+                    android:text="@{vo.getBuildingAreaString()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
@@ -109,41 +107,44 @@
                     android:layout_marginEnd="10dp"
 
                 android:lines="1"/>
+
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:text="@{vo.getPriceText()}"
+                android:textColor="@color/tw_red"
+                android:layout_marginEnd="10dp"
+
+                android:lines="1"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
-<!--                                android:text="@{vo.isType==1?`住宅`:vo.isType==2?`商鋪`:vo.isType==3?`車位`:vo.isType==4?`工業`:vo.isType==5?`地皮`:vo.isType==6?`寫字樓`:vo.isType==7?`別墅`:``,default =`住宅`}"
--->
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    android:textColor="@color/tw_black"
+                    android:text="@{vo.getTypeName()}"
                     android:layout_marginEnd="10dp"
 
                 android:lines="1"/>
-<!--                android:text="@{vo.editDate.length()>10?vo.editDate.substring(0,10):``,default =`2020-09-21`}"-->
 
                 <TextView
+                    android:text="@{vo.getEditTimeString()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    android:textColor="@color/tw_black"
                     android:layout_marginEnd="10dp"
                     android:lines="1"/>
             </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:textColor="@color/tw_red"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
