@@ -3,12 +3,14 @@ package com.ftofs.twant.go853
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.R
 import com.ftofs.twant.BR
+import com.ftofs.twant.databinding.GoHouseListFragmentBinding
 import com.ftofs.twant.databinding.GoPropertyDetailFragmentBinding
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 
-class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int=-1) : BaseTwantFragmentMVVM<GoPropertyDetailFragmentBinding,GoHouseViewModel>() {
+class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int=-1,private val propertyVo: PropertyVo?=null) : BaseTwantFragmentMVVM<GoPropertyDetailFragmentBinding,GoHouseViewModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.go_property_detail_fragment
     }
@@ -24,10 +26,12 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int=-1
             setLeftImageResource(R.drawable.icon_back)
             setLeftLayoutClickListener{onBackPressedSupport()}
         }
-        binding.banner.apply {
-//            mei
-        }
-        viewModel.getPropertyDetail(pid)
+//        binding.banner.apply {
+////            mei
+//        }
+        propertyVo?.let{
+            viewModel.currPropertyInfo.postValue(it)
+        }?: viewModel.getPropertyDetail(pid)
     }
 
     override fun initViewObservable() {

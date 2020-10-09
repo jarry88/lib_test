@@ -18,8 +18,10 @@
             android:layout_marginBottom="@dimen/margin_16dp"
             radius="@{2f}"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/house_img"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/house_img"
+            android:src="@drawable/go_no_data"
             imageUrl="@{vo.cover}"/>
         <LinearLayout
             android:layout_width="0dp"
@@ -36,10 +38,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginBottom="4dp">
-<!--                android:background="@{vo.saleType ==1?@color/tw_yellow:vo.saleType==2?@color/tw_red:@color/tw_blue}"-->
+                android:layout_marginBottom="4dp"
 
-<!--                android:text="@{vo.saleType ==1?@string/rent:vo.saleType==2?@string/onsale:@string/onsale_rent,default=`出售`}"-->
+                >
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -47,11 +49,14 @@
                     android:id="@+id/sale_tag"
                     android:textColor="@color/white"
                     android:textSize="11sp"
+                    android:background="@{vo.saleType ==1?@color/tw_yellow:vo.saleType==2?@color/tw_red:@color/tw_blue}"
+                    android:text="@{vo.getSaleTypeString()}"
+
                     android:gravity="center"
                     android:padding="@dimen/dp_2"
                     android:paddingStart="4dp"
                     android:paddingEnd="4dp"
-                radius="@{3f}"
+                     radius="@{3f}"
                     />
 <!--                android:text="@{vo.detail,default =` 金峰南岸 高層 \r\n兩房兩廁1176呎 \r\n東南光猛 品味生活\r\n吉租 14000HKD \r\n\r\n何生63038005歡迎合作`}"-->
 
@@ -59,8 +64,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tw_black"
+                    android:layout_marginStart="@dimen/margin_4dp"
                     android:textStyle="bold"
                     android:textSize="15sp"
+                    android:text="@{vo.getItemTitle()}"
                     android:lines="1"
                     android:ellipsize="end"
                 />

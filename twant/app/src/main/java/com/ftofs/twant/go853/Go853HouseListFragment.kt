@@ -34,7 +34,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             override fun initView(binding: ItemHouseVoBinding, item: PropertyVo) {
                 binding.vo=item
                 binding.root.setOnClickListener {
-                    start(GoPropertyDetailFragment(item.pid))
+                    start(GoPropertyDetailFragment(item.pid,item))
                 }
             }
 

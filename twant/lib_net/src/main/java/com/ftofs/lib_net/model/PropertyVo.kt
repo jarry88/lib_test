@@ -53,7 +53,7 @@ data class PropertyVo(
         val parkingSpaces: String,
         val picAmount: Int,
         val pid: Int,
-        val propertyCorp: String,
+        val propertyCorp: String,//銷售商、地產公司
         val propertyName: String,
         val pubDate: String,
         val remark: String,
@@ -63,7 +63,8 @@ data class PropertyVo(
         val salableArea: Int,
         val saleDate: Any,
         val saleType: Int,
-        val selected: Int,
+        //todo selected 屬性問題
+        val selected: Boolean,
         val sellReservePrice: Int,
         val sellingPrice: Int,
         val sequence: Int,
@@ -76,8 +77,10 @@ data class PropertyVo(
         val uid: Int,
         val unit: String,//單位：
         val unitPrice: Int,
-        val photoList:List<GoPhoto>
+        val photoList:List<GoPhoto>,
+        val pingJunPrice:Double
 ):Serializable{
+    fun getItemTitle():String=propertyName
     fun getTypeName():String=when(isType){//房產類型（用整形數填寫）：1 : 住宅 2 : 商鋪 3 : 車位 4 : 工業 5 : 地皮 6 : 寫字樓 7 : 別墅
         1->"住宅"
         2->"商鋪"
@@ -121,9 +124,9 @@ data class PropertyVo(
     }.apply {
         intervalToilet.takeIf { it>0 }?.let { this.plus("${it}衛") }
     }
-    fun getSaleType():String=when(saleType){//租售，1：租，2：售
-        1 ->"租"
-        2 ->"售"
+    fun getSaleTypeString():String=when(saleType){//租售，1：租，2：售
+        1 ->"出租"
+        2 ->"出售"
 
         else ->""
     }
@@ -134,12 +137,12 @@ data class PropertyVo(
         else ->""
     }
     //todo 待確定補全的屬性
-    fun getRentalPrice():String=when(rentalPrice){//租價，0：面議，1：有
+    fun getRentalPriceString():String=when(rentalPrice){//租價，0：面議，1：有
         0 ->"面議"
         else ->""
     }
     //todo 待確定補全的屬性
-    fun getSellingPrice():String=when(sellingPrice){//租價，0：面議，1：**萬
+    fun getSellingPriceString():String=when(sellingPrice){//租價，0：面議，1：**萬
         0 ->"面議"
         else ->"${sellingPrice}萬"
     }
@@ -150,11 +153,20 @@ data class PropertyVo(
         else ->""
     }
     //todo 待確定補全的屬性
-    fun getSourc():String=when(source){//樓盤來源：：，0：不帶，1：帶
+    fun getDecorationString():String=when(decoration){//裝修：不詳：不帶，1：帶
+        0 ->"不詳"
+        1 ->"帶"
+        else ->""
+    }
+    //todo 待確定補全的屬性
+    fun getSourceString():String=when(source){//樓盤來源：：，0：不帶，1：帶
         0 ->" GO853 "
         1 ->"帶"
         else ->"GO853"
     }
+    fun getBuildingAreaString():String="$buildingArea  呎"  //建築面積
+    fun getSalableAreaString():String="$salableArea  呎"  //實用面積
+    fun getAveragePrice():String="$pingJunPrice 元"  //實用面積
 }
 data class GoPhoto(
         val isDefault: Int,
