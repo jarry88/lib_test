@@ -889,7 +889,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     // 自提碼
-                    if (responseObj.exists("datas.ordersVo.takeCode")) {
+                    if (ordersState != OrderState.TO_BE_PAY && responseObj.exists("datas.ordersVo.takeCode")) {
                         int takeCode = responseObj.getInt("datas.ordersVo.takeCode");
                         if (takeCode > 0) {
                             rlTakeCodeContainer.setVisibility(View.VISIBLE);

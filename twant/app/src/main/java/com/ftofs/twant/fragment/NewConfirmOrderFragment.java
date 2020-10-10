@@ -720,7 +720,7 @@ public class NewConfirmOrderFragment extends BaseFragment implements View.OnClic
                 return;
             }
 
-            if (Constant.PAYMENT_TYPE_CODE_OFFLINE.equals(paymentTypeCode)) { // 如果是【货到付款】，记录一下订单金额
+            if (Constant.PAYMENT_TYPE_CODE_OFFLINE.equals(paymentTypeCode) || totalPrice < Constant.DOUBLE_ZERO_THRESHOLD) { // 如果是【货到付款】 或 免支付訂單（金額為0），记录一下订单金额
                 Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, totalPrice);
             }
 
