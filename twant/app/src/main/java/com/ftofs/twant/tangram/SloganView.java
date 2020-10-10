@@ -35,7 +35,7 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
 
     public static final int ANIM_COUNT = 4;
     ObjectAnimator[] animatorArr = new ObjectAnimator[ANIM_COUNT];
-    private LinearLayout clFirst;
+    private ConstraintLayout clFirst;
     private LinearLayout clSecondLine;
     private LinearLayout clFirstLine;
     private LinearLayout llContainer;
