@@ -265,7 +265,8 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     @Override
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                         CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
-                        Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                        SLog.info("____bargainId[%d]", activityGoods.bargainId);
+                        Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId, activityGoods.bargainId));
                     }
                 });
                 rvBargainList.setAdapter(bargainGoodsAdapter);
