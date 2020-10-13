@@ -46,7 +46,6 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
     public GoodsSearchResultAdapter(Context context, List<GoodsSearchItemPair> data) {
         super(data);
 
-        addItemType(Constant.ITEM_TYPE_BANNER, R.layout.double_eleven_header);
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.goods_search_item_pair);
         addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint_new);
         addItemType(Constant.ITEM_TYPE_NO_DATA, R.layout.ic_placeholder_no_data);
@@ -193,15 +192,6 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
 
 
-        } else if (itemType == Constant.ITEM_TYPE_BANNER) {
-            helper.addOnClickListener(R.id.btn_play_game)
-                    .addOnClickListener(R.id.btn_back);
-            long now = System.currentTimeMillis();
-            long doubleElevenTimestamp = Jarbon.parse("2019-11-11").getTimestampMillis();
-
-            if (now > doubleElevenTimestamp) {
-                helper.setGone(R.id.btn_play_game, true);
-            }
         } else if(itemType==Constant.ITEM_TYPE_NO_DATA){
         } else { // 最后那项发表想要的提示
             SLog.info("here");

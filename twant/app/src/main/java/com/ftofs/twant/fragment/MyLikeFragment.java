@@ -172,15 +172,6 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                     }
 
                     Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                } else if (id == R.id.btn_play_game) {
-//                    String url = Util.makeChristmasH5Url();
-                    String url = Util.makeSpringH5Url();
-                    SLog.info("sprint_url[%s]", url);
-                    if (url == null) {
-                        Util.showLoginFragment(requireContext());
-                        return;
-                    }
-                    start(H5GameFragment.newInstance(url, true));
                 } else if (id == R.id.btn_back) {
                     pop();
                 }

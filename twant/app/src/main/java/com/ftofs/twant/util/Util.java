@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -41,13 +40,13 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.facebook.AccessToken;
+import com.ftofs.lib_common_ui.entity.ListPopupItem;
+import com.ftofs.lib_common_ui.popup.TwLoadingPopup;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
-import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.activity.YoutubeActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.appserver.AppServiceImpl;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -56,7 +55,6 @@ import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.DownloadImageResult;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.lib_common_ui.entity.ListPopupItem;
 import com.ftofs.twant.entity.Location;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.SpecPair;
@@ -65,11 +63,9 @@ import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ChatFragment;
 import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.CrossBorderMainFragment;
-import com.ftofs.twant.fragment.DoubleElevenFragment;
 import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
-import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.MessageFragment;
@@ -80,21 +76,16 @@ import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.hot_zone.HotZoneFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.login.UserManager;
-import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
-import com.ftofs.twant.tangram.SloganView;
-import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
-import com.ftofs.lib_common_ui.popup.TwLoadingPopup;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
+import com.gzp.lib_common.utils.SLog;
 import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.orhanobut.hawk.Hawk;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
-import com.wzq.mvvmsmart.net.net_utils.RetrofitUtil;
 
-
-import org.greenrobot.eventbus.EventBus;
 import org.urllib.Query;
 import org.urllib.Urls;
 
@@ -911,10 +902,6 @@ public class Util {
         String url = "https://www.twant.com/activities/spring/#/20191226/index" + queryString;
         SLog.info("url[%s]", url);
         return url;
-    }
-
-    public static void startDoubleElevenFragment() {
-        Util.startFragment(DoubleElevenFragment.newInstance());
     }
 
     /**
