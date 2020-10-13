@@ -84,6 +84,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     View btnCopyLink;
     View btnShareToTakewantCircle;
     View btnShareToWord;
+    View btnShareToPoster;
 
     String goodsWord;  // 商品分享口令
     String storeWord;  // 店鋪分享口令
@@ -133,7 +134,6 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         }
 
         btnShareToWord = findViewById(R.id.btn_share_to_word);
-
         // 判斷是否為商品分享，如果是，就生成分享口令
         try {
             if (data != null && data instanceof EasyJSONObject) {
@@ -158,6 +158,9 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+
+        btnShareToPoster = findViewById(R.id.btn_share_to_poster);
+        btnShareToPoster.setOnClickListener(this);
     }
 
     /**
@@ -369,6 +372,8 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                     .asCustom(new WordSharePopup(context, word)).show();
 
             dismiss();
+        } else if (id == R.id.btn_share_to_poster) { // 分享海報
+
         }
     }
 

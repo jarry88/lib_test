@@ -101,6 +101,8 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_to_be_commented, this);
         Util.setOnClickListener(view, R.id.icon_return_or_exchange, this);
 
+        Util.setOnClickListener(view, R.id.btn_join_distribution, this);
+
         Util.setOnClickListener(view, R.id.btn_my_express, this);
         Util.setOnClickListener(view, R.id.ll_express_container, this);
         Util.setOnClickListener(view, R.id.btn_look_package, this);
@@ -241,6 +243,9 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                     dataType = MyBargainListFragment.DATA_TYPE_PARTICIPATE;
                 }
                 Util.startFragment(MyBargainListFragment.newInstance(dataType));
+                break;
+            case R.id.btn_join_distribution:
+                Util.startFragment(DistributionEnrollmentFragment.newInstance());
                 break;
             default:
                 break;
