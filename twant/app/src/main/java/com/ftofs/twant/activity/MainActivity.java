@@ -29,6 +29,7 @@ import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
 import com.donkingliang.imageselector.utils.ImageSelector;
 import com.facebook.CallbackManager;
+import com.ftofs.lib_common_ui.popup.ListPopup;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
@@ -68,7 +69,9 @@ import com.ftofs.twant.handler.StackViewTouchListener;
 import com.ftofs.twant.hot_zone.HotZoneFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.widget.WithdrawPopup;
 import com.gzp.lib_common.base.callback.CommonCallback;
+import com.gzp.lib_common.constant.PopupType;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.tangram.CarouselView;
 import com.ftofs.twant.tangram.HomeStickyView;
@@ -526,7 +529,12 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                 } else if (position == 10) { // 測試2
                                     // EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WEIXIN_LOGIN, null);
 
-                                    Util.startFragment(Test2Fragment.newInstance());
+                                    // Util.startFragment(Test2Fragment.newInstance());
+                                    new XPopup.Builder(MainActivity.this)
+                                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                                            .moveUpToKeyboard(false)
+                                            .asCustom(new WithdrawPopup(MainActivity.this, 2.56))
+                                            .show();
                                 }else if (position == 11) { // 開發寫死的數值通道開關
                                     Config.USE_DEVELOPER_TEST_DATA = !Config.USE_DEVELOPER_TEST_DATA;
                                     ToastUtil.success(getApplicationContext(),Config.USE_DEVELOPER_TEST_DATA?"使用寫死的數據":"使用服務器數據");

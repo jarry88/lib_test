@@ -32,8 +32,8 @@ public class BackgroundDrawable {
             // 将每个角拆分为, [X_radius, Y_radius]
             float[] radii8 = new float[8];
             for (int i = 0; i < 4; i++) {
-                radii8[i] = radii[i];
-                radii8[i + 1] = radii[i];
+                radii8[2 * i] = radii[i];
+                radii8[2 * i + 1] = radii[i];
             }
             drawable.setCornerRadii(radii8);
         }

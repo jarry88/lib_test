@@ -616,6 +616,125 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/white_6dp_radius_bg"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="43dp"
+                            android:paddingLeft="12dp"
+                            android:text="推介分享"
+                            android:gravity="center_vertical">
+                        </TextView>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/tw_light_grey"
+                            />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="94dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="bottom"
+                                        android:orientation="horizontal">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="¥"
+                                            android:textSize="16sp"
+                                            android:textColor="#6B6B6B">
+                                        </TextView>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="4dp"
+                                            android:text="0.00"
+                                            android:textSize="20sp"
+                                            android:textColor="#6B6B6B">
+                                        </TextView>
+                                    </LinearLayout>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="推廣佣金餘額"
+                                        android:textColor="#6C6C6C"
+                                        android:textSize="15sp">
+                                    </TextView>
+                                </LinearLayout>
+                            </FrameLayout>
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="70dp"
+                                android:background="@color/tw_light_grey">
+                            </View>
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_distribution_my_team"
+                                        app:tint="#6B6B6B">
+                                    </ImageView>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:text="我的团队"
+                                        android:textSize="15sp"
+                                        android:textColor="#717171">
+
+                                    </TextView>
+                                </LinearLayout>
+
+                            </FrameLayout>
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/tw_light_grey"
+                            />
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp">
+                            <TextView
+                                android:id="@+id/btn_join_distribution"
+                                android:layout_width="84dp"
+                                android:layout_height="26dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="加入我們"
+                                android:textColor="@android:color/white"
+                                android:textSize="13sp"
+                                android:background="@drawable/app_update_blue_button">
+
+                            </TextView>
+                        </FrameLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -677,13 +796,11 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingBottom="10dp">
-
                             <RelativeLayout
                                 android:id="@+id/btn_handle_price"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-
                                 android:gravity="bottom">
 
                                 <LinearLayout
