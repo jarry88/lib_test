@@ -42,8 +42,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
     }
 
     override fun initVariableId(): Int {
-        return BR
-                .viewModel
+        return BR.viewModel
     }
 
     private var drawListView: BasePopupView?=null
@@ -162,8 +161,8 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         binding.rvList.adapter=mAdapter.apply { showEmptyView(true) }
         binding.refreshLayout.setOnRefreshListener {
             viewModel.currPage=0
-            viewModel.getPropertyList(search = binding.title.getSearchWord()
-            )
+            binding.rvList.scrollToPosition(0)
+            viewModel.getPropertyList(search = binding.title.getSearchWord())
         }
         binding.refreshLayout.setOnLoadMoreListener {
             viewModel.getPropertyList(search = binding.title.getSearchWord())

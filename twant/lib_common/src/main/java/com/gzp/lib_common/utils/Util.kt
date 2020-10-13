@@ -11,8 +11,11 @@ import android.util.Log
 import com.gzp.lib_common.BuildConfig
 import com.gzp.lib_common.constant.SPField
 import com.orhanobut.hawk.Hawk
+import com.umeng.analytics.MobclickAgent
 import java.io.File
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
+fun pushUmengEvent(actionName:String ,analyticsDataMap:HashMap<String,Any?>?=null)=analyticsDataMap?.let {MobclickAgent.onEventObject(BaseContext.instance.getContext(),actionName,it)  }?:MobclickAgent.onEvent(BaseContext.instance.getContext(),actionName)
 object Util {
     fun inDev(): Boolean {
         return BuildConfig.DEBUG

@@ -23,4 +23,17 @@ public class UmengAnalyticsActionName {
     public static final String ACTIVITY_GOODS = "activity_goods";
     public static final String ACTIVITY_STORE = "activity_store";
     public static final String ACTIVITY_ZONE = "activity_zone";
+    //【房产模块】首页
+    public static final String GO853_HOME_PROPERTY_TYPE = "go853_home_property";//房产类型点击
+    public static final String GO853_HOME_SALE_TYPE = "go853_home_sale";//房产租售类型点击
+    public static final String GO853_HOME_city_TYPE = "go853_home_city";//房产区域类型点击
+//    public static final String GO853_HOME_PROPERTY_TYPE = "go853_home_price";//房产价格区域点击
+//    public static final String GO853_HOME_PROPERTY_TYPE = "go853_home_search";//房产搜索区域点击
+//    public static final String GO853_HOME_PROPERTY_TYPE = "go853_home_item";//房产列表区域item点击
+//    public static final String GO853_HOME_PROPERTY_TYPE = "go853_detail_user";//房产详情页用户房产列表点击
+//    public static final String GO853_HOME_PROPERTY_TYPE = "go853_detail_mobile";//房产详情页联系电话点击
+//    public static final String GO853_HOME_PROPERTY_TYPE = "go853_user_item";//用户房产列表区域item点击
+//    public static final String GO853_HOME_PROPERTY_TYPE = "go853_result_search";//搜索结果页 搜索框搜索
+//    public static final String GO853_HOME_PROPERTY_TYPE = "go853_result_item";//搜索结果页 房产列表item搜索
+
 }
