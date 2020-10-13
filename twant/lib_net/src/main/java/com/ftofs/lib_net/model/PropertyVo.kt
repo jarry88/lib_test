@@ -179,9 +179,9 @@ data class PropertyVo(
         1 ->"帶"
         else ->"GO853"
     }
-    fun getBuildingAreaString():String=if(buildingArea>0) "$buildingArea 呎" else ""  //建築面積
-    fun getSalableAreaString():String=if(salableArea>0) "$salableArea 呎" else ""  //實用面積
-    fun getAveragePrice():String=if(pingJunPrice>0)"$pingJunPrice 元" else ""  //實用面積
+    fun getBuildingAreaString():String=if(buildingArea>0) "$buildingArea 呎" else "-"  //建築面積
+    fun getSalableAreaString():String=if(salableArea>0) "$salableArea 呎" else "-"  //實用面積
+    fun getAveragePrice():String=if(pingJunPrice>0)"$pingJunPrice 元" else "-"  //實用面積
 }
 data class GoPhoto(
         val isDefault: Int,

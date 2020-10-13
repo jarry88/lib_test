@@ -5,18 +5,17 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
 import com.bumptech.glide.Glide
-import com.ftofs.lib_common_ui.entity.ListPopupItem
 import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.lib_net.model.RENT_SALE_TYPE
 import com.ftofs.lib_net.model.SELLING_SALE_TYPE
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
+import com.ftofs.twant.config.Config
 import com.ftofs.twant.databinding.GoHouseListFragmentBinding
 import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
@@ -27,6 +26,7 @@ import com.ftofs.twant.widget.SearchHistoryPopup
 import com.google.android.material.tabs.TabLayout
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
+import com.gzp.lib_common.utils.pushUmengEvent
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.lxj.xpopup.interfaces.XPopupCallback
@@ -146,7 +146,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             }
             )
             addTab(newTab().apply {
-                customView = tagViewFactory("租售")
+                customView = tagViewFactory("出售")
             })
             addTab(newTab().apply {
                 customView = tagViewFactory("區域")
@@ -161,7 +161,6 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         binding.rvList.adapter=mAdapter.apply { showEmptyView(true) }
         binding.refreshLayout.setOnRefreshListener {
             viewModel.currPage=0
-            binding.rvList.scrollToPosition(0)
             viewModel.getPropertyList(search = binding.title.getSearchWord())
         }
         binding.refreshLayout.setOnLoadMoreListener {
@@ -208,20 +207,30 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 .asCustom(
                         when (selectedTabPosition) {
                             PROPERTY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.propertyTypeList, tagView?.text.toString()) { s ->
+                                pushUmengEvent(Config.PROD,GO853_FILTER_PROPERTY)
+                                binding.rvList.scrollToPosition(0)
                                 viewModel.savePropertyType(s)
                                 drawListView?.dismiss()
                             }
                             SALE_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.saleTypeList, tagView?.text.toString()) { s ->
+                                pushUmengEvent(Config.PROD,GO853_FILTER_SALE)
+                                binding.rvList.scrollToPosition(0)
+
                                 viewModel.saveSaleType(s)
                                 drawListView?.dismiss()
                             }
 
                             CITY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.cityTypeList, tagView?.text.toString()) { s ->
+                                pushUmengEvent(Config.PROD,GO853_FILTER_CITY)
+                                binding.rvList.scrollToPosition(0)
+
                                 viewModel.saveCityString(s)
                                 drawListView?.dismiss()
                             }
 
                             PRICE_TYPE_BUTTON ->viewModel.getPriceDescList()?.let {  GoDropdownMenu(requireContext(),it , tagView?.text.toString()) { s ->
+                                pushUmengEvent(Config.PROD,GO853_FIlTER_PRICE)
+                                binding.rvList.scrollToPosition(0)
                                 when(viewModel.saleTypeLiveData.value){
                                     SELLING_SALE_TYPE ->viewModel.saveSellingPriceRange(s)
                                     RENT_SALE_TYPE ->viewModel.saveRentPriceRang(s)
@@ -235,7 +244,8 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
 
                             else -> GoDropdownMenu(requireContext())
                         })
-        .show().apply { tabFold=false }
+        .show().apply {
+                    tabFold=false }
     }
 
 
@@ -260,7 +270,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             }
         }
         viewModel.cityTypeLiveData.observe(this){city ->
-            binding.tabLayout.getTabAt(SALE_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{
+            binding.tabLayout.getTabAt(CITY_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{
                 it.text= city
                 binding.refreshLayout.autoRefresh()
             }

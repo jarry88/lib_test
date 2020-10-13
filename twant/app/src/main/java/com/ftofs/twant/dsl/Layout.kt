@@ -35,8 +35,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.ftofs.twant.hot_zone.HotView
-import com.gzp.lib_common.utils.StringUtil
-import com.gzp.lib_common.utils.normalizeImageUrl
+import com.ftofs.twant.util.StringUtil.normalizeImageUrl
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor

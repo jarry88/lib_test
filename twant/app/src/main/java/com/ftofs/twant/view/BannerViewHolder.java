@@ -82,35 +82,37 @@ public class BannerViewHolder implements MZViewHolder<WebSliderItem> {
         setGoodsImageVisibility(View.GONE,GOODS_IMAGE_COUNT);
         if(!webSliderItem.goodsCommons.equals("[]")){
             String goodsCommons = webSliderItem.goodsCommons;
-            EasyJSONArray goodsArray = (EasyJSONArray) EasyJSONArray.parse(goodsCommons);
+            EasyJSONArray goodsArray = EasyJSONArray.parse(goodsCommons);
             //SLog.info("goodsArray%d",goodsArray.length());
-            for (int i=0;i<goodsArray.length();i++) {
-                EasyJSONObject goods;
-                try {
-                    goods = goodsArray.getObject(i);
-                    int commonId = goods.getInt("commonId");
-                    float price = (float) goods.getDouble("goodsPrice0");
-                    String goodsImage = StringUtil.normalizeImageUrl(goods.getSafeString("goodsImage"));
-                    if (StringUtil.isEmpty(goodsImage)) {
-                        goodsImageArr[i].setVisibility(View.GONE);
-                    }
-                    Glide.with(context).load(goodsImage).centerCrop().into(goodsImageArr[i]);
-                    goodsImageArr[i].setCustomData(commonId);
+            if (goodsArray != null) {
+                for (int i=0;i<goodsArray.length();i++) {
+                    EasyJSONObject goods;
+                    try {
+                        goods = goodsArray.getObject(i);
+                        int commonId = goods.getInt("commonId");
+                        float price = (float) goods.getDouble("goodsPrice0");
+                        String goodsImage = StringUtil.normalizeImageUrl(goods.getSafeString("goodsImage"));
+                        if (StringUtil.isEmpty(goodsImage)) {
+                            goodsImageArr[i].setVisibility(View.GONE);
+                        }
+                        Glide.with(context).load(goodsImage).centerCrop().into(goodsImageArr[i]);
+                        goodsImageArr[i].setCustomData(commonId);
 
-                    boolean noPrice = StringUtil.safeModel(goods)== Constant.GOODS_TYPE_CONSULT;
-                    if (noPrice) {
-                        UiUtil.toConsultUI(goodsPriceArr[i]);
-                    } else {
-                        goodsPriceArr[i].setText(StringUtil.formatPrice(context,price,0,false ));
+                        boolean noPrice = StringUtil.safeModel(goods)== Constant.GOODS_TYPE_CONSULT;
+                        if (noPrice) {
+                            UiUtil.toConsultUI(goodsPriceArr[i]);
+                        } else {
+                            goodsPriceArr[i].setText(StringUtil.formatPrice(context,price,0,false ));
+                        }
+                        goodsPriceArr[i].setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
-                    goodsPriceArr[i].setVisibility(View.VISIBLE);
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                }
 
-                if (goodsArray.length() > 0) {
-                    imgDesktop.setVisibility(View.VISIBLE);
-                    setGoodsImageVisibility(View.VISIBLE,goodsArray.length());
+                    if (goodsArray.length() > 0) {
+                        imgDesktop.setVisibility(View.VISIBLE);
+                        setGoodsImageVisibility(View.VISIBLE,goodsArray.length());
+                    }
                 }
             }
 

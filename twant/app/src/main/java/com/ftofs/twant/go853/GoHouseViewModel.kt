@@ -31,7 +31,7 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
     val saleTypeList=listOf("全部","出租",
     "出售",
     "售/租")
-    val saleTypeLiveData by lazy { MutableLiveData<Int>() }
+    val saleTypeLiveData by lazy { MutableLiveData<Int>(SELLING_SALE_TYPE) }
 
     val cityTypeList=listOf("全部","澳門","路氹","路環")
     val cityTypeLiveData by lazy { MutableLiveData<String>() }

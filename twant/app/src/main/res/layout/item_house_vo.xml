@@ -39,10 +39,7 @@
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal"
                 android:layout_marginBottom="4dp"
-
                 >
-
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -87,8 +84,6 @@
                     android:textColor="@color/tw_black"
                     android:layout_marginEnd="10dp"
                     android:lines="1"/>
-<!--                android:text="@{vo.intervalStoreRooms>0?String.valueOf(vo.intervalStoreRooms)+`舖`:``+vo.intervalRoom>0?String.valueOf(vo.intervalRoom)+`房`:``+vo.intervalHall>0?String.valueOf(vo.intervalHall)+`廳`:``+vo.intervalTerrace>0?String.valueOf(vo.intervalTerrace)+`露臺`:``+vo.intervalToilet>0?String.valueOf(vo.intervalToilet)+`厠`:`` ,default =`3舖5房8客廳6露臺7厠所`}"-->
-<!--                android:text="@{String.valueOf(vo.buildingArea)+` 呎`,default =`385 呎`}"-->
 
                 <TextView
                     android:id="@+id/room_info"
@@ -114,7 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:textSize="16sp"
+                android:textSize="@{vo.saleType==3?`14sp`:`16sp`}"
                 android:gravity="center"
                 android:text="@{vo.getPriceText()}"
                 android:textColor="@color/tw_red"

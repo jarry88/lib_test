@@ -76,15 +76,18 @@ class Title @JvmOverloads constructor(
         titleText.visibility= GONE
         searchWight.visibility= VISIBLE
         btnClear.setOnClickListener{editKeyWord?.text=null}
-        editKeyWord?.setOnEditorActionListener { textView, i, keyEvent ->
-            if (i == EditorInfo.IME_ACTION_SEARCH) {
-                val keyword = textView.text.toString().trim { it <= ' ' }
-                if (keyword.isNotEmpty()) {
-                    a(keyword)
+        editKeyWord?.apply {
+            hint=hintText
+            setOnEditorActionListener { textView, i, keyEvent ->
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    val keyword = textView.text.toString().trim { it <= ' ' }
+                    if (keyword.isNotEmpty()) {
+                        a(keyword)
+                    }
+                    true
+                } else {
+                    false
                 }
-                true
-            } else {
-                false
             }
         }
     }

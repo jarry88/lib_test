@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -15,7 +16,8 @@ import com.umeng.analytics.MobclickAgent
 import java.io.File
 import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
-fun pushUmengEvent(actionName:String ,analyticsDataMap:HashMap<String,Any?>?=null)=analyticsDataMap?.let {MobclickAgent.onEventObject(BaseContext.instance.getContext(),actionName,it)  }?:MobclickAgent.onEvent(BaseContext.instance.getContext(),actionName)
+fun pushUmengEvent(config:Boolean,actionName:String ,analyticsDataMap:HashMap<String,Any?>?=null)= if(config) analyticsDataMap?.let {MobclickAgent.onEventObject(BaseContext.instance.getContext(),actionName,it)  }?:MobclickAgent.onEvent(BaseContext.instance.getContext(),actionName)
+else{}
 object Util {
     fun inDev(): Boolean {
         return BuildConfig.DEBUG

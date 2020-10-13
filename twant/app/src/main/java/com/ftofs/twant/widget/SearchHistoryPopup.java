@@ -49,6 +49,7 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
     int twBlue;
 
     public static final String SEARCH_HISTORY_ITEM = "SEARCH_HISTORY_ITEM";
+    public static final String SEARCH_GO_HISTORY_ITEM = "SEARCH_GO_HISTORY_ITEM";
 
     FlowLayout flHistoryContainer;
     FlowLayout flSearchHotContainer;

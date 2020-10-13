@@ -13,4 +13,6 @@ public class UmengAnalyticsPageName {
     public static final String SELECT_PAYMENT = "select_payment";
     // 購物專場activity_zone
     public static final String ACTIVITY_ZONE = "activity_zone";
+    // 房产模块activity_zone
+    public static final String ACTIVITY_GO853 = "activity_go853";
 }
