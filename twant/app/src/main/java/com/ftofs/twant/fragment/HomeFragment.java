@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.lib_common_ui.UiUtilsKt;
 import com.ftofs.twant.go853.Go853HouseListFragment;
+import com.ftofs.twant.kotlin.BlackTestFragment;
 import com.ftofs.twant.login.service.LoginServiceImpl;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
@@ -123,6 +124,14 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         Util.setOnClickListener(view, R.id.btn_test, this);
         view.findViewById(R.id.btn_test).setVisibility(Config.PROD?View.GONE:View.VISIBLE);
+        view.findViewById(R.id.btn_test).setLongClickable(true);
+        view.findViewById(R.id.btn_test).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Util.startFragment(new BlackTestFragment());
+                return true;
+            }
+        });
         Util.setOnClickListener(view, R.id.btn_goto_top, this);
         Util.setOnClickListener(view, R.id.btn_publish_want_post, this);
 

@@ -832,25 +832,18 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="景觀："
-                                    android:textSize="14sp"
-                                    android:lines="1"
-
-                                    android:textColor="@color/gray_66"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
                                     android:text="@{vo.detail}"
                                     android:textColor="@color/tw_black"/>
                             </LinearLayout>
                         </LinearLayout>
-                                            聯係方式
 
+
+                </LinearLayout>
+                    <!--                                            聯係方式-->
                     <RelativeLayout
+                        android:padding="@dimen/dp_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp_15"
                         android:orientation="vertical">
                         <TextView
                             android:id="@+id/tv_title"
@@ -880,12 +873,12 @@
                             android:layout_below="@id/tv_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_weight="2"
 
-                                android:layout_height="wrap_content">
+                                android:layout_height="0dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -955,7 +948,6 @@
                         android:layout_height="6dp"
                         android:background="@color/tw_grey_F3F3"/>
                 </LinearLayout>
-                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 <!--底部電話聯係-->
@@ -984,12 +976,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="聯繫我時，請說是在想要城上睇到的，謝謝！"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:lines="1"/>
             </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="36dp"
                 android:background="@drawable/blue_button_106_39"
                 android:text="電話咨詢"
                 android:textColor="@color/white"

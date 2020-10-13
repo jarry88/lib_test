@@ -841,4 +841,5 @@
     <string name="onsale">出售</string>
     <string name="onsale_rent">售/租</string>
     <string name="onrent">出租</string>
+    <string name="go_no_data_hint">暫無數據~</string>
 </resources>

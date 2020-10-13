@@ -2,6 +2,9 @@ package com.ftofs.lib_net.model
 
 import java.io.Serializable
 
+const val RENT_SALE_TYPE=1
+const val SELLING_SALE_TYPE=2
+const val RENT_AND_SELLING_TYPE=3
 
 data class PropertyVo(
         val additionalFeaturesType: String,
@@ -63,8 +66,7 @@ data class PropertyVo(
         val salableArea: Int,
         val saleDate: Any,
         val saleType: Int,
-        //todo selected 屬性問題
-        val selected: Boolean,
+        val selected: Int,
         val sellReservePrice: Int,
         val sellingPrice: Int,
         val sequence: Int,
@@ -80,6 +82,7 @@ data class PropertyVo(
         val photoList:List<GoPhoto>,
         val pingJunPrice:Double
 ):Serializable{
+
     fun getItemTitle():String=propertyName.plus(floor?.let { " $it" }?:"").plus(unit?.let { " $it" }?:"").plus(street?.let { " $it" }?:"").plus(street?.let { " $it" }?:"")
 //    {
 //        floor?.takeIf{it.isNotEmpty()}?.let { this.plus(" $it") }
@@ -130,10 +133,10 @@ data class PropertyVo(
     }.apply {
         intervalToilet.takeIf { it>0 }?.let { this.plus("${it}衛") }
     }
-    fun getSaleTypeString():String=when(saleType){//租售，1：租，2：售
-        1 ->"出租"
-        2 ->"出售"
-
+    fun getSaleTypeString():String=when(saleType){//租售，1：租，2：售，3：租/售
+        RENT_SALE_TYPE ->"出租"
+        SELLING_SALE_TYPE ->"出售"
+        RENT_AND_SELLING_TYPE ->"售/租"
         else ->""
     }
     //todo 待確定補全的屬性
@@ -145,6 +148,7 @@ data class PropertyVo(
     fun getPriceText():String=when(saleType){
         1->"租 $"+getRentalPriceString()
         2->"售 $" +getSellingPriceString()
+        3->"售 $" +getSellingPriceString()+"    "+"租 $"+getRentalPriceString()
         else ->""
     }
     //todo 待確定補全的屬性

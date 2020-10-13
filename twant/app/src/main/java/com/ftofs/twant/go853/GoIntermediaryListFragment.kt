@@ -21,7 +21,16 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
         binding.title.apply {
             setLeftLayoutClickListener() { onBackPressedSupport() }
             setLeftImageResource(R.drawable.icon_back)
-            text=""
+        }
+        viewModel.currUid=uid
+        binding.refreshLayout.setOnRefreshListener {
+            viewModel.getUserPropertyList()
+        }
+    }
+
+    override fun initViewObservable() {
+        viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
+
         }
     }
 
