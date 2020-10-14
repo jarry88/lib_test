@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<LayoutHistoryLoginBinding, HistoryLoginViewModel>(){
+class HistoryLoginFragment @JvmOverloads constructor(private val historyUser: User?=null):BaseTwantFragmentMVVM<LayoutHistoryLoginBinding, HistoryLoginViewModel>(){
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.layout_history_login
     }
@@ -59,11 +59,15 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     }
     override fun initData() {
         mLoadingPopup= Util.createLoadingPopup(requireContext())
-        binding.vo=historyUser
-        EventBus.getDefault().register(this)
-        EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
-
         binding.title.setLeftLayoutClickListener{onBackPressedSupport()}
+
+        historyUser?.let {
+            binding.vo=it
+
+            EventBus.getDefault().register(this)
+            EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
+        }?:pop()
+
 //
 //        <com.ftofs.twant.login.Title
 //        android:layout_width="match_parent"
@@ -91,7 +95,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
 
     private fun loginAction() {
 //        (activity as LoginActivity).viewModel<LoginViewModel>().value
-        viewModel.login(historyUser)
+        historyUser?.let { viewModel.login(it) }
     }
 
     override fun onDestroyView() {
@@ -151,7 +155,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
         //登陆成功才会保存账号信息
 
     }
-        viewModel.stateLiveData.stateEnumMutableLiveData.observe(this) {
+        viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, {
             when (it) {
                 StateLiveData.StateEnum.Success -> {
                     mLoadingPopup?.dismiss()
@@ -164,6 +168,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
                 }
             }
         }
+        )
     }
 
 
