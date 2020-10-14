@@ -79,7 +79,7 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
             viewModel.currPage=0
             viewModel.getPropertyList(search = binding.title.getSearchWord())
         }
-
+        showSearchHistoryContainer()
     }
 
     private fun showSearchHistoryContainer() {

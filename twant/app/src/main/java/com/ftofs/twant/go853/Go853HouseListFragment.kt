@@ -11,8 +11,6 @@ import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
 import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.PropertyVo
-import com.ftofs.lib_net.model.RENT_SALE_TYPE
-import com.ftofs.lib_net.model.SELLING_SALE_TYPE
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.config.Config
@@ -22,7 +20,6 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.util.SearchHistoryUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
-import com.ftofs.twant.widget.SearchHistoryPopup
 import com.google.android.material.tabs.TabLayout
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
@@ -63,7 +60,6 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
 
         }
     }
-    private var searchHistoryPopup:SearchHistoryPopup?=null
 
     override fun initData() {
         binding.title.apply {

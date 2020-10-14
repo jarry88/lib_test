@@ -1,25 +1,22 @@
 package com.ftofs.twant.go853
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.DemoApiService
-import com.ftofs.lib_net.model.*
-import com.ftofs.lib_net.net.TwantResponse
-import com.ftofs.twant.util.AssetsUtil
+import com.ftofs.lib_net.model.GoeftInfo
+import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.util.Util
-import com.ftofs.twant.vo.goods.BatchNumPriceVo
 import com.gzp.lib_common.base.BaseViewModel
-import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
-import com.wzq.mvvmsmart.net.net_utils.OkHttpUtil
-import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
+const val RENT_SALE_TYPE=1
+const val SELLING_SALE_TYPE=2
+const val RENT_AND_SELLING_TYPE=3
 class GoHouseViewModel(application: Application):BaseViewModel(application) {
     val isTypeLiveData by lazy { MutableLiveData<Int>() }
     val propertyTypeList=listOf("全部","住宅",
@@ -73,18 +70,23 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
     var currUid: Int?=null
     private val repository by lazy { object :BaseRepository(){} }
     val propertyList by lazy { MutableLiveData<GoeftInfo>() }
+    val userPropertyList by lazy { MutableLiveData<GoeftInfo>() }
     val retrofit = (Retrofit.Builder()).client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("http://192.168.5.19:8080/api/").build()
     val testApi=retrofit.create(DemoApiService::class.java)
     val currPropertyInfo by lazy { MutableLiveData<PropertyVo>() }
+
+    var hasMore=true
+    var currPage=0
+    val finalApi =if(Util.inDev()) testApi else repository.api
+
     fun getPropertyDetail(pid: Int) {//獲取房產詳情
         launch(stateLiveData, {
-            repository.run { simpleGet(api.getPropertyInfo(pid)) }
+//            val finalApi =if(Util.inDev()) testApi else api
+            repository.run { simpleGet(finalApi.getPropertyInfo(pid)) }
         }, {
             currPropertyInfo.postValue(it)
         })
     }
-    var hasMore=true
-    var currPage=0
     fun getPropertyList(
             page:Int=currPage+1,
             size:Int=20,
@@ -101,51 +103,42 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
             editDateEnd:String?=null,//	更新時間（"2006-01-02 15:04:05"）：止；如果有 begin, end默認為 nowt
     ) {
         launch(stateLiveData, {
-            if (Util.inDev()) {
-//                delay(2000)
-//                val response = repository.getMockJsonData<TwantResponse<GoeftInfo>>(AssetsUtil.loadText(getApplication(), "json/go853.json"))
-//                Result.Success(response.datas)
-                val params = mapOf<String,Any?>("page" to page, "size" to size)
-                        .run {
-                            if(search.isNullOrEmpty()) this
-                            else this.plus("search" to search)
-                        }.run {
-                            if(sort.isNullOrEmpty()) this
-                            else this.plus("sort" to sort)
-                        }.run {
+            val params = mapOf<String,Any?>("page" to page, "size" to size)
+                    .run {
+                        if(search.isNullOrEmpty()) this
+                        else this.plus("search" to search)
+                    }.run {
+                        if(sort.isNullOrEmpty()) this
+                        else this.plus("sort" to sort)
+                    }.run {
 
-                    isType?.let {  this.plus("isType" to it) }?:this
-                        }.run {
-                    saleType?.let { this.plus("saleType" to it) }?:this
-                        }.run {
-                            if(city.isNullOrEmpty()) this
-                            else this.plus("city" to city)
-                        }.run {
+                        isType?.let {  this.plus("isType" to it) }?:this
+                    }.run {
+                        saleType?.let { this.plus("saleType" to it) }?:this
+                    }.run {
+                        if(city.isNullOrEmpty()) this
+                        else this.plus("city" to city)
+                    }.run {
 
                         sellingPriceBegin?.let { this.plus("sellingPriceBegin" to it) }?:this
-                        }.run {
+                    }.run {
 
                         sellingPriceEnd?.let { this.plus("sellingPriceEnd" to it) }?:this
-                        }.run {
+                    }.run {
 
                         rentalPriceBegin?.let { this.plus("rentalPriceBegin" to it) }?:this
-                        }.run {
+                    }.run {
 
                         rentalPriceEnd?.let { this.plus("rentalPriceEnd" to it) }?:this
-                        }.run {
+                    }.run {
 
                         editDateBegin?.let { this.plus("editDateBegin" to it) }?:this
-                        }.run {
+                    }.run {
                         editDateEnd?.let { this.plus("editDateEnd" to it) }?:this
-                }
+                    }
                 repository.run {
-                    simpleGet(testApi.getPropertyInfoList(
-                            params.apply { SLog.info(this.toString()) }
-                    )
-                    )
+                    simpleGet(finalApi.getPropertyInfoList(params.apply { SLog.info(this.toString()) }))
                 }
-
-            } else repository.run { simpleGet(api.getPropertyInfoList(mapOf())) }
         }, {
             hasMore = it.pageEntity.hasMore
             propertyList.postValue(it).apply {
@@ -196,8 +189,6 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
         saleTypeLiveData.value?.let {
             try {
                 when(it){
-
-
                     RENT_SALE_TYPE ->rentPriceEndLiveData.value
                     else ->null
                 }
@@ -207,7 +198,16 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
         }
 
     fun getUserPropertyList() {
-//        TODO("Not yet implemented")
+    launch(stateLiveData,{repository.run {
+        SLog.info("uid $currUid,page$currPage")
+//        ,mapOf("page" to currPage+1,"size" to "20")
+        simpleGet(finalApi.getGoeftUserUid(currUid?:0,mapOf("page" to currPage+1,"size" to "20"))) }},
+            {userPropertyList.postValue(it)
+                hasMore=it.pageEntity.hasMore
+                it.propertyList?.let {list ->
+                    if(list.isNotEmpty()) currPage++
+                }
+            })
     }
 
     fun savePropertyType(propertyType: String) {

@@ -10,6 +10,7 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
@@ -142,4 +143,11 @@ fun setBackRadius(v: View, radius: Float) {
         }
     }
 
+}
+/**
+ * 注意不能剪裁带背景色的view
+ */
+@BindingAdapter("tv_size")
+fun setTextViewSize(v: TextView, size: Float) {
+    v.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
 }

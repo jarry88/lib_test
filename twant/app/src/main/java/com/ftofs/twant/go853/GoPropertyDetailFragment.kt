@@ -18,6 +18,7 @@ import com.gzp.lib_common.config.Config
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.pushUmengEvent
 import com.zhouwei.mzbanner.holder.MZHolderCreator
+import kotlinx.android.synthetic.main.go_property_detail_fragment.*
 
 class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = -1, private val propertyVo: PropertyVo? = null) : BaseTwantFragmentMVVM<GoPropertyDetailFragmentBinding, GoHouseViewModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
@@ -43,35 +44,31 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
             Util.startFragment(GoIntermediaryListFragment(viewModel.currPropertyInfo.value?.uid))
         }
         binding.btnMobile.setOnClickListener{
-            viewModel.currPropertyInfo.value?.mobile?.let {
-                pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_CALL_MOBILE, hashMapOf("mobile" to it,"pid" to viewModel.currPropertyInfo.value?.pid))
-                Util.dialPhone(activity, it)
-            }?:ToastUtil.error(context, getString(R.string.text_seller_phone_not_set)).apply {
-                pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_CALL_MOBILE, hashMapOf("mobile" to "無","pid" to viewModel.currPropertyInfo.value?.pid))
-            }
+            callToUser()
         }
         binding.btnLink.setOnClickListener{
-            viewModel.currPropertyInfo.value?.mobile?.let {
-                pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_CALL_MOBILE, hashMapOf("mobile" to it,"pid" to viewModel.currPropertyInfo.value?.pid))
-
-                SLog.info(it)
-                Util.dialPhone(activity, it)
-            }?:ToastUtil.error(context, getString(R.string.text_seller_phone_not_set)).apply {
-                pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_CALL_MOBILE, hashMapOf("mobile" to "無","pid" to viewModel.currPropertyInfo.value?.pid))
-
-            }
+           callToUser()
         }
         propertyVo?.let{
             viewModel.currPropertyInfo.postValue(it)
-        }
-        viewModel.getPropertyDetail(pid)
+        }?: viewModel.getPropertyDetail(pid)
 
+    }
+
+    private fun callToUser() {
+        viewModel.currPropertyInfo.value?.mobile?.let {
+            it.split("/").takeIf { list ->list.size>1  }?.let { SLog.info("多個") }
+            pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_CALL_MOBILE, hashMapOf("mobile" to it,"pid" to viewModel.currPropertyInfo.value?.pid))
+            Util.dialPhone(activity, it)
+        }?:ToastUtil.error(context, getString(R.string.text_seller_phone_not_set)).apply {
+            pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_CALL_MOBILE, hashMapOf("mobile" to "無","pid" to viewModel.currPropertyInfo.value?.pid))
+        }
     }
 
     override fun initViewObservable() {
         viewModel.currPropertyInfo.observe(this){
             binding.vo=it
-            it.photoList.takeIf { l-> l.isNotEmpty() }?.let { list ->
+            it.photoList?.takeIf { l-> l.isNotEmpty() }?.let { list ->
                 list.map { p -> WebSliderItem(p.title, "none", "", "", "[]") }
                         .let {
                             binding.banner.setPages(it, MZHolderCreator<BannerViewHolder> { BannerViewHolder(it) })

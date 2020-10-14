@@ -2,10 +2,9 @@ package com.ftofs.lib_net.model
 
 import java.io.Serializable
 
-const val RENT_SALE_TYPE=1
-const val SELLING_SALE_TYPE=2
-const val RENT_AND_SELLING_TYPE=3
-
+//const val RENT_SALE_TYPE=1
+//const val SELLING_SALE_TYPE=2
+//const val RENT_AND_SELLING_TYPE=3
 data class PropertyVo(
         val additionalFeaturesType: String,
         val age: Int,
@@ -79,16 +78,12 @@ data class PropertyVo(
         val uid: Int,
         val unit: String?,//單位：
         val unitPrice: Int,
-        val photoList:List<GoPhoto>,
+        val photoList:List<GoPhoto>?,
         val pingJunPrice:Double
 ):Serializable{
 
     fun getItemTitle():String=propertyName.plus(floor?.let { " $it" }?:"").plus(unit?.let { " $it" }?:"").plus(street?.let { " $it" }?:"").plus(street?.let { " $it" }?:"")
-//    {
-//        floor?.takeIf{it.isNotEmpty()}?.let { this.plus(" $it") }
-//        unit?.takeIf{it.isNotEmpty()}?.let { this.plus(" $it") }
-//        street?.takeIf{it.isNotEmpty()}?.let { this.plus(" $it") }
-//    }
+
     fun getTypeName():String=when(isType){//房產類型（用整形數填寫）：1 : 住宅 2 : 商鋪 3 : 車位 4 : 工業 5 : 地皮 6 : 寫字樓 7 : 別墅
         1->"住宅"
         2->"商鋪"
@@ -134,10 +129,10 @@ data class PropertyVo(
         intervalToilet.takeIf { it>0 }?.let { this.plus("${it}衛") }
     }
     fun getSaleTypeString():String=when(saleType){//租售，1：租，2：售，3：租/售
-        RENT_SALE_TYPE ->"出租"
-        SELLING_SALE_TYPE ->"出售"
-        RENT_AND_SELLING_TYPE ->"售/租"
-        else ->""
+        1 ->"出租"
+        2 ->"出售"
+        3 ->"售/租"
+        else ->"不詳"
     }
     //todo 待確定補全的屬性
     fun getParkingString():String=when(isParkingSpaces){//車位，0：無，1：有
@@ -199,5 +194,7 @@ data class GoeftUser(
         val mobile: String?,//聯繫手機號
         val email: String?,//聯繫郵箱
         val linkMan: String?//聯繫人
-):Serializable
+):Serializable{
+    fun getLinkNumber()=tel?:"".run{mobile?.let { this.plus("|$it") }?:this}
+}
 

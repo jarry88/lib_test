@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.ftofs.twant.R
 import com.ftofs.twant.constant.SearchType
 import com.ftofs.twant.util.SearchHistoryUtil
@@ -26,6 +27,7 @@ class Title @JvmOverloads constructor(
     private val titlebarFollowImage by lazy {findViewById<ImageView>(R.id.follow_img)  }
     private val titlebarRight by lazy {findViewById<RelativeLayout>(R.id.titlebar_rightlayout)  }
     private val titleText by lazy {findViewById<TextView>(R.id.titlebar_title)  }
+    private val iconSearch by lazy {findViewById<ImageView>(R.id.icon_search)  }
     private val searchWight by lazy {findViewById<RelativeLayout>(R.id.rl_search)  }
     val editKeyWord: TouchEditText? by lazy {findViewById(R.id.et_keyword)  }
     private val btnClear by lazy {findViewById<ImageView>(R.id.btn_clear_all)  }
@@ -72,11 +74,17 @@ class Title @JvmOverloads constructor(
         titlebarRight!!.setOnClickListener(listener)
     }
     //  展示搜索栏,并设置回调
-    fun showSearchWidget(hintText:String="请输入关键词",a:(keyword:String)->Unit){
+    fun showSearchWidget(hintText:String="请输入关键词",searchRes:Int?=null,a:(keyword:String)->Unit){
         titleText.visibility= GONE
         searchWight.visibility= VISIBLE
         btnClear.setOnClickListener{editKeyWord?.text=null}
+        searchRes?.let {
+            iconSearch?.let { v->
+                Glide.with(context).load(it).centerCrop().into(v)
+            }
+        }
         editKeyWord?.apply {
+            searchRes?.let {  }
             hint=hintText
             setOnEditorActionListener { textView, i, keyEvent ->
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
