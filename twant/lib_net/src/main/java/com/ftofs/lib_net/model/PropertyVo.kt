@@ -12,7 +12,7 @@ data class PropertyVo(
         val brokeragePercent: Int,
         val brokerageType: Int,
         val building: String,
-        val buildingArea: Int,
+        val buildingArea: Double,
         val city: String,
         val contactHits: Int,
         val cooperation: Int,
@@ -20,6 +20,7 @@ data class PropertyVo(
         val coverkey: Int,
         val decoration: Int,
         val decorationDescription: String,//裝修描述
+        val sourceDes: String,//裝修描述
         val detail: String,
         val developers: String,
         val direction: Int,
@@ -82,7 +83,11 @@ data class PropertyVo(
         val pingJunPrice:Double
 ):Serializable{
 
-    fun getItemTitle():String=(propertyName?:"").plus(floor?.let { " $it" }?:"").plus(unit?.let { " $it" }?:"").plus(street?.let { " $it" }?:"").plus(street?.let { " $it" }?:"")
+    fun getItemTitle():String=
+            (propertyName?:"").
+            plus(floor?.let { " $it" }?:"").
+            plus(unit?.let { " $it" }?:"").
+            plus(street?.let { " $it" }?:"")
 
     fun getTypeName():String=when(isType){//房產類型（用整形數填寫）：1 : 住宅 2 : 商鋪 3 : 車位 4 : 工業 5 : 地皮 6 : 寫字樓 7 : 別墅
         1->"住宅"

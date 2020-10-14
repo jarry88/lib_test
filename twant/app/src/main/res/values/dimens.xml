@@ -45,4 +45,5 @@
     <dimen name="dp_90">90dp</dimen>
     <dimen name="dp_92">92dp</dimen>
     <dimen name="dp_150">150dp</dimen>
+    <dimen name="tab_height">40dp</dimen>
 </resources>

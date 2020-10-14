@@ -55,6 +55,7 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
     override fun initViewObservable() {
         viewModel.userPropertyList.observe(this){
             binding.vo=it.user
+            binding.title.text=it.user?.propertyCorp
             mAdapter.addAll(it.propertyList?: listOf(),viewModel.currPage<=1)
         }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
