@@ -69,6 +69,7 @@ import com.ftofs.twant.handler.StackViewTouchListener;
 import com.ftofs.twant.hot_zone.HotZoneFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.widget.SharePosterPopup;
 import com.ftofs.twant.widget.WithdrawPopup;
 import com.gzp.lib_common.base.callback.CommonCallback;
 import com.gzp.lib_common.constant.PopupType;
@@ -1572,5 +1573,13 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
             canShowOtherPopupNotified = true; // 設置為已經通知過，只通知1次
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CAN_SHOW_OTHER_POPUP, null);
         }
+    }
+
+    public void showSharePosterPopup(File posterFile) {
+        new XPopup.Builder(this)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new SharePosterPopup(this, posterFile))
+                .show();
     }
 }

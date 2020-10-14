@@ -46,7 +46,16 @@ import java.util.List;
  * @author zwm
  */
 public class MyTeamFragment extends BaseFragment implements View.OnClickListener {
-    static final int TOOL_BTN_COUNT = 5;
+    static final int TOOL_BTN_COUNT = 4;
+
+    /*
+    ic_distribution_my_team, R.id.ic_distribution_promoting_order,
+            R.id.ic_distribution_withdraw_record, R.id.ic_distribution_promotion_goods
+     */
+    public static final int TAB_INDEX_MY_TEAM = 0;
+    public static final int TAB_INDEX_PROMOTING_ORDER = 1;
+    public static final int TAB_INDEX_WITHDRAW_RECORD = 2;
+    public static final int TAB_INDEX_PROMOTION_GOODS = 3;
 
     RecyclerView rvList;
     DistributionMemberAdapter memberAdapter;
@@ -66,11 +75,11 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
 
 
     int currSelectedBtnIndex = 0;  // 當前選中的工具欄按鈕的索引
-    int[] toolButtonIdArr = new int[] {R.id.btn_my_team, R.id.btn_promoting_order, R.id.btn_profit_detail,
+    int[] toolButtonIdArr = new int[] {R.id.btn_my_team, R.id.btn_promoting_order,
             R.id.btn_withdraw_record, R.id.btn_promotion_goods, };
-    int[] toolBtnTextIdArr = new int[] {R.id.tv_my_team, R.id.tv_promoting_order, R.id.tv_profit_detail,
+    int[] toolBtnTextIdArr = new int[] {R.id.tv_my_team, R.id.tv_promoting_order,
             R.id.tv_withdraw_record, R.id.tv_promotion_goods, };
-    int[] toolBtnIconIdArr = new int[] {R.id.ic_distribution_my_team, R.id.ic_distribution_promoting_order, R.id.ic_distribution_profit_detail,
+    int[] toolBtnIconIdArr = new int[] {R.id.ic_distribution_my_team, R.id.ic_distribution_promoting_order,
             R.id.ic_distribution_withdraw_record, R.id.ic_distribution_promotion_goods, };
 
     TextView[] tvToolBtnTextArr = new TextView[TOOL_BTN_COUNT];
@@ -251,25 +260,22 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
         currSelectedBtnIndex = i;
         tvToolBtnTextArr[currSelectedBtnIndex].setTextColor(Util.getColor(R.color.tw_blue));
         imgToolBtnIconArr[currSelectedBtnIndex].setImageTintList(ColorStateList.valueOf(Util.getColor(R.color.tw_blue)));
-        if (currSelectedBtnIndex == 0) { // 我的團隊
+        if (currSelectedBtnIndex == TAB_INDEX_MY_TEAM) { // 我的團隊
             vwSeparator.setVisibility(View.VISIBLE);
             myTeamTabContainer.setVisibility(View.VISIBLE);
             rvList.setBackgroundResource(R.drawable.white_r4dp_bg);
             rvList.setAdapter(memberAdapter);
-        } else if (currSelectedBtnIndex == 1) { // 推介訂單
+        } else if (currSelectedBtnIndex == TAB_INDEX_PROMOTING_ORDER) { // 推介訂單
             vwSeparator.setVisibility(View.VISIBLE);
             promotingOrderTabContainer.setVisibility(View.VISIBLE);
             rvList.setBackground(null);
             rvList.setAdapter(orderAdapter);
-        } else if (currSelectedBtnIndex == 2) { // 收益明細
-            rvList.setBackgroundResource(R.drawable.white_r4dp_bg);
-            rvList.setAdapter(profitDetailAdapter);
-        } else if (currSelectedBtnIndex == 3) { // 提現記錄
+        } else if (currSelectedBtnIndex == TAB_INDEX_WITHDRAW_RECORD) { // 提現記錄
             vwSeparator.setVisibility(View.VISIBLE);
             withdrawRecordTabContainer.setVisibility(View.VISIBLE);
             rvList.setBackground(null);
             rvList.setAdapter(withdrawRecordAdapter);
-        } else if (currSelectedBtnIndex == 4) { // 推介商品
+        } else if (currSelectedBtnIndex == TAB_INDEX_PROMOTION_GOODS) { // 推介商品
             vwSeparator.setVisibility(View.VISIBLE);
             promotionGoodsTabContainer.setVisibility(View.VISIBLE);
             rvList.setBackground(null);

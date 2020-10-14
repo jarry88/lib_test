@@ -19,7 +19,7 @@
                 android:id="@+id/img_avatar"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/avatar_female">
+                android:src="@drawable/icon_twant_loge">
             </de.hdodenhof.circleimageview.CircleImageView>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
                     android:id="@+id/tv_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Jude Harvey"
+                    android:text="想要城客友"
                     android:textSize="14sp"
                     android:textColor="#717171">
                 </TextView>
@@ -123,8 +123,8 @@
             android:layout_height="80dp"
             android:layout_marginTop="8dp"
             android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
             android:src="@drawable/distribution_qr_code">
-
         </ImageView>
         
         <TextView

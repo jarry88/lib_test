@@ -42,8 +42,12 @@ public class BitmapUtil {
      * @param path 要保存到的文件路径
      */
     public static void Bitmap2File(Bitmap bitmap, String path, Bitmap.CompressFormat format, int quality) {
-        File file = new File(path);//设置文件名称
-        String strDirectory = PathUtil.getDirectory(path);
+        File file = new File(path);
+        Bitmap2File(bitmap, file, format, quality);
+    }
+
+    public static void Bitmap2File(Bitmap bitmap, File file, Bitmap.CompressFormat format, int quality) {
+        String strDirectory = PathUtil.getDirectory(file.getAbsolutePath());
         File directory = new File(strDirectory);
 
         // 先确定目录是否存在，如果不存在createNewFile会抛出异常，所以如果目录不存在，则创建

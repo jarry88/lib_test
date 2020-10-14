@@ -1,14 +1,17 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import androidx.annotation.NonNull;
 
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.ftofs.twant.R;
@@ -17,7 +20,11 @@ import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.fragment.GeneratePosterFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.util.BitmapUtil;
+import com.ftofs.twant.util.Util;
+import com.gzp.lib_common.base.Jarbon;
 import com.gzp.lib_common.utils.SLog;
 import com.gzp.lib_common.task.TaskObservable;
 import com.gzp.lib_common.task.TaskObserver;
@@ -34,6 +41,7 @@ import com.ftofs.twant.util.WeixinUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
+import com.qmuiteam.qmui.util.QMUIDrawableHelper;
 
 import org.urllib.Urls;
 
@@ -41,6 +49,13 @@ import java.io.File;
 import java.io.IOException;
 
 import cn.snailpad.easyjson.EasyJSONObject;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 
 
@@ -86,6 +101,9 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     View btnShareToWord;
     View btnShareToPoster;
 
+    int commonId;
+    String goodsName;
+    String goodsImageUrl;
     String goodsWord;  // 商品分享口令
     String storeWord;  // 店鋪分享口令
 
@@ -141,7 +159,9 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                 if (shareData.exists("shareType")) {
                     shareType = shareData.getInt("shareType");
                     if (shareType == SHARE_TYPE_GOODS) {
-                        int commonId = shareData.getInt("commonId");
+                        commonId = shareData.optInt("commonId");
+                        goodsName = shareData.optString("goodsName");
+                        goodsImageUrl = shareData.optString("goodsImage");
                         getCommandWord(shareType, commonId);
 
                         btnShareToWord.setOnClickListener(this);
@@ -159,8 +179,11 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
-        btnShareToPoster = findViewById(R.id.btn_share_to_poster);
-        btnShareToPoster.setOnClickListener(this);
+        if (commonId > 0) { // 如果是商品分享
+            btnShareToPoster = findViewById(R.id.btn_share_to_poster);
+            btnShareToPoster.setVisibility(VISIBLE);
+            btnShareToPoster.setOnClickListener(this);
+        }
     }
 
     /**
@@ -373,7 +396,8 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 
             dismiss();
         } else if (id == R.id.btn_share_to_poster) { // 分享海報
-
+            Util.startFragment(GeneratePosterFragment.newInstance(commonId, goodsName, goodsImageUrl));
+            dismiss();
         }
     }
 
