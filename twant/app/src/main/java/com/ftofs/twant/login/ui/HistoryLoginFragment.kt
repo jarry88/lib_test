@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<LayoutHistoryLoginBinding, HistoryLoginViewModel>(){
+class HistoryLoginFragment @JvmOverloads constructor(private val historyUser: User?=null):BaseTwantFragmentMVVM<LayoutHistoryLoginBinding, HistoryLoginViewModel>(){
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.layout_history_login
     }
@@ -33,9 +33,9 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     override fun initVariableId(): Int {
         return BR.viewModel
     }
-    lateinit var mLoadingPopup: BasePopupView
+    private var mLoadingPopup: BasePopupView?=null
     fun showLoading(){
-        mLoadingPopup.show()
+        mLoadingPopup?.show()
 
     }
     private val aViewModel by lazy { ViewModelProvider(this).get(LoginViewModel::class.java) }
@@ -50,7 +50,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
 
     override fun onSupportInvisible() {
         super.onSupportInvisible()
-        mLoadingPopup.dismiss()
+        mLoadingPopup?.dismiss()
     }
 
     override fun onDestroy() {
@@ -59,11 +59,15 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
     }
     override fun initData() {
         mLoadingPopup= Util.createLoadingPopup(requireContext())
-        binding.vo=historyUser
-        EventBus.getDefault().register(this)
-        EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
-
         binding.title.setLeftLayoutClickListener{onBackPressedSupport()}
+
+        historyUser?.let {
+            binding.vo=it
+
+            EventBus.getDefault().register(this)
+            EBMessage.postMessage(EBMessageType.LOADING_POPUP_DISMISS,null)
+        }?:pop()
+
 //
 //        <com.ftofs.twant.login.Title
 //        android:layout_width="match_parent"
@@ -91,7 +95,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
 
     private fun loginAction() {
 //        (activity as LoginActivity).viewModel<LoginViewModel>().value
-        viewModel.login(historyUser)
+        historyUser?.let { viewModel.login(it) }
     }
 
     override fun onDestroyView() {
@@ -143,7 +147,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
                 hideSoftInput()
 
                 SLog.info("登錄成功")
-                com.ftofs.twant.util.Util.getMemberToken(_mActivity)
+                Util.getMemberToken(_mActivity)
                 (activity as LoginActivity).onBackPressedSupport()
             }
             msgError.observe(this@HistoryLoginFragment){if(it.isNotEmpty()) ToastUtil.error(context, it)}
@@ -151,7 +155,7 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
         //登陆成功才会保存账号信息
 
     }
-        viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, Observer {
+        viewModel.stateLiveData.stateEnumMutableLiveData.observe(this, {
             when (it) {
                 StateLiveData.StateEnum.Success -> {
                     mLoadingPopup?.dismiss()
@@ -163,7 +167,8 @@ class HistoryLoginFragment(private val historyUser: User):BaseTwantFragmentMVVM<
 //                    loadingUtil?.hideLoading()
                 }
             }
-        })
+        }
+        )
     }
 
 

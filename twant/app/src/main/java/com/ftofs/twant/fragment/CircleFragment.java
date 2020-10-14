@@ -157,23 +157,20 @@ public class CircleFragment extends MainBaseFragment implements View.OnClickList
         historyPopupLayout.setOnClickListener(this);
 
         etKeyword = view.findViewById(R.id.et_keyword);
-        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchPostParams.keyword = textView.getText().toString().trim();
-                    if (!StringUtil.isEmpty(searchPostParams.keyword)) {
-                        SearchHistoryUtil.saveSearchHistory(SearchType.POST.ordinal(), searchPostParams.keyword);
-                    }
-                    hideSearchHistoryContainer();
-
-                    currPage = 0;
-                    loadPostData(currPage + 1);
-
-                    return true;
+        etKeyword.setOnEditorActionListener((textView, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchPostParams.keyword = textView.getText().toString().trim();
+                if (!StringUtil.isEmpty(searchPostParams.keyword)) {
+                    SearchHistoryUtil.saveSearchHistory(SearchType.POST.ordinal(), searchPostParams.keyword);
                 }
-                return false;
+                hideSearchHistoryContainer();
+
+                currPage = 0;
+                loadPostData(currPage + 1);
+
+                return true;
             }
+            return false;
         });
         etKeyword.setSimpleCallback(this);
 
@@ -203,16 +200,13 @@ public class CircleFragment extends MainBaseFragment implements View.OnClickList
 
         rvPostList = view.findViewById(R.id.rv_post_list);
         adapter = new PostListAdapter(_mActivity, postItemList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                PostItem postItem = postItemList.get(position);
-                if (postItem.getItemType() == Constant.ITEM_TYPE_NORMAL) {
-                    Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
-                } else {
+        adapter.setOnItemClickListener((adapter, view1, position) -> {
+            PostItem postItem = postItemList.get(position);
+            if (postItem.getItemType() == Constant.ITEM_TYPE_NORMAL) {
+                Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
+            } else {
 //                    Util.startFragment(AddPostFragment.newInstance(false));
-                    ApiUtil.addPost(_mActivity,false);
-                }
+                ApiUtil.addPost(_mActivity,false);
             }
         });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {

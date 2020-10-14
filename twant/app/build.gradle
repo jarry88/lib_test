@@ -35,7 +35,7 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
 
 
-        versionCode 221
+        versionCode 222
         versionName "1.2.8.02"
 
         ndk {

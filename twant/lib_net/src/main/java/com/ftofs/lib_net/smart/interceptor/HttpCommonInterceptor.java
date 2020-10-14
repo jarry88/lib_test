@@ -52,7 +52,7 @@ public class HttpCommonInterceptor implements Interceptor {
         request = addHeader(request);
         addCookie(context, request);
         response = chain.proceed(request);
-
+        KLog.INSTANCE.e(TAG, "网络请求--#" + response.request().url());
         if (Config.INSTANCE.getDEVELOPER_MODE()) {
             ResponseBody responseBody = response.body();
             KLog.INSTANCE.e(TAG, "网络请求--#" + response.request().url());

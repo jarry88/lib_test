@@ -79,7 +79,7 @@ interface DemoApiService {
     @GET("app/home/random/member/list")
     suspend fun getRandomMemberList(@Query("token")token:String?): TwantResponse<RandomFriendInfo>
 
-    //【登錄模塊】
+//【登錄模塊】
     //賬號密碼登錄
     @POST("v2/login")
     suspend fun getLogin(@Query("mobile")mobile:String,@Query("password")password:String,@Query("clientType")clientType:String):TwantResponse<LoginInfo>
@@ -106,9 +106,23 @@ interface DemoApiService {
     suspend fun passwordLogin(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
     @POST("loginconnect/new/weixin/login")
     suspend fun getWXLoginStepOne(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
-    //【熱區模塊】 熱區首頁
+//【登錄模塊】結束
+
+//【熱區模塊】 熱區首頁
     @GET("hotzone/index")
     suspend fun getHotZoneIndex(@Query("hotId")hotId: Int?): TwantResponse<HotZoneInfo>
+//【熱區模塊】 熱區結束
+
+//【GOEFT】房產信息模塊
+
+    @GET("goeft/property/{propertyId}")//房產詳情
+    suspend fun getPropertyInfo(@Path("propertyId")propertyId: Int): TwantResponse<PropertyVo>
+    @GET("goeft/property/list")//房產信息列表
+    suspend fun getPropertyInfoList(@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>):TwantResponse<GoeftInfo>//问题出在参数map的value类型Any.对于java来说,这个value的类型是Object,可以被Retrofit识别,但对于kotlin来说,retrofit会把Any识别成 ?,就报出了错误.
+    @GET("goeft/user/{uid}")//房產用戶列表
+    suspend fun getGoeftUserUid(@Path("uid") uid:Int,@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>): TwantResponse<GoeftInfo>
+//【GOEFT】房產模塊結束
+
 
 
 //@Field

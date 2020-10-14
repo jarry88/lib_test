@@ -50,17 +50,12 @@ class FeatureGoodViewModel(application: Application) : BaseViewModel(application
                             val goodsList = baseResponse.data.goodsList
 
                             //自定义处理
-                            if (goodsList != null) {
-                                if (goodsList.size > 0) {
-                                    liveData.postValue(goodsList)
-                                } else {
-
-                                    //    showShortToast("没有更多数据了")
-                                    KLog.e("请求到数据students.size" + goodsList.size)
-                                }
+                            if (goodsList.size > 0) {
+                                liveData.postValue(goodsList)
                             } else {
-                                KLog.e("数据返回null")
-                                stateLiveData.postError()
+
+                                //    showShortToast("没有更多数据了")
+                                KLog.e("请求到数据students.size" + goodsList.size)
                             }
                         } else {
                             //code错误时也可以定义Observable回调到View层去处理

@@ -18,6 +18,8 @@ import com.ftofs.twant.entity.SearchHistoryItem;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
+import com.ftofs.twant.go853.GoSearchResultFragment;
+import com.ftofs.twant.go853.GoSearchType;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
@@ -30,20 +32,24 @@ import com.nex3z.flowlayout.FlowLayout;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 public class SearchHistoryPopup extends PartShadowPopupView implements View.OnClickListener {
+    boolean loadRoomData;
     Context context;
     SearchType searchType;
+    GoSearchType goSearchType;
     SimpleCallback callback;
 
     int twBlack;
     int twBlue;
 
     public static final String SEARCH_HISTORY_ITEM = "SEARCH_HISTORY_ITEM";
+    public static final String SEARCH_GO_HISTORY_ITEM = "SEARCH_GO_HISTORY_ITEM";
 
     FlowLayout flHistoryContainer;
     FlowLayout flSearchHotContainer;
@@ -55,6 +61,15 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
         this.context = context;
         this.searchType = searchType;
         this.callback = callback;
+    }
+
+    public SearchHistoryPopup(@NonNull Context context, GoSearchType searchType, SimpleCallback callback) {
+        super(context);
+
+        this.context = context;
+        this.goSearchType = searchType;
+        this.callback = callback;
+        loadRoomData = true;//只加載本地數據 ，目前使用與 go853場景
     }
 
 
@@ -72,8 +87,8 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
         flHistoryContainer = findViewById(R.id.fl_search_history_container);
         flSearchHotContainer = findViewById(R.id.fl_search_hot_container);
 
-        List<SearchHistoryItem> historyItemList = SearchHistoryUtil.loadSearchHistory(searchType.ordinal());
-        for (SearchHistoryItem item : historyItemList) {
+        List<SearchHistoryItem> historyItemList = SearchHistoryUtil.loadSearchHistory(loadRoomData?goSearchType.ordinal():searchType.ordinal());
+        for (SearchHistoryItem item : Objects.requireNonNull(historyItemList)) {
             TextView textView = (TextView) LayoutInflater.from(context)
                     .inflate(R.layout.search_history_popup_item, flHistoryContainer, false);
             textView.setText(item.keyword);
@@ -85,8 +100,11 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
         }
 
         findViewById(R.id.btn_clear_all).setOnClickListener(this);
-
-        loadHotKeyword();
+        if (loadRoomData) {
+            SLog.info(SearchHistoryUtil.loadSearchHistory(goSearchType.ordinal()).toString());
+        } else {
+            loadHotKeyword();
+        }
     }
 
     @Override
@@ -107,8 +125,9 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
             if (tag != null && tag instanceof String && SEARCH_HISTORY_ITEM.equals(tag)) {
                 TextView btnSearchHistoryItem = (TextView) v;
                 String keyword = btnSearchHistoryItem.getText().toString();
-
-                if (searchType == SearchType.GOODS || searchType == SearchType.STORE) {
+                if (loadRoomData) {
+                    callback.onSimpleCall(keyword);
+                }else if (searchType == SearchType.GOODS || searchType == SearchType.STORE) {
                     Util.startFragment(SearchResultFragment.newInstance(searchType.name(),
                             EasyJSONObject.generate("keyword", keyword).toString()));
                 } else {

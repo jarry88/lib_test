@@ -105,4 +105,8 @@ public class SearchHistoryUtil {
         String key = SPField.FIELD_SEARCH_TYPE + searchTypeInt;
         Hawk.put(key, "[]");
     }
+    /**
+     * 清除歷史搜索記錄
+     * @param searchTypeInt
+     */
 }

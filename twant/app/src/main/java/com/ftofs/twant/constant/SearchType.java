@@ -1,5 +1,7 @@
 package com.ftofs.twant.constant;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * 搜索類型
  * @author zwm
@@ -20,5 +22,11 @@ public enum SearchType {
     /**
      * 僅能搜索想要帖
      */
-    POST
+    POST,
+
+
+    /**
+     * 能夠搜索所有房产類別
+     */
+    GO_ALL;
 }

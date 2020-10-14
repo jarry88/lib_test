@@ -1,9 +1,6 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ftofs.lib_common_ui.UiUtilsKt;
-import com.ftofs.twant.login.service.LoginServiceImpl;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
@@ -30,21 +25,21 @@ import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
-import com.ftofs.twant.util.UiUtil;
-import com.ftofs.twant.widget.HwLoadingPopup;
-import com.github.richardwrq.krouter.annotation.Inject;
-import com.github.richardwrq.krouter.api.core.KRouter;
-import com.gzp.lib_common.service.ConstantsPath;
-import com.gzp.lib_common.utils.BaseContextKt;
-import com.gzp.lib_common.utils.SLog;
+import com.ftofs.twant.go853.Go853HouseListFragment;
+import com.ftofs.twant.kotlin.BlackTestFragment;
+import com.ftofs.twant.login.service.LoginServiceImpl;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
-import com.gzp.lib_common.base.Jarbon;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ActivityPopup;
+import com.github.richardwrq.krouter.annotation.Inject;
+import com.github.richardwrq.krouter.api.core.KRouter;
+import com.gzp.lib_common.base.Jarbon;
+import com.gzp.lib_common.service.ConstantsPath;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.orhanobut.hawk.Hawk;
@@ -67,10 +62,8 @@ import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
-import kotlin.reflect.jvm.internal.UtilKt;
 import okhttp3.Call;
 
-import static com.ftofs.twant.util.Util.createLoadingPopup;
 import static com.ftofs.twant.util.Util.dip2px;
 
 public class HomeFragment extends MainBaseFragment implements View.OnClickListener {
@@ -122,6 +115,14 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         Util.setOnClickListener(view, R.id.btn_test, this);
         view.findViewById(R.id.btn_test).setVisibility(Config.PROD?View.GONE:View.VISIBLE);
+        view.findViewById(R.id.btn_test).setLongClickable(true);
+        view.findViewById(R.id.btn_test).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Util.startFragment(new BlackTestFragment());
+                return true;
+            }
+        });
         Util.setOnClickListener(view, R.id.btn_goto_top, this);
         Util.setOnClickListener(view, R.id.btn_publish_want_post, this);
 
@@ -409,7 +410,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 //            final BasePopupView load=Util.createLoadingPopup(requireContext()).show();
 
 //            UiUtilsKt.createLoadingPopup(requireContext()).show();
-            start(LabFragment.newInstance());
+            Util.startFragment(new Go853HouseListFragment());
 //            loginService.start(_mActivity);
         }
     }

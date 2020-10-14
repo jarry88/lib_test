@@ -46,7 +46,7 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                     success(re.datas)}
                 is Result.DataError->{//400參數錯誤。401登陸錯誤
                     errorMessage="数据加载失败"
-                    SLog.info("400、401")
+                    SLog.info("400、401 ${re.datas}")
                     error(re.datas)
 //                    errorMessage=re
                     stateLiveData.postError()

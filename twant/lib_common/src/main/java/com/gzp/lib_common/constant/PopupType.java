@@ -1,5 +1,7 @@
 package com.gzp.lib_common.constant;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Popup彈窗類型
  * @author zwm
@@ -242,4 +244,10 @@ public enum PopupType {
      * 處理訂單中售罄的商品
      */
     HANDLE_SOLD_OUT_GOODS,
+
+    /**
+     * 房产下拉弹窗
+     */
+    GO_PROPERTY_TYPE,
+    ;
 }

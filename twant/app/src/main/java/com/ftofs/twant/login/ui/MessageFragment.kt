@@ -166,7 +166,7 @@ class MessageFragment @JvmOverloads constructor(val mobile: String="", val sdkAv
                 SLog.info("onError, exception[%s]", exception.toString())
             }
         })
-        aViewModel?.apply {this.getMobileAreaZoneList() }
+        aViewModel.apply {this.getMobileAreaZoneList() }
     }
 
     override fun onSupportVisible() {

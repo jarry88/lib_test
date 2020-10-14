@@ -91,6 +91,7 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_post1, this);
 
         btnTest3 = view.findViewById(R.id.btn_test2);
+        btnTest3.setText("空白自留地");
         recyclerView = view.findViewById(R.id.rv_list);
         luckpan = view.findViewById(R.id.luckpan);
         imageViewCropped = view.findViewById(R.id.imageViewCropped);
@@ -203,7 +204,6 @@ public class LabFragment extends BaseFragment implements View.OnClickListener {
         }else if (id == R.id.btn_post1) {
             ToastUtil.info(_mActivity, "btn_post1");
         } else if (id == R.id.btn_test2) {
-            ToastUtil.info(_mActivity, "進入熱區頁 12");
             KLog.INSTANCE.e("進入熱區頁");
             //49  8080
             start(new BlackTestFragment());

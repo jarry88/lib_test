@@ -837,4 +837,9 @@
     <string name="text_more_activity_prepare">更多活動正在籌備中</string>
     <string name="text_goods_mannager">商品管理</string>
     <string name="input_password_hint_less">請輸入密碼</string>
+<!--    地產模塊-->
+    <string name="onsale">出售</string>
+    <string name="onsale_rent">售/租</string>
+    <string name="onrent">出租</string>
+    <string name="go_no_data_hint">暫無數據~</string>
 </resources>

@@ -213,7 +213,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/thirdLogin_container"/>
         <TextView
-            android:layout_width="20dp"
+            android:layout_width="35dp"
             android:layout_height="60dp"
             android:id="@+id/btn_test"
             app:layout_constraintStart_toStartOf="parent"

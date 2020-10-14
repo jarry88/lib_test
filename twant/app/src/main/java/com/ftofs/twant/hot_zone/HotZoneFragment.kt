@@ -23,14 +23,18 @@ import com.gzp.lib_common.utils.SLog
 import com.wzq.mvvmsmart.event.StateLiveData
 import retrofit2.http.GET
 
-class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHotzoneBinding, HotZoneViewModel> (){
+class HotZoneFragment @JvmOverloads constructor(private val hotId: Int=-1) :BaseTwantFragmentMVVM<FragmentHotzoneBinding, HotZoneViewModel> (){
     private val mAdapter by lazy {
         object : DataBoundAdapter<HotZoneVo, ItemHotZoneVoBinding>(parentFragment = this),SimpleCallback{
             override val layoutId: Int
                 get() = R.layout.item_hot_zone_vo
 
+
             override fun initView(binding: ItemHotZoneVoBinding, item: HotZoneVo) {
                 binding.vo=item
+                if (hotId == -1) {
+                    hideSoftInputPop()
+                }
                 Glide.with(context).load(StringUtil.normalizeImageUrl(item.url)).into(binding.hotImage)
                 binding.hotImage.apply {
                     adjustViewBounds=true
@@ -140,11 +144,12 @@ class HotZoneFragment(private val hotId: Int) :BaseTwantFragmentMVVM<FragmentHot
         viewModel.hotZoneInfo.observe(this){
             SLog.info("观测到hotZoneInfo数据")
             binding.title.text=it.hotName
-            SLog.info(it.hotZoneVoList.toString())
-            it.hotZoneVoList.takeIf { it.isNotEmpty() }?.apply {
+            SLog.info(it.hotZoneVoList?.toString())
+            it.hotZoneVoList?.takeIf { it.isNotEmpty() }?.apply {
                 mAdapter.addAll(this, true)
             }
         }
+
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
             when(it){
                 StateLiveData.StateEnum.Error -> SLog.info("异常")
