@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -51,6 +52,14 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
     NestedScrollView containerView;
     int containerViewHeight = -1;
+
+    int marketingState;
+    int marketingArticleId;
+    String marketingUrl; // 用於發展下級的分享Url
+
+    TextView tvCommissionAmount;
+    ImageView icDistributionMyTeam;
+    TextView tvDistributionMyTeam;
 
 
     /**
@@ -91,6 +100,10 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         tvToBeReceivedCount = view.findViewById(R.id.tv_to_be_received_count);
         tvToBeCommentedCount = view.findViewById(R.id.tv_to_be_commented_count);
         tvHelpCount = view.findViewById(R.id.tvHelpCount);
+        tvCommissionAmount = view.findViewById(R.id.tv_commission_amount);
+        icDistributionMyTeam = view.findViewById(R.id.ic_distribution_my_team);
+        tvDistributionMyTeam = view.findViewById(R.id.tv_distribution_my_team);
+
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_my_bill, this);
@@ -166,7 +179,51 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
         loadGuessData();
         loadOrderCountData();
+
+        loadData();
         checkWalletStatus(false);
+    }
+
+    private void loadData() {
+        String url = Api.PATH_MEMBER_BUY_INDEX;
+        SLog.info("url[%s]", url);
+        Api.getUI(url, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, "", responseStr, "");
+                    return;
+                }
+
+                try {
+                    marketingState = responseObj.optInt("datas.marketingState");
+                    marketingArticleId = responseObj.optInt("datas.articleId");
+                    marketingUrl = responseObj.optString("datas.marketingUrl");
+
+                    if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) { // 申請通過
+                        double unpayCommission = responseObj.optInt("datas.marketingMember.unpayCommission");
+                        tvCommissionAmount.setText(StringUtil.formatFloat(unpayCommission));
+                        icDistributionMyTeam.setImageResource(R.drawable.icon_distribution_share);
+                        tvDistributionMyTeam.setText("分享好友");
+                    } else { // 其他狀態
+                        tvCommissionAmount.setText("***.**");
+                        icDistributionMyTeam.setImageResource(R.drawable.ic_distribution_my_team);
+                        tvDistributionMyTeam.setText("我的團隊");
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     @Override
@@ -245,7 +302,13 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 Util.startFragment(MyBargainListFragment.newInstance(dataType));
                 break;
             case R.id.btn_join_distribution:
-                Util.startFragment(DistributionEnrollmentFragment.newInstance());
+                if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) {
+                    Util.startFragment(MyTeamFragment.newInstance());
+                } else if (marketingState == Constant.MARKETING_STATE_APPLY_IN_PROGRESS) {
+                    ToastUtil.error(_mActivity, "審核中，請耐心等候");
+                } else {
+                    Util.startFragment(DistributionEnrollmentFragment.newInstance(marketingArticleId, null));
+                }
                 break;
             default:
                 break;

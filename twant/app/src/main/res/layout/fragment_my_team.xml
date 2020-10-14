@@ -145,7 +145,6 @@
                         android:textSize="13sp"
                         android:background="@drawable/blue_button_75_25"
                         android:gravity="center">
-
                     </TextView>
                 </RelativeLayout>
             </LinearLayout>

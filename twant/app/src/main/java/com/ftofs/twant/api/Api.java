@@ -1550,7 +1550,50 @@ public class Api {
      */
     public static final String PATH_TARIFF_BUY_INDEX_GOODS = "/tariff_buy/index/goods";
 
+    /**
+     * 【分銷】申請成爲分銷商
+     */
+    public static final String PATH_DISTRIBUTOR_APPLY = "/marketing/apply";
 
+    /**
+     * 【分銷】我的團隊首頁
+     */
+    public static final String PATH_MY_TEAM_HOME = "/member/marketing/team";
+
+    /**
+     * 【分銷】我的團隊(下綫)
+     */
+    public static final String PATH_MEMBER_MARKETING_SUB = "/member/marketing/sub";
+
+    /**
+     * 【會員中心】購買首頁
+     */
+    public static final String PATH_MEMBER_BUY_INDEX = "/member/buyIndex";
+
+    /**
+     * 【賬戶設置】實名認證
+     */
+    public static final String PATH_JOIN_REAL_NAME = "/member/real_name_auth/join_update";
+
+    /**
+     * 【分銷】提現(所有可提現金額)
+     */
+    public static final String PATH_DISTRIBUTION_WITHDRAW = "/member/marketing/withdrawDeposit";
+
+    /**
+     * 【分銷】提現記錄
+     */
+    public static final String PATH_DISTRIBUTION_WITHDRAW_RECORD = "/member/marketing/withdrawDepositLog";
+
+    /**
+     * 【分銷】提現賬號保存
+     */
+    public static final String PATH_SAVE_DISTRIBUTION_WITHDRAW_ACCOUNT = "/member/marketing/account/apply";
+
+    /**
+     * 【分銷】推介商品
+     */
+    public static final String PATH_MEMBER_MARKETING_GOODS = "/member/marketing/goods";
 
     /**
      * 發送Http請求

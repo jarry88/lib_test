@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +12,37 @@ import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.AppUpdatePopup;
-import com.ftofs.twant.widget.DistributionPromotionContractPopup;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
+
 public class DistributionEnrollmentFragment extends BaseFragment implements View.OnClickListener {
     boolean agreeContractChecked;  // 是否勾選了《分銷推廣協議》
     ImageView iconAgreeContract;
 
-    public static DistributionEnrollmentFragment newInstance() {
+    int articleId; // 協議文章的Id
+    String articleTitle; // 協議文章的標題
+
+    public static DistributionEnrollmentFragment newInstance(int articleId, String articleTitle) {
         Bundle args = new Bundle();
 
         DistributionEnrollmentFragment fragment = new DistributionEnrollmentFragment();
         fragment.setArguments(args);
+
+        fragment.articleId = articleId;
+        fragment.articleTitle = articleTitle;
 
         return fragment;
     }
@@ -64,18 +77,37 @@ public class DistributionEnrollmentFragment extends BaseFragment implements View
                 return;
             }
 
+            String url = Api.PATH_DISTRIBUTOR_APPLY;
+            Api.postUI(url, null, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, "", "", e.getMessage());
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
 
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, "", responseStr, "");
+                            return;
+                        }
+
+                        ToastUtil.success(_mActivity, "申請成功");
+                        hideSoftInputPop();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
         } else if (id == R.id.btn_agree_contract) {
             agreeContractChecked = !agreeContractChecked;
             iconAgreeContract.setImageResource(agreeContractChecked ? R.drawable.ic_baseline_check_box_24 : R.drawable.ic_baseline_check_box_outline_blank_24);
         } else if (id == R.id.btn_view_contract) {
-            new XPopup.Builder(_mActivity)
-                    .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
-                    .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new DistributionPromotionContractPopup(_mActivity))
-                    .show();
+            Util.startFragment(H5GameFragment.newInstance(articleId, articleTitle));
         }
     }
 

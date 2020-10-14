@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.DistributionMemberAdapter;
 import com.ftofs.twant.adapter.DistributionOrderAdapter;
 import com.ftofs.twant.adapter.DistributionProfitDetailAdapter;
@@ -33,8 +34,10 @@ import com.ftofs.twant.entity.DistributionPromotionGoods;
 import com.ftofs.twant.entity.DistributionWithdrawRecord;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
+import com.ftofs.twant.widget.WithdrawPopup;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
+import com.lxj.xpopup.XPopup;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -158,6 +161,90 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
         tabManager.add(view.findViewById(R.id.stb_first_level));
         tabManager.add(view.findViewById(R.id.stb_second_level));
         tabManager.onSelect(view.findViewById(R.id.stb_all));  // 默認選中第1個
+
+        SimpleTabManager orderTabManager = new SimpleTabManager(0) {
+            @Override
+            public void onClick(View v) {
+                boolean isRepeat = onSelect(v);
+                int id = v.getId();
+                SLog.info("id[%d]", id);
+                if (isRepeat) {
+                    return;
+                }
+
+                if (id == R.id.stb_promoting_order_all) { // 全部
+                    SLog.info("全部");
+                } else if (id == R.id.stb_promoting_order_ongoing) { // 進行中
+                    SLog.info("進行中");
+                } else if (id == R.id.stb_promoting_order_finished) { // 已完成
+                    SLog.info("已完成");
+                } else if (id == R.id.stb_promoting_order_canceled) { // 已取消
+                    SLog.info("已取消");
+                }
+            }
+        };
+        orderTabManager.add(view.findViewById(R.id.stb_promoting_order_all));
+        orderTabManager.add(view.findViewById(R.id.stb_promoting_order_ongoing));
+        orderTabManager.add(view.findViewById(R.id.stb_promoting_order_finished));
+        orderTabManager.add(view.findViewById(R.id.stb_promoting_order_canceled));
+        orderTabManager.onSelect(view.findViewById(R.id.stb_promoting_order_all));  // 默認選中第1個
+
+
+        SimpleTabManager withdrawTabManager = new SimpleTabManager(0) {
+            @Override
+            public void onClick(View v) {
+                boolean isRepeat = onSelect(v);
+                int id = v.getId();
+                SLog.info("id[%d]", id);
+                if (isRepeat) {
+                    return;
+                }
+
+                if (id == R.id.stb_withdraw_all) { // 全部
+                    SLog.info("全部");
+                } else if (id == R.id.stb_withdraw_unprocessed) { // 未處理
+                    SLog.info("未處理");
+                } else if (id == R.id.stb_withdraw_success) { // 提現成功
+                    SLog.info("提現成功");
+                } else if (id == R.id.stb_withdraw_fail) { // 提現失敗
+                    SLog.info("提現失敗");
+                }
+            }
+        };
+        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_all));
+        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_unprocessed));
+        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_success));
+        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_fail));
+        withdrawTabManager.onSelect(view.findViewById(R.id.stb_withdraw_all));  // 默認選中第1個
+
+
+        SimpleTabManager goodsTabManager = new SimpleTabManager(0) {
+            @Override
+            public void onClick(View v) {
+                boolean isRepeat = onSelect(v);
+                int id = v.getId();
+                SLog.info("id[%d]", id);
+                if (isRepeat) {
+                    return;
+                }
+
+                if (id == R.id.stb_withdraw_all) { // 全部
+                    SLog.info("全部");
+                } else if (id == R.id.stb_withdraw_unprocessed) { // 未處理
+                    SLog.info("未處理");
+                } else if (id == R.id.stb_withdraw_success) { // 提現成功
+                    SLog.info("提現成功");
+                } else if (id == R.id.stb_withdraw_fail) { // 提現失敗
+                    SLog.info("提現失敗");
+                }
+            }
+        };
+        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_all));
+        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_unprocessed));
+        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_success));
+        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_fail));
+        withdrawTabManager.onSelect(view.findViewById(R.id.stb_withdraw_all));  // 默認選中第1個
+
 
         for (int i = 0; i < 20; i++) {
             distributionMemberList.add(new DistributionMember());
@@ -291,9 +378,13 @@ public class MyTeamFragment extends BaseFragment implements View.OnClickListener
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_show_qr_code) { // 二維碼
-
+            SLog.info("二維碼");
         } else if (id == R.id.btn_withdraw) { // 提現
-
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new WithdrawPopup(_mActivity, 2.56))
+                    .show();
         }
 
         if (handleToolbarClick(id)) {

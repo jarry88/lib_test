@@ -662,6 +662,7 @@
                                             android:textColor="#6B6B6B">
                                         </TextView>
                                         <TextView
+                                            android:id="@+id/tv_commission_amount"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="4dp"
@@ -695,19 +696,21 @@
                                     android:gravity="center_horizontal"
                                     android:orientation="vertical">
                                     <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:id="@+id/ic_distribution_my_team"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
                                         android:src="@drawable/ic_distribution_my_team"
+                                        android:scaleType="fitXY"
                                         app:tint="#6B6B6B">
                                     </ImageView>
                                     <TextView
+                                        android:id="@+id/tv_distribution_my_team"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="8dp"
                                         android:text="我的团队"
                                         android:textSize="15sp"
                                         android:textColor="#717171">
-
                                     </TextView>
                                 </LinearLayout>
 
