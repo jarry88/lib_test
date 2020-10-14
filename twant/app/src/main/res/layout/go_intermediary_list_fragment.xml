@@ -64,7 +64,8 @@
                         <ImageView
                             android:layout_width="@dimen/margin_16dp"
                             android:layout_height="@dimen/margin_16dp"
-                            android:src="@drawable/icon_mobile_go"/>
+                            android:src="@drawable/icon_mobile_go"
+                            android:layout_marginEnd="6dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -82,7 +83,8 @@
                         <ImageView
                             android:layout_width="@dimen/margin_16dp"
                             android:layout_height="@dimen/margin_16dp"
-                            android:src="@drawable/icon_email_go"/>
+                            android:src="@drawable/icon_email_go"
+                            android:layout_marginEnd="6dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

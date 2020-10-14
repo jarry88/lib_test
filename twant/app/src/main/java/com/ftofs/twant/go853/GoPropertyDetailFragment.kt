@@ -41,6 +41,7 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
 //        }
 
         binding.btnAboutOwner.setOnClickListener{
+            pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_DETAIL_USER, hashMapOf("uid" to viewModel.currPropertyInfo.value?.uid,"pid" to viewModel.currPropertyInfo.value?.pid))
             Util.startFragment(GoIntermediaryListFragment(viewModel.currPropertyInfo.value?.uid))
         }
         binding.btnMobile.setOnClickListener{

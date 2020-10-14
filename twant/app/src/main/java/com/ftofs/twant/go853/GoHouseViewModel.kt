@@ -19,6 +19,7 @@ const val SELLING_SALE_TYPE=2
 const val RENT_AND_SELLING_TYPE=3
 class GoHouseViewModel(application: Application):BaseViewModel(application) {
     val isTypeLiveData by lazy { MutableLiveData<Int>() }
+    val toastError by lazy { MutableLiveData<String>() }
     val propertyTypeList=listOf("全部","住宅",
     "商鋪",
     "車位",
@@ -147,6 +148,12 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
                     if (l.isNotEmpty()) {
                         currPage=page
                     }
+                }
+            }
+        },error={
+            it.error?.let {s->
+                if(s.isNotEmpty()){
+                    toastError.postValue(s)
                 }
             }
         })

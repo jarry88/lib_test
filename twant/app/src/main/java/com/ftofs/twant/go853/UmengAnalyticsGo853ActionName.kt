@@ -7,3 +7,4 @@ const val GO853_FIlTER_PRICE= "go853_filter_price" //房產價格篩選按鈕
 const val GO853_SEARCH_KEYWORD= "go853_search_keyword" //使用關鍵詞搜索按鈕
 
 const val GO853_CALL_MOBILE= "go853_call_mobile" //撥打用戶電話按鈕  mobile
+const val GO853_DETAIL_USER= "go853_detail_user" //跳轉至用戶列表  mobile

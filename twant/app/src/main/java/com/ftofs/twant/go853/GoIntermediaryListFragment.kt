@@ -32,7 +32,7 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
                 }
             }
 
-        }
+        }.apply { showEmptyView(true) }
     }
     override fun initData() {
         KLog.init(true)
@@ -47,6 +47,7 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
         }
         binding.refreshLayout.setNoMoreData(true)
         binding.rvList.adapter=mAdapter
+        binding.refreshLayout.setOnLoadMoreListener { viewModel.getUserPropertyList() }
         uid?.let { binding.refreshLayout.autoRefresh() }?:hideSoftInputPop()
 
     }
@@ -59,6 +60,7 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
             binding.refreshLayout.finishRefresh()
             binding.refreshLayout.finishLoadMore()
+            if(!viewModel.hasMore)binding.refreshLayout.setNoMoreData(true)
         }
     }
 

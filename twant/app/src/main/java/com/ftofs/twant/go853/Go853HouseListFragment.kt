@@ -43,7 +43,6 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
     }
 
     private var drawListView: BasePopupView?=null
-    private var historyPopupDismiss: Boolean=true
     var firstTabSelected =true
     var tabFold =true
     private val mAdapter by lazy {
