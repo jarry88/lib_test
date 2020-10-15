@@ -303,7 +303,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.btn_join_distribution:
                 if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) {
-                    Util.startFragment(MyTeamFragment.newInstance());
+                    Util.startFragment(DistributionFragment.newInstance());
                 } else if (marketingState == Constant.MARKETING_STATE_APPLY_IN_PROGRESS) {
                     ToastUtil.error(_mActivity, "審核中，請耐心等候");
                 } else {
