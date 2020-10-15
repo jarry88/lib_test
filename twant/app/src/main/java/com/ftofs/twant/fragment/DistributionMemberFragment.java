@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -74,7 +75,7 @@ public class DistributionMemberFragment extends NestedScrollingFragment implemen
         SLog.info("rvList[%s]", rvList);
         rvList.setNestedScrollingEnabled(NestedScrollingEnabled);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        adapter = new DistributionMemberAdapter(R.layout.distribution_member_item, distributionMemberList);
+        adapter = new DistributionMemberAdapter(_mActivity, R.layout.distribution_member_item, distributionMemberList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
 
@@ -123,7 +124,8 @@ public class DistributionMemberFragment extends NestedScrollingFragment implemen
                     }
                     EasyJSONArray goodsList = responseObj.getArray("datas.subMemberList");
                     for (Object object : goodsList) {
-                        distributionMemberList.add(new DistributionMember());
+                        DistributionMember distributionMember = (DistributionMember) EasyJSONBase.jsonDecode(DistributionMember.class, object.toString());
+                        distributionMemberList.add(distributionMember);
                     }
                     adapter.loadMoreComplete();
                     adapter.setNewData(distributionMemberList);

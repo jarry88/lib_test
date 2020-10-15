@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.DistributionPromotionGoods;
+import com.ftofs.twant.util.LogUtil;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.WithdrawPopup;
@@ -28,8 +34,12 @@ import com.lxj.xpopup.XPopup;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 我的團隊頁面
@@ -85,6 +95,9 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
+    TextView tvTotalCommissionAmount;
+    TextView tvUnpaidCommissionAmount;
+
     public static DistributionFragment newInstance() {
         DistributionFragment fragment = new DistributionFragment();
         Bundle args = new Bundle();
@@ -112,6 +125,8 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
         withdrawRecordTabContainer = view.findViewById(R.id.withdraw_record_tab_container);
         promotionGoodsTabContainer = view.findViewById(R.id.promotion_goods_tab_container);
 
+        tvTotalCommissionAmount = view.findViewById(R.id.tv_total_comission_amount);
+        tvUnpaidCommissionAmount = view.findViewById(R.id.tv_unpaid_commission_amount);
 
         titleList.add("");
         fragmentList.add(DistributionMemberFragment.newInstance(DistributionMemberFragment.REQUEST_TYPE_ALL));
@@ -268,6 +283,39 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
                     setNestedScrollingEnabled(true);
                 } else {
                     setNestedScrollingEnabled(false);
+                }
+            }
+        });
+
+        loadData();
+    }
+
+    private void loadData() {
+        String url = Api.PATH_MY_TEAM_HOME;
+
+        Api.getUI(url, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, "", responseStr, "");
+                        return;
+                    }
+
+                    double totalCommissionAmount = responseObj.optDouble("datas.marketingMember.commissionTotalAmount");
+                    double unpaidCommissionAmount = responseObj.optDouble("datas.marketingMember.unpayCommission");
+                    tvTotalCommissionAmount.setText("¥ " + StringUtil.formatFloat(totalCommissionAmount));
+                    tvUnpaidCommissionAmount.setText("可提現金額：" + StringUtil.formatFloat(unpaidCommissionAmount) + "元");
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

@@ -128,6 +128,7 @@
                 app:layout_constraintTop_toTopOf="@id/img_progress_ind_apply"
                 app:layout_constraintBottom_toBottomOf="@id/img_progress_ind_apply"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:scaleType="fitXY"
                 android:src="@drawable/blue_r6dp_circle">
             </ImageView>
 
@@ -139,6 +140,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/img_progress_ind_apply"
                 app:layout_constraintStart_toEndOf="@id/img_progress_ind_apply"
                 app:layout_constraintEnd_toStartOf="@id/img_progress_ind_arrive"
+                android:scaleType="fitXY"
                 android:src="@drawable/blue_r6dp_circle">
             </ImageView>
             
