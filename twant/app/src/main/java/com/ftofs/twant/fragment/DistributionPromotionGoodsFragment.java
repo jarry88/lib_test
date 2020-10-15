@@ -19,12 +19,16 @@ import com.ftofs.twant.adapter.DistributionOrderAdapter;
 import com.ftofs.twant.adapter.DistributionPromotionGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.DistributionMember;
 import com.ftofs.twant.entity.DistributionOrderItem;
 import com.ftofs.twant.entity.DistributionPromotionGoods;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.utils.SLog;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +41,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
+import retrofit2.http.POST;
 
 public class DistributionPromotionGoodsFragment extends NestedScrollingFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
     DistributionPromotionGoodsAdapter adapter;
@@ -46,10 +51,14 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
     int currPage = 0;
     boolean hasMore;
 
-    public static DistributionPromotionGoodsFragment newInstance() {
+    int selectedCount = 0; // 選中的商品個數
+    SimpleCallback simpleCallback;
+
+    public static DistributionPromotionGoodsFragment newInstance(SimpleCallback simpleCallback) {
         DistributionPromotionGoodsFragment fragment = new DistributionPromotionGoodsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        fragment.simpleCallback = simpleCallback;
 
         return fragment;
     }
@@ -77,7 +86,37 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 DistributionPromotionGoods promotionGoods = distributionPromotionGoodsList.get(position);
                 promotionGoods.selected = !promotionGoods.selected;
+                if (promotionGoods.selected) {
+                    selectedCount++;
+                } else {
+                    selectedCount--;
+                }
+
+                List<Integer> selectedCommonIdList = new ArrayList<>();
+                for (DistributionPromotionGoods item : distributionPromotionGoodsList) {
+                    if (item.selected) {
+                        selectedCommonIdList.add(item.commonId);
+                    }
+                }
+
+                if (simpleCallback != null) {
+                    CustomActionData customActionData = new CustomActionData();
+                    customActionData.action = CustomAction.CUSTOM_ACTION_SHARE_MULTIPLE_GOODS.ordinal();
+                    customActionData.data = selectedCommonIdList;
+                    simpleCallback.onSimpleCall(customActionData);
+                }
+
                 adapter.notifyItemChanged(position);
+            }
+        });
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_share) {
+                    DistributionPromotionGoods goods = distributionPromotionGoodsList.get(position);
+                    Util.startFragment(GeneratePosterFragment.newInstance(goods.commonId, goods.goodsName, goods.imageName));
+                }
             }
         });
         rvList.setAdapter(adapter);

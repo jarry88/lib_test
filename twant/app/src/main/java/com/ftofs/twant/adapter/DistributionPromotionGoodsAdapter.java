@@ -26,6 +26,8 @@ public class DistributionPromotionGoodsAdapter extends BaseQuickAdapter<Distribu
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, DistributionPromotionGoods item) {
+        helper.addOnClickListener(R.id.btn_share);
+
         helper.setImageResource(R.id.ic_selected_indicator,
                 item.selected ? R.drawable.ic_baseline_check_box_24 : R.drawable.ic_baseline_check_box_outline_blank_24);
 

@@ -433,10 +433,12 @@
                             android:textColor="@color/tw_black">
                         </TextView>
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="12dp"
+                            android:id="@+id/btn_share_multiple"
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_marginEnd="8dp"
                             android:layout_gravity="center_vertical|end"
+                            android:gravity="center"
                             android:text="分享"
                             android:textSize="12sp"
                             android:textColor="@color/tw_black">

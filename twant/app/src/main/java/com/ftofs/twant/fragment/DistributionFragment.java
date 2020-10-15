@@ -21,11 +21,17 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.DistributionPromotionGoods;
+import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.WithdrawPopup;
 import com.gzp.lib_common.base.BaseFragment;
@@ -45,7 +51,7 @@ import okhttp3.Call;
  * 我的團隊頁面
  * @author zwm
  */
-public class DistributionFragment extends BaseFragment implements View.OnClickListener {
+public class DistributionFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
     static final int TOOL_BTN_COUNT = 4;
 
     /*
@@ -67,7 +73,6 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     int vpInternalOffsetMyTeam = 0;
     int vpInternalOffsetPromotingOrder = 0;
     int vpInternalOffsetWithdrawRecord = 0;
-    int vpInternalOffsetPromotionGoods = 0;
 
 
     int currSelectedBtnIndex = 0;  // 當前選中的工具欄按鈕的索引
@@ -97,6 +102,10 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
     TextView tvTotalCommissionAmount;
     TextView tvUnpaidCommissionAmount;
+
+    // 分享多個商品按鈕
+    TextView btnShareMultiple;
+    List<Integer> selectedCommonIdList;
 
     public static DistributionFragment newInstance() {
         DistributionFragment fragment = new DistributionFragment();
@@ -128,6 +137,9 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
         tvTotalCommissionAmount = view.findViewById(R.id.tv_total_comission_amount);
         tvUnpaidCommissionAmount = view.findViewById(R.id.tv_unpaid_commission_amount);
 
+        btnShareMultiple = view.findViewById(R.id.btn_share_multiple);
+        btnShareMultiple.setOnClickListener(this);
+
         titleList.add("");
         fragmentList.add(DistributionMemberFragment.newInstance(DistributionMemberFragment.REQUEST_TYPE_ALL));
         titleList.add("");
@@ -157,9 +169,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
 
         titleList.add("");
-        fragmentList.add(DistributionPromotionGoodsFragment.newInstance());
-
-
+        fragmentList.add(DistributionPromotionGoodsFragment.newInstance(this));
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_withdraw, this);
@@ -377,6 +387,22 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
             hideSoftInputPop();
         } else if (id == R.id.btn_show_qr_code) { // 二維碼
             SLog.info("二維碼");
+        } else if (id == R.id.btn_share_multiple) {
+            if (selectedCommonIdList.size() < 2) {
+                return;
+            }
+
+            /*
+            多個商品分享 H5鏈接 示例
+            /mobile/distributor/goods-list?commonIdList=151,581,51,485
+             */
+            String shareUrl = Config.WEB_BASE_URL + "/mobile/distributor/goods-list?commonIdList=" + StringUtil.implode(",", selectedCommonIdList);
+            SLog.info("shareUrl[%s]", shareUrl);
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new SharePopup(_mActivity, shareUrl, "", "", "", null))
+                    .show();
         } else if (id == R.id.btn_withdraw) { // 提現
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -422,6 +448,29 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
         SLog.info("onBackPressedSupport");
         hideSoftInputPop();
         return true;
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        try {
+            if (data instanceof CustomActionData) {
+                CustomActionData customActionData = (CustomActionData) data;
+                // 編輯彈窗保存時調用
+                if (CustomAction.CUSTOM_ACTION_SHARE_MULTIPLE_GOODS.ordinal() == customActionData.action) {
+                    selectedCommonIdList = (List<Integer>) customActionData.data;
+
+                    if (selectedCommonIdList.size() > 1) {
+                        btnShareMultiple.setBackgroundResource(R.drawable.micro_blue_button);
+                        btnShareMultiple.setTextColor(Color.WHITE);
+                    } else {
+                        btnShareMultiple.setBackground(null);
+                        btnShareMultiple.setTextColor(Util.getColor(R.color.tw_black));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 }
 
