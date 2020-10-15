@@ -15,8 +15,7 @@ public class NestedScrollingFragment extends BaseFragment {
     protected boolean NestedScrollingEnabled = false;
 
     public void setNestedScrollingEnabled(boolean enabled) {
-        SLog.info("rvList[%s]", rvList);
-
+        // SLog.info("rvList[%s]", rvList);
         if (rvList != null) {
             rvList.setNestedScrollingEnabled(enabled);
         }

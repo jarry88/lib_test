@@ -14,19 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
-import com.ftofs.twant.adapter.DistributionMemberAdapter;
-import com.ftofs.twant.adapter.DistributionOrderAdapter;
-import com.ftofs.twant.adapter.DistributionPromotionGoodsAdapter;
-import com.ftofs.twant.adapter.DistributionWithdrawRecordAdapter;
-import com.ftofs.twant.entity.DistributionMember;
-import com.ftofs.twant.entity.DistributionOrderItem;
 import com.ftofs.twant.entity.DistributionPromotionGoods;
-import com.ftofs.twant.entity.DistributionWithdrawRecord;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.WithdrawPopup;
@@ -54,6 +46,18 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     public static final int TAB_INDEX_PROMOTING_ORDER = 1;
     public static final int TAB_INDEX_WITHDRAW_RECORD = 2;
     public static final int TAB_INDEX_PROMOTION_GOODS = 3;
+
+    // 一級Tab的切換的ViewPager偏移量
+    public static final int VP_OFFSET_MY_TEAM = 0;
+    public static final int VP_OFFSET_PROMOTING_ORDER = 3;
+    public static final int VP_OFFSET_WITHDRAW_RECORD = 7;
+    public static final int VP_OFFSET_PROMOTION_GOODS = 11;
+
+    // 二級Tab切換的ViewPager內部偏移量
+    int vpInternalOffsetMyTeam = 0;
+    int vpInternalOffsetPromotingOrder = 0;
+    int vpInternalOffsetWithdrawRecord = 0;
+    int vpInternalOffsetPromotionGoods = 0;
 
 
     int currSelectedBtnIndex = 0;  // 當前選中的工具欄按鈕的索引
@@ -108,13 +112,37 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
         withdrawRecordTabContainer = view.findViewById(R.id.withdraw_record_tab_container);
         promotionGoodsTabContainer = view.findViewById(R.id.promotion_goods_tab_container);
 
-        titleList.add("");
-        fragmentList.add(MyTeamFragment.newInstance(MyTeamFragment.REQUEST_TYPE_ALL));
-        titleList.add("");
-        fragmentList.add(MyTeamFragment.newInstance(MyTeamFragment.REQUEST_TYPE_FIRST_LEVEL));
-        titleList.add("");
-        fragmentList.add(MyTeamFragment.newInstance(MyTeamFragment.REQUEST_TYPE_SECOND_LEVEL));
 
+        titleList.add("");
+        fragmentList.add(DistributionMemberFragment.newInstance(DistributionMemberFragment.REQUEST_TYPE_ALL));
+        titleList.add("");
+        fragmentList.add(DistributionMemberFragment.newInstance(DistributionMemberFragment.REQUEST_TYPE_FIRST_LEVEL));
+        titleList.add("");
+        fragmentList.add(DistributionMemberFragment.newInstance(DistributionMemberFragment.REQUEST_TYPE_SECOND_LEVEL));
+
+
+        titleList.add("");
+        fragmentList.add(DistributionOrderFragment.newInstance(DistributionOrderFragment.REQUEST_TYPE_ALL));
+        titleList.add("");
+        fragmentList.add(DistributionOrderFragment.newInstance(DistributionOrderFragment.REQUEST_TYPE_ONGOING));
+        titleList.add("");
+        fragmentList.add(DistributionOrderFragment.newInstance(DistributionOrderFragment.REQUEST_TYPE_FINISHED));
+        titleList.add("");
+        fragmentList.add(DistributionOrderFragment.newInstance(DistributionOrderFragment.REQUEST_TYPE_CANCELED));
+
+
+        titleList.add("");
+        fragmentList.add(DistributionWithdrawRecordFragment.newInstance(DistributionWithdrawRecordFragment.REQUEST_TYPE_ALL));
+        titleList.add("");
+        fragmentList.add(DistributionWithdrawRecordFragment.newInstance(DistributionWithdrawRecordFragment.REQUEST_TYPE_UNPROCESSED));
+        titleList.add("");
+        fragmentList.add(DistributionWithdrawRecordFragment.newInstance(DistributionWithdrawRecordFragment.REQUEST_TYPE_SUCCESS));
+        titleList.add("");
+        fragmentList.add(DistributionWithdrawRecordFragment.newInstance(DistributionWithdrawRecordFragment.REQUEST_TYPE_FAIL));
+
+
+        titleList.add("");
+        fragmentList.add(DistributionPromotionGoodsFragment.newInstance());
 
 
 
@@ -129,7 +157,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
             imgToolBtnIconArr[i] = view.findViewById(toolBtnIconIdArr[i]);
         }
 
-        SimpleTabManager tabManager = new SimpleTabManager(0) {
+        SimpleTabManager myTeamTabManager = new SimpleTabManager(0) {
             @Override
             public void onClick(View v) {
                 boolean isRepeat = onSelect(v);
@@ -141,17 +169,21 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
                 if (id == R.id.stb_all) { // 全部
                     SLog.info("全部");
+                    vpInternalOffsetMyTeam = 0;
                 } else if (id == R.id.stb_first_level) { // 一級同伴
                     SLog.info("一級同伴");
+                    vpInternalOffsetMyTeam = 1;
                 } else if (id == R.id.stb_second_level) { // 二級同伴
                     SLog.info("二級同伴");
+                    vpInternalOffsetMyTeam = 2;
                 }
+                viewPager.setCurrentItem(VP_OFFSET_MY_TEAM + vpInternalOffsetMyTeam);
             }
         };
-        tabManager.add(view.findViewById(R.id.stb_all));
-        tabManager.add(view.findViewById(R.id.stb_first_level));
-        tabManager.add(view.findViewById(R.id.stb_second_level));
-        tabManager.onSelect(view.findViewById(R.id.stb_all));  // 默認選中第1個
+        myTeamTabManager.add(view.findViewById(R.id.stb_all));
+        myTeamTabManager.add(view.findViewById(R.id.stb_first_level));
+        myTeamTabManager.add(view.findViewById(R.id.stb_second_level));
+        myTeamTabManager.onSelect(view.findViewById(R.id.stb_all));  // 默認選中第1個
 
         SimpleTabManager orderTabManager = new SimpleTabManager(0) {
             @Override
@@ -165,13 +197,18 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
                 if (id == R.id.stb_promoting_order_all) { // 全部
                     SLog.info("全部");
+                    vpInternalOffsetPromotingOrder = 0;
                 } else if (id == R.id.stb_promoting_order_ongoing) { // 進行中
                     SLog.info("進行中");
+                    vpInternalOffsetPromotingOrder = 1;
                 } else if (id == R.id.stb_promoting_order_finished) { // 已完成
                     SLog.info("已完成");
+                    vpInternalOffsetPromotingOrder = 2;
                 } else if (id == R.id.stb_promoting_order_canceled) { // 已取消
                     SLog.info("已取消");
+                    vpInternalOffsetPromotingOrder = 3;
                 }
+                viewPager.setCurrentItem(VP_OFFSET_PROMOTING_ORDER + vpInternalOffsetPromotingOrder);
             }
         };
         orderTabManager.add(view.findViewById(R.id.stb_promoting_order_all));
@@ -193,41 +230,18 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
                 if (id == R.id.stb_withdraw_all) { // 全部
                     SLog.info("全部");
+                    vpInternalOffsetWithdrawRecord = 0;
                 } else if (id == R.id.stb_withdraw_unprocessed) { // 未處理
                     SLog.info("未處理");
+                    vpInternalOffsetWithdrawRecord = 1;
                 } else if (id == R.id.stb_withdraw_success) { // 提現成功
                     SLog.info("提現成功");
+                    vpInternalOffsetWithdrawRecord = 2;
                 } else if (id == R.id.stb_withdraw_fail) { // 提現失敗
                     SLog.info("提現失敗");
+                    vpInternalOffsetWithdrawRecord = 3;
                 }
-            }
-        };
-        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_all));
-        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_unprocessed));
-        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_success));
-        withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_fail));
-        withdrawTabManager.onSelect(view.findViewById(R.id.stb_withdraw_all));  // 默認選中第1個
-
-
-        SimpleTabManager goodsTabManager = new SimpleTabManager(0) {
-            @Override
-            public void onClick(View v) {
-                boolean isRepeat = onSelect(v);
-                int id = v.getId();
-                SLog.info("id[%d]", id);
-                if (isRepeat) {
-                    return;
-                }
-
-                if (id == R.id.stb_withdraw_all) { // 全部
-                    SLog.info("全部");
-                } else if (id == R.id.stb_withdraw_unprocessed) { // 未處理
-                    SLog.info("未處理");
-                } else if (id == R.id.stb_withdraw_success) { // 提現成功
-                    SLog.info("提現成功");
-                } else if (id == R.id.stb_withdraw_fail) { // 提現失敗
-                    SLog.info("提現失敗");
-                }
+                viewPager.setCurrentItem(VP_OFFSET_WITHDRAW_RECORD + vpInternalOffsetWithdrawRecord);
             }
         };
         withdrawTabManager.add(view.findViewById(R.id.stb_withdraw_all));
@@ -293,12 +307,16 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
         imgToolBtnIconArr[currSelectedBtnIndex].setImageTintList(ColorStateList.valueOf(Util.getColor(R.color.tw_blue)));
         if (currSelectedBtnIndex == TAB_INDEX_MY_TEAM) { // 我的團隊
             myTeamTabContainer.setVisibility(View.VISIBLE);
+            viewPager.setCurrentItem(VP_OFFSET_MY_TEAM + vpInternalOffsetMyTeam);
         } else if (currSelectedBtnIndex == TAB_INDEX_PROMOTING_ORDER) { // 推介訂單
             promotingOrderTabContainer.setVisibility(View.VISIBLE);
+            viewPager.setCurrentItem(VP_OFFSET_PROMOTING_ORDER + vpInternalOffsetPromotingOrder);
         } else if (currSelectedBtnIndex == TAB_INDEX_WITHDRAW_RECORD) { // 提現記錄
             withdrawRecordTabContainer.setVisibility(View.VISIBLE);
+            viewPager.setCurrentItem(VP_OFFSET_WITHDRAW_RECORD + vpInternalOffsetWithdrawRecord);
         } else if (currSelectedBtnIndex == TAB_INDEX_PROMOTION_GOODS) { // 推介商品
             promotionGoodsTabContainer.setVisibility(View.VISIBLE);
+            viewPager.setCurrentItem(VP_OFFSET_PROMOTION_GOODS);
         }
 
         return true;
@@ -327,7 +345,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
     private void setNestedScrollingEnabled(boolean enabled) {
         for (Fragment fragment : fragmentList) {
-            SLog.info("class[%s]", fragment.getClass().getName());
+            // SLog.info("class[%s]", fragment.getClass().getName());
             ((NestedScrollingFragment) fragment).setNestedScrollingEnabled(enabled);
         }
     }

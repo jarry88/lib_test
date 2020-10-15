@@ -412,6 +412,12 @@ public class Constant {
     public static final int MARKETING_STATE_APPLY_NOT_PASS = 2;
     public static final int MARKETING_STATE_APPLY_REMOVED = 3;
 
+    /**
+     * 分銷佣金類型
+     */
+    public static final int COMMISSION_TYPE_RATIO = 1; // 按比例
+    public static final int COMMISSION_TYPE_FIXED = 2; // 固定金額
+
     public static int[] WRITE_OFFS_ID=new int[]{
         1575, 959,1598
     };

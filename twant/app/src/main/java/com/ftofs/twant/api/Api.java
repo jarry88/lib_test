@@ -1566,6 +1566,11 @@ public class Api {
     public static final String PATH_MEMBER_MARKETING_SUB = "/member/marketing/sub";
 
     /**
+     * 【分銷】推介訂單
+     */
+    public static final String PATH_MEMBER_MARKETING_ORDERS = "/member/marketing/orders";
+
+    /**
      * 【會員中心】購買首頁
      */
     public static final String PATH_MEMBER_BUY_INDEX = "/member/buyIndex";

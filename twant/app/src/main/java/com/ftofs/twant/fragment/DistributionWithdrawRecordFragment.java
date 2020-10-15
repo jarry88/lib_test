@@ -15,9 +15,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.lib_net.model.SellerGoodsItem;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.DistributionMemberAdapter;
+import com.ftofs.twant.adapter.DistributionOrderAdapter;
+import com.ftofs.twant.adapter.DistributionWithdrawRecordAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.DistributionMember;
+import com.ftofs.twant.entity.DistributionOrderItem;
+import com.ftofs.twant.entity.DistributionWithdrawRecord;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -30,28 +34,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class MyTeamFragment extends NestedScrollingFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class DistributionWithdrawRecordFragment extends NestedScrollingFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
     int requestType;
 
     /*
-    查询类型
+    查詢類型,-1 全部 0待審核 2提現失敗 3提現成功
      */
-    public static final int REQUEST_TYPE_ALL = 0; // 查询所有成员
-    public static final int REQUEST_TYPE_FIRST_LEVEL = 1; // 查询1级成员
-    public static final int REQUEST_TYPE_SECOND_LEVEL = 2; // 查询2级成员
+    public static final int REQUEST_TYPE_ALL = -1;
+    public static final int REQUEST_TYPE_UNPROCESSED = 0;
+    public static final int REQUEST_TYPE_SUCCESS = 2;
+    public static final int REQUEST_TYPE_FAIL = 3;
 
-    DistributionMemberAdapter adapter;
-    List<DistributionMember> distributionMemberList = new ArrayList<>();
+    DistributionWithdrawRecordAdapter adapter;
+    List<DistributionWithdrawRecord> distributionWithdrawRecordList = new ArrayList<>();
 
     // 當前要加載第幾頁(從1開始）
     int currPage = 0;
     boolean hasMore;
 
-    public static MyTeamFragment newInstance(int requestType) {
-        MyTeamFragment fragment = new MyTeamFragment();
+    public static DistributionWithdrawRecordFragment newInstance(int requestType) {
+        DistributionWithdrawRecordFragment fragment = new DistributionWithdrawRecordFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         fragment.requestType = requestType;
@@ -62,7 +68,7 @@ public class MyTeamFragment extends NestedScrollingFragment implements View.OnCl
     @Nullable
     @Override
     public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_team, container, false);
+        View view = inflater.inflate(R.layout.fragment_distribution_order, container, false);
         return view;
     }
 
@@ -74,9 +80,18 @@ public class MyTeamFragment extends NestedScrollingFragment implements View.OnCl
         SLog.info("rvList[%s]", rvList);
         rvList.setNestedScrollingEnabled(NestedScrollingEnabled);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        adapter = new DistributionMemberAdapter(R.layout.distribution_member_item, distributionMemberList);
+        adapter = new DistributionWithdrawRecordAdapter(_mActivity, R.layout.distribution_withdraw_record, distributionWithdrawRecordList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
+
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                DistributionWithdrawRecord record = distributionWithdrawRecordList.get(position);
+                record.expanded = !record.expanded;
+                adapter.notifyItemChanged(position);
+            }
+        });
 
         rvList.setAdapter(adapter);
 
@@ -85,11 +100,21 @@ public class MyTeamFragment extends NestedScrollingFragment implements View.OnCl
 
 
     private void loadData(int page) {
-        String url = Api.PATH_MEMBER_MARKETING_SUB;
+        String url = Api.PATH_DISTRIBUTION_WITHDRAW_RECORD;
         EasyJSONObject params = EasyJSONObject.generate(
-                "searchType", requestType,
                 "page", page
         );
+
+        try {
+            // 不傳searchType表示查詢全部
+            if (requestType != REQUEST_TYPE_ALL) {
+                params.set("searchType", requestType);
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+
+
         SLog.info("url[%s], params[%s]", url, params.toString());
         Api.getUI(url, params, new UICallback() {
             @Override
@@ -119,14 +144,15 @@ public class MyTeamFragment extends NestedScrollingFragment implements View.OnCl
                     }
 
                     if (page == 1) {
-                        distributionMemberList.clear();
+                        distributionWithdrawRecordList.clear();
                     }
-                    EasyJSONArray goodsList = responseObj.getArray("datas.subMemberList");
-                    for (Object object : goodsList) {
-                        distributionMemberList.add(new DistributionMember());
+                    EasyJSONArray recordList = responseObj.getArray("datas.logs");
+                    for (Object object : recordList) {
+                        DistributionWithdrawRecord recordItem = (DistributionWithdrawRecord) EasyJSONBase.jsonDecode(DistributionWithdrawRecord.class, object.toString());
+                        distributionWithdrawRecordList.add(recordItem);
                     }
                     adapter.loadMoreComplete();
-                    adapter.setNewData(distributionMemberList);
+                    adapter.setNewData(distributionWithdrawRecordList);
                     currPage++;
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
