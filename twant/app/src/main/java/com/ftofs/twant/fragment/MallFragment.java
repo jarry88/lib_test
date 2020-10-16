@@ -74,6 +74,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     TextView tvToBePaidCount, tvToBeShippedCount, tvToBeReceivedCount, tvToBeCommentedCount;
     private int myBargain;
     private TextView tvHelpCount;
+    TextView btnJoinDistribution;
 
     public static MallFragment newInstance() {
         Bundle args = new Bundle();
@@ -114,7 +115,8 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_to_be_commented, this);
         Util.setOnClickListener(view, R.id.icon_return_or_exchange, this);
 
-        Util.setOnClickListener(view, R.id.btn_join_distribution, this);
+        btnJoinDistribution = view.findViewById(R.id.btn_join_distribution);
+        btnJoinDistribution.setOnClickListener(this);
 
         Util.setOnClickListener(view, R.id.btn_my_express, this);
         Util.setOnClickListener(view, R.id.ll_express_container, this);
@@ -218,6 +220,16 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                         tvCommissionAmount.setText("***.**");
                         icDistributionMyTeam.setImageResource(R.drawable.ic_distribution_my_team);
                         tvDistributionMyTeam.setText("我的團隊");
+                    }
+
+                    if (marketingState == Constant.MARKETING_STATE_NOT_APPLY) {
+                        btnJoinDistribution.setText("加入我們");
+                    } else if (marketingState == Constant.MARKETING_STATE_APPLY_IN_PROGRESS) {
+                        btnJoinDistribution.setText("審核中");
+                    } else if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) {
+                        btnJoinDistribution.setText("我的團隊");
+                    } else if (marketingState == Constant.MARKETING_STATE_APPLY_NOT_PASS || marketingState == Constant.MARKETING_STATE_APPLY_REMOVED) {
+                        btnJoinDistribution.setText("重新加入");
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
