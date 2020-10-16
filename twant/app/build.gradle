@@ -35,8 +35,8 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
 
 
-        versionCode 222
-        versionName "1.2.8.02"
+        versionCode 223
+        versionName "1.2.9.00"
 
         ndk {
             //设置支持的SO库架构
