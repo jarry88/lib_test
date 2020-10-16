@@ -22,6 +22,8 @@ public class DistributionPromotionGoods {
     public int commonId;
     public String goodsName;
     public String imageName;
+    public double batchPrice0;
+    public double batchPrice2;
     public double goodsPrice;
     public int commissionType;  // 分銷佣金類型 1比例 2固定
     public double commissionLevel1;

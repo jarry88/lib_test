@@ -79,7 +79,7 @@ public class Poster extends FrameLayout {
      * @return
      */
     public Poster setMopPrice(double price) {
-        tvNickname.setText("MOP " + StringUtil.formatFloat(price));
+        tvMopPrice.setText("MOP " + StringUtil.formatFloat(price));
         return this;
     }
 
@@ -89,7 +89,7 @@ public class Poster extends FrameLayout {
      * @return
      */
     public Poster setCnyPrice(double price) {
-        tvNickname.setText("约为CNY " + StringUtil.formatFloat(price) + "元");
+        tvCnyPrice.setText("约为CNY " + StringUtil.formatFloat(price) + "元");
         return this;
     }
 

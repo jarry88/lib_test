@@ -23,7 +23,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -38,7 +39,7 @@
                 android:src="@drawable/distribution_promotion_poster">
             </ImageView>
 
-            <com.makeramen.roundedimageview.RoundedImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_invitation_avatar"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -49,7 +50,7 @@
                 android:src="@drawable/avatar_male"
                 app:riv_border_color="@android:color/white"
                 app:riv_border_width="2dp">
-            </com.makeramen.roundedimageview.RoundedImageView>
+            </de.hdodenhof.circleimageview.CircleImageView>
 
             <TextView
                 android:id="@+id/tv_invitation_nickname"
@@ -74,7 +75,6 @@
                 android:id="@+id/img_invitation_qr_code"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:scaleType="fitXY"
                 android:src="@drawable/distribution_qr_code">
             </ImageView>
             <TextView

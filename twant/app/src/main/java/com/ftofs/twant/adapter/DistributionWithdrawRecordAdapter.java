@@ -49,7 +49,7 @@ public class DistributionWithdrawRecordAdapter extends BaseQuickAdapter<Distribu
         ImageView imgProgressIndAudit = helper.getView(R.id.img_progress_ind_audit);
         ImageView imgProgressIndArrive = helper.getView(R.id.img_progress_ind_arrive);
 
-        tvTimeApply.setText(item.createTime);
+        tvTimeApply.setText(formatTime(item.createTime));
         tvTimeAudit.setText("");
         tvTimeArrive.setText("");
         vwIndicatorLine1.setBackgroundColor(gray);
@@ -63,7 +63,7 @@ public class DistributionWithdrawRecordAdapter extends BaseQuickAdapter<Distribu
         } else if (item.billState == DistributionWithdrawRecord.STATE_PASS || item.billState == DistributionWithdrawRecord.STATE_NOT_PASS ||
                 item.billState == DistributionWithdrawRecord.STATE_PAID) {
             tvCurrentStateTime.setText(item.adminTime);
-            if (item.billState == DistributionWithdrawRecord.STATE_PASS) {
+            if (item.billState == DistributionWithdrawRecord.STATE_PASS || item.billState == DistributionWithdrawRecord.STATE_PAID) {
                 tvStatusText.setText("審核通過");
                 vwIndicatorLine1.setBackgroundColor(blue);
                 imgProgressIndAudit.setImageResource(R.drawable.icon_checked);
@@ -72,15 +72,22 @@ public class DistributionWithdrawRecordAdapter extends BaseQuickAdapter<Distribu
                 vwIndicatorLine1.setBackgroundColor(red);
                 imgProgressIndAudit.setImageResource(R.drawable.icon_remove_red);
             }
-            tvTimeAudit.setText(item.adminTime);
+            tvTimeAudit.setText(formatTime(item.adminTime));
 
             if (item.billState == DistributionWithdrawRecord.STATE_PAID) {
                 tvCurrentStateTime.setText(item.payTime);
                 tvStatusText.setText("財務已付款");
-                tvTimeArrive.setText(item.payTime);
+                tvTimeArrive.setText(formatTime(item.payTime));
                 vwIndicatorLine2.setBackgroundColor(blue);
                 imgProgressIndArrive.setImageResource(R.drawable.icon_checked);
             }
         }
+    }
+
+    private String formatTime(String timeStr) {
+        if (StringUtil.isEmpty(timeStr) || timeStr.length() < 16) {
+            return timeStr;
+        }
+        return timeStr.substring(5, 16);
     }
 }

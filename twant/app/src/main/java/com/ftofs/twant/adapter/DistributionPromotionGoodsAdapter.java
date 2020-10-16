@@ -32,7 +32,7 @@ public class DistributionPromotionGoodsAdapter extends BaseQuickAdapter<Distribu
                 item.selected ? R.drawable.ic_baseline_check_box_24 : R.drawable.ic_baseline_check_box_outline_blank_24);
 
         helper.setText(R.id.tv_goods_name, item.goodsName)
-                .setText(R.id.tv_goods_price, "¥" + StringUtil.formatFloat(item.goodsPrice));
+                .setText(R.id.tv_goods_price, "¥" + StringUtil.formatFloat(item.batchPrice2));
 
         ImageView goodsImage = helper.getView(R.id.img_goods);
         Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageName, "?x-oss-process=image/resize,w_160")).centerCrop().into(goodsImage);

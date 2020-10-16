@@ -78,6 +78,7 @@ import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.login.UserManager;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
+import com.ftofs.twant.widget.SharePopup;
 import com.gzp.lib_common.utils.SLog;
 import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
@@ -1919,6 +1920,17 @@ public class Util {
                 view.setClickable(true);
             }
         }, millis);
+    }
+
+    public static void showInvitationSharePopup(Context context, String marketingUrl) {
+        new XPopup.Builder(context)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new SharePopup(context, marketingUrl, "title",
+                        "description", "coverUrl", EasyJSONObject.generate(
+                        "shareType", SharePopup.SHARE_TYPE_POSTER,
+                        "marketingUrl", marketingUrl))
+                ).show();
     }
 }
 

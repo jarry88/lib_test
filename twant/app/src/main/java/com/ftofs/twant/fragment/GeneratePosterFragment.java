@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
@@ -21,6 +22,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.util.BitmapUtil;
 import com.ftofs.twant.util.Guid;
+import com.ftofs.twant.util.QRCode;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -76,6 +78,7 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
     ImageView imgInvitationAvatar;
     TextView tvInvitationNickname;
     ImageView imgInvitationQrCode;
+    View invitationPoster;
 
     public static GeneratePosterFragment newInstance(int posterType, EasyJSONObject data) {
         Bundle args = new Bundle();
@@ -102,6 +105,7 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
 
         loadingView = view.findViewById(R.id.loading_view);
         poster = view.findViewById(R.id.poster);
+        invitationPoster = view.findViewById(R.id.invitation_poster);
 
         if (posterType == Constant.POSTER_TYPE_GOODS) {
             commonId = data.optInt("commonId");
@@ -133,13 +137,16 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
                 SLog.info("filename[%s]", filename);
                 goodsImageFile = FileUtil.getCacheFile(_mActivity, filename);
 
-                SLog.info("goodsImageUrl[%s]", goodsImageUrl);
-                boolean success = Api.syncDownloadFile(goodsImageUrl, goodsImageFile);
-                if (!success || !goodsImageFile.exists()) {
-                    SLog.info("Error!产品图片下载失败, goodsImageUrl[%s]", goodsImageUrl);
-                    emitter.onError(new Exception("產品圖片下載失敗"));
-                    return;
+                if (!goodsImageFile.exists()) {
+                    SLog.info("goodsImageUrl[%s]", goodsImageUrl);
+                    boolean success = Api.syncDownloadFile(goodsImageUrl, goodsImageFile);
+                    if (!success || !goodsImageFile.exists()) {
+                        SLog.info("Error!产品图片下载失败, goodsImageUrl[%s]", goodsImageUrl);
+                        emitter.onError(new Exception("產品圖片下載失敗"));
+                        return;
+                    }
                 }
+
 
                 String avatarUrl = User.getUserInfo(SPField.FIELD_AVATAR, null);
                 SLog.info("avatarUrl[%s]", avatarUrl);
@@ -149,12 +156,14 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
                     SLog.info("filename[%s]", filename);
                     avatarFile = FileUtil.getCacheFile(_mActivity, filename);
 
-                    SLog.info("avatarUrl[%s]", avatarUrl);
-                    success = Api.syncDownloadFile(avatarUrl, avatarFile);
-                    if (!success || !avatarFile.exists()) {
-                        SLog.info("Error!頭像图片下载失败, avatarUrl[%s]", avatarUrl);
-                        emitter.onError(new Exception("頭像圖片下載失敗"));
-                        return;
+                    if (!avatarFile.exists()) {
+                        SLog.info("avatarUrl[%s]", avatarUrl);
+                        boolean success = Api.syncDownloadFile(avatarUrl, avatarFile);
+                        if (!success || !avatarFile.exists()) {
+                            SLog.info("Error!頭像图片下载失败, avatarUrl[%s]", avatarUrl);
+                            emitter.onError(new Exception("頭像圖片下載失敗"));
+                            return;
+                        }
                     }
                 }
 
@@ -275,16 +284,20 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
 
                 loadingView.setVisibility(View.GONE);
                 if (avatarFile != null) { // 如果已經登錄，則設置頭像
-                    poster.setAvatar(avatarFile);
+                    Glide.with(_mActivity).load(avatarFile).centerCrop().into(imgInvitationAvatar);
                 }
-                poster.setGoodsImage(goodsImageFile)
-                        .setGoodsName(goodsName)
-                        .setQrCode(goodsUrl);
-                poster.setVisibility(View.VISIBLE);
-                poster.postDelayed(new Runnable() {
+
+                String nickname = User.getUserInfo(SPField.FIELD_NICKNAME, "");
+                tvInvitationNickname.setText(nickname);
+                String marketingUrl = data.optString("marketingUrl");
+                SLog.info("marketingUrl[%s]", marketingUrl);
+                Bitmap qrCode = QRCode.createQRCode(marketingUrl);
+                Glide.with(imgInvitationQrCode).load(qrCode).centerCrop().into(imgInvitationQrCode);
+                invitationPoster.setVisibility(View.VISIBLE);
+                invitationPoster.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Bitmap bitmap = QMUIDrawableHelper.createBitmapFromView(poster);
+                        Bitmap bitmap = QMUIDrawableHelper.createBitmapFromView(invitationPoster);
                         posterFile = FileUtil.getCacheFile(_mActivity, Guid.getSpUuid() + ".jpg");
                         SLog.info("path[%s]", posterFile.getAbsoluteFile());
                         BitmapUtil.Bitmap2File(bitmap, posterFile, Bitmap.CompressFormat.JPEG,75);

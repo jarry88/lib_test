@@ -101,11 +101,15 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     private List<Fragment> fragmentList = new ArrayList<>();
 
     TextView tvTotalCommissionAmount;
+    double totalCommissionAmount;
     TextView tvUnpaidCommissionAmount;
+    double unpaidCommissionAmount;
 
     // 分享多個商品按鈕
     TextView btnShareMultiple;
     List<Integer> selectedCommonIdList;
+
+    String marketingUrl;
 
     public static DistributionFragment newInstance() {
         DistributionFragment fragment = new DistributionFragment();
@@ -320,10 +324,11 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
                         return;
                     }
 
-                    double totalCommissionAmount = responseObj.optDouble("datas.marketingMember.commissionTotalAmount");
-                    double unpaidCommissionAmount = responseObj.optDouble("datas.marketingMember.unpayCommission");
+                    totalCommissionAmount = responseObj.optDouble("datas.marketingMember.commissionTotalAmount");
+                    unpaidCommissionAmount = responseObj.optDouble("datas.marketingMember.unpayCommission");
                     tvTotalCommissionAmount.setText("¥ " + StringUtil.formatFloat(totalCommissionAmount));
                     tvUnpaidCommissionAmount.setText("可提現金額：" + StringUtil.formatFloat(unpaidCommissionAmount) + "元");
+                    marketingUrl = responseObj.optString("datas.marketingUrl");
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -387,6 +392,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
             hideSoftInputPop();
         } else if (id == R.id.btn_show_qr_code) { // 二維碼
             SLog.info("二維碼");
+            Util.showInvitationSharePopup(_mActivity, marketingUrl);
         } else if (id == R.id.btn_share_multiple) {
             if (selectedCommonIdList.size() < 2) {
                 return;
@@ -407,7 +413,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new WithdrawPopup(_mActivity, 2.56))
+                    .asCustom(new WithdrawPopup(_mActivity, unpaidCommissionAmount))
                     .show();
         }
 

@@ -214,6 +214,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                     marketingState = responseObj.optInt("datas.marketingState");
                     marketingArticleId = responseObj.optInt("datas.articleId");
                     marketingUrl = responseObj.optString("datas.marketingUrl");
+                    SLog.info("marketingUrl[%s]", marketingUrl);
 
                     if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) { // 申請通過
                         double unpayCommission = responseObj.optDouble("datas.marketingMember.unpayCommission");
@@ -330,12 +331,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 if (marketingState != Constant.MARKETING_STATE_APPLY_PASS) {
                     return;
                 }
-                new XPopup.Builder(_mActivity)
-                        // 如果不加这个，评论弹窗会移动到软键盘上面
-                        .moveUpToKeyboard(false)
-                        .asCustom(new SharePopup(_mActivity, marketingUrl, "title",
-                                "description", "coverUrl", EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS)))
-                        .show();
+                Util.showInvitationSharePopup(_mActivity, marketingUrl);
                 break;
             default:
                 break;
