@@ -24,6 +24,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
+import com.ftofs.twant.widget.SharePopup;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
@@ -32,6 +33,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.MaxHeightRecyclerView;
+import com.lxj.xpopup.XPopup;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -117,6 +119,8 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
         btnJoinDistribution = view.findViewById(R.id.btn_join_distribution);
         btnJoinDistribution.setOnClickListener(this);
+
+        Util.setOnClickListener(view, R.id.btn_distribution_share, this);
 
         Util.setOnClickListener(view, R.id.btn_my_express, this);
         Util.setOnClickListener(view, R.id.ll_express_container, this);
@@ -321,6 +325,17 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 } else {
                     Util.startFragment(DistributionEnrollmentFragment.newInstance(marketingArticleId, null));
                 }
+                break;
+            case R.id.btn_distribution_share:
+                if (marketingState != Constant.MARKETING_STATE_APPLY_PASS) {
+                    return;
+                }
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new SharePopup(_mActivity, marketingUrl, "title",
+                                "description", "coverUrl", EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS)))
+                        .show();
                 break;
             default:
                 break;

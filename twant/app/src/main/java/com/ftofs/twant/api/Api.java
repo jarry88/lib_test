@@ -1553,7 +1553,7 @@ public class Api {
     /**
      * 【分銷】申請成爲分銷商
      */
-    public static final String PATH_DISTRIBUTOR_APPLY = "/marketing/apply";
+    public static final String PATH_DISTRIBUTOR_APPLY = "/member/marketing/apply";
 
     /**
      * 【分銷】我的團隊首頁

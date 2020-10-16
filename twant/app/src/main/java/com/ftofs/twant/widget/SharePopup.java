@@ -20,6 +20,7 @@ import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.GeneratePosterFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.util.BitmapUtil;
@@ -396,7 +397,22 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 
             dismiss();
         } else if (id == R.id.btn_share_to_poster) { // 分享海報
-            Util.startFragment(GeneratePosterFragment.newInstance(commonId, goodsName, goodsImageUrl));
+            if (commonId > 0) { // 分享商品海報
+                EasyJSONObject posterData = EasyJSONObject.generate(
+                        "commonId", commonId,
+                        "goodsName", goodsName,
+                        "goodsImageUrl", goodsImageUrl,
+                        "mopPrice", 99999999,
+                        "cnyPrice", 88888888
+                );
+                Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_GOODS, posterData));
+            } else { // 分享邀請海報
+                EasyJSONObject posterData = EasyJSONObject.generate(
+
+                );
+                Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_INVITATION, posterData));
+            }
+
             dismiss();
         }
     }

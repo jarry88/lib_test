@@ -19,6 +19,7 @@ import com.ftofs.twant.adapter.DistributionOrderAdapter;
 import com.ftofs.twant.adapter.DistributionPromotionGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.DistributionMember;
@@ -115,7 +116,14 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
                 int id = view.getId();
                 if (id == R.id.btn_share) {
                     DistributionPromotionGoods goods = distributionPromotionGoodsList.get(position);
-                    Util.startFragment(GeneratePosterFragment.newInstance(goods.commonId, goods.goodsName, goods.imageName));
+                    EasyJSONObject posterData = EasyJSONObject.generate(
+                            "commonId", goods.commonId,
+                            "goodsName", goods.goodsName,
+                            "goodsImageUrl", goods.imageName,
+                            "mopPrice", 99999999,
+                            "cnyPrice", 88888888
+                    );
+                    Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_GOODS, posterData));
                 }
             }
         });

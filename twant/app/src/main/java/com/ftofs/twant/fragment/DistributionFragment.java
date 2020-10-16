@@ -396,7 +396,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
             多個商品分享 H5鏈接 示例
             /mobile/distributor/goods-list?commonIdList=151,581,51,485
              */
-            String shareUrl = Config.WEB_BASE_URL + "/mobile/distributor/goods-list?commonIdList=" + StringUtil.implode(",", selectedCommonIdList);
+            String shareUrl = Config.BASE_URL + "/mobile/distributor/goods-list?commonIdList=" + StringUtil.implode(",", selectedCommonIdList);
             SLog.info("shareUrl[%s]", shareUrl);
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面

@@ -418,6 +418,13 @@ public class Constant {
     public static final int COMMISSION_TYPE_RATIO = 1; // 按比例
     public static final int COMMISSION_TYPE_FIXED = 2; // 固定金額
 
+    /**
+     * 海報類型
+     */
+    public static final int POSTER_TYPE_GOODS = 1; // 商品海報
+    public static final int POSTER_TYPE_INVITATION = 2; // 邀請海報
+
+
     public static int[] WRITE_OFFS_ID=new int[]{
         1575, 959,1598
     };
