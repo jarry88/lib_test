@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="227dp"
         android:layout_alignParentBottom="true"
-        android:background="#03B9FF"
+        android:background="#05C1FF"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
