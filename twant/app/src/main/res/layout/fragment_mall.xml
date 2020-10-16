@@ -336,6 +336,7 @@
 
                     </LinearLayout>
 
+                    <!-- 優惠券 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -397,224 +398,7 @@
                             android:onClick="@{()->click.gotoChangeMyCoupon()}"
                             android:textColor="@color/tw_blue"/>
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ll_express_container"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp"
-                        android:padding="14dp"
-                        android:onClick="@{()->click.gotoSendPackage()}"
-
-                        android:background="@drawable/white_6dp_radius_bg">
-                        <LinearLayout
-                            android:id="@+id/btn_my_express"
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/icon_my_logistics" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/dp_4"
-                                android:text="寄快遞"
-                                android:textColor="@color/tw_black"
-                                android:textSize="15sp" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="4dp"
-                            android:layout_marginEnd="4dp"
-                            android:text="查看"
-
-                            android:textSize="13sp"
-                            android:textColor="@color/tw_blue"/>
-                        <TextView
-                            android:id="@+id/btn_look_package"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="查詢"
-                            android:textSize="13sp"
-                            android:textColor="@color/tw_blue"
-                            android:padding="4dp"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ll_wallet_container"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp"
-                        android:padding="14dp"
-                        android:background="@drawable/white_6dp_radius_bg"
-                        >
-                        <LinearLayout
-                            android:id="@+id/btn_wallet"
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/icon_want_pay_wallet" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/dp_4"
-                                android:text="@string/text_want_pay_wallet"
-                                android:textColor="@color/tw_black"
-                                android:textSize="15sp" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:visibility="gone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="兌換"
-                            android:textSize="13sp"
-                            android:textColor="@color/tw_blue"
-                            android:layout_marginEnd="@dimen/dp_4"
-                            android:layout_marginTop="@dimen/dp_4"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/white_6dp_radius_bg"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="86dp"
-                            android:orientation="horizontal">
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1">
-
-                                <LinearLayout
-                                    android:id="@+id/ll_my_footprint"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:orientation="vertical"
-                                    android:onClick="@{()->click.gotoFootPrint">
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:src="@drawable/icon_footprint" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:layout_marginTop="12dp"
-                                        android:text="@string/text_footprint"
-                                        android:textColor="@color/tw_black"
-                                        android:textSize="14sp" />
-                                </LinearLayout>
-                            </RelativeLayout>
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginBottom="@dimen/dp_15"
-                                android:layout_marginTop="@dimen/dp_15"
-                                android:background="@color/tw_light_grey_EDED"/>
-                            <RelativeLayout
-                                android:id="@+id/btn_my_bonus"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1">
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:orientation="vertical">
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:src="@drawable/icon_bonus" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:layout_marginTop="11dp"
-                                        android:text="@string/text_bonus"
-                                        android:textColor="@color/tw_black"
-                                        android:textSize="14sp" />
-                                </LinearLayout>
-                            </RelativeLayout>
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginBottom="@dimen/dp_15"
-                                android:layout_marginTop="@dimen/dp_15"
-                                android:background="@color/tw_light_grey_EDED"/>
-                            <RelativeLayout
-                                android:id="@+id/btn_my_trust_value"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1">
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:orientation="vertical">
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:src="@drawable/icon_trust_value" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:layout_marginTop="11dp"
-                                        android:text="@string/text_trust_value"
-                                        android:textColor="@color/tw_black"
-                                        android:textSize="14sp" />
-                                </LinearLayout>
-                            </RelativeLayout>
-                        </LinearLayout>
-                    </LinearLayout>
+                    <!-- END OF 優惠券 -->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -739,6 +523,7 @@
                         </FrameLayout>
                     </LinearLayout>
 
+                    <!-- 砍價 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -825,7 +610,7 @@
                                         pointSize="26"
                                         defaultSize="14"
                                         textInput="5笔"
-                                    />
+                                        />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -891,6 +676,229 @@
                                 </LinearLayout>
                             </RelativeLayout>
                         </LinearLayout>
+                    </LinearLayout>
+                    <!-- END OF 砍價 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/white_6dp_radius_bg"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="86dp"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:id="@+id/ll_my_footprint"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:orientation="vertical"
+                                    android:onClick="@{()->click.gotoFootPrint">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/icon_footprint" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="12dp"
+                                        android:text="@string/text_footprint"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="14sp" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="@dimen/dp_15"
+                                android:layout_marginTop="@dimen/dp_15"
+                                android:background="@color/tw_light_grey_EDED"/>
+                            <RelativeLayout
+                                android:id="@+id/btn_my_bonus"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/icon_bonus" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="11dp"
+                                        android:text="@string/text_bonus"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="14sp" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="@dimen/dp_15"
+                                android:layout_marginTop="@dimen/dp_15"
+                                android:background="@color/tw_light_grey_EDED"/>
+                            <RelativeLayout
+                                android:id="@+id/btn_my_trust_value"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/icon_trust_value" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="11dp"
+                                        android:text="@string/text_trust_value"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="14sp" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- 寄快遞 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ll_express_container"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp"
+                        android:padding="14dp"
+                        android:onClick="@{()->click.gotoSendPackage()}"
+
+                        android:background="@drawable/white_6dp_radius_bg">
+                        <LinearLayout
+                            android:id="@+id/btn_my_express"
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/icon_my_logistics" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/dp_4"
+                                android:text="寄快遞"
+                                android:textColor="@color/tw_black"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:layout_marginEnd="4dp"
+                            android:text="查看"
+
+                            android:textSize="13sp"
+                            android:textColor="@color/tw_blue"/>
+                        <TextView
+                            android:id="@+id/btn_look_package"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="查詢"
+                            android:textSize="13sp"
+                            android:textColor="@color/tw_blue"
+                            android:padding="4dp"/>
+                    </LinearLayout>
+                    <!-- END OF 寄快遞 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ll_wallet_container"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp"
+                        android:padding="14dp"
+                        android:background="@drawable/white_6dp_radius_bg"
+                        >
+                        <LinearLayout
+                            android:id="@+id/btn_wallet"
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/icon_want_pay_wallet" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/dp_4"
+                                android:text="@string/text_want_pay_wallet"
+                                android:textColor="@color/tw_black"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+                        <TextView
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="兌換"
+                            android:textSize="13sp"
+                            android:textColor="@color/tw_blue"
+                            android:layout_marginEnd="@dimen/dp_4"
+                            android:layout_marginTop="@dimen/dp_4"/>
                     </LinearLayout>
                 </LinearLayout>
 
