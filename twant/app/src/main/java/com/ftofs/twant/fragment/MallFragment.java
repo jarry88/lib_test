@@ -210,7 +210,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                     marketingUrl = responseObj.optString("datas.marketingUrl");
 
                     if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) { // 申請通過
-                        double unpayCommission = responseObj.optInt("datas.marketingMember.unpayCommission");
+                        double unpayCommission = responseObj.optDouble("datas.marketingMember.unpayCommission");
                         tvCommissionAmount.setText(StringUtil.formatFloat(unpayCommission));
                         icDistributionMyTeam.setImageResource(R.drawable.icon_distribution_share);
                         tvDistributionMyTeam.setText("分享好友");
