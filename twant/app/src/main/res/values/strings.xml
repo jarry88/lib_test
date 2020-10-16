@@ -842,4 +842,5 @@
     <string name="onsale_rent">售/租</string>
     <string name="onrent">出租</string>
     <string name="go_no_data_hint">暫無數據~</string>
+    <string name="text_find_password">找回密碼</string>
 </resources>

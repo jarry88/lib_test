@@ -11,9 +11,6 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.ftofs.twant.R
-import com.ftofs.twant.constant.SearchType
-import com.ftofs.twant.util.SearchHistoryUtil
-import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.widget.TouchEditText
 
 class Title @JvmOverloads constructor(
@@ -24,6 +21,7 @@ class Title @JvmOverloads constructor(
     }
     private val titlebarLeft by lazy {findViewById<RelativeLayout>(R.id.titlebar_leftlayout)  }
     private val titlebarLeftImage by lazy {findViewById<ImageView>(R.id.titlebar_leftimage)  }
+    private val titlebarRightImage by lazy {findViewById<ImageView>(R.id.titlebar_rightimage)  }
     private val titlebarFollowImage by lazy {findViewById<ImageView>(R.id.follow_img)  }
     private val titlebarRight by lazy {findViewById<RelativeLayout>(R.id.titlebar_rightlayout)  }
     private val titleText by lazy {findViewById<TextView>(R.id.titlebar_title)  }
@@ -35,8 +33,8 @@ class Title @JvmOverloads constructor(
     private fun initView(attrs: AttributeSet?) {
       View.inflate(context, R.layout.layout_login_tilte, this)
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.Title)
-        typedArray.getString(R.styleable.Title_text_title)?.let {
-            text=it
+        typedArray.getString(R.styleable.Title_title_text)?.let {
+            rootView.findViewById<TextView>(R.id.titlebar_title)?.text=it
         }
         //不設置的時候是顯示的
         typedArray.getBoolean(R.styleable.Title_login_info, false).takeIf { it }?.let {
@@ -58,6 +56,10 @@ class Title @JvmOverloads constructor(
     //   通过资源id设置左侧图片样式
     fun setLeftImageResource(resId: Int) {
         titlebarLeftImage!!.setImageResource(resId)
+    }//   通过资源id设置左侧图片样式
+    fun setRightImageResource(resId: Int) {
+        titlebarRightImage!!.setImageResource(resId)
+        titlebarRightImage!!.visibility= VISIBLE
     }//   通过资源id设置左侧图片样式
     fun setFollowImageResource(resId: Int) {
         titlebarFollowImage!!.setImageResource(resId)

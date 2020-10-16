@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.alibaba.fastjson.JSON
+import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.R
 import com.ftofs.twant.BR
 import com.ftofs.twant.databinding.ItemHouseVoBinding
@@ -59,11 +60,12 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
             KLog.init(true)
         }
         binding.button3.setOnClickListener {
-            viewModel.getTest()
+            viewModel.getPropertyList()
         }
         binding.button4.setOnClickListener { start(Go853HouseListFragment()) }
         binding.rlList.adapter=suggestAdapter
         suggestAdapter.addAll(SearchHistoryUtil.loadSearchHistory(GoSearchType.All.ordinal).map { it.keyword },true)
+
     }
     inline fun <reified T:Any> getJsonData(jsonStr:String):T{
         SLog.info(jsonStr)

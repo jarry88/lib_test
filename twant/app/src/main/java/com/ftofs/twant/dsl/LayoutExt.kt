@@ -1,9 +1,8 @@
-package taylor.com.dsl
+package com.ftofs.twant.dsl
 
 import android.content.Context
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.ftofs.twant.dsl.dp
 import com.ftofs.twant.dsl.views.LineFeedLayout
 import taylor.com.views.ProgressBar
 import taylor.com.views.Selector

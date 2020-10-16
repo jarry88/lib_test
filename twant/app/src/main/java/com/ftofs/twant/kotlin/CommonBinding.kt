@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.Goods
 import com.ftofs.twant.R
 import com.ftofs.twant.constant.Constant
+import com.ftofs.twant.login.Title
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.Util
@@ -46,6 +47,11 @@ fun loadImageUrl(v: ImageView, url: String?, defaultDrawable: Drawable?){
 
         }
     }
+}
+
+@BindingAdapter("tt")
+fun setTitleText(view: Title, title: String) {
+    view.text=title
 }
 @BindingAdapter(value = ["delayBackgroud"])
 fun setDelayBackground(v: View, bg: Drawable?) {

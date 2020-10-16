@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.ftofs.twant.login.Title
 import com.ftofs.twant.util.StringUtil
 import com.wzq.mvvmsmart.utils.KLog
 
@@ -24,6 +25,7 @@ fun setInViewVisible(view: View, visible: Int) {
     if(visible==1) view.visibility=View.INVISIBLE
     else view.visibility=View.VISIBLE
 }
+
 
 //@BindingAdapter("android:paddingLeft")
 //fun setPaddingLeft(view: View, oldPadding: Int, newPadding: Int) {

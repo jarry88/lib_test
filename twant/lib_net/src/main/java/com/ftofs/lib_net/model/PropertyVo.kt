@@ -20,7 +20,7 @@ data class PropertyVo(
         val coverkey: Int,
         val decoration: Int,
         val decorationDescription: String,//裝修描述
-        val sourceDes: String,//裝修描述
+        val sourceDes: String,//来源
         val detail: String,
         val developers: String,
         val direction: Int,
@@ -174,11 +174,7 @@ data class PropertyVo(
         else ->""
     }
     //todo 待確定補全的屬性
-    fun getSourceString():String=when(source){//樓盤來源：：，0：不帶，1：帶
-        0 ->" GO853 "
-        1 ->"帶"
-        else ->"GO853"
-    }
+    fun getSourceString():String=sourceDes
     fun getBuildingAreaString():String=if(buildingArea>0) "$buildingArea 呎" else "-"  //建築面積
     fun getSalableAreaString():String=if(salableArea>0) "$salableArea 呎" else "-"  //實用面積
     fun getAveragePrice():String=if(pingJunPrice>0)"$pingJunPrice 元" else "-"  //實用面積

@@ -72,13 +72,14 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
     private val repository by lazy { object :BaseRepository(){} }
     val propertyList by lazy { MutableLiveData<GoeftInfo>() }
     val userPropertyList by lazy { MutableLiveData<GoeftInfo>() }
+
     val retrofit = (Retrofit.Builder()).client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("http://192.168.5.19:8080/api/").build()
     val testApi=retrofit.create(DemoApiService::class.java)
-    val currPropertyInfo by lazy { MutableLiveData<PropertyVo>() }
+    val finalApi =if(Util.inDev()) testApi else repository.api
 
+    val currPropertyInfo by lazy { MutableLiveData<PropertyVo>() }
     var hasMore=true
     var currPage=0
-    val finalApi =if(Util.inDev()) testApi else repository.api
 
     fun getPropertyDetail(pid: Int) {//獲取房產詳情
         launch(stateLiveData, {

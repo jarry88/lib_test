@@ -11,10 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.ftofs.lib_net.model.CouponStoreVo;
+import com.ftofs.lib_net.model.CouponItemVo;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
@@ -36,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -53,6 +53,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
     conformList[] 店铺满优惠
     discountList[] 限时折扣
      */
+    LinearLayout singleFragmentContainer;
     ShopMainFragment parentFragment;
     ViewPager mViewPager;
     TabLayout tabLayout;
@@ -61,13 +62,14 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
     List<StoreVoucher> couponStoreList = new ArrayList<>();
     LinearLayout llCouponStoreWrapper;
     LinearLayout llCouponStoreContainer;
-    ViewGroupAdapter<CouponStoreVo> couponStoreListAdapter;
+    ViewGroupAdapter<CouponItemVo> couponStoreListAdapter;
 
 
     List<Fragment> fragments;
     LinearLayout llPlaceholderContainer;
     TextView tvEmptyHint;
     Timer timer;
+    CommonFragmentPagerAdapter adapter;
     public static ShopActivityFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -90,39 +92,57 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
         parentFragment = (ShopMainFragment) getParentFragment();
         tabLayout = view.findViewById(R.id.tab_layout);
         mViewPager = view.findViewById(R.id.view_pager);
+        singleFragmentContainer = view.findViewById(R.id.single_fragment_container);
 
         tvEmptyHint = view.findViewById(R.id.tv_empty_hint);
         llPlaceholderContainer = view.findViewById(R.id.ll_placeholder_container);
         llOuterContainer = view.findViewById(R.id.ll_outer_container);
 
 
-        couponStoreListAdapter =new ViewGroupAdapter<CouponStoreVo>(_mActivity,llCouponStoreContainer,R.layout.store_voucher_item) {
+        couponStoreListAdapter =new ViewGroupAdapter<CouponItemVo>(_mActivity,llCouponStoreContainer,R.layout.store_voucher_item) {
             @Override
-            public void bindView(int position, View itemView, CouponStoreVo itemData) {
+            public void bindView(int position, View itemView, CouponItemVo itemData) {
 //                String token = User.getToken();
 //                if (StringUtil.isEmpty(token)) {
 //                    Util.showLoginFragment(requireContext());
 //                    return;
 //                }
-                Util.startFragment(ShopCouponStoreListFragment.newInstance(0));
+//                Util.startFragment(ShopCouponStoreListFragment.newInstance(0,this));
             }
         };
         couponStoreListAdapter.setItemClickListener((adapter, view1, position) -> {
 
         });
         fragments = new ArrayList<>();
-        fragments.add(ShopCouponStoreListFragment.Companion.newInstance(0));
+        fragments.add(ShopCouponStoreListFragment.Companion.newInstance(0,this));
         fragments.add(ShopActivityVoucherListFragment.newInstance());
 
         List<String> titleList = new ArrayList<String>();
-        titleList.add("1");
-        titleList.add("2");
-        CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(),titleList, fragments);
+        titleList.add("代金券");
+        titleList.add("优惠券");
+        adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(),titleList, fragments);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
 
     }
 
+
+    public void hideCouponStoreView() {
+        mViewPager.removeViewAt(0);
+        Objects.requireNonNull(mViewPager.getAdapter()).notify();
+//        List<String> titleList = new ArrayList<>();
+//        List<Fragment> fragmentList = new ArrayList<>();
+//        titleList.add("优惠券");
+//        fragments.clear();
+//        fragments.add(ShopActivityVoucherListFragment.newInstance());
+//        adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(),titleList,new ArrayList<>().add(ShopActivityVoucherListFragment.newInstance()) );
+//        mViewPager.setAdapter(adapter);
+//        tabLayout.setupWithViewPager(mViewPager);
+
+    }
+    public int getStoreId(){
+        return parentFragment.storeId;
+    }
 
     @Override
     public void onClick(View v) {

@@ -44,10 +44,10 @@ open class BaseRepository() {
                 errorBlock?.let { it() }
                 Result.Error(IOException(response.message))
             }else if((response.code==400 )or(response.code==401) ){
-                Result.DataError(response.datas)
+                Result.DataError(response.run { datas?:data!! })
             } else {
                 successBlock?.let { it() }
-                Result.Success(response.datas)
+                Result.Success(response.run { datas?:data!! })
             }
         }
     }

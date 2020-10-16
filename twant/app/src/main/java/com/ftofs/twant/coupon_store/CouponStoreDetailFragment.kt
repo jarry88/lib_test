@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.ftofs.twant.R
 import com.ftofs.twant.BR
 import com.ftofs.twant.databinding.CouponStoreDetailFragmentBinding
+import com.ftofs.twant.util.ToastUtil
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 
 private const val COUPON_ID ="couponId"
@@ -17,21 +18,36 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
     override fun initVariableId(): Int {
         return BR.viewModel
     }
+    val id=arguments?.getInt(COUPON_ID)
 
     override fun initData() {
         binding.title.apply {
-
+            setLeftImageResource(R.drawable.icon_back)
+            setRightImageResource(R.drawable.icon_coupon_share)
+            setRightLayoutClickListener{ToastUtil.success(context,"分享")}
+            setLeftLayoutClickListener{onBackPressedSupport()}
         }
+        id?.let {
+            viewModel.getCouponDetail(it)
+        }?:viewModel.getCouponDetail(42)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(couponId: Int):ShopCouponStoreListFragment {
+        fun newInstance(couponId: Int?):CouponStoreDetailFragment {
             val args = Bundle()
-            args.putInt(COUPON_ID,couponId)
-            val  fragment =ShopCouponStoreListFragment()
+            couponId?.let {
+                args.putInt(COUPON_ID,it)
+            }
+            val  fragment =CouponStoreDetailFragment()
             fragment.arguments=args
             return fragment
+        }
+    }
+
+    override fun initViewObservable() {
+        viewModel.currCouponDetail.observe(this){
+            binding.vo=it
         }
     }
 }
