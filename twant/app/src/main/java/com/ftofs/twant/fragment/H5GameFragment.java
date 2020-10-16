@@ -74,9 +74,10 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
     boolean isFirstVisible = true;
 
     TextView tvFragmentTitle;
+    String htmlContent;
 
 
-    public static H5GameFragment newInstance(String url, boolean ignoreSslError, boolean reloadOnVisible, String title, int articleId) {
+    public static H5GameFragment newInstance(String url, boolean ignoreSslError, boolean reloadOnVisible, String title, int articleId, String htmlContent) {
         Bundle args = new Bundle();
 
         args.putString("url", url);
@@ -87,16 +88,17 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
         H5GameFragment fragment = new H5GameFragment();
         fragment.setArguments(args);
         fragment.articleId = articleId;
+        fragment.htmlContent = htmlContent;
 
         return fragment;
     }
 
     public static H5GameFragment newInstance(String url, boolean ignoreSslError) {
-        return newInstance(url, ignoreSslError, false, null, ARTICLE_ID_INVALID);
+        return newInstance(url, ignoreSslError, false, null, ARTICLE_ID_INVALID, null);
     }
 
     public static H5GameFragment newInstance(String url, String title) {
-        return newInstance(url, true, false, title, ARTICLE_ID_INVALID);
+        return newInstance(url, true, false, title, ARTICLE_ID_INVALID, null);
     }
 
     /**
@@ -106,7 +108,11 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
      * @return
      */
     public static H5GameFragment newInstance(int articleId, String title) {
-        return newInstance(null, true, false, title, articleId);
+        return newInstance(null, true, false, title, articleId, null);
+    }
+
+    public static H5GameFragment newInstance(String title, String htmlContent, boolean ignoreSslError) {
+        return newInstance(null, ignoreSslError, false, title, ARTICLE_ID_INVALID, htmlContent);
     }
 
 
@@ -137,7 +143,9 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
         mWebView=view.findViewById(R.id.x5_web_view);
         loadingPopup = Util.createLoadingPopup(_mActivity).show();
         SLog.info("mwebView url[%s]",url);
-        if (articleId == ARTICLE_ID_INVALID) {
+        if (!StringUtil.isEmpty(htmlContent)) {
+            mWebView.loadData(htmlContent, "text/html", "utf-8");
+        } else if (articleId == ARTICLE_ID_INVALID) {
             mWebView.loadUrl(url);
         } else {
             loadPageContent();
@@ -286,7 +294,7 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
                         return;
                     }
 
-                    String htmlContent = responseObj.getSafeString("datas.articleInfo.content");
+                    htmlContent = responseObj.getSafeString("datas.articleInfo.content");
                     mWebView.loadData(htmlContent, "text/html", "utf-8");
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

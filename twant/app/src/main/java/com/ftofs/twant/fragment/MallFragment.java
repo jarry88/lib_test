@@ -57,6 +57,8 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
     int marketingState;
     int marketingArticleId;
+    String marketingArticleTitle;
+    String marketingArticleContent;
     String marketingUrl; // 用於發展下級的分享Url
 
     TextView tvCommissionAmount;
@@ -212,9 +214,12 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
                 try {
                     marketingState = responseObj.optInt("datas.marketingState");
-                    marketingArticleId = responseObj.optInt("datas.articleId");
+                    marketingArticleId = responseObj.optInt("datas.marketingArticle.articleId");
+                    marketingArticleTitle = responseObj.optString("datas.marketingArticle.title");
+                    marketingArticleContent = responseObj.optString("datas.marketingArticle.content");
                     marketingUrl = responseObj.optString("datas.marketingUrl");
-                    SLog.info("marketingUrl[%s]", marketingUrl);
+                    SLog.info("marketingUrl[%s], marketingArticleTitle[%s], marketingArticleContent[%s]",
+                            marketingUrl, marketingArticleTitle, marketingArticleContent);
 
                     if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) { // 申請通過
                         double unpayCommission = responseObj.optDouble("datas.marketingMember.unpayCommission");
@@ -324,7 +329,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 } else if (marketingState == Constant.MARKETING_STATE_APPLY_IN_PROGRESS) {
                     ToastUtil.error(_mActivity, "審核中，請耐心等候");
                 } else {
-                    Util.startFragment(DistributionEnrollmentFragment.newInstance(marketingArticleId, null));
+                    Util.startFragment(DistributionEnrollmentFragment.newInstance(marketingArticleId, marketingArticleTitle, marketingArticleContent));
                 }
                 break;
             case R.id.btn_distribution_share:

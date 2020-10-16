@@ -34,8 +34,9 @@ public class DistributionEnrollmentFragment extends BaseFragment implements View
 
     int articleId; // 協議文章的Id
     String articleTitle; // 協議文章的標題
+    String articleContent; // 協議文章的內容
 
-    public static DistributionEnrollmentFragment newInstance(int articleId, String articleTitle) {
+    public static DistributionEnrollmentFragment newInstance(int articleId, String articleTitle, String articleContent) {
         Bundle args = new Bundle();
 
         DistributionEnrollmentFragment fragment = new DistributionEnrollmentFragment();
@@ -43,6 +44,8 @@ public class DistributionEnrollmentFragment extends BaseFragment implements View
 
         fragment.articleId = articleId;
         fragment.articleTitle = articleTitle;
+        fragment.articleContent = articleContent;
+        SLog.info("articleContent[%s]", articleContent);
 
         return fragment;
     }
@@ -107,7 +110,7 @@ public class DistributionEnrollmentFragment extends BaseFragment implements View
             agreeContractChecked = !agreeContractChecked;
             iconAgreeContract.setImageResource(agreeContractChecked ? R.drawable.ic_baseline_check_box_24 : R.drawable.ic_baseline_check_box_outline_blank_24);
         } else if (id == R.id.btn_view_contract) {
-            Util.startFragment(H5GameFragment.newInstance(articleId, articleTitle));
+            Util.startFragment(H5GameFragment.newInstance(articleTitle, articleContent, true));
         }
     }
 

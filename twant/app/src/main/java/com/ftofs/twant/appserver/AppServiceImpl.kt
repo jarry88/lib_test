@@ -107,7 +107,7 @@ class AppServiceImpl:AppService {
 
         //            url = url + "#/20191226/index";
 //            SLog.info("url[%s]",url);
-        Util.startFragment(H5GameFragment.newInstance(url, true, true, title, H5GameFragment.ARTICLE_ID_INVALID))
+        Util.startFragment(H5GameFragment.newInstance(url, true, true, title, H5GameFragment.ARTICLE_ID_INVALID, null))
     }
 
     override fun sendWant() {
