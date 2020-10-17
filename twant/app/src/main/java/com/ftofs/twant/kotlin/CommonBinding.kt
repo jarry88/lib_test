@@ -50,8 +50,8 @@ fun loadImageUrl(v: ImageView, url: String?, defaultDrawable: Drawable?){
 }
 
 @BindingAdapter("tt")
-fun setTitleText(view: Title, title: String) {
-    view.text=title
+fun setTitleText(view: Title, title: String?) {
+    title?.let { view.text=it }
 }
 @BindingAdapter(value = ["delayBackgroud"])
 fun setDelayBackground(v: View, bg: Drawable?) {

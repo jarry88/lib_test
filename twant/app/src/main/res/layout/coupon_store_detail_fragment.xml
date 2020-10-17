@@ -15,8 +15,75 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title"
-            app:tt="@{vo.title}"
+            app:tt ="@{vo.title}"
             app:layout_constraintTop_toTopOf="parent"
            />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/ll_bottom"
+            app:layout_constraintTop_toBottomOf="@+id/title">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/tw_grey_F3F3">
+<!--                店內套餐-->
+                <LinearLayout
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="9dp"
+                    android:layout_marginBottom="6dp"
+                    android:id="@+id/ll_pkg_container"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:paddingStart="10dp"
+            android:paddingEnd="@dimen/margin_8dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/ll_bottom"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    price="@{vo.price}"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="11sp"
+                    android:textColor="@color/tw_grey"
+                    android:text="@{`$`+String.valueOf(vo.originalPrice) +`   d`}"/>
+            </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/btn_buy"
+                android:layout_width="155dp"
+                android:layout_height="39dp"
+                android:background="@drawable/blue_button"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="#FFF"
+                android:text="@string/text_instance_to_buy"
+                />
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

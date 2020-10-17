@@ -802,6 +802,11 @@ inline var TextView.textStyle: Int
         return -1
     }
     set(value) = setTypeface(typeface, value)
+inline var TextView.colorId: Int
+    get() {
+        return 0
+    }
+    set(value) = setTextColor(resources.getColor(value))
 
 inline var TextView.textColor: String
     get() {

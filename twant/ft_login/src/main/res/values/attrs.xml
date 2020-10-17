@@ -8,5 +8,16 @@
         <attr name="item_resource" format="reference"/>
         <attr name="show_empty" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="CircleView">
+        <!--定义资源-->
+        <attr name="src" format="reference" />
+        <!--定义类型-->
+        <attr name="type" format="enum">
+            <!--圆形-->
+            <enum name="round" value="1" />
+            <!--矩形-->
+            <enum name="rect" value="2" />
+        </attr>
+    </declare-styleable>
     <declare-styleable name="SettingPhoneView"></declare-styleable>
 </resources>
