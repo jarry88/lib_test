@@ -209,13 +209,13 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
                 .asCustom(
                         when (selectedTabPosition) {
                             PROPERTY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.propertyTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FILTER_PROPERTY)
+                                pushUmengEvent(Config.PROD,GO853_FILTER_PROPERTY,hashMapOf("type" to "房產"))
                                 binding.rvList.scrollToPosition(0)
                                 viewModel.savePropertyType(s)
                                 drawListView?.dismiss()
                             }
                             SALE_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.saleTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FILTER_SALE)
+                                pushUmengEvent(Config.PROD,GO853_FILTER_SALE,hashMapOf("type" to "租售"))
                                 binding.rvList.scrollToPosition(0)
 
                                 viewModel.saveSaleType(s)
@@ -223,16 +223,23 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
                             }
 
                             CITY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.cityTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FILTER_CITY)
+                                pushUmengEvent(Config.PROD,GO853_FILTER_CITY,hashMapOf("type" to "區域"))
                                 binding.rvList.scrollToPosition(0)
 
                                 viewModel.saveCityString(s)
                                 drawListView?.dismiss()
                             }
 
-                            PRICE_TYPE_BUTTON ->viewModel.getPriceDescList()?.let {  GoDropdownMenu(requireContext(),it , tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FIlTER_PRICE)
+                            PRICE_TYPE_BUTTON ->viewModel.getPriceDescList()?.let {
+                                binding.tabLayout.getTabAt(SALE_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let { v->
+                                    viewModel.saleTypeList.get(2).let{s ->
+                                        v.text=s
+                                    }
+                                }
+                                GoDropdownMenu(requireContext(),it , tagView?.text.toString()) { s ->
+                                pushUmengEvent(Config.PROD,GO853_FIlTER_PRICE, hashMapOf("type" to "價格"))
                                 binding.rvList.scrollToPosition(0)
+
                                 when(viewModel.saleTypeLiveData.value){
                                     SELLING_SALE_TYPE ->viewModel.saveSellingPriceRange(s)
                                     RENT_SALE_TYPE ->viewModel.saveRentPriceRang(s)
@@ -241,7 +248,6 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
                                 binding.refreshLayout.autoRefresh()
                                 drawListView?.dismiss()
                             } }?: run {
-                                ToastUtil.error(context,"请先选择租售类型")
                                 GoDropdownMenu(requireContext()) }//为空时自动dismiss
 
                             else -> GoDropdownMenu(requireContext())
@@ -297,7 +303,7 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
         }
         viewModel.toastError.observe(this){
             mAdapter.addAll(listOf(),true)
-            ToastUtil.error(context,it)
+//            ToastUtil.error(context,it)
         }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
             binding.refreshLayout.finishRefresh()
@@ -305,7 +311,7 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
             if(it==StateLiveData.StateEnum.Error){
                 mAdapter.addAll(listOf(),true)
                 if(!viewModel.errorMessage.isNullOrEmpty()){
-                    ToastUtil.error(context,viewModel.errorMessage)
+//                    mAdapter.emptyText=viewModel.errorMessage
                 }
             }
             if(!viewModel.hasMore)binding.refreshLayout.setNoMoreData(true)

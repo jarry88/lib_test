@@ -31,6 +31,10 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
     override fun initVariableId(): Int {
         return BR.viewModel
     }
+
+    private val imageAdapter by lazy {  factoryAdapter<String,ImageSquareItemBinding>(R.layout.image_square_item){b,d->
+        b.imageItem.imageUrl=d
+    } }
     val id=arguments?.getInt(COUPON_ID)
 
     override fun initData() {
@@ -45,12 +49,10 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
         }?:viewModel.getCouponDetail(42)
         binding.rvImageList.apply {
             layoutManager= LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,true)
-            adapter= factoryAdapter<String,ImageSquareItemBinding>(R.layout.image_square_item){b,d->
-                b.imageItem.imageUrl=d
-
-            }
+            adapter= imageAdapter
         }
         binding.couponInformation.observable(viewModel.currCouponDetail)
+        binding.btnBuy.setOnClickListener {  }
     }
 
     companion object {
@@ -69,6 +71,10 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
     override fun initViewObservable() {
         viewModel.currCouponDetail.observe(this){
             binding.vo=it
+            it.picList?.let {list ->
+                imageAdapter.addAll(list,true)
+
+            }
         }
     }
 }

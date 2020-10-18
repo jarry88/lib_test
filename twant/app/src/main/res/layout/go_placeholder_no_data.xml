@@ -16,7 +16,7 @@
             android:layout_marginBottom="@dimen/dp_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/go_no_data_hint"
+            android:text="@string/go_no_data_853_hint"
             android:textSize="18sp"/>
     </LinearLayout>
 </layout>

@@ -27,8 +27,9 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
     "地皮","寫字樓","別墅")
 
     val saleTypeList=listOf("全部","出租",
-    "出售",
-    "售/租")
+    "出售"
+//    "售/租"
+    )
     val saleTypeLiveData by lazy { MutableLiveData<Int>(SELLING_SALE_TYPE) }
 
     val cityTypeList=listOf("全部","澳門","路氹","路環")
@@ -66,7 +67,6 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
             mapOf("desc" to desc,"sellingPriceBegin" to sellingPriceBegin,"sellingPriceEnd" to sellingPriceEnd)
     private fun factoryPriceMap(desc: String?, rentalPriceBegin: Double?, rentalPriceEnd: Double?): Map<String, Any?> =
             mapOf("desc" to desc,"rentalPriceBegin" to rentalPriceBegin,"rentalPriceEnd" to rentalPriceEnd)
-//    val cityTypeLiveData by lazy { MutableLiveData<String>() }
 
     var currUid: Int?=null
     private val repository by lazy { object :BaseRepository(){} }
@@ -157,6 +157,7 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
                     toastError.postValue(s)
                 }
             }
+            propertyList.postValue(it)
         })
     }
 
@@ -248,8 +249,10 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
         when(it){
             RENT_SALE_TYPE ->rentPriceRangeList.map { map ->  map["desc"] as String }
             SELLING_SALE_TYPE ->sellingPriceRangeList.map {  map ->  map["desc"] as String }
-            RENT_AND_SELLING_TYPE ->null
-            else -> null
+//            RENT_AND_SELLING_TYPE ->null
+            else -> {
+                saleTypeLiveData.value=SELLING_SALE_TYPE
+                sellingPriceRangeList.map {  map ->  map["desc"] as String }}
         }
     }
 

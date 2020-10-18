@@ -234,7 +234,6 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                                 binding.refreshLayout.autoRefresh()
                                 drawListView?.dismiss()
                             } }?: run {
-                                ToastUtil.error(context,"请先选择租售类型")
                                 GoDropdownMenu(requireContext()) }//为空时自动dismiss
 
                             else -> GoDropdownMenu(requireContext())
