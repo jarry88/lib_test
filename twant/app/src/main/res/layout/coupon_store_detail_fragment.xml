@@ -38,6 +38,7 @@
                     android:orientation="vertical">
                     <LinearLayout
                         android:paddingStart="@dimen/length_15dp"
+                        android:paddingEnd="@dimen/length_15dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp_6">
@@ -51,7 +52,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
-                            android:text="@{vo.store.address}"
+                            android:text="@{vo.storeName+`|`+vo.store.address}"
                             android:textSize="12sp"/>
                     </LinearLayout>
                     <TextView
@@ -72,6 +73,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/tw_grey_A8"
                             android:text="@{vo.tips}"
                             android:textSize="12sp"/>
                         <View
@@ -81,6 +83,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/tw_grey_A8"
+
                             android:textSize="12sp"
                             android:text="@{`已售：`+String.valueOf(vo.sale)}"/>
                     </LinearLayout>
@@ -88,10 +92,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="130dp"
                         android:layout_marginBottom="@dimen/margin_8dp">
-                        <com.ftofs.twant.view.SmartListView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="130dp"
-                            android:id="@+id/image_list"/>
+                            android:orientation="horizontal"
+                            android:id="@+id/rv_image_list"/>
                         <ImageView
                             android:layout_width="18dp"
                             android:layout_height="18dp"
@@ -121,10 +126,10 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/coupon_information"/>
                 <com.ftofs.twant.view.StoreInfoView
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/store_information"/>
+                    android:id="@+id/store_information"
+                    store_vo="@{vo.store}"/>
             </LinearLayout>
         </ScrollView>
         <LinearLayout
@@ -146,14 +151,25 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     price="@{vo.price}"
-                    tv_red="true"/>
-                <TextView
+                    app:tv_red="@{true}"
+                    />
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="11sp"
-                    android:textColor="@color/tw_grey"
-                    price="@{vo.originalPrice}"
-                    tv_red="false"/>
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:textColor="@color/tw_grey"
+                        android:text="門市價"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:textColor="@color/tw_grey"
+                        app:price="@{vo.originalPrice}"/>
+                </LinearLayout>
             </LinearLayout>
             <View
                 android:layout_width="0dp"

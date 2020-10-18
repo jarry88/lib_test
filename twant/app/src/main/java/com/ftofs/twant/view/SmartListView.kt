@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.SmartListViewBinding
 import com.ftofs.twant.dsl.customer.factoryAdapter
+import com.gzp.lib_common.utils.SLog
 
 class SmartListView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -63,8 +64,11 @@ class SmartListView @JvmOverloads constructor(
         mBinding.rvList.adapter=adapter
         getLifecycleOwner()?.let {
             list.observe(it){
-                it?.let {                 adapter.addAll(it,currPage<=1)
-                }?:adapter.addAll(listOf(),true)
+                it?.let {
+                    SLog.info("容器收货")
+                    adapter.addAll(it,currPage<=1)
+                }?:adapter.addAll(listOf(),true).apply {                     SLog.info("空数据")
+                }
             }
         }
 
@@ -76,7 +80,7 @@ class SmartListView @JvmOverloads constructor(
     finishRefresh()
     }
     fun setOrientation(){
-        mBinding.refreshLayout.isHorizontalFadingEdgeEnabled=true
+//        mBinding.refreshLayout.isHorizontalFadingEdgeEnabled=true
         mBinding.rvList.isHorizontalFadingEdgeEnabled=true
         mBinding.rvList.layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
     }

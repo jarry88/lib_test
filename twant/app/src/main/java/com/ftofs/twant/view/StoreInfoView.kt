@@ -19,12 +19,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ftofs.lib_net.model.CouponDetailVo
+import com.ftofs.lib_net.model.Store
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CouponInfoWighetBinding
 import com.ftofs.twant.databinding.SmartListViewBinding
 import com.ftofs.twant.databinding.StoreInfoWighetBinding
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.dsl.customer.factoryAdapter
+import com.ftofs.twant.util.Util
 
 class StoreInfoView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -37,6 +39,12 @@ class StoreInfoView @JvmOverloads constructor(
     init {
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SmartList)
+        mBinding.btnContact.setOnClickListener {
+            mBinding.vo?.contact?.takeIf { it.isNotEmpty() }?.let {
+                Util.dialPhone(Util.findActivity(context),it)
+
+            }
+        }
 //        typedArray.getString(R.styleable.Title_text_title)?.let {
 //            text=it
 //        }
@@ -70,10 +78,11 @@ class StoreInfoView @JvmOverloads constructor(
     fun observable(vo:LiveData<CouponDetailVo?>){
         getLifecycleOwner()?.let {
             vo.observe(it){t->
-                t?.let { mBinding.vo=t
+                t?.let { mBinding.vo=t.store
 
                 }
             }
         }
     }
+    fun updateVo(vo: Store?)=vo?.let { mBinding.vo=it }
 }
