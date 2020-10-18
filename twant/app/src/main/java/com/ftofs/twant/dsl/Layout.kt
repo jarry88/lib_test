@@ -581,6 +581,13 @@ inline var View.background_color: String
     set(value) {
         setBackgroundColor(Color.parseColor(value))
     }
+inline var View.bg_color_id: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        setBackgroundColor(resources.getColor(value))
+    }
 
 inline var View.background_res: Int
     get() {

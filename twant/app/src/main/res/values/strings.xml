@@ -844,4 +844,5 @@
     <string name="go_no_data_hint">暫無數據~</string>
     <string name="text_find_password">找回密碼</string>
     <string name="text_instance_to_buy">立即購買</string>
+    <string name="text_look_more">查看更多</string>
 </resources>

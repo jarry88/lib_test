@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.Goods
 import com.ftofs.twant.R
 import com.ftofs.twant.constant.Constant
+import com.ftofs.twant.dsl.colorId
 import com.ftofs.twant.login.Title
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Time
@@ -72,10 +73,12 @@ fun setTimeStamp(v: TextView, timeStamp: Long?) {
         v.text= Time.fromMillisUnixtime(timeStamp, "Y-m-d H:i:s")
     }
 }
-@BindingAdapter(value = ["price"])
-fun setTextPrice(v: TextView, price: Double) {
+@BindingAdapter("price","tv_red","first_small", requireAll = false)
+fun setTextPrice(v: TextView, price: Double,red:Boolean=true ,first:Boolean=true) {
     price.run {
         v.text= StringUtil.formatPrice(null, price, 0, 2)
+        if(red) v.colorId=R.color.red
+//        v.apply { textSize=firstSize.toFloat() }
     }
 }
 @BindingAdapter(value = ["priceModel"])

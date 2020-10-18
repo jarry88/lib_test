@@ -21,14 +21,14 @@ data class CouponDetailVo(
     val limitUsePeople: Boolean,
     val limitUsePeopleNum: Int,
     val needAppointment: Boolean,
-    val originalPrice: Int,
+    val originalPrice: Double,
     val parkingType: Int,
     val picIds: String,
     val picList: List<String>?,
     val pkgList: List<Pkg>,
     val platformId: Int,
     val platformStoreId: Int,
-    val price: Int,
+    val price: Double,
     val publishStatus: Int,
     val sale: Int,
     val sceneId: Int,
@@ -52,7 +52,15 @@ data class CouponDetailVo(
     val validityEndDate: String,
     val validityStartDate: String,
     val validityType: Int
-):Serializable
+):Serializable{
+    fun getParkingTypeString():String= when(parkingType){
+        0->"無停车位"
+        1->"提供免費停車位"
+        2->"提供收費停車位"
+        else ->"停車位信息咨詢商戶"
+    }
+    fun getFreeWifiString():String= if(freeWifi) "WIFI免費" else "WIFI需收費"
+}
 
 data class Pkg(
     val childItems: List<ChildItem>,
