@@ -19,6 +19,7 @@ import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.coupon_store.ShopCouponStoreListFragment;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.google.android.material.tabs.TabLayout;
@@ -114,12 +115,19 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
 
         });
         fragments = new ArrayList<>();
-        fragments.add(ShopCouponStoreListFragment.Companion.newInstance(0,this));
-        fragments.add(ShopActivityVoucherListFragment.newInstance());
 
         List<String> titleList = new ArrayList<String>();
-        titleList.add("代金券");
-        titleList.add("优惠券");
+        if (Config.USE_DEVELOPER_TEST_DATA) {
+            titleList.add("代金券");
+            titleList.add("优惠券");
+
+            fragments.add(ShopCouponStoreListFragment.Companion.newInstance(0,this));
+            fragments.add(ShopActivityVoucherListFragment.newInstance());
+        } else {
+            titleList.add("优惠券");
+            fragments.add(ShopActivityVoucherListFragment.newInstance());
+            tabLayout.setVisibility(View.GONE);
+        }
         adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(),titleList, fragments);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);

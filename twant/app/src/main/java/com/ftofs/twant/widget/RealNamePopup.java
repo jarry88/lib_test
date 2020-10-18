@@ -114,15 +114,12 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
                 }
             }
         });
-        etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    commitData();
-                }
-
-                return false;
+        etId.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                commitData();
             }
+
+            return false;
         });
     }
 

@@ -231,21 +231,19 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
                             }
 
                             PRICE_TYPE_BUTTON ->viewModel.getPriceDescList()?.let {
-                                binding.tabLayout.getTabAt(SALE_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let { v->
-                                    viewModel.saleTypeList.get(2).let{s ->
-                                        v.text=s
-                                    }
-                                }
+//                                binding.tabLayout.getTabAt(SALE_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let { v->
+//                                    viewModel.saleTypeList.get(2).let{s ->
+//                                        v.text=s
+//                                    }
+//                                }
                                 GoDropdownMenu(requireContext(),it , tagView?.text.toString()) { s ->
                                 pushUmengEvent(Config.PROD,GO853_FIlTER_PRICE, hashMapOf("type" to "價格"))
                                 binding.rvList.scrollToPosition(0)
-
                                 when(viewModel.saleTypeLiveData.value){
                                     SELLING_SALE_TYPE ->viewModel.saveSellingPriceRange(s)
                                     RENT_SALE_TYPE ->viewModel.saveRentPriceRang(s)
                                     else ->viewModel.clearPriceRange()
                                 }
-                                binding.refreshLayout.autoRefresh()
                                 drawListView?.dismiss()
                             } }?: run {
                                 GoDropdownMenu(requireContext()) }//为空时自动dismiss
@@ -286,11 +284,14 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
         viewModel.isTypeLiveData.observe(this){ value ->
             binding.tabLayout.getTabAt(PROPERTY_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{
                 it.text= viewModel.propertyTypeList[value]
+                SLog.info(".isTyp")
                 binding.refreshLayout.autoRefresh()
             }
         }
         viewModel.saleTypeLiveData.observe(this){ value ->
             binding.tabLayout.getTabAt(SALE_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{
+                SLog.info("saleisTyp")
+
                 it.text= viewModel.saleTypeList[value]
                 binding.refreshLayout.autoRefresh()
             }
@@ -298,6 +299,8 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
         viewModel.cityTypeLiveData.observe(this){city ->
             binding.tabLayout.getTabAt(CITY_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{
                 it.text= city
+                SLog.info("city")
+
                 binding.refreshLayout.autoRefresh()
             }
         }

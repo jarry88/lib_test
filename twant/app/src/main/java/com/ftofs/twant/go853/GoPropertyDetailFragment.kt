@@ -2,6 +2,7 @@ package com.ftofs.twant.go853
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -10,6 +11,7 @@ import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.GoPropertyDetailFragmentBinding
 import com.ftofs.twant.entity.WebSliderItem
+import com.ftofs.twant.fragment.ViewPagerFragment
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.view.BannerViewHolder
@@ -17,6 +19,7 @@ import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.config.Config
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.pushUmengEvent
+import com.zhouwei.mzbanner.MZBannerView
 import com.zhouwei.mzbanner.holder.MZHolderCreator
 import kotlinx.android.synthetic.main.go_property_detail_fragment.*
 
@@ -70,21 +73,33 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
         viewModel.currPropertyInfo.observe(this){
             binding.vo=it
             it.photoList?.takeIf { l-> l.isNotEmpty() }?.let { list ->
-                list.map { p -> WebSliderItem(p.title, "none", "", "", "[]") }
-                        .let {
-                            binding.banner.setPages(it, MZHolderCreator<BannerViewHolder> { BannerViewHolder(it) })
-                            binding.banner.setIndicatorRes(R.drawable.white_banner_indicator_normal, R.drawable.gray_banner_indicator_normal)
-                            val padding = Util.dip2px(context, 10f)
-                            val linearLayout: LinearLayout = binding.banner.indicatorContainer
-                            for (i in 0 until linearLayout.childCount) {
-                                SLog.info("第%d個", i)
-                                val imageView = linearLayout.getChildAt(i) as ImageView
-                                val layoutParams = imageView.layoutParams as LinearLayout.LayoutParams
-                                imageView.setPadding(padding, 0, padding, 0)
+                if (list.isNotEmpty()) {
+                    while (list.size < 3) {
+                        list.plus(list[0])
+                    }
+                    list.map { p -> WebSliderItem(p.title, "none", "", "", "[]") }
+                            .let {ll->
+                                    binding.banner.let { it.visibility=View.VISIBLE }
+                                    binding.banner.setPages(ll) { BannerViewHolder(ll) }
+                                    binding.banner.setIndicatorRes(R.drawable.white_banner_indicator_normal, R.drawable.gray_banner_indicator_normal)
+                                    val padding = Util.dip2px(context, 5f)
+                                    val linearLayout: LinearLayout = binding.banner.indicatorContainer
+                                    for (i in 0 until linearLayout.childCount) {
+                                        SLog.info("第%d個", i)
+                                        val imageView = linearLayout.getChildAt(i) as ImageView
+                                        imageView.setPadding(padding, 0, padding, 0)
+                                    }
+                                    binding.banner.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT)
+                                    binding.banner.indicatorContainer.apply {
+                                        layoutParams
+                                    }
+                                    binding.banner.setOnClickListener { Util.startFragment(ViewPagerFragment.newInstance(list.map { it.title }, false)) }
+                                    binding.banner.start()
+                                }
                             }
-//                            binding.banner.start()
-                        }
-            }
+            }?:binding.banner.let { it.visibility=View.GONE }
+
+
         }
     }
 }

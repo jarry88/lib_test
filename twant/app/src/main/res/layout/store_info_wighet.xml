@@ -86,7 +86,7 @@
                             android:layout_width="16dp"
                             android:layout_margin="@dimen/dp_4"
                             android:layout_height="16dp"
-                            android:src="@drawable/icon_mobile"/>
+                            android:src="@drawable/icon_coupon_number"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                             android:layout_width="16dp"
                             android:layout_margin="@dimen/dp_4"
                             android:layout_height="16dp"
-                            android:src="@drawable/icon_position_location"/>
+                            android:src="@drawable/icon_coupon_position"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

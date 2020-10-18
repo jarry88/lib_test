@@ -15,8 +15,8 @@ import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 
-private const val COUPON_ID ="couponId"
-class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmentBinding,CouponStoreViewModel>() {
+private const val COUPON_ID ="orderId"
+class CouponConfirmOrderFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmentBinding,CouponStoreViewModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.coupon_store_detail_fragment
     }
@@ -50,14 +50,13 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
         }?:viewModel.getCouponDetail(42)
         binding.rvImage.adapter=imageAdapter
         binding.couponInformation.observable(viewModel.currCouponDetail)
-        binding.btnBuy.setOnClickListener { CouponConfirmOrderFragment.newInstance(viewModel.currCouponDetail.value?.id) }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(couponId: Int?):CouponConfirmOrderFragment {
+        fun newInstance(orderid: Int?):CouponConfirmOrderFragment {
             val args = Bundle()
-            couponId?.let {
+            orderid?.let {
                 args.putInt(COUPON_ID,it)
             }
             val  fragment =CouponConfirmOrderFragment()
