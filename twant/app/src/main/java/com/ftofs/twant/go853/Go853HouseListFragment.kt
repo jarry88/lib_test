@@ -53,7 +53,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             override fun initView(binding: ItemHouseVoBinding, item: PropertyVo) {
                 binding.vo=item
                 binding.root.setOnClickListener {
-                    start(GoPropertyDetailFragment(item.pid, item))
+                    Util.startFragment(GoPropertyDetailFragment(item.pid, item))
                 }
             }
 
@@ -172,8 +172,10 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
 
 //                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
             // 如果列表滑动到顶部，则启用嵌套滚动
+                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY,)
+
                 if (rvPostListY <= containerViewY) {
-                    binding.scrollView.isNestedScrollingEnabled = false
+//                    binding.scrollView.isNestedScrollingEnabled = false
                     binding.rvList.isNestedScrollingEnabled = true
                 } else {
                     binding.rvList.isNestedScrollingEnabled = false
@@ -223,14 +225,14 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 .asCustom(
                         when (selectedTabPosition) {
                             PROPERTY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.propertyTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD, GO853_FILTER_PROPERTY, hashMapOf("type" to "房產"))
+                                pushUmengEvent(Config.PROD, GO853_FILTER_PROPERTY, hashMapOf("type" to s))
 
                                 binding.rvList.scrollToPosition(0)
                                 viewModel.savePropertyType(s)
                                 drawListView?.dismiss()
                             }
                             SALE_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.saleTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD, GO853_FILTER_SALE, hashMapOf("type" to "租售"))
+                                pushUmengEvent(Config.PROD, GO853_FILTER_SALE, hashMapOf("type" to s))
 
                                 binding.rvList.scrollToPosition(0)
 
@@ -239,7 +241,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                             }
 
                             CITY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.cityTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD, GO853_FILTER_CITY, hashMapOf("type" to "區域"))
+                                pushUmengEvent(Config.PROD, GO853_FILTER_CITY, hashMapOf("type" to s))
 
                                 binding.rvList.scrollToPosition(0)
 
@@ -249,7 +251,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
 
                             PRICE_TYPE_BUTTON -> viewModel.getPriceDescList()?.let {
                                 GoDropdownMenu(requireContext(), it, tagView?.text.toString()) { s ->
-                                    pushUmengEvent(Config.PROD, GO853_FIlTER_PRICE)
+                                    pushUmengEvent(Config.PROD, GO853_FIlTER_PRICE,hashMapOf("type" to s))
                                     binding.rvList.scrollToPosition(0)
                                     when (viewModel.saleTypeLiveData.value) {
                                         SELLING_SALE_TYPE -> viewModel.saveSellingPriceRange(s)

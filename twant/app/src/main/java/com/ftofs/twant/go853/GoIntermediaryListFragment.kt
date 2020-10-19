@@ -9,6 +9,7 @@ import com.ftofs.twant.BR
 import com.ftofs.twant.databinding.GoIntermediaryListFragmentBinding
 import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
+import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.wzq.mvvmsmart.utils.KLog
 
@@ -28,7 +29,7 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
             override fun initView(binding: ItemHouseVoBinding, item: PropertyVo) {
                 binding.vo=item
                 binding.root.setOnClickListener {
-                    start(GoPropertyDetailFragment(item.pid, item))
+                    Util.startFragment(GoPropertyDetailFragment(item.pid, item))
                 }
             }
 

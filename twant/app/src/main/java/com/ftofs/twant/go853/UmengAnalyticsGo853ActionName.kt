@@ -8,3 +8,4 @@ const val GO853_SEARCH_KEYWORD= "go853_search_keyword" //使用關鍵詞搜索�
 
 const val GO853_CALL_MOBILE= "go853_call_mobile" //撥打用戶電話按鈕  mobile
 const val GO853_DETAIL_USER= "go853_detail_user" //跳轉至用戶列表  mobile
+const val GO853_DETAIL_ITEM= "go853_detail_item" //用户详情页展示  mobile

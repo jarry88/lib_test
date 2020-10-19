@@ -28,6 +28,11 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
         return R.layout.go_property_detail_fragment
     }
 
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_DETAIL_ITEM, hashMapOf("pid" to pid))
+    }
+
     override fun initVariableId(): Int {
         return BR.viewModel
     }
@@ -48,15 +53,19 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
             Util.startFragment(GoIntermediaryListFragment(viewModel.currPropertyInfo.value?.uid))
         }
         binding.btnMobile.setOnClickListener{
+            pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_CALL_MOBILE, hashMapOf("mobile" to viewModel.currPropertyInfo.value?.mobile,"pid" to viewModel.currPropertyInfo.value?.pid))
+
             callToUser()
         }
         binding.btnLink.setOnClickListener{
-           callToUser()
+            pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_CALL_MOBILE, hashMapOf("mobile" to viewModel.currPropertyInfo.value?.mobile,"pid" to viewModel.currPropertyInfo.value?.pid))
+
+            callToUser()
         }
         propertyVo?.let{
             viewModel.currPropertyInfo.postValue(it)
-        }?: viewModel.getPropertyDetail(pid)
-
+        }
+        viewModel.getPropertyDetail(pid)
     }
 
     private fun callToUser() {
