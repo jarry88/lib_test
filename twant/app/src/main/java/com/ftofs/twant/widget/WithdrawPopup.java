@@ -2,17 +2,28 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
+
+import java.io.IOException;
+
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 public class WithdrawPopup extends CenterPopupView implements View.OnClickListener {
     Context context;
@@ -69,6 +80,30 @@ public class WithdrawPopup extends CenterPopupView implements View.OnClickListen
 
         if (id == R.id.btn_withdraw) {
             SLog.info("全部提現");
+
+            String url = Api.PATH_DISTRIBUTION_WITHDRAW;
+            SLog.info("url[%s]", url);
+            Api.postUI(url, null, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, "", "", e.getMessage());
+                    ToastUtil.showNetworkError(context, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(context, responseObj)) {
+                        LogUtil.uploadAppLog(url, "", responseStr, "");
+                        return;
+                    }
+
+                    ToastUtil.success(context, "提現成功");
+                    dismiss();
+                }
+            });
         }
     }
 }

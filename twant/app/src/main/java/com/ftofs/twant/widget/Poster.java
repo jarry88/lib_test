@@ -29,6 +29,9 @@ public class Poster extends FrameLayout {
     TextView tvGoodsName;
     ImageView imgQrCode;
 
+    TextView tvMopPrice;
+    TextView tvCnyPrice;
+
     public Poster(@NonNull Context context) {
         this(context, null);
     }
@@ -51,6 +54,8 @@ public class Poster extends FrameLayout {
         goodsImage = findViewById(R.id.img_goods);
         tvGoodsName = findViewById(R.id.tv_goods_name);
         imgQrCode = findViewById(R.id.img_qr_code);
+        tvMopPrice = findViewById(R.id.tv_mop_price);
+        tvCnyPrice = findViewById(R.id.tv_cny_price);
     }
 
     public Poster setAvatar(File avatarFile) {
@@ -65,6 +70,31 @@ public class Poster extends FrameLayout {
 
     public Poster setGoodsName(String goodsName) {
         tvGoodsName.setText(goodsName);
+        return this;
+    }
+
+    /**
+     * 設置澳門元 MOP 146.00
+     * @param price
+     * @return
+     */
+    public Poster setMopPrice(double price) {
+        tvMopPrice.setText("MOP " + StringUtil.formatFloat(price));
+        return this;
+    }
+
+    /**
+     * 設置人民幣 (约为CNY 120.20元)
+     * @param price
+     * @return
+     */
+    public Poster setCnyPrice(double price) {
+        tvCnyPrice.setText("约为CNY " + StringUtil.formatFloat(price) + "元");
+        return this;
+    }
+
+    public Poster setNickname(String nickname) {
+        tvNickname.setText(nickname);
         return this;
     }
 

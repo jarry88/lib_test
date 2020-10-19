@@ -20,6 +20,7 @@ import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.GeneratePosterFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.util.BitmapUtil;
@@ -65,8 +66,9 @@ import okhttp3.Call;
  */
 public class SharePopup extends BottomPopupView implements View.OnClickListener {
     int shareType;
-    public static final int SHARE_TYPE_STORE = 1;
-    public static final int SHARE_TYPE_GOODS = 2;
+    public static final int SHARE_TYPE_STORE = 1;  // 分享店鋪
+    public static final int SHARE_TYPE_GOODS = 2;  // 分享商品
+    public static final int SHARE_TYPE_POSTER = 3; // 分享海報
 
     // 記錄上次點擊的時間，防止點擊過快
     long lastClickTime = 0;
@@ -106,6 +108,8 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     String goodsImageUrl;
     String goodsWord;  // 商品分享口令
     String storeWord;  // 店鋪分享口令
+
+    String marketingUrl; // 分銷系統分享鏈接
 
     /*
     public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data) {
@@ -172,6 +176,9 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 
                         btnShareToWord.setOnClickListener(this);
                         btnShareToWord.setVisibility(VISIBLE);
+                    } else if (shareType == SHARE_TYPE_POSTER) {
+                        marketingUrl = shareData.optString("marketingUrl");
+                        SLog.info("marketingUrl[%s]", marketingUrl);
                     }
                 }
             }
@@ -179,7 +186,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
-        if (commonId > 0) { // 如果是商品分享
+        if (commonId > 0 || shareType == SHARE_TYPE_POSTER) { // 如果是商品分享 或 海報分享， 則顯示海報按鈕
             btnShareToPoster = findViewById(R.id.btn_share_to_poster);
             btnShareToPoster.setVisibility(VISIBLE);
             btnShareToPoster.setOnClickListener(this);
@@ -396,7 +403,22 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 
             dismiss();
         } else if (id == R.id.btn_share_to_poster) { // 分享海報
-            Util.startFragment(GeneratePosterFragment.newInstance(commonId, goodsName, goodsImageUrl));
+            if (commonId > 0) { // 分享商品海報
+                EasyJSONObject posterData = EasyJSONObject.generate(
+                        "commonId", commonId,
+                        "goodsName", goodsName,
+                        "goodsImageUrl", goodsImageUrl,
+                        "mopPrice", 99999999,
+                        "cnyPrice", 88888888
+                );
+                Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_GOODS, posterData));
+            } else { // 分享邀請海報
+                EasyJSONObject posterData = EasyJSONObject.generate(
+                        "marketingUrl", marketingUrl
+                );
+                Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_INVITATION, posterData));
+            }
+
             dismiss();
         }
     }

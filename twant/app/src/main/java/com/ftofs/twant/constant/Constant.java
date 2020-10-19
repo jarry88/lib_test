@@ -401,6 +401,30 @@ public class Constant {
     public static final int BARGAIN_STATE_ONGOING = 1;
     public static final int BARGAIN_STATE_FINISHED = 2;
     public static final int BARGAIN_STATE_CLOSED = 3;
+
+    /**
+     * 分銷狀態
+     * -1 未申請 0申請中 1審核通過 2審核不通過 3清退
+     */
+    public static final int MARKETING_STATE_NOT_APPLY = -1;
+    public static final int MARKETING_STATE_APPLY_IN_PROGRESS = 0;
+    public static final int MARKETING_STATE_APPLY_PASS = 1;
+    public static final int MARKETING_STATE_APPLY_NOT_PASS = 2;
+    public static final int MARKETING_STATE_APPLY_REMOVED = 3;
+
+    /**
+     * 分銷佣金類型
+     */
+    public static final int COMMISSION_TYPE_RATIO = 1; // 按比例
+    public static final int COMMISSION_TYPE_FIXED = 2; // 固定金額
+
+    /**
+     * 海報類型
+     */
+    public static final int POSTER_TYPE_GOODS = 1; // 商品海報
+    public static final int POSTER_TYPE_INVITATION = 2; // 邀請海報
+
+
     public static int[] WRITE_OFFS_ID=new int[]{
         1575, 959,1598
     };

@@ -84,6 +84,7 @@
             android:layout_alignBottom="@id/goods_image"
             android:layout_marginStart="8dp">
             <TextView
+                android:id="@+id/tv_create_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -92,6 +93,7 @@
                 android:text="2020.02.20 12:01:01">
             </TextView>
             <TextView
+                android:id="@+id/tv_pay_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -117,7 +119,8 @@
             android:layout_gravity="center_vertical"
             android:text="佣金比例：5%"
             android:textColor="@color/tw_black"
-            android:textSize="12sp">
+            android:textSize="12sp"
+            android:visibility="gone">
         </TextView>
 
         <TextView

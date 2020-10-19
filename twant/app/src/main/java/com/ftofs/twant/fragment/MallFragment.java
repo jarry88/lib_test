@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -23,6 +24,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
+import com.ftofs.twant.widget.SharePopup;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
@@ -31,6 +33,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.MaxHeightRecyclerView;
+import com.lxj.xpopup.XPopup;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,6 +55,16 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     NestedScrollView containerView;
     int containerViewHeight = -1;
 
+    int marketingState;
+    int marketingArticleId;
+    String marketingArticleTitle;
+    String marketingArticleContent;
+    String marketingUrl; // 用於發展下級的分享Url
+
+    TextView tvCommissionAmount;
+    ImageView icDistributionMyTeam;
+    TextView tvDistributionMyTeam;
+
 
     /**
      * 猜你喜歡列表
@@ -65,6 +78,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     TextView tvToBePaidCount, tvToBeShippedCount, tvToBeReceivedCount, tvToBeCommentedCount;
     private int myBargain;
     private TextView tvHelpCount;
+    TextView btnJoinDistribution;
 
     public static MallFragment newInstance() {
         Bundle args = new Bundle();
@@ -91,6 +105,10 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         tvToBeReceivedCount = view.findViewById(R.id.tv_to_be_received_count);
         tvToBeCommentedCount = view.findViewById(R.id.tv_to_be_commented_count);
         tvHelpCount = view.findViewById(R.id.tvHelpCount);
+        tvCommissionAmount = view.findViewById(R.id.tv_commission_amount);
+        icDistributionMyTeam = view.findViewById(R.id.ic_distribution_my_team);
+        tvDistributionMyTeam = view.findViewById(R.id.tv_distribution_my_team);
+
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_my_bill, this);
@@ -101,7 +119,10 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_to_be_commented, this);
         Util.setOnClickListener(view, R.id.icon_return_or_exchange, this);
 
-        Util.setOnClickListener(view, R.id.btn_join_distribution, this);
+        btnJoinDistribution = view.findViewById(R.id.btn_join_distribution);
+        btnJoinDistribution.setOnClickListener(this);
+
+        Util.setOnClickListener(view, R.id.btn_distribution_share, this);
 
         Util.setOnClickListener(view, R.id.btn_my_express, this);
         Util.setOnClickListener(view, R.id.ll_express_container, this);
@@ -166,7 +187,65 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
         loadGuessData();
         loadOrderCountData();
+
+        loadData();
         checkWalletStatus(false);
+    }
+
+    private void loadData() {
+        String url = Api.PATH_MEMBER_BUY_INDEX;
+        SLog.info("url[%s]", url);
+        Api.getUI(url, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.uploadAppLog(url, "", "", e.getMessage());
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    LogUtil.uploadAppLog(url, "", responseStr, "");
+                    return;
+                }
+
+                try {
+                    marketingState = responseObj.optInt("datas.marketingState");
+                    marketingArticleId = responseObj.optInt("datas.marketingArticle.articleId");
+                    marketingArticleTitle = responseObj.optString("datas.marketingArticle.title");
+                    marketingArticleContent = responseObj.optString("datas.marketingArticle.content");
+                    marketingUrl = responseObj.optString("datas.marketingUrl");
+                    SLog.info("marketingUrl[%s], marketingArticleTitle[%s], marketingArticleContent[%s]",
+                            marketingUrl, marketingArticleTitle, marketingArticleContent);
+
+                    if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) { // 申請通過
+                        double unpayCommission = responseObj.optDouble("datas.marketingMember.unpayCommission");
+                        tvCommissionAmount.setText(StringUtil.formatFloat(unpayCommission));
+                        icDistributionMyTeam.setImageResource(R.drawable.icon_distribution_share);
+                        tvDistributionMyTeam.setText("分享好友");
+                    } else { // 其他狀態
+                        tvCommissionAmount.setText("***.**");
+                        icDistributionMyTeam.setImageResource(R.drawable.ic_distribution_my_team);
+                        tvDistributionMyTeam.setText("我的團隊");
+                    }
+
+                    if (marketingState == Constant.MARKETING_STATE_NOT_APPLY) {
+                        btnJoinDistribution.setText("加入我們");
+                    } else if (marketingState == Constant.MARKETING_STATE_APPLY_IN_PROGRESS) {
+                        btnJoinDistribution.setText("審核中");
+                    } else if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) {
+                        btnJoinDistribution.setText("我的團隊");
+                    } else if (marketingState == Constant.MARKETING_STATE_APPLY_NOT_PASS || marketingState == Constant.MARKETING_STATE_APPLY_REMOVED) {
+                        btnJoinDistribution.setText("重新加入");
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     @Override
@@ -245,7 +324,19 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 Util.startFragment(MyBargainListFragment.newInstance(dataType));
                 break;
             case R.id.btn_join_distribution:
-                Util.startFragment(DistributionEnrollmentFragment.newInstance());
+                if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) {
+                    Util.startFragment(DistributionFragment.newInstance());
+                } else if (marketingState == Constant.MARKETING_STATE_APPLY_IN_PROGRESS) {
+                    ToastUtil.error(_mActivity, "審核中，請耐心等候");
+                } else {
+                    Util.startFragment(DistributionEnrollmentFragment.newInstance(marketingArticleId, marketingArticleTitle, marketingArticleContent));
+                }
+                break;
+            case R.id.btn_distribution_share:
+                if (marketingState != Constant.MARKETING_STATE_APPLY_PASS) {
+                    return;
+                }
+                Util.showInvitationSharePopup(_mActivity, marketingUrl);
                 break;
             default:
                 break;

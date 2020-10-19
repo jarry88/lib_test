@@ -67,6 +67,7 @@
                             android:textColor="@color/tw_black">
                         </TextView>
                         <TextView
+                            android:id="@+id/tv_total_comission_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
@@ -116,6 +117,7 @@
                         android:layout_centerVertical="true"
                         android:orientation="vertical">
                         <TextView
+                            android:id="@+id/tv_unpaid_commission_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="可提現金額：0.00元"
@@ -145,7 +147,6 @@
                         android:textSize="13sp"
                         android:background="@drawable/blue_button_75_25"
                         android:gravity="center">
-
                     </TextView>
                 </RelativeLayout>
             </LinearLayout>
@@ -281,7 +282,6 @@
                     </FrameLayout>
                 </LinearLayout>
                 <View
-                    android:id="@+id/vw_separator"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/tw_light_grey">
@@ -428,15 +428,17 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="72dp"
                             android:layout_gravity="center_vertical|end"
-                            android:text="佣金比例"
+                            android:text="佣金/比例"
                             android:textSize="12sp"
                             android:textColor="@color/tw_black">
                         </TextView>
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="12dp"
+                            android:id="@+id/btn_share_multiple"
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_marginEnd="8dp"
                             android:layout_gravity="center_vertical|end"
+                            android:gravity="center"
                             android:text="分享"
                             android:textSize="12sp"
                             android:textColor="@color/tw_black">
@@ -446,13 +448,12 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_list"
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/white_r4dp_bg">
-            </androidx.recyclerview.widget.RecyclerView>
+                android:layout_marginTop="8dp">
+            </androidx.viewpager.widget.ViewPager>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

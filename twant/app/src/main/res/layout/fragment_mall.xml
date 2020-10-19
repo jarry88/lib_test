@@ -336,6 +336,7 @@
 
                     </LinearLayout>
 
+                    <!-- 優惠券 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -397,112 +398,287 @@
                             android:onClick="@{()->click.gotoChangeMyCoupon()}"
                             android:textColor="@color/tw_blue"/>
                     </LinearLayout>
+                    <!-- END OF 優惠券 -->
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/ll_express_container"
-                        android:orientation="horizontal"
                         android:layout_marginTop="8dp"
-                        android:padding="14dp"
-                        android:onClick="@{()->click.gotoSendPackage()}"
-
-                        android:background="@drawable/white_6dp_radius_bg">
-                        <LinearLayout
-                            android:id="@+id/btn_my_express"
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/icon_my_logistics" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/dp_4"
-                                android:text="寄快遞"
-                                android:textColor="@color/tw_black"
-                                android:textSize="15sp" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="4dp"
-                            android:layout_marginEnd="4dp"
-                            android:text="查看"
-
-                            android:textSize="13sp"
-                            android:textColor="@color/tw_blue"/>
-                        <TextView
-                            android:id="@+id/btn_look_package"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="查詢"
-                            android:textSize="13sp"
-                            android:textColor="@color/tw_blue"
-                            android:padding="4dp"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ll_wallet_container"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp"
-                        android:padding="14dp"
                         android:background="@drawable/white_6dp_radius_bg"
-                        >
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="43dp"
+                            android:paddingLeft="12dp"
+                            android:text="推介分享"
+                            android:gravity="center_vertical">
+                        </TextView>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/tw_light_grey"
+                            />
                         <LinearLayout
-                            android:id="@+id/btn_wallet"
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="94dp"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal">
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="bottom"
+                                        android:orientation="horizontal">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="¥"
+                                            android:textSize="16sp"
+                                            android:textColor="#6B6B6B">
+                                        </TextView>
+                                        <TextView
+                                            android:id="@+id/tv_commission_amount"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="4dp"
+                                            android:text="0.00"
+                                            android:textSize="20sp"
+                                            android:textColor="#6B6B6B">
+                                        </TextView>
+                                    </LinearLayout>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="推廣佣金餘額"
+                                        android:textColor="#6C6C6C"
+                                        android:textSize="15sp">
+                                    </TextView>
+                                </LinearLayout>
+                            </FrameLayout>
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="70dp"
+                                android:background="@color/tw_light_grey">
+                            </View>
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+                                <LinearLayout
+                                    android:id="@+id/btn_distribution_share"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
+                                    <ImageView
+                                        android:id="@+id/ic_distribution_my_team"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_distribution_my_team"
+                                        android:scaleType="fitXY"
+                                        app:tint="#6B6B6B">
+                                    </ImageView>
+                                    <TextView
+                                        android:id="@+id/tv_distribution_my_team"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:text="我的团队"
+                                        android:textSize="15sp"
+                                        android:textColor="#717171">
+                                    </TextView>
+                                </LinearLayout>
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/icon_want_pay_wallet" />
+                            </FrameLayout>
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/tw_light_grey"
+                            />
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp">
+                            <TextView
+                                android:id="@+id/btn_join_distribution"
+                                android:layout_width="84dp"
+                                android:layout_height="26dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="加入我們"
+                                android:textColor="@android:color/white"
+                                android:textSize="13sp"
+                                android:background="@drawable/app_update_blue_button">
+
+                            </TextView>
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <!-- 砍價 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/white_6dp_radius_bg"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:paddingStart="@dimen/dp_10"
+                            android:paddingEnd="@dimen/dp_10"
+                            android:layout_marginBottom="10dp"
+                            >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/dp_4"
-                                android:text="@string/text_want_pay_wallet"
+                                android:layout_centerVertical="true"
+                                android:text="砍價"
                                 android:textColor="@color/tw_black"
-                                android:textSize="15sp" />
-                        </LinearLayout>
+                                android:textSize="14sp" />
+
+                            <LinearLayout
+                                android:id="@+id/btn_more_price"
+                                android:layout_marginEnd="4dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:paddingStart="30dp"
+                                    android:textSize="12sp"
+                                    android:text="查看更多砍價商品" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="10dp"
+                                    android:src="@drawable/expand_button" />
+                            </LinearLayout>
+                        </RelativeLayout>
 
                         <View
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:visibility="gone"
-                            android:layout_width="wrap_content"
+                            android:background="@color/tw_light_grey_EDED" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="兌換"
-                            android:textSize="13sp"
-                            android:textColor="@color/tw_blue"
-                            android:layout_marginEnd="@dimen/dp_4"
-                            android:layout_marginTop="@dimen/dp_4"/>
+                            android:orientation="horizontal"
+                            android:paddingBottom="10dp">
+                            <RelativeLayout
+                                android:id="@+id/btn_handle_price"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="bottom">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:gravity="center_horizontal"
+
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvHelpCount"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:textColor="@color/tw_yellow"
+                                        fir="0"
+                                        len="1"
+                                        pointSize="26"
+                                        defaultSize="14"
+                                        textInput="5笔"
+                                        />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:text="發起的砍價"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="15sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="1dp"
+                                        android:text="砍的越多越優惠"
+                                        android:textColor="@color/tw_grey"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="24dp"
+                                android:layout_marginBottom="24dp"
+                                android:background="@color/tw_light_grey_EDED" />
+                            <RelativeLayout
+                                android:id="@+id/btn_help_price"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="bottom">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:orientation="vertical">
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/icon_help_price"
+                                        android:padding="@dimen/dp_2"
+                                        />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="1dp"
+                                        android:text="幫別人砍價"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="1dp"
+                                        android:text="讓好友買到更實惠低價"
+                                        android:textColor="@color/tw_grey"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
                     </LinearLayout>
+                    <!-- END OF 砍價 -->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -616,278 +792,114 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- 寄快遞 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/ll_express_container"
+                        android:orientation="horizontal"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/white_6dp_radius_bg"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="43dp"
-                            android:paddingLeft="12dp"
-                            android:text="推介分享"
-                            android:gravity="center_vertical">
-                        </TextView>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/tw_light_grey"
-                            />
+                        android:padding="14dp"
+                        android:onClick="@{()->click.gotoSendPackage()}"
+
+                        android:background="@drawable/white_6dp_radius_bg">
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="94dp"
-                            android:gravity="center_vertical"
+                            android:id="@+id/btn_my_express"
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
                             android:orientation="horizontal">
-                            <FrameLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1">
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center_horizontal"
-                                    android:orientation="vertical">
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="bottom"
-                                        android:orientation="horizontal">
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="¥"
-                                            android:textSize="16sp"
-                                            android:textColor="#6B6B6B">
-                                        </TextView>
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="4dp"
-                                            android:text="0.00"
-                                            android:textSize="20sp"
-                                            android:textColor="#6B6B6B">
-                                        </TextView>
-                                    </LinearLayout>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="推廣佣金餘額"
-                                        android:textColor="#6C6C6C"
-                                        android:textSize="15sp">
-                                    </TextView>
-                                </LinearLayout>
-                            </FrameLayout>
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="70dp"
-                                android:background="@color/tw_light_grey">
-                            </View>
-                            <FrameLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1">
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center_horizontal"
-                                    android:orientation="vertical">
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/ic_distribution_my_team"
-                                        app:tint="#6B6B6B">
-                                    </ImageView>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="8dp"
-                                        android:text="我的团队"
-                                        android:textSize="15sp"
-                                        android:textColor="#717171">
 
-                                    </TextView>
-                                </LinearLayout>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/icon_my_logistics" />
 
-                            </FrameLayout>
-                        </LinearLayout>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/tw_light_grey"
-                            />
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="46dp">
                             <TextView
-                                android:id="@+id/btn_join_distribution"
-                                android:layout_width="84dp"
-                                android:layout_height="26dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:gravity="center"
-                                android:text="加入我們"
-                                android:textColor="@android:color/white"
-                                android:textSize="13sp"
-                                android:background="@drawable/app_update_blue_button">
+                                android:layout_marginStart="@dimen/dp_4"
+                                android:text="寄快遞"
+                                android:textColor="@color/tw_black"
+                                android:textSize="15sp" />
+                        </LinearLayout>
 
-                            </TextView>
-                        </FrameLayout>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:layout_marginEnd="4dp"
+                            android:text="查看"
+
+                            android:textSize="13sp"
+                            android:textColor="@color/tw_blue"/>
+                        <TextView
+                            android:id="@+id/btn_look_package"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="查詢"
+                            android:textSize="13sp"
+                            android:textColor="@color/tw_blue"
+                            android:padding="4dp"/>
                     </LinearLayout>
+                    <!-- END OF 寄快遞 -->
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/ll_wallet_container"
+                        android:orientation="horizontal"
                         android:layout_marginTop="8dp"
+                        android:padding="14dp"
                         android:background="@drawable/white_6dp_radius_bg"
-                        android:orientation="vertical">
+                        >
+                        <LinearLayout
+                            android:id="@+id/btn_wallet"
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:paddingStart="@dimen/dp_10"
-                            android:paddingEnd="@dimen/dp_10"
-                            android:layout_marginBottom="10dp"
-                            >
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/icon_want_pay_wallet" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="砍價"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/dp_4"
+                                android:text="@string/text_want_pay_wallet"
                                 android:textColor="@color/tw_black"
-                                android:textSize="14sp" />
-
-                            <LinearLayout
-                                android:id="@+id/btn_more_price"
-                                android:layout_marginEnd="4dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:paddingStart="30dp"
-                                    android:textSize="12sp"
-                                    android:text="查看更多砍價商品" />
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="10dp"
-                                    android:src="@drawable/expand_button" />
-                            </LinearLayout>
-                        </RelativeLayout>
+                                android:textSize="15sp" />
+                        </LinearLayout>
 
                         <View
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:background="@color/tw_light_grey_EDED" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_weight="1" />
+                        <TextView
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="10dp">
-                            <RelativeLayout
-                                android:id="@+id/btn_handle_price"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="bottom">
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:gravity="center_horizontal"
-
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:id="@+id/tvHelpCount"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:textColor="@color/tw_yellow"
-                                        fir="0"
-                                        len="1"
-                                        pointSize="26"
-                                        defaultSize="14"
-                                        textInput="5笔"
-                                    />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:text="發起的砍價"
-                                        android:textColor="@color/tw_black"
-                                        android:textSize="15sp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:layout_marginTop="1dp"
-                                        android:text="砍的越多越優惠"
-                                        android:textColor="@color/tw_grey"
-                                        android:textSize="12sp" />
-                                </LinearLayout>
-                            </RelativeLayout>
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="24dp"
-                                android:layout_marginBottom="24dp"
-                                android:background="@color/tw_light_grey_EDED" />
-                            <RelativeLayout
-                                android:id="@+id/btn_help_price"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="bottom">
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
-                                    android:orientation="vertical">
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:src="@drawable/icon_help_price"
-                                        android:padding="@dimen/dp_2"
-                                        />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:layout_marginTop="1dp"
-                                        android:text="幫別人砍價"
-                                        android:textColor="@color/tw_black"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        android:layout_marginTop="1dp"
-                                        android:text="讓好友買到更實惠低價"
-                                        android:textColor="@color/tw_grey"
-                                        android:textSize="12sp" />
-                                </LinearLayout>
-                            </RelativeLayout>
-                        </LinearLayout>
+                            android:text="兌換"
+                            android:textSize="13sp"
+                            android:textColor="@color/tw_blue"
+                            android:layout_marginEnd="@dimen/dp_4"
+                            android:layout_marginTop="@dimen/dp_4"/>
                     </LinearLayout>
                 </LinearLayout>
 

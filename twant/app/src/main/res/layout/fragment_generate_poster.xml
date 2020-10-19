@@ -15,6 +15,115 @@
     </com.ftofs.twant.widget.Poster>
 
     <LinearLayout
+        android:id="@+id/invitation_poster"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintDimensionRatio="375:525"
+                android:src="@drawable/distribution_promotion_poster">
+            </ImageView>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_invitation_avatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/avatar_male"
+                app:riv_border_color="@android:color/white"
+                app:riv_border_width="2dp">
+            </de.hdodenhof.circleimageview.CircleImageView>
+
+            <TextView
+                android:id="@+id/tv_invitation_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@id/img_invitation_avatar"
+                app:layout_constraintTop_toTopOf="@id/img_invitation_avatar"
+                app:layout_constraintBottom_toBottomOf="@id/img_invitation_avatar"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:text="Rico Kihn">
+            </TextView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:background="#FFF9F5">
+            <ImageView
+                android:id="@+id/img_invitation_qr_code"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/distribution_qr_code">
+            </ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:text="長按識別二維碼"
+                android:textColor="@color/tw_medium_grey"
+                android:textSize="12sp">
+            </TextView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:orientation="horizontal"
+                android:background="@drawable/poster_footer_bg">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="大牌正品"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white">
+                </TextView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="全網超低價"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white">
+                </TextView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="澳門直郵"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white">
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/loading_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -50,6 +50,11 @@ public enum CustomAction {
      * 選擇拼團
      */
     CUSTOM_ACTION_SELECT_JOIN_GROUP,
+
+    /**
+     * 分享多個商品
+     */
+    CUSTOM_ACTION_SHARE_MULTIPLE_GOODS,
 }
 
 
