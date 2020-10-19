@@ -84,9 +84,10 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
     fun getPropertyDetail(pid: Int) {//獲取房產詳情
         launch(stateLiveData, {
 //            val finalApi =if(Util.inDev()) testApi else api
+            SLog.info("pid $pid")
             repository.run { simpleGet(finalApi.getPropertyInfo(pid)) }
         }, {
-            currPropertyInfo.postValue(it)
+            currPropertyInfo.postValue(it.property)
         })
     }
     fun getPropertyList(

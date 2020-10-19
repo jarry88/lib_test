@@ -177,6 +177,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 if (rvPostListY <= containerViewY) {
 //                    binding.scrollView.isNestedScrollingEnabled = false
                     binding.rvList.isNestedScrollingEnabled = true
+                    this.stopNestedScroll()
                 } else {
                     binding.rvList.isNestedScrollingEnabled = false
 

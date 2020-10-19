@@ -85,8 +85,14 @@ data class PropertyVo(
 
     fun getItemTitle():String=
             (propertyName?:"").
+            plus(building?.let { " $it" }?:"").
             plus(floor?.let { " $it" }?:"").
             plus(unit?.let { " $it" }?:"").
+            plus(street?.let { " $it" }?:"")
+
+    fun getListItemTitle():String=
+            (propertyName?:"").
+            plus(floor?.let { " $it" }?:"").
             plus(street?.let { " $it" }?:"")
 
     fun getTypeName():String=when(isType){//房產類型（用整形數填寫）：1 : 住宅 2 : 商鋪 3 : 車位 4 : 工業 5 : 地皮 6 : 寫字樓 7 : 別墅
