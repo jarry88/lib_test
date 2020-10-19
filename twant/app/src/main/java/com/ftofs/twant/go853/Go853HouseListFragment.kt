@@ -162,6 +162,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             viewModel.getPropertyList(search = binding.title.getSearchWord())
         }
         binding.refreshLayout.autoRefresh()//page为0
+        binding.rvList.isNestedScrollingEnabled=false
         binding.scrollView.apply {
             setOnScrollChangeListener { view, i, i2, i3, i4 ->
                 val rvPostListY = Util.getYOnScreen(binding.tabLayout)
@@ -171,7 +172,13 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
 
 //                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
             // 如果列表滑动到顶部，则启用嵌套滚动
-              binding.rvList.isNestedScrollingEnabled = rvPostListY <= containerViewY
+                if (rvPostListY <= containerViewY) {
+                    binding.scrollView.isNestedScrollingEnabled = false
+                    binding.rvList.isNestedScrollingEnabled = true
+                } else {
+                    binding.rvList.isNestedScrollingEnabled = false
+
+                }
 
 
             }

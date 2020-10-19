@@ -491,6 +491,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         new XPopup.Builder(getContext())
                 .popupAnimation(PopupAnimation.TranslateFromBottom)
                 .hasStatusBarShadow(true)
+                .hasShadowBg(true)
                 .asCustom(new WalletPayPopup(_mActivity, payId, payAmount, this))
                 .show();
     }
