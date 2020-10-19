@@ -22,46 +22,63 @@
             app:layout_constraintRight_toRightOf="parent"
             android:id="@+id/vw_anchor"
             app:layout_constraintTop_toBottomOf="@id/title"/>
-
-
-        <com.zhouwei.mzbanner.MZBannerView
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:id="@+id/scroll_view"
             app:layout_constraintTop_toBottomOf="@id/title"
-            app:layout_constraintDimensionRatio="375:138"
-            android:id="@+id/banner"
-            />
-        <ImageView
-            android:layout_width="177dp"
-            android:layout_height="33dp"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/go_banner_logo"/>
-        <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            app:layout_constraintTop_toBottomOf="@id/banner"
-            android:id="@+id/tab_layout">
-        </com.google.android.material.tabs.TabLayout>
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-
-            app:layout_constraintTop_toBottomOf="@id/tab_layout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/refresh_layout">
-
-            <androidx.recyclerview.widget.RecyclerView
+            app:layout_constraintBottom_toBottomOf="parent">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_house_vo"
-                android:id="@+id/rv_list"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.zhouwei.mzbanner.MZBannerView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintDimensionRatio="375:138"
+                        android:id="@+id/banner"
+                        />
 
-                />
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+                    <ImageView
+                        android:layout_width="177dp"
+                        android:layout_height="33dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:src="@drawable/go_banner_logo"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.tabs.TabLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:id="@+id/tab_layout">
+                </com.google.android.material.tabs.TabLayout>
+                <com.scwang.smartrefresh.layout.SmartRefreshLayout
+
+                    app:layout_constraintTop_toBottomOf="@id/tab_layout"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/refresh_layout">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_house_vo"
+                        android:id="@+id/rv_list"
+
+                        />
+                </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+            </LinearLayout>
+        </ScrollView>
+
 
         <LinearLayout
             android:id="@+id/ll_search_history_container"

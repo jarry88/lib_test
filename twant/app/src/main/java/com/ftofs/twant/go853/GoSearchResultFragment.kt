@@ -18,6 +18,7 @@ import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.util.EditTextUtil
 import com.ftofs.twant.util.SearchHistoryUtil
 import com.ftofs.twant.util.ToastUtil
+import com.ftofs.twant.util.Util
 import com.ftofs.twant.widget.SearchHistoryPopup
 import com.google.android.material.tabs.TabLayout
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
@@ -30,6 +31,7 @@ import com.wzq.mvvmsmart.event.StateLiveData
 
 private const val KEYWORD = "keyword"
 class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBinding, GoHouseViewModel>() {
+    var firstLoad =true
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.go_search_result_list_fragment
     }
@@ -46,7 +48,7 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
             override fun initView(binding: ItemHouseVoBinding, item: PropertyVo) {
                 binding.vo=item
                 binding.root.setOnClickListener {
-                    start(GoPropertyDetailFragment(item.pid, item))
+                    Util.startFragment(GoPropertyDetailFragment(item.pid, item))
                 }
             }
 
@@ -209,39 +211,42 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
                 .asCustom(
                         when (selectedTabPosition) {
                             PROPERTY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.propertyTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FILTER_PROPERTY)
+                                pushUmengEvent(Config.PROD,GO853_FILTER_PROPERTY,hashMapOf("type" to s))
                                 binding.rvList.scrollToPosition(0)
                                 viewModel.savePropertyType(s)
                                 drawListView?.dismiss()
                             }
                             SALE_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.saleTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FILTER_SALE)
-                                binding.rvList.scrollToPosition(0)
+                                pushUmengEvent(Config.PROD,GO853_FILTER_SALE,hashMapOf("type" to s))
 
                                 viewModel.saveSaleType(s)
                                 drawListView?.dismiss()
                             }
 
                             CITY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.cityTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FILTER_CITY)
+                                pushUmengEvent(Config.PROD,GO853_FILTER_CITY,hashMapOf("type" to s))
                                 binding.rvList.scrollToPosition(0)
 
                                 viewModel.saveCityString(s)
                                 drawListView?.dismiss()
                             }
 
-                            PRICE_TYPE_BUTTON ->viewModel.getPriceDescList()?.let {  GoDropdownMenu(requireContext(),it , tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FIlTER_PRICE)
+                            PRICE_TYPE_BUTTON ->viewModel.getPriceDescList()?.let {
+//                                binding.tabLayout.getTabAt(SALE_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let { v->
+//                                    viewModel.saleTypeList.get(2).let{s ->
+//                                        v.text=s
+//                                    }
+//                                }
+                                GoDropdownMenu(requireContext(),it , tagView?.text.toString()) { s ->
+                                pushUmengEvent(Config.PROD,GO853_FIlTER_PRICE, hashMapOf("type" to s))
                                 binding.rvList.scrollToPosition(0)
                                 when(viewModel.saleTypeLiveData.value){
                                     SELLING_SALE_TYPE ->viewModel.saveSellingPriceRange(s)
                                     RENT_SALE_TYPE ->viewModel.saveRentPriceRang(s)
                                     else ->viewModel.clearPriceRange()
                                 }
-                                binding.refreshLayout.autoRefresh()
                                 drawListView?.dismiss()
                             } }?: run {
-                                ToastUtil.error(context,"请先选择租售类型")
                                 GoDropdownMenu(requireContext()) }//为空时自动dismiss
 
                             else -> GoDropdownMenu(requireContext())
@@ -280,24 +285,32 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
         viewModel.isTypeLiveData.observe(this){ value ->
             binding.tabLayout.getTabAt(PROPERTY_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{
                 it.text= viewModel.propertyTypeList[value]
+                SLog.info(".isTyp")
                 binding.refreshLayout.autoRefresh()
             }
         }
         viewModel.saleTypeLiveData.observe(this){ value ->
             binding.tabLayout.getTabAt(SALE_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{
-                it.text= viewModel.saleTypeList[value]
-                binding.refreshLayout.autoRefresh()
+                SLog.info("saleisTyp")
+                if (firstLoad) {
+                    firstLoad = false
+                } else {
+                    it.text= viewModel.saleTypeList[value]
+                    binding.refreshLayout.autoRefresh()
+                }
             }
         }
         viewModel.cityTypeLiveData.observe(this){city ->
             binding.tabLayout.getTabAt(CITY_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{
                 it.text= city
+                SLog.info("city")
+
                 binding.refreshLayout.autoRefresh()
             }
         }
         viewModel.toastError.observe(this){
             mAdapter.addAll(listOf(),true)
-            ToastUtil.error(context,it)
+//            ToastUtil.error(context,it)
         }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
             binding.refreshLayout.finishRefresh()
@@ -305,7 +318,7 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
             if(it==StateLiveData.StateEnum.Error){
                 mAdapter.addAll(listOf(),true)
                 if(!viewModel.errorMessage.isNullOrEmpty()){
-                    ToastUtil.error(context,viewModel.errorMessage)
+//                    mAdapter.emptyText=viewModel.errorMessage
                 }
             }
             if(!viewModel.hasMore)binding.refreshLayout.setNoMoreData(true)

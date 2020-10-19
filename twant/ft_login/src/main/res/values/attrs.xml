@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="Title">
-        <attr name="text_title" format="string"/>
+        <attr format="string" name="title_text" />
         <attr name="login_info" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="SmartList">
+        <attr name="item_resource" format="reference"/>
+        <attr name="show_empty" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="CircleView">
+        <!--定义资源-->
+        <attr name="src" format="reference" />
+        <!--定义类型-->
+        <attr name="type" format="enum">
+            <!--圆形-->
+            <enum name="round" value="1" />
+            <!--矩形-->
+            <enum name="rect" value="2" />
+        </attr>
     </declare-styleable>
     <declare-styleable name="SettingPhoneView"></declare-styleable>
 </resources>

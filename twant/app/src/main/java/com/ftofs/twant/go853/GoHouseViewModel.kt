@@ -27,8 +27,9 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
     "地皮","寫字樓","別墅")
 
     val saleTypeList=listOf("全部","出租",
-    "出售",
-    "售/租")
+    "出售"
+//    "售/租"
+    )
     val saleTypeLiveData by lazy { MutableLiveData<Int>(SELLING_SALE_TYPE) }
 
     val cityTypeList=listOf("全部","澳門","路氹","路環")
@@ -66,26 +67,27 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
             mapOf("desc" to desc,"sellingPriceBegin" to sellingPriceBegin,"sellingPriceEnd" to sellingPriceEnd)
     private fun factoryPriceMap(desc: String?, rentalPriceBegin: Double?, rentalPriceEnd: Double?): Map<String, Any?> =
             mapOf("desc" to desc,"rentalPriceBegin" to rentalPriceBegin,"rentalPriceEnd" to rentalPriceEnd)
-//    val cityTypeLiveData by lazy { MutableLiveData<String>() }
 
     var currUid: Int?=null
     private val repository by lazy { object :BaseRepository(){} }
     val propertyList by lazy { MutableLiveData<GoeftInfo>() }
     val userPropertyList by lazy { MutableLiveData<GoeftInfo>() }
+
     val retrofit = (Retrofit.Builder()).client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("http://192.168.5.19:8080/api/").build()
     val testApi=retrofit.create(DemoApiService::class.java)
-    val currPropertyInfo by lazy { MutableLiveData<PropertyVo>() }
+    val finalApi =if(Util.inDev()) testApi else repository.api
 
+    val currPropertyInfo by lazy { MutableLiveData<PropertyVo>() }
     var hasMore=true
     var currPage=0
-    val finalApi =if(Util.inDev()) testApi else repository.api
 
     fun getPropertyDetail(pid: Int) {//獲取房產詳情
         launch(stateLiveData, {
 //            val finalApi =if(Util.inDev()) testApi else api
+            SLog.info("pid $pid")
             repository.run { simpleGet(finalApi.getPropertyInfo(pid)) }
         }, {
-            currPropertyInfo.postValue(it)
+            currPropertyInfo.postValue(it.property)
         })
     }
     fun getPropertyList(
@@ -156,6 +158,7 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
                     toastError.postValue(s)
                 }
             }
+            propertyList.postValue(it)
         })
     }
 
@@ -247,8 +250,10 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
         when(it){
             RENT_SALE_TYPE ->rentPriceRangeList.map { map ->  map["desc"] as String }
             SELLING_SALE_TYPE ->sellingPriceRangeList.map {  map ->  map["desc"] as String }
-            RENT_AND_SELLING_TYPE ->null
-            else -> null
+//            RENT_AND_SELLING_TYPE ->null
+            else -> {
+                saleTypeLiveData.value=SELLING_SALE_TYPE
+                sellingPriceRangeList.map {  map ->  map["desc"] as String }}
         }
     }
 

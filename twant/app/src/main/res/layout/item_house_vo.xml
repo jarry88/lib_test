@@ -64,7 +64,7 @@
                     android:layout_marginStart="@dimen/margin_4dp"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:text="@{vo.getItemTitle()}"
+                    android:text="@{vo.listItemTitle}"
                     android:lines="1"
                     android:ellipsize="end"
                 />

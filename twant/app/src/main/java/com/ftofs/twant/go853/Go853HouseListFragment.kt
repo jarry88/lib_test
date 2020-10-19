@@ -53,7 +53,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             override fun initView(binding: ItemHouseVoBinding, item: PropertyVo) {
                 binding.vo=item
                 binding.root.setOnClickListener {
-                    start(GoPropertyDetailFragment(item.pid, item))
+                    Util.startFragment(GoPropertyDetailFragment(item.pid, item))
                 }
             }
 
@@ -76,7 +76,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             setLeftLayoutClickListener{onBackPressedSupport()}
             editKeyWord?.doAfterTextChanged {
             }
-            editKeyWord?.setOnTouchListener { v: View?, event: MotionEvent ->
+            editKeyWord?.setOnTouchListener { _: View?, event: MotionEvent ->
                 if (event.action == MotionEvent.ACTION_UP) {
                     Util.startFragment(GoSearchResultFragment.newInstance(""))
                 }
@@ -162,6 +162,30 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             viewModel.getPropertyList(search = binding.title.getSearchWord())
         }
         binding.refreshLayout.autoRefresh()//page为0
+        binding.rvList.isNestedScrollingEnabled=false
+        binding.scrollView.apply {
+            setOnScrollChangeListener { view, i, i2, i3, i4 ->
+                val rvPostListY = Util.getYOnScreen(binding.tabLayout)
+                val containerViewY = Util.getYOnScreen(this)
+
+//                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
+
+//                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
+            // 如果列表滑动到顶部，则启用嵌套滚动
+                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY,)
+
+                if (rvPostListY <= containerViewY) {
+//                    binding.scrollView.isNestedScrollingEnabled = false
+                    binding.rvList.isNestedScrollingEnabled = true
+                    this.stopNestedScroll()
+                } else {
+                    binding.rvList.isNestedScrollingEnabled = false
+
+                }
+
+
+            }
+        }
 //        binding.rlSuggestionList.adapter=suggestAdapter
     }
 
@@ -202,13 +226,15 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 .asCustom(
                         when (selectedTabPosition) {
                             PROPERTY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.propertyTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FILTER_PROPERTY)
+                                pushUmengEvent(Config.PROD, GO853_FILTER_PROPERTY, hashMapOf("type" to s))
+
                                 binding.rvList.scrollToPosition(0)
                                 viewModel.savePropertyType(s)
                                 drawListView?.dismiss()
                             }
                             SALE_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.saleTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FILTER_SALE)
+                                pushUmengEvent(Config.PROD, GO853_FILTER_SALE, hashMapOf("type" to s))
+
                                 binding.rvList.scrollToPosition(0)
 
                                 viewModel.saveSaleType(s)
@@ -216,26 +242,29 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                             }
 
                             CITY_TYPE_BUTTON -> GoDropdownMenu(requireContext(), viewModel.cityTypeList, tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FILTER_CITY)
+                                pushUmengEvent(Config.PROD, GO853_FILTER_CITY, hashMapOf("type" to s))
+
                                 binding.rvList.scrollToPosition(0)
 
                                 viewModel.saveCityString(s)
                                 drawListView?.dismiss()
                             }
 
-                            PRICE_TYPE_BUTTON ->viewModel.getPriceDescList()?.let {  GoDropdownMenu(requireContext(),it , tagView?.text.toString()) { s ->
-                                pushUmengEvent(Config.PROD,GO853_FIlTER_PRICE)
-                                binding.rvList.scrollToPosition(0)
-                                when(viewModel.saleTypeLiveData.value){
-                                    SELLING_SALE_TYPE ->viewModel.saveSellingPriceRange(s)
-                                    RENT_SALE_TYPE ->viewModel.saveRentPriceRang(s)
-                                    else ->viewModel.clearPriceRange()
+                            PRICE_TYPE_BUTTON -> viewModel.getPriceDescList()?.let {
+                                GoDropdownMenu(requireContext(), it, tagView?.text.toString()) { s ->
+                                    pushUmengEvent(Config.PROD, GO853_FIlTER_PRICE,hashMapOf("type" to s))
+                                    binding.rvList.scrollToPosition(0)
+                                    when (viewModel.saleTypeLiveData.value) {
+                                        SELLING_SALE_TYPE -> viewModel.saveSellingPriceRange(s)
+                                        RENT_SALE_TYPE -> viewModel.saveRentPriceRang(s)
+                                        else -> viewModel.clearPriceRange()
+                                    }
+                                    binding.refreshLayout.autoRefresh()
+                                    drawListView?.dismiss()
                                 }
-                                binding.refreshLayout.autoRefresh()
-                                drawListView?.dismiss()
-                            } }?: run {
-                                ToastUtil.error(context,"请先选择租售类型")
-                                GoDropdownMenu(requireContext()) }//为空时自动dismiss
+                            } ?: run {
+                                GoDropdownMenu(requireContext())
+                            }//为空时自动dismiss
 
                             else -> GoDropdownMenu(requireContext())
                         })
@@ -264,7 +293,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 binding.refreshLayout.autoRefresh()
             }
         }
-        viewModel.cityTypeLiveData.observe(this){city ->
+        viewModel.cityTypeLiveData.observe(this){ city ->
             binding.tabLayout.getTabAt(CITY_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{
                 it.text= city
                 binding.refreshLayout.autoRefresh()

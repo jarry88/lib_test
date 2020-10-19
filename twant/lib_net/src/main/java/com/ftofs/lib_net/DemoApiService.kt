@@ -116,11 +116,18 @@ interface DemoApiService {
 //【GOEFT】房產信息模塊
 
     @GET("goeft/property/{propertyId}")//房產詳情
-    suspend fun getPropertyInfo(@Path("propertyId")propertyId: Int): TwantResponse<PropertyVo>
+    suspend fun getPropertyInfo(@Path("propertyId")propertyId: Int): TwantResponse<GoeftInfo>
     @GET("goeft/property/list")//房產信息列表
     suspend fun getPropertyInfoList(@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>):TwantResponse<GoeftInfo>//问题出在参数map的value类型Any.对于java来说,这个value的类型是Object,可以被Retrofit识别,但对于kotlin来说,retrofit会把Any识别成 ?,就报出了错误.
     @GET("goeft/user/{uid}")//房產用戶列表
     suspend fun getGoeftUserUid(@Path("uid") uid:Int,@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>): TwantResponse<GoeftInfo>
+    //【GOEFT】房產信息模塊 結束
+
+    //【券倉】券倉模塊
+    @GET("coupon/list")
+    suspend fun getCouponList(@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>): TwantResponse<CouponInfo>
+    @GET("tc/coupon/{id}")
+    suspend fun getCouponDetail(@Path ("id")id: Int): TwantResponse<CouponDetailVo>
 //【GOEFT】房產模塊結束
 
 

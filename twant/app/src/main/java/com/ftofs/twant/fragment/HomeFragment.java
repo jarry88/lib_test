@@ -22,6 +22,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
+import com.ftofs.twant.coupon_store.CouponConfirmOrderFragment;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
@@ -411,6 +412,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 
 //            UiUtilsKt.createLoadingPopup(requireContext()).show();
             Util.startFragment(new Go853HouseListFragment());
+//            Util.startFragment(CouponConfirmOrderFragment.newInstance(0));
 //            loginService.start(_mActivity);
         }
     }

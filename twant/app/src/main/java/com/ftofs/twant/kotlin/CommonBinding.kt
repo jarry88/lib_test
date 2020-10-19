@@ -8,10 +8,13 @@ import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.View
+import android.view.View.*
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,11 +22,15 @@ import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.Goods
+import com.ftofs.lib_net.model.Store
 import com.ftofs.twant.R
 import com.ftofs.twant.constant.Constant
+import com.ftofs.twant.dsl.colorId
+import com.ftofs.twant.login.Title
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.Util
+import com.ftofs.twant.view.StoreInfoView
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
 
@@ -47,6 +54,11 @@ fun loadImageUrl(v: ImageView, url: String?, defaultDrawable: Drawable?){
         }
     }
 }
+
+@BindingAdapter("tt")
+fun setTitleText(view: Title, title: String?) {
+    title?.let { view.text=it }
+}
 @BindingAdapter(value = ["delayBackgroud"])
 fun setDelayBackground(v: View, bg: Drawable?) {
     bg?.run {
@@ -66,10 +78,33 @@ fun setTimeStamp(v: TextView, timeStamp: Long?) {
         v.text= Time.fromMillisUnixtime(timeStamp, "Y-m-d H:i:s")
     }
 }
-@BindingAdapter(value = ["price"])
-fun setTextPrice(v: TextView, price: Double) {
+@BindingAdapter("visibleOrGone")
+fun View.setVisibleOrGone(show: Boolean) {
+    visibility = if (show) VISIBLE else GONE
+}
+
+@BindingAdapter("visible")
+fun View.setVisible(show: Boolean) {
+    visibility = if (show) VISIBLE else INVISIBLE
+}
+@BindingAdapter("pre_text")
+fun TextView.setPretext(str: String) {
+    text= String.format("%s%s",str,text)
+}
+@BindingAdapter("store_vo")
+fun StoreInfoView.bindVo(vo: Store?) {
+    vo?.let { this.updateVo(it) }
+}
+@BindingAdapter(value = ["price","tv_red","first_small"], requireAll = false)
+fun setTextPrice(v: TextView, price: Double,tv_red:Boolean=true ,first:Int=11) {
     price.run {
-        v.text= StringUtil.formatPrice(null, price, 0, 2)
+        var size=first
+        if(size<10) size=11
+        v.text = SpannableStringBuilder(StringUtil.formatPrice(null, price, 0, 2)).also { s->
+            s.setSpan(AbsoluteSizeSpan(size,true),0,1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        }
+        if(tv_red) v.colorId=R.color.red
+//        v.apply { textSize=firstSize.toFloat() }
     }
 }
 @BindingAdapter(value = ["priceModel"])

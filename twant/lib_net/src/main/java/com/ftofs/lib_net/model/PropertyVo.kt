@@ -12,7 +12,7 @@ data class PropertyVo(
         val brokeragePercent: Int,
         val brokerageType: Int,
         val building: String,
-        val buildingArea: Int,
+        val buildingArea: Double,
         val city: String,
         val contactHits: Int,
         val cooperation: Int,
@@ -20,6 +20,7 @@ data class PropertyVo(
         val coverkey: Int,
         val decoration: Int,
         val decorationDescription: String,//裝修描述
+        val sourceDes: String,//来源
         val detail: String,
         val developers: String,
         val direction: Int,
@@ -82,7 +83,17 @@ data class PropertyVo(
         val pingJunPrice:Double
 ):Serializable{
 
-    fun getItemTitle():String=(propertyName?:"").plus(floor?.let { " $it" }?:"").plus(unit?.let { " $it" }?:"").plus(street?.let { " $it" }?:"").plus(street?.let { " $it" }?:"")
+    fun getItemTitle():String=
+            (propertyName?:"").
+            plus(building?.let { " $it" }?:"").
+            plus(floor?.let { " $it" }?:"").
+            plus(unit?.let { " $it" }?:"").
+            plus(street?.let { " $it" }?:"")
+
+    fun getListItemTitle():String=
+            (propertyName?:"").
+            plus(floor?.let { " $it" }?:"").
+            plus(street?.let { " $it" }?:"")
 
     fun getTypeName():String=when(isType){//房產類型（用整形數填寫）：1 : 住宅 2 : 商鋪 3 : 車位 4 : 工業 5 : 地皮 6 : 寫字樓 7 : 別墅
         1->"住宅"
@@ -169,11 +180,7 @@ data class PropertyVo(
         else ->""
     }
     //todo 待確定補全的屬性
-    fun getSourceString():String=when(source){//樓盤來源：：，0：不帶，1：帶
-        0 ->" GO853 "
-        1 ->"帶"
-        else ->"GO853"
-    }
+    fun getSourceString():String=sourceDes
     fun getBuildingAreaString():String=if(buildingArea>0) "$buildingArea 呎" else "-"  //建築面積
     fun getSalableAreaString():String=if(salableArea>0) "$salableArea 呎" else "-"  //實用面積
     fun getAveragePrice():String=if(pingJunPrice>0)"$pingJunPrice 元" else "-"  //實用面積

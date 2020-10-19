@@ -2,6 +2,7 @@ package com.ftofs.twant.kotlin.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -28,7 +29,6 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> (
     private var showEmptyView =false
     private var showFootView =false
     private var showHeadView =false
-
 
 
 

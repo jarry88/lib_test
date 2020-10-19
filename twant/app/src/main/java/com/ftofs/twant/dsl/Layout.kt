@@ -581,6 +581,13 @@ inline var View.background_color: String
     set(value) {
         setBackgroundColor(Color.parseColor(value))
     }
+inline var View.bg_color_id: Int
+    get() {
+        return 0
+    }
+    set(value) {
+        setBackgroundColor(resources.getColor(value))
+    }
 
 inline var View.background_res: Int
     get() {
@@ -802,6 +809,11 @@ inline var TextView.textStyle: Int
         return -1
     }
     set(value) = setTypeface(typeface, value)
+inline var TextView.colorId: Int
+    get() {
+        return 0
+    }
+    set(value) = setTextColor(resources.getColor(value))
 
 inline var TextView.textColor: String
     get() {

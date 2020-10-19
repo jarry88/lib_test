@@ -109,6 +109,7 @@ import com.tmall.wireless.tangram.support.async.AsyncPageLoader;
 import com.tmall.wireless.tangram.support.async.CardLoadSupport;
 import com.tmall.wireless.tangram.util.IInnerImageSetter;
 import com.umeng.commonsdk.statistics.common.DeviceConfig;
+import com.wzq.mvvmsmart.utils.KLog;
 import com.yalantis.ucrop.UCrop;
 import com.yanzhenjie.permission.runtime.Permission;
 
@@ -498,6 +499,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                     // RestartApp.restartThroughPendingIntentAlarmManager(MainActivity.this);
                                     RestartApp.restartThroughIntentCompatMakeRestartActivityTask(MainActivity.this);
                                 } else if (position == 6) {
+                                    ToastUtil.success(MainActivity.this, "打開klog");
+
+                                    KLog.INSTANCE.init(true);
                                     if (Config.SLOGENABLE) {
                                         ToastUtil.success(MainActivity.this, "日誌輸出已開啟");
                                     } else {

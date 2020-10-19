@@ -18,3 +18,5 @@ twant/wrapper/
 twant/native/
 twant/daemon/
 *.profile
+*.properties
+*.scan

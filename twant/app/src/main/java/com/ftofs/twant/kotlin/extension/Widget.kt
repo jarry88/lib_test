@@ -1,7 +1,9 @@
 package com.ftofs.twant.kotlin.extension
 
 import android.content.Context
+
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -9,7 +11,10 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.ftofs.twant.kotlin.util.EmptyCornerDrawable
-
+fun View.removeParent(): View {
+    return (this.parent as ViewGroup).let { it.removeView(this)
+    it}
+}
 fun ImageView.displayWithUrl(url: String?) {
     Glide.with(this).load(url)
             .apply(

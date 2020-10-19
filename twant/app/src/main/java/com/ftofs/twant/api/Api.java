@@ -1307,6 +1307,7 @@ public class Api {
      */
     public static final String SELLER_GOODS_EDIT = "/member/seller/goods/edit";
     public static final String MEMBER_IM_SESSION_INCR ="/member/im/session/incr" ;
+    public static final String PATH_COUPON_STORE = "";
     /**
      * 【商家】
      * 退貨訂單列表

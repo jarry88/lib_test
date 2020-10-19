@@ -1,0 +1,78 @@
+package com.ftofs.twant.coupon_store
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.ftofs.twant.BR
+import com.ftofs.twant.R
+import com.ftofs.twant.databinding.CouponStoreDetailFragmentBinding
+import com.ftofs.twant.databinding.ImageSquareItemBinding
+import com.ftofs.twant.dsl.customer.factoryAdapter
+import com.ftofs.twant.dsl.imageUrl
+import com.ftofs.twant.dsl.margin_end
+import com.ftofs.twant.fragment.ViewPagerFragment
+import com.ftofs.twant.util.ToastUtil
+import com.ftofs.twant.util.Util
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
+
+private const val COUPON_ID ="couponId"
+class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmentBinding,CouponStoreViewModel>() {
+    override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
+        return R.layout.coupon_store_detail_fragment
+    }
+
+    override fun initVariableId(): Int {
+        return BR.viewModel
+    }
+
+    private val imageAdapter by lazy {  factoryAdapter<String,ImageSquareItemBinding>(R.layout.image_square_item){b,d->
+        b.llContainer.apply {
+            margin_end=8
+        }
+        b.imageItem.imageUrl=d
+        b.imageItem.setOnClickListener{
+            viewModel.currCouponDetail.value?.picList?.let {list ->
+                Util.startFragment(ViewPagerFragment.newInstance(list,false).also { it.start=list.indexOf(d) })}
+
+        }
+    } }
+    val id=arguments?.getInt(COUPON_ID)
+
+    override fun initData() {
+        binding.title.apply {
+            setLeftImageResource(R.drawable.icon_back)
+//            setRightImageResource(R.drawable.icon_coupon_share)
+            setRightLayoutClickListener{ToastUtil.success(context,"分享")}
+            setLeftLayoutClickListener{onBackPressedSupport()}
+        }
+        id?.let {
+            viewModel.getCouponDetail(it)
+        }?:viewModel.getCouponDetail(42)
+        binding.rvImage.adapter=imageAdapter
+        binding.couponInformation.observable(viewModel.currCouponDetail)
+        binding.btnBuy.setOnClickListener { CouponConfirmOrderFragment.newInstance(viewModel.currCouponDetail.value?.id) }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(couponId: Int?):CouponConfirmOrderFragment {
+            val args = Bundle()
+            couponId?.let {
+                args.putInt(COUPON_ID,it)
+            }
+            val  fragment =CouponConfirmOrderFragment()
+            fragment.arguments=args
+            return fragment
+        }
+    }
+
+    override fun initViewObservable() {
+        viewModel.currCouponDetail.observe(this){
+            binding.vo=it
+            it.picList?.let {list ->
+                imageAdapter.addAll(list,true)
+            }
+        }
+    }
+}
+

@@ -115,11 +115,16 @@
                 android:src="@drawable/icon_job_follow"
                 android:layout_marginStart="4dp" />
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/titlebar_rightimage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:scaleType="fitXY"
+
+                android:src="@drawable/icon_coupon_share"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
+                android:layout_marginEnd="14dp"
                 android:layout_marginStart="10dp" />
         </RelativeLayout>
 

@@ -23,6 +23,7 @@ import com.ftofs.twant.di.koinModule
 import com.ftofs.twant.entity.ChatMessage
 import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.fragment.MainFragment
+import com.ftofs.twant.login.OneStepLogin
 import com.ftofs.twant.orm.*
 import com.ftofs.twant.util.*
 import com.ftofs.twant.vo.member.MemberVo
@@ -55,6 +56,7 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary
 import com.wzq.mvvmsmart.utils.KLog
 import com.wzq.mvvmsmart.utils.Tasks
 import com.jeremyliao.liveeventbus.LiveEventBus
+import com.mobile.auth.gatewayauth.PreLoginResultListener
 import com.wzq.mvvmsmart.net.net_utils.Utils
 import me.yokeyword.fragmentation.Fragmentation
 import org.koin.android.ext.koin.androidContext
@@ -102,7 +104,7 @@ class TwantApplication :BaseApplication(){
     private var notificationId = 0
     private var count = 0
 
-
+    var mPhoneNumberAuthHelper :PhoneNumberAuthHelper?=null
     //保存當前會員身份信息，目前主要用於取得role，來判斷用戶身份
     var memberVo: MemberVo? = null
     init { //使用static代码段可以防止内存泄漏
@@ -121,7 +123,7 @@ class TwantApplication :BaseApplication(){
         SLog.info("打开Klog %s",BuildConfig.DEBUG)
         initMVVM()
 
-        PhoneNumberAuthHelper.getInstance(this,object :TokenResultListener{
+        mPhoneNumberAuthHelper= PhoneNumberAuthHelper.getInstance(this,object :TokenResultListener{
             override fun onTokenFailed(p0: String?) {
                 Log.e("init", "onTokenFaild: $p0")
             }
@@ -132,6 +134,15 @@ class TwantApplication :BaseApplication(){
 
         }).apply { setAuthSDKInfo("gg+CTOzZf+lDYnx+JNodeuceDBDHIef/DjPospYtY8puMEuVeUJM8lS7elL36rSB+oeAV1Rli9rGMnrMxnbJ4kCNEEo46l/l1VzH+q92nrd4du5f9KHBZ+e6uFt9i7WznSBR1s+/0LLl8CCD9F10NpH4yPa5xkY0LvDP1xgCNPZDn70mPq0Dl3vZz7TdGEaZ3euShG5sa04hFZiMN34YidOfHwr6SVRu37Mz9ehOHsLnoeCzgx9IkICa3KI2nPTjlniBi+bkj9CDq6iK6u6NNlODVfsrZcar")
             reporter.setLoggerEnable(BuildConfig.DEBUG)
+                    accelerateLoginPage(5000,object : PreLoginResultListener {
+                        override fun onTokenSuccess(s: String) {
+                            Log.e("OneStepLogin.TAG", "预取号成功: $s")
+                        }
+
+                        override fun onTokenFailed(s: String, s1: String) {
+                            Log.e("OneStepLogin.TAG", "预取号失败：, $s1")
+                        }
+                    })
         }
 //        HTLoading().setl
 
@@ -282,6 +293,8 @@ class TwantApplication :BaseApplication(){
         regToWx()
         initCrash()
     }
+
+
 
     private fun initMVVM() {
         Tasks.init()
