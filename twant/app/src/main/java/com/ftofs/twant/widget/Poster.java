@@ -64,7 +64,7 @@ public class Poster extends FrameLayout {
     }
 
     public Poster setGoodsImage(File goodsImageFile) {
-        Glide.with(this).load(goodsImageFile).centerCrop().into(goodsImage);
+        Glide.with(this).load(goodsImageFile).centerInside().into(goodsImage);
         return this;
     }
 

@@ -70,6 +70,7 @@
                 android:id="@+id/tv_mop_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:text="MOP 0.00"
                 android:textSize="16sp"
                 android:textColor="@color/tw_red">

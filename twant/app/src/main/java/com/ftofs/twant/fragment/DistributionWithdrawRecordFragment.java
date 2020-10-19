@@ -46,8 +46,8 @@ public class DistributionWithdrawRecordFragment extends NestedScrollingFragment 
      */
     public static final int REQUEST_TYPE_ALL = -1;
     public static final int REQUEST_TYPE_UNPROCESSED = 0;
-    public static final int REQUEST_TYPE_SUCCESS = 2;
-    public static final int REQUEST_TYPE_FAIL = 3;
+    public static final int REQUEST_TYPE_SUCCESS = 3;
+    public static final int REQUEST_TYPE_FAIL = 2;
 
     DistributionWithdrawRecordAdapter adapter;
     List<DistributionWithdrawRecord> distributionWithdrawRecordList = new ArrayList<>();

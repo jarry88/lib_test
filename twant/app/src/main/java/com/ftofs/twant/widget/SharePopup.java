@@ -110,6 +110,8 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     String storeWord;  // 店鋪分享口令
 
     String marketingUrl; // 分銷系統分享鏈接
+    double goodsPrice; // 商品價格
+    double cnyPrice;   // 人民幣價格
 
     /*
     public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data) {
@@ -166,6 +168,8 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                         commonId = shareData.optInt("commonId");
                         goodsName = shareData.optString("goodsName");
                         goodsImageUrl = shareData.optString("goodsImage");
+                        goodsPrice = shareData.optDouble("goodsPrice");
+                        cnyPrice = shareData.optDouble("cnyPrice");
                         getCommandWord(shareType, commonId);
 
                         btnShareToWord.setOnClickListener(this);
@@ -408,8 +412,8 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                         "commonId", commonId,
                         "goodsName", goodsName,
                         "goodsImageUrl", goodsImageUrl,
-                        "mopPrice", 99999999,
-                        "cnyPrice", 88888888
+                        "mopPrice", goodsPrice,
+                        "cnyPrice", cnyPrice
                 );
                 Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_GOODS, posterData));
             } else { // 分享邀請海報
@@ -474,7 +478,11 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     }
 
     public static String generateGoodsShareLink(int spuId, int skuId) {
-        return Config.WEB_BASE_URL + String.format("/goods/%d?goodsId=%d", spuId, skuId);
+        if (skuId > 0) {
+            return Config.WEB_BASE_URL + String.format("/goods/%d?goodsId=%d", spuId, skuId);
+        } else {
+            return Config.WEB_BASE_URL + String.format("/goods/%d", spuId);
+        }
     }
 
     public static String generatePostShareLink(int postId) {

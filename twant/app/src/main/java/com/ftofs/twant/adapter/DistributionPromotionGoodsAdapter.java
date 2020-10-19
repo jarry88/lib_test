@@ -41,8 +41,8 @@ public class DistributionPromotionGoodsAdapter extends BaseQuickAdapter<Distribu
             helper.setText(R.id.tv_first_level, "一級：" + StringUtil.formatFloat(item.commissionLevel1) + "%")
                     .setText(R.id.tv_second_level, "二級：" + StringUtil.formatFloat(item.commissionLevel2) + "%");
         } else if (item.commissionType == Constant.COMMISSION_TYPE_FIXED) {
-            helper.setText(R.id.tv_first_level, "一級：" + StringUtil.formatFloat(item.commissionAmount) + "%")
-                    .setText(R.id.tv_second_level, "二級：" + StringUtil.formatFloat(item.commissionAmount2) + "%");
+            helper.setText(R.id.tv_first_level, "一級：" + StringUtil.formatFloat(item.commissionAmount))
+                    .setText(R.id.tv_second_level, "二級：" + StringUtil.formatFloat(item.commissionAmount2));
         }
     }
 }

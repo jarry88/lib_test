@@ -24,9 +24,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="20dp">
+            android:layout_height="110dp">
             <LinearLayout
                 android:id="@+id/btn_share_to_timeline"
                 android:layout_width="wrap_content"
