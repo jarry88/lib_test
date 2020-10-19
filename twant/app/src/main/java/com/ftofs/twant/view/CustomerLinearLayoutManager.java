@@ -26,7 +26,6 @@ public class CustomerLinearLayoutManager extends LinearLayoutManager {
         try {
             super.onLayoutChildren(recycler, state);
         } catch (IndexOutOfBoundsException e) {
-            SLog.bt();
             e.printStackTrace();
         }
     }

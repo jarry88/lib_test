@@ -72,7 +72,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     ShopGoodsListAdapter shopGoodsListAdapter;
     ShopGoodsGridAdapter shopGoodsGridAdapter;
     LinearLayoutManager layoutManager;
-
+    boolean firstShow = true;
 
 
     float lastX = 0;
@@ -173,7 +173,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 simpleTabManager.performClick(1);
             }
         } else {
-            loadStoreGoods(paramsOriginal, EasyJSONObject.generate("sort", "default_desc"), 1);
+//            loadStoreGoods(paramsOriginal, EasyJSONObject.generate("sort", "default_desc"), 1);
         }
 
     }
@@ -415,6 +415,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Goods goods = goodsList.get(position);
+                SLog.info(title +String.valueOf(position));
                 int commonId = goods.id;
 
                 Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
@@ -446,8 +447,6 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
                 if (!hasMore) {
                     shopGoodsListAdapter.setEnableLoadMore(false);
-//                    storeCategoryListAdapter.performCilckNext();
-//                    rvGoodsList.getChildAt(storeCategoryListAdapter.getPrevSelectedItemIndex()).performClick();
                     return;
                 }
                 loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
@@ -524,13 +523,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         rvCategoryList = view.findViewById(R.id.rv_category_list);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity));
         storeCategoryListAdapter = new StoreCategoryListAdapter(_mActivity, R.layout.store_category_list_item, shopStoreLabelList, this);
-        storeCategoryListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                categoryOnItemClick(position);
-
-            }
-        });
+        storeCategoryListAdapter.setOnItemClickListener((adapter, view1, position) -> categoryOnItemClick(position));
         rvCategoryList.setAdapter(storeCategoryListAdapter);
 
 
@@ -879,6 +872,11 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     }
 
                     storeCategoryListAdapter.setNewData(shopStoreLabelList);
+                    if (firstShow) {
+                        firstShow = false;
+                        loadStoreGoods(paramsOriginal, EasyJSONObject.generate("sort", "default_desc"), 1);
+                    }
+
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
