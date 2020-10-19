@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -29,6 +30,7 @@ import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.go853.Go853HouseListFragment;
 import com.ftofs.twant.kotlin.BlackTestFragment;
 import com.ftofs.twant.login.service.LoginServiceImpl;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.LogUtil;
@@ -411,6 +413,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 //            final BasePopupView load=Util.createLoadingPopup(requireContext()).show();
 
 //            UiUtilsKt.createLoadingPopup(requireContext()).show();
+            SLog.info(TwantApplication.Companion.get().getUmengDeviceToken());
             Util.startFragment(new Go853HouseListFragment());
 //            Util.startFragment(CouponConfirmOrderFragment.newInstance(0));
 //            loginService.start(_mActivity);

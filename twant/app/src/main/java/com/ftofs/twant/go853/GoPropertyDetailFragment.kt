@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.ftofs.lib_net.model.GoPhoto
 import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
@@ -30,6 +31,7 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
 
     override fun onSupportVisible() {
         super.onSupportVisible()
+        SLog.info("可見"+com.ftofs.twant.config.Config.PROD)
         pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_DETAIL_ITEM, hashMapOf("pid" to pid))
     }
 
@@ -81,11 +83,13 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
     override fun initViewObservable() {
         viewModel.currPropertyInfo.observe(this){
             binding.vo=it
-            it.photoList?.takeIf { l-> l.isNotEmpty() }?.let { list ->
-                if (list.isNotEmpty()) {
-                    while (list.size < 3) {
-                        list.plus(list[0])
-                    }
+            it.photoList?.takeIf { l-> l.isNotEmpty() }?.let { lll ->
+                val list = mutableListOf<GoPhoto>()
+                list.addAll(lll)
+                val a =list[0]
+                if (list.size < 3)  list.plus(a)
+                if (list.size < 3)  list.plus(a)
+
                     list.map { p -> WebSliderItem(p.title, "none", "", "", "[]") }
                             .let {ll->
                                     binding.banner.let { it.visibility=View.VISIBLE }
@@ -102,10 +106,12 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
                                     binding.banner.indicatorContainer.apply {
                                         layoutParams
                                     }
-                                    binding.banner.setOnClickListener { Util.startFragment(ViewPagerFragment.newInstance(list.map { it.title }, false)) }
+                                    binding.banner.setBannerPageClickListener { view, i ->
+                                        Util.startFragment(ViewPagerFragment.newInstance(list.map { it.title }, false))
+                                    }
                                     binding.banner.start()
                                 }
-                            }
+
             }?:binding.banner.let { it.visibility=View.GONE }
 
 

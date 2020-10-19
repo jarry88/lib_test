@@ -73,6 +73,7 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
+import com.ftofs.twant.go853.Go853HouseListFragment;
 import com.ftofs.twant.hot_zone.HotZoneFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.login.UserManager;
@@ -1809,6 +1810,9 @@ public class Util {
                     SLog.info("測試環境切換到229環境");
                 }
                 Util.startFragment(new HotZoneFragment(Integer.parseInt(linkValue)));
+                break;
+            case "GO853":
+                Util.startFragment(new Go853HouseListFragment());
                 break;
             default:
                 break;
