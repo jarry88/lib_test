@@ -22,6 +22,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
+import com.ftofs.twant.entity.CrossBorderFloorItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
@@ -62,6 +63,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     List<CrossBorderShoppingZoneItem> shoppingZoneList;
     List<CrossBorderActivityGoods> bargainGoodsList;
     List<CrossBorderActivityGoods> groupGoodsList;
+    List<CrossBorderFloorItem> floorItemList;
     List<Store> storeList;
 
     // 當前要加載第幾頁(從1開始）
@@ -76,6 +78,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                                                       List<CrossBorderShoppingZoneItem> shoppingZoneList,
                                                       List<CrossBorderActivityGoods> bargainGoodsList,
                                                       List<CrossBorderActivityGoods> groupGoodsList,
+                                                      List<CrossBorderFloorItem> floorItemList,
                                                       List<Store> storeList) {
         CrossBorderHomeFragment fragment = new CrossBorderHomeFragment();
         Bundle args = new Bundle();
@@ -87,6 +90,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         fragment.shoppingZoneList = shoppingZoneList;
         fragment.bargainGoodsList = bargainGoodsList;
         fragment.groupGoodsList = groupGoodsList;
+        fragment.floorItemList = floorItemList;
         fragment.storeList = storeList;
 
         return fragment;
@@ -119,6 +123,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         header.shoppingZoneList = shoppingZoneList;
         header.bargainGoodsList = bargainGoodsList;
         header.groupGoodsList = groupGoodsList;
+        header.floorItemList = floorItemList;
         header.storeList = storeList;
         header.itemType = Constant.ITEM_TYPE_HEADER;
 

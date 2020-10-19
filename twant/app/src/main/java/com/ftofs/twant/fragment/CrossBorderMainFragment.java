@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.CrossBorderCategoryListAdapter;
@@ -28,6 +29,7 @@ import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderCategoryItem;
+import com.ftofs.twant.entity.CrossBorderFloorItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
@@ -260,6 +262,16 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 groupGoodsList.add(groupGoods);
             }
 
+            // 獲取樓層數據
+            List<CrossBorderFloorItem> floorItemList = new ArrayList<>();
+            CrossBorderFloorItem floorItem1 = new CrossBorderFloorItem();
+            floorItem1.goodsList = new ArrayList<>();
+            floorItem1.goodsList.add(new Goods());floorItem1.goodsList.add(new Goods());floorItem1.goodsList.add(new Goods());
+            floorItemList.add(floorItem1);
+
+            CrossBorderFloorItem floorItem2 = new CrossBorderFloorItem();
+            floorItemList.add(floorItem2);
+
             // 獲取【優選好店】數據
             List<Store> storeList = new ArrayList<>();
             EasyJSONArray storeArray = responseObj.getSafeArray("datas.storeList");
@@ -269,7 +281,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             }
 
             titleList.add("首頁");
-            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemCount, navPaneList, shoppingZoneList, bargainGoodsList, groupGoodsList, storeList));
+            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemCount, navPaneList, shoppingZoneList, bargainGoodsList,
+                    groupGoodsList, floorItemList, storeList));
             categoryList.add(new CrossBorderCategoryItem(0, "首頁", homeDefaultColorStr));
 
             EasyJSONArray catList = responseObj.getSafeArray("datas.catList");

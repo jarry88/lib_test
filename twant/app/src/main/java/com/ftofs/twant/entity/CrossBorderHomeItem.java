@@ -14,6 +14,7 @@ public class CrossBorderHomeItem implements MultiItemEntity {
     public List<CrossBorderShoppingZoneItem> shoppingZoneList;
     public List<CrossBorderActivityGoods> bargainGoodsList;
     public List<CrossBorderActivityGoods> groupGoodsList;
+    public List<CrossBorderFloorItem> floorItemList;  // 樓層結構
     public List<Store> storeList;
 
     // NORMAL用到以下數據
