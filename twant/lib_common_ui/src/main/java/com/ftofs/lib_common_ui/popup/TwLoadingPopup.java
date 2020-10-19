@@ -44,8 +44,10 @@ public class TwLoadingPopup extends CenterPopupView implements View.OnClickListe
         }
 
         ImageView imgLoading = findViewById(R.id.img_loading);
-        Glide.with(context).load("file:///android_asset/loading.gif")
-                .into(imgLoading);
+        if (imgLoading != null) {
+            Glide.with(context).load("file:///android_asset/loading.gif")
+                    .into(imgLoading);
+        }
     }
 
     //完全可见执行

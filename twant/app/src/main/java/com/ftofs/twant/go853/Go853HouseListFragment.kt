@@ -91,6 +91,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         binding.banner.apply {
             setBackgroundResource(R.drawable.go_banner)
         }
+        binding.rvList.isNestedScrollingEnabled=false
         binding.tabLayout.apply {
             setSelectedTabIndicatorColor(resources.getColor(R.color.tw_blue))
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -163,31 +164,12 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         binding.refreshLayout.setOnLoadMoreListener {
             viewModel.getPropertyList(search = binding.title.getSearchWord())
         }
-        binding.refreshLayout.autoRefresh()//page为0
-        binding.rvList.isNestedScrollingEnabled=false
-        binding.scrollView.apply {
-            setOnScrollChangeListener { view, i, i2, i3, i4 ->
-                val rvPostListY = Util.getYOnScreen(binding.tabLayout)
-                val containerViewY = Util.getYOnScreen(this)
-
-//                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
-
-//                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
-            // 如果列表滑动到顶部，则启用嵌套滚动
-                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY,)
-
-                if (rvPostListY <= containerViewY) {
-//                    binding.scrollView.isNestedScrollingEnabled = false
-                    binding.rvList.isNestedScrollingEnabled = true
-                    this.stopNestedScroll()
-                } else {
-                    binding.rvList.isNestedScrollingEnabled = false
-
-                }
-
-
-            }
+        binding.scrollView.setOnScrollChangeListener { view, i, i2, i3, i4 ->
+            val tabY = Util.getYOnScreen(binding.tabLayout)
+            val containerViewY = Util.getYOnScreen(binding.scrollView)
+            binding.rvList.isNestedScrollingEnabled= tabY<=containerViewY
         }
+        binding.refreshLayout.autoRefresh()//page为0
 //        binding.rlSuggestionList.adapter=suggestAdapter
     }
 
@@ -254,7 +236,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
 
                             PRICE_TYPE_BUTTON -> viewModel.getPriceDescList()?.let {
                                 GoDropdownMenu(requireContext(), it, tagView?.text.toString()) { s ->
-                                    pushUmengEvent(Config.PROD, GO853_FIlTER_PRICE,hashMapOf("type" to s))
+                                    pushUmengEvent(Config.PROD, GO853_FIlTER_PRICE, hashMapOf("type" to s))
                                     binding.rvList.scrollToPosition(0)
                                     when (viewModel.saleTypeLiveData.value) {
                                         SELLING_SALE_TYPE -> viewModel.saveSellingPriceRange(s)

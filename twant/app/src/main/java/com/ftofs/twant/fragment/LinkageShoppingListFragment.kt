@@ -32,7 +32,7 @@ import java.util.*
 /**
  * 专场的商店列表页
  */
-class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecialFragment): BaseTwantFragmentMVVM<SimpleRvListBinding, LinkageShoppingListModel>() {
+class LinkageShoppingListFragment @JvmOverloads constructor (val zoneId: Int?=null,val parent: NewShoppingSpecialFragment?=null): BaseTwantFragmentMVVM<SimpleRvListBinding, LinkageShoppingListModel>() {
 
     //    private var parent by lazy { arguments?.get("parent") }
     private val mAdapter by lazy {
@@ -52,7 +52,7 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
         SLog.info("onBackPressedSupport")
 
         hideSoftInputPop()
-        parent.onBackPressedSupport()
+        parent?.onBackPressedSupport()
         return true
     }
 
@@ -70,7 +70,7 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
 
     override fun initData() {
         initRecyclerView()
-        zoneId.let { viewModel.doGetStoreItems(it) } //请求网络数据
+        zoneId?.let { viewModel.doGetStoreItems(it) }?:hideSoftInputPop() //请求网络数据
     }
 
     private fun initRecyclerView() {
@@ -110,7 +110,7 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
             Util.startFragment(ShopMainFragment.newInstance(store.storeId))
         }
 
-        parent.let {
+        parent?.let {
             binding.rvSimple.isNestedScrollingEnabled = false
             binding.rvSimple.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -123,7 +123,7 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
                 }
             })
 
-        }
+        }?:hideSoftInputPop()
 
     }
     override fun initViewObservable() {
@@ -142,9 +142,9 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
         })
         binding.refreshLayout.setOnRefreshListener {
             viewModel.pageNum = 1
-            zoneId.let {
+            zoneId?.let {
                 viewModel.doGetStoreItems(it)
-            }
+            }?:hideSoftInputPop()
             binding.rvSimple.scrollToPosition(0)
 
         }
@@ -153,7 +153,7 @@ class LinkageShoppingListFragment (val zoneId: Int,val parent: NewShoppingSpecia
             //            loadMoreTestData();   // 模拟加载更多数据
             if (viewModel.hasMore) {
                 viewModel.pageNum++//請求到數據后，如果獲得list為空，會在vm中將pagenum-1
-                zoneId.let { viewModel.doGetStoreItems(it) }
+                zoneId?.let { viewModel.doGetStoreItems(it) }
             } else {
                 viewModel.stateLiveData.postNoMoreData()
             }
