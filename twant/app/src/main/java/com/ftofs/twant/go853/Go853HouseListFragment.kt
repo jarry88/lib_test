@@ -34,6 +34,8 @@ const val CITY_TYPE_BUTTON: Int=2
 const val PRICE_TYPE_BUTTON: Int=3
 
 class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, GoHouseViewModel>(){
+    var scrollViewHeight = 0;
+
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.go_house_list_fragment
     }
@@ -321,4 +323,15 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         this
     }
 
+
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+
+        if (scrollViewHeight == 0) {
+            binding.apply {
+                scrollViewHeight = scrollView.height
+                rvList.layoutParams.height = scrollViewHeight - tabLayout.height
+            }
+        }
+    }
 }
