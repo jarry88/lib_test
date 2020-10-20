@@ -76,7 +76,7 @@
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="姓名"
+                    android:text="銀行帳號名稱"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black">
 
@@ -85,7 +85,7 @@
                     android:id="@+id/et_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="請填寫收件人的真實姓名"
+                    android:hint="請填寫開戶人姓名"
                     android:textColor="@color/tw_black"
                     android:textSize="16sp"
                     android:singleLine="true"
@@ -103,21 +103,21 @@
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="開戶行"
+                    android:text="銀行卡帳號"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black">
 
                 </TextView>
                 <EditText
-                    android:id="@+id/et_bank_name"
+                    android:id="@+id/et_bank_account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="請輸入開戶行名稱"
+                    android:hint="請填寫銀行卡帳號"
                     android:textColor="@color/tw_black"
                     android:textSize="16sp"
                     android:singleLine="true"
-                    android:inputType="text"
-                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"
                     android:background="@null">
                 </EditText>
             </LinearLayout>
@@ -129,21 +129,21 @@
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="銀行卡帳號"
+                    android:text="開戶行信息"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black">
 
                 </TextView>
                 <EditText
-                    android:id="@+id/et_bank_account"
+                    android:id="@+id/et_bank_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="請輸入銀行帳號"
+                    android:hint="請填寫開戶行名稱"
                     android:textColor="@color/tw_black"
                     android:textSize="16sp"
                     android:singleLine="true"
-                    android:inputType="numberDecimal"
-                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
                     android:background="@null">
                 </EditText>
             </LinearLayout>

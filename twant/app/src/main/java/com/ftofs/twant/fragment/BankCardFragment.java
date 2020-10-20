@@ -83,17 +83,17 @@ public class BankCardFragment extends BaseFragment implements View.OnClickListen
         String bankAccount = etBankAccount.getText().toString().trim();
 
         if (StringUtil.isEmpty(name)) {
-            ToastUtil.error(_mActivity, "請填寫收件人的真實姓名");
-            return;
-        }
-
-        if (StringUtil.isEmpty(bankName)) {
-            ToastUtil.error(_mActivity, "請輸入開戶行名稱");
+            ToastUtil.error(_mActivity, "請填寫開戶人姓名");
             return;
         }
 
         if (StringUtil.isEmpty(bankAccount)) {
-            ToastUtil.error(_mActivity, "請輸入銀行帳號");
+            ToastUtil.error(_mActivity, "請填寫銀行卡帳號");
+            return;
+        }
+
+        if (StringUtil.isEmpty(bankName)) {
+            ToastUtil.error(_mActivity, "請填寫開戶行名稱");
             return;
         }
 

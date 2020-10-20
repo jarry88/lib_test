@@ -35,6 +35,7 @@ public class DistributionOrderAdapter extends BaseMultiItemQuickAdapter<Distribu
     protected void convert(@NonNull BaseViewHolder helper, DistributionOrderItem item) {
         if (item.itemType == Constant.ITEM_TYPE_NORMAL) {
             helper.setText(R.id.tv_order_sn, String.valueOf(item.ordersSn))
+                    .setText(R.id.tv_order_status, item.getMarketingOrdersStateDesc())
                     .setText(R.id.tv_goods_name, item.goodsName)
                     .setText(R.id.tv_create_time, item.createTime)
                     .setText(R.id.tv_pay_amount, "實付款：¥" + StringUtil.formatFloat(item.goodsPayAmount))
