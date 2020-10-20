@@ -36,7 +36,7 @@ public class CrossBorderDrawView extends View {
     private void init() {
         // 创建画笔
         p = new Paint();
-        p.setColor(getContext().getColor(R.color.tw_cross_border_home_page_bg_color));
+        p.setColor(Util.getColor(R.color.tw_blue));
         p.setAntiAlias(true);
     }
 

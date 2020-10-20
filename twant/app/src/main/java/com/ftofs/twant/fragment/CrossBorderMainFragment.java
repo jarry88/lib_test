@@ -74,11 +74,10 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     private List<Fragment> fragmentList = new ArrayList<>();
 
     LinearLayout llAppBar;
-    View vwTopBg;
-    CrossBorderDrawView vwBottomBg;
 
     View crossBorderCategoryListMask;
     View btnViewMoreCategory;
+    String homeDefaultColorStr = "";
 
     public static CrossBorderMainFragment newInstance() {
         CrossBorderMainFragment fragment = new CrossBorderMainFragment();
@@ -106,8 +105,6 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         btnViewMoreCategory = view.findViewById(R.id.btn_view_more_category);
 
         llAppBar = view.findViewById(R.id.ll_app_bar);
-        vwTopBg = view.findViewById(R.id.vw_top_bg);
-        vwBottomBg = view.findViewById(R.id.vw_bottom_bg);
 
         rvCategoryList = view.findViewById(R.id.rv_category_list);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
@@ -174,13 +171,13 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_search, this);
 
         // 先設置默認顏色
-        changeBackgroundColor(_mActivity.getColor(R.color.tw_cross_border_home_page_bg_color));
+        changeBackgroundColor(Util.getColor(R.color.tw_blue));
 
         loadData();
     }
 
     private void initViewPager(EasyJSONObject responseObj) {
-        String homeDefaultColorStr = "";
+
         try {
             // 獲取Banner圖數據
             int index = 0;
@@ -264,6 +261,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
             // 獲取樓層數據
             List<CrossBorderFloorItem> floorItemList = new ArrayList<>();
+            /*
             CrossBorderFloorItem floorItem1 = new CrossBorderFloorItem();
             floorItem1.goodsList = new ArrayList<>();
             floorItem1.goodsList.add(new Goods());floorItem1.goodsList.add(new Goods());floorItem1.goodsList.add(new Goods());
@@ -271,6 +269,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
             CrossBorderFloorItem floorItem2 = new CrossBorderFloorItem();
             floorItemList.add(floorItem2);
+
+             */
 
             // 獲取【優選好店】數據
             List<Store> storeList = new ArrayList<>();
@@ -281,7 +281,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             }
 
             titleList.add("首頁");
-            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, navItemCount, navPaneList, shoppingZoneList, bargainGoodsList,
+            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, homeDefaultColorStr, navItemCount, navPaneList, shoppingZoneList, bargainGoodsList,
                     groupGoodsList, floorItemList, storeList));
             categoryList.add(new CrossBorderCategoryItem(0, "首頁", homeDefaultColorStr));
 
@@ -354,9 +354,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
     private void changeBackgroundColor(int color) {
         llAppBar.setBackgroundColor(color);
-        vwTopBg.setBackgroundColor(color);
         btnViewMoreCategory.setBackgroundColor(color);
-        vwBottomBg.setColor(color);
     }
 
     @Override

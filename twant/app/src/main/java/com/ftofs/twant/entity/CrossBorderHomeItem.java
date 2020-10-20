@@ -8,6 +8,7 @@ public class CrossBorderHomeItem implements MultiItemEntity {
     public int itemType;
 
     // HEADER用到以下數據
+    public int bannerBackgroundColor;  // Banner Item才用到
     public List<CrossBorderBannerItem> bannerItemList;
     public int navItemCount;
     public List<CrossBorderNavPane> navPaneList;

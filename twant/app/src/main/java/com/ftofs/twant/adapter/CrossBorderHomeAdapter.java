@@ -1,6 +1,7 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.gzp.lib_common.utils.SLog;
@@ -53,8 +55,8 @@ import java.util.List;
 
 public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorderHomeItem, BaseViewHolder> {
     Context context;
-
-    boolean isFirst = true; // 是否為首次初始化
+    public String currentThemeColor;
+    String homeDefaultColorStr;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -62,11 +64,13 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public CrossBorderHomeAdapter(Context context, List<CrossBorderHomeItem> data) {
+    public CrossBorderHomeAdapter(Context context, List<CrossBorderHomeItem> data, String homeDefaultColorStr) {
         super(data);
 
         this.context = context;
+        this.homeDefaultColorStr = homeDefaultColorStr;
 
+        addItemType(Constant.ITEM_TYPE_BANNER, R.layout.cross_border_home_banner);
         addItemType(Constant.ITEM_TYPE_HEADER, R.layout.cross_border_home_header);
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.cross_border_home_item); // 商品分頁加載Item
         addItemType(Constant.ITEM_TYPE_FOOTER, R.layout.cross_border_home_footer);
@@ -76,12 +80,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
     protected void convert(@NonNull BaseViewHolder helper, CrossBorderHomeItem item) {
         int itemType = item.getItemType();
 
-        if (itemType == Constant.ITEM_TYPE_HEADER) {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
-
-            helper.addOnClickListener(R.id.btn_view_more_bargain, R.id.btn_view_more_group);
-
-
+        if (itemType == Constant.ITEM_TYPE_BANNER) {
+            CrossBorderDrawView drawView = helper.getView(R.id.vw_bottom_bg);
+            drawView.setColor(Color.parseColor(homeDefaultColorStr));
             Banner<CrossBorderBannerItem, BannerImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
             banner.setAdapter(new BannerImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
                 @Override
@@ -105,8 +106,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
                     boolean canChangeBackgroundColor = Hawk.get(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR);
                     if (canChangeBackgroundColor) {
-                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, bannerItem.backgroundColorApp);
+                        currentThemeColor = bannerItem.backgroundColorApp;
+                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, currentThemeColor);
                         SLog.info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                        drawView.setColor(Color.parseColor(currentThemeColor));
                     }
                 }
 
@@ -123,6 +126,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp, true);
                 }
             });
+        } else if (itemType == Constant.ITEM_TYPE_HEADER) {
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
+
+            helper.addOnClickListener(R.id.btn_view_more_bargain, R.id.btn_view_more_group);
 
             // 導航區
             RecyclerView rvNavList = helper.getView(R.id.rv_nav_list);
