@@ -62,6 +62,7 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
     int commonId;
     String goodsName;
     String goodsImageUrl;
+    int goodsModel;
 
     String goodsUrl; // 商品詳情頁的Url
 
@@ -110,6 +111,7 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
         if (posterType == Constant.POSTER_TYPE_GOODS) {
             commonId = data.optInt("commonId");
             goodsName = data.optString("goodsName");
+            goodsModel = data.optInt("goodsModel");
             goodsImageUrl = StringUtil.normalizeImageUrl(data.optString("goodsImageUrl"), "?x-oss-process=image/resize,w_800");
 
             generateGoodsPoster();
@@ -209,6 +211,7 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
                 poster.setGoodsImage(goodsImageFile)
                         .setGoodsName(goodsName)
                         .setQrCode(goodsUrl)
+                        .setGoodsModel(goodsModel)
                         .setMopPrice(mopPrice)
                         .setCnyPrice(cnyPrice);
 

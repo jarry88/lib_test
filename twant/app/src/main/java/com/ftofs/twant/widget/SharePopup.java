@@ -105,6 +105,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 
     int commonId;
     String goodsName;
+    int goodsModel;
     String goodsImageUrl;
     String goodsWord;  // 商品分享口令
     String storeWord;  // 店鋪分享口令
@@ -167,6 +168,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                     if (shareType == SHARE_TYPE_GOODS) {
                         commonId = shareData.optInt("commonId");
                         goodsName = shareData.optString("goodsName");
+                        goodsModel = shareData.optInt("goodsModel");
                         goodsImageUrl = shareData.optString("goodsImage");
                         goodsPrice = shareData.optDouble("goodsPrice");
                         cnyPrice = shareData.optDouble("cnyPrice");
@@ -411,6 +413,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                 EasyJSONObject posterData = EasyJSONObject.generate(
                         "commonId", commonId,
                         "goodsName", goodsName,
+                        "goodsModel", goodsModel,
                         "goodsImageUrl", goodsImageUrl,
                         "mopPrice", goodsPrice,
                         "cnyPrice", cnyPrice
