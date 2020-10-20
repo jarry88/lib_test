@@ -19,6 +19,7 @@ import com.ftofs.twant.adapter.DistributionOrderAdapter;
 import com.ftofs.twant.adapter.DistributionWithdrawRecordAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.DistributionMember;
 import com.ftofs.twant.entity.DistributionOrderItem;
 import com.ftofs.twant.entity.DistributionWithdrawRecord;
@@ -80,7 +81,7 @@ public class DistributionWithdrawRecordFragment extends NestedScrollingFragment 
         SLog.info("rvList[%s]", rvList);
         rvList.setNestedScrollingEnabled(NestedScrollingEnabled);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        adapter = new DistributionWithdrawRecordAdapter(_mActivity, R.layout.distribution_withdraw_record, distributionWithdrawRecordList);
+        adapter = new DistributionWithdrawRecordAdapter(_mActivity, distributionWithdrawRecordList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
 
@@ -149,8 +150,14 @@ public class DistributionWithdrawRecordFragment extends NestedScrollingFragment 
                     EasyJSONArray recordList = responseObj.getArray("datas.logs");
                     for (Object object : recordList) {
                         DistributionWithdrawRecord recordItem = (DistributionWithdrawRecord) EasyJSONBase.jsonDecode(DistributionWithdrawRecord.class, object.toString());
+                        recordItem.itemType = Constant.ITEM_TYPE_NORMAL;
                         distributionWithdrawRecordList.add(recordItem);
                     }
+
+                    if (page == 1 && !hasMore && distributionWithdrawRecordList.size() == 0) {
+                        distributionWithdrawRecordList.add(new DistributionWithdrawRecord(Constant.ITEM_TYPE_NO_DATA));
+                    }
+
                     adapter.loadMoreComplete();
                     adapter.setNewData(distributionWithdrawRecordList);
                     currPage++;

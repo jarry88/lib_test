@@ -25,6 +25,7 @@ import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.DistributionMember;
 import com.ftofs.twant.entity.DistributionOrderItem;
 import com.ftofs.twant.entity.DistributionPromotionGoods;
+import com.ftofs.twant.entity.DistributionWithdrawRecord;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -82,7 +83,7 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
         SLog.info("rvList[%s]", rvList);
         rvList.setNestedScrollingEnabled(NestedScrollingEnabled);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        adapter = new DistributionPromotionGoodsAdapter(_mActivity, R.layout.distribution_promotion_goods, distributionPromotionGoodsList);
+        adapter = new DistributionPromotionGoodsAdapter(_mActivity, distributionPromotionGoodsList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -194,8 +195,14 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
                     EasyJSONArray goodsList = responseObj.getArray("datas.goodsList");
                     for (Object object : goodsList) {
                         DistributionPromotionGoods distributionPromotionGoods = (DistributionPromotionGoods) EasyJSONBase.jsonDecode(DistributionPromotionGoods.class, object.toString());
+                        distributionPromotionGoods.itemType = Constant.ITEM_TYPE_NORMAL;
                         distributionPromotionGoodsList.add(distributionPromotionGoods);
                     }
+
+                    if (page == 1 && !hasMore && distributionPromotionGoodsList.size() == 0) {
+                        distributionPromotionGoodsList.add(new DistributionPromotionGoods(Constant.ITEM_TYPE_NO_DATA));
+                    }
+
                     adapter.loadMoreComplete();
                     adapter.setNewData(distributionPromotionGoodsList);
                     currPage++;

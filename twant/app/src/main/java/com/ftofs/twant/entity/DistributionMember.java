@@ -2,7 +2,9 @@ package com.ftofs.twant.entity;
 
 import androidx.navigation.PopUpToBuilder;
 
-public class DistributionMember {
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+public class DistributionMember implements MultiItemEntity {
     /*
     "memberId": 872,
 			"memberName": "u_087116027519",
@@ -21,9 +23,19 @@ public class DistributionMember {
     public DistributionMember() {
     }
 
+    public DistributionMember(int itemType) {
+        this.itemType = itemType;
+    }
+
+    public int itemType;
     public String nickName;
     public String avatar;
     public double commissionTotalAmount;
     public int deep;
     public String parentNickName;
+
+    @Override
+    public int getItemType() {
+        return itemType;
+    }
 }

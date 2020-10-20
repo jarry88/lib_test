@@ -1,6 +1,8 @@
 package com.ftofs.twant.entity;
 
-public class DistributionOrderItem {
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+public class DistributionOrderItem implements MultiItemEntity {
     /*
     marketingOrdersState	string	true	訂單狀態 0已取消 2進行中 3已完成 4退貨退款中 5退貨退款完成 6結算完成
     marketingOrdersId	number	true	推介訂單ID
@@ -18,7 +20,13 @@ public class DistributionOrderItem {
     deep	string	true	層級(一級/二級分佣)
      */
 
+    public int itemType;
+
     public DistributionOrderItem() {
+    }
+
+    public DistributionOrderItem(int itemType) {
+        this.itemType = itemType;
     }
 
     public long ordersSn;
@@ -33,4 +41,9 @@ public class DistributionOrderItem {
     public double commissionAmount2;
     public double predictCommission;
     public int deep;
+
+    @Override
+    public int getItemType() {
+        return itemType;
+    }
 }

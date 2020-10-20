@@ -1,6 +1,10 @@
 package com.ftofs.twant.entity;
 
-public class DistributionPromotionGoods {
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+public class DistributionPromotionGoods implements MultiItemEntity {
+    public int itemType;
+
     public boolean selected; // 是否選中
 
     /*
@@ -19,6 +23,13 @@ public class DistributionPromotionGoods {
                 "commissionAmount2": 0.00,
      */
 
+    public DistributionPromotionGoods() {
+    }
+
+    public DistributionPromotionGoods(int itemType) {
+        this.itemType = itemType;
+    }
+
     public int commonId;
     public String goodsName;
     public String imageName;
@@ -30,4 +41,9 @@ public class DistributionPromotionGoods {
     public double commissionLevel2;
     public double commissionAmount;
     public double commissionAmount2;
+
+    @Override
+    public int getItemType() {
+        return itemType;
+    }
 }
