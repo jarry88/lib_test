@@ -141,6 +141,11 @@ public enum RequestCode {
     REAL_NAME_INFO,
 
     /**
+     * 添加銀行卡
+     */
+    ADD_BANK_CARD,
+
+    /**
      * 選擇多張圖片
      */
     SELECT_MULTI_IMAGE,

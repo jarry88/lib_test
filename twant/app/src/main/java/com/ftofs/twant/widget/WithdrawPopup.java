@@ -2,7 +2,6 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,7 +10,6 @@ import androidx.annotation.NonNull;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -28,12 +26,15 @@ import okhttp3.Call;
 public class WithdrawPopup extends CenterPopupView implements View.OnClickListener {
     Context context;
     double withdrawAmount;
+    double cnyExchangeRate;
 
-    public WithdrawPopup(@NonNull Context context, double withdrawAmount) {
+    public WithdrawPopup(@NonNull Context context, double withdrawAmount, double cnyExchangeRate) {
         super(context);
 
         this.context = context;
         this.withdrawAmount = withdrawAmount;
+        this.cnyExchangeRate = cnyExchangeRate;
+        SLog.info("withdrawAmount[%s], cnyExchangeRate[%s]", withdrawAmount, cnyExchangeRate);
     }
 
     @Override
@@ -43,7 +44,12 @@ public class WithdrawPopup extends CenterPopupView implements View.OnClickListen
         findViewById(R.id.btn_withdraw).setOnClickListener(this);
 
         TextView tvWithdrawAmount = findViewById(R.id.tv_withdraw_amount);
+        TextView tvWithdrawAmountCny = findViewById(R.id.tv_withdraw_amount_cny);
         tvWithdrawAmount.setText(StringUtil.formatFloat(withdrawAmount));
+        if (cnyExchangeRate > 0) {
+            tvWithdrawAmountCny.setText(StringUtil.formatFloat(withdrawAmount / cnyExchangeRate));
+        }
+
 
         View btnWithdraw = findViewById(R.id.btn_withdraw);
         float radius = Util.dip2px(context, 8);

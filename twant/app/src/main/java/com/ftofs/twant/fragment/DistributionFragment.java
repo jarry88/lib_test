@@ -24,6 +24,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.util.LogUtil;
@@ -336,6 +337,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
                     tvUnpaidCommissionAmount.setText("可提現金額：MOP " + StringUtil.formatFloat(unpaidCommissionAmount));
                     marketingUrl = responseObj.optString("datas.marketingUrl");
                     cnyExchangeRate = responseObj.optDouble("datas.cnyExchangeRate");
+                    SLog.info("cnyExchangeRate[%s]", cnyExchangeRate);
 
                     // 實名認證狀態 1已認證 0未認證
                     authState = responseObj.optInt("datas.authState");
@@ -431,10 +433,20 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
                     .asCustom(new SharePopup(_mActivity, shareUrl, "", "", "", null))
                     .show();
         } else if (id == R.id.btn_withdraw) { // 提現
+            if (authState == 0) {
+                startForResult(AddRealNameInfoFragment.newInstance(AddRealNameInfoFragment.FROM_DISTRIBUTION, Constant.ACTION_ADD, null), RequestCode.REAL_NAME_INFO.ordinal());
+                return;
+            }
+
+            if (accountOpenState == 0) {
+                startForResult(BankCardFragment.newInstance(), RequestCode.ADD_BANK_CARD.ordinal());
+                return;
+            }
+
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new WithdrawPopup(_mActivity, unpaidCommissionAmount))
+                    .asCustom(new WithdrawPopup(_mActivity, unpaidCommissionAmount, cnyExchangeRate))
                     .show();
         }
 
@@ -497,6 +509,21 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == RequestCode.REAL_NAME_INFO.ordinal() || requestCode == RequestCode.ADD_BANK_CARD.ordinal()) {
+            SLog.info("data[%s]",data.toString());
+            loadData(); // 刷新數據
         }
     }
 }

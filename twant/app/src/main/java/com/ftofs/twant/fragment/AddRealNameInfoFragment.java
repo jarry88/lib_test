@@ -60,6 +60,11 @@ import okhttp3.Call;
  * @author zwm
  */
 public class AddRealNameInfoFragment extends BaseFragment implements View.OnClickListener {
+    int from; // 來自哪裏
+    public static final int FROM_CROSS_BORDER = 1;  // 來自跨境購
+    public static final int FROM_DISTRIBUTION = 2;  // 來自分銷系統
+
+
     /**
      * 拍照的圖片文件
      */
@@ -103,12 +108,13 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
      * @param realNameItem 編輯時才用到，添加時傳null即可
      * @return
      */
-    public static AddRealNameInfoFragment newInstance(int action, RealNameListItem realNameItem) {
+    public static AddRealNameInfoFragment newInstance(int from, int action, RealNameListItem realNameItem) {
         Bundle args = new Bundle();
 
         AddRealNameInfoFragment fragment = new AddRealNameInfoFragment();
         fragment.setArguments(args);
         fragment.setData(action, realNameItem);
+        fragment.from = from;
 
         return fragment;
     }
@@ -281,10 +287,18 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
             EasyJSONObject params = EasyJSONObject.generate();
 
             if (!StringUtil.isEmpty(frontImageUrl)) {
-                params.set("idCardFrontImage", frontImageUrl);
+                if (from == FROM_CROSS_BORDER) {
+                    params.set("idCardFrontImage", frontImageUrl);
+                } else {
+                    params.set("idCartFrontImage", frontImageUrl);
+                }
             }
             if (!StringUtil.isEmpty(backImageUrl)) {
-                params.set("idCardBackImage", backImageUrl);
+                if (from == FROM_CROSS_BORDER) {
+                    params.set("idCardBackImage", backImageUrl);
+                } else {
+                    params.set("idCartBackImage", backImageUrl);
+                }
             }
 
             String url;
@@ -297,45 +311,85 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
                     "idCardBackImage": "身份證背面照片(人像)"
                 }
                  */
-                url = Api.PATH_MEMBER_AUTH_ADD;
-                params.set("idCardNumber", idNum);
-                params.set("authConsigneeName", name);
+                if (from == FROM_CROSS_BORDER) {
+                    url = Api.PATH_MEMBER_AUTH_ADD;
+                    params.set("idCardNumber", idNum);
+                    params.set("authConsigneeName", name);
+                    SLog.info("url[%s], params[%s]", url, params);
+                    Api.postJsonUi(url, params.toString(), new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ToastUtil.showNetworkError(_mActivity, e);
+                        }
 
-                SLog.info("url[%s], params[%s]", url, params);
-                Api.postJsonUi(url, params.toString(), new UICallback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        ToastUtil.showNetworkError(_mActivity, e);
-                    }
+                        @Override
+                        public void onResponse(Call call, String responseStr) throws IOException {
+                            try {
+                                SLog.info("responseStr[%s]", responseStr);
 
-                    @Override
-                    public void onResponse(Call call, String responseStr) throws IOException {
-                        try {
-                            SLog.info("responseStr[%s]", responseStr);
-
-                            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                            if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                return;
-                            }
-                            if (responseObj.exists("datas.isAuth")) {
-                                int isAuth = responseObj.getInt("datas.isAuth");
-                                if (isAuth == 1) {
-                                    ToastUtil.success(_mActivity, "datas.message");
+                                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                                if (ToastUtil.checkError(_mActivity, responseObj)) {
                                     return;
                                 }
+                                if (responseObj.exists("datas.isAuth")) {
+                                    int isAuth = responseObj.getInt("datas.isAuth");
+                                    if (isAuth == 1) {
+                                        ToastUtil.success(_mActivity, "datas.message");
+                                        return;
+                                    }
+                                }
+                                ToastUtil.success(_mActivity, "保存成功");
+
+                                Bundle bundle = new Bundle();
+                                bundle.putBoolean("reloadData", true);
+                                setFragmentResult(RESULT_OK, bundle);
+
+                                hideSoftInputPop();
+                            } catch (Exception e) {
+                                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                             }
-                            ToastUtil.success(_mActivity, "保存成功");
-
-                            Bundle bundle = new Bundle();
-                            bundle.putBoolean("reloadData", true);
-                            setFragmentResult(RESULT_OK, bundle);
-
-                            hideSoftInputPop();
-                        } catch (Exception e) {
-                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                         }
-                    }
-                });
+                    });
+                } else {
+                    url = Api.PATH_JOIN_REAL_NAME;
+                    params.set("idCartNumber", idNum);
+                    params.set("authRealName", name);
+                    SLog.info("url[%s], params[%s]", url, params);
+                    Api.postUI(url, params, new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ToastUtil.showNetworkError(_mActivity, e);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, String responseStr) throws IOException {
+                            try {
+                                SLog.info("responseStr[%s]", responseStr);
+
+                                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                    return;
+                                }
+                                if (responseObj.exists("datas.isAuth")) {
+                                    int isAuth = responseObj.getInt("datas.isAuth");
+                                    if (isAuth == 1) {
+                                        ToastUtil.success(_mActivity, "datas.message");
+                                        return;
+                                    }
+                                }
+                                ToastUtil.success(_mActivity, "保存成功");
+
+                                Bundle bundle = new Bundle();
+                                bundle.putBoolean("reloadData", true);
+                                setFragmentResult(RESULT_OK, bundle);
+
+                                hideSoftInputPop();
+                            } catch (Exception e) {
+                                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                            }
+                        }
+                    });
+                }
             } else { // 編輯操作
                 /*
                 {

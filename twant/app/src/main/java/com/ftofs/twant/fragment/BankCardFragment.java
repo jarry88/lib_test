@@ -121,6 +121,12 @@ public class BankCardFragment extends BaseFragment implements View.OnClickListen
                     }
 
                     ToastUtil.success(_mActivity, "保存成功");
+
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("success", true);
+                    setFragmentResult(RESULT_OK, bundle);
+
+                    hideSoftInputPop();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }

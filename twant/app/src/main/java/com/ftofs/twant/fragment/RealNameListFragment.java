@@ -82,7 +82,7 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
                 RealNameListItem item = realNameItemList.get(position);
 
                 if (id == R.id.btn_edit_real_name_info) {
-                    startForResult(AddRealNameInfoFragment.newInstance(Constant.ACTION_EDIT, item), RequestCode.REAL_NAME_INFO.ordinal());
+                    startForResult(AddRealNameInfoFragment.newInstance(AddRealNameInfoFragment.FROM_CROSS_BORDER, Constant.ACTION_EDIT, item), RequestCode.REAL_NAME_INFO.ordinal());
                 } else if (id == R.id.btn_delete_real_name_info) {
                     new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
@@ -110,7 +110,7 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
         emptyView.findViewById(R.id.btn_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startForResult(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.REAL_NAME_INFO.ordinal());
+                startForResult(AddRealNameInfoFragment.newInstance(AddRealNameInfoFragment.FROM_CROSS_BORDER, Constant.ACTION_ADD, null), RequestCode.REAL_NAME_INFO.ordinal());
             }
         });
 
@@ -216,7 +216,7 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_add_real_name_info) {
-            startForResult(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.REAL_NAME_INFO.ordinal());
+            startForResult(AddRealNameInfoFragment.newInstance(AddRealNameInfoFragment.FROM_CROSS_BORDER, Constant.ACTION_ADD, null), RequestCode.REAL_NAME_INFO.ordinal());
         }
     }
 
