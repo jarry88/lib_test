@@ -861,7 +861,6 @@
                             android:id="@+id/rl_mop_price_container"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:background="@drawable/icon_price_tag"
                             android:visibility="visible">
                             <TextView
@@ -881,11 +880,12 @@
                             android:id="@+id/ll_cny_price_container"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toEndOf="@id/rl_mop_price_container"
-                            android:layout_marginStart="8dp"
-                            android:layout_centerVertical="true"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_below="@id/rl_mop_price_container"
                             android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

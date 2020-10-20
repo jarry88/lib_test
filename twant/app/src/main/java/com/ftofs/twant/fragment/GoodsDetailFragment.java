@@ -2846,7 +2846,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             rlPriceTag.setVisibility(VISIBLE);
             llCnyPriceContainer.setVisibility(GONE);
         } else if (promotionType == Constant.PROMOTION_TYPE_NONE || promotionCountDownTime == 0) {
-            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
+            tvGoodsPrice.setText(StringUtil.formatMopPrice(goodsInfo.price, 1));
             rlPriceTag.setVisibility(VISIBLE);
             showCnyPrice(goodsInfo.price);
         } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
