@@ -856,20 +856,56 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
-                        android:background="@drawable/icon_price_tag"
                         android:visibility="gone">
-                        <TextView
-                            android:id="@+id/tv_goods_price_left"
+                        <RelativeLayout
+                            android:id="@+id/rl_mop_price_container"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="7dp"
-                            android:layout_marginEnd="5dp"
                             android:layout_centerVertical="true"
-                            android:textSize="17sp"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold"
-                            />
+                            android:background="@drawable/icon_price_tag"
+                            android:visibility="visible">
+                            <TextView
+                                android:id="@+id/tv_goods_price_left"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="7dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_centerVertical="true"
+                                android:textSize="17sp"
+                                android:textColor="@android:color/white"
+                                android:text=""
+                                android:textStyle="bold"
+                                />
+                        </RelativeLayout>
+                        <LinearLayout
+                            android:id="@+id/ll_cny_price_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@id/rl_mop_price_container"
+                            android:layout_marginStart="8dp"
+                            android:layout_centerVertical="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="約為CNY "
+                                android:textColor="#717171"
+                                android:textSize="12sp">
+                            </TextView>
+                            <TextView
+                                android:id="@+id/tv_cny_price"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#717171"
+                                android:textSize="14sp"
+                                android:textStyle="bold">
+                            </TextView>
+                        </LinearLayout>
+
                     </RelativeLayout>
+
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_extra_info_container"

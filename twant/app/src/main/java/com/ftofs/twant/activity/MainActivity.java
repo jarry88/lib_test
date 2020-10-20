@@ -527,7 +527,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                 } else if (position == 10) { // 測試2
                                     // EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WEIXIN_LOGIN, null);
 
-                                    Util.startFragment(BankCardFragment.newInstance());
+                                    // Util.startFragment(BankCardFragment.newInstance());
                                     /*
                                     new XPopup.Builder(MainActivity.this)
                                             // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -536,6 +536,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                             .show();
 
                                      */
+                                    String mobile = User.getUserInfo(SPField.FIELD_MOBILE, "");
+                                    SLog.info("mobile[%s]", mobile);
                                 }else if (position == 11) { // 開發寫死的數值通道開關
                                     Config.USE_DEVELOPER_TEST_DATA = !Config.USE_DEVELOPER_TEST_DATA;
                                     ToastUtil.success(getApplicationContext(),Config.USE_DEVELOPER_TEST_DATA?"使用寫死的數據":"使用服務器數據");
