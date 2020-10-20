@@ -36,7 +36,7 @@ public class DistributionPromotionGoodsAdapter extends BaseMultiItemQuickAdapter
                     item.selected ? R.drawable.ic_baseline_check_box_24 : R.drawable.ic_baseline_check_box_outline_blank_24);
 
             helper.setText(R.id.tv_goods_name, item.goodsName)
-                    .setText(R.id.tv_goods_price, "¥" + StringUtil.formatFloat(item.batchPrice2));
+                    .setText(R.id.tv_goods_price, "MOP " + StringUtil.formatFloat(item.batchPrice2));
 
             ImageView goodsImage = helper.getView(R.id.img_goods);
             Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageName, "?x-oss-process=image/resize,w_160")).centerCrop().into(goodsImage);
@@ -45,8 +45,8 @@ public class DistributionPromotionGoodsAdapter extends BaseMultiItemQuickAdapter
                 helper.setText(R.id.tv_first_level, "一級：" + StringUtil.formatFloat(item.commissionLevel1) + "%")
                         .setText(R.id.tv_second_level, "二級：" + StringUtil.formatFloat(item.commissionLevel2) + "%");
             } else if (item.commissionType == Constant.COMMISSION_TYPE_FIXED) {
-                helper.setText(R.id.tv_first_level, "一級：" + StringUtil.formatFloat(item.commissionAmount))
-                        .setText(R.id.tv_second_level, "二級：" + StringUtil.formatFloat(item.commissionAmount2));
+                helper.setText(R.id.tv_first_level, "一級：$" + StringUtil.formatFloat(item.commissionAmount))
+                        .setText(R.id.tv_second_level, "二級：$" + StringUtil.formatFloat(item.commissionAmount2));
             }
         }
     }
