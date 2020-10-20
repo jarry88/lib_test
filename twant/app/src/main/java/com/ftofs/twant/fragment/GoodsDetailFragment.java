@@ -1087,13 +1087,18 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 goodsImageUrl = "";
             }
 
+            double cnyPrice = 0;
+            if (cnyExchangeRate > 0) {
+                cnyPrice = goodsPrice / cnyExchangeRate;
+            }
+
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
                             jingle, goodsImageUrl, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
                             "commonId", commonId, "goodsName", goodsName,
-                            "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice,"goodsModel",goodsModel)))
+                            "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice, "cnyPrice", cnyPrice, "goodsModel", goodsModel)))
                     .show();
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
