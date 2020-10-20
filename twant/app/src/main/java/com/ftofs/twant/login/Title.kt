@@ -40,6 +40,11 @@ class Title @JvmOverloads constructor(
         typedArray.getBoolean(R.styleable.Title_login_info, false).takeIf { it }?.let {
             rootView.findViewById<View>(R.id.tv_info)?.visibility=View.VISIBLE
         }
+        typedArray.getType(R.styleable.Title_left_type).let {
+            if (it == 2) {
+                setLeftImageResource(R.drawable.icon_back)
+            }
+        }
 //        typedArray.getBoolean(R.attr.login_info,false).let {
 //            if(it) rootView.findViewById<TextView>(R.id.tv_info)?.visibility= VISIBLE
 //        }

@@ -124,11 +124,18 @@ interface DemoApiService {
     //【GOEFT】房產信息模塊 結束
 
     //【券倉】券倉模塊
+    @Headers("clientType: android")
     @GET("coupon/list")
     suspend fun getCouponList(@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>): TwantResponse<CouponInfo>
+    @Headers("clientType: android")
     @GET("tc/coupon/{id}")
     suspend fun getCouponDetail(@Path ("id")id: Int): TwantResponse<CouponDetailVo>
-//【GOEFT】房產模塊結束
+    //
+    @POST("tc/buy/step1")
+    suspend fun getTcBuyStep1( @Header("Content-Type")contentType:String,@QueryMap queryParams:@JvmSuppressWildcards Map<String, Any?>): TwantResponse<BuyStep1Vo>
+    @POST("tc/buy/step2")
+    suspend fun getTcBuyStep2( @Header("Content-Type")contentType:String,@QueryMap queryParams:@JvmSuppressWildcards Map<String, Any?>): TwantResponse<BuyStep1Vo>
+//【GOEFT】券倉模塊結束
 
 
 

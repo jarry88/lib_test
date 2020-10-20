@@ -20,6 +20,18 @@ public class StoreMapInfo {
         this.busInfo = busInfo;
     }
 
+    public StoreMapInfo(double storeLongitude, double storeLatitude,
+                        String storeName, String storeAddress, String storePhone) {
+        this.storeLongitude = storeLongitude;
+        this.storeLatitude = storeLatitude;
+        this.storeDistance = 0;
+        this.myLongitude = 0;
+        this.myLatitude = 0;
+        this.storeName = storeName;
+        this.storeAddress = storeAddress;
+        this.storePhone = storePhone;
+    }
+
 
     public double storeLongitude;
     public double storeLatitude;

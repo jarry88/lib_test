@@ -21,6 +21,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.ftofs.lib_net.model.CouponItemVo
 import com.ftofs.lib_net.model.Goods
 import com.ftofs.lib_net.model.Store
 import com.ftofs.twant.R
@@ -30,6 +31,7 @@ import com.ftofs.twant.login.Title
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.Util
+import com.ftofs.twant.view.CouponListItemView
 import com.ftofs.twant.view.StoreInfoView
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
@@ -93,6 +95,10 @@ fun TextView.setPretext(str: String) {
 }
 @BindingAdapter("store_vo")
 fun StoreInfoView.bindVo(vo: Store?) {
+    vo?.let { this.updateVo(it) }
+}
+@BindingAdapter("coupon_item_vo")
+fun CouponListItemView.bindVo(vo: CouponItemVo?) {
     vo?.let { this.updateVo(it) }
 }
 @BindingAdapter(value = ["price","tv_red","first_small"], requireAll = false)

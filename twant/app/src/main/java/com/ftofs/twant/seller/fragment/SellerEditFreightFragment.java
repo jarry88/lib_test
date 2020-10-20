@@ -11,21 +11,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.ftofs.lib_common_ui.entity.ListPopupItem;
+import com.ftofs.lib_common_ui.popup.ListPopup;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.gzp.lib_common.constant.PopupType;
-import com.ftofs.lib_common_ui.entity.ListPopupItem;
-import com.gzp.lib_common.base.BaseFragment;
-import com.gzp.lib_common.base.callback.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.lib_common_ui.popup.ListPopup;
 import com.ftofs.twant.widget.ScaledButton;
+import com.gzp.lib_common.base.BaseFragment;
+import com.gzp.lib_common.base.callback.OnSelectedListener;
+import com.gzp.lib_common.constant.PopupType;
+import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 

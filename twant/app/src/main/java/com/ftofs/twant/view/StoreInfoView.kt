@@ -1,32 +1,22 @@
 package com.ftofs.twant.view
 
 import android.content.Context
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.ftofs.lib_net.model.CouponDetailVo
 import com.ftofs.lib_net.model.Store
 import com.ftofs.twant.R
-import com.ftofs.twant.databinding.CouponInfoWighetBinding
-import com.ftofs.twant.databinding.SmartListViewBinding
 import com.ftofs.twant.databinding.StoreInfoWighetBinding
-import com.ftofs.twant.dsl.*
-import com.ftofs.twant.dsl.customer.factoryAdapter
+import com.ftofs.twant.entity.StoreMapInfo
 import com.ftofs.twant.util.Util
+import com.ftofs.twant.widget.AmapPopup
+import com.lxj.xpopup.XPopup
 
 class StoreInfoView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -35,26 +25,26 @@ class StoreInfoView @JvmOverloads constructor(
     var hasMore =true
     var fragment:Fragment?=null
     val inflater =context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    val mBinding =DataBindingUtil.inflate<StoreInfoWighetBinding>(inflater,R.layout.store_info_wighet,this,true)
+    val mBinding =DataBindingUtil.inflate<StoreInfoWighetBinding>(inflater, R.layout.store_info_wighet, this, true)
     init {
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SmartList)
         mBinding.btnContact.setOnClickListener {
             mBinding.vo?.contact?.takeIf { it.isNotEmpty() }?.let {
-                Util.dialPhone(Util.findActivity(context),it)
+                Util.dialPhone(Util.findActivity(context), it)
 
             }
         }
-//        typedArray.getString(R.styleable.Title_text_title)?.let {
-//            text=it
-//        }
-//        //不設置的時候是顯示的
-//        typedArray.getBoolean(R.styleable.Title_login_info, false).takeIf { it }?.let {
-//            rootView.findViewById<View>(R.id.tv_info)?.visibility= View.VISIBLE
-//        }
-//        typedArray.getBoolean(R.attr.login_info,false).let {
-//            if(it) rootView.findViewById<TextView>(R.id.tv_info)?.visibility= VISIBLE
-//        }
+        mBinding.btnPosition.setOnClickListener {
+            mBinding.vo?.let {
+                XPopup.Builder(context) // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(AmapPopup(Util.findActivity(context), StoreMapInfo(
+                                it.lnt?:0.0,it.lat?:0.0,it.name,it.address,it.contact
+                        )))
+                        .show()
+            }
+        }
         typedArray.recycle()
 
     }
@@ -75,9 +65,9 @@ class StoreInfoView @JvmOverloads constructor(
         }
         return null
     }
-    fun observable(vo:LiveData<CouponDetailVo?>){
+    fun observable(vo: LiveData<CouponDetailVo?>){
         getLifecycleOwner()?.let {
-            vo.observe(it){t->
+            vo.observe(it){ t->
                 t?.let { mBinding.vo=t.store
 
                 }

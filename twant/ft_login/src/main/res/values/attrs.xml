@@ -3,10 +3,26 @@
     <declare-styleable name="Title">
         <attr format="string" name="title_text" />
         <attr name="login_info" format="boolean"/>
+        <!--定义类型-->
+        <attr name="left_type" format="enum">
+            <!--圆形-->
+            <enum name="close" value="1" />
+            <!--矩形-->
+            <enum name="back" value="2" />
+        </attr>
     </declare-styleable>
     <declare-styleable name="SmartList">
         <attr name="item_resource" format="reference"/>
         <attr name="show_empty" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="CouponListItemView">
+        <!--定义类型-->
+        <attr name="coupon_type" format="enum">
+            <!--圆形-->
+            <enum name="order" value="1" />
+            <!--矩形-->
+            <enum name="detail" value="2" />
+        </attr>
     </declare-styleable>
     <declare-styleable name="CircleView">
         <!--定义资源-->

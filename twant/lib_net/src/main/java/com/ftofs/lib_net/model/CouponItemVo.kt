@@ -9,11 +9,19 @@ data class CouponItemVo(
     val originalPrice: Int?,
     val price: Int?,
     val sale: Int?,
-    val stock: Int?,
-    val subTitle: String?,
-    val title: String?,
+    val stock: Int?,//庫存
+    val subTitle: String?,//副標題
+    val title: String?,//標題
     val validityDay: Int?,
     val validityEndDate: String?,
     val validityStartDate: String?,
-    val validityType: Int?
-):Serializable
+    val validityType: Int?//有效期類型：0->相對時間，1->指定時間
+):Serializable{
+    fun getValidityString():String =validityType?.let {
+        when(it){
+            0 -> "$validityDay 天内有效"
+            1 -> validityStartDate+"至" +validityEndDate
+            else -> ""
+        }
+    }?:""
+}

@@ -42,6 +42,7 @@
                         android:paddingEnd="@dimen/length_15dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:layout_marginBottom="@dimen/dp_6">
                         <ImageView
                             android:layout_width="12dp"

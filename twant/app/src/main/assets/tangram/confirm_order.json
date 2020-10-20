@@ -1,0 +1,24 @@
+{
+  "couponBaseList": [
+    {
+      "id": 42,
+      "title": "食堂四人餐",
+      "subTitle": "清蒸脆肉是用特殊方法配養出來的才肉。肉質脆而爽口，因產於南屏而出名。",
+      "cover": "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/coupon/f7937866-f929-4c94-af0e-ce26b800b995.jpg",
+      "sale": 37,
+      "price": 366.00,
+      "originalPrice": 420.00,
+      "consumptionType": 1,
+      "tips": "免預約 | 不可退款",
+      "needAppointment": false,
+      "supportRefund": false,
+      "limitStock": true,
+      "stock": 43,
+      "validityType": 1,
+      "validityDay": 0,
+      "validityStartDate": "2020-10-14",
+      "validityEndDate": "2020-10-14"
+    }
+  ],
+  "totalPrice": 366.00
+}

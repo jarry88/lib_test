@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -99,9 +100,11 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
 
         TextView tvStoreAddress = findViewById(R.id.tv_store_address);
         TextView tvBusInfo = findViewById(R.id.tv_bus_info);
+        LinearLayout llBusInfo = findViewById(R.id.ll_container_bus);
         tvStoreAddress.setText(storeMapInfo.storeAddress);
         if (StringUtil.isEmpty(storeMapInfo.busInfo)) {
             tvBusInfo.setVisibility(GONE);
+            llBusInfo.setVisibility(GONE);
         } else {
             tvBusInfo.setText(storeMapInfo.busInfo);
         }
