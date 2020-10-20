@@ -22,6 +22,7 @@ import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.widget.SharePopup;
@@ -329,7 +330,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 } else if (marketingState == Constant.MARKETING_STATE_APPLY_IN_PROGRESS) {
                     ToastUtil.error(_mActivity, "審核中，請耐心等候");
                 } else {
-                    Util.startFragment(DistributionEnrollmentFragment.newInstance(marketingArticleId, marketingArticleTitle, marketingArticleContent));
+                    startForResult(DistributionEnrollmentFragment.newInstance(marketingArticleId, marketingArticleTitle, marketingArticleContent), RequestCode.DISTRIBUTION_ENROLLMENT.ordinal());
                 }
                 break;
             case R.id.btn_distribution_share:
@@ -580,6 +581,27 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+    }
+
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == RequestCode.DISTRIBUTION_ENROLLMENT.ordinal()) {
+            SLog.info("data[%s]", data.toString());
+
+            boolean success = data.getBoolean("success");
+            SLog.info("success[%s]", success);
+            if (success) {
+                loadData(); // 刷新數據
+            }
+        }
     }
 
     static public class ClickProxy {
