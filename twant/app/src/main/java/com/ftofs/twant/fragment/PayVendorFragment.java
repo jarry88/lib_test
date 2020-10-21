@@ -433,21 +433,6 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 return;
             }
 
-            if (selectedPayButtonId == PayCardItem.PAY_TYPE_WEIXING) {
-                // 檢測微信是否已經安裝
-                if (!TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) {
-                    ToastUtil.error(_mActivity, getString(R.string.weixin_not_installed_hint));
-                    return;
-                }
-            }
-
-            // 防止支付快速點擊處理
-            long now = System.currentTimeMillis();
-            if (now - lastClickTime < CLICKABLE_INTERVAL) {
-                return;
-            }
-            lastClickTime = now;
-
             switch (selectedPayButtonId) {
                 case PayCardItem.PAY_TYPE_MPAY:
                     doMPay();
@@ -474,6 +459,21 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 default:
                     break;
             }
+            if (selectedPayButtonId == PayCardItem.PAY_TYPE_WEIXING) {
+                // 檢測微信是否已經安裝
+                if (!TwantApplication.Companion.get().getWxApi().isWXAppInstalled()) {
+                    ToastUtil.error(_mActivity, getString(R.string.weixin_not_installed_hint));
+                    return;
+                }
+            }
+
+            // 防止支付快速點擊處理
+            long now = System.currentTimeMillis();
+            if (now - lastClickTime < CLICKABLE_INTERVAL) {
+                return;
+            }
+            lastClickTime = now;
+
         }
     }
 
@@ -534,7 +534,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     EasyJSONObject datas = (EasyJSONObject) responseObj.get("datas");
                     MPaySdk.mPayNew(_mActivity, datas.toString(), (MainActivity) _mActivity);
 
-                    markPayId(SPField.FIELD_MPAY_PAY_ID);
+                    Util.markPayId(SPField.FIELD_MPAY_PAY_ID,payId);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -687,7 +687,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
                     TwantApplication.Companion.get().getWxApi().sendReq(req);
 
-                    markPayId(SPField.FIELD_WX_PAY_ID);
+                    Util.markPayId(SPField.FIELD_WX_PAY_ID,payId);
 
                     hideSoftInputPop();
                 } catch (Exception e) {
@@ -743,7 +743,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
                     String orderInfo = responseObj.getSafeString("datas.payData");
                     ((MainActivity) _mActivity).startAliPay(orderInfo);
-                    markPayId(SPField.FIELD_ALI_PAY_ID);
+                    Util.markPayId(SPField.FIELD_ALI_PAY_ID,payId);
                     hideSoftInputPop();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -798,27 +798,13 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
                     String orderInfo = responseObj.getSafeString("datas.payData");
                     ((MainActivity) _mActivity).startAliPay(orderInfo);
-                    markPayId(SPField.FIELD_ALI_PAY_HK_ID);
+                    Util.markPayId(SPField.FIELD_ALI_PAY_HK_ID,payId);
                     hideSoftInputPop();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
-    }
-
-    /**
-     * 記錄payId
-     *
-     * @param field
-     */
-    private void markPayId(String field) {
-        int userId = User.getUserId();
-        if (userId > 0) {
-            String key = String.format(field, userId);
-            SLog.info("key[%s]", key);
-            Hawk.put(key, EasyJSONObject.generate("payId", payId, "timestampMillis", System.currentTimeMillis()).toString());
-        }
     }
 
     @Override

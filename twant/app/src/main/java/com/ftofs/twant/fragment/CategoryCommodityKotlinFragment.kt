@@ -31,7 +31,13 @@ class CategoryCommodityKotlinFragment: BaseTwantFragmentMVVM<PageCategoryCommodi
     private val loadPopup by lazy {
         Util.createLoadingPopup(context)
     }
-
+    var parent:CategoryFragment?=null
+    companion object{
+        @JvmStatic
+        fun newInstance(fragment:CategoryFragment)=CategoryCommodityKotlinFragment().apply {
+            parent=fragment
+        }
+    }
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return  R.layout.page_category_commodity
     }
@@ -127,6 +133,10 @@ class CategoryCommodityKotlinFragment: BaseTwantFragmentMVVM<PageCategoryCommodi
         viewModel.getCategoryData()
     }
 
+    override fun onBackPressedSupport(): Boolean {
+        parent?.onBackPressedSupport()
+        return true
+    }
     override fun initViewObservable() {
         viewModel.categoryNavVo.observe(this, Observer {
 //            KLog.e(it.size)

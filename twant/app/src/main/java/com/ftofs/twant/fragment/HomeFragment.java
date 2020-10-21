@@ -23,7 +23,9 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
+import com.ftofs.twant.coupon_store.CouponActivityListFragment;
 import com.ftofs.twant.coupon_store.CouponConfirmOrderFragment;
+import com.ftofs.twant.coupon_store.CouponOrderListFragment;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
@@ -122,7 +124,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         view.findViewById(R.id.btn_test).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Util.startFragment(new BlackTestFragment());
+                Util.startFragment(CouponOrderListFragment.newInstance());
                 return true;
             }
         });
@@ -414,7 +416,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 
 //            UiUtilsKt.createLoadingPopup(requireContext()).show();
             SLog.info(TwantApplication.Companion.get().getUmengDeviceToken());
-            Util.startFragment(new Go853HouseListFragment());
+            Util.startFragment(new CouponActivityListFragment());
 //            Util.startFragment(CouponConfirmOrderFragment.newInstance(0));
 //            loginService.start(_mActivity);
         }

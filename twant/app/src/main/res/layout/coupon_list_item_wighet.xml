@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="vo"
+            type="com.ftofs.lib_net.model.CouponItemVo" />
+    </data>
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        imgUrl="@{vo.cover}"
+        android:background="@color/tw_light_grey_EDED"
+        android:layout_marginEnd="5dp"
+        />
+    <!--            有效期-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vo.title}"
+                android:textSize="14sp"
+                android:maxLines="2"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:textColor="@color/tw_black"/>
+            <TextView
+                android:id="@+id/tv_validity"
+                android:visibility="gone"
+                android:layout_marginTop="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vo.validityString}"
+                android:textSize="12sp"
+                android:layout_marginBottom="2dp"
+                android:textColor="@color/tw_black"/>
+            <TextView
+                android:id="@+id/tv_sub_title"
+                android:visibility="gone"
+                android:layout_marginTop="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vo.subTitle}"
+                android:textSize="12sp"
+                android:layout_marginBottom="2dp"
+                android:textColor="@color/tw_black"/>
+
+            <TextView
+                android:id="@+id/tv_bottom_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                price="@{vo.price}"
+                app:tv_red="@{true}"
+                />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_end_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginStart="@dimen/dp_15"
+            android:textColor="@color/black"
+            price="@{vo.price}"
+            app:tv_red="@{false}"
+            />
+    </LinearLayout>
+</LinearLayout>
+</layout>

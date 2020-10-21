@@ -14,6 +14,7 @@ import com.ftofs.twant.fragment.ViewPagerFragment
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
+import com.gzp.lib_common.utils.SLog
 
 private const val COUPON_ID ="couponId"
 class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmentBinding,CouponStoreViewModel>() {
@@ -32,12 +33,16 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
         b.imageItem.imageUrl=d
         b.imageItem.setOnClickListener{
             viewModel.currCouponDetail.value?.picList?.let {list ->
+                Util.showLoginFragment(requireContext())
                 Util.startFragment(ViewPagerFragment.newInstance(list,false).also { it.start=list.indexOf(d) })}
 
         }
     } }
-    val id=arguments?.getInt(COUPON_ID)
-
+    val id by lazy { arguments?.getInt(COUPON_ID) }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        id?.apply { SLog.info("receive couponId $this") }
+    }
     override fun initData() {
         binding.title.apply {
             setLeftImageResource(R.drawable.icon_back)
@@ -50,19 +55,18 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
         }?:viewModel.getCouponDetail(42)
         binding.rvImage.adapter=imageAdapter
         binding.couponInformation.observable(viewModel.currCouponDetail)
-        binding.btnBuy.setOnClickListener { CouponConfirmOrderFragment.newInstance(viewModel.currCouponDetail.value?.id) }
+        binding.btnBuy.setOnClickListener {
+            Util.startFragment(CouponConfirmOrderFragment.newInstance(viewModel.currCouponDetail.value?.id)) }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(couponId: Int?):CouponConfirmOrderFragment {
-            val args = Bundle()
-            couponId?.let {
-                args.putInt(COUPON_ID,it)
+        fun newInstance(couponId: Int?)=CouponStoreDetailFragment().apply {
+            arguments = Bundle().apply {
+                couponId?.let {
+                    putInt(COUPON_ID,it).apply { SLog.info("couponId $it") }
+                }
             }
-            val  fragment =CouponConfirmOrderFragment()
-            fragment.arguments=args
-            return fragment
         }
     }
 

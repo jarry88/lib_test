@@ -3,9 +3,9 @@ package com.ftofs.lib_net.model
 import java.io.Serializable
 
 data class CouponDetailVo(
-    val appointmentNum: Int,
-    val appointmentNumType: Int,
-    val consumptionType: Int,
+    val appointmentNum: Int,//appointmentNum提前（多少）單位預約
+    val appointmentNumType: Int,//提前多少（單位）預約，0->小時，1->天
+    val consumptionType: Int,//消費類型：0->抵用券，1->套餐券
     val cover: String,
     val createTime: String,
     val des: String,
@@ -73,8 +73,8 @@ data class Store(
     val contact: String,
     val id: Int,
     val industry: String,
-    val lat: Double,
-    val lnt: Double,
+    val lat: Double?,
+    val lnt: Double?,
     val name: String,
     val platformName: String,
     val platformStoreId: Int

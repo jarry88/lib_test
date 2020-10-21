@@ -26,6 +26,7 @@ import com.ftofs.twant.adapter.GoodsGalleryAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.coupon_store.SellerCouponVerificationFragment;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
@@ -224,6 +225,9 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     void gotoSellerOrderSend() {
         Util.startFragment(SellerOrderListFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED));
     }
+    void gotoSellerVerification() {
+        Util.startFragment(SellerCouponVerificationFragment.newInstance());
+    }
 
 
     TextView tvOnSaleCount;
@@ -335,6 +339,12 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             @Override
             public void onClick(View v) {
                 gotoSellerOrderList();
+            }
+        });
+        view.findViewById(R.id.btn_goto_seller_verification).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoSellerVerification();
             }
         });
         view.findViewById(R.id.btn_goto_seller_refund).setOnClickListener(new View.OnClickListener() {

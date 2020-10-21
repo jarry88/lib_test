@@ -283,6 +283,7 @@ public class Util {
         }
     }
     public static void showLoginFragment(Context context) {
+        if(User.getUserId() > 0) return;
         if (!isFastClick()) {
             //過快點擊不響應
             return;
@@ -292,6 +293,20 @@ public class Util {
 //        Util.startFragment(LoginFragment.newInstance());
     }
 
+
+    /**
+     * 記錄payId
+     *
+     * @param field
+     */
+    public static void markPayId(String field,int payId) {
+        int userId = User.getUserId();
+        if (userId > 0) {
+            String key = String.format(field, userId);
+            SLog.info("key[%s]", key);
+            Hawk.put(key, EasyJSONObject.generate("payId", payId, "timestampMillis", System.currentTimeMillis()).toString());
+        }
+    }
     public static void showLoginFragmentWithoutContext(ISupportFragment fragment) {
         MainFragment.getInstance().goLogin(fragment);
 
