@@ -39,7 +39,7 @@ public class DistributionOrderAdapter extends BaseMultiItemQuickAdapter<Distribu
                     .setText(R.id.tv_goods_name, item.goodsName)
                     .setText(R.id.tv_create_time, item.createTime)
                     .setText(R.id.tv_pay_amount, "實付款：MOP " + StringUtil.formatFloat(item.goodsPayAmount))
-                    .setText(R.id.tv_expect_commission_amount, "預計佣金：" + StringUtil.formatFloat(item.predictCommission) + "元");
+                    .setText(R.id.tv_expect_commission_amount, "佣金：MOP " + StringUtil.formatFloat(item.predictCommission));
 
             ImageView goodsImage = helper.getView(R.id.goods_image);
             Glide.with(context).load(StringUtil.normalizeImageUrl(item.goodsImage, "?x-oss-process=image/resize,w_160")).centerCrop().into(goodsImage);
