@@ -283,7 +283,6 @@ public class Util {
         }
     }
     public static void showLoginFragment(Context context) {
-        if(User.getUserId() > 0) return;
         if (!isFastClick()) {
             //過快點擊不響應
             return;

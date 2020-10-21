@@ -1,107 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
     <data>
         <variable
             name="vo"
             type="com.ftofs.lib_net.model.CouponItemVo" />
     </data>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:background="@drawable/coupon_item_bg"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
         android:layout_marginStart="@dimen/toolbar_margin_left"
         android:layout_marginEnd="@dimen/toolbar_margin_right"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="3dp"
-            android:layout_gravity="center_vertical"
-            android:layout_width="@dimen/dp_78"
-            android:layout_height="@dimen/dp_78"
-            imgUrl="@{vo.cover}"/>
-        <RelativeLayout
-            android:layout_marginTop="@dimen/dp_18"
-            android:layout_marginBottom="@dimen/margin_8dp"
-            android:layout_width="0dp"
+        android:layout_height="@dimen/dp_144">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/coupon_bg_white">
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:orientation="horizontal">
+            <View
+                android:layout_width="@dimen/dp_26"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:background="@drawable/coupon_start_bg"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/coupon_middle_bg"/>
+            <View
+                android:layout_width="@dimen/dp_23"
+                android:layout_height="wrap_content"
+                android:background="@drawable/coupon_right_bg"/>
+            <View
+                android:layout_width="@dimen/dp_65"
+                android:layout_height="wrap_content"
+                android:background="@drawable/coupon_out_bg"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_144"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_width="@dimen/dp_78"
+                android:layout_height="@dimen/dp_78"
+                imgUrl="@{vo.cover}"/>
+            <RelativeLayout
+                android:layout_marginTop="@dimen/dp_18"
+                android:layout_marginBottom="@dimen/margin_8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginBottom="6dp">
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="6dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{vo.typeString}"
+                            visibleOrGone="@{!vo.typeString.empty}"
+                            android:textColor="@color/tw_white"
+                            android:background="@drawable/coupon_word_bg"
+                            android:paddingStart="2dp"
+                            android:paddingEnd="2dp"
+                            android:layout_marginEnd="@dimen/margin_4dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="@{vo.title}"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="6dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:ellipsize="end"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/tw_black"
+
+                            android:textSize="12sp"
+                            android:maxLines="2"
+                            android:text="@{vo.subTitle}"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="6dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:ellipsize="end"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/tw_grey_A8"
+                            android:textSize="11sp"
+                            android:maxLines="2"
+                            android:text="@{vo.validityString}"/>
+                    </LinearLayout>
+
+
                     <TextView
+                        android:id="@+id/tv_bottom_price"
+                        android:layout_gravity="start"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{vo.typeString}"
-                        visibleOrGone="@{!vo.typeString.empty}"
-                        android:textColor="@color/tw_white"
-                        android:background="@drawable/coupon_word_bg"
-                        android:paddingStart="2dp"
-                        android:paddingEnd="2dp"
-                        android:layout_marginEnd="@dimen/margin_4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:lines="1"
-                        android:ellipsize="end"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:text="@{vo.title}"/>
+                        android:textSize="15sp"
+                        price="@{vo.price}"
+                        app:tv_red="@{true}"
+                        />
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginBottom="6dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:ellipsize="end"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/tw_black"
-
-                        android:textSize="12sp"
-                        android:maxLines="2"
-                        android:text="@{vo.subTitle}"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginBottom="6dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:ellipsize="end"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/tw_grey_A8"
-                        android:textSize="11sp"
-                        android:maxLines="2"
-                        android:text="@{vo.validityString}"/>
-                </LinearLayout>
-
-
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="@dimen/dp_65"
+                android:layout_height="match_parent"
+                android:gravity="center">
                 <TextView
-                    android:id="@+id/tv_bottom_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    price="@{vo.price}"
-                    app:tv_red="@{true}"
-                    />
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_white"
+                    android:text="售罄"/>
             </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

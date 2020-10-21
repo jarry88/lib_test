@@ -124,7 +124,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
         view.findViewById(R.id.btn_test).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Util.startFragment(CouponOrderListFragment.newInstance());
+                Util.startFragment(new BlackTestFragment());
                 return true;
             }
         });
@@ -415,8 +415,8 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 //            final BasePopupView load=Util.createLoadingPopup(requireContext()).show();
 
 //            UiUtilsKt.createLoadingPopup(requireContext()).show();
-            SLog.info(TwantApplication.Companion.get().getUmengDeviceToken());
-            Util.startFragment(new CouponActivityListFragment());
+//            SLog.info(TwantApplication.Companion.get().getUmengDeviceToken());
+            Util.startFragment(new CouponOrderListFragment());
 //            Util.startFragment(CouponConfirmOrderFragment.newInstance(0));
 //            loginService.start(_mActivity);
         }

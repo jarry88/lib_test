@@ -37,7 +37,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
                             .addInterceptor() { chain ->
                                 chain.request().run {
                                     newBuilder()
-                                            .header("Authorization", User.getToken())
+                                            .header("Authorization", User.getToken()?:"")
                                             .header("clientType", "android")
                                             .method(method(), body())
                                             .build()

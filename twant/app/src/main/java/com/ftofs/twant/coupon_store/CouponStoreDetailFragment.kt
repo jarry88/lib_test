@@ -12,6 +12,7 @@ import com.ftofs.twant.dsl.imageUrl
 import com.ftofs.twant.dsl.margin_end
 import com.ftofs.twant.fragment.ViewPagerFragment
 import com.ftofs.twant.util.ToastUtil
+import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
@@ -54,9 +55,11 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
             viewModel.getCouponDetail(it)
         }?:viewModel.getCouponDetail(42)
         binding.rvImage.adapter=imageAdapter
-        binding.couponInformation.observable(viewModel.currCouponDetail)
         binding.btnBuy.setOnClickListener {
-            Util.startFragment(CouponConfirmOrderFragment.newInstance(viewModel.currCouponDetail.value?.id)) }
+            if (User.getUserId() > 0) {
+                Util.startFragment(CouponConfirmOrderFragment.newInstance(viewModel.currCouponDetail.value?.id))
+            } else Util.showLoginFragment(requireContext())}
+        binding.couponInformation.observable(viewModel.currCouponDetail)
     }
 
     companion object {

@@ -60,6 +60,7 @@ data class CouponDetailVo(
         else ->"停車位信息咨詢商戶"
     }
     fun getFreeWifiString():String= if(freeWifi) "WIFI免費" else "WIFI需收費"
+    fun getImgSize():String= picList?.let { it.size.toString() }?:"0"
 }
 
 data class Pkg(

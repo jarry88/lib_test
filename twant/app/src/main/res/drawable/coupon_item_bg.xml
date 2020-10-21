@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <bitmap android:src="@drawable/coupon_start_bg"/>
+            </item>
+            <item>
+            </item>
+        </layer-list>
+    </item>
+</level-list>
