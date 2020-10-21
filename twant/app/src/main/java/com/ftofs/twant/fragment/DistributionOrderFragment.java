@@ -18,6 +18,7 @@ import com.ftofs.twant.adapter.DistributionMemberAdapter;
 import com.ftofs.twant.adapter.DistributionOrderAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.DistributionMember;
 import com.ftofs.twant.entity.DistributionOrderItem;
 import com.ftofs.twant.util.LogUtil;
@@ -79,7 +80,7 @@ public class DistributionOrderFragment extends NestedScrollingFragment implement
         SLog.info("rvList[%s]", rvList);
         rvList.setNestedScrollingEnabled(NestedScrollingEnabled);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        adapter = new DistributionOrderAdapter(_mActivity, R.layout.distribution_order_item, distributionOrderList);
+        adapter = new DistributionOrderAdapter(_mActivity, distributionOrderList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
 
@@ -129,8 +130,14 @@ public class DistributionOrderFragment extends NestedScrollingFragment implement
                     EasyJSONArray ordersList = responseObj.getArray("datas.ordersList");
                     for (Object object : ordersList) {
                         DistributionOrderItem distributionOrderItem = (DistributionOrderItem) EasyJSONBase.jsonDecode(DistributionOrderItem.class, object.toString());
+                        distributionOrderItem.itemType = Constant.ITEM_TYPE_NORMAL;
                         distributionOrderList.add(distributionOrderItem);
                     }
+
+                    if (page == 1 && !hasMore && distributionOrderList.size() == 0) {
+                        distributionOrderList.add(new DistributionOrderItem(Constant.ITEM_TYPE_NO_DATA));
+                    }
+
                     adapter.loadMoreComplete();
                     adapter.setNewData(distributionOrderList);
                     currPage++;

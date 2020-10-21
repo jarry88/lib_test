@@ -39,9 +39,9 @@ public class User {
         String nickname = Hawk.get(SPField.FIELD_NICKNAME, "");
         int lastLoginTime = Hawk.get(SPField.FIELD_LAST_LOGIN_TIME, 0);
         String memberName = Hawk.get(SPField.FIELD_MEMBER_NAME, "");
-        String memberToken = Hawk.get(SPField.FIELD_MEMBER_NAME, "");
+        String memberToken = Hawk.get(SPField.FIELD_MEMBER_TOKEN, "");
 
-        SLog.info("userId[%d], token[%s], nickname[%s],memberToken[%s], lastLoginTime[%d]", userId, token, nickname, memberToken,lastLoginTime);
+        SLog.info("userId[%d], token[%s], nickname[%s], memberToken[%s], lastLoginTime[%d]", userId, token, nickname, memberToken, lastLoginTime);
 
         int now = Time.timestamp();
 

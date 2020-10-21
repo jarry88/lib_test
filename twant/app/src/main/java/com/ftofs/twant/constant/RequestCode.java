@@ -141,6 +141,16 @@ public enum RequestCode {
     REAL_NAME_INFO,
 
     /**
+     * 添加銀行卡
+     */
+    ADD_BANK_CARD,
+
+    /**
+     * 分銷招募
+     */
+    DISTRIBUTION_ENROLLMENT,
+
+    /**
      * 選擇多張圖片
      */
     SELECT_MULTI_IMAGE,

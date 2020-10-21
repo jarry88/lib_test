@@ -53,7 +53,7 @@ public class CrossBorderActivityGoodsAdapter extends BaseQuickAdapter<CrossBorde
                 .setText(R.id.tv_price_type, "拼團價：");
         } else if (promotionType == Constant.PROMOTION_TYPE_BARGAIN) {
             helper.setText(R.id.btn_action, "立即砍價")
-                    .setText(R.id.tv_price_type, "最低可砍至：");
+                    .setText(R.id.tv_price_type, "最低價：");
         }
     }
 }

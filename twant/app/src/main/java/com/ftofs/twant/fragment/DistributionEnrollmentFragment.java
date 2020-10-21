@@ -100,6 +100,11 @@ public class DistributionEnrollmentFragment extends BaseFragment implements View
                         }
 
                         ToastUtil.success(_mActivity, "申請成功");
+
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("success", true);
+                        setFragmentResult(RESULT_OK, bundle);
+
                         hideSoftInputPop();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

@@ -22,11 +22,11 @@ import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.CustomActionData;
-import com.ftofs.twant.entity.DistributionPromotionGoods;
 import com.ftofs.twant.interfaces.SimpleCallback;
-import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -110,6 +110,11 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     List<Integer> selectedCommonIdList;
 
     String marketingUrl;
+    double cnyExchangeRate;
+
+    int authState; // 實名認證狀態 1已認證 0未認證
+    int accountOpenState;  // 账户開通狀態 0未開通 1已開通
+    TextView tvAccountStatus;
 
     public static DistributionFragment newInstance() {
         DistributionFragment fragment = new DistributionFragment();
@@ -140,6 +145,8 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
         tvTotalCommissionAmount = view.findViewById(R.id.tv_total_comission_amount);
         tvUnpaidCommissionAmount = view.findViewById(R.id.tv_unpaid_commission_amount);
+
+        tvAccountStatus = view.findViewById(R.id.tv_account_status);
 
         btnShareMultiple = view.findViewById(R.id.btn_share_multiple);
         btnShareMultiple.setOnClickListener(this);
@@ -326,9 +333,22 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
                     totalCommissionAmount = responseObj.optDouble("datas.marketingMember.commissionTotalAmount");
                     unpaidCommissionAmount = responseObj.optDouble("datas.marketingMember.unpayCommission");
-                    tvTotalCommissionAmount.setText("¥ " + StringUtil.formatFloat(totalCommissionAmount));
-                    tvUnpaidCommissionAmount.setText("可提現金額：" + StringUtil.formatFloat(unpaidCommissionAmount) + "元");
+                    tvTotalCommissionAmount.setText("MOP " + StringUtil.formatFloat(totalCommissionAmount));
+                    tvUnpaidCommissionAmount.setText("可提現金額：MOP " + StringUtil.formatFloat(unpaidCommissionAmount));
                     marketingUrl = responseObj.optString("datas.marketingUrl");
+                    cnyExchangeRate = responseObj.optDouble("datas.cnyExchangeRate");
+                    SLog.info("cnyExchangeRate[%s]", cnyExchangeRate);
+
+                    // 實名認證狀態 1已認證 0未認證
+                    authState = responseObj.optInt("datas.authState");
+                    // 账户開通狀態 0未開通 1已開通
+                    accountOpenState = responseObj.optInt("datas.marketingMember.accountOpenState");
+
+                    if (authState == 0 || accountOpenState == 0) {
+                        tvAccountStatus.setText("帳戶狀態：未開通");
+                    } else {
+                        tvAccountStatus.setText("帳戶狀態：正常");
+                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -392,7 +412,10 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
             hideSoftInputPop();
         } else if (id == R.id.btn_show_qr_code) { // 二維碼
             SLog.info("二維碼");
-            Util.showInvitationSharePopup(_mActivity, marketingUrl);
+            EasyJSONObject posterData = EasyJSONObject.generate(
+                    "marketingUrl", marketingUrl
+            );
+            Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_INVITATION, posterData));
         } else if (id == R.id.btn_share_multiple) {
             if (selectedCommonIdList.size() < 2) {
                 return;
@@ -410,10 +433,20 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
                     .asCustom(new SharePopup(_mActivity, shareUrl, "", "", "", null))
                     .show();
         } else if (id == R.id.btn_withdraw) { // 提現
+            if (authState == 0) {
+                startForResult(AddRealNameInfoFragment.newInstance(AddRealNameInfoFragment.FROM_DISTRIBUTION, Constant.ACTION_ADD, null), RequestCode.REAL_NAME_INFO.ordinal());
+                return;
+            }
+
+            if (accountOpenState == 0) {
+                startForResult(BankCardFragment.newInstance(), RequestCode.ADD_BANK_CARD.ordinal());
+                return;
+            }
+
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new WithdrawPopup(_mActivity, unpaidCommissionAmount))
+                    .asCustom(new WithdrawPopup(_mActivity, unpaidCommissionAmount, cnyExchangeRate))
                     .show();
         }
 
@@ -476,6 +509,21 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == RequestCode.REAL_NAME_INFO.ordinal() || requestCode == RequestCode.ADD_BANK_CARD.ordinal()) {
+            SLog.info("data[%s]",data.toString());
+            loadData(); // 刷新數據
         }
     }
 }

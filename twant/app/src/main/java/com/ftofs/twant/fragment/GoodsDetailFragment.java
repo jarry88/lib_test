@@ -44,6 +44,7 @@ import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.GroupBuyStatus;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.AddrItem;
@@ -122,6 +123,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private static final int BEFORE_DISCOUNT=1;
     private static final int IN_DISCOUNT=2;
     private static final int OUT_DISCOUNT=3;
+
+    double cnyExchangeRate;
 
     // 砍價Id
     int bargainId = Constant.INVALID_BARGAIN_ID;
@@ -235,6 +238,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     RelativeLayout rlDiscountInfoContainer;
     RelativeLayout rlPriceTag;
+    View llCnyPriceContainer;
+    TextView tvCnyPrice;
+
+    boolean isMainlandUser = false; // 是否有大陆用户
 
     int inStorePersonCount;
     StoreFriendsAdapter adapter;
@@ -570,6 +577,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         rlDiscountInfoContainer = view.findViewById(R.id.rl_discount_info_container);
         rlPriceTag = view.findViewById(R.id.rl_price_tag);
+        llCnyPriceContainer = view.findViewById(R.id.ll_cny_price_container);
+        tvCnyPrice = view.findViewById(R.id.tv_cny_price);
+
+        String mobile = User.getUserInfo(SPField.FIELD_MOBILE, "");
+        if (!StringUtil.isEmpty(mobile)) {
+            isMainlandUser = mobile.startsWith("0086");
+        }
 
         tvGoodsPriceOriginal = view.findViewById(R.id.tv_goods_price_original);
         // 原價顯示刪除線
@@ -1073,13 +1087,18 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 goodsImageUrl = "";
             }
 
+            double cnyPrice = 0;
+            if (cnyExchangeRate > 0) {
+                cnyPrice = goodsPrice / cnyExchangeRate;
+            }
+
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
                             jingle, goodsImageUrl, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
                             "commonId", commonId, "goodsName", goodsName,
-                            "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice,"goodsModel",goodsModel)))
+                            "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice, "cnyPrice", cnyPrice, "goodsModel", goodsModel)))
                     .show();
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1429,6 +1448,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 }
 
                 try {
+                    // 获取汇率
+                    cnyExchangeRate = responseObj.optDouble("datas.cnyExchangeRate");
+
                     // 產品詳情圖片
                     int imageIndex = 0;
                     EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.goodsMobileBodyVoList");
@@ -1852,6 +1874,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 long now = System.currentTimeMillis();
 
                 try {
+                    cnyExchangeRate = responseObj.optDouble("datas.cnyExchangeRate");
+
                     EasyJSONObject goodsDetail = responseObj.getSafeObject("datas.goodsDetail");
                     SLog.info("goodsDetail[%s]", goodsDetail);
 
@@ -2825,10 +2849,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         if (Util.noPrice(goodsModel)) {
             UiUtil.toConsultUI(tvGoodsPrice);
             rlPriceTag.setVisibility(VISIBLE);
-        }
-        else if (promotionType == Constant.PROMOTION_TYPE_NONE || promotionCountDownTime == 0) {
-            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
+            llCnyPriceContainer.setVisibility(GONE);
+        } else if (promotionType == Constant.PROMOTION_TYPE_NONE || promotionCountDownTime == 0) {
+            tvGoodsPrice.setText(StringUtil.formatMopPrice(goodsInfo.price, 1));
             rlPriceTag.setVisibility(VISIBLE);
+            showCnyPrice(goodsInfo.price);
         } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
             updateDiscount(goodsInfo);
             boolean showDiscountInfo = discountState==BEFORE_DISCOUNT||discountState==IN_DISCOUNT;
@@ -2846,6 +2871,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 UiUtil.toPriceUI(tvGoodsPrice,13);
 
                 stopCountDown();
+                showCnyPrice(goodsInfo.price);
             }
         } else if (promotionType == Constant.PROMOTION_TYPE_GROUP) {
             rlPriceTag.setVisibility(GONE);
@@ -2853,6 +2879,32 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             // 未开始秒杀的商品需要显示价格标签
             tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
             rlPriceTag.setVisibility(VISIBLE);
+            showCnyPrice(goodsInfo.price);
+        }
+    }
+
+    /**
+     * 計算商品的人民幣價格
+     * @param price
+     * @return
+     */
+    private double calcCnyPrice(double price) {
+        if (cnyExchangeRate > 0) {
+            return price / cnyExchangeRate;
+        }
+
+        return price;
+    }
+
+    /**
+     * 顯示人民幣價格
+     * @param mopPrice 澳門幣價格
+     */
+    private void showCnyPrice(double mopPrice) {
+        if (isMainlandUser) {
+            double cnyPrice = calcCnyPrice(mopPrice);
+            llCnyPriceContainer.setVisibility(VISIBLE);
+            tvCnyPrice.setText(StringUtil.formatFloat(cnyPrice));
         }
     }
 

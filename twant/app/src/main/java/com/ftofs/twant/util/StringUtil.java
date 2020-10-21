@@ -116,6 +116,16 @@ public class StringUtil {
         sb.append(StringUtil.formatFloat(price));
         return sb.toString();
     }
+
+    public static String formatMopPrice(double price, int spaceCount) {
+        StringBuilder sb = new StringBuilder("MOP");
+        for (int i = 0; i < spaceCount; i++) {
+            sb.append(" ");
+        }
+        sb.append(StringUtil.formatFloat(price));
+        return sb.toString();
+    }
+
     /**
      * 格式化价格
      * @param context

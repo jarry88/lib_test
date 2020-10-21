@@ -22,6 +22,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
+import com.ftofs.twant.entity.CrossBorderFloorItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
@@ -55,13 +56,16 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     RecyclerView rvList;
     CrossBorderHomeAdapter adapter;
     List<CrossBorderHomeItem> crossBorderHomeItemList = new ArrayList<>();
+    LinearLayoutManager layoutManager;
 
     List<CrossBorderBannerItem> bannerItemList;
+    String homeDefaultColorStr;
     int navItemCount;
     List<CrossBorderNavPane> navPaneList;
     List<CrossBorderShoppingZoneItem> shoppingZoneList;
     List<CrossBorderActivityGoods> bargainGoodsList;
     List<CrossBorderActivityGoods> groupGoodsList;
+    List<CrossBorderFloorItem> floorItemList;
     List<Store> storeList;
 
     // 當前要加載第幾頁(從1開始）
@@ -71,22 +75,26 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     LinearLayout llFloatButtonContainer;
 
     public static CrossBorderHomeFragment newInstance(List<CrossBorderBannerItem> bannerItemList,
+                                                      String homeDefaultColorStr,
                                                       int navItemCount,
                                                       List<CrossBorderNavPane> navPaneList,
                                                       List<CrossBorderShoppingZoneItem> shoppingZoneList,
                                                       List<CrossBorderActivityGoods> bargainGoodsList,
                                                       List<CrossBorderActivityGoods> groupGoodsList,
+                                                      List<CrossBorderFloorItem> floorItemList,
                                                       List<Store> storeList) {
         CrossBorderHomeFragment fragment = new CrossBorderHomeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
 
         fragment.bannerItemList = bannerItemList;
+        fragment.homeDefaultColorStr = homeDefaultColorStr;
         fragment.navItemCount = navItemCount;
         fragment.navPaneList = navPaneList;
         fragment.shoppingZoneList = shoppingZoneList;
         fragment.bargainGoodsList = bargainGoodsList;
         fragment.groupGoodsList = groupGoodsList;
+        fragment.floorItemList = floorItemList;
         fragment.storeList = storeList;
 
         return fragment;
@@ -112,22 +120,27 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_goto_cart, this);
         Util.setOnClickListener(view, R.id.btn_goto_top, this);
 
+        crossBorderHomeItemList.clear();
+        CrossBorderHomeItem banner = new CrossBorderHomeItem();
+        banner.bannerItemList = bannerItemList;
+        banner.itemType = Constant.ITEM_TYPE_BANNER;
+        crossBorderHomeItemList.add(banner);
+
         CrossBorderHomeItem header = new CrossBorderHomeItem();
-        header.bannerItemList = bannerItemList;
         header.navItemCount = navItemCount;
         header.navPaneList = navPaneList;
         header.shoppingZoneList = shoppingZoneList;
         header.bargainGoodsList = bargainGoodsList;
         header.groupGoodsList = groupGoodsList;
+        header.floorItemList = floorItemList;
         header.storeList = storeList;
         header.itemType = Constant.ITEM_TYPE_HEADER;
-
-        crossBorderHomeItemList.clear();
         crossBorderHomeItemList.add(header);
 
         rvList = view.findViewById(R.id.rv_list);
-        rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        adapter = new CrossBorderHomeAdapter(_mActivity, crossBorderHomeItemList);
+        layoutManager = new LinearLayoutManager(_mActivity);
+        rvList.setLayoutManager(layoutManager);
+        adapter = new CrossBorderHomeAdapter(_mActivity, crossBorderHomeItemList, homeDefaultColorStr);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
 
@@ -166,11 +179,27 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     showFloatButton();
                 }
+                // SLog.info("111111111111111111111111111111111111111111111");
+
+                int completelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
+                int visibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                int verticalOffset = rvList.computeVerticalScrollOffset();
+
+                SLog.info("completelyVisibleItemPosition[%d], visibleItemPosition[%d], verticalOffset[%d]",
+                        completelyVisibleItemPosition, visibleItemPosition, verticalOffset);
+                if (verticalOffset > 0) {
+                    Hawk.put(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR, false);
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, "#00B0FF");
+                } else {
+                    Hawk.put(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR, true);
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, adapter.currentThemeColor);
+                }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                SLog.info("dddddddddddddddddddddddddddddddddddddy[%d]", dy);
             }
         });
 

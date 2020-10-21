@@ -1,6 +1,7 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
+import com.ftofs.twant.entity.CrossBorderFloorItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
@@ -36,6 +38,7 @@ import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.gzp.lib_common.utils.SLog;
@@ -52,8 +55,8 @@ import java.util.List;
 
 public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorderHomeItem, BaseViewHolder> {
     Context context;
-
-    boolean isFirst = true; // 是否為首次初始化
+    public String currentThemeColor;
+    String homeDefaultColorStr;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -61,11 +64,13 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public CrossBorderHomeAdapter(Context context, List<CrossBorderHomeItem> data) {
+    public CrossBorderHomeAdapter(Context context, List<CrossBorderHomeItem> data, String homeDefaultColorStr) {
         super(data);
 
         this.context = context;
+        this.homeDefaultColorStr = homeDefaultColorStr;
 
+        addItemType(Constant.ITEM_TYPE_BANNER, R.layout.cross_border_home_banner);
         addItemType(Constant.ITEM_TYPE_HEADER, R.layout.cross_border_home_header);
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.cross_border_home_item); // 商品分頁加載Item
         addItemType(Constant.ITEM_TYPE_FOOTER, R.layout.cross_border_home_footer);
@@ -75,10 +80,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
     protected void convert(@NonNull BaseViewHolder helper, CrossBorderHomeItem item) {
         int itemType = item.getItemType();
 
-        if (itemType == Constant.ITEM_TYPE_HEADER) {
-            helper.addOnClickListener(R.id.btn_view_more_bargain, R.id.btn_view_more_group);
-
-
+        if (itemType == Constant.ITEM_TYPE_BANNER) {
+            CrossBorderDrawView drawView = helper.getView(R.id.vw_bottom_bg);
+            drawView.setColor(Color.parseColor(homeDefaultColorStr));
             Banner<CrossBorderBannerItem, BannerImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
             banner.setAdapter(new BannerImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
                 @Override
@@ -102,8 +106,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
                     boolean canChangeBackgroundColor = Hawk.get(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR);
                     if (canChangeBackgroundColor) {
-                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, bannerItem.backgroundColorApp);
+                        currentThemeColor = bannerItem.backgroundColorApp;
+                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, currentThemeColor);
                         SLog.info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                        drawView.setColor(Color.parseColor(currentThemeColor));
                     }
                 }
 
@@ -120,6 +126,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp, true);
                 }
             });
+        } else if (itemType == Constant.ITEM_TYPE_HEADER) {
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
+
+            helper.addOnClickListener(R.id.btn_view_more_bargain, R.id.btn_view_more_group);
 
             // 導航區
             RecyclerView rvNavList = helper.getView(R.id.rv_nav_list);
@@ -200,7 +210,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             } else {
                 resId = R.layout.cross_border_shopping_zone_4;
             }
-            View zoneContainer = LayoutInflater.from(context).inflate(resId, llShoppingZoneContainer, false);
+            View zoneContainer = layoutInflater.inflate(resId, llShoppingZoneContainer, false);
 
             // shoppingZoneCount = 1;
             if (shoppingZoneCount >= 1) {
@@ -295,11 +305,36 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 helper.setGone(R.id.ll_group_container, false);
             }
 
+            // 樓層結構
+            LinearLayout llFloorContainer = helper.getView(R.id.ll_floor_container);
+            llFloorContainer.removeAllViews();
+            if (item.floorItemList.size() > 0) {
+                llFloorContainer.setVisibility(View.VISIBLE);
+
+                for (int i = 0; i < item.floorItemList.size(); i++) {
+                    View floorItemView = layoutInflater.inflate(R.layout.cross_border_floor_item, llFloorContainer, false);
+                    CrossBorderFloorItem floorItem = item.floorItemList.get(i);
+
+                    View clGoodsContainer = floorItemView.findViewById(R.id.cl_goods_container);
+                    if (floorItem.goodsList != null && floorItem.goodsList.size() == 3) {
+                        clGoodsContainer.setVisibility(View.VISIBLE);
+                    } else {
+                        clGoodsContainer.setVisibility(View.GONE);
+                    }
+
+                    llFloorContainer.addView(floorItemView);
+                }
+            } else {
+                helper.setGone(R.id.ll_floor_container, false);
+                llFloorContainer.setVisibility(View.GONE);
+            }
+
+            // 優選好店
             helper.setGone(R.id.ll_best_store_container, item.storeList.size() > 0);  // 如果沒有店鋪，則隱藏
             GridLayout glStoreContainer = helper.getView(R.id.gl_store_container);
             glStoreContainer.removeAllViews();
             for (Store store : item.storeList) {
-                View storeItemView = LayoutInflater.from(context).inflate(R.layout.cross_border_store_item, glStoreContainer, false);
+                View storeItemView = layoutInflater.inflate(R.layout.cross_border_store_item, glStoreContainer, false);
                 ImageView imgStoreFigure = storeItemView.findViewById(R.id.img_store_figure);
                 SLog.info("store.storeFigureImage[%s]", store.storeFigureImage);
                 Glide.with(context).load(StringUtil.normalizeImageUrl(store.storeFigureImage)).centerCrop().into(imgStoreFigure);

@@ -1,6 +1,8 @@
 package com.ftofs.twant.entity;
 
-public class DistributionWithdrawRecord {
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+public class DistributionWithdrawRecord implements MultiItemEntity {
     public static final int STATE_TO_BE_AUDIT = 0;
     public static final int STATE_PASS = 1;
     public static final int STATE_NOT_PASS = 2;
@@ -15,7 +17,14 @@ public class DistributionWithdrawRecord {
 	"payTime": null,
 	"billState": 0,
      */
+
+    public int itemType;
+
     public DistributionWithdrawRecord() {
+    }
+
+    public DistributionWithdrawRecord(int itemType) {
+        this.itemType = itemType;
     }
 
     public boolean expanded; // 是否展开详情
@@ -25,4 +34,9 @@ public class DistributionWithdrawRecord {
     public String createTime; // 提現發起時間
     public String adminTime;
     public String payTime;
+
+    @Override
+    public int getItemType() {
+        return itemType;
+    }
 }

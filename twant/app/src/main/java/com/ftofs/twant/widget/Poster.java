@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.util.QRCode;
 import com.ftofs.twant.util.StringUtil;
 
@@ -31,6 +32,9 @@ public class Poster extends FrameLayout {
 
     TextView tvMopPrice;
     TextView tvCnyPrice;
+    TextView tvPriceNotice;
+
+    int goodsModel;
 
     public Poster(@NonNull Context context) {
         this(context, null);
@@ -56,6 +60,7 @@ public class Poster extends FrameLayout {
         imgQrCode = findViewById(R.id.img_qr_code);
         tvMopPrice = findViewById(R.id.tv_mop_price);
         tvCnyPrice = findViewById(R.id.tv_cny_price);
+        tvPriceNotice = findViewById(R.id.tv_price_notice);
     }
 
     public Poster setAvatar(File avatarFile) {
@@ -64,7 +69,7 @@ public class Poster extends FrameLayout {
     }
 
     public Poster setGoodsImage(File goodsImageFile) {
-        Glide.with(this).load(goodsImageFile).centerCrop().into(goodsImage);
+        Glide.with(this).load(goodsImageFile).centerInside().into(goodsImage);
         return this;
     }
 
@@ -79,7 +84,12 @@ public class Poster extends FrameLayout {
      * @return
      */
     public Poster setMopPrice(double price) {
-        tvMopPrice.setText("MOP " + StringUtil.formatFloat(price));
+        if (goodsModel == Constant.GOODS_TYPE_CONSULT) {
+            tvMopPrice.setText("問價");
+        } else {
+            tvMopPrice.setText("MOP " + StringUtil.formatFloat(price));
+        }
+
         return this;
     }
 
@@ -101,6 +111,17 @@ public class Poster extends FrameLayout {
     public Poster setQrCode(String text) {
         Bitmap qrCode = QRCode.createQRCode(text);
         Glide.with(imgQrCode).load(qrCode).into(imgQrCode);
+        return this;
+    }
+
+    public Poster setGoodsModel(int goodsModel) {
+        this.goodsModel = goodsModel;
+        if (goodsModel == Constant.GOODS_TYPE_CONSULT) {
+            tvMopPrice.setText("問價");
+            tvCnyPrice.setVisibility(GONE);
+            tvPriceNotice.setVisibility(INVISIBLE);
+        }
+
         return this;
     }
 }

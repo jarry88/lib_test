@@ -64,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginTop="4dp"
+            android:layout_marginStart="4dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <TextView
@@ -144,9 +145,11 @@
             </TextView>
         </LinearLayout>
         <TextView
+            android:id="@+id/tv_price_notice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
+            android:layout_marginStart="4dp"
             android:text="價格具有時效性"
             android:textColor="@color/tw_medium_grey"
             android:textSize="12sp">
@@ -157,6 +160,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:layout_marginStart="4dp"
             android:text="天虹 迷你主机四核微型mini电脑主机台式小主机 四核/2G/16升32G（内置wifi）win10"
             android:textSize="14sp"
             android:textColor="@color/tw_black"

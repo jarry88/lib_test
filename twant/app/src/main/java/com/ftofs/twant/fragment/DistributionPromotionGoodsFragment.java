@@ -25,12 +25,15 @@ import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.entity.DistributionMember;
 import com.ftofs.twant.entity.DistributionOrderItem;
 import com.ftofs.twant.entity.DistributionPromotionGoods;
+import com.ftofs.twant.entity.DistributionWithdrawRecord;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SharePopup;
 import com.gzp.lib_common.utils.SLog;
+import com.lxj.xpopup.XPopup;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,6 +55,7 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
     int currPage = 0;
     boolean hasMore;
 
+    double cnyExchangeRate;
     int selectedCount = 0; // 選中的商品個數
     SimpleCallback simpleCallback;
 
@@ -79,7 +83,7 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
         SLog.info("rvList[%s]", rvList);
         rvList.setNestedScrollingEnabled(NestedScrollingEnabled);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
-        adapter = new DistributionPromotionGoodsAdapter(_mActivity, R.layout.distribution_promotion_goods, distributionPromotionGoodsList);
+        adapter = new DistributionPromotionGoodsAdapter(_mActivity, distributionPromotionGoodsList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -116,14 +120,29 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
                 int id = view.getId();
                 if (id == R.id.btn_share) {
                     DistributionPromotionGoods goods = distributionPromotionGoodsList.get(position);
+                    double cnyPrice = 0;
+                    if (cnyExchangeRate > 0) {
+                        cnyPrice = goods.batchPrice2 / cnyExchangeRate;
+                    }
+
                     EasyJSONObject posterData = EasyJSONObject.generate(
                             "commonId", goods.commonId,
                             "goodsName", goods.goodsName,
                             "goodsImageUrl", goods.imageName,
-                            "mopPrice", 99999999,
-                            "cnyPrice", 88888888
+                            "mopPrice", goods.batchPrice2,
+                            "cnyPrice", cnyPrice
                     );
-                    Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_GOODS, posterData));
+                    // Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_GOODS, posterData));
+
+                    new XPopup.Builder(_mActivity)
+                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                            .moveUpToKeyboard(false)
+                            .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(goods.commonId, 0), goods.goodsName,
+                                    "", goods.imageName, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
+                                    "commonId", goods.commonId, "goodsName", goods.goodsName,
+                                    "goodsImage", goods.imageName, "goodsPrice", goods.batchPrice2,
+                                    "cnyPrice", cnyPrice, "goodsModel", Constant.GOODS_TYPE_CROSS_BORDER)))
+                            .show();
                 }
             }
         });
@@ -159,6 +178,10 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
                         return;
                     }
 
+                    if (cnyExchangeRate < Constant.DOUBLE_ZERO_THRESHOLD) {
+                        cnyExchangeRate = responseObj.optDouble("datas.cnyExchangeRate");
+                    }
+
                     hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
                     SLog.info("hasMore[%s]", hasMore);
                     if (!hasMore) {
@@ -172,8 +195,14 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
                     EasyJSONArray goodsList = responseObj.getArray("datas.goodsList");
                     for (Object object : goodsList) {
                         DistributionPromotionGoods distributionPromotionGoods = (DistributionPromotionGoods) EasyJSONBase.jsonDecode(DistributionPromotionGoods.class, object.toString());
+                        distributionPromotionGoods.itemType = Constant.ITEM_TYPE_NORMAL;
                         distributionPromotionGoodsList.add(distributionPromotionGoods);
                     }
+
+                    if (page == 1 && !hasMore && distributionPromotionGoodsList.size() == 0) {
+                        distributionPromotionGoodsList.add(new DistributionPromotionGoods(Constant.ITEM_TYPE_NO_DATA));
+                    }
+
                     adapter.loadMoreComplete();
                     adapter.setNewData(distributionPromotionGoodsList);
                     currPage++;
