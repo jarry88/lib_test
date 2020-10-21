@@ -38,7 +38,7 @@ public class DistributionOrderAdapter extends BaseMultiItemQuickAdapter<Distribu
                     .setText(R.id.tv_order_status, item.getMarketingOrdersStateDesc())
                     .setText(R.id.tv_goods_name, item.goodsName)
                     .setText(R.id.tv_create_time, item.createTime)
-                    .setText(R.id.tv_pay_amount, "實付款：¥" + StringUtil.formatFloat(item.goodsPayAmount))
+                    .setText(R.id.tv_pay_amount, "實付款：MOP " + StringUtil.formatFloat(item.goodsPayAmount))
                     .setText(R.id.tv_expect_commission_amount, "預計佣金：" + StringUtil.formatFloat(item.predictCommission) + "元");
 
             ImageView goodsImage = helper.getView(R.id.goods_image);

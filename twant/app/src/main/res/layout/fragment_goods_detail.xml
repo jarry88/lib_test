@@ -37,35 +37,36 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-                
-                <TextView
-                    android:id="@+id/tv_group_buy_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/rv_gallery_image_list"
-                    android:background="@drawable/tv_group_buy_label"
-                    android:text="4人拼團價"
-                    android:textColor="@android:color/white"
-                    android:textSize="15sp"
-                    android:gravity="center">
-                </TextView>
 
-                <!-- 砍價活動Label -->
+                <!-- 活動Label -->
                 <FrameLayout
-                    android:id="@+id/fl_bargain_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/fl_activity_label_container"
+                    android:layout_width="117dp"
+                    android:layout_height="28dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/rv_gallery_image_list"
                     android:background="@drawable/tv_group_buy_label"
                     android:visibility="gone">
+                    <TextView
+                        android:id="@+id/vw_group_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="4人拼團價"
+                        android:textSize="15sp"
+                        android:textColor="@android:color/white"
+                        android:visibility="gone">
+                    </TextView>
+
+                    <!-- 砍價 -->
                     <LinearLayout
+                        android:id="@+id/vw_bargain_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -82,40 +83,41 @@
 
                         </TextView>
                     </LinearLayout>
-                </FrameLayout>
-                <!-- END OF 砍價活動Label -->
+                    <!-- END OF 砍價 -->
 
-                <!-- 秒殺活動Label -->
-                <FrameLayout
-                    android:id="@+id/fl_sec_kill_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/rv_gallery_image_list"
-                    android:background="@drawable/tv_group_buy_label"
-                    android:visibility="gone">
-                    <LinearLayout
+                    <!-- 秒殺 -->
+                    <FrameLayout
+                        android:id="@+id/vw_sec_kill_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-                        <ImageView
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/rv_gallery_image_list"
+                        android:background="@drawable/tv_group_buy_label"
+                        android:visibility="gone">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/icon_sec_kill">
-                        </ImageView>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp"
-                            android:text="限時秒殺"
-                            android:textSize="15sp"
-                            android:textColor="@android:color/white">
-                        </TextView>
-                    </LinearLayout>
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/icon_sec_kill">
+                            </ImageView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="4dp"
+                                android:text="限時秒殺"
+                                android:textSize="15sp"
+                                android:textColor="@android:color/white">
+                            </TextView>
+                        </LinearLayout>
+                    </FrameLayout>
+                    <!-- END OF 秒殺 -->
                 </FrameLayout>
-                <!-- END OF 秒殺活動Label -->
+                <!-- END OF 活動Label -->
 
                 <com.rd.PageIndicatorView
                     android:id="@+id/pageIndicatorView"
@@ -132,6 +134,7 @@
                     attrs:piv_padding="9dp"
                     attrs:piv_radius="5dp"
                     />
+
                 <ImageView
                     android:id="@+id/btn_play"
                     android:layout_width="wrap_content"
@@ -218,523 +221,144 @@
                 <LinearLayout
                     android:id="@+id/ll_activity_container"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="59dp"
                     app:layout_constraintTop_toBottomOf="@id/rv_gallery_image_list"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:orientation="vertical">
-                    <!-- 拼团活动 -->
-                    <LinearLayout
-                        android:id="@+id/ll_group_info_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:background="@drawable/banner_618_activity_bg">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="$"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="16sp">
-                                </TextView>
-                                <TextView
-                                    android:id="@+id/tv_group_price"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="2dp"
-                                    android:text="899.00"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="30sp">
-                                </TextView>
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="8dp"
-                                    android:orientation="vertical">
-                                    <androidx.constraintlayout.widget.ConstraintLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content">
-                                        <TextView
-                                            android:id="@+id/tv_group_original_price"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            app:layout_constraintTop_toTopOf="parent"
-                                            app:layout_constraintTop_toBottomOf="parent"
-                                            app:layout_constraintLeft_toLeftOf="parent"
-                                            app:layout_constraintRight_toRightOf="parent"
-                                            android:textSize="12sp"
-                                            android:text="原價 $1000.00"
-                                            android:textColor="@android:color/white">
-                                        </TextView>
-                                        <View
-                                            android:layout_width="0dp"
-                                            android:layout_height="1dp"
-                                            app:layout_constraintTop_toTopOf="parent"
-                                            app:layout_constraintBottom_toBottomOf="parent"
-                                            app:layout_constraintLeft_toLeftOf="parent"
-                                            app:layout_constraintRight_toRightOf="parent"
-                                            android:background="@android:color/white">
-
-                                        </View>
-                                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                                    <TextView
-                                        android:id="@+id/tv_group_discount_amount"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="20dp"
-                                        android:paddingLeft="4dp"
-                                        android:paddingRight="4dp"
-                                        android:textSize="13sp"
-                                        android:textColor="@color/tw_yellow"
-                                        android:text="拼團立減 $111.0"
-                                        android:gravity="center"
-                                        android:background="@drawable/white_r10dp_bg">
-
-                                    </TextView>
-                                </LinearLayout>
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="right">
-                                <TextView
-                                    android:id="@+id/tv_group_buy_count_down_title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="活動倒計時"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="13sp">
-
-                                </TextView>
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:gravity="center_vertical">
-                                    <TextView
-                                        android:id="@+id/tv_group_remain_day"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="5天"
-                                        android:textSize="12sp"
-                                        android:textColor="@android:color/white">
-                                    </TextView>
-                                    <TextView
-                                        android:id="@+id/tv_group_remain_hour"
-                                        android:layout_width="18dp"
-                                        android:layout_height="18dp"
-                                        android:layout_marginLeft="2dp"
-                                        android:background="@drawable/white_r2dp_bg"
-                                        android:text="23"
-                                        android:textColor="@color/tw_yellow"
-                                        android:textSize="12sp"
-                                        android:gravity="center">
-                                    </TextView>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="1dp"
-                                        android:layout_marginRight="1dp"
-                                        android:text=":"
-                                        android:textColor="@android:color/white"
-                                        android:textSize="12sp">
-                                    </TextView>
-                                    <TextView
-                                        android:id="@+id/tv_group_remain_minute"
-                                        android:layout_width="18dp"
-                                        android:layout_height="18dp"
-                                        android:background="@drawable/white_r2dp_bg"
-                                        android:text="23"
-                                        android:textColor="@color/tw_yellow"
-                                        android:textSize="12sp"
-                                        android:gravity="center">
-                                    </TextView>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="1dp"
-                                        android:layout_marginRight="1dp"
-                                        android:text=":"
-                                        android:textColor="@android:color/white"
-                                        android:textSize="12sp">
-                                    </TextView>
-                                    <TextView
-                                        android:id="@+id/tv_group_remain_second"
-                                        android:layout_width="18dp"
-                                        android:layout_height="18dp"
-                                        android:background="@drawable/white_r2dp_bg"
-                                        android:text="23"
-                                        android:textColor="@color/tw_yellow"
-                                        android:textSize="12sp"
-                                        android:gravity="center">
-                                    </TextView>
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <!-- END OF 拼团活动 -->
-
-                    <!-- 砍價活動 -->
-                    <LinearLayout
-                        android:id="@+id/ll_bargain_state_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:background="@drawable/banner_618_activity_bg"
-                        android:visibility="gone">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="$"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="16sp">
-                                </TextView>
-                                <TextView
-                                    android:id="@+id/tv_bargain_state_price"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="2dp"
-                                    android:text=""
-                                    android:textColor="@android:color/white"
-                                    android:textSize="30sp">
-                                </TextView>
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="8dp"
-                                    android:orientation="vertical">
-                                    <TextView
-                                        android:id="@+id/tv_bargain_state_bottom_price"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintTop_toTopOf="parent"
-                                        app:layout_constraintTop_toBottomOf="parent"
-                                        app:layout_constraintLeft_toLeftOf="parent"
-                                        app:layout_constraintRight_toRightOf="parent"
-                                        android:textSize="12sp"
-                                        android:text=""
-                                        android:textColor="@android:color/white">
-                                    </TextView>
-                                    <TextView
-                                        android:id="@+id/tv_bargain_state_member_count"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="20dp"
-                                        android:paddingLeft="4dp"
-                                        android:paddingRight="4dp"
-                                        android:textSize="13sp"
-                                        android:textColor="@color/tw_yellow"
-                                        android:text="已有0人參與"
-                                        android:gravity="center"
-                                        android:background="@drawable/white_r10dp_bg">
-                                    </TextView>
-                                </LinearLayout>
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="right">
-                                <TextView
-                                    android:id="@+id/tv_bargain_count_down_label"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="活動倒計時"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="13sp">
-                                </TextView>
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:gravity="center_vertical">
-                                    <TextView
-                                        android:id="@+id/tv_bargain_remain_day"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="0天"
-                                        android:textSize="12sp"
-                                        android:textColor="@android:color/white">
-                                    </TextView>
-                                    <TextView
-                                        android:id="@+id/tv_bargain_remain_hour"
-                                        android:layout_width="18dp"
-                                        android:layout_height="18dp"
-                                        android:layout_marginLeft="2dp"
-                                        android:background="@drawable/white_r2dp_bg"
-                                        android:text="00"
-                                        android:textColor="@color/tw_yellow"
-                                        android:textSize="12sp"
-                                        android:gravity="center">
-                                    </TextView>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="1dp"
-                                        android:layout_marginRight="1dp"
-                                        android:text=":"
-                                        android:textColor="@android:color/white"
-                                        android:textSize="12sp">
-                                    </TextView>
-                                    <TextView
-                                        android:id="@+id/tv_bargain_remain_minute"
-                                        android:layout_width="18dp"
-                                        android:layout_height="18dp"
-                                        android:background="@drawable/white_r2dp_bg"
-                                        android:text="00"
-                                        android:textColor="@color/tw_yellow"
-                                        android:textSize="12sp"
-                                        android:gravity="center">
-                                    </TextView>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="1dp"
-                                        android:layout_marginRight="1dp"
-                                        android:text=":"
-                                        android:textColor="@android:color/white"
-                                        android:textSize="12sp">
-                                    </TextView>
-                                    <TextView
-                                        android:id="@+id/tv_bargain_remain_second"
-                                        android:layout_width="18dp"
-                                        android:layout_height="18dp"
-                                        android:background="@drawable/white_r2dp_bg"
-                                        android:text="00"
-                                        android:textColor="@color/tw_yellow"
-                                        android:textSize="12sp"
-                                        android:gravity="center">
-                                    </TextView>
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <!-- END OF 砍價活動 -->
-
-
-                    <!-- 限時折扣活動信息 -->
+                    android:orientation="horizontal"
+                    android:background="@color/tw_yellow"
+                    android:visibility="gone">
                     <RelativeLayout
-                        android:id="@+id/rl_discount_info_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:background="@color/tw_yellow"
-                        android:visibility="gone">
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/toolbar_margin_left"
-                            android:layout_centerVertical="true"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:id="@+id/tv_goods_price_final"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text=""
-                                android:textColor="#fff"
-                                android:textSize="34sp"
-                                />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
-                                android:layout_gravity="center_vertical"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:id="@+id/tv_goods_price_original"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text=""
-                                    android:textColor="@android:color/white"
-                                    android:textSize="12sp"
-                                    />
-
-                                <TextView
-                                    android:id="@+id/tv_promotion_discount_rate"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="20dp"
-                                    android:layout_marginTop="2dp"
-                                    android:paddingLeft="8dp"
-                                    android:paddingRight="8dp"
-                                    android:text="@string/text_time_limited_offer"
-                                    android:textColor="@color/tw_yellow"
-                                    android:textSize="13sp"
-                                    android:background="@drawable/white_r10dp_bg"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/toolbar_margin_right"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
+                            android:layout_marginStart="15dp"
                             android:orientation="vertical">
-                            <TextView
-                                android:id="@+id/tv_count_down_day"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text=""
-                                android:textSize="13sp"
-                                android:textColor="@android:color/white"
-                                />
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="3dp"
+                                android:gravity="center_vertical"
                                 android:orientation="horizontal">
                                 <TextView
-                                    android:id="@+id/tv_count_down_hour"
-                                    android:layout_width="18dp"
-                                    android:layout_height="18dp"
-                                    android:gravity="center"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/tw_yellow"
-                                    android:text="00"
-                                    android:background="@drawable/digital_clock_bg"
-                                    />
-                                <TextView
-                                    android:layout_width="6dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:textSize="11sp"
-                                    android:textColor="@android:color/white"
-                                    android:text=":"
-                                    />
+                                    android:text="MOP"
+                                    android:textSize="10sp"
+                                    android:textColor="@android:color/white">
+                                </TextView>
                                 <TextView
-                                    android:id="@+id/tv_count_down_minute"
-                                    android:layout_width="18dp"
-                                    android:layout_height="18dp"
-                                    android:gravity="center"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/tw_yellow"
-                                    android:text="00"
-                                    android:background="@drawable/digital_clock_bg"
-                                    />
-                                <TextView
-                                    android:layout_width="6dp"
+                                    android:id="@+id/tv_activity_mop_price"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:textSize="11sp"
-                                    android:textColor="@android:color/white"
-                                    android:text=":"
-                                    />
-                                <TextView
-                                    android:id="@+id/tv_count_down_second"
-                                    android:layout_width="18dp"
-                                    android:layout_height="18dp"
-                                    android:gravity="center"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/tw_yellow"
-                                    android:text="00"
-                                    android:background="@drawable/digital_clock_bg"
-                                    />
+                                    android:text="899.00"
+                                    android:textSize="30sp"
+                                    android:textColor="@android:color/white">
+
+                                </TextView>
                             </LinearLayout>
-
+                            <LinearLayout
+                                android:id="@+id/vw_activity_cny_price_container"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:visibility="invisible">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="約RMB "
+                                    android:textColor="@android:color/white"
+                                    android:textSize="10sp">
+                                </TextView>
+                                <TextView
+                                    android:id="@+id/tv_activity_cny_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="816.32"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="12sp">
+                                </TextView>
+                            </LinearLayout>
                         </LinearLayout>
-                    </RelativeLayout>
-                    <!-- END OF 限時折扣活動信息 -->
-
-                    <!-- 秒殺活動 -->
-                    <RelativeLayout
-                        android:id="@+id/rl_sec_kill_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="62dp"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:background="@color/tw_yellow"
-                        android:visibility="gone">
-                        <LinearLayout
-                            android:id="@+id/ll_sec_kill_price_container"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:orientation="horizontal"
-                            android:gravity="bottom">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="$"
-                                android:textColor="@android:color/white"
-                                android:textSize="16sp">
-                            </TextView>
-                            <TextView
-                                android:id="@+id/tv_sec_kill_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="30sp"
-                                android:textColor="@android:color/white"
-                                android:text="599.00">
-                            </TextView>
-                        </LinearLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_toEndOf="@id/ll_sec_kill_price_container"
-                            android:layout_centerVertical="true">
-                            <TextView
-                                android:id="@+id/tv_sec_kill_original_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintLeft_toLeftOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:text="原價 $1000.0"
-                                android:textColor="@android:color/white"
-                                android:textSize="13sp">
-                            </TextView>
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="1dp"
-                                app:layout_constraintLeft_toLeftOf="@id/tv_sec_kill_original_price"
-                                app:layout_constraintRight_toRightOf="@id/tv_sec_kill_original_price"
-                                app:layout_constraintTop_toTopOf="@id/tv_sec_kill_original_price"
-                                app:layout_constraintBottom_toBottomOf="@id/tv_sec_kill_original_price"
-                                android:background="@android:color/white">
-
-                            </View>
-                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
-                            android:gravity="right"
+                            android:gravity="end"
                             android:orientation="vertical">
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:id="@+id/tv_activity_original_mop_price_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="2dp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    android:text="MOP"
+                                    android:textSize="8sp"
+                                    android:textColor="@android:color/white">
+
+                                </TextView>
+                                <TextView
+                                    android:id="@+id/tv_activity_original_mop_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="2dp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@id/tv_activity_original_mop_price_label"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:text="1000.00"
+                                    android:textSize="11sp"
+                                    android:textColor="@android:color/white">
+                                </TextView>
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="1dp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:background="@android:color/white">
+                                </View>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
                             <TextView
-                                android:id="@+id/tv_sec_kill_count_down_title"
+                                android:id="@+id/tv_activity_mop_discount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="18dp"
+                                android:layout_marginTop="5dp"
+                                android:paddingStart="4dp"
+                                android:paddingEnd="4dp"
+                                android:background="@drawable/white_r9dp_bg"
+                                android:gravity="center"
+                                android:text="立減 MOP111.00"
+                                android:textColor="@color/tw_yellow"
+                                android:textSize="11sp">
+                            </TextView>
+                        </LinearLayout>
+                    </RelativeLayout>
+                    <FrameLayout
+                        android:layout_width="111dp"
+                        android:layout_height="match_parent"
+                        android:background="#FDA20D">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="end"
+                            android:layout_gravity="center">
+                            <TextView
+                                android:id="@+id/tv_activity_count_down_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="活動倒計時"
@@ -748,7 +372,7 @@
                                 android:orientation="horizontal"
                                 android:gravity="center_vertical">
                                 <TextView
-                                    android:id="@+id/tv_sec_kill_remain_day"
+                                    android:id="@+id/tv_activity_remain_day"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="5天"
@@ -756,7 +380,7 @@
                                     android:textColor="@android:color/white">
                                 </TextView>
                                 <TextView
-                                    android:id="@+id/tv_sec_kill_remain_hour"
+                                    android:id="@+id/tv_activity_remain_hour"
                                     android:layout_width="18dp"
                                     android:layout_height="18dp"
                                     android:layout_marginLeft="2dp"
@@ -776,7 +400,7 @@
                                     android:textSize="12sp">
                                 </TextView>
                                 <TextView
-                                    android:id="@+id/tv_sec_kill_remain_minute"
+                                    android:id="@+id/tv_activity_remain_minute"
                                     android:layout_width="18dp"
                                     android:layout_height="18dp"
                                     android:background="@drawable/white_r2dp_bg"
@@ -795,7 +419,7 @@
                                     android:textSize="12sp">
                                 </TextView>
                                 <TextView
-                                    android:id="@+id/tv_sec_kill_remain_second"
+                                    android:id="@+id/tv_activity_remain_second"
                                     android:layout_width="18dp"
                                     android:layout_height="18dp"
                                     android:background="@drawable/white_r2dp_bg"
@@ -806,8 +430,7 @@
                                 </TextView>
                             </LinearLayout>
                         </LinearLayout>
-                    </RelativeLayout>
-                    <!-- END OF 秒殺活動 -->
+                    </FrameLayout>
                 </LinearLayout>
 
 
@@ -889,7 +512,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="約為CNY "
+                                android:text="約RMB "
                                 android:textColor="#717171"
                                 android:textSize="12sp">
                             </TextView>

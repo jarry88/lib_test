@@ -73,7 +73,7 @@
                             android:layout_marginTop="12dp"
                             android:textSize="16sp"
                             android:textColor="#6B6B6B"
-                            android:text="¥ 0.00">
+                            android:text="MOP 0.00">
                         </TextView>
                     </LinearLayout>
 
@@ -311,7 +311,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:stb_text="一級同伴"
+                            app:stb_text="一級"
                             app:stb_text_size="12sp">
                         </com.ftofs.twant.widget.SimpleTabButton>
                         <com.ftofs.twant.widget.SimpleTabButton
@@ -319,7 +319,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:stb_text="二級同伴"
+                            app:stb_text="二級"
                             app:stb_text_size="12sp">
                         </com.ftofs.twant.widget.SimpleTabButton>
                     </LinearLayout>

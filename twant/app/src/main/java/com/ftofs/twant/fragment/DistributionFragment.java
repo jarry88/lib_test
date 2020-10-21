@@ -206,11 +206,11 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
                 if (id == R.id.stb_all) { // 全部
                     SLog.info("全部");
                     vpInternalOffsetMyTeam = 0;
-                } else if (id == R.id.stb_first_level) { // 一級同伴
-                    SLog.info("一級同伴");
+                } else if (id == R.id.stb_first_level) { // 一級
+                    SLog.info("一級");
                     vpInternalOffsetMyTeam = 1;
-                } else if (id == R.id.stb_second_level) { // 二級同伴
-                    SLog.info("二級同伴");
+                } else if (id == R.id.stb_second_level) { // 二級
+                    SLog.info("二級");
                     vpInternalOffsetMyTeam = 2;
                 }
                 viewPager.setCurrentItem(VP_OFFSET_MY_TEAM + vpInternalOffsetMyTeam);
