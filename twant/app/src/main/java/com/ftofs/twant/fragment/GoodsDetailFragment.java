@@ -2558,6 +2558,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      * @param show
      */
     private void showHideGroupBuyView(boolean show) {
+        if (promotionType != Constant.PROMOTION_TYPE_GROUP) {
+            return;
+        }
         SLog.info("showHideGroupBuyView[%s]", show);
         SLog.bt();
         if (show) {
@@ -2572,6 +2575,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void showHideBargainView(boolean show) {
+        if (promotionType != Constant.PROMOTION_TYPE_BARGAIN) {
+            return;
+        }
         SLog.info("showHideBargainView[%s]", show);
         SLog.bt();
         if (show) {
@@ -2586,6 +2592,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void showHideSecKillView(boolean show) {
+        if (promotionType != Constant.PROMOTION_TYPE_SEC_KILL) {
+            return;
+        }
         SLog.info("showHideSecKillView[%s]", show);
         SLog.bt();
         if (show) {
@@ -2845,6 +2854,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         } else if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
             updateDiscount(goodsInfo);
             boolean showDiscountInfo = discountState==BEFORE_DISCOUNT||discountState==IN_DISCOUNT;
+            if (goodsInfo.appUsable != Constant.TRUE_INT) { // appUsable字段為1時才算開啟限時折扣
+                showDiscountInfo = false;
+            }
             rlPriceTag.setVisibility(showDiscountInfo?GONE:VISIBLE);
             llActivityContainer.setVisibility(showDiscountInfo?VISIBLE:GONE);
             if (showDiscountInfo) {
