@@ -128,13 +128,23 @@ interface DemoApiService {
     @GET("coupon/list")
     suspend fun getCouponList(@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>): TwantResponse<CouponInfo>
     @Headers("clientType: android")
-    @GET("tc/coupon/{id}")
+    @GET("coupon/{id}")
     suspend fun getCouponDetail(@Path ("id")id: Int): TwantResponse<CouponDetailVo>
     //
-    @POST("tc/buy/step1")
-    suspend fun getTcBuyStep1( @Header("Content-Type")contentType:String,@QueryMap queryParams:@JvmSuppressWildcards Map<String, Any?>): TwantResponse<BuyStep1Vo>
-    @POST("tc/buy/step2")
-    suspend fun getTcBuyStep2( @Header("Content-Type")contentType:String,@QueryMap queryParams:@JvmSuppressWildcards Map<String, Any?>): TwantResponse<BuyStep1Vo>
+    @POST("buy/step1")
+    @Headers("Content-Type:application/json; charset=UTF-8")
+    suspend fun getTcBuyStep1( @Body queryParams:@JvmSuppressWildcards Map<String, Any?>): TwantResponse<BuyStep1Vo>
+    @POST("buy/step2")
+    @Headers("Content-Type:application/json; charset=UTF-8")
+    suspend fun getTcBuyStep2(@Body queryParams:@JvmSuppressWildcards Map<String, Any?>): TwantResponse<BuyStep2Vo>
+    //mpay支付下單
+    @POST("pay/mpay")
+    @Headers("Content-Type:application/json; charset=UTF-8")
+    suspend fun postPayMpay(@Body queryParams:@JvmSuppressWildcards Map<String, Any?>?): TwantResponse<MpayVo>
+    //mpay支付下單
+    @POST("pay/mpayNotify")
+    @Headers("Content-Type:application/json; charset=UTF-8")
+    suspend fun postPayMpayNotify(params: Map<String, Any>?): TwantResponse<MpayVo>
 //【GOEFT】券倉模塊結束
 
 

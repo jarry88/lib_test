@@ -378,6 +378,35 @@
                                         android:textColor="@color/tw_black"
                                         android:textSize="13sp" />
                                 </LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/btn_goto_seller_verification"
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginEnd="@dimen/margin12"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"
+                                    android:visibility="visible">
+
+                                    <ImageView
+                                        android:id="@+id/iv_seller_verification"
+                                        android:layout_width="35dp"
+                                        android:layout_height="35dp"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/icon_seller_coupon"
+                                        android:textColor="@color/tw_black" />
+
+                                    <TextView
+                                        android:id="@+id/tv_seller_verification"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="8dp"
+                                        android:text="@string/text_seller_verification"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="13sp" />
+                                </LinearLayout>
 
                             </LinearLayout>
                         </LinearLayout>

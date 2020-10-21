@@ -162,7 +162,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
         titleList.add(getResources().getString(R.string.category_brand));
 
         fragmentList.add(CategoryShopFragment.newInstance());
-        fragmentList.add(new CategoryCommodityKotlinFragment());
+        fragmentList.add(CategoryCommodityKotlinFragment.newInstance(this));
         fragmentList.add(CategoryPostFragment.newInstance());
 
 

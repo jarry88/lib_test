@@ -131,6 +131,14 @@ public enum EBMessageType {
      * 【賣家】刷新訂單列表
      */
     MESSAGE_SELLER_RELOAD_ORDER_LIST,
+    /**
+     * 【賣家】券商支付回调成功
+     */
+    MESSAGE_TYPE_COUPON_MPAY_SUCCESS,
+    /**
+     * 【賣家】券商支付回调成功
+     */
+    MESSAGE_TYPE_COUPON_MPAY_OTHER,
 
     /**
      * (關閉了APP升級彈窗後)可以顯示其它類型的彈窗

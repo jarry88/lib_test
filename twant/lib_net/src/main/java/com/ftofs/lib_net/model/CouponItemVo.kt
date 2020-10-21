@@ -6,8 +6,8 @@ data class CouponItemVo(
     val consumptionType: Int?,
     val cover: String?,
     val id: Int?,
-    val originalPrice: Int?,
-    val price: Int?,
+    val originalPrice: Double?,
+    val price: Double?,
     val sale: Int?,
     val stock: Int?,//庫存
     val subTitle: String?,//副標題
@@ -23,5 +23,8 @@ data class CouponItemVo(
             1 -> validityStartDate+"至" +validityEndDate
             else -> ""
         }
+    }?:""
+    fun getTypeString():String =consumptionType?.let {//	消費類型：0->抵用券，1->套餐券
+        "团"
     }?:""
 }

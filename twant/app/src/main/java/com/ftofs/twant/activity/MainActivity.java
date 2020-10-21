@@ -1164,6 +1164,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
             ToastUtil.success(this, payResult.getResult());
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS, null);
+
 
 
             // MPay支付成功，通知服務器
@@ -1226,6 +1228,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         } else {
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER, null);
             ToastUtil.error(this, payResult.getResult());
         }
     }

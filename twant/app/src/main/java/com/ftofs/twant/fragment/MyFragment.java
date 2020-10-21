@@ -29,6 +29,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.coupon_store.CouponOrderListFragment;
 import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
@@ -176,6 +177,7 @@ public class MyFragment extends MainBaseFragment implements View.OnClickListener
         Util.setOnClickListener(view, R.id.btn_friends, this);
         Util.setOnClickListener(view, R.id.btn_interactive, this);
         Util.setOnClickListener(view,R.id.btn_want_job,this);
+        Util.setOnClickListener(view,R.id.btn_order_coupon,this);
 
         Util.setOnClickListener(view, R.id.btn_publish_post, this);
         Util.setOnClickListener(view, R.id.btn_show_more, this);
@@ -338,6 +340,9 @@ public class MyFragment extends MainBaseFragment implements View.OnClickListener
                 break;
             case R.id.btn_want_job:
                 Util.startFragment(JobInfoFragment.newInstance());
+                break;
+            case R.id.btn_order_coupon:
+                Util.startFragment(CouponOrderListFragment.newInstance());
                 break;
             case R.id.btn_setting:
                 Util.startFragment(UniversalFragment.newInstance());

@@ -368,7 +368,7 @@
     <string name="text_leave_message">留言</string>
     <string name="text_leave_message_hint">給商家留言，100字以內（選填）</string>
     <string name="text_receipt_info">單據信息</string>
-    <string name="text_coupon">優惠券</string>
+    <string name="text_coupon">優惠</string>
     <string name="text_shipping_time">發貨時間</string>
     <string name="text_pay_way">支付方式</string>
     <string name="text_transact_way">交易方式</string>
@@ -847,4 +847,5 @@
     <string name="text_look_more">查看更多</string>
     <string name="go_no_data_853_hint">暫未揾到你的心水荀盤，\n可以嘗試其他條件！</string>
     <string name="text_go_pay">去支付</string>
+    <string name="text_seller_verification">核銷</string>
 </resources>

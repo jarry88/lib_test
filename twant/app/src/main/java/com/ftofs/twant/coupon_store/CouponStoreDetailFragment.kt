@@ -38,8 +38,11 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
 
         }
     } }
-    val id=arguments?.getInt(COUPON_ID)
-
+    val id by lazy { arguments?.getInt(COUPON_ID) }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        id?.apply { SLog.info("receive couponId $this") }
+    }
     override fun initData() {
         binding.title.apply {
             setLeftImageResource(R.drawable.icon_back)
@@ -58,14 +61,12 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
 
     companion object {
         @JvmStatic
-        fun newInstance(couponId: Int?):CouponStoreDetailFragment {
-            val args = Bundle()
-            couponId?.let {
-                args.putInt(COUPON_ID,it)
+        fun newInstance(couponId: Int?)=CouponStoreDetailFragment().apply {
+            arguments = Bundle().apply {
+                couponId?.let {
+                    putInt(COUPON_ID,it).apply { SLog.info("couponId $it") }
+                }
             }
-            val  fragment =CouponStoreDetailFragment()
-            fragment.arguments=args
-            return fragment
         }
     }
 

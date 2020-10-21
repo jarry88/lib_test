@@ -21,7 +21,7 @@ import com.gzp.lib_common.utils.SLog
 class SmartListView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) ,LifecycleObserver{
-    var currPage =0
+    var onRefresh =true
     var hasMore =true
     var fragment:Fragment?=null
     val inflater =context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -66,15 +66,20 @@ class SmartListView @JvmOverloads constructor(
             list.observe(it){
                 it?.let {
                     SLog.info("容器收货")
-                    adapter.addAll(it,currPage<=1)
+                    adapter.addAll(it,onRefresh)
                 }?:adapter.addAll(listOf(),true).apply {                     SLog.info("空数据")
                 }
+                endLoadingUi()
             }
         }
 
     }
-    fun setLoadMoreListener(loadMore:()->Unit)=mBinding.refreshLayout.setOnLoadMoreListener { loadMore() }
-    fun setRefreshListener(refresh:()->Unit)=mBinding.refreshLayout.setOnRefreshListener { refresh() }
+    fun setLoadMoreListener(loadMore:()->Unit)=mBinding.refreshLayout.setOnLoadMoreListener {
+        onRefresh=false
+        loadMore() }
+    fun setRefreshListener(refresh:()->Unit)=mBinding.refreshLayout.setOnRefreshListener {
+        onRefresh=true
+        refresh() }
     fun endLoadingUi()=mBinding.refreshLayout.apply {
         finishLoadMore()
     finishRefresh()

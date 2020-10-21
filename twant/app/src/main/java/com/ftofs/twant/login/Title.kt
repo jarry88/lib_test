@@ -9,9 +9,11 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.fragment.app.findFragment
 import com.bumptech.glide.Glide
 import com.ftofs.twant.R
 import com.ftofs.twant.widget.TouchEditText
+import com.gzp.lib_common.base.BaseFragment
 
 class Title @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -41,8 +43,11 @@ class Title @JvmOverloads constructor(
             rootView.findViewById<View>(R.id.tv_info)?.visibility=View.VISIBLE
         }
         typedArray.getType(R.styleable.Title_left_type).let {
-            if (it == 2) {
+            if (it == 2) { //back
                 setLeftImageResource(R.drawable.icon_back)
+//                setLeftLayoutClickListener{
+//                    findFragment<BaseFragment>()?.onBackPressedSupport()
+//                }
             }
         }
 //        typedArray.getBoolean(R.attr.login_info,false).let {
