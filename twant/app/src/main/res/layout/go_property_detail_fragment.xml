@@ -131,7 +131,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/tw_red"
-                                text="@{vo.getBuildingAreaString()}"
                                 android:textSize="21sp"/>
 
 
