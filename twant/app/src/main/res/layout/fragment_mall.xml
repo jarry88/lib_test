@@ -458,7 +458,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="推廣佣金餘額"
+                                        android:text="推廣佣金"
                                         android:textColor="#6C6C6C"
                                         android:textSize="15sp">
                                     </TextView>
