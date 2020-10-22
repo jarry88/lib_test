@@ -10,9 +10,11 @@ import com.ftofs.lib_net.model.GoPhoto
 import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
+import com.ftofs.twant.constant.Constant
 import com.ftofs.twant.databinding.GoPropertyDetailFragmentBinding
 import com.ftofs.twant.entity.WebSliderItem
 import com.ftofs.twant.fragment.ViewPagerFragment
+import com.ftofs.twant.kotlin.setBackRadius
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.view.BannerViewHolder
@@ -46,9 +48,6 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
             setLeftImageResource(R.drawable.icon_back)
             setLeftLayoutClickListener{onBackPressedSupport()}
         }
-//        binding.banner.apply {
-////            mei
-//        }
 
         binding.btnAboutOwner.setOnClickListener{
             pushUmengEvent(com.ftofs.twant.config.Config.PROD, GO853_DETAIL_USER, hashMapOf("uid" to viewModel.currPropertyInfo.value?.uid,"pid" to viewModel.currPropertyInfo.value?.pid))
@@ -85,15 +84,14 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
             binding.vo=it
             it.photoList?.takeIf { l-> l.isNotEmpty() }?.let { lll ->
                 val list = mutableListOf<GoPhoto>()
-                list.addAll(lll)
-                val a =list[0]
-                if (list.size < 3)  list.plus(a)
-                if (list.size < 3)  list.plus(a)
-
                     list.map { p -> WebSliderItem(p.title, "none", "", "", "[]") }
                             .let {ll->
-                                    binding.banner.let { it.visibility=View.VISIBLE }
-                                    binding.banner.setPages(ll) { BannerViewHolder(ll) }
+                                    val finalList = mutableListOf<WebSliderItem>().apply { addAll(ll) }
+                                    if(finalList.size<3){finalList.add(WebSliderItem(Constant.GO853_HOLD_PLACE))}
+                                    if(finalList.size<3){finalList.add(WebSliderItem(Constant.GO853_HOLD_PLACE))}
+                                    if(finalList.size<3){finalList.add(WebSliderItem(Constant.GO853_HOLD_PLACE))}
+//                                    binding.banner.let { it.visibility=View.VISIBLE }
+                                    binding.banner.setPages(ll) { BannerViewHolder(ll).apply { setmImageViewRadius(4f) } }
                                     binding.banner.setIndicatorRes(R.drawable.white_banner_indicator_normal, R.drawable.gray_banner_indicator_normal)
                                     val padding = Util.dip2px(context, 5f)
                                     val linearLayout: LinearLayout = binding.banner.indicatorContainer

@@ -9,9 +9,11 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.findFragment
 import com.bumptech.glide.Glide
 import com.ftofs.twant.R
+import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.widget.TouchEditText
 import com.gzp.lib_common.base.BaseFragment
 
@@ -28,6 +30,7 @@ class Title @JvmOverloads constructor(
     private val titlebarRight by lazy {findViewById<RelativeLayout>(R.id.titlebar_rightlayout)  }
     private val titleText by lazy {findViewById<TextView>(R.id.titlebar_title)  }
     private val iconSearch by lazy {findViewById<ImageView>(R.id.icon_search)  }
+    val iconClear by lazy {findViewById<ImageView>(R.id.btn_clear_all)  }
     private val searchWight by lazy {findViewById<RelativeLayout>(R.id.rl_search)  }
     val editKeyWord: TouchEditText? by lazy {findViewById(R.id.et_keyword)  }
     private val btnClear by lazy {findViewById<ImageView>(R.id.btn_clear_all)  }

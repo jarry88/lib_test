@@ -48,7 +48,7 @@ fun loadImageUrl(v: ImageView, url: String?, defaultDrawable: Drawable?){
         } else {
             SLog.info("url $url ")
             if (url.contains("none.gif")) {//go853房产占位图
-                Glide.with(v).load(R.drawable.go_no_data).centerCrop().into(v)
+                Glide.with(v).load(R.drawable.go_item_no_data).centerCrop().into(v)
             } else {
                 Glide.with(v).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(v)
             }

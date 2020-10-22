@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
+import com.ftofs.twant.databinding.CouponOrderDetailFragmentBinding
 import com.ftofs.twant.databinding.CouponStoreDetailFragmentBinding
 import com.ftofs.twant.databinding.ImageSquareItemBinding
 import com.ftofs.twant.dsl.customer.factoryAdapter
@@ -18,9 +19,9 @@ import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
 
 private const val COUPON_ID ="couponId"
-class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmentBinding,CouponStoreViewModel>() {
+class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmentBinding,CouponStoreViewModel>() {
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
-        return R.layout.coupon_store_detail_fragment
+        return R.layout.coupon_order_detail_fragment
     }
 
     override fun initVariableId(): Int {

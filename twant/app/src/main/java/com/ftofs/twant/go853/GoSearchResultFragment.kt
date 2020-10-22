@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.doAfterTextChanged
 import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.BR
@@ -15,6 +16,7 @@ import com.ftofs.twant.config.Config
 import com.ftofs.twant.databinding.GoSearchResultListFragmentBinding
 import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
+import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.EditTextUtil
 import com.ftofs.twant.util.SearchHistoryUtil
 import com.ftofs.twant.util.ToastUtil
@@ -75,6 +77,10 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
     }
     override fun initData() {
         binding.title.apply {
+
+            editKeyWord?.doAfterTextChanged {
+                iconClear.setVisibleOrGone(!text.isNullOrEmpty())
+            }
             setLeftLayoutClickListener{onBackPressedSupport()}
             setLeftImageResource(R.drawable.icon_back)
             showSearchWidget("點擊搜索靚屋") {

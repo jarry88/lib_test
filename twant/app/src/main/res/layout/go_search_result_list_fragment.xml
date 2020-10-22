@@ -58,11 +58,14 @@
             android:layout_height="0dp"
             android:background="@color/tw_mask_bg_color"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
             <LinearLayout
                 android:id="@+id/history_popup_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="13dp"
+                android:paddingBottom="15dp"
+                android:paddingStart="15dp"
                 android:padding="15dp"
                 android:background="#F7F7F7"
                 android:orientation="vertical">
@@ -74,7 +77,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="歷史搜索"
+                        android:text="歷史記錄"
+                        android:textStyle="bold"
                         android:textSize="14sp"
                         android:textColor="#676666"
                         />

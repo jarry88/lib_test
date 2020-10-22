@@ -1,5 +1,8 @@
 package com.ftofs.lib_net.model
 
+import android.graphics.drawable.Drawable
+import com.ftofs.lib_net.R
+import com.gzp.lib_common.utils.BaseContext
 import java.io.Serializable
 
 //const val RENT_SALE_TYPE=1
@@ -60,15 +63,15 @@ data class PropertyVo(
         val propertyName: String?,
         val pubDate: String,
         val remark: String,
-        val rentReservePrice: Int,
-        val rentalPrice: Int,
+        val rentReservePrice: Double?,
+        val rentalPrice: Double?,
         val roomType: Int,
         val salableArea: Int,
         val saleDate: Any,
         val saleType: Int,
         val selected: Int,
-        val sellReservePrice: Int,
-        val sellingPrice: Int,
+        val sellReservePrice: Double?,
+        val sellingPrice: Double?,
         val sequence: Int,
         val source: Int,
         val street: String?,
@@ -80,7 +83,7 @@ data class PropertyVo(
         val unit: String?,//單位：
         val unitPrice: Int,
         val photoList:List<GoPhoto>?,
-        val pingJunPrice:Double
+        val pingJunPrice:Double?
 ):Serializable{
 
     fun getItemTitle():String=
@@ -152,8 +155,8 @@ data class PropertyVo(
         else ->""
     }
     fun getPriceText():String=when(saleType){
-        1->"租 $"+getRentalPriceString()
-        2->"售 $" +getSellingPriceString()
+        1->"$"+getRentalPriceString()
+        2->"$" +getSellingPriceString()
         3->"售 $" +getSellingPriceString()+"    "+"租 $"+getRentalPriceString()
         else ->""
     }

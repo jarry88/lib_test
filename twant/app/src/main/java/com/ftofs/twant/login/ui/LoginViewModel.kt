@@ -8,11 +8,14 @@ import com.ftofs.lib_net.model.LoginInfo
 import com.ftofs.lib_net.model.MobileZone
 import com.ftofs.twant.TwantApplication
 import com.ftofs.twant.constant.Constant
+import com.ftofs.twant.constant.SPField
 import com.ftofs.twant.tangram.SloganView
+import com.ftofs.twant.util.HawkUtil
 import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.model.User
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
+import com.orhanobut.hawk.Hawk
 
 class LoginViewModel(application: Application = BaseContext.instance.getContext() as Application) :BaseViewModel(application) {
     var faceBookAccessToken: AccessToken?=null
@@ -27,7 +30,7 @@ class LoginViewModel(application: Application = BaseContext.instance.getContext(
     fun add(){}
     fun login(aliYunToken: String) {//阿里云一键登陆
         launch(stateLiveData,
-                { repository.run { simpleGet(api.getLoginOne(aliYunToken, "android")) } },
+                { repository.run { simpleGet(api.getLoginOne(aliYunToken, "android", Hawk.get(SPField.FIELD_REGISTER_REFEREE,""))) } },
                 { //finally 默认发送成功
                 }
         )

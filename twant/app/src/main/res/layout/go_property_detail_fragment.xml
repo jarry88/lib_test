@@ -128,6 +128,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/red"
                                 text="@{vo.getBuildingAreaString()}"
                                 android:textSize="21sp"/>
 
@@ -142,6 +143,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_8dp"
                                 android:orientation="horizontal">
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -193,6 +195,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_8dp"
+
                                 android:orientation="horizontal">
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -243,6 +247,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_8dp"
+
                                 android:orientation="horizontal">
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -293,6 +299,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_8dp"
+
                                 android:orientation="horizontal">
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -344,6 +352,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_8dp"
+
                                 android:orientation="horizontal">
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -470,6 +480,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_8dp"
+
                             android:orientation="horizontal">
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -521,6 +533,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_8dp"
+
                             android:orientation="horizontal">
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -571,6 +585,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_8dp"
+
                             android:orientation="horizontal">
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -621,6 +637,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_8dp"
+
                             android:orientation="horizontal">
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -671,6 +689,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_8dp"
+
                             android:orientation="horizontal">
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -744,6 +764,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_8dp"
+
                             android:orientation="horizontal">
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -763,6 +785,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:lineSpacingExtra="5dp"
                                     android:text="@{vo.landscape}"
                                     android:textColor="@color/tw_black"
                                     android:lines="1"/>
@@ -827,6 +850,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:lineSpacingExtra="10pt"
                                     android:text="@{vo.detail}"
                                     android:textColor="@color/tw_black"/>
                             </LinearLayout>

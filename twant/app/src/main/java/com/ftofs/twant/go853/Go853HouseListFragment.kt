@@ -17,6 +17,7 @@ import com.ftofs.twant.config.Config
 import com.ftofs.twant.databinding.GoHouseListFragmentBinding
 import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
+import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.SearchHistoryUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
@@ -57,6 +58,14 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 binding.root.setOnClickListener {
                     Util.startFragment(GoPropertyDetailFragment(item.pid, item))
                 }
+                when(item.saleType){
+                    1 ->
+                    2 ->
+                    else -> {
+                        item.sellingPrice?.let {  }?:binding.tvSellPrice.visibility=View.GONE
+                        item.rentalPrice?.let {  }?:binding.tvRentPrice.visibility=View.GONE
+                    }
+                }
             }
 
         }
@@ -77,6 +86,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             setLeftImageResource(R.drawable.icon_back)
             setLeftLayoutClickListener{onBackPressedSupport()}
             editKeyWord?.doAfterTextChanged {
+               iconClear.setVisibleOrGone(!text.isNullOrEmpty())
             }
             editKeyWord?.setOnTouchListener { _: View?, event: MotionEvent ->
                 if (event.action == MotionEvent.ACTION_UP) {
@@ -90,6 +100,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         }
         binding.banner.apply {
             setBackgroundResource(R.drawable.go_banner)
+
         }
         binding.rvList.isNestedScrollingEnabled=false
         binding.tabLayout.apply {
@@ -314,6 +325,9 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 scrollViewHeight = scrollView.height
                 rvList.layoutParams.height = scrollViewHeight - tabLayout.height
             }
+        }
+        binding.title.apply {
+            iconClear.setVisibleOrGone(!text.isNullOrEmpty())
         }
     }
 }

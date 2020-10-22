@@ -12,6 +12,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
+import com.ftofs.twant.kotlin.CommonBindingKt;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
@@ -44,6 +45,11 @@ public class BannerViewHolder implements MZViewHolder<WebSliderItem> {
             goodsPriceArr[i].setVisibility(visibility);
         }
     }
+    public void setmImageViewRadius(Float radius) {
+        if (mImageView != null) {
+            CommonBindingKt.setBackRadius(mImageView,radius);
+        }
+    }
 
     @Override
     public View createView(Context context) {
@@ -74,8 +80,12 @@ public class BannerViewHolder implements MZViewHolder<WebSliderItem> {
     @Override
     public void onBind(Context context, int position, WebSliderItem webSliderItem) {
         // 数据绑定
-        String imageUrl = StringUtil.normalizeImageUrl(webSliderItem.image);
-        Glide.with(context).load(imageUrl).centerCrop().into(mImageView);
+        if (Constant.GO853_HOLD_PLACE.equals(webSliderItem.image)) {//使用go853占位圖
+            Glide.with(context).load(R.drawable.go_item_no_data).centerCrop().into(mImageView);
+        } else {
+            String imageUrl = StringUtil.normalizeImageUrl(webSliderItem.image);
+            Glide.with(context).load(imageUrl).centerCrop().into(mImageView);
+        }
         //SLog.info("webSliderItem.linkType，[%s]",webSliderItem.linkType);
 
         imgDesktop.setVisibility(View.GONE);

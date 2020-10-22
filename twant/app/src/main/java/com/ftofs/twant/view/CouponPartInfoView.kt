@@ -117,7 +117,7 @@ class CouponPartInfoView @JvmOverloads constructor(
                                         layout_width= wrap_content
                                         textSize=14f
                                         text = SpannableStringBuilder("${child.title}  ${child.unit}").also { s->
-                                            s.setSpan(ForegroundColorSpan(resources.getColor(R.color.tw_grey_666)),s.length-child.unit.length,s.length-1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                                            s.setSpan(ForegroundColorSpan(resources.getColor(R.color.tw_grey_666,null)),s.length-child.unit.length,s.length-1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                                         }
                                     }
                                     View{

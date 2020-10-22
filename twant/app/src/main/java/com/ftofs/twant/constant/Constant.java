@@ -428,7 +428,10 @@ public class Constant {
     public static int[] WRITE_OFFS_ID=new int[]{
         1575, 959,1598
     };
+    public static final String GO853_HOLD_PLACE ="go853_no_data";
+
     public static final int MOON_ZONE_ID=69;
     @NotNull
     public static final Pair<String, String> CLIENT_TYPE_PAIR=new Pair("clientType",CLIENT_TYPE_ANDROID);
 }
+
