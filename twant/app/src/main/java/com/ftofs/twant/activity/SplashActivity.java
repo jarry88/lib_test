@@ -175,6 +175,12 @@ public class SplashActivity extends BaseActivity {
                                 "commonId", Integer.valueOf(commonId),
                                 "goodsId", Integer.valueOf(goodsId)
                         );
+                    } else if ("login".equals(host)) { // 拉新註冊（一鍵註冊&註冊都需帶上invite參數）
+                        String invite = uri.getQueryParameter("invite");
+                        // 只需要保存到Hawk，註冊時帶上此參數即可
+                        if (!StringUtil.isEmpty(invite)) {
+                            Hawk.put(SPField.FIELD_REGISTER_REFEREE, invite);
+                        }
                     } else if ("activityindexNew".equals(host)) {
                         String zoneId = uri.getQueryParameter("zoneId");
                         launchAppParams = EasyJSONObject.generate(

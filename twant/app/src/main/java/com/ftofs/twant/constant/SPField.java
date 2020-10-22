@@ -140,6 +140,12 @@ public class SPField {
      * 網頁拉起APP的參數
      */
     public static final String FIELD_LAUNCH_APP_PARAMS = "launch_app_params";
+
+    /**
+     * 用戶註冊時，誰拉的新用戶
+     */
+    public static final String FIELD_REGISTER_REFEREE = "register_referee";
+
     /**
      * 當前環境
      */
