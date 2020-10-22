@@ -175,7 +175,7 @@
                         android:id="@+id/tv_cny_indicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="≈RMB"
+                        android:text="RMB"
                         android:textColor="#717171"
                         android:textSize="12sp">
                     </TextView>
@@ -196,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:text="天虹 迷你主机四核微型mini电脑主机台式小主机 四核/2G/16升32G（内置wifi）win10"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@color/tw_black"
                     android:lines="2"
                     android:ellipsize="end">

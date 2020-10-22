@@ -125,6 +125,20 @@ public class Poster extends FrameLayout {
         return this;
     }
 
+    public Poster setPromotionType(int promotionType) {
+        if (promotionType == Constant.PROMOTION_TYPE_TIME_LIMITED_DISCOUNT) {
+            findViewById(R.id.tv_discount_indicator).setVisibility(VISIBLE);
+        } else if (promotionType == Constant.PROMOTION_TYPE_GROUP) {
+            findViewById(R.id.tv_group_indicator).setVisibility(VISIBLE);
+        } else if (promotionType == Constant.PROMOTION_TYPE_SEC_KILL) {
+            findViewById(R.id.tv_sec_kill_indicator).setVisibility(VISIBLE);
+        } else if (promotionType == Constant.PROMOTION_TYPE_BARGAIN) {
+            findViewById(R.id.tv_bargain_indicator).setVisibility(VISIBLE);
+        }
+
+        return this;
+    }
+
     private void setConsultGoods() {
         tvMopPrice.setText("問價");
         tvCnyPrice.setVisibility(INVISIBLE);

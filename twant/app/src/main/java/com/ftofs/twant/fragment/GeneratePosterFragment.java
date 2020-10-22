@@ -68,6 +68,7 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
 
     String marketingUrl; // 邀請分銷Url
 
+    int promotionType = Constant.PROMOTION_TYPE_NONE;
     File goodsImageFile; // 商品圖片
     File posterFile; // 海報圖片
     File avatarFile; // 頭像圖片
@@ -110,6 +111,7 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
 
         if (posterType == Constant.POSTER_TYPE_GOODS) {
             commonId = data.optInt("commonId");
+            promotionType = data.optInt("promotionType", Constant.PROMOTION_TYPE_NONE);
             goodsName = data.optString("goodsName");
             goodsModel = data.optInt("goodsModel");
             goodsImageUrl = StringUtil.normalizeImageUrl(data.optString("goodsImageUrl"), "?x-oss-process=image/resize,w_800");
@@ -213,7 +215,8 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
                         .setQrCode(goodsUrl)
                         .setGoodsModel(goodsModel)
                         .setMopPrice(mopPrice)
-                        .setCnyPrice(cnyPrice);
+                        .setCnyPrice(cnyPrice)
+                        .setPromotionType(promotionType);
 
                 poster.setVisibility(View.VISIBLE);
                 poster.postDelayed(new Runnable() {
@@ -303,7 +306,7 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
                         Bitmap bitmap = QMUIDrawableHelper.createBitmapFromView(invitationPoster);
                         posterFile = FileUtil.getCacheFile(_mActivity, Guid.getSpUuid() + ".jpg");
                         SLog.info("path[%s]", posterFile.getAbsoluteFile());
-                        BitmapUtil.Bitmap2File(bitmap, posterFile, Bitmap.CompressFormat.JPEG,75);
+                        BitmapUtil.Bitmap2File(bitmap, posterFile, Bitmap.CompressFormat.JPEG,100);
 
                         ((MainActivity) _mActivity).showSharePosterPopup(posterFile);
                         hideSoftInputPop();

@@ -48,6 +48,10 @@ public class SharePosterPopup extends BottomPopupView implements View.OnClickLis
         float radius = Util.dip2px(context, 16);
         llBottomContainer.setBackground(BackgroundDrawable.create(Color.WHITE, new float[] {radius, radius, 0, 0}));
 
+        findViewById(R.id.btn_dismiss).setOnClickListener(this);
+        findViewById(R.id.ll_bottom_container).setOnClickListener(this);
+        findViewById(R.id.img_poster).setOnClickListener(this);
+
         findViewById(R.id.btn_share_to_gallery).setOnClickListener(this);
         findViewById(R.id.btn_share_to_timeline).setOnClickListener(this);
         findViewById(R.id.btn_share_to_friend).setOnClickListener(this);
@@ -74,10 +78,17 @@ public class SharePosterPopup extends BottomPopupView implements View.OnClickLis
     }
 
     @Override
+    protected int getMaxHeight() {
+        return (int) (XPopupUtils.getWindowHeight(getContext())* 1f);
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.btn_share_to_gallery) {
+        if (id == R.id.btn_dismiss) {
+            dismiss();
+        } if (id == R.id.btn_share_to_gallery) {
             Util.addImageToGallery(context, posterFile);
             ToastUtil.success(context, "已保存到相冊");
             dismiss();

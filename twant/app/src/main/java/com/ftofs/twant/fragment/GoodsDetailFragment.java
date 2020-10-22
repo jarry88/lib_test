@@ -1062,7 +1062,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     .moveUpToKeyboard(false)
                     .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
                             jingle, goodsImageUrl, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
-                            "commonId", commonId, "goodsName", goodsName,
+                            "commonId", commonId, "goodsName", goodsName, "promotionType", promotionType,
                             "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice, "cnyPrice", cnyPrice, "goodsModel", goodsModel)))
                     .show();
         } catch (Exception e) {

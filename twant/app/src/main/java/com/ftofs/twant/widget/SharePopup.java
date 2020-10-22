@@ -113,6 +113,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     String marketingUrl; // 分銷系統分享鏈接
     double goodsPrice; // 商品價格
     double cnyPrice;   // 人民幣價格
+    int promotionType = Constant.PROMOTION_TYPE_NONE;
 
     /*
     public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data) {
@@ -172,6 +173,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                         goodsImageUrl = shareData.optString("goodsImage");
                         goodsPrice = shareData.optDouble("goodsPrice");
                         cnyPrice = shareData.optDouble("cnyPrice");
+                        promotionType = shareData.optInt("promotionType", Constant.PROMOTION_TYPE_NONE);
                         getCommandWord(shareType, commonId);
 
                         btnShareToWord.setOnClickListener(this);
@@ -412,6 +414,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             if (commonId > 0) { // 分享商品海報
                 EasyJSONObject posterData = EasyJSONObject.generate(
                         "commonId", commonId,
+                        "promotionType", promotionType,
                         "goodsName", goodsName,
                         "goodsModel", goodsModel,
                         "goodsImageUrl", goodsImageUrl,
