@@ -416,7 +416,7 @@ public class HomeFragment extends MainBaseFragment implements View.OnClickListen
 
 //            UiUtilsKt.createLoadingPopup(requireContext()).show();
 //            SLog.info(TwantApplication.Companion.get().getUmengDeviceToken());
-            Util.startFragment(new CouponOrderListFragment());
+            Util.startFragment(new BlackTestFragment());
 //            Util.startFragment(CouponConfirmOrderFragment.newInstance(0));
 //            loginService.start(_mActivity);
         }
