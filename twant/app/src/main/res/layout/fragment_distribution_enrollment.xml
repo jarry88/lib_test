@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="18sp"
-            android:text="我的團隊"
+            android:text="分銷中心"
             android:textColor="@color/tw_black"
             />
     </RelativeLayout>

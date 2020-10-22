@@ -2230,7 +2230,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
                         if (goodsInfo.isGroup == Constant.TRUE_INT) {
                             goodsInfo.groupPrice = goodsInfoVo.getDouble("groupPrice");
-                            goodsInfo.groupDiscountAmount = goodsInfo.appPrice0 - goodsInfo.groupPrice;
+                            goodsInfo.groupDiscountAmount = goodsInfo.goodsPrice0 - goodsInfo.groupPrice;
                         }
 
                         // 是否為秒殺
@@ -2877,8 +2877,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 showCnyPrice(goodsInfo.price);
             }
         } else if (promotionType == Constant.PROMOTION_TYPE_GROUP) {
-            rlPriceTag.setVisibility(GONE);
-            showHideGroupBuyView(true);
+            if (goodsInfo.isGroup == Constant.TRUE_INT) {
+                rlPriceTag.setVisibility(GONE);
+                showHideGroupBuyView(true);
+            } else {
+                tvGoodsPrice.setText(StringUtil.formatMopPrice(goodsInfo.price, 1));
+                rlPriceTag.setVisibility(VISIBLE);
+                showHideGroupBuyView(false);
+                showCnyPrice(goodsInfo.price);
+            }
+
         } else if (promotionType == Constant.PROMOTION_TYPE_SEC_KILL && COUNT_DOWN_TYPE_BEGIN.equals(promotionCountDownTimeType)) {
             // 未开始秒杀的商品需要显示价格标签
             tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
