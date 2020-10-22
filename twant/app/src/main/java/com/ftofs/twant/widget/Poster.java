@@ -94,12 +94,12 @@ public class Poster extends FrameLayout {
     }
 
     /**
-     * 設置人民幣 (约为CNY 120.20元)
+     * 設置人民幣 (约为RMB 120.20元)
      * @param price
      * @return
      */
     public Poster setCnyPrice(double price) {
-        tvCnyPrice.setText("约为CNY " + StringUtil.formatFloat(price) + "元");
+        tvCnyPrice.setText("約RMB " + StringUtil.formatFloat(price) + "元");
         return this;
     }
 

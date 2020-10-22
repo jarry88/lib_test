@@ -144,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:textColor="#929292"
-                android:text="底价：¥300.00"
+                android:text="底价：MOP 300.00"
                 android:textSize="13sp">
             </TextView>
         </LinearLayout>

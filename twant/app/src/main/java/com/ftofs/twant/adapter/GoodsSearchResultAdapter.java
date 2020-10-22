@@ -93,8 +93,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 if (Util.noPrice(item.left.goodsModel)) {
                     UiUtil.toConsultUI(leftTextView);
                 } else {
-                    leftTextView.setText(StringUtil.formatPrice(context, item.left.price, 1,false));
-                    UiUtil.toPriceUI(leftTextView,0);
+                    leftTextView.setText(StringUtil.formatMopPrice(item.left.price, 1));
+                    UiUtil.toPriceUI(leftTextView,0, 0, 3);
                 }
 
 
@@ -149,8 +149,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 if (Util.noPrice(item.right.goodsModel)) {
                     UiUtil.toConsultUI(priceRight);
                 } else {
-                    priceRight.setText(StringUtil.formatPrice(context, item.right.price, 1, false));
-                    UiUtil.toPriceUI(priceRight, 0);
+                    priceRight.setText(StringUtil.formatMopPrice(item.right.price, 1));
+                    UiUtil.toPriceUI(priceRight, 0, 0, 3);
                 }
 
                 helper.setGone(R.id.tv_freight_free_right, item.right.isFreightFree)

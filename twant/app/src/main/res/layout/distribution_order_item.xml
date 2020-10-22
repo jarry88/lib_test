@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:text="實付款：¥10"
+                android:text="實付款：MOP 10"
                 android:textSize="12sp"
                 android:textColor="@color/tw_medium_grey">
 

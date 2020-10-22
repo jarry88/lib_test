@@ -58,16 +58,16 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     ic_distribution_my_team, R.id.ic_distribution_promoting_order,
             R.id.ic_distribution_withdraw_record, R.id.ic_distribution_promotion_goods
      */
-    public static final int TAB_INDEX_MY_TEAM = 0;
-    public static final int TAB_INDEX_PROMOTING_ORDER = 1;
-    public static final int TAB_INDEX_WITHDRAW_RECORD = 2;
-    public static final int TAB_INDEX_PROMOTION_GOODS = 3;
+    public static final int TAB_INDEX_PROMOTION_GOODS = 0;
+    public static final int TAB_INDEX_MY_TEAM = 1;
+    public static final int TAB_INDEX_PROMOTING_ORDER = 2;
+    public static final int TAB_INDEX_WITHDRAW_RECORD = 3;
 
     // 一級Tab的切換的ViewPager偏移量
-    public static final int VP_OFFSET_MY_TEAM = 0;
-    public static final int VP_OFFSET_PROMOTING_ORDER = 3;
-    public static final int VP_OFFSET_WITHDRAW_RECORD = 7;
-    public static final int VP_OFFSET_PROMOTION_GOODS = 11;
+    public static final int VP_OFFSET_PROMOTION_GOODS = 0;
+    public static final int VP_OFFSET_MY_TEAM = 1;
+    public static final int VP_OFFSET_PROMOTING_ORDER = 4;
+    public static final int VP_OFFSET_WITHDRAW_RECORD = 8;
 
     // 二級Tab切換的ViewPager內部偏移量
     int vpInternalOffsetMyTeam = 0;
@@ -76,12 +76,12 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
 
     int currSelectedBtnIndex = 0;  // 當前選中的工具欄按鈕的索引
-    int[] toolButtonIdArr = new int[] {R.id.btn_my_team, R.id.btn_promoting_order,
-            R.id.btn_withdraw_record, R.id.btn_promotion_goods, };
-    int[] toolBtnTextIdArr = new int[] {R.id.tv_my_team, R.id.tv_promoting_order,
-            R.id.tv_withdraw_record, R.id.tv_promotion_goods, };
-    int[] toolBtnIconIdArr = new int[] {R.id.ic_distribution_my_team, R.id.ic_distribution_promoting_order,
-            R.id.ic_distribution_withdraw_record, R.id.ic_distribution_promotion_goods, };
+    int[] toolButtonIdArr = new int[] {R.id.btn_promotion_goods, R.id.btn_my_team, R.id.btn_promoting_order,
+            R.id.btn_withdraw_record, };
+    int[] toolBtnTextIdArr = new int[] {R.id.tv_promotion_goods, R.id.tv_my_team, R.id.tv_promoting_order,
+            R.id.tv_withdraw_record, };
+    int[] toolBtnIconIdArr = new int[] {R.id.ic_distribution_promotion_goods, R.id.ic_distribution_my_team, R.id.ic_distribution_promoting_order,
+            R.id.ic_distribution_withdraw_record, };
 
     TextView[] tvToolBtnTextArr = new TextView[TOOL_BTN_COUNT];
     ImageView[] imgToolBtnIconArr = new ImageView[TOOL_BTN_COUNT];
@@ -151,6 +151,10 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
         btnShareMultiple = view.findViewById(R.id.btn_share_multiple);
         btnShareMultiple.setOnClickListener(this);
 
+
+        titleList.add("");
+        fragmentList.add(DistributionPromotionGoodsFragment.newInstance(this));
+
         titleList.add("");
         fragmentList.add(DistributionMemberFragment.newInstance(DistributionMemberFragment.REQUEST_TYPE_ALL));
         titleList.add("");
@@ -179,8 +183,6 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
         fragmentList.add(DistributionWithdrawRecordFragment.newInstance(DistributionWithdrawRecordFragment.REQUEST_TYPE_FAIL));
 
 
-        titleList.add("");
-        fragmentList.add(DistributionPromotionGoodsFragment.newInstance(this));
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_withdraw, this);
@@ -206,11 +208,11 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
                 if (id == R.id.stb_all) { // 全部
                     SLog.info("全部");
                     vpInternalOffsetMyTeam = 0;
-                } else if (id == R.id.stb_first_level) { // 一級同伴
-                    SLog.info("一級同伴");
+                } else if (id == R.id.stb_first_level) { // 一級
+                    SLog.info("一級");
                     vpInternalOffsetMyTeam = 1;
-                } else if (id == R.id.stb_second_level) { // 二級同伴
-                    SLog.info("二級同伴");
+                } else if (id == R.id.stb_second_level) { // 二級
+                    SLog.info("二級");
                     vpInternalOffsetMyTeam = 2;
                 }
                 viewPager.setCurrentItem(VP_OFFSET_MY_TEAM + vpInternalOffsetMyTeam);

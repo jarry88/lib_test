@@ -81,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="(约为CNY 0.00元)"
+                android:text="(約RMB 0.00元)"
                 android:textColor="#717171"
                 android:textSize="12sp">
             </TextView>
