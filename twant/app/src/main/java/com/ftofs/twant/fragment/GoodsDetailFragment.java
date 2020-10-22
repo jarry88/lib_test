@@ -2819,6 +2819,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             tvActivityMopPrice.setText(StringUtil.formatFloat(goodsInfo.appPrice0));
             showActivityCnyPrice(goodsInfo.appPrice0);
             tvActivityOriginalMopPrice.setText(StringUtil.formatFloat(goodsInfo.goodsPrice0));
+            double secKillDiscount = goodsInfo.goodsPrice0 - goodsInfo.appPrice0;
+            tvActivityMopDiscount.setText("立減 " + StringUtil.formatMopPrice(secKillDiscount, 0));
         }
 
 

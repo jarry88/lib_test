@@ -32,7 +32,8 @@ public class Poster extends FrameLayout {
 
     TextView tvMopPrice;
     TextView tvCnyPrice;
-    TextView tvPriceNotice;
+    TextView tvMopIndicator;
+    TextView tvCnyIndicator;
 
     int goodsModel;
 
@@ -60,7 +61,8 @@ public class Poster extends FrameLayout {
         imgQrCode = findViewById(R.id.img_qr_code);
         tvMopPrice = findViewById(R.id.tv_mop_price);
         tvCnyPrice = findViewById(R.id.tv_cny_price);
-        tvPriceNotice = findViewById(R.id.tv_price_notice);
+        tvMopIndicator = findViewById(R.id.tv_mop_indicator);
+        tvCnyIndicator = findViewById(R.id.tv_cny_indicator);
     }
 
     public Poster setAvatar(File avatarFile) {
@@ -85,9 +87,9 @@ public class Poster extends FrameLayout {
      */
     public Poster setMopPrice(double price) {
         if (goodsModel == Constant.GOODS_TYPE_CONSULT) {
-            tvMopPrice.setText("問價");
+            setConsultGoods();
         } else {
-            tvMopPrice.setText("MOP " + StringUtil.formatFloat(price));
+            tvMopPrice.setText(StringUtil.formatFloat(price));
         }
 
         return this;
@@ -99,7 +101,7 @@ public class Poster extends FrameLayout {
      * @return
      */
     public Poster setCnyPrice(double price) {
-        tvCnyPrice.setText("約RMB " + StringUtil.formatFloat(price) + "元");
+        tvCnyPrice.setText(StringUtil.formatFloat(price));
         return this;
     }
 
@@ -117,11 +119,16 @@ public class Poster extends FrameLayout {
     public Poster setGoodsModel(int goodsModel) {
         this.goodsModel = goodsModel;
         if (goodsModel == Constant.GOODS_TYPE_CONSULT) {
-            tvMopPrice.setText("問價");
-            tvCnyPrice.setVisibility(GONE);
-            tvPriceNotice.setVisibility(INVISIBLE);
+            setConsultGoods();
         }
 
         return this;
+    }
+
+    private void setConsultGoods() {
+        tvMopPrice.setText("問價");
+        tvCnyPrice.setVisibility(INVISIBLE);
+        tvMopIndicator.setVisibility(GONE);
+        tvCnyIndicator.setVisibility(INVISIBLE);
     }
 }

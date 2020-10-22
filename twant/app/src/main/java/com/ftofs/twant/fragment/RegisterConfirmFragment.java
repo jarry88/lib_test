@@ -23,6 +23,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.ResponseCode;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
@@ -31,6 +32,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.orhanobut.hawk.Hawk;
 import com.umeng.analytics.MobclickAgent;
 
 import org.jetbrains.annotations.NotNull;
@@ -216,108 +218,108 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                 MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.REGISTER);
             }
 
-            String fullMobile = areaCode + "," + mobile;
-            String smsCode =etSmsCode.getText().toString().trim();
-            String password = etPassword.getText().toString();
-            String confirmPassword = etConfirmPassword.getText().toString();
-            String nickname = etNickname.getText().toString().trim();
+            try {
+                String fullMobile = areaCode + "," + mobile;
+                String smsCode =etSmsCode.getText().toString().trim();
+                String password = etPassword.getText().toString();
+                String confirmPassword = etConfirmPassword.getText().toString();
+                String nickname = etNickname.getText().toString().trim();
 
-            if (StringUtil.isEmpty(smsCode)) {
-                ToastUtil.error(_mActivity, getString(R.string.input_sms_code_hint));
-                btnRegister.setBackgroundResource(R.drawable.grey_button);
+                if (StringUtil.isEmpty(smsCode)) {
+                    ToastUtil.error(_mActivity, getString(R.string.input_sms_code_hint));
+                    btnRegister.setBackgroundResource(R.drawable.grey_button);
 
-                return;
-            }
+                    return;
+                }
 
-            if (StringUtil.isEmpty(password)) {
-                ToastUtil.error(_mActivity, "請輸入密碼");
-                btnRegister.setBackgroundResource(R.drawable.grey_button);
+                if (StringUtil.isEmpty(password)) {
+                    ToastUtil.error(_mActivity, "請輸入密碼");
+                    btnRegister.setBackgroundResource(R.drawable.grey_button);
 
-                return;
-            }
+                    return;
+                }
 
-            if (!password.equals(confirmPassword)) {
-                ToastUtil.error(_mActivity, "密碼不一致");
-                btnRegister.setBackgroundResource(R.drawable.grey_button);
+                if (!password.equals(confirmPassword)) {
+                    ToastUtil.error(_mActivity, "密碼不一致");
+                    btnRegister.setBackgroundResource(R.drawable.grey_button);
 
-                return;
-            }
+                    return;
+                }
 
-            if (StringUtil.isEmpty(nickname)) {
-                ToastUtil.error(_mActivity, getString(R.string.input_nickname_hint));
-                btnRegister.setBackgroundResource(R.drawable.grey_button);
-                return;
-            }
+                if (StringUtil.isEmpty(nickname)) {
+                    ToastUtil.error(_mActivity, getString(R.string.input_nickname_hint));
+                    btnRegister.setBackgroundResource(R.drawable.grey_button);
+                    return;
+                }
 
-            SLog.info("mobile[%s]", fullMobile);
-            EasyJSONObject params = EasyJSONObject.generate(
-                    "mobile", fullMobile,
-                    "smsAuthCode", smsCode,
-                    "memberPwd", password,
-                    "memberPwdRepeat", confirmPassword,
-                    "clientType", Constant.CLIENT_TYPE_ANDROID,
-                    "nickName", nickname);
+                SLog.info("mobile[%s]", fullMobile);
+                EasyJSONObject params = EasyJSONObject.generate(
+                        "mobile", fullMobile,
+                        "smsAuthCode", smsCode,
+                        "memberPwd", password,
+                        "memberPwdRepeat", confirmPassword,
+                        "clientType", Constant.CLIENT_TYPE_ANDROID,
+                        "nickName", nickname);
 
-            // 拼湊推薦碼和uuid
-            String promotionCode = etPromotionCode.getText().toString().trim();
-            if (!StringUtil.isEmpty(promotionCode)) {
-                String uuid = Util.getUUID();
-                if (!StringUtil.isEmpty(uuid)) {
-                    try {
+                // 拼湊推薦碼和uuid
+                String promotionCode = etPromotionCode.getText().toString().trim();
+                if (!StringUtil.isEmpty(promotionCode)) {
+                    String uuid = Util.getUUID();
+                    if (!StringUtil.isEmpty(uuid)) {
                         params.set("recommendNumber", promotionCode);
                         params.set("clientUuid", uuid);
-                    } catch (Exception e) {
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
-            }
 
-            String url = Api.PATH_MOBILE_REGISTER;
-            SLog.info("url[%s], params[%s]", url, params);
-            Api.postUI(url, params, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
-                    ToastUtil.showNetworkError(_mActivity, e);
-                    btnRegister.setBackgroundResource(R.drawable.grey_button);
-                }
-
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    SLog.info("responseStr[%s]", responseStr);
-
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
-                        return;
+                String url = Api.PATH_MOBILE_REGISTER;
+                SLog.info("url[%s], params[%s]", url, params);
+                Api.postUI(url, params, new UICallback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
+                        ToastUtil.showNetworkError(_mActivity, e);
+                        btnRegister.setBackgroundResource(R.drawable.grey_button);
                     }
 
-                    try {
-                        int code = responseObj.getInt("code");
-                        if (code != ResponseCode.SUCCESS) {
-                            ToastUtil.error(_mActivity, responseObj.getSafeString("datas.error"));
+                    @Override
+                    public void onResponse(Call call, String responseStr) throws IOException {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
                             return;
                         }
 
-                        // 保存服務器端返回的數據
-                        int userId = responseObj.getInt("datas.memberId");
-                        User.onLoginSuccess(userId, LoginType.MOBILE, responseObj);
-                        hideSoftInput();
-                        Util.getMemberToken(_mActivity);
+                        try {
+                            int code = responseObj.getInt("code");
+                            if (code != ResponseCode.SUCCESS) {
+                                ToastUtil.error(_mActivity, responseObj.getSafeString("datas.error"));
+                                return;
+                            }
 
-                        ToastUtil.success(_mActivity, "注冊成功");
+                            // 保存服務器端返回的數據
+                            int userId = responseObj.getInt("datas.memberId");
+                            User.onLoginSuccess(userId, LoginType.MOBILE, responseObj);
+                            hideSoftInput();
+                            Util.getMemberToken(_mActivity);
 
-                        if (Config.PROD) {
-                            MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.REGISTER_SUCCESS);
+                            ToastUtil.success(_mActivity, "注冊成功");
+
+                            if (Config.PROD) {
+                                MobclickAgent.onEvent(TwantApplication.Companion.get(), UmengAnalyticsActionName.REGISTER_SUCCESS);
+                            }
+
+                            // 注冊成功，跳到主頁面
+                            popTo(MainFragment.class, false);
+                        } catch (Exception e) {
+                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                         }
-
-                        // 注冊成功，跳到主頁面
-                        popTo(MainFragment.class, false);
-                    } catch (Exception e) {
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
-                }
-            });
+                });
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
         }
     }
     @Override
