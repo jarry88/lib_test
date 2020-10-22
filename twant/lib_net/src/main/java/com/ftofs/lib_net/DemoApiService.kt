@@ -97,7 +97,7 @@ interface DemoApiService {
     suspend fun getMessage(@QueryMap queryParams: Map<String, String?>): TwantResponse<LoginInfo>
     //阿里雲一鍵登錄
     @POST("v2/mobile/loginOne")
-    suspend fun getLoginOne(@Query("aliYunToken")aliYunToken:String,@Query("clientType")clientType:String): TwantResponse<LoginInfo>
+    suspend fun getLoginOne(@Query("aliYunToken")aliYunToken:String,@Query("clientType")clientType:String?,@Query("invite")invite:String?): TwantResponse<LoginInfo>
     @GET("app/mobile/zone")
     suspend fun getMobileZoneList(): TwantResponse<AdminMobileAreaList>
     @POST("loginconnect/facebook/login")

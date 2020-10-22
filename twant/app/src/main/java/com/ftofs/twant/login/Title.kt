@@ -30,7 +30,7 @@ class Title @JvmOverloads constructor(
     private val titlebarRight by lazy {findViewById<RelativeLayout>(R.id.titlebar_rightlayout)  }
     private val titleText by lazy {findViewById<TextView>(R.id.titlebar_title)  }
     private val iconSearch by lazy {findViewById<ImageView>(R.id.icon_search)  }
-    private val iconClear by lazy {findViewById<ImageView>(R.id.btn_clear_all)  }
+    val iconClear by lazy {findViewById<ImageView>(R.id.btn_clear_all)  }
     private val searchWight by lazy {findViewById<RelativeLayout>(R.id.rl_search)  }
     val editKeyWord: TouchEditText? by lazy {findViewById(R.id.et_keyword)  }
     private val btnClear by lazy {findViewById<ImageView>(R.id.btn_clear_all)  }
@@ -45,8 +45,6 @@ class Title @JvmOverloads constructor(
         typedArray.getBoolean(R.styleable.Title_login_info, false).takeIf { it }?.let {
             rootView.findViewById<View>(R.id.tv_info)?.visibility=View.VISIBLE
         }
-        editKeyWord?.setOnFocusChangeListener { view, b -> iconClear.setVisibleOrGone(!text.isNullOrEmpty()) }
-        editKeyWord?.doAfterTextChanged { iconClear.setVisibleOrGone(!text.isNullOrEmpty()) }
         typedArray.getType(R.styleable.Title_left_type).let {
             if (it == 2) { //back
                 setLeftImageResource(R.drawable.icon_back)

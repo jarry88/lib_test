@@ -6,9 +6,11 @@ import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.model.AuthCodeInfo
 import com.ftofs.lib_net.model.CommonInfo
 import com.ftofs.lib_net.model.LoginInfo
+import com.ftofs.twant.constant.SPField
 import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.Util
+import com.orhanobut.hawk.Hawk
 
 class MessageLoginViewModel(application: Application):BaseViewModel(application) {
     val authCodeInfo by lazy { MutableLiveData<AuthCodeInfo>() }
@@ -21,7 +23,8 @@ class MessageLoginViewModel(application: Application):BaseViewModel(application)
         val queryParams = mapOf(
                 "mobile" to mobile,
                 "smsAuthCode" to smsAuthCode,
-                "clientType" to "android"
+                "clientType" to "android",
+                "invite" to Hawk.get(SPField.FIELD_REGISTER_REFEREE,"")
         ).apply {
             recommendNumber?.let {
                 plus("recommendNumber" to recommendNumber)

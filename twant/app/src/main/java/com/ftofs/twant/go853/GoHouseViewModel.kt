@@ -73,9 +73,9 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
     val propertyList by lazy { MutableLiveData<GoeftInfo>() }
     val userPropertyList by lazy { MutableLiveData<GoeftInfo>() }
 
-    val retrofit = (Retrofit.Builder()).client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("http://192.168.5.19:8080/api/").build()
-    val testApi=retrofit.create(DemoApiService::class.java)
-    val finalApi =if(Util.inDev()) testApi else repository.api
+    private val retrofit = (Retrofit.Builder()).client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("http://192.168.5.19:8080/api/").build()
+    private val testApi=retrofit.create(DemoApiService::class.java)
+    private val finalApi =if(Util.inDev()) testApi else repository.api
 
     val currPropertyInfo by lazy { MutableLiveData<PropertyVo>() }
     var hasMore=true

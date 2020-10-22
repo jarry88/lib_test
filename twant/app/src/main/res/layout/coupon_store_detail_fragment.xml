@@ -105,14 +105,12 @@
                         <ImageView
                             android:layout_width="18dp"
                             android:layout_height="18dp"
-                            visibleOrGone="@{vo.imgSize>3}"
                             android:id="@+id/btn_left_select"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="5dp"/>
                         <ImageView
                             android:layout_width="18dp"
                             android:layout_height="18dp"
-                            visibleOrGone="@{vo.imgSize>3}"
                             android:id="@+id/btn_right_select"
                             android:layout_centerVertical="true"
                             android:layout_alignParentEnd="true"
