@@ -88,10 +88,11 @@
                                     android:textStyle="bold"
                                     android:text="售價 "/>
                                 <TextView
+
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/tw_red"
-                                    text="@{vo.getSellingPriceString()}"
+                                    android:id="@+id/tv_sell_price"
                                     android:textSize="21sp"/>
                             </LinearLayout>
                             <LinearLayout
@@ -106,6 +107,7 @@
                                     android:textStyle="bold"
                                     android:text="租金 "/>
                                 <TextView
+                                    android:id="@+id/tv_rent_price"
                                     android:layout_width="wrap_content"
                                     android:text="@{vo.getRentalPriceString()}"
                                     android:layout_height="wrap_content"
@@ -128,7 +130,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/red"
+                                android:textColor="@color/tw_red"
                                 text="@{vo.getBuildingAreaString()}"
                                 android:textSize="21sp"/>
 

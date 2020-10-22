@@ -1,5 +1,6 @@
 package com.ftofs.twant.go853
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -62,30 +63,6 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 binding.root.setOnClickListener {
                     Util.startFragment(GoPropertyDetailFragment(item.pid, item))
                 }
-                when(item.saleType){
-//                    1 ->
-//                    2 ->
-                    else -> {
-                        binding.tvSellPrice.apply {
-                            item.sellingPrice?.let {
-                                text=SpannableStringBuilder("售$ "+it.toInt().toString()+"萬").also { s->
-                                    s.setSpan(AbsoluteSizeSpan(13,true),0,3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                                    s.setSpan(AbsoluteSizeSpan(13,true),s.length-1,s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                                }
-                            }?:View.GONE.let { visibility=it }
-                        }
-                        binding.tvRentPrice.apply {
-                            item.rentalPrice?.let {
-                                if (it > 0) {
-                                    text=SpannableStringBuilder("租$ "+it.toInt().toString()+"元/月").also { s->
-                                        s.setSpan(AbsoluteSizeSpan(13,true),0,3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                                        s.setSpan(AbsoluteSizeSpan(13,true),s.length-3,s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                                    }
-                                }
-                        }?:View.GONE.let { visibility=it }
-                        }
-                    }
-                }
             }
 
         }
@@ -120,7 +97,6 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         }
         binding.banner.apply {
             setBackgroundResource(R.drawable.go_banner)
-
         }
         binding.rvList.isNestedScrollingEnabled=false
         binding.tabLayout.apply {

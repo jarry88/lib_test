@@ -12,7 +12,7 @@ import com.ftofs.twant.dsl.*
 import com.gzp.lib_common.utils.SLog
 import com.lxj.xpopup.core.AttachPopupView
 
-class GoDropdownMenu @JvmOverloads constructor(private val mContext: Context, val stringList:List<String> = listOf(), var selectText:String="", val selectCall:(String)->Unit={s -> SLog.info(s)}) : AttachPopupView(mContext) {
+class GoDropdownMenu @JvmOverloads constructor(private val mContext: Context, val stringList:List<String> = listOf(), var selectText:String="",val fullWidth:Boolean=true,val selectCall:(String)->Unit={s -> SLog.info(s)}) : AttachPopupView(mContext) {
     override fun getImplLayoutId(): Int {
         return R.layout.simple_popup_list
     }
