@@ -59,12 +59,12 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                     Util.startFragment(GoPropertyDetailFragment(item.pid, item))
                 }
                 when(item.saleType){
-                    1 ->
-                    2 ->
-                    else -> {
-                        item.sellingPrice?.let {  }?:binding.tvSellPrice.visibility=View.GONE
-                        item.rentalPrice?.let {  }?:binding.tvRentPrice.visibility=View.GONE
-                    }
+//                    1 ->
+//                    2 ->
+//                    else -> {
+//                        item.sellingPrice?.let {  }?:binding.tvSellPrice.visibility=View.GONE
+//                        item.rentalPrice?.let {  }?:binding.tvRentPrice.visibility=View.GONE
+//                    }
                 }
             }
 

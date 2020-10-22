@@ -22,6 +22,7 @@ import com.ftofs.twant.api.Api
 import com.ftofs.twant.api.UICallback
 import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.constant.LoginType
+import com.ftofs.twant.constant.SPField
 import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.fragment.H5GameFragment.ARTICLE_ID_TERMS_OF_PRIVATE
 import com.ftofs.twant.fragment.H5GameFragment.ARTICLE_ID_TERMS_OF_SERVICE
@@ -40,6 +41,7 @@ import com.lxj.xpopup.core.BasePopupView
 import com.mobile.auth.gatewayauth.*
 import com.mobile.auth.gatewayauth.model.TokenRet
 import com.mobile.auth.gatewayauth.ui.AbstractPnsViewDelegate
+import com.orhanobut.hawk.Hawk
 import kotlinx.android.synthetic.main.password_find_layout.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -195,7 +197,7 @@ object OneStepLogin{
             launch {
                 try {
                     SLog.info("aliYunToken  $aliYunToken")
-                    when (val re = repository.run { simpleGet(api.getLoginOne(aliYunToken, "android")) }) {
+                    when (val re = repository.run { simpleGet(api.getLoginOne(aliYunToken, "android", Hawk.get(SPField.FIELD_REGISTER_REFEREE,""))) }) {
                         is Result.Success -> {
                             SLog.info("数据加载成功${re.datas.nickName}")
                             getResultWithToken(aliYunToken)
