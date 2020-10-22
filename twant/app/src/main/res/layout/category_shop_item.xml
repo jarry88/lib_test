@@ -37,17 +37,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_shop_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#666666"
 
-                android:textSize="11sp"
-                android:text="10閒"
-                android:singleLine="true"
-                android:layout_marginEnd="@dimen/dp_4"
-                />
             <TextView
                 android:visibility="gone"
                 android:id="@+id/tv_commodity_count"
@@ -74,7 +64,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:paddingBottom="8dp"
         android:paddingTop="1dp"
         android:background="@drawable/new_arrivals_pane_bg"
@@ -93,6 +83,18 @@
             android:singleLine="true"
             android:textColor="#525556"
             android:layout_marginEnd="@dimen/margin8"
+            />
+        <TextView
+            android:id="@+id/tv_shop_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#666666"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:textSize="11sp"
+            android:text="10閒"
+            android:singleLine="true"
+            android:layout_marginEnd="6dp"
             />
     </RelativeLayout>
 </LinearLayout>
