@@ -1,6 +1,9 @@
 package com.ftofs.twant.go853
 
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -19,6 +22,7 @@ import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.SearchHistoryUtil
+import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.google.android.material.tabs.TabLayout
@@ -61,10 +65,26 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 when(item.saleType){
 //                    1 ->
 //                    2 ->
-//                    else -> {
-//                        item.sellingPrice?.let {  }?:binding.tvSellPrice.visibility=View.GONE
-//                        item.rentalPrice?.let {  }?:binding.tvRentPrice.visibility=View.GONE
-//                    }
+                    else -> {
+                        binding.tvSellPrice.apply {
+                            item.sellingPrice?.let {
+                                text=SpannableStringBuilder("售$ "+it.toInt().toString()+"萬").also { s->
+                                    s.setSpan(AbsoluteSizeSpan(13,true),0,3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                                    s.setSpan(AbsoluteSizeSpan(13,true),s.length-1,s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                                }
+                            }?:View.GONE.let { visibility=it }
+                        }
+                        binding.tvRentPrice.apply {
+                            item.rentalPrice?.let {
+                                if (it > 0) {
+                                    text=SpannableStringBuilder("租$ "+it.toInt().toString()+"元/月").also { s->
+                                        s.setSpan(AbsoluteSizeSpan(13,true),0,3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                                        s.setSpan(AbsoluteSizeSpan(13,true),s.length-3,s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                                    }
+                                }
+                        }?:View.GONE.let { visibility=it }
+                        }
+                    }
                 }
             }
 
@@ -86,7 +106,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             setLeftImageResource(R.drawable.icon_back)
             setLeftLayoutClickListener{onBackPressedSupport()}
             editKeyWord?.doAfterTextChanged {
-               iconClear.setVisibleOrGone(!text.isNullOrEmpty())
+               iconClear.visibility=if (text.isNullOrEmpty())View.GONE else View.VISIBLE
             }
             editKeyWord?.setOnTouchListener { _: View?, event: MotionEvent ->
                 if (event.action == MotionEvent.ACTION_UP) {
@@ -327,7 +347,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             }
         }
         binding.title.apply {
-            iconClear.setVisibleOrGone(!text.isNullOrEmpty())
+            iconClear.visibility=if (text.isNullOrEmpty())View.GONE else View.VISIBLE
         }
     }
 }

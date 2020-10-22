@@ -91,6 +91,7 @@
             android:textColor="#666666"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
+            android:paddingTop="4dp"
             android:textSize="11sp"
             android:text="10閒"
             android:singleLine="true"

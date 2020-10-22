@@ -192,7 +192,7 @@ data class GoPhoto(
         val isDefault: Int,
         val monthPic: Int,
         val photoId: Int,
-        val remark: String,
+        val remark: String?,
         val rollShow: Int,
         val sortimg: Int,
         val title: String

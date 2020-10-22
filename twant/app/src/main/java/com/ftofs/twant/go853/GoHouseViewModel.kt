@@ -73,7 +73,7 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
     val propertyList by lazy { MutableLiveData<GoeftInfo>() }
     val userPropertyList by lazy { MutableLiveData<GoeftInfo>() }
 
-    private val retrofit = (Retrofit.Builder()).client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("http://192.168.5.19:8080/api/").build()
+    private val retrofit = (Retrofit.Builder()).client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("http://192.168.5.28/api/").build()
     private val testApi=retrofit.create(DemoApiService::class.java)
     private val finalApi =if(Util.inDev()) testApi else repository.api
 

@@ -79,7 +79,7 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
         binding.title.apply {
 
             editKeyWord?.doAfterTextChanged {
-                iconClear.setVisibleOrGone(!text.isNullOrEmpty())
+                iconClear.visibility=if (text.isNullOrEmpty())View.GONE else View.VISIBLE
             }
             setLeftLayoutClickListener{onBackPressedSupport()}
             setLeftImageResource(R.drawable.icon_back)

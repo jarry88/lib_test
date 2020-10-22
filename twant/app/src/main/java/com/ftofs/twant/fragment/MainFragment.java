@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     public static final int CART_FRAGMENT = 3;
     /** 專頁 */
     public static final int MY_FRAGMENT = 4;
+    int doubleCircle=0;
     BasePopupView mLoading;
     TextView tvMessageItemCount; // 顯示未讀消息條數的紅點
     TextView tvCartItemCount;    // 顯示購物袋中產品數的紅點
@@ -76,6 +78,9 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     @Inject(name = ConstantsPath.LOGIN_SERVICE_PATH)
     LoginServiceImpl loginService;
+    private int MIN_CLICK_DELAY_TIME=300;
+    private long lastClickTime;
+
     public static MainFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -173,6 +178,22 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         SLog.info("index[%d], selectedFragmentIndex[%d]", index, selectedFragmentIndex);
         // 如果index不等于-1，表示是按下BottomBar的按鈕
         if (index != -1) {
+            if (index == CIRCLE_FRAGMENT) {
+                if (isDoubleClick()) {
+                    doubleCircle = 0;
+                    Util.startFragment(AddPostFragment.newInstance(false));
+                    return;
+                } else {
+                    doubleCircle = 1;
+                    new Handler().postDelayed(() -> {
+                        if (doubleCircle > 0) {
+                            doubleCircle = 0;
+                            showHideFragment(CIRCLE_FRAGMENT);
+                        }
+                    },MIN_CLICK_DELAY_TIME);
+                }
+                return;
+            }
             if (index == selectedFragmentIndex) {
                 // 已經是當前Fragment，返回
                 return;
@@ -348,6 +369,15 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     public void goLogin(ISupportFragment fragment) {
         loginService.start(requireContext());
+    }
+    public boolean isDoubleClick() {
+        boolean flag = false;
+        long curClickTime = System.currentTimeMillis();
+        if ((curClickTime - lastClickTime) <= MIN_CLICK_DELAY_TIME) {
+            flag = true;
+        }
+        lastClickTime = curClickTime;
+        return flag;
     }
 }
 

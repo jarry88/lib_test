@@ -109,6 +109,7 @@ class Title @JvmOverloads constructor(
                     }
                     true
                 } else {
+                    iconClear.visibility=if(text.isNullOrEmpty()) View.GONE else VISIBLE
                     false
                 }
             }

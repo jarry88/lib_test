@@ -103,29 +103,31 @@
                 android:lines="1"/>
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_sell_price"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:textSize="@{vo.saleType==3?28:32}"
-                tv_size="@{vo.saleType==3?14:16}"
-                android:gravity="center"
-                android:textColor="@color/tw_red"
-                android:layout_marginEnd="10dp"
-                android:lines="1"/>
-            <TextView
-                android:id="@+id/tv_rent_price"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:textSize="@{vo.saleType==3?28:32}"
-                tv_size="@{vo.saleType==3?14:16}"
-                android:gravity="center"
-                android:textColor="@color/tw_red"
-                android:layout_marginEnd="10dp"
-                android:lines="1"/>
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_sell_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@{vo.saleType==3?28:32}"
+                    tv_size="@{vo.saleType==3?14:16}"
+                    android:gravity="center"
+                    android:textColor="@color/tw_red"
+                    android:layout_marginEnd="10dp"
+                    android:lines="1"/>
+                <TextView
+                    android:id="@+id/tv_rent_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@{vo.saleType==3?28:32}"
+                    tv_size="@{vo.saleType==3?14:16}"
+                    android:gravity="center"
+                    android:textColor="@color/tw_red"
+                    android:layout_marginEnd="10dp"
+                    android:lines="1"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

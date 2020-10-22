@@ -84,31 +84,30 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
             binding.vo=it
             it.photoList?.takeIf { l-> l.isNotEmpty() }?.let { lll ->
                 val list = mutableListOf<GoPhoto>()
-                    list.map { p -> WebSliderItem(p.title, "none", "", "", "[]") }
-                            .let {ll->
-                                    val finalList = mutableListOf<WebSliderItem>().apply { addAll(ll) }
-                                    if(finalList.size<3){finalList.add(WebSliderItem(Constant.GO853_HOLD_PLACE))}
-                                    if(finalList.size<3){finalList.add(WebSliderItem(Constant.GO853_HOLD_PLACE))}
-                                    if(finalList.size<3){finalList.add(WebSliderItem(Constant.GO853_HOLD_PLACE))}
-//                                    binding.banner.let { it.visibility=View.VISIBLE }
-                                    binding.banner.setPages(ll) { BannerViewHolder(ll).apply { setmImageViewRadius(4f) } }
-                                    binding.banner.setIndicatorRes(R.drawable.white_banner_indicator_normal, R.drawable.gray_banner_indicator_normal)
-                                    val padding = Util.dip2px(context, 5f)
-                                    val linearLayout: LinearLayout = binding.banner.indicatorContainer
-                                    for (i in 0 until linearLayout.childCount) {
-                                        SLog.info("第%d個", i)
-                                        val imageView = linearLayout.getChildAt(i) as ImageView
-                                        imageView.setPadding(padding, 0, padding, 0)
-                                    }
-                                    binding.banner.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT)
-                                    binding.banner.indicatorContainer.apply {
-                                        layoutParams
-                                    }
-                                    binding.banner.setBannerPageClickListener { view, i ->
-                                        Util.startFragment(ViewPagerFragment.newInstance(list.map { it.title }, false))
-                                    }
-                                    binding.banner.start()
+                if(list.size<3){list.add(GoPhoto(0,0,0,null,0,0,Constant.GO853_HOLD_PLACE))}
+                if(list.size<3){list.add(GoPhoto(0,0,0,null,0,0,Constant.GO853_HOLD_PLACE))}
+                if(list.size<3){list.add(GoPhoto(0,0,0,null,0,0,Constant.GO853_HOLD_PLACE))}
+
+                list.map { p -> WebSliderItem(p.title, "none", "", "", "[]") }
+                        .let {ll->
+                                binding.banner.setPages(ll) { BannerViewHolder(ll).apply { setmImageViewRadius(4f) } }
+                                binding.banner.setIndicatorRes(R.drawable.white_banner_indicator_normal, R.drawable.gray_banner_indicator_normal)
+                                val padding = Util.dip2px(context, 5f)
+                                val linearLayout: LinearLayout = binding.banner.indicatorContainer
+                                for (i in 0 until linearLayout.childCount) {
+                                    SLog.info("第%d個", i)
+                                    val imageView = linearLayout.getChildAt(i) as ImageView
+                                    imageView.setPadding(padding, 0, padding, 0)
                                 }
+                                binding.banner.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT)
+                                binding.banner.indicatorContainer.apply {
+                                    layoutParams
+                                }
+                                binding.banner.setBannerPageClickListener { view, i ->
+                                    Util.startFragment(ViewPagerFragment.newInstance(list.map { it.title }, false))
+                                }
+                                binding.banner.start()
+                            }
 
             }?:binding.banner.let { it.visibility=View.GONE }
 
