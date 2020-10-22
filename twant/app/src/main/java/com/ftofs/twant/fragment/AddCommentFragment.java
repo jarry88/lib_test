@@ -483,7 +483,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         int id = (int) data;
         if (id == R.id.et_content) {
             SLog.info("點擊內容");
-            showBottomToolbar();
+            // showBottomToolbar();
         }
     }
 
