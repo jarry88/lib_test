@@ -20,7 +20,6 @@
                 android:layout_marginStart="18dp"
                 android:layout_centerVertical="true"
                 app:icon_src="@drawable/ic_arrow_back_white_24dp">
-
             </com.ftofs.twant.widget.ScaledButton>
             <ImageView
                 android:id="@+id/btn_test"
@@ -74,7 +73,6 @@
                 </ImageView>
             </FrameLayout>
         </LinearLayout>
-
     </LinearLayout>
 
     <androidx.viewpager.widget.ViewPager

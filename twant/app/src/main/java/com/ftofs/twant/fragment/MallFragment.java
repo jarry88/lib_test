@@ -238,7 +238,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                     } else if (marketingState == Constant.MARKETING_STATE_APPLY_IN_PROGRESS) {
                         btnJoinDistribution.setText("審核中");
                     } else if (marketingState == Constant.MARKETING_STATE_APPLY_PASS) {
-                        btnJoinDistribution.setText("我的團隊");
+                        btnJoinDistribution.setText("分銷中心");
                     } else if (marketingState == Constant.MARKETING_STATE_APPLY_NOT_PASS || marketingState == Constant.MARKETING_STATE_APPLY_REMOVED) {
                         btnJoinDistribution.setText("重新加入");
                     }
