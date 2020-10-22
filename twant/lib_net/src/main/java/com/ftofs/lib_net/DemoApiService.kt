@@ -130,6 +130,10 @@ interface DemoApiService {
     @Headers("clientType: android")
     @GET("coupon/{id}")
     suspend fun getCouponDetail(@Path ("id")id: Int): TwantResponse<CouponDetailVo>
+    //獲取訂單列表-分頁
+    @Headers("clientType: android")
+    @GET("orders/list")
+    suspend fun getCouponOrdersList(@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>): TwantResponse<CouponOrdersListInfo>
     //
     @POST("buy/step1")
     @Headers("Content-Type:application/json; charset=UTF-8")

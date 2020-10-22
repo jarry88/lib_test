@@ -14,6 +14,7 @@ import com.ftofs.lib_net.model.CouponItemVo
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CouponOrderListFragmentBinding
+import com.ftofs.twant.databinding.CouponOrderListItemBinding
 import com.ftofs.twant.databinding.CouponStoreItemBinding
 import com.ftofs.twant.kotlin.extension.dp2FloatPx
 import com.ftofs.twant.kotlin.extension.dp2IntPx
@@ -43,9 +44,9 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             setLeftLayoutClickListener{onBackPressedSupport()}
         }
         binding.smartList.apply {
-            config<CouponItemVo, CouponStoreItemBinding>(R.layout.coupon_store_item, viewModel.couponStoreList){ b, d ->
-                b.vo=d
-                b.root.setOnClickListener { Util.startFragment(CouponStoreDetailFragment.newInstance(d.id)) }
+            config<CouponItemVo, CouponOrderListItemBinding>(R.layout.coupon_order_list_item, viewModel.couponStoreList){ b, d ->
+                b.vo
+                b.root.setOnClickListener { Util.startFragment(CouponOrderDetailFragment.newInstance(d.id)) }
             }
             setRefreshListener {
                 viewModel.currPage=0

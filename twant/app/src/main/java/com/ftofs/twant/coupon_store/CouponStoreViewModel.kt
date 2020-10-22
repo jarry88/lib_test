@@ -21,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class CouponStoreViewModel(application: Application):BaseViewModel(application) {
     val currCouponDetail by lazy { MutableLiveData<CouponDetailVo>() }
     val couponStoreList by lazy { MutableLiveData<List<CouponItemVo>>() }
+    val couponOrdersListInfo by lazy { MutableLiveData<CouponOrdersListInfo>() }
     val buyStep1Vo by lazy { MutableLiveData<BuyStep1Vo>() }
     val buyStep2Vo by lazy { MutableLiveData<BuyStep2Vo>() }
     val mPayVo by lazy { MutableLiveData<MpayVo>() }
@@ -131,6 +132,29 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
                 { currCouponDetail.postValue(it) }
         )
     }
+    /**
+     * 獲取訂單列表-分頁
+     */
+    fun getOrdersList(){
+        val params = mapOf<String, Any?>(
+                "field" to null,//	排序字段
+                "order" to null, //排序规则，asc升序，desc降序
+                "orderSn" to null, //	訂單號
+                "orderType" to null, //int
+                "orderStatus" to null, //訂單狀態 int
+                "page" to currPage, //訂單狀態 int
+                "pageSize" to null, //訂單狀態 int
+
+        )
+                .run {
+                   this
+                }
+        launch(stateLiveData,
+                { repository.run { simpleGet(finalApi.getCouponOrdersList(params)).apply { SLog.info(params.toString()) } } },
+                { couponOrdersListInfo.postValue(it) }
+        )
+    }
+
     /**
      * 獲取券倉列表
      */
