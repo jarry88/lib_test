@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -35,7 +35,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintDimensionRatio="375:525"
+                app:layout_constraintDimensionRatio="375:524"
                 android:src="@drawable/distribution_promotion_poster">
             </ImageView>
 
@@ -71,24 +71,66 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:background="#FFF9F5">
-            <ImageView
-                android:id="@+id/img_invitation_qr_code"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/distribution_qr_code">
-            </ImageView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="8dp"
-                android:text="長按識別二維碼"
-                android:textColor="@color/tw_medium_grey"
-                android:textSize="12sp">
-            </TextView>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="91dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginStart="15dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="快來逛逛吧！"
+                        android:textSize="21sp"
+                        android:textColor="#FA6400">
+                    </TextView>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:orientation="horizontal"
+                        android:gravity="bottom">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#868280"
+                            android:textSize="14sp"
+                            android:text="掃碼註冊">
+                        </TextView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#FA6400"
+                            android:textSize="18sp"
+                            android:text="送好禮">
+                        </TextView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#868280"
+                            android:textSize="14sp"
+                            android:text="，聯繫客服領取">
+                        </TextView>
+
+                    </LinearLayout>
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/img_invitation_qr_code"
+                    android:layout_width="81dp"
+                    android:layout_height="81dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/distribution_qr_code">
+                </ImageView>
+            </FrameLayout>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="33dp"
+                android:layout_height="38dp"
                 android:orientation="horizontal"
                 android:background="@drawable/poster_footer_bg">
                 <TextView
@@ -96,7 +138,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="大牌正品"
+                    android:text="原裝進口"
                     android:textSize="12sp"
                     android:textColor="@android:color/white">
                 </TextView>
@@ -105,7 +147,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="全網超低價"
+                    android:text="假一罰十"
                     android:textSize="12sp"
                     android:textColor="@android:color/white">
                 </TextView>
@@ -114,7 +156,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="澳門直郵"
+                    android:text="包郵包稅"
                     android:textSize="12sp"
                     android:textColor="@android:color/white">
                 </TextView>

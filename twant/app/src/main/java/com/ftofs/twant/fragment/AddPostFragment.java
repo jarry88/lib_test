@@ -918,7 +918,7 @@ public class AddPostFragment extends BaseFragment implements
             llToolContainer.setVisibility(View.GONE);
         } else if (id == R.id.et_content) {
             SLog.info("點擊內容");
-            showBottomToolbar();
+            // showBottomToolbar();
         }
     }
 
