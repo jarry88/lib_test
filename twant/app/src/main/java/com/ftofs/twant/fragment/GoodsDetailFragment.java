@@ -2230,7 +2230,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
                         if (goodsInfo.isGroup == Constant.TRUE_INT) {
                             goodsInfo.groupPrice = goodsInfoVo.getDouble("groupPrice");
-                            goodsInfo.groupDiscountAmount = goodsInfo.appPrice0 - goodsInfo.groupPrice;
+                            goodsInfo.groupDiscountAmount = goodsInfo.goodsPrice0 - goodsInfo.groupPrice;
                         }
 
                         // 是否為秒殺
