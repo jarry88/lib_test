@@ -13,9 +13,12 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.findFragment
 import com.bumptech.glide.Glide
 import com.ftofs.twant.R
+import com.ftofs.twant.dsl.TextWatcher
+import com.ftofs.twant.dsl.onTextChange
 import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.widget.TouchEditText
 import com.gzp.lib_common.base.BaseFragment
+import com.gzp.lib_common.utils.SLog
 
 class Title @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -101,6 +104,12 @@ class Title @JvmOverloads constructor(
         editKeyWord?.apply {
             searchRes?.let {  }
             hint=hintText
+            onTextChange = TextWatcher{ e ->
+                SLog.info(e?.toString())
+                e?.let {
+                    iconClear.setVisibleOrGone(it.isNotEmpty())
+                }
+            }
             setOnEditorActionListener { textView, i, keyEvent ->
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
                     val keyword = textView.text.toString().trim { it <= ' ' }
@@ -109,6 +118,7 @@ class Title @JvmOverloads constructor(
                     }
                     true
                 } else {
+                    iconClear.visibility=if(text.isNullOrEmpty()) View.GONE else VISIBLE
                     false
                 }
             }

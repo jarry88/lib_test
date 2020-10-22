@@ -1,6 +1,9 @@
 package com.ftofs.twant.go853
 
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -83,35 +86,66 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
         viewModel.currPropertyInfo.observe(this){
             binding.vo=it
             it.photoList?.takeIf { l-> l.isNotEmpty() }?.let { lll ->
-                val list = mutableListOf<GoPhoto>()
-                    list.map { p -> WebSliderItem(p.title, "none", "", "", "[]") }
-                            .let {ll->
-                                    val finalList = mutableListOf<WebSliderItem>().apply { addAll(ll) }
-                                    if(finalList.size<3){finalList.add(WebSliderItem(Constant.GO853_HOLD_PLACE))}
-                                    if(finalList.size<3){finalList.add(WebSliderItem(Constant.GO853_HOLD_PLACE))}
-                                    if(finalList.size<3){finalList.add(WebSliderItem(Constant.GO853_HOLD_PLACE))}
-//                                    binding.banner.let { it.visibility=View.VISIBLE }
-                                    binding.banner.setPages(ll) { BannerViewHolder(ll).apply { setmImageViewRadius(4f) } }
-                                    binding.banner.setIndicatorRes(R.drawable.white_banner_indicator_normal, R.drawable.gray_banner_indicator_normal)
-                                    val padding = Util.dip2px(context, 5f)
-                                    val linearLayout: LinearLayout = binding.banner.indicatorContainer
-                                    for (i in 0 until linearLayout.childCount) {
-                                        SLog.info("第%d個", i)
-                                        val imageView = linearLayout.getChildAt(i) as ImageView
-                                        imageView.setPadding(padding, 0, padding, 0)
-                                    }
-                                    binding.banner.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT)
-                                    binding.banner.indicatorContainer.apply {
-                                        layoutParams
-                                    }
-                                    binding.banner.setBannerPageClickListener { view, i ->
-                                        Util.startFragment(ViewPagerFragment.newInstance(list.map { it.title }, false))
-                                    }
-                                    binding.banner.start()
+                val list = mutableListOf<GoPhoto>().apply { addAll(lll) }
+                if(list.size<3){list.add(GoPhoto(0,0,0,null,0,0,Constant.GO853_HOLD_PLACE))}
+                if(list.size<3){list.add(GoPhoto(0,0,0,null,0,0,Constant.GO853_HOLD_PLACE))}
+                if(list.size<3){list.add(GoPhoto(0,0,0,null,0,0,Constant.GO853_HOLD_PLACE))}
+
+                list.map { p -> WebSliderItem(p.title, "none", "", "", "[]").apply { SLog.info(p.title) } }
+                        .let {ll->
+                                binding.banner.setPages(ll) { BannerViewHolder(ll).apply { setmImageViewRadius(4f) } }
+                                binding.banner.setIndicatorRes(R.drawable.white_banner_indicator_normal, R.drawable.gray_banner_indicator_normal)
+                                val padding = Util.dip2px(context, 5f)
+                                val linearLayout: LinearLayout = binding.banner.indicatorContainer
+                                for (i in 0 until linearLayout.childCount) {
+                                    SLog.info("第%d個", i)
+                                    val imageView = linearLayout.getChildAt(i) as ImageView
+                                    imageView.setPadding(padding, 0, padding, 0)
                                 }
+                                binding.banner.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT)
+                                binding.banner.indicatorContainer.apply {
+                                    layoutParams
+                                }
+                                binding.banner.setBannerPageClickListener { view, i ->
+                                    Util.startFragment(ViewPagerFragment.newInstance(list.map { it.title }, false))
+                                }
+                                binding.banner.start()
+                            }
 
             }?:binding.banner.let { it.visibility=View.GONE }
 
+            var bothNothing = true
+            val item =it
+            binding.tvSellPrice.apply {
+                item.sellingPrice?.let {
+                    if (it > 0) {
+                        val start = item.saleType == 2
+                        bothNothing = false
+                        text = SpannableStringBuilder("$" + it.toInt().toString() + "萬").also { s ->
+                            s.setSpan(AbsoluteSizeSpan(13, true), 0,  1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                            s.setSpan(AbsoluteSizeSpan(13, true), s.length - 1, s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        }
+                    } else View.GONE.let { visibility=it }
+                }?:View.GONE.let { visibility=it }
+            }
+            binding.tvRentPrice.apply {
+                item.rentalPrice?.let {
+                    if (it > 0) {
+                        bothNothing=false
+                        val start =item.saleType==1
+                        text= SpannableStringBuilder(
+                                "$"
+                                        +it.toInt().toString().let{if(it.length>3) it.substring(0,it.length-3)+","+it.substring(it.length-3,it.length) else it}+"元/月").also { s->
+                            s.setSpan(AbsoluteSizeSpan(13,true),0, 1 , Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                            s.setSpan(AbsoluteSizeSpan(13,true),s.length-3,s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        }
+                    }else View.GONE.let { visibility=it }
+                }?:View.GONE.let { visibility=it }
+            }
+            if(bothNothing) binding.tvSellPrice.apply {
+                text="面議"
+                visibility=View.VISIBLE
+            }
 
         }
     }

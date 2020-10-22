@@ -1,6 +1,10 @@
 package com.ftofs.twant.go853
 
+import android.opengl.Visibility
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -19,6 +23,7 @@ import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.SearchHistoryUtil
+import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.google.android.material.tabs.TabLayout
@@ -58,14 +63,6 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
                 binding.root.setOnClickListener {
                     Util.startFragment(GoPropertyDetailFragment(item.pid, item))
                 }
-                when(item.saleType){
-//                    1 ->
-//                    2 ->
-//                    else -> {
-//                        item.sellingPrice?.let {  }?:binding.tvSellPrice.visibility=View.GONE
-//                        item.rentalPrice?.let {  }?:binding.tvRentPrice.visibility=View.GONE
-//                    }
-                }
             }
 
         }
@@ -86,7 +83,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             setLeftImageResource(R.drawable.icon_back)
             setLeftLayoutClickListener{onBackPressedSupport()}
             editKeyWord?.doAfterTextChanged {
-               iconClear.setVisibleOrGone(!text.isNullOrEmpty())
+               iconClear.visibility=if (text.isNullOrEmpty())View.GONE else View.VISIBLE
             }
             editKeyWord?.setOnTouchListener { _: View?, event: MotionEvent ->
                 if (event.action == MotionEvent.ACTION_UP) {
@@ -100,7 +97,6 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         }
         binding.banner.apply {
             setBackgroundResource(R.drawable.go_banner)
-
         }
         binding.rvList.isNestedScrollingEnabled=false
         binding.tabLayout.apply {
@@ -327,7 +323,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             }
         }
         binding.title.apply {
-            iconClear.setVisibleOrGone(!text.isNullOrEmpty())
+            iconClear.visibility=if (text.isNullOrEmpty())View.GONE else View.VISIBLE
         }
     }
 }
