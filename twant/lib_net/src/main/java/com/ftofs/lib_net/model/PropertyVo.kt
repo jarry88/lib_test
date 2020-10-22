@@ -161,15 +161,15 @@ data class PropertyVo(
         else ->""
     }
     //todo 待確定補全的屬性
-    fun getRentalPriceString():String=when(rentalPrice){//租價，0：面議，1：有
+    fun getRentalPriceString():String=rentalPrice?.let { when(it.toInt()){//租價，0：面議，1：有
         0 ->"面議"
-        else ->"${rentalPrice}元/月"
-    }
+        else ->"${it.toInt()}元/月"
+    } }?:"面議"
     //todo 待確定補全的屬性
-    fun getSellingPriceString():String=when(sellingPrice){//租價，0：面議，1：**萬
+    fun getSellingPriceString():String=sellingPrice?.let { when(sellingPrice.toInt()){//租價，0：面議，1：**萬
         0 ->"面議"
-        else ->"${sellingPrice}萬"
-    }
+        else ->"${sellingPrice.toInt()}萬"
+    }}?:"面議"
     //todo 待確定補全的屬性
     fun getLeaseString():String=when(lease){//帶租約：，0：不帶，1：帶
         0 ->"不帶"
@@ -186,7 +186,7 @@ data class PropertyVo(
     fun getSourceString():String=sourceDes
     fun getBuildingAreaString():String=if(buildingArea>0) "$buildingArea 呎" else "-"  //建築面積
     fun getSalableAreaString():String=if(salableArea>0) "$salableArea 呎" else "-"  //實用面積
-    fun getAveragePrice():String=if(pingJunPrice>0)"$pingJunPrice 元" else "-"  //實用面積
+    fun getAveragePrice():String=pingJunPrice?.let { if(pingJunPrice>0)"$pingJunPrice 元" else "-"  }?:"-" //實用面積
 }
 data class GoPhoto(
         val isDefault: Int,
