@@ -10,6 +10,13 @@ public class WebSliderItem {
         this.goodsIds = goodsIds;
         this.goodsCommons = goodsCommons;
     }
+    public WebSliderItem(String image) {
+        this.image = image;
+        this.linkType = "none";
+        this.linkValue = "";
+        this.goodsIds = "";
+        this.goodsCommons = "[]";
+    }
 
     public String image;
     public String linkType;

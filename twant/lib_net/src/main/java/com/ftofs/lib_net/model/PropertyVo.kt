@@ -152,8 +152,8 @@ data class PropertyVo(
         else ->""
     }
     fun getPriceText():String=when(saleType){
-        1->"租 $"+getRentalPriceString()
-        2->"售 $" +getSellingPriceString()
+        1->"$"+getRentalPriceString()
+        2->"$" +getSellingPriceString()
         3->"售 $" +getSellingPriceString()+"    "+"租 $"+getRentalPriceString()
         else ->""
     }

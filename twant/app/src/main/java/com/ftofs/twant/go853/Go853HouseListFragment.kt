@@ -90,6 +90,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         }
         binding.banner.apply {
             setBackgroundResource(R.drawable.go_banner)
+
         }
         binding.rvList.isNestedScrollingEnabled=false
         binding.tabLayout.apply {
