@@ -46,10 +46,10 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
             factoryPriceMap("18000-20000/月",18000.0,20000.0),
             factoryPriceMap("高於20000/月",20000.0,Double.MAX_VALUE),
     )
-    val rentPriceBeginLiveData by lazy { MutableLiveData<Double>() }
-    val rentPriceEndLiveData by lazy { MutableLiveData<Double>() }
-    val sellingPriceBeginLiveData by lazy { MutableLiveData<Double>() }
-    val sellingPriceEndLiveData by lazy { MutableLiveData<Double>() }
+    private val rentPriceBeginLiveData by lazy { MutableLiveData<Double>() }
+    private val rentPriceEndLiveData by lazy { MutableLiveData<Double>() }
+    private val sellingPriceBeginLiveData by lazy { MutableLiveData<Double>() }
+    private val sellingPriceEndLiveData by lazy { MutableLiveData<Double>() }
 
     val sellingPriceRangeList=listOf(
             factorySellingPriceMap("全部",0.0,Double.MAX_VALUE),
@@ -260,17 +260,17 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
     fun saveRentPriceRang(desc: String) {
         SLog.info(desc)
         rentPriceRangeList.first { (it["desc"] as String) == desc }?.let {
-            rentPriceBeginLiveData.value=it.get("rentalPriceBegin") as Double?
-            rentPriceEndLiveData.value=it.get("rentalPriceEnd") as Double?
-        }?:{
+            rentPriceBeginLiveData.value= it["rentalPriceBegin"] as Double?
+            rentPriceEndLiveData.value= it["rentalPriceEnd"] as Double?
+        } ?:{
             rentPriceBeginLiveData.value=null
             rentPriceEndLiveData.value=null
         }
     }
     fun saveSellingPriceRange(desc: String) {
         sellingPriceRangeList.first { (it["desc"] as String) == desc }?.let {
-            sellingPriceBeginLiveData.value=it.get("sellingPriceBegin") as Double?
-            sellingPriceEndLiveData.value=it.get("sellingPriceEnd") as Double?
+            sellingPriceBeginLiveData.value= it["sellingPriceBegin"] as Double?
+            sellingPriceEndLiveData.value= it["sellingPriceEnd"] as Double?
         }?:{
             sellingPriceBeginLiveData.value=null
             sellingPriceEndLiveData.value=null
