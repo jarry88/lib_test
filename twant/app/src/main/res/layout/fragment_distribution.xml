@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
-            android:text="我的團隊"
+            android:text="分銷中心"
             />
     </RelativeLayout>
     <!--  END OF 工具欄 -->
@@ -120,7 +120,7 @@
                             android:id="@+id/tv_unpaid_commission_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="可提現金額：0.00元"
+                            android:text="可提現金額："
                             android:textColor="#717171"
                             android:textSize="14sp">
                         </TextView>
