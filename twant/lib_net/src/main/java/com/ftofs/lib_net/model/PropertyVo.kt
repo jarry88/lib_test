@@ -15,7 +15,7 @@ data class PropertyVo(
         val brokeragePercent: Int,
         val brokerageType: Int,
         val building: String,
-        val buildingArea: Double,
+        val buildingArea: Double?,
         val city: String,
         val contactHits: Int,
         val cooperation: Int,
@@ -184,7 +184,7 @@ data class PropertyVo(
     }
     //todo 待確定補全的屬性
     fun getSourceString():String=sourceDes
-    fun getBuildingAreaString():String=if(buildingArea>0) "$buildingArea 呎" else "-"  //建築面積
+    fun getBuildingAreaString():String=buildingArea?.run { if(buildingArea>0) "$buildingArea 呎" else "-" }?: "-" //建築面積
     fun getSalableAreaString():String=if(salableArea>0) "$salableArea 呎" else "-"  //實用面積
     fun getAveragePrice():String=pingJunPrice?.let { if(pingJunPrice>0)"$pingJunPrice 元" else "-"  }?:"-" //實用面積
 }

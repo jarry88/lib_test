@@ -68,10 +68,16 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
             ToastUtil.success(context,"打开")
             KLog.init(true)
         }
-        binding.button3.setOnClickListener {
-            XPopup.Builder(context).atView(it).asCustom(
-                    GoDropdownMenu(mActivity, listOf("1","2","3","4"),"2")
+        binding.button3.apply{
+            setOnClickListener {
+            XPopup.Builder(_mActivity)
+                    .moveUpToKeyboard(false)
+                    .hasShadowBg(false)
+                    .atView(this)
+                    .asCustom(
+                    GoDropdownMenu(context, listOf("1","2","3","4"),"2")
             ).show()
+        }
         }
         binding.button4.setOnClickListener { start(Go853HouseListFragment()) }
         binding.rlList.adapter=mAdapter
