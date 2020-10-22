@@ -13,15 +13,19 @@ import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.constant.SPField
+import com.ftofs.twant.databinding.CouponListItemWighetBinding
 import com.ftofs.twant.databinding.CouponOrderConfirmFragmentBinding
 import com.ftofs.twant.databinding.CouponOrderConfirmItemBinding
+import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.dsl.customer.factoryAdapter
 import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.fragment.PaySuccessFragment
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
 import com.ftofs.twant.util.AssetsUtil
 import com.ftofs.twant.util.ToastUtil
+import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
+import com.ftofs.twant.widget.AdjustButton
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
@@ -47,18 +51,13 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
         return BR.viewModel
     }
 
-    private val mAdapter by lazy {
-//        factoryAdapter<CouponItemVo, CouponOrderConfirmItemBinding>(R.layout.coupon_order_confirm_item){ b, d ->
-//            b.vo=d
-//        }
-        object :DataBoundAdapter<CouponItemVo,CouponOrderConfirmItemBinding>(){
-            override val layoutId: Int
-                get() = R.layout.coupon_order_confirm_item
-
-            override fun initView(binding: CouponOrderConfirmItemBinding, item: CouponItemVo) {
-                binding.vo=item
+    val mAdapter by lazy {
+        factoryAdapter<CouponItemVo, CouponOrderConfirmItemBinding>(R.layout.coupon_order_confirm_item){ b, d ->
+            b.vo=d
+            b.fixed.setFixedText("留言：",15)
+            b.abQuantity.setMaxValue(d.stock?:Int.MAX_VALUE){
+                SLog.info("已經達到上限")
             }
-
         }
     }
     val id by lazy { arguments?.getInt(ORDER_ID).apply { SLog.info(this.toString()) } }
@@ -88,11 +87,13 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
             viewModel.getTcBuyStep1(listOf(BuyGoodsDTO(it, 1)))
         }?:hideSoftInputPop()
         binding.btnBuy.setOnClickListener {
-            mAdapter.getData()?.let { list ->
-                viewModel.getTcBuyStep2(listOf(BuyGoodsDTO(id, 1)))
-            }?:SLog.info("没有数据")}
-        mAdapter.addAll(listOf(CouponItemVo(null,null,null,null,null,null,null,null,null,null,null,null,null)), true)
-
+            if (User.getUserId() > 0) {
+                mAdapter.getData()?.let { list ->
+                    viewModel.getTcBuyStep2(listOf(BuyGoodsDTO(id, 1)))
+                }?:SLog.info("没有数据")}
+               else {Util.showLoginFragment(requireContext())
+                        }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -110,7 +111,7 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
         viewModel.buyStep1Vo.observe(this){
             binding.vo=it
             it.couponBaseList?.let { list ->
-                mAdapter.addAll(list, false).apply { SLog.info(list.size.toString()) }
+                mAdapter.addAll(list, true).apply { SLog.info(list.size.toString()) }
             }
         }
         viewModel.buyStep2Vo.observe(this){

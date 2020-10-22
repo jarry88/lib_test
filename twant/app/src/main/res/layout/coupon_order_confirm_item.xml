@@ -9,20 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp_15">
-<!--        <com.ftofs.twant.view.CouponListItemView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            android:id="@+id/list_item"-->
-<!--            app:coupon_type="order"-->
-<!--            app:coupon_item_vo="@{vo}"-->
-<!--            android:layout_marginBottom="@dimen/dp_18"-->
-<!--            />-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical">
+
+            <com.ftofs.twant.view.CouponListItemView
+                android:id="@+id/coupon_list_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:coupon_type="order"
+                app:coupon_item_vo="@{vo}"
+                android:layout_marginBottom="@dimen/dp_18"
+                />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -56,17 +56,16 @@
             <com.ftofs.twant.widget.FixedEditText
                 android:id="@+id/fixed"
                 android:layout_marginBottom="14dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:paddingStart="@dimen/dp_10"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
                 android:paddingEnd="10dp"
                 android:textSize="13sp"
+                android:minLines="2"
                 android:hint="給商家留言，100字以內（選填）"
-                android:background="@drawable/seller_edit_text_bg"
-                android:layout_marginStart="@dimen/margin8"
-                android:inputType="number" />
+                android:background="@drawable/seller_edit_text_bg" />
 
             <View
                 android:layout_width="match_parent"
@@ -108,6 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_coupon_list"
+                    android:layout_gravity="center_vertical"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_width="wrap_content"

@@ -114,6 +114,30 @@
                             android:layout_centerVertical="true"
                             android:layout_alignParentEnd="true"
                             android:layout_marginEnd="5dp"/>
+                        <LinearLayout
+
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginEnd="@dimen/margin_8dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="@dimen/dp_4"
+                            android:paddingEnd="@dimen/dp_4"
+                            android:background="#99161616"
+                            radius="@{3f}"
+                            android:gravity="center">
+                            <ImageView
+                                android:layout_width="@dimen/dp_12"
+                                android:layout_height="12dp"
+                                android:src="@drawable/coupon_img_icon"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/tw_white"
+                                android:textSize="12sp"
+                                android:text="@{vo.imgSize}"/>
+                        </LinearLayout>
                     </RelativeLayout>
 
                     <TextView

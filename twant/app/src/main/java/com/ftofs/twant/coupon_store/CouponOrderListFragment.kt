@@ -6,22 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.view.size
 import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.CouponItemVo
-import com.gzp.lib_common.base.BaseTwantFragmentMVVM
-import com.ftofs.twant.R
 import com.ftofs.twant.BR
-import com.ftofs.twant.databinding.CouponActivityListFragmentBinding
+import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CouponOrderListFragmentBinding
+import com.ftofs.twant.databinding.CouponOrderListItemBinding
 import com.ftofs.twant.databinding.CouponStoreItemBinding
-import com.ftofs.twant.kotlin.setTextViewSize
+import com.ftofs.twant.kotlin.extension.dp2FloatPx
+import com.ftofs.twant.kotlin.extension.dp2IntPx
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.google.android.material.tabs.TabLayout
+import com.gzp.lib_common.base.BaseTwantFragmentMVVM
+import org.apache.http.cookie.SM
 
-class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBinding,CouponStoreViewModel>(){
+
+class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBinding, CouponStoreViewModel>(){
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.coupon_order_list_fragment
     }
@@ -40,9 +44,9 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             setLeftLayoutClickListener{onBackPressedSupport()}
         }
         binding.smartList.apply {
-            config<CouponItemVo,CouponStoreItemBinding>(R.layout.coupon_store_item,viewModel.couponStoreList){b,d ->
-                b.vo=d
-                b.root.setOnClickListener { Util.startFragment(CouponStoreDetailFragment.newInstance(d.id)) }
+            config<CouponItemVo, CouponOrderListItemBinding>(R.layout.coupon_order_list_item, viewModel.couponStoreList){ b, d ->
+                b.vo
+                b.root.setOnClickListener { Util.startFragment(CouponOrderDetailFragment.newInstance(d.id)) }
             }
             setRefreshListener {
                 viewModel.currPage=0
@@ -98,22 +102,67 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
 
             })
             addTab(newTab().apply {
-                customView = tagViewFactory("全部")
+//                customView = tagViewFactory("全部")
+                text="全部"
             }
             )
             addTab(newTab().apply {
-                customView = tagViewFactory("待付款")
+                text="待付款"
+
+//                customView = tagViewFactory("待付款")
             })
             addTab(newTab().apply {
-                customView = tagViewFactory("可使用")
+                text="可使用"
+//
+//                customView = tagViewFactory("可使用")
 
             })
             addTab(newTab().apply {
-                customView = tagViewFactory("退款/售後")
+                text="退款/售後"
+//                customView = tagViewFactory("退款/售後")
 
             })
+
+            post {
+                try {
+                    //拿到tabLayout的mTabStrip属性
+                    val mTabStripField = javaClass.getDeclaredField("mTabStrip")
+                    mTabStripField.isAccessible=true
+                    val mTabStrip = mTabStripField.get(this) as LinearLayout
+                    for (i in 0 until mTabStrip.childCount) {
+                        val tabView = mTabStrip.getChildAt(i)
+
+                        //拿到tabView的mTextView属性
+                        val mTextViewField = tabView.javaClass.getDeclaredField("mTextView")
+                        mTextViewField.isAccessible = true
+                        val mTextView = mTextViewField.get(tabView) as TextView
+                        tabView.setPadding(0, 0, 0, 0)
+
+                        //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
+                        var width = 0
+                        width = mTextView.width
+                        if (width == 0) {
+                            mTextView.measure(0, 0)
+                            width = mTextView.measuredWidth
+                        }
+
+                        //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
+                        val params = tabView.layoutParams as LinearLayout.LayoutParams
+                        params.width = width
+                        params.leftMargin = 10.dp2IntPx(_mActivity)
+                        params.rightMargin = 10.dp2IntPx(_mActivity)
+                        tabView.layoutParams = params
+                        tabView.invalidate()
+                    }
+                } catch (e: NoSuchFieldException) {
+                    e.printStackTrace()
+                } catch (e: IllegalAccessException) {
+                    e.printStackTrace()
+                }
+            }
 
         }
+        binding.btnMoreCoupon.setOnClickListener { Util.startFragment(CouponActivityListFragment()) }
     }
 
     companion object{
@@ -129,7 +178,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
         }
     }
     private fun showDrawListView(v: View, selectedTabPosition: Int) {
-        ToastUtil.success(context,"$selectedTabPosition")
+        ToastUtil.success(context, "$selectedTabPosition")
     }
 
     private fun tagViewFactory(tagText: String, visible: Boolean = true)=with(LayoutInflater.from(context).inflate(R.layout.tab_red_count_item, null, false)) {

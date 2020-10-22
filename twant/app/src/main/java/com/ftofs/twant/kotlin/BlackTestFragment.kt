@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.alibaba.fastjson.JSON
+import com.ftofs.lib_net.model.CouponItemVo
 import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.R
 import com.ftofs.twant.BR
+import com.ftofs.twant.databinding.CouponListItemWighetBinding
 import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.databinding.SearchSuggestionItemBinding
 import com.ftofs.twant.databinding.TestBlackFragmentBinding
+import com.ftofs.twant.dsl.customer.factoryAdapter
 import com.ftofs.twant.go853.Go853HouseListFragment
 import com.ftofs.twant.go853.GoSearchType
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
@@ -31,6 +34,10 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
 
     override fun initVariableId(): Int {
         return BR.viewModel
+    }
+    val mAdapter=
+    factoryAdapter<CouponItemVo, CouponListItemWighetBinding>(R.layout.coupon_list_item_wighet){ b, d ->
+        b.vo=d
     }
     private val suggestAdapter by lazy {
         object : DataBoundAdapter<String, ItemHouseVoBinding>(){
@@ -63,7 +70,8 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
             viewModel.getPropertyList()
         }
         binding.button4.setOnClickListener { start(Go853HouseListFragment()) }
-        binding.rlList.adapter=suggestAdapter
+        binding.rlList.adapter=mAdapter
+        mAdapter.addAll(listOf(CouponItemVo(null,null,null,null,null,null,null,null,"null",null,null,null,null)),true)
         suggestAdapter.addAll(SearchHistoryUtil.loadSearchHistory(GoSearchType.All.ordinal).map { it.keyword },true)
 
     }

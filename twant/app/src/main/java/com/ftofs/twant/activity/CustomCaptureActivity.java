@@ -10,6 +10,9 @@ import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CaptureFragment;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
+/**
+ * 二維碼掃描頁（zxing）
+ */
 public class CustomCaptureActivity extends CaptureActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

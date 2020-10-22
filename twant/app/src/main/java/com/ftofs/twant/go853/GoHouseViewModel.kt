@@ -95,9 +95,9 @@ class GoHouseViewModel(application: Application):BaseViewModel(application) {
             size:Int=20,
             search:String?=null,
             sort:String?=null,//editDate,排序字段名
-            isType:Int?=allEqualsNull(isTypeLiveData.value) ,//房產類型
+            isType:Int?=allEqualsNull(isTypeLiveData.value),//房產類型
             saleType:Int?=allEqualsNull(saleTypeLiveData.value),//租售
-            city:String?=cityTypeLiveData.value,//地理位置（區）：路氹、路環、新橋、關閘...等
+            city:String?= cityTypeLiveData.value?.let { if(cityTypeList.indexOf(it)<=0) null else it },//地理位置（區）：路氹、路環、新橋、關閘...等
             sellingPriceBegin:Double?=getSellingPriceBegin(),//售價區間：起；如果有 end，begin 的默認為0
             sellingPriceEnd:Double?=getSellingPriceEnd(),//	售價區間：止；如果有 begin，end 的默認為 maxint
             rentalPriceBegin:Double?=getRentPriceBegin(),//	售價區間：止；如果有 begin，end 的默認為 maxint
