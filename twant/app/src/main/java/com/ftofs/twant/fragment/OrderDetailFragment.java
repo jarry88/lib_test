@@ -433,6 +433,14 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             "action", Constant.ACTION_REFUND,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
+                } else if (id == R.id.btn_view_refund) {
+                    Util.startFragment(RefundDetailFragment.newInstance(item.refundId, EasyJSONObject.generate(
+                            "action", Constant.ACTION_REFUND,
+                            "goodsFullSpecs", item.goodsFullSpecs,
+                            "goodsPrice", item.goodsPrice,
+                            "buyNum", item.buyNum,
+                            "ordersId", item.ordersId,
+                            "ordersGoodsId", item.ordersGoodsId).toString()));
                 } else if (id == R.id.btn_refund_all) {
                     Util.startFragment(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
                             "action", Constant.ACTION_REFUND_ALL,
@@ -1115,6 +1123,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     EasyJSONArray ordersGoodsVoList = ordersVo.getSafeArray("ordersGoodsVoList");
                     orderDetailGoodsItemList.clear();
 
+                    adapter.setOrdersState(ordersState);
                     int showMemberRefundAll = ordersVo.getInt("showMemberRefundAll");
                     for (Object object : ordersGoodsVoList) {
                         EasyJSONObject goodsVo = (EasyJSONObject) object;
@@ -1133,6 +1142,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("buyNum"),
                                 goodsVo.getSafeString("goodsFullSpecs"),
                                 goodsVo.getInt("refundType"),
+                                goodsVo.optInt("refundId"),
                                 goodsVo.getInt("showRefund"),
                                 showMemberComplain,
                                 goodsVo.getInt("complainId")
