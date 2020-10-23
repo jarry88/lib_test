@@ -32,11 +32,18 @@ public class BannerViewHolder implements MZViewHolder<WebSliderItem> {
     ImageView imgDesktop;
     RoundedDataImageView[] goodsImageArr = new RoundedDataImageView[GOODS_IMAGE_COUNT];
     TextView[] goodsPriceArr = new TextView[GOODS_IMAGE_COUNT];
-
+    private int type = 1;
     List<WebSliderItem> webSliderItemList;
+    private int resID=R.layout.carousel_banner_item;
 
     public BannerViewHolder(List<WebSliderItem> webSliderItemList) {
         this.webSliderItemList = webSliderItemList;
+    }
+    public BannerViewHolder(List<WebSliderItem> webSliderItemList,int type) {
+        this.webSliderItemList = webSliderItemList;
+        resID=R.layout.radius_carousel_banner_item;
+        this.type = type;
+
     }
 
     public void setGoodsImageVisibility(int visibility,int count) {
@@ -54,9 +61,11 @@ public class BannerViewHolder implements MZViewHolder<WebSliderItem> {
     @Override
     public View createView(Context context) {
         // 返回页面布局
-        View view = LayoutInflater.from(context).inflate(R.layout.carousel_banner_item,null);
+        View view = LayoutInflater.from(context).inflate(resID,null);
         mImageView = view.findViewById(R.id.img_banner);
-
+        if (type == 2) {
+            mImageView.setClipToOutline(true);
+        }
         imgDesktop = view.findViewById(R.id.img_goods_desktop);
         goodsImageArr[0] = view.findViewById(R.id.goods_image_left);
         goodsImageArr[1] = view.findViewById(R.id.goods_image_middle);

@@ -47,4 +47,8 @@ class GoDropdownMenu @JvmOverloads constructor(private val mContext: Context, va
     override fun getMaxWidth(): Int {
         return XPopupUtils.getWindowWidth(context)
     }
+
+//    override fun getPopupWidth(): Int {
+//        return maxWidth
+//    }
 }

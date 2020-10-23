@@ -93,7 +93,7 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
 
                 list.map { p -> WebSliderItem(p.title, "none", "", "", "[]").apply { SLog.info(p.title) } }
                         .let {ll->
-                                binding.banner.setPages(ll) { BannerViewHolder(ll).apply { setmImageViewRadius(4f) } }
+                                binding.banner.setPages(ll) { BannerViewHolder(ll,2).apply { setmImageViewRadius(4f) } }
                                 binding.banner.setIndicatorRes(R.drawable.white_banner_indicator_normal, R.drawable.gray_banner_indicator_normal)
                                 val padding = Util.dip2px(context, 5f)
                                 val linearLayout: LinearLayout = binding.banner.indicatorContainer

@@ -33,6 +33,7 @@ import com.gzp.lib_common.utils.pushUmengEvent
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.lxj.xpopup.interfaces.XPopupCallback
+import com.wzq.mvvmsmart.event.StateLiveData
 
 const val PROPERTY_TYPE_BUTTON: Int=0
 const val SALE_TYPE_BUTTON: Int=1
@@ -100,6 +101,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
         }
         binding.rvList.isNestedScrollingEnabled=false
         binding.tabLayout.apply {
+            isTabIndicatorFullWidth =false
             setSelectedTabIndicatorColor(resources.getColor(R.color.tw_blue))
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -183,7 +185,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
     private fun showDrawListView(view: View, selectedTabPosition: Int) {
         val tagView=view.findViewById<TextView>(R.id.tag_text)
         val iconView=view.findViewById<ImageView>(R.id.icon_exp)
-        drawListView=XPopup.Builder(context).moveUpToKeyboard(false)
+        drawListView=XPopup.Builder(_mActivity).moveUpToKeyboard(false)
                 .hasShadowBg(false)
                 .atView(view)
                 .setPopupCallback(object : XPopupCallback {
@@ -270,7 +272,7 @@ class Go853HouseListFragment :BaseTwantFragmentMVVM<GoHouseListFragmentBinding, 
             it.propertyList?.apply {
                 SLog.info("觀測到數據變化${it.propertyList?.size}")
                 mAdapter.addAll(this, viewModel.currPage <= 1)
-            }
+            }?:mAdapter.addAll(listOf(), true)
         }
         viewModel.isTypeLiveData.observe(this){ value ->
             binding.tabLayout.getTabAt(PROPERTY_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{

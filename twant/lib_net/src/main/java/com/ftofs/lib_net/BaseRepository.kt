@@ -53,7 +53,6 @@ open class BaseRepository() {
     }
     open suspend fun <T : Any> simpleGet(response: TwantResponse<T>, successBlock: (suspend CoroutineScope.() -> Unit)? = null,
                                          errorBlock: (suspend CoroutineScope.() -> Unit)? = null): Result<T> {
-        SLog.info("response:"+response.toString())
         return safeApiCall(call = {executeResponse(response)})
     }
 
