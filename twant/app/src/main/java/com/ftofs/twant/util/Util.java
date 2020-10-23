@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -1949,6 +1950,16 @@ public class Util {
                         "shareType", SharePopup.SHARE_TYPE_POSTER,
                         "marketingUrl", marketingUrl))
                 ).show();
+    }
+
+    /**
+     * 設置中文字體是否加粗
+     * @param textView
+     * @param bold
+     */
+    public static void setFakeBoldText(TextView textView, boolean bold) {
+        TextPaint paint = textView.getPaint();
+        paint.setFakeBoldText(bold);
     }
 }
 
