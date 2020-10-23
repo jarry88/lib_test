@@ -3,14 +3,17 @@ package com.ftofs.twant.go853
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.R
 import com.ftofs.twant.BR
 import com.ftofs.twant.databinding.GoIntermediaryListFragmentBinding
 import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.kotlin.adapter.DataBoundAdapter
+import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
+import com.gzp.lib_common.utils.SLog
 import com.wzq.mvvmsmart.utils.KLog
 
 class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?=null) : BaseTwantFragmentMVVM<GoIntermediaryListFragmentBinding,GoHouseViewModel>() {
@@ -57,6 +60,17 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
         viewModel.userPropertyList.observe(this){
             binding.vo=it.user
             binding.title.text=it.user?.propertyCorp
+            val url =it.user?.userPhoto
+            url?.let {
+                if (url.contains("none.gif")) {//go853房产占位图
+                    Glide.with(requireContext()).load(R.drawable.go_avatar_empty).centerCrop().into(binding.imgAvatar)
+                } else {
+                    Glide.with(requireContext()).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(binding.imgAvatar)
+                }
+            }?:Glide.with(requireContext()).load(R.drawable.go_avatar_empty).centerCrop().into(binding.imgAvatar)
+
+
+
             mAdapter.addAll(it.propertyList?: listOf(),viewModel.currPage<=1)
         }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
