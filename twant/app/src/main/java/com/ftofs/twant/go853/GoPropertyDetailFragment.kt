@@ -133,14 +133,22 @@ class GoPropertyDetailFragment @JvmOverloads constructor(private val pid: Int = 
                     if (it > 0) {
                         bothNothing=false
                         val start =item.saleType==1
-                        text= SpannableStringBuilder(
-                                "$"
-                                        +it.toInt().toString().let{if(it.length>3) it.substring(0,it.length-3)+","+it.substring(it.length-3,it.length) else it}+"元/月").also { s->
+                        text= SpannableStringBuilder("$" +it.toInt().toString().let{if(it.length>3) it.substring(0,it.length-3)+","+it.substring(it.length-3,it.length) else it}+"元/月").also { s->
                             s.setSpan(AbsoluteSizeSpan(13,true),0, 1 , Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                             s.setSpan(AbsoluteSizeSpan(13,true),s.length-3,s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                         }
                     }else View.GONE.let { visibility=it }
                 }?:View.GONE.let { visibility=it }
+            }
+            binding.tvBuilding.apply {
+                item.buildingArea?.let {
+                    if (it > 0) {
+                        bothNothing=false
+                        text= SpannableStringBuilder("$it 呎").also { s->
+                            s.setSpan(AbsoluteSizeSpan(13,true),s.length-2,s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        }
+                    }else View.GONE.let {text="-"  }
+                }?:View.GONE.let { text="-" }
             }
             if(bothNothing) binding.tvSellPrice.apply {
                 text="面議"

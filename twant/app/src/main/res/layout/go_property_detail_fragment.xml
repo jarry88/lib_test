@@ -109,7 +109,6 @@
                                 <TextView
                                     android:id="@+id/tv_rent_price"
                                     android:layout_width="wrap_content"
-                                    android:text="@{vo.getRentalPriceString()}"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/tw_red"
                                     android:textSize="21sp"/>
@@ -128,10 +127,10 @@
                                 android:textStyle="bold"
                                 android:text="面積 "/>
                             <TextView
+                                android:id="@+id/tv_building"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/tw_red"
-                                text="@{vo.getBuildingAreaString()}"
                                 android:textSize="21sp"/>
 
 

@@ -200,16 +200,19 @@ fun setTextViewSize(v: TextView, size: Float) {
 @BindingAdapter("go_sell")
 fun setGoSell(v: TextView, item: PropertyVo) {
     v.apply {
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 15.0f)
         item.sellingPrice?.let {
             if (it > 0) {
-                val start = item.saleType == 2
+                val start = item.saleType != 2
                 text = SpannableStringBuilder("${if (start) "售" else ""}$" + it.toInt().toString() + "萬").also { s ->
                     s.setSpan(AbsoluteSizeSpan(13, true), 0, if (start) 2 else 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                     s.setSpan(AbsoluteSizeSpan(13, true), s.length - 1, s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                 }
-            } else GONE.let { if(item.saleType == 2) text ="面議" else visibility=it }
+            } else GONE.let { if(item.saleType == 2) text ="面議" else {text ="" } }
         }?:GONE.let {
-            if(item.saleType == 2) text ="面議" else visibility=it }
+            if(item.saleType == 2){ text ="面議"
+                visibility = VISIBLE
+            }else text ="" }
     }
 }
 /**
@@ -218,16 +221,20 @@ fun setGoSell(v: TextView, item: PropertyVo) {
 @BindingAdapter("go_rent")
 fun setGoRent(v: TextView, item: PropertyVo) {
     v.apply {
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 15.0f)
         item.rentalPrice?.let {
+
             if (it > 0) {
-                val start =item.saleType==1
+                val start =item.saleType!=1
                 text=SpannableStringBuilder(
                         "${if(start)"租" else ""}$"
                                 +it.toInt().toString().let{if(it.length>3) it.substring(0,it.length-3)+","+it.substring(it.length-3,it.length) else it}+"元/月").also { s->
                     s.setSpan(AbsoluteSizeSpan(13,true),0,if(start) 2 else 1 , Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                     s.setSpan(AbsoluteSizeSpan(13,true),s.length-3,s.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                 }
-            }else GONE.let { if(item.saleType == 1) text ="面議" else visibility=it }
-        }?:GONE.let {if(item.saleType == 1) text ="面議" else visibility=it }
+            }else GONE.let { if(item.saleType == 1){ text ="面議"
+                visibility = VISIBLE
+            }else text ="" }
+        }?:GONE.let {if(item.saleType == 1) text ="面議" else text ="" }
     }
 }
