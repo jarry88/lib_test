@@ -26,6 +26,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderCategoryItem;
@@ -38,6 +39,7 @@ import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.gzp.lib_common.base.BaseFragment;
@@ -50,6 +52,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -114,6 +117,14 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 CrossBorderCategoryItem item = categoryList.get(position);
                 SLog.info("position[%d], item[%s]", position, item);
+
+                HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                if (position == 0) {
+                    UmengAnalytics.onEventObject(UmengAnalyticsActionName.GO_TARIFF_BUY, analyticsDataMap);
+                } else {
+                    analyticsDataMap.put("categoryId", item.categoryId);
+                    UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_CATEGORY, analyticsDataMap);
+                }
 
                 int prevSelectedIndex = categoryListAdapter.getSelectedIndex();
                 if (position == prevSelectedIndex) {

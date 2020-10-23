@@ -665,11 +665,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         UmengAnalytics.onPageStart(UmengAnalyticsPageName.GOODS);
 
-        if (Config.PROD) {
-            HashMap<String, Object> analyticsDataMap = new HashMap<>();
-            analyticsDataMap.put("commonId", commonId);
-            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS, analyticsDataMap);
-        }
+        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+        analyticsDataMap.put("commonId", commonId);
+        UmengAnalytics.onEventObject(UmengAnalyticsActionName.GOODS, analyticsDataMap);
     }
 
     private void setImageBanner(RecyclerView rvGalleryImageList) {
