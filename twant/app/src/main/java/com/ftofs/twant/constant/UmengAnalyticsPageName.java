@@ -15,4 +15,7 @@ public class UmengAnalyticsPageName {
     public static final String ACTIVITY_ZONE = "activity_zone";
     // 房产模块activity_zone
     public static final String ACTIVITY_GO853 = "activity_go853";
+
+    // 進入跨城購首頁
+    public static final String CROSS_BORDER_HOME_PAGE = "tariff_buy";
 }

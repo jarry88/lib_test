@@ -64,6 +64,7 @@ import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.ClipboardUtils;
@@ -662,10 +663,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         pageIndicatorView = view.findViewById(R.id.pageIndicatorView);
         setImageBanner(rvGalleryImageList);
 
+        UmengAnalytics.onPageStart(UmengAnalyticsPageName.GOODS);
 
         if (Config.PROD) {
-            MobclickAgent.onPageStart(UmengAnalyticsPageName.GOODS);
-
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("commonId", commonId);
             MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS, analyticsDataMap);
@@ -2440,9 +2440,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         SLog.info("onDestroyView");
         EventBus.getDefault().unregister(this);
 
-        if (Config.PROD) {
-            MobclickAgent.onPageEnd(UmengAnalyticsPageName.GOODS);
-        }
+        UmengAnalytics.onPageEnd(UmengAnalyticsPageName.GOODS);
 
         stopCountDown();
     }

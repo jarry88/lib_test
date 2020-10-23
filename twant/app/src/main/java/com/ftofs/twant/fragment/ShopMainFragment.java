@@ -31,6 +31,7 @@ import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.StoreNavigationItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.orm.FriendInfo;
@@ -185,9 +186,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         Bundle args = getArguments();
         storeId = args.getInt("shopId");
 
-        if (Config.PROD) {
-            MobclickAgent.onPageStart(UmengAnalyticsPageName.STORE);
+        UmengAnalytics.onPageStart(UmengAnalyticsPageName.STORE);
 
+        if (Config.PROD) {
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("storeId", storeId);
             MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.STORE, analyticsDataMap);
@@ -320,9 +321,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     public void onDestroyView() {
         super.onDestroyView();
 
-        if (Config.PROD) {
-            MobclickAgent.onPageEnd(UmengAnalyticsPageName.STORE);
-        }
+        UmengAnalytics.onPageEnd(UmengAnalyticsPageName.STORE);
     }
 
     private void initCustomerList(View view) {
