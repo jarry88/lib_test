@@ -419,7 +419,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
             );
             Util.startFragment(GeneratePosterFragment.newInstance(Constant.POSTER_TYPE_INVITATION, posterData));
         } else if (id == R.id.btn_share_multiple) {
-            if (selectedCommonIdList.size() < 2) {
+            if (selectedCommonIdList == null || selectedCommonIdList.size() < 2) {
                 return;
             }
 

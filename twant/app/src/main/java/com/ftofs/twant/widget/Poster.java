@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.util.QRCode;
+import com.ftofs.twant.util.QRCodeUtil;
 import com.ftofs.twant.util.StringUtil;
 
 import java.io.File;
@@ -111,7 +112,7 @@ public class Poster extends FrameLayout {
     }
 
     public Poster setQrCode(String text) {
-        Bitmap qrCode = QRCode.createQRCode(text);
+        Bitmap qrCode = QRCodeUtil.createTrimmedBitmap(text);
         Glide.with(imgQrCode).load(qrCode).into(imgQrCode);
         return this;
     }
