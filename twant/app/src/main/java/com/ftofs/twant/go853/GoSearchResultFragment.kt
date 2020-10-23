@@ -114,6 +114,7 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
         binding.refreshLayout.setOnLoadMoreListener { viewModel.getPropertyList(search = binding.title.getSearchWord()) }
         binding.rvList.adapter=mAdapter
         binding.tabLayout.apply {
+
             setSelectedTabIndicatorColor(resources.getColor(R.color.tw_blue))
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -286,7 +287,7 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
             it.propertyList?.apply {
                 SLog.info("觀測到數據變化${it.propertyList?.size}")
                 mAdapter.addAll(this, viewModel.currPage <= 1)
-            }
+            }?:mAdapter.addAll(listOf(), true)
         }
         viewModel.isTypeLiveData.observe(this){ value ->
             binding.tabLayout.getTabAt(PROPERTY_TYPE_BUTTON)?.customView?.findViewById<TextView>(R.id.tag_text)?.let{

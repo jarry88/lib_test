@@ -501,7 +501,12 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         try {
             if (responseObj.exists("datas.todayViewCount")) {
                 String todayViewCount = responseObj.getSafeString("datas.todayViewCount");
-                tvTodayViewCount.setText(String.valueOf(todayViewCount));
+                if (todayViewCount == null) {
+                    tvTodayViewCount.setText("0");
+
+                } else {
+                    tvTodayViewCount.setText(todayViewCount);
+                }
             }
             if (responseObj.exists("datas.messageCount")) {
                 int messageCount = responseObj.getInt("datas.messageCount");

@@ -24,10 +24,6 @@
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/title"
             android:id="@+id/ll_link_container">
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="@color/tw_grey_F3F3"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,6 +37,8 @@
                     android:layout_height="60dp"
                     app:civ_border_width="1dp"
                     app:civ_border_color="@color/tw_light_grey_EDED"
+                    android:src="@drawable/go_avatar_empty"
+                    defaultDrawable="@drawable/go_avatar_empty"
                     imageUrl="@{vo.userPhoto}"/>
                 <LinearLayout
                     android:layout_width="match_parent"
