@@ -63,9 +63,13 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
             val url =it.user?.userPhoto
             SLog.info(url)
             url?.let {
-                if (!url.contains("none.gif")) {//go853房产占位图
-                    Glide.with(_mContext).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(binding.imgAvatar)
+                if (url.isNotEmpty()) {
+                    if (!url.contains("none.gif")) {//go853房产占位图
+                        SLog.info("here $url|")
+                        Glide.with(_mContext).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(binding.imgAvatar)
                 }
+            }
+
             }
 
 
