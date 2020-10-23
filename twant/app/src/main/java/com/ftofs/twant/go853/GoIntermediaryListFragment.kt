@@ -61,13 +61,12 @@ class GoIntermediaryListFragment @JvmOverloads constructor(private val uid: Int?
             binding.vo=it.user
             binding.title.text=it.user?.propertyCorp
             val url =it.user?.userPhoto
+            SLog.info(url)
             url?.let {
-                if (url.contains("none.gif")) {//go853房产占位图
-                    Glide.with(requireContext()).load(R.drawable.go_avatar_empty).centerCrop().into(binding.imgAvatar)
-                } else {
-                    Glide.with(requireContext()).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(binding.imgAvatar)
+                if (!url.contains("none.gif")) {//go853房产占位图
+                    Glide.with(_mContext).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(binding.imgAvatar)
                 }
-            }?:Glide.with(requireContext()).load(R.drawable.go_avatar_empty).centerCrop().into(binding.imgAvatar)
+            }
 
 
 

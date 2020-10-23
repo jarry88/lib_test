@@ -204,8 +204,9 @@ public class SplashActivity extends BaseActivity {
         String copyright = getResources().getString(R.string.copyright);
         // 获取年份
         copyright = String.format(copyright, jarbon.getYear());
-
-        tvCopyRight.setText(copyright);
+        if (tvCopyRight != null) {
+            tvCopyRight.setText(copyright);
+        }
 
         splashBackground = findViewById(R.id.splash_bg);
 
