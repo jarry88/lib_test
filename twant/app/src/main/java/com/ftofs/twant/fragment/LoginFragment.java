@@ -31,6 +31,7 @@ import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.CommonCallback;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.widget.ScaledButton;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
@@ -111,9 +112,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_register, this);
 
-        if (Config.PROD) {
-            MobclickAgent.onPageStart(UmengAnalyticsPageName.LOGIN);
-        }
+        UmengAnalytics.onPageStart(UmengAnalyticsPageName.LOGIN);
 
         tabLayout = view.findViewById(R.id.login_tab_layout);
         ViewPager viewPager = view.findViewById(R.id.login_viewpager);
@@ -197,9 +196,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
-        if (Config.PROD) {
-            MobclickAgent.onPageEnd(UmengAnalyticsPageName.LOGIN);
-        }
+        UmengAnalytics.onPageEnd(UmengAnalyticsPageName.LOGIN);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

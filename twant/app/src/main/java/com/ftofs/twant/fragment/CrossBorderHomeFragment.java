@@ -20,6 +20,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderFloorItem;
@@ -33,6 +34,7 @@ import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.base.BaseFragment;
@@ -112,6 +114,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        UmengAnalytics.onPageStart(UmengAnalyticsPageName.CROSS_BORDER_HOME_PAGE);
 
         SLog.info("CrossBorderHomeFragment::onViewCreated()");
         Hawk.get(SPField.FIELD_CURR_CROSS_BORDER_THEME_COLOR, "");
@@ -204,6 +208,13 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         });
 
         loadData(currPage + 1);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        UmengAnalytics.onPageEnd(UmengAnalyticsPageName.CROSS_BORDER_HOME_PAGE);
     }
 
     private void loadData(int page) {

@@ -32,6 +32,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.WebSliderItem;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.gzp.lib_common.base.BaseFragment;
 import com.ftofs.twant.fragment.CartFragment;
 import com.ftofs.twant.fragment.LinkageContainerFragment2;
@@ -134,9 +135,9 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (Config.PROD) {
-            MobclickAgent.onPageStart(UmengAnalyticsPageName.ACTIVITY_ZONE);
+        UmengAnalytics.onPageStart(UmengAnalyticsPageName.ACTIVITY_ZONE);
 
+        if (Config.PROD) {
             HashMap<String, Object> analyticsDataMap = new HashMap<>();
             analyticsDataMap.put("zoneId", zoneId);
             MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.ACTIVITY_ZONE, analyticsDataMap);
@@ -172,9 +173,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     public void onDestroyView() {
         super.onDestroyView();
 
-        if (Config.PROD) {
-            MobclickAgent.onPageEnd(UmengAnalyticsPageName.ACTIVITY_ZONE);
-        }
+        UmengAnalytics.onPageEnd(UmengAnalyticsPageName.ACTIVITY_ZONE);
     }
 
     private void initBanner() {

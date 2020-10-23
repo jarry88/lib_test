@@ -30,6 +30,7 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.PayCardItem;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.LogUtil;
@@ -154,9 +155,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         Bundle args = getArguments();
         user_zone =StringUtil.parseZone();
         payId = args.getInt("payId");
-        if (Config.PROD) {
-            MobclickAgent.onPageStart(UmengAnalyticsPageName.SELECT_PAYMENT);
-        }
+        UmengAnalytics.onPageStart(UmengAnalyticsPageName.SELECT_PAYMENT);
 
         payAmount = args.getDouble("payAmount");
         walletBalance = args.getDouble("walletBalance");
@@ -212,9 +211,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     public void onDestroyView() {
         super.onDestroyView();
 
-        if (Config.PROD) {
-            MobclickAgent.onPageEnd(UmengAnalyticsPageName.SELECT_PAYMENT);
-        }
+        UmengAnalytics.onPageEnd(UmengAnalyticsPageName.SELECT_PAYMENT);
     }
 
     private void initPayCardList() {

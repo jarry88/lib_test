@@ -24,6 +24,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
@@ -127,9 +128,7 @@ public class ResetPasswordFragment extends BaseFragment implements
             trueNoticeLoge.setVisibility(View.VISIBLE);
             view.findViewById(R.id.rl_tos_container).setVisibility(View.VISIBLE);
 
-            if (Config.PROD) {
-                MobclickAgent.onPageStart(UmengAnalyticsPageName.REGISTER);
-            }
+            UmengAnalytics.onPageStart(UmengAnalyticsPageName.REGISTER);
         } else if (usage == Constant.USAGE_RESET_PASSWORD) {
             tvFragmentTitle.setText(R.string.reset_password_fragment_title);
         } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
@@ -179,9 +178,7 @@ public class ResetPasswordFragment extends BaseFragment implements
         super.onDestroyView();
 
         if (usage == Constant.USAGE_USER_REGISTER) {
-            if (Config.PROD) {
-                MobclickAgent.onPageEnd(UmengAnalyticsPageName.REGISTER);
-            }
+            UmengAnalytics.onPageEnd(UmengAnalyticsPageName.REGISTER);
         }
     }
 
