@@ -1951,16 +1951,6 @@ public class Util {
                         "marketingUrl", marketingUrl))
                 ).show();
     }
-
-    /**
-     * 設置中文字體是否加粗
-     * @param textView
-     * @param bold
-     */
-    public static void setFakeBoldText(TextView textView, boolean bold) {
-        TextPaint paint = textView.getPaint();
-        paint.setFakeBoldText(bold);
-    }
 }
 
 
