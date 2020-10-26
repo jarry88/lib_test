@@ -1,5 +1,6 @@
 package com.ftofs.lib_net.model
 
+import com.google.gson.JsonObject
 import java.io.Serializable
 
 data class BuyStep1Vo(
@@ -15,6 +16,6 @@ data class BuyGoodsDTO(
 ):Serializable
 data class MpayVo(
         val isPay:Boolean,
-        val payData:Any?,
+        val payData:JsonObject?,
         val payId:Int?,
 ):Serializable

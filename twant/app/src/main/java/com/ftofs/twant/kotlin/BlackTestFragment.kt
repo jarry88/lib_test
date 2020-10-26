@@ -91,6 +91,10 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
             text="訂單"
             setOnClickListener {start(CouponOrderListFragment.newInstance())
         }
+        binding.button6.apply{
+            text="Mpay 参数"
+            setOnClickListener {start(CouponOrderListFragment.newInstance())
+        }}
         }
         binding.button4.setOnClickListener { start(Go853HouseListFragment()) }
         binding.rlList.adapter=mAdapter

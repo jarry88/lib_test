@@ -44,7 +44,7 @@
                     android:textColor="@color/tw_white"
                     android:textStyle="bold"
                     android:layout_marginStart="12dp"
-                    android:text="@string/success_pay_success"/>
+                    android:text="@{success?@string/success_pay_success:`支付失敗`"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="78dp"

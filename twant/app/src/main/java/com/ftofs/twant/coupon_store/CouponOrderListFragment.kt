@@ -49,7 +49,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             config<CouponOrderBase, CouponOrderListItemBinding>(R.layout.coupon_order_list_item, viewModel.couponOrdersListInfo.map { it.list }){ b, d ->
                 b.vo
                 b.tvStatus.text=d.getOrderStatusString()
-
+                b.tvStatus.colorId=if(d.getOrderRed()) R.color.tw_red else R.color.tw_black
                 b.llContainer.apply {
                     removeAllViews()
                     d.itemList?.forEach {vo ->
@@ -134,8 +134,15 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                 }
                 b.btnCancel.setVisibleOrGone(d.orderStatus?.let { it==10 }?:false)
                 b.btnGotoPay.setVisibleOrGone(d.orderStatus?.let { it==10 }?:false)
+                b.btnGotoPay.setOnClickListener { Util.startFragment(CouponConfirmOrderFragment.newInstance(d.id)) }
+                b.root.setOnClickListener {
+                    if (it.id == R.id.btn_goto_pay) {
+                        Util.startFragment(CouponConfirmOrderFragment.newInstance(d.id))
+                    } else {
+                        Util.startFragment(CouponOrderDetailFragment.newInstance(d.id)) }
+
+                    }
                 b.btnGotoRefund.setVisibleOrGone(d.orderStatus?.let { it==20 }?:false)
-                b.root.setOnClickListener { Util.startFragment(CouponOrderDetailFragment.newInstance(d.id)) }
             }
             setRefreshListener {
                 viewModel.currPage=0

@@ -3,6 +3,7 @@ package com.ftofs.twant.coupon_store
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.lib_net.model.BuyGoodsDTO
 import com.ftofs.lib_net.model.BuyStep1Vo
 import com.ftofs.lib_net.model.CouponItemVo
@@ -52,7 +53,6 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
     var mLoading :BasePopupView?=null
     var currAb: AdjustButton?=null
     var delayValue :Int?=null
-
     val mAdapter by lazy {
         factoryAdapter<CouponItemVo, CouponOrderConfirmItemBinding>(R.layout.coupon_order_confirm_item){ b, d ->
             b.vo=d
@@ -72,6 +72,9 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
                 setMaxValue(d.stock ?: Int.MAX_VALUE){
                     SLog.info("已經達到上限")
                 }
+                if (value <= 0) {
+                    value=1
+                }
             }
 
         }
@@ -84,7 +87,7 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
         fun newInstance(orderid: Int?)=CouponConfirmOrderFragment().apply{
             arguments = Bundle().apply {
                 orderid?.let {
-                    putInt(ORDER_ID, it)
+                    putInt(ORDER_ID, it).apply { SLog.info("ORDER_ID :$it") }
                 }
             }
         }
@@ -106,7 +109,7 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
             if (User.getUserId() > 0) {
                 mLoading =Util.createLoadingPopup(_mActivity).show()
                 mAdapter.getData()?.let { list ->
-                    viewModel.getTcBuyStep2(listOf(BuyGoodsDTO(id, currAb?.value)))
+                    viewModel.getTcBuyStep2(listOf(BuyGoodsDTO(id, currAb?.value?:1)))
                 }?:SLog.info("没有数据")}
                else {Util.showLoginFragment(requireContext())
             }
@@ -117,7 +120,8 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
     fun onEBMessage(message: EBMessage) {
         when (message.messageType) {
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS -> {
-                viewModel.postMpayNotify()
+
+//                viewModel.postMpayNotify()
                 Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID), true))
             }
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER -> Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID)))
@@ -135,6 +139,7 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
             delayValue?.let {v ->
                 currAb?.value=v
             }
+
         }
         viewModel.buyStep2Vo.observe(this){
             SLog.info("返回成功")

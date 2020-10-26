@@ -121,8 +121,9 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         launch(stateLiveData,
                 { repository.run { simpleGet(finalApi.getTcBuyStep2(params.apply { SLog.info(this.toString()) })) } },
                 {
-                    buyStep2Vo.postValue(it).apply { SLog.info("返回值") }
+                    buyStep2Vo.postValue(it).apply { SLog.info("buystep  返回值: ${it}") }
                 }
+
         )
     }
     /**
@@ -214,26 +215,26 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
 
     fun loadMpay() {
         val params =buyStep2Vo.value?.orderId?.let {
-            mapOf("orderId" to it)
-        }.apply { SLog.info(this.toString()) }
+            mapOf("clientType" to "android","orderId" to it)
+        }
         launch(stateLiveData, {
-            repository.run { simpleGet(finalApi.postPayMpay(params)) }
+            repository.run { simpleGet(finalApi.postPayMpay(params.apply { SLog.info(this.toString()) })) }
         },
-                {
-                    it.payId?.let { p ->
-                        Util.markPayId(SPField.FIELD_MPAY_PAY_ID, p)
-                    }
-                    mPayVo.postValue(it)
-                },
-                error = {
-                    LogUtil.uploadAppLog("pay/mpay", params.toString(), it.toString(), "")
+        {
+            it.payId?.let { p ->
+                Util.markPayId(SPField.FIELD_MPAY_PAY_ID, p)
+            }
+            mPayVo.postValue(it)
+        },
+        error = {
+            LogUtil.uploadAppLog("pay/mpay", params.toString(), it.toString(), "")
 
-                    error.postValue(it.payData.toString())
-                },
-                others = {
-                    LogUtil.uploadAppLog("pay/mpay", params.toString(), "", "")
+            error.postValue(it.payData.toString())
+        },
+        others = {
+            LogUtil.uploadAppLog("pay/mpay", params.toString(), "", "")
 
-                }
+        }
         )
     }
 
