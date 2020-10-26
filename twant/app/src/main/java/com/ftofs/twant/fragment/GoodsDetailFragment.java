@@ -665,11 +665,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         UmengAnalytics.onPageStart(UmengAnalyticsPageName.GOODS);
 
-        if (Config.PROD) {
-            HashMap<String, Object> analyticsDataMap = new HashMap<>();
-            analyticsDataMap.put("commonId", commonId);
-            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS, analyticsDataMap);
-        }
+        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+        analyticsDataMap.put("commonId", commonId);
+        UmengAnalytics.onEventObject(UmengAnalyticsActionName.GOODS, analyticsDataMap);
     }
 
     private void setImageBanner(RecyclerView rvGalleryImageList) {
@@ -2887,7 +2885,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         } else if (promotionType == Constant.PROMOTION_TYPE_SEC_KILL && COUNT_DOWN_TYPE_BEGIN.equals(promotionCountDownTimeType)) {
             // 未开始秒杀的商品需要显示价格标签
-            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
+            tvGoodsPrice.setText(StringUtil.formatMopPrice(goodsInfo.price, 1));
             rlPriceTag.setVisibility(VISIBLE);
             showHideSecKillView(false);
             showCnyPrice(goodsInfo.price);

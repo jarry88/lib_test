@@ -414,6 +414,7 @@
     <!--退換貨-->
     <string name="text_refund_tab">退款</string>
     <string name="text_view_refund">查看退款</string>
+    <string name="text_view_return">查看退貨</string>
     <string name="text_return_tab">退貨</string>
     <string name="text_complain_tab">投訴</string>
     <string name="text_refund_list">退款列表</string>

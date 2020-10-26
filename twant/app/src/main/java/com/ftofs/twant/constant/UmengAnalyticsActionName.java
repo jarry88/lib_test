@@ -36,4 +36,23 @@ public class UmengAnalyticsActionName {
 //    public static final String GO853_HOME_PROPERTY_TYPE = "go853_result_search";//搜索结果页 搜索框搜索
 //    public static final String GO853_HOME_PROPERTY_TYPE = "go853_result_item";//搜索结果页 房产列表item搜索
 
+
+    /**
+     * 跨城購
+     * 首頁點擊跨城購首頁go_tariff_buy
+     *
+     * 分類選擇按鈕tariff_buy_category(categoryId) 導航菜單按鈕tariff_buy_nav(navId) 專題活動按鈕tariff_buy_zone(zoneId)
+     * 樓層商品按鈕tariff_buy_floorGoods(commonId)
+     *
+     * 樓層圖片按鈕tariff_buy_floor 砍價商品按鈕tariff_buy_Bargain 拼團商品按鈕tariff_buy_Group 點擊購物車tariff_buy_addcart
+     */
+    public static final String GO_TARIFF_BUY = "go_tariff_buy";
+    public static final String TARIFF_BUY_CATEGORY = "tariff_buy_category";
+    public static final String TARIFF_BUY_NAV = "tariff_buy_nav";
+    public static final String TARIFF_BUY_ZONE = "tariff_buy_zone";
+    public static final String TARIFF_BUY_FLOORGOODS = "tariff_buy_floorGoods";
+    public static final String TARIFF_BUY_FLOOR = "tariff_buy_floor";
+    public static final String TARIFF_BUY_BARGAIN = "tariff_buy_Bargain";
+    public static final String TARIFF_BUY_GROUP = "tariff_buy_Group";
+    public static final String TARIFF_BUY_ADDCART = "tariff_buy_addcart";
 }

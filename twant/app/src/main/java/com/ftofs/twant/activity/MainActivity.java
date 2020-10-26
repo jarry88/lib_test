@@ -60,6 +60,7 @@ import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
+import com.ftofs.twant.fragment.Test2Fragment;
 import com.ftofs.twant.handler.StackViewTouchListener;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
@@ -518,7 +519,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                                     // Util.startFragment(Test2Fragment.newInstance());
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_DATE);
                                     // Hawk.delete(SPField.FIELD_SHOW_APP_GUIDE_VERSION);
-                                    Util.startFragment(DistributionFragment.newInstance());
+                                    Util.startFragment(Test2Fragment.newInstance());
 
 
                                     // Util.startFragment(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null));

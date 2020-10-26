@@ -22,6 +22,7 @@ import com.ftofs.twant.kotlin.LinkageShoppingListModel
 import com.gzp.lib_common.utils.SLog
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment
 import com.ftofs.twant.util.UiUtil
+import com.ftofs.twant.util.UmengAnalytics
 import com.ftofs.twant.util.Util
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.umeng.analytics.MobclickAgent
@@ -102,11 +103,9 @@ class LinkageShoppingListFragment @JvmOverloads constructor (val zoneId: Int?=nu
         mAdapter.setOnItemClickListener { adapter, _, position ->
             val store = adapter.data[position] as StoreItem
 
-            if (Config.PROD) {
-                val analyticsDataMap = HashMap<String, Any>()
-                analyticsDataMap["storeId"] = store.storeId
-                MobclickAgent.onEventObject(TwantApplication.get(), UmengAnalyticsActionName.ACTIVITY_STORE, analyticsDataMap)
-            }
+            val analyticsDataMap = HashMap<String, Any>()
+            analyticsDataMap["storeId"] = store.storeId
+            UmengAnalytics.onEventObject(UmengAnalyticsActionName.ACTIVITY_STORE, analyticsDataMap);
             Util.startFragment(ShopMainFragment.newInstance(store.storeId))
         }
 

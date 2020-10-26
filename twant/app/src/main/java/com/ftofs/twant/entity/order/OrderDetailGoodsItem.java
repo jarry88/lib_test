@@ -10,7 +10,7 @@ public class OrderDetailGoodsItem {
     public OrderDetailGoodsItem(int commonId, int goodsId, int ordersId, int orderState, int showRefundWaiting, int showMemberRefundAll,
                                 int ordersGoodsId,
                                 String imageSrc, String goodsName, double goodsPrice, int buyNum,
-                                String goodsFullSpecs, int refundType, int showRefund, int showMemberComplain,
+                                String goodsFullSpecs, int refundType, int refundId, int showRefund, int showMemberComplain,
                                 int complainId) {
         this.commonId = commonId;
         this.goodsId = goodsId;
@@ -26,6 +26,7 @@ public class OrderDetailGoodsItem {
         this.goodsFullSpecs = goodsFullSpecs;
 
         this.refundType = refundType;
+        this.refundId = refundId;
         this.showRefund = showRefund;
         this.showMemberComplain = showMemberComplain;
         this.complainId = complainId;
@@ -47,6 +48,7 @@ public class OrderDetailGoodsItem {
     public String goodsFullSpecs;
 
     public int refundType;
+    public int refundId;
     public int showRefund;
     public int showMemberComplain;
     public int complainId;

@@ -22,6 +22,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderFloorItem;
@@ -37,6 +38,7 @@ import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.ftofs.twant.widget.GridLayout;
@@ -51,6 +53,7 @@ import com.youth.banner.indicator.CircleIndicator;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.listener.OnPageChangeListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorderHomeItem, BaseViewHolder> {
@@ -150,6 +153,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                             CrossBorderNavItem navItem = navPane.crossBorderNavItemList.get(i);
                             SLog.info("navItem[%s]", navItem);
                             Util.handleClickLink(navItem.linkTypeApp, navItem.linkValueApp, true);
+
+                            HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                            analyticsDataMap.put("categoryId", navItem.navId);
+                            UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_NAV, analyticsDataMap);
                             break;
                         }
                     }
@@ -220,6 +227,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     @Override
                     public void onClick(View v) {
                         Util.startFragment(NewShoppingSpecialFragment.newInstance(shoppingZoneItem1.zoneId));
+                        handleClickShoppingZone(shoppingZoneItem1.zoneId);
                     }
                 });
                 Glide.with(context).load(StringUtil.normalizeImageUrl(shoppingZoneItem1.appLogo)).centerCrop().into(zone1);
@@ -231,6 +239,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                         @Override
                         public void onClick(View v) {
                             Util.startFragment(NewShoppingSpecialFragment.newInstance(shoppingZoneItem2.zoneId));
+                            handleClickShoppingZone(shoppingZoneItem2.zoneId);
                         }
                     });
                     Glide.with(context).load(StringUtil.normalizeImageUrl(shoppingZoneItem2.appLogo)).centerCrop().into(zone2);
@@ -241,6 +250,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                             @Override
                             public void onClick(View v) {
                                 Util.startFragment(NewShoppingSpecialFragment.newInstance(shoppingZoneItem3.zoneId));
+                                handleClickShoppingZone(shoppingZoneItem3.zoneId);
                             }
                         });
                         Glide.with(context).load(StringUtil.normalizeImageUrl(shoppingZoneItem3.appLogo)).centerCrop().into(zone3);
@@ -252,6 +262,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                                 @Override
                                 public void onClick(View v) {
                                     Util.startFragment(NewShoppingSpecialFragment.newInstance(shoppingZoneItem4.zoneId));
+                                    handleClickShoppingZone(shoppingZoneItem4.zoneId);
                                 }
                             });
                             Glide.with(context).load(StringUtil.normalizeImageUrl(shoppingZoneItem4.appLogo)).centerCrop().into(zone4);
@@ -277,6 +288,8 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                         CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
                         SLog.info("____bargainId[%d]", activityGoods.bargainId);
                         Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId, activityGoods.bargainId));
+                        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                        UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_BARGAIN, analyticsDataMap);
                     }
                 });
                 rvBargainList.setAdapter(bargainGoodsAdapter);
@@ -298,6 +311,8 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                         CrossBorderActivityGoods activityGoods = item.groupGoodsList.get(position);
                         Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                        UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_GROUP, analyticsDataMap);
                     }
                 });
                 rvGroupList.setAdapter(groupGoodsAdapter);
@@ -520,5 +535,11 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
     public void onViewDetachedFromWindow(@NonNull BaseViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         SLog.info("onViewDetachedFromWindow, position[%d]", holder.getAdapterPosition());
+    }
+
+    private void handleClickShoppingZone(int zoneId) {
+        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+        analyticsDataMap.put("zoneId", zoneId);
+        UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_ZONE, analyticsDataMap);
     }
 }

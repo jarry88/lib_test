@@ -20,6 +20,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.FilterCategoryGroup;
 import com.ftofs.twant.entity.FilterCategoryItem;
 import com.ftofs.twant.entity.GoodsSearchItem;
@@ -28,6 +29,7 @@ import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.base.BaseFragment;
@@ -36,6 +38,7 @@ import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -308,6 +311,8 @@ public class CrossBorderCategoryFragment extends BaseFragment implements View.On
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_goto_cart) {
+            HashMap<String, Object> analyticsDataMap = new HashMap<>();
+            UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_ADDCART, analyticsDataMap);
             if (User.isLogin()) {
                 Util.startFragment(CartFragment.newInstance(true));
             } else {
