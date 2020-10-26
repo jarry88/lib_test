@@ -30,12 +30,62 @@ import java.util.Hashtable;
 public class QRCode {
     private static int IMAGE_HALFWIDTH = 50;
 
+    public static Bitmap getBarcodeBitmapVertical(String content, int qrWidth, int qrHeight) {
+        //文字的高度
+        int mHeight = qrHeight / 4;
+        try {
+            Map<EncodeHintType, Object> hints = new EnumMap(EncodeHintType.class);
+            hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.MARGIN, 1);
+            BitMatrix result;
+            try {
+                result = new MultiFormatWriter().encode(content, BarcodeFormat.CODE_128, qrWidth, mHeight * 3, hints);
+            } catch (IllegalArgumentException iae) {
+                return null;
+            }
+            int width = result.getWidth();
+            int height = result.getHeight();
+            int[] pixels = new int[width * height];
+            for (int y = 0; y < height; y++) {
+                int offset = y * width;
+                for (int x = 0; x < width; x++) {
+                    pixels[offset + x] = result.get(x, y) ? BLACK : 0;
+                }
+            }
+            Bitmap qrBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            qrBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+            //大的bitmap
+            Bitmap bigBitmap = Bitmap.createBitmap(width, qrHeight, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bigBitmap);
+            Rect srcRect = new Rect(0, 0, width, height);
+            Rect dstRect = new Rect(0, 0, width, height);
+            canvas.drawBitmap(qrBitmap, srcRect, dstRect, null);
+            Paint p = new Paint();
+            p.setColor(Color.BLACK);
+            p.setFilterBitmap(true);
+            p.setTextSize(mHeight);
+            canvas.translate(width / 10, mHeight);
+            canvas.drawText(content, 0, content.length(), 0, height, p);
+            canvas.save();
+            //旋转
+            Matrix matrix = new Matrix();
+            matrix.setRotate(-90, (float) bigBitmap.getWidth() / 2, (float) bigBitmap.getHeight() / 2);
+            Bitmap dstbmp = Bitmap.createBitmap(bigBitmap, 0, 0, bigBitmap.getWidth(), bigBitmap.getHeight(),
+                    matrix, true);
+            return dstbmp;
+        } catch (Exception e) {
+            LogUtil.d("bitmap 旋转失败!");
+            return null;}
+    }
+
     /**
      * 生成二维码，默认大小为500*500
      *
      * @param text 需要生成二维码的文字、网址等
      * @return bitmap
      */
+
     public static Bitmap createQRCode(String text) {
         return createQRCode(text, 500);
     }
