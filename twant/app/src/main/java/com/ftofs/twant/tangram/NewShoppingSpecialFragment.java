@@ -137,11 +137,9 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
         UmengAnalytics.onPageStart(UmengAnalyticsPageName.ACTIVITY_ZONE);
 
-        if (Config.PROD) {
-            HashMap<String, Object> analyticsDataMap = new HashMap<>();
-            analyticsDataMap.put("zoneId", zoneId);
-            MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.ACTIVITY_ZONE, analyticsDataMap);
-        }
+        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+        analyticsDataMap.put("zoneId", zoneId);
+        UmengAnalytics.onEventObject(UmengAnalyticsActionName.ACTIVITY_ZONE, analyticsDataMap);
 
 
         tvZoneName = view.findViewById(R.id.tv_zone_name);

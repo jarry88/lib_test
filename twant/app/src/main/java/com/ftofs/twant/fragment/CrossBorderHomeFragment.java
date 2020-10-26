@@ -20,6 +20,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
@@ -43,6 +44,7 @@ import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -345,6 +347,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         int id = v.getId();
 
         if (id == R.id.btn_goto_cart) {
+            HashMap<String, Object> analyticsDataMap = new HashMap<>();
+            UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_ADDCART, analyticsDataMap);
             if (User.isLogin()) {
                 Util.startFragment(CartFragment.newInstance(true));
             } else {

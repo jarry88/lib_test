@@ -4,6 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/tw_slight_grey">
+    <!-- 用於測量分類菜單是否超過屏幕寬度 -->
+    <LinearLayout
+        android:id="@+id/ll_text_ruler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    </LinearLayout>
+    <!-- END OF 用於測量分類菜單是否超過屏幕寬度 -->
 
     <LinearLayout
         android:id="@+id/ll_app_bar"
@@ -39,10 +47,13 @@
                 app:icon_src="@drawable/icon_shop_goods_search">
             </com.ftofs.twant.widget.ScaledButton>
         </RelativeLayout>
+        <!-- 分類菜單1： 當分類菜單的總寬度超過屏幕寬度時 -->
         <LinearLayout
+            android:id="@+id/ll_more_category_menu_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="33dp"
@@ -72,6 +83,14 @@
                     android:src="@drawable/icon_more_cross_border_cateogyr">
                 </ImageView>
             </FrameLayout>
+        </LinearLayout>
+        <!-- 分類菜單2： 當分類菜單的總寬度超過屏幕寬度時 -->
+        <LinearLayout
+            android:id="@+id/ll_less_category_menu_container"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
         </LinearLayout>
     </LinearLayout>
 

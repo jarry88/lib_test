@@ -39,6 +39,7 @@ import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.gzp.lib_common.base.Jarbon;
@@ -214,11 +215,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         } else {
             SLog.info("添加到購物袋%d",ordersId);
             for (OrderDetailGoodsItem goodsItem:orderDetailGoodsItemList){
-                if (Config.PROD) {
-                    HashMap<String, Object> analyticsDataMap = new HashMap<>();
-                    analyticsDataMap.put("commonId", goodsItem.commonId);
-                    MobclickAgent.onEventObject(TwantApplication.Companion.get(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
-                }
+                HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                analyticsDataMap.put("commonId", goodsItem.commonId);
+                UmengAnalytics.onEventObject(UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
 
                 Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> {ToastUtil.success(_mActivity, "添加購物袋成功");
                     Util.startFragment(CartFragment.newInstance(true));});
@@ -432,6 +431,14 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 } else if (id == R.id.btn_refund) {
                     Util.startFragment(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
                             "action", Constant.ACTION_REFUND,
+                            "ordersId", item.ordersId,
+                            "ordersGoodsId", item.ordersGoodsId).toString()));
+                } else if (id == R.id.btn_view_refund) {
+                    Util.startFragment(RefundDetailFragment.newInstance(item.refundId, EasyJSONObject.generate(
+                            "action", Constant.ACTION_REFUND,
+                            "goodsFullSpecs", item.goodsFullSpecs,
+                            "goodsPrice", item.goodsPrice,
+                            "buyNum", item.buyNum,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
                 } else if (id == R.id.btn_refund_all) {
@@ -1116,6 +1123,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     EasyJSONArray ordersGoodsVoList = ordersVo.getSafeArray("ordersGoodsVoList");
                     orderDetailGoodsItemList.clear();
 
+                    adapter.setOrdersState(ordersState);
                     int showMemberRefundAll = ordersVo.getInt("showMemberRefundAll");
                     for (Object object : ordersGoodsVoList) {
                         EasyJSONObject goodsVo = (EasyJSONObject) object;
@@ -1134,6 +1142,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("buyNum"),
                                 goodsVo.getSafeString("goodsFullSpecs"),
                                 goodsVo.getInt("refundType"),
+                                goodsVo.optInt("refundId"),
                                 goodsVo.getInt("showRefund"),
                                 showMemberComplain,
                                 goodsVo.getInt("complainId")

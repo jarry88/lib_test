@@ -279,7 +279,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                         tvGoodsName.setText(refundItemVo.getSafeString("goodsName"));
                         tvGoodsFullSpecs.setText(paramsInObj.getSafeString("goodsFullSpecs"));
 
-                        tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, (float) paramsInObj.getDouble("goodsPrice"), 0));
+                        tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, paramsInObj.getDouble("goodsPrice"), 0));
                         tvBuyNum.setText(getString(R.string.times_sign) + " " + paramsInObj.getInt("buyNum"));
 
                         String refundStatus = refundItemVo.getSafeString("currentStateText");

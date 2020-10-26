@@ -23,6 +23,7 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.util.BitmapUtil;
 import com.ftofs.twant.util.Guid;
 import com.ftofs.twant.util.QRCode;
+import com.ftofs.twant.util.QRCodeUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -297,7 +298,7 @@ public class GeneratePosterFragment extends BaseFragment implements View.OnClick
                 tvInvitationNickname.setText(nickname);
                 String marketingUrl = data.optString("marketingUrl");
                 SLog.info("marketingUrl[%s]", marketingUrl);
-                Bitmap qrCode = QRCode.createQRCode(marketingUrl);
+                Bitmap qrCode = QRCodeUtil.createTrimmedBitmap(marketingUrl);
                 Glide.with(imgInvitationQrCode).load(qrCode).centerCrop().into(imgInvitationQrCode);
                 invitationPoster.setVisibility(View.VISIBLE);
                 invitationPoster.postDelayed(new Runnable() {

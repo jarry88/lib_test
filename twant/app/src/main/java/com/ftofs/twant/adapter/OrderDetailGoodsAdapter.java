@@ -25,6 +25,7 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
     private Stream<View> btnViews;
     Context context;
     String timesSign;
+    int ordersState;
 
     String paymentTypeCode;
 
@@ -40,9 +41,13 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
 
         this.context = context;
         timesSign = context.getString(R.string.times_sign);
-        addClickableChildrenId(R.id.btn_goto_goods, R.id.btn_refund, R.id.btn_refund_all, R.id.btn_refund_waiting, R.id.btn_return, R.id.btn_view_complaint, R.id.btn_complain);
+        addClickableChildrenId(R.id.btn_goto_goods, R.id.btn_refund, R.id.btn_view_refund, R.id.btn_refund_all, R.id.btn_refund_waiting,
+                R.id.btn_return, R.id.btn_view_return, R.id.btn_view_complaint, R.id.btn_complain);
     }
 
+    public void setOrdersState(int ordersState) {
+        this.ordersState = ordersState;
+    }
 
     @Override
     public void bindView(int position, View itemView, OrderDetailGoodsItem itemData) {
@@ -54,9 +59,11 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
         setText(itemView, R.id.tv_buy_item_amount, timesSign + " " + itemData.buyNum);
         setText(itemView,R.id.tv_goods_amount,StringUtil.formatPrice(context,itemData.goodsPrice,0,2));
         View btnRefund = itemView.findViewById(R.id.btn_refund);
+        View btnViewRefund = itemView.findViewById(R.id.btn_view_refund);
         View btnRefundAll = itemView.findViewById(R.id.btn_refund_all);
         View btnRefundWaiting = itemView.findViewById(R.id.btn_refund_waiting);
         View btnReturn = itemView.findViewById(R.id.btn_return);
+        View btnViewReturn = itemView.findViewById(R.id.btn_view_return);
         View btnComplain = itemView.findViewById(R.id.btn_complain);
         View btnViewComplaint = itemView.findViewById(R.id.btn_view_complaint);
 
@@ -83,8 +90,15 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
                 btnRefundAll.setVisibility(itemData.showMemberRefundAll == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
             }
 
+            if (ordersState == OrderState.TO_BE_RECEIVE) {
+                btnRefundWaiting.setVisibility(View.GONE);
+                btnRefund.setVisibility(View.VISIBLE);
+                btnReturn.setVisibility(View.VISIBLE);
+            }
         } else if (itemData.refundType == 1) { // 查看退款
-
+            if (ordersState == OrderState.TO_BE_RECEIVE) {
+                btnViewRefund.setVisibility(View.VISIBLE);
+            }
         } else if (itemData.refundType == 2) { // 查看退貨
 
         }

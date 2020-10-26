@@ -1,12 +1,17 @@
 package com.ftofs.twant.fragment;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.util.Log;
+import android.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +22,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.lib_net.model.Goods;
+import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.CrossBorderCategoryListAdapter;
@@ -26,6 +32,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderCategoryItem;
@@ -38,6 +45,7 @@ import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.gzp.lib_common.base.BaseFragment;
@@ -50,6 +58,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -68,6 +77,9 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     CrossBorderCategoryListAdapter categoryListAdapter;
     List<CrossBorderCategoryItem> categoryList = new ArrayList<>();
 
+    LinearLayout llMoreCategoryMenuContainer;
+    LinearLayout llLessCategoryMenuContainer;
+
     ViewPager viewPager;
 
     private List<String> titleList = new ArrayList<>();
@@ -78,6 +90,9 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     View crossBorderCategoryListMask;
     View btnViewMoreCategory;
     String homeDefaultColorStr = "";
+
+    int selCategoryMenuIndex = 0; // 當前選中的分類菜單的索引
+    LinearLayout llTextRuler;
 
     public static CrossBorderMainFragment newInstance() {
         CrossBorderMainFragment fragment = new CrossBorderMainFragment();
@@ -101,6 +116,11 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
         EventBus.getDefault().register(this);
 
+        llMoreCategoryMenuContainer = view.findViewById(R.id.ll_more_category_menu_container);
+        llLessCategoryMenuContainer = view.findViewById(R.id.ll_less_category_menu_container);
+
+        llTextRuler = view.findViewById(R.id.ll_text_ruler);
+
         crossBorderCategoryListMask = view.findViewById(R.id.cross_border_category_list_mask);
         btnViewMoreCategory = view.findViewById(R.id.btn_view_more_category);
 
@@ -112,21 +132,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         categoryListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                CrossBorderCategoryItem item = categoryList.get(position);
-                SLog.info("position[%d], item[%s]", position, item);
-
-                int prevSelectedIndex = categoryListAdapter.getSelectedIndex();
-                if (position == prevSelectedIndex) {
-                    return;
-                }
-
-                categoryListAdapter.setSelectedIndex(position);
-                categoryListAdapter.notifyItemChanged(prevSelectedIndex);
-                categoryListAdapter.notifyItemChanged(position);
-
-                viewPager.setCurrentItem(position);
-
-                changeBackgroundColor(Color.parseColor(item.backgroundColor));
+                SLog.info("onItemClick, position[%d]", position);
+                handleCategoryMenuSelected(position);
             }
         });
         rvCategoryList.setAdapter(categoryListAdapter);
@@ -158,6 +165,13 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 categoryListAdapter.setSelectedIndex(position);
                 categoryListAdapter.notifyItemChanged(prevSelectedIndex);
                 categoryListAdapter.notifyItemChanged(position);
+
+                TextView prevTextView = (TextView) llLessCategoryMenuContainer.getChildAt(selCategoryMenuIndex);
+                prevTextView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+
+                selCategoryMenuIndex = position;
+                TextView currTextView = (TextView) llLessCategoryMenuContainer.getChildAt(selCategoryMenuIndex);
+                currTextView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             }
 
             @Override
@@ -176,8 +190,33 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         loadData();
     }
 
-    private void initViewPager(EasyJSONObject responseObj) {
+    private void handleCategoryMenuSelected(int position) {
+        CrossBorderCategoryItem item = categoryList.get(position);
+        SLog.info("position[%d], item[%s]", position, item);
 
+        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+        if (position == 0) {
+            UmengAnalytics.onEventObject(UmengAnalyticsActionName.GO_TARIFF_BUY, analyticsDataMap);
+        } else {
+            analyticsDataMap.put("categoryId", item.categoryId);
+            UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_CATEGORY, analyticsDataMap);
+        }
+
+        int prevSelectedIndex = categoryListAdapter.getSelectedIndex();
+        if (position == prevSelectedIndex) {
+            return;
+        }
+
+        categoryListAdapter.setSelectedIndex(position);
+        categoryListAdapter.notifyItemChanged(prevSelectedIndex);
+        categoryListAdapter.notifyItemChanged(position);
+
+        viewPager.setCurrentItem(position);
+
+        changeBackgroundColor(Color.parseColor(item.backgroundColor));
+    }
+
+    private void initViewPager(EasyJSONObject responseObj) {
         try {
             // 獲取Banner圖數據
             int index = 0;
@@ -294,7 +333,99 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 titleList.add(item.catName);
                 fragmentList.add(CrossBorderCategoryFragment.newInstance(item.categoryId, item.catName));
                 categoryList.add(item);
+
+                if (BuildConfig.DEBUG) {
+                    if (categoryList.size() >= 3) {
+                        break;
+                    }
+                }
             }
+
+            // int margin = Util.dip2px(_mActivity, 15); //
+            for (int i = 0; i < categoryList.size(); i++) {
+                CrossBorderCategoryItem item = categoryList.get(i);
+                TextView textView = new TextView(_mActivity);
+                textView.setTextSize(15);
+                textView.setTextColor(Color.WHITE);
+                textView.setText(item.catName);
+                textView.setGravity(Gravity.CENTER);
+                textView.setTag(R.id.data_index, i);
+                if (i == 0) {
+                    textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                }
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = (int) v.getTag(R.id.data_index);
+                        if (position == selCategoryMenuIndex) {
+                            return;
+                        }
+
+                        TextView tvCatPrev = (TextView) llLessCategoryMenuContainer.getChildAt(selCategoryMenuIndex);
+                        tvCatPrev.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+
+                        SLog.info("selCategoryMenuIndex[%d], position[%d]", selCategoryMenuIndex, position);
+                        selCategoryMenuIndex = position;
+                        TextView tvCatCurr = (TextView) llLessCategoryMenuContainer.getChildAt(selCategoryMenuIndex);
+                        tvCatCurr.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+                        handleCategoryMenuSelected(position);
+                    }
+                });
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.weight = 1;
+
+                llLessCategoryMenuContainer.addView(textView, layoutParams);
+
+                /*
+                int margin = Util.dip2px(_mActivity, 15);
+                TextView tvRuler = new TextView(_mActivity);
+                tvRuler.setTextSize(15);
+                tvRuler.setText(item.catName);
+                LinearLayout.LayoutParams rulerParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                rulerParams.leftMargin = margin;
+                rulerParams.rightMargin = margin;
+
+                llTextRuler.addView(textView, layoutParams);
+                *
+                 */
+            }
+
+            for (int i = 0; i < categoryList.size(); i++) {
+                CrossBorderCategoryItem item = categoryList.get(i);
+                int margin = Util.dip2px(_mActivity, 15);
+                TextView tvRuler = new TextView(_mActivity);
+                tvRuler.setTextSize(15);
+                tvRuler.setText(item.catName);
+                LinearLayout.LayoutParams rulerParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                rulerParams.leftMargin = margin;
+                rulerParams.rightMargin = margin;
+
+                llTextRuler.addView(tvRuler, rulerParams);
+            }
+
+
+            llTextRuler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Pair<Integer, Integer> dimension = Util.getScreenDimension(_mActivity);
+                    int rulerWidth = llTextRuler.getWidth();
+                    int screenWidth = dimension.first;
+                    SLog.info("screenWidth[%d], rulerWidth[%d]", screenWidth, rulerWidth);
+
+                    if (rulerWidth < screenWidth) {
+                        llLessCategoryMenuContainer.setVisibility(View.VISIBLE);
+                        llMoreCategoryMenuContainer.setVisibility(View.GONE);
+                    } else {
+                        llLessCategoryMenuContainer.setVisibility(View.GONE);
+                        llMoreCategoryMenuContainer.setVisibility(View.VISIBLE);
+                    }
+
+                    llTextRuler.setVisibility(View.GONE);
+                }
+            });
+
             categoryListAdapter.setShowViewMore(categoryList.size() > 5);
             showViewMoreCategoryIndicator(categoryList.size() > 5);
             categoryListAdapter.setNewData(categoryList);
