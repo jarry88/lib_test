@@ -3,7 +3,6 @@ package com.ftofs.twant.fragment;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.TextPaint;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
@@ -21,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.ftofs.lib_net.model.Goods;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
@@ -36,18 +34,18 @@ import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
 import com.ftofs.twant.entity.CrossBorderCategoryItem;
-import com.ftofs.twant.entity.CrossBorderFloorItem;
+import com.ftofs.twant.entity.CrossBorderFloor;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.FloorItem;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.orhanobut.hawk.Hawk;
@@ -299,17 +297,24 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             }
 
             // 獲取樓層數據
-            List<CrossBorderFloorItem> floorItemList = new ArrayList<>();
-            /*
-            CrossBorderFloorItem floorItem1 = new CrossBorderFloorItem();
-            floorItem1.goodsList = new ArrayList<>();
-            floorItem1.goodsList.add(new Goods());floorItem1.goodsList.add(new Goods());floorItem1.goodsList.add(new Goods());
-            floorItemList.add(floorItem1);
+            List<CrossBorderFloor> floorList = new ArrayList<>();
+            EasyJSONArray floorArray = responseObj.getSafeArray("datas.floorList");
+            for (Object object : floorArray) {
+                EasyJSONObject floorObject = (EasyJSONObject) object;
+                CrossBorderFloor floor = new CrossBorderFloor();
+                floor.floorId = floorObject.optInt("floorId");
+                floor.floorHeadline = floorObject.optString("floorHeadline");
+                floor.floorSubhead = floorObject.optString("floorSubhead");
+                floor.floorType = floorObject.optString("floorType");
 
-            CrossBorderFloorItem floorItem2 = new CrossBorderFloorItem();
-            floorItemList.add(floorItem2);
+                EasyJSONArray imgVoList = floorObject.getSafeArray("imgVoList");
+                for (Object object2 : imgVoList) {
+                    FloorItem floorItem = (FloorItem) EasyJSONBase.jsonDecode(FloorItem.class, object2.toString());
+                    floor.floorItemList.add(floorItem);
+                }
+                floorList.add(floor);
+            }
 
-             */
 
             // 獲取【優選好店】數據
             List<Store> storeList = new ArrayList<>();
@@ -321,7 +326,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
             titleList.add("首頁");
             fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, homeDefaultColorStr, navItemCount, navPaneList, shoppingZoneList, bargainGoodsList,
-                    groupGoodsList, floorItemList, storeList));
+                    groupGoodsList, floorList, storeList));
             categoryList.add(new CrossBorderCategoryItem(0, "首頁", homeDefaultColorStr));
 
             EasyJSONArray catList = responseObj.getSafeArray("datas.catList");

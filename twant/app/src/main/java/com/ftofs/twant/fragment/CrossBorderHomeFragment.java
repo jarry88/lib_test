@@ -24,11 +24,12 @@ import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
-import com.ftofs.twant.entity.CrossBorderFloorItem;
+import com.ftofs.twant.entity.CrossBorderFloor;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.FloorItem;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.Store;
@@ -69,7 +70,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     List<CrossBorderShoppingZoneItem> shoppingZoneList;
     List<CrossBorderActivityGoods> bargainGoodsList;
     List<CrossBorderActivityGoods> groupGoodsList;
-    List<CrossBorderFloorItem> floorItemList;
+    List<CrossBorderFloor> floorList;
     List<Store> storeList;
 
     // 當前要加載第幾頁(從1開始）
@@ -85,7 +86,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                                                       List<CrossBorderShoppingZoneItem> shoppingZoneList,
                                                       List<CrossBorderActivityGoods> bargainGoodsList,
                                                       List<CrossBorderActivityGoods> groupGoodsList,
-                                                      List<CrossBorderFloorItem> floorItemList,
+                                                      List<CrossBorderFloor> floorList,
                                                       List<Store> storeList) {
         CrossBorderHomeFragment fragment = new CrossBorderHomeFragment();
         Bundle args = new Bundle();
@@ -98,7 +99,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         fragment.shoppingZoneList = shoppingZoneList;
         fragment.bargainGoodsList = bargainGoodsList;
         fragment.groupGoodsList = groupGoodsList;
-        fragment.floorItemList = floorItemList;
+        fragment.floorList = floorList;
         fragment.storeList = storeList;
 
         return fragment;
@@ -127,21 +128,40 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_goto_top, this);
 
         crossBorderHomeItemList.clear();
+        // 組裝banner數據
         CrossBorderHomeItem banner = new CrossBorderHomeItem();
         banner.bannerItemList = bannerItemList;
         banner.itemType = Constant.ITEM_TYPE_BANNER;
         crossBorderHomeItemList.add(banner);
 
+        // 組裝header數據
         CrossBorderHomeItem header = new CrossBorderHomeItem();
         header.navItemCount = navItemCount;
         header.navPaneList = navPaneList;
         header.shoppingZoneList = shoppingZoneList;
         header.bargainGoodsList = bargainGoodsList;
         header.groupGoodsList = groupGoodsList;
-        header.floorItemList = floorItemList;
-        header.storeList = storeList;
         header.itemType = Constant.ITEM_TYPE_HEADER;
         crossBorderHomeItemList.add(header);
+
+        // 組裝樓層數據
+        for (CrossBorderFloor crossBorderFloor : floorList) {
+            CrossBorderHomeItem floor = new CrossBorderHomeItem();
+            floor.floorId = crossBorderFloor.floorId;
+            floor.floorHeadline = crossBorderFloor.floorHeadline;
+            floor.floorSubhead = crossBorderFloor.floorSubhead;
+            floor.floorType = crossBorderFloor.floorType;
+            floor.floorItemList = crossBorderFloor.floorItemList;
+            if (floor.floorItemList == null) {
+                floor.floorItemList = new ArrayList<>();
+            }
+            floor.itemType = Constant.ITEM_TYPE_FLOOR;
+
+            crossBorderHomeItemList.add(floor);
+        }
+
+        // 組裝優選好店數據
+
 
         rvList = view.findViewById(R.id.rv_list);
         layoutManager = new LinearLayoutManager(_mActivity);

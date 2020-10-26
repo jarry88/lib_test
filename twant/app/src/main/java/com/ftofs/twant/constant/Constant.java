@@ -108,6 +108,16 @@ public class Constant {
      */
     public static final int ITEM_TYPE_FOOTER = 8;
 
+    /**
+     * 樓層類型
+     */
+    public static final int ITEM_TYPE_FLOOR = 9;
+
+    /**
+     * 優選好店類型
+     */
+    public static final int ITEM_TYPE_BEST_STORE = 10;
+
 
 
     /**

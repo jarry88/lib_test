@@ -286,7 +286,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/pay_red_button"
-                    android:tint="@color/tw_blue">
+                    app:tint="@color/tw_blue">
                 </ImageView>
                 <TextView
                     android:id="@+id/btn_buy_now_text"
