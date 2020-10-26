@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.map
+import com.ftofs.lib_net.model.OrderCodeVo
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CouponOrderDetailFragmentBinding
 import com.ftofs.twant.dsl.*
+import com.ftofs.twant.kotlin.setVisibleOrGone
+import com.ftofs.twant.util.QRCode
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
@@ -39,12 +42,18 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
             setRightLayoutClickListener{ToastUtil.success(context, "分享")}
             setLeftLayoutClickListener{onBackPressedSupport()}
         }
+        binding.couponListItem.mBinding.apply {
+            tvBottomPrice.setVisibleOrGone(true)
+            tvValidity.setVisibleOrGone(true)
+        }
         id?.let {
             viewModel.getCouponOrderDetail(it)
         }?:hideSoftInputPop()
-        binding.btnBuy.setOnClickListener {
+        binding.btnBuyAgain.setOnClickListener {
             if (User.getUserId() > 0) {
-                Util.startFragment(CouponConfirmOrderFragment.newInstance(viewModel.currCouponDetail.value?.id))
+                viewModel.currCouponOrder.value?.itemList?.get(0)?.coupon?.let {coupon ->
+                    Util.startFragment(CouponStoreDetailFragment.newInstance(coupon.id))
+                }
             } else Util.showLoginFragment(requireContext())}
         binding.couponInformation.observable(viewModel.currCouponOrder.map { it.itemList?.get(0)?.coupon })
     }
@@ -54,7 +63,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
         fun newInstance(couponId: Int?)=CouponOrderDetailFragment().apply {
             arguments = Bundle().apply {
                 couponId?.let {
-                    putInt(ORDER_ID, it).apply { SLog.info("couponId $it") }
+                    putInt(ORDER_ID, it).apply { SLog.info("order_Id $it") }
                 }
             }
         }
@@ -66,7 +75,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
             binding.llCodeContainer.apply { 
                 removeAllViews()
                 it.itemList?.forEach{ orderItem ->  
-                    orderItem.extractCode?.forEach{ orderCodeVo ->
+                    orderItem.extractCode?: listOf(OrderCodeVo("223456",true,"2"),OrderCodeVo("123456",false,"2")).forEach{ orderCodeVo ->
                         LinearLayout {
                             layout_height = wrap_content
                             layout_width = wrap_content
@@ -121,13 +130,13 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                         layout_height = 160
                                         layout_width = 160
                                         margin_end =16
-                                        setImageBitmap( CodeUtils.createImage(orderCodeVo.code, BarcodeFormat.CODE_39,160, 160, null))
+                                        setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
                                     }
                                     ImageView {
                                         layout_height = 160
                                         layout_width = 160
                                         margin_end =16
-                                        setImageBitmap( CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
+                                        setImageBitmap( QRCode.createQR128Code(orderCodeVo.code,160,86))
                                     }
 
                                 }.let { v -> (v.parent as ViewGroup).removeView(v)
@@ -138,6 +147,11 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                     }
                 }
             }
+            binding.btnLink.setOnClickListener { _ ->
+                it.itemList?.get(0)?.coupon?.store?.apply {
+                    Util.dialPhone(activity, contact)
+                }
+                }
         }
     }
 }

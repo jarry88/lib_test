@@ -19,7 +19,7 @@ data class CouponItemVo(
 ):Serializable{
     fun getValidityString():String =validityType?.let {
         when(it){
-            0 -> "$validityDay 天内有效"
+            0,// -> "$validityDay 天内有效"
             1 -> validityStartDate+"至" +validityEndDate
             else -> ""
         }

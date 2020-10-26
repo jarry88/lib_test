@@ -64,7 +64,7 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
 
     companion object {
         @JvmStatic
-        fun newInstance(couponId: Int?)=CouponOrderDetailFragment().apply {
+        fun newInstance(couponId: Int?)=CouponStoreDetailFragment().apply {
             arguments = Bundle().apply {
                 couponId?.let {
                     putInt(COUPON_ID,it).apply { SLog.info("couponId $it") }
