@@ -78,6 +78,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         addItemType(Constant.ITEM_TYPE_HEADER, R.layout.cross_border_home_header);
         addItemType(Constant.ITEM_TYPE_FLOOR, R.layout.cross_border_floor_item);
         addItemType(Constant.ITEM_TYPE_BEST_STORE, R.layout.cross_border_best_store);
+        addItemType(Constant.ITEM_TYPE_RECOMMEND_TITLE, R.layout.cross_border_recommend_title);
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.cross_border_home_item); // 商品分頁加載Item
         addItemType(Constant.ITEM_TYPE_FOOTER, R.layout.cross_border_home_footer);
     }

@@ -161,7 +161,18 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         }
 
         // 組裝優選好店數據
+        if (storeList != null && storeList.size() > 0) {
+            CrossBorderHomeItem store = new CrossBorderHomeItem();
+            store.storeList = storeList;
+            store.itemType = Constant.ITEM_TYPE_BEST_STORE;
 
+            crossBorderHomeItemList.add(store);
+        }
+
+        // 為你推薦的標題欄
+        CrossBorderHomeItem recommendTitle = new CrossBorderHomeItem();
+        recommendTitle.itemType = Constant.ITEM_TYPE_RECOMMEND_TITLE;
+        crossBorderHomeItemList.add(recommendTitle);
 
         rvList = view.findViewById(R.id.rv_list);
         layoutManager = new LinearLayoutManager(_mActivity);

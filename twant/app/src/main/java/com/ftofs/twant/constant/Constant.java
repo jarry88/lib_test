@@ -118,6 +118,11 @@ public class Constant {
      */
     public static final int ITEM_TYPE_BEST_STORE = 10;
 
+    /**
+     * 為你推薦標題欄
+     */
+    public static final int ITEM_TYPE_RECOMMEND_TITLE = 11;
+
 
 
     /**

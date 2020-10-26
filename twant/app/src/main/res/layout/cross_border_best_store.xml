@@ -56,7 +56,6 @@
                     android:text="進入專場"
                     android:textColor="@color/tw_black"
                     android:textSize="10sp">
-
                 </TextView>
                 <ImageView
                     android:layout_width="wrap_content"
@@ -74,68 +73,5 @@
         </com.ftofs.twant.widget.GridLayout>
     </LinearLayout>
     <!-- END OF 優選好店 -->
-
-    <!-- 為你推薦的標題欄 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        android:background="@drawable/white_r4dp_bg">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="51dp">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="11dp"
-                    android:text="為你推薦"
-                    android:textColor="@color/tw_black"
-                    android:textSize="15sp">
-                </TextView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="HOT"
-                    android:textSize="10sp"
-                    android:textColor="#BBB">
-                </TextView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_view_more_recommendation"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:visibility="gone">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="進入專場"
-                    android:textColor="@color/tw_black"
-                    android:textSize="10sp">
-
-                </TextView>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:src="@drawable/expand_button">
-                </ImageView>
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
-    <!-- END OF 為你推薦的標題欄 -->
 
 </LinearLayout>
