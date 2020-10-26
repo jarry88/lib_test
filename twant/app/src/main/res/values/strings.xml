@@ -848,4 +848,6 @@
     <string name="go_no_data_853_hint">暫未揾到你的心水荀盤，\n可以嘗試其他條件！</string>
     <string name="text_go_pay">去支付</string>
     <string name="text_seller_verification">核銷</string>
+    <string name="text_again_to_buy">再來一單</string>
+    <string name="text_link_store">聯繫商戶</string>
 </resources>

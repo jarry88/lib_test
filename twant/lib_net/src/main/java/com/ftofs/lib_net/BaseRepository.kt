@@ -42,7 +42,7 @@ open class BaseRepository() {
             SLog.info(response.toString())
             if (response.code == -1) {
                 errorBlock?.let { it() }
-                Result.Error(IOException(response.message))
+                Result.Error(IOException(response.message?:response.msg))
             }else if((response.code==400 )or(response.code==401) ){
                 Result.DataError(response.run { datas?:data!! })
             } else {

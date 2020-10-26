@@ -76,7 +76,7 @@ object Util {
      */
     fun makeParentDirectory(file: File): Boolean {
         val parentFile = file.parentFile
-        return if (parentFile.exists()) {
+        return if (parentFile?.exists() == true) {
             true
         } else parentFile.mkdirs()
     }

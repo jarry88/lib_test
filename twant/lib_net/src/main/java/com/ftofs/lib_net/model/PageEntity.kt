@@ -5,10 +5,10 @@ data class PageEntity(
     var totalPage: Int,
     var hasMore: Boolean,
     
-    var curPage: Int,
-    var offset: Int,
-    var over: Boolean,
-    var pageCount: Int,
-    var size: Int
+    var curPage: Int=1,
+    var offset: Int=1,
+    var over: Boolean=false,
+    var pageCount: Int=1,
+    var size: Int=20
 
 )

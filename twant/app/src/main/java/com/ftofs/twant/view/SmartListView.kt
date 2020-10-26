@@ -60,7 +60,7 @@ class SmartListView @JvmOverloads constructor(
         return null
     }
     fun <T,V:ViewDataBinding>config(resId:Int,list:LiveData<List<T>?>,initAdapter:(V,T)->Unit){
-        val adapter= factoryAdapter(resId,initAdapter)
+        val adapter= factoryAdapter(resId,initAdapter).apply { showEmptyView(true) }
         mBinding.rvList.adapter=adapter
         getLifecycleOwner()?.let {
             list.observe(it){
@@ -69,6 +69,7 @@ class SmartListView @JvmOverloads constructor(
                     adapter.addAll(it,onRefresh)
                 }?:adapter.addAll(listOf(),true).apply {                     SLog.info("空数据")
                 }
+                adapter.notifyDataSetChanged()
                 endLoadingUi()
             }
         }
@@ -84,6 +85,7 @@ class SmartListView @JvmOverloads constructor(
         finishLoadMore()
     finishRefresh()
     }
+    fun autoRefresh(){mBinding.refreshLayout.autoRefresh()}
     fun setOrientation(){
 //        mBinding.refreshLayout.isHorizontalFadingEdgeEnabled=true
         mBinding.rvList.isHorizontalFadingEdgeEnabled=true

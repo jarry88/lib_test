@@ -117,17 +117,17 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
         fragments = new ArrayList<>();
 
         List<String> titleList = new ArrayList<String>();
-        if (Config.USE_DEVELOPER_TEST_DATA) {
+//        if (Config.USE_DEVELOPER_TEST_DATA) {
             titleList.add("代金券");
             titleList.add("优惠券");
 
             fragments.add(ShopCouponStoreListFragment.Companion.newInstance(0,this));
             fragments.add(ShopActivityVoucherListFragment.newInstance());
-        } else {
-            titleList.add("优惠券");
-            fragments.add(ShopActivityVoucherListFragment.newInstance());
-            tabLayout.setVisibility(View.GONE);
-        }
+//        } else {
+//            titleList.add("优惠券");
+//            fragments.add(ShopActivityVoucherListFragment.newInstance());
+//            tabLayout.setVisibility(View.GONE);
+//        }
         adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(),titleList, fragments);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);

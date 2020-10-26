@@ -174,7 +174,8 @@ public class ShopActivityVoucherListFragment extends BaseFragment implements Vie
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        ((SupportFragment) getParentFragment()).pop();
+        assert getParentFragment() != null;
+        ((SupportFragment) getParentFragment()).onBackPressedSupport();
         return true;
     }
 

@@ -33,12 +33,13 @@
             android:id="@+id/btn_more_coupon"/>
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
+            app:tabTextColor="@color/tw_black"
             android:layout_height="@dimen/tab_height"
             android:id="@+id/tab_layout"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:tabIndicator="@color/tw_red"
             app:tabIndicatorFullWidth="false"
-            app:tabIndicatorHeight="1dp"
+            app:tabIndicatorHeight="2dp"
             app:tabSelectedTextColor="@color/tw_red"/>
 
         <com.ftofs.twant.view.SmartListView

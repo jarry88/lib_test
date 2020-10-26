@@ -57,13 +57,13 @@ class ShopCouponStoreListFragment:BaseTwantFragmentMVVM<ShopCouponStoreListFragm
 
     companion object {
         @JvmStatic
-        fun newInstance(couponId: Int,parent:ShopActivityFragment):ShopCouponStoreListFragment {
+        fun newInstance(storeId: Int,parent:ShopActivityFragment):ShopCouponStoreListFragment {
             val args = Bundle()
-            args.putInt(COUPON_ID,couponId)
-            val  fragment =ShopCouponStoreListFragment()
-            fragment.arguments=args
-            fragment.shopActivityFragment=parent
-            return fragment
+            args.putInt(COUPON_ID,storeId)
+            return ShopCouponStoreListFragment().apply {
+                arguments=args
+                shopActivityFragment=parent
+            }
         }
     }
 

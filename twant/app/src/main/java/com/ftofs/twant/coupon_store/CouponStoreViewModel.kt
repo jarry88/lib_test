@@ -7,6 +7,7 @@ import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.DemoApiService
 import com.ftofs.lib_net.model.*
 import com.ftofs.twant.constant.SPField
+import com.ftofs.twant.dsl.customer.factoryParams
 import com.ftofs.twant.util.LogUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
@@ -20,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class CouponStoreViewModel(application: Application):BaseViewModel(application) {
     val currCouponDetail by lazy { MutableLiveData<CouponDetailVo>() }
+    val currCouponOrder by lazy { MutableLiveData<CouponOrderDetailInfo>() }
     val couponStoreList by lazy { MutableLiveData<List<CouponItemVo>>() }
     val couponOrdersListInfo by lazy { MutableLiveData<CouponOrdersListInfo>() }
     val buyStep1Vo by lazy { MutableLiveData<BuyStep1Vo>() }
@@ -28,13 +30,12 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     val error by lazy { MutableLiveData<String>() }
 
     val repository by lazy { BaseRepository() }
-
+    val currOrderStatus by lazy { MutableLiveData<Int>() }
     val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .baseUrl("http://192.168.5.32:8100/tc/")
-            .client(
-                    OkHttpClient.Builder()
+            .client(OkHttpClient.Builder()
                             .addInterceptor() { chain ->
                                 chain.request().run {
                                     newBuilder()
@@ -78,8 +79,8 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
                                         .build()
                             }.build())
             .build()
-    val testApi=retrofit.create(DemoApiService::class.java)
-    val finalApi =if(Util.inDev()) testApi else repository.api
+    private val testApi=retrofit.create(DemoApiService::class.java)
+    private val finalApi =if(Util.inDev()) testApi else repository.api
     var currPage =0
 
     /**
@@ -124,7 +125,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         )
     }
     /**
-     * 獲取券倉詳情
+     * 獲取優惠券詳情
      */
     fun getCouponDetail(couponId: Int){
         launch(stateLiveData,
@@ -133,35 +134,52 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         )
     }
     /**
+     * 獲取優惠券訂單詳情
+     */
+    fun getCouponOrderDetail(orderId: Int){
+        launch(stateLiveData,
+                { repository.run { simpleGet(finalApi.getCouponOrderDetail(orderId)).apply { SLog.info(orderId.toString()) } } },
+                { currCouponOrder.postValue(it) }
+        )
+    }
+    /**
      * 獲取訂單列表-分頁
      */
     fun getOrdersList(){
-        val params = mapOf<String, Any?>(
-                "field" to null,//	排序字段
-                "order" to null, //排序规则，asc升序，desc降序
-                "orderSn" to null, //	訂單號
-                "orderType" to null, //int
-                "orderStatus" to null, //訂單狀態 int
-                "page" to currPage, //訂單狀態 int
-                "pageSize" to null, //訂單狀態 int
-
+        val page =currPage+1
+        val params = factoryParams(
+                "field" , null,//	排序字段
+                "order" , null, //排序规则，asc升序，desc降序
+                "orderSn" , null, //	訂單號
+//                "orderType" , null, //int //后台使用的参数，前端用不到
+                "orderStatus" , currOrderStatus.value, //訂單狀態 int
+                "page" , page, //訂單狀態 int
+                "pageSize" , null, //訂單狀態 int
         )
-                .run {
-                   this
-                }
         launch(stateLiveData,
-                { repository.run { simpleGet(finalApi.getCouponOrdersList(params)).apply { SLog.info(params.toString()) } } },
-                { couponOrdersListInfo.postValue(it) }
+                { repository.run { simpleGet(finalApi.getCouponOrdersList(params)) } },
+                { couponOrdersListInfo.postValue(it.apply {
+                    if(!list.isNullOrEmpty()) currPage=page.apply { SLog.info("currPage: $this") }
+                })
+                },
+                error={
+                    couponOrdersListInfo.postValue(CouponOrdersListInfo(listOf(), PageEntity(0,0,false)))
+                },
+                others = {
+                    couponOrdersListInfo.postValue(CouponOrdersListInfo(listOf(), PageEntity(0,0,false)))
+                }
         )
     }
 
     /**
-     * 獲取券倉列表
+     * 獲取店鋪券倉列表
      */
     fun getShopCouponStoreList(storeId: Int) {
         launch(stateLiveData,
                 {
-                    val params = mapOf("page" to currPage + 1, "storeId" to storeId)
+                    val params = factoryParams(
+                            "page" ,currPage + 1,
+                            "storeId" , storeId)
                     SLog.info(params.toString())
                     repository.run { simpleGet(finalApi.getCouponList(params)) }
                 },
@@ -174,6 +192,9 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         )
     }
 
+    /**
+     * 獲取專場券倉列表
+     */
     fun getActivityList(type: String) {
         launch(stateLiveData,
                 {

@@ -813,7 +813,7 @@ inline var TextView.colorId: Int
     get() {
         return 0
     }
-    set(value) = setTextColor(resources.getColor(value))
+    set(value) = setTextColor(resources.getColor(value,null))
 
 inline var TextView.textColor: String
     get() {

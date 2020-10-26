@@ -126,7 +126,7 @@ class PhoneView @JvmOverloads constructor(
 //            }
 //        } }
 //        etMobile.seto
-        etMobile.doBeforeTextChanged { text, start, count, after ->   llErrorContainer?.visibility=View.GONE}
+        etMobile.doBeforeTextChanged { _, _, _, _ ->   llErrorContainer?.visibility=View.GONE}
         etMobile.doAfterTextChanged { text->
             SLog.info(regex[zoneIndex]+areaArray[zoneIndex]+text)
             isRight=true

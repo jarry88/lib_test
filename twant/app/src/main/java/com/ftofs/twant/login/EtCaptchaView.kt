@@ -67,7 +67,7 @@ class EtCaptchaView @JvmOverloads constructor(
         return etCaptcha.text?.toString()
     }
     private fun initTextChangedListener(){
-        etCaptcha.doBeforeTextChanged { text, start, count, after ->   llErrorContainer?.visibility=View.GONE}
+        etCaptcha.doBeforeTextChanged { _, _, _, _ ->   llErrorContainer?.visibility=View.GONE}
         etCaptcha.doAfterTextChanged { updateRight() }
         etCaptcha.setOnFocusChangeListener { v, hasFocus ->
            updateRight()

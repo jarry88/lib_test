@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.alibaba.fastjson.JSON
 import com.ftofs.lib_net.model.CouponItemVo
+import com.ftofs.lib_net.model.CouponOrdersListInfo
 import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.R
 import com.ftofs.twant.BR
+import com.ftofs.twant.coupon_store.CouponOrderListFragment
 import com.ftofs.twant.databinding.CouponListItemWighetBinding
 import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.databinding.SearchSuggestionItemBinding
@@ -61,14 +63,21 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
     }
 
     override fun initData() {
-        binding.button1.setOnClickListener {
-            viewModel.getData()
+        binding.button1.apply {
+            text="api_test"
+            setOnClickListener {
+                viewModel.getData()
+            }
         }
-        binding.button2.setOnClickListener {
-            ToastUtil.success(context,"打开")
-            KLog.init(true)
+        binding.button2.apply {
+            text="klog"
+            setOnClickListener {
+                ToastUtil.success(context,"打开")
+                KLog.init(true)
+            }
         }
         binding.button3.apply{
+            text="下拉彈窗"
             setOnClickListener {
             XPopup.Builder(_mActivity)
                     .moveUpToKeyboard(false)
@@ -77,6 +86,10 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
                     .asCustom(
                     GoDropdownMenu(context, listOf("1","2","3","4"),"2")
             ).show()
+        }}
+        binding.button5.apply{
+            text="訂單"
+            setOnClickListener {start(CouponOrderListFragment.newInstance())
         }
         }
         binding.button4.setOnClickListener { start(Go853HouseListFragment()) }
