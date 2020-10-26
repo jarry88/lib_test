@@ -63,6 +63,17 @@ data class CouponDetailVo(
     fun getImgSize():String= picList?.size?.toString() ?:"0"
     fun getShowPicList():Boolean= picList?.isNotEmpty() ?:false
     fun getShowPicBtn():Boolean= picList?.let{it.size>3} ?:false
+    fun getValidityString():String =validityType?.let {
+        when(it){
+            0,// -> "$validityDay 天内有效"
+            1 -> validityStartDate+"至" +validityEndDate
+            else -> ""
+        }
+    }?:""
+    fun getTypeString():String =consumptionType?.let {//	消費類型：0->抵用券，1->套餐券
+        "团"
+    }?:""
+    fun isOutStock():Boolean =if(limitStock) stock<=0 else false
 }
 
 data class Pkg(

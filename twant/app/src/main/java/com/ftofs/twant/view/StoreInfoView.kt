@@ -14,6 +14,8 @@ import com.ftofs.lib_net.model.Store
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.StoreInfoWighetBinding
 import com.ftofs.twant.entity.StoreMapInfo
+import com.ftofs.twant.fragment.ShopMainFragment
+import com.ftofs.twant.fragment.StoreHomeFragment
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.widget.AmapPopup
 import com.lxj.xpopup.XPopup
@@ -69,7 +71,7 @@ class StoreInfoView @JvmOverloads constructor(
         getLifecycleOwner()?.let {
             vo.observe(it){ t->
                 t?.let { mBinding.vo=t.store
-
+                    mBinding.root.setOnClickListener { Util.startFragment(ShopMainFragment.newInstance(t.storeId)) }
                 }
             }
         }

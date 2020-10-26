@@ -5,7 +5,7 @@
     <data>
         <variable
             name="vo"
-            type="com.ftofs.lib_net.model.CouponItemVo" />
+            type="com.ftofs.lib_net.model.CouponDetailVo" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
             <View
                 android:layout_width="@dimen/dp_65"
                 android:layout_height="wrap_content"
-                android:background="@drawable/coupon_out_bg"/>
+                android:background="@{vo.outStock?@drawable/coupon_out_bg:@drawable/coupon_red_bg}"/>
         </LinearLayout>
 
         <LinearLayout
@@ -139,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textColor="@color/tw_white"
-                    android:text="售罄"/>
+                    android:text="@{vo.outStock?`售罄`:`購買`}"/>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

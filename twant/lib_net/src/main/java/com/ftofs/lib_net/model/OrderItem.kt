@@ -24,7 +24,7 @@ data class CouponOrderDetailInfo(
         val userId:Int?,//支付方式，10->mpay
         val userName:String?,//下單用戶名
         val totalPrice:Double?,//商品總金額（不包含優惠折扣）
-        val transactionId:Double?,//外部訂單號（不包含優惠折扣）
+        val transactionId:String?,//外部訂單號（不包含優惠折扣）
         val updatePrice:Double?,//後台修改的價格
         val updateTime:String?,//更新時間
 ):Serializable
@@ -70,7 +70,7 @@ data class OrderItem(
     fun getTypeString():String =consumptionType?.let {//	消費類型：0->抵用券，1->套餐券
         "团"
     }?:""
-    fun getCouponItemVo():CouponItemVo = CouponItemVo(consumptionType,cover,id,originalPrice,price,sale,stock,subTitle,title,validityDay,validityEndDate,validityStartDate,validityType)
+    fun getCouponItemVo():CouponItemVo = CouponItemVo(consumptionType,cover,id,originalPrice,price,sale,stock,subTitle,title,validityDay,validityEndDate,validityStartDate,validityType)//,1
 }
 
 /**
@@ -96,7 +96,7 @@ data class CouponOrderBase(
             50 -> "已退款"
             60 -> "已取消"
             else ->"-"
-        }.apply { SLog.info(this) }
+        }.apply { SLog.info("OrderStatusString: $this") }
     }?:"-"
     fun getOrderRed():Boolean=orderStatus?.let {
         when(orderStatus){

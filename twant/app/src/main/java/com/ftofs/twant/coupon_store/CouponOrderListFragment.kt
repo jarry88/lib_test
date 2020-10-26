@@ -18,6 +18,7 @@ import com.ftofs.twant.databinding.CouponOrderListItemBinding
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.dsl.customer.toMopString
 import com.ftofs.twant.kotlin.extension.dp2IntPx
+import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.google.android.material.tabs.TabLayout
@@ -131,6 +132,9 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                         )
                     }
                 }
+                b.btnCancel.setVisibleOrGone(d.orderStatus?.let { it==10 }?:false)
+                b.btnGotoPay.setVisibleOrGone(d.orderStatus?.let { it==10 }?:false)
+                b.btnGotoRefund.setVisibleOrGone(d.orderStatus?.let { it==20 }?:false)
                 b.root.setOnClickListener { Util.startFragment(CouponOrderDetailFragment.newInstance(d.id)) }
             }
             setRefreshListener {

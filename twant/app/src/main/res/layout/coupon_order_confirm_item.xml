@@ -84,8 +84,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/red"
                     android:gravity="center"
-                    android:padding="1dp"
-                    radius="@{3f}"
+                    android:padding="3dp"
                     android:textColor="@color/tw_white"
                     android:textSize="12sp"
                     android:text="券"
@@ -97,6 +96,7 @@
                     android:gravity="center"
                     android:padding="2dp"
                     android:textSize="14sp"
+                    android:textColor="@color/tw_black"
                     android:text="優惠券"
                     />
                 <View
@@ -108,13 +108,16 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_coupon_list"
                     android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textSize="14sp"
-                        android:text="@{`可用優惠券`+String.valueOf(vo.stock)+`張`}"/>
+                        android:text="@{`可用優惠券`+String.valueOf(vo.stock)+`張`}"
+                        android:layout_marginEnd="@dimen/margin_4dp"
+                        />
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

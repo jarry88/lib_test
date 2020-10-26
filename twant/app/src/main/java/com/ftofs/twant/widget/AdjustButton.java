@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.cart.SkuStatus;
 import com.ftofs.twant.entity.cart.SpuStatus;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.gzp.lib_common.utils.SLog;
 import com.ftofs.twant.util.Util;
 
@@ -24,6 +25,7 @@ public class AdjustButton extends androidx.appcompat.widget.AppCompatTextView {
     // 有效的取值范圍為 [minValue, maxValue]，開區間
     int minValue = 0;
     int maxValue = Integer.MAX_VALUE;
+    public SimpleCallback mValueChangeListener;
 
     /**
      * 超出有效范圍的Callback
@@ -137,7 +139,11 @@ public class AdjustButton extends androidx.appcompat.widget.AppCompatTextView {
      */
 
     public void changeValue(int delta) {
-        setValue(value + delta);
+        if (mValueChangeListener != null) {
+            mValueChangeListener.onSimpleCall(value + delta);
+        } else {
+            setValue(value + delta);
+        }
     }
 
     public void setMinValue(int minValue, OutOfValueCallback outOfValueCallback) {

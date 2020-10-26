@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.ftofs.lib_net.model.CouponDetailVo
 import com.ftofs.lib_net.model.CouponItemVo
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.ftofs.twant.R
@@ -38,7 +39,7 @@ class CouponActivityListFragment: BaseTwantFragmentMVVM<CouponActivityListFragme
             setLeftLayoutClickListener{onBackPressedSupport()}
         }
         binding.smartList.apply {
-            config<CouponItemVo,CouponStoreItemBinding>(R.layout.coupon_store_item,viewModel.couponStoreList){b,d ->
+            config<CouponDetailVo,CouponStoreItemBinding>(R.layout.coupon_store_item,viewModel.couponStoreList){b,d ->
                 b.vo=d
                 b.root.setOnClickListener { Util.startFragment(CouponStoreDetailFragment.newInstance(d.id)) }
             }

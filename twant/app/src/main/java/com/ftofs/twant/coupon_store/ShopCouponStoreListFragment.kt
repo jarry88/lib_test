@@ -3,9 +3,11 @@ package com.ftofs.twant.coupon_store
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.ftofs.lib_net.model.CouponDetailVo
 import com.ftofs.lib_net.model.CouponItemVo
 import com.ftofs.twant.R
 import com.ftofs.twant.BR
+import com.ftofs.twant.config.Config
 import com.ftofs.twant.databinding.CouponStoreItemBinding
 import com.ftofs.twant.databinding.ShopCouponStoreListFragmentBinding
 import com.ftofs.twant.fragment.ShopActivityFragment
@@ -44,11 +46,11 @@ class ShopCouponStoreListFragment:BaseTwantFragmentMVVM<ShopCouponStoreListFragm
 ////            hideCouponStoreView()
 //        }
         binding.listView.apply {
-            config<CouponItemVo, CouponStoreItemBinding>(R.layout.coupon_store_item,viewModel.couponStoreList){ b, v->
+            config<CouponDetailVo, CouponStoreItemBinding>(R.layout.coupon_store_item,viewModel.couponStoreList){ b, v->
                 b.root.setOnClickListener{Util.startFragment(CouponStoreDetailFragment.newInstance(v.id))}
             }
             setLoadMoreListener { shopActivityFragment?.let { viewModel.getShopCouponStoreList(it.storeId)
-                if(Util.inDev()) viewModel.couponStoreList.postValue(listOf(CouponItemVo(null,null,null,null,null,null,null,null,null,null,null,null,null)))
+//                if(Config.USE_DEVELOPER_TEST_DATA) viewModel.couponStoreList.postValue(listOf(CouponItemVo(null,null,null,null,null,null,null,null,null,null,null,null,null)))
             } }
             setRefreshListener { viewModel.currPage=0
                 shopActivityFragment?.let { viewModel.getShopCouponStoreList(it.storeId) } }

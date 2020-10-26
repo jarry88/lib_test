@@ -22,7 +22,7 @@
            />
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_200"
+            android:layout_height="wrap_content"
             android:background="@drawable/coupon_pay_bg"
             app:layout_constraintTop_toBottomOf="@id/title"
             android:id="@+id/rv_list"
@@ -54,7 +54,7 @@
                 <TextView
                     android:id="@+id/btn_goto_home"
                     android:layout_width="125dp"
-                    android:layout_height="@dimen/dp_40"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:background="@drawable/coupon_white_button_line_down_bg"
                     android:textSize="16sp"
@@ -64,7 +64,7 @@
                 <TextView
                     android:id="@+id/btn_goto_order"
                     android:layout_width="125dp"
-                    android:layout_height="@dimen/dp_40"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:visibility="@{success?View.VISIBLE:View.GONE}"
                     android:background="@drawable/coupon_white_button_line_up_bg"
@@ -76,7 +76,7 @@
                     android:visibility="@{success?View.GONE:View.VISIBLE}"
                     android:id="@+id/btn_goto_customer"
                     android:layout_width="125dp"
-                    android:layout_height="@dimen/dp_40"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:background="@drawable/coupon_white_button_line_up_bg"
                     android:textSize="16sp"

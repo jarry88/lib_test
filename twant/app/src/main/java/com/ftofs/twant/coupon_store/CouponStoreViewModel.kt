@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class CouponStoreViewModel(application: Application):BaseViewModel(application) {
     val currCouponDetail by lazy { MutableLiveData<CouponDetailVo>() }
     val currCouponOrder by lazy { MutableLiveData<CouponOrderDetailInfo>() }
-    val couponStoreList by lazy { MutableLiveData<List<CouponItemVo>>() }
+    val couponStoreList by lazy { MutableLiveData<List<CouponDetailVo>>() }
     val couponOrdersListInfo by lazy { MutableLiveData<CouponOrdersListInfo>() }
     val buyStep1Vo by lazy { MutableLiveData<BuyStep1Vo>() }
     val buyStep2Vo by lazy { MutableLiveData<BuyStep2Vo>() }
@@ -102,7 +102,8 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
                                 finalApi.getTcBuyStep1(params.apply { SLog.info(this.toString()) }))
                     }
                 },
-                { buyStep1Vo.postValue(it) }
+                { buyStep1Vo.postValue(it) },
+                final = {stateLiveData.postIdle()}
         )
     }
     /**
@@ -120,7 +121,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         launch(stateLiveData,
                 { repository.run { simpleGet(finalApi.getTcBuyStep2(params.apply { SLog.info(this.toString()) })) } },
                 {
-                    buyStep2Vo.postValue(it)
+                    buyStep2Vo.postValue(it).apply { SLog.info("返回值") }
                 }
         )
     }
