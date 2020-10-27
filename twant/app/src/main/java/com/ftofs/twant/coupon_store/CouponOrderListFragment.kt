@@ -13,10 +13,14 @@ import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.CouponOrderBase
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
+import com.ftofs.twant.activity.MainActivity
+import com.ftofs.twant.constant.EBMessageType
+import com.ftofs.twant.constant.SPField
 import com.ftofs.twant.databinding.CouponOrderListFragmentBinding
 import com.ftofs.twant.databinding.CouponOrderListItemBinding
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.dsl.customer.toMopString
+import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.kotlin.extension.dp2IntPx
 import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.ToastUtil
@@ -24,7 +28,12 @@ import com.ftofs.twant.util.Util
 import com.google.android.material.tabs.TabLayout
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
+import com.macau.pay.sdk.MPaySdk
+import com.orhanobut.hawk.Hawk
 import com.wzq.mvvmsmart.event.StateLiveData
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBinding, CouponStoreViewModel>(){
@@ -39,7 +48,24 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
     var firstTabSelected=true
 
     var type =""
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        EventBus.getDefault().register(this)
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEBMessage(message: EBMessage) {
+        when (message.messageType) {
+            EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS -> {
 
+//                viewModel.postMpayNotify()
+                Util.startFragment(CouponPayResultFragment.newInstance(
+                        id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
+                        , true))
+            }
+            EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER -> Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID)))
+            else ->SLog.info(this::class.java.name)
+        }
+    }
     override fun initData() {
         binding.title.apply {
             setLeftImageResource(R.drawable.icon_back)
@@ -133,6 +159,12 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                     }
                 }
                 b.btnCancel.setVisibleOrGone(d.orderStatus?.let { it==10 }?:false)
+                b.btnCancel.setOnClickListener {
+                    viewModel.deleteCouponOrderDetail(it.id)
+                }
+                b.btnGotoPay.setOnClickListener {
+                    viewModel.loadMpay( mapOf("clientType" to "android","orderId" to d.id))
+                }
                 b.btnGotoPay.setVisibleOrGone(d.orderStatus?.let { it==10 }?:false)
                 b.root.setOnClickListener {
                     when (it.id) {
@@ -277,6 +309,13 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             binding.smartList.endLoadingUi()
             if (it == StateLiveData.StateEnum.Idle) {
                 binding.smartList.autoRefresh()
+            }
+        }
+        viewModel.mPayVo.observe(this){
+            if (it.isPay) {
+                ToastUtil.success(context,"已經支付過了")
+            } else {
+                MPaySdk.mPayNew(_mActivity, it.payData.toString().apply { SLog.info(this) }, _mActivity as MainActivity)
             }
         }
         viewModel.currOrderStatus.observe(this){binding.smartList.autoRefresh().apply { SLog.info("刷新") }}

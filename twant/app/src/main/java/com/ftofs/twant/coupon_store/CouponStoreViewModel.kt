@@ -222,8 +222,8 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         )
     }
 
-    fun loadMpay() {
-        val params =buyStep2Vo.value?.orderId?.let {
+    fun loadMpay(p:Map<String,Any?>?=null) {
+        val params =p?:buyStep2Vo.value?.orderId?.let {
             mapOf("clientType" to "android","orderId" to it)
         }
         Hawk.put(SPField.FROM_COUPON_MPAY,true)

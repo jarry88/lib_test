@@ -99,9 +99,14 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        EventBus.getDefault().register(this)
+
+    }
+
     override fun initData() {
 
-        EventBus.getDefault().register(this)
         binding.title.apply {
 //            setRightLayoutClickListener{ToastUtil.success(context,"分享")}
             setLeftImageResource(R.drawable.icon_back)
@@ -157,7 +162,7 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
         }
         viewModel.mPayVo.observe(this){
             if (it.isPay) {
-                MPaySdk.mPayNew(_mActivity, it.toString(), _mActivity as MainActivity)
+                ToastUtil.success(context,"已經支付過了")
             } else {
                 MPaySdk.mPayNew(_mActivity, it.payData.toString().apply { SLog.info(this) }, _mActivity as MainActivity)
             }
