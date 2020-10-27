@@ -25,12 +25,12 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.CrossBorderActivityGoods;
 import com.ftofs.twant.entity.CrossBorderBannerItem;
-import com.ftofs.twant.entity.CrossBorderFloorItem;
 import com.ftofs.twant.entity.CrossBorderHomeItem;
 import com.ftofs.twant.entity.CrossBorderNavItem;
 import com.ftofs.twant.entity.CrossBorderNavPane;
 import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.FloorItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -41,6 +41,7 @@ import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CrossBorderDrawView;
+import com.ftofs.twant.widget.FloorContainer;
 import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.gzp.lib_common.utils.SLog;
@@ -75,6 +76,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
         addItemType(Constant.ITEM_TYPE_BANNER, R.layout.cross_border_home_banner);
         addItemType(Constant.ITEM_TYPE_HEADER, R.layout.cross_border_home_header);
+        addItemType(Constant.ITEM_TYPE_FLOOR, R.layout.cross_border_floor_item);
+        addItemType(Constant.ITEM_TYPE_BEST_STORE, R.layout.cross_border_best_store);
+        addItemType(Constant.ITEM_TYPE_RECOMMEND_TITLE, R.layout.cross_border_recommend_title);
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.cross_border_home_item); // 商品分頁加載Item
         addItemType(Constant.ITEM_TYPE_FOOTER, R.layout.cross_border_home_footer);
     }
@@ -319,32 +323,51 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             } else { // 沒數據，則隱藏
                 helper.setGone(R.id.ll_group_container, false);
             }
+        } else if (itemType == Constant.ITEM_TYPE_FLOOR) { // 樓層
+            FloorContainer floorContainer = helper.getView(R.id.floor_container);
+            floorContainer.removeAllViews();
 
-            // 樓層結構
-            LinearLayout llFloorContainer = helper.getView(R.id.ll_floor_container);
-            llFloorContainer.removeAllViews();
-            if (item.floorItemList.size() > 0) {
-                llFloorContainer.setVisibility(View.VISIBLE);
+            ImageView imgFloorBanner = helper.getView(R.id.img_floor_banner);
+            String floorType = item.floorType;
+            if (CrossBorderHomeItem.FLOOR_TYPE_BANNER.equals(floorType)) { // Banner圖類型
+                imgFloorBanner.setVisibility(View.VISIBLE);
+                floorContainer.setVisibility(View.GONE);
+                helper.setText(R.id.tv_title, item.floorHeadline)
+                        .setText(R.id.tv_sub_title, item.floorSubhead);
+                if (item.floorItemList != null && item.floorItemList.size() > 0) {
+                    FloorItem floorItem = item.floorItemList.get(0);
+                    Glide.with(context).load(StringUtil.normalizeImageUrl(floorItem.imageName)).centerCrop().into(imgFloorBanner);
+                    imgFloorBanner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Util.handleClickLink(floorItem.linkType, floorItem.linkValue, true);
+                        }
+                    });
+                }
+            } else { // 圖片類型
+                imgFloorBanner.setVisibility(View.GONE);
+                floorContainer.setVisibility(View.VISIBLE);
 
                 for (int i = 0; i < item.floorItemList.size(); i++) {
-                    View floorItemView = layoutInflater.inflate(R.layout.cross_border_floor_item, llFloorContainer, false);
-                    CrossBorderFloorItem floorItem = item.floorItemList.get(i);
-
-                    View clGoodsContainer = floorItemView.findViewById(R.id.cl_goods_container);
-                    if (floorItem.goodsList != null && floorItem.goodsList.size() == 3) {
-                        clGoodsContainer.setVisibility(View.VISIBLE);
-                    } else {
-                        clGoodsContainer.setVisibility(View.GONE);
-                    }
-
-                    llFloorContainer.addView(floorItemView);
+                    FloorItem floorItem = item.floorItemList.get(i);
+                    ImageView imageView = new ImageView(context);
+                    imageView.setTag(R.id.key_meta_data, floorItem);
+                    Glide.with(context).load(floorItem.imageName).into(imageView);
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FloorItem imageItem = (FloorItem) v.getTag(R.id.key_meta_data);
+                            SLog.info("imageName[%s]", imageItem.imageName);
+                            Util.handleClickLink(imageItem.linkType, imageItem.linkValue, true);
+                        }
+                    });
+                    floorContainer.addView(imageView);
                 }
-            } else {
-                helper.setGone(R.id.ll_floor_container, false);
-                llFloorContainer.setVisibility(View.GONE);
-            }
 
-            // 優選好店
+            }
+        } else if (itemType == Constant.ITEM_TYPE_BEST_STORE) { // 優選好店
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
+
             helper.setGone(R.id.ll_best_store_container, item.storeList.size() > 0);  // 如果沒有店鋪，則隱藏
             GridLayout glStoreContainer = helper.getView(R.id.gl_store_container);
             glStoreContainer.removeAllViews();
