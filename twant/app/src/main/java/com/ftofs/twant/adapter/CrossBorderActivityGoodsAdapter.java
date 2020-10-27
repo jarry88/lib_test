@@ -46,14 +46,12 @@ public class CrossBorderActivityGoodsAdapter extends BaseQuickAdapter<CrossBorde
         Glide.with(context).load(StringUtil.normalizeImageUrl(item.goodsImage)).centerCrop().into(goodsImage);
 
         helper.setText(R.id.tv_goods_name, item.goodsName)
-            .setText(R.id.tv_price, StringUtil.formatPrice(context, item.price, 0));
+            .setText(R.id.tv_price, StringUtil.formatMopPrice(item.price, 1));
 
         if (promotionType == Constant.PROMOTION_TYPE_GROUP) {
-            helper.setText(R.id.btn_action, "立即拼團")
-                .setText(R.id.tv_price_type, "拼團價：");
+            helper.setText(R.id.btn_action, "立即拼團");
         } else if (promotionType == Constant.PROMOTION_TYPE_BARGAIN) {
-            helper.setText(R.id.btn_action, "立即砍價")
-                    .setText(R.id.tv_price_type, "最低價：");
+            helper.setText(R.id.btn_action, "立即砍價");
         }
     }
 }
