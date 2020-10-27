@@ -52,7 +52,8 @@
                 android:id="@+id/et_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="https://bugly.qq.com/v2/crash-reporting/crashes/222fdc9738/202618/report?pid=1crashDataType=undefined">
+                android:text="https://bugly.qq.com/v2/crash-reporting/crashes/222fdc9738/202618/report?pid=1crashDataType=undefined"
+                android:visibility="gone">
             </EditText>
             <EditText
                 android:id="@+id/et_blank_width"
@@ -65,7 +66,8 @@
                 android:layout_height="450dp"
                 android:background="@color/tw_red"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/img_original"
@@ -91,6 +93,11 @@
                     android:scaleType="fitXY">
                 </ImageView>
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:background="@drawable/code_bg">
+            </TextView>
 
 
         </LinearLayout>
