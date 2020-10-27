@@ -1,6 +1,7 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,11 +13,15 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.FloorItem;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.utils.SLog;
 
 public class FloorContainer extends ViewGroup {
     public static final int SPAN_COUNT = 2; // 每行2列
-
+    public static final int HORIZONTAL_MARGIN_DP = 11; // 圖片間的水平間距(dp)
+    public static final int VERTICAL_MARGIN_DP = 8; // 圖片間的垂直間距(dp)
+    int horizontalMarginPx = 0;
+    int verticalMarginPx = 0;
     int itemWidth = 0; // 每一项的宽度
 
     public FloorContainer(@NonNull Context context) {
@@ -29,6 +34,9 @@ public class FloorContainer extends ViewGroup {
 
     public FloorContainer(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        horizontalMarginPx = Util.dip2px(context, HORIZONTAL_MARGIN_DP);
+        verticalMarginPx = Util.dip2px(context, VERTICAL_MARGIN_DP);
     }
 
     @Override
@@ -36,7 +44,7 @@ public class FloorContainer extends ViewGroup {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        itemWidth = width / SPAN_COUNT;
+        itemWidth = (width - horizontalMarginPx) / SPAN_COUNT;
 
         int leftHeight = 0; // 左边已占用的高度
         int rightHeight = 0; // 右边已占用的高度
@@ -45,6 +53,7 @@ public class FloorContainer extends ViewGroup {
         SLog.info("childCount[%d]", childCount);
         for (int i = 0; i < childCount; i++) {
             ImageView childView = (ImageView) getChildAt(i);
+            childView.setBackgroundColor(Color.BLACK);
             FloorItem item = (FloorItem) childView.getTag(R.id.key_meta_data);
 
             // 计算图片显示的高度
@@ -52,9 +61,9 @@ public class FloorContainer extends ViewGroup {
             SLog.info("itemHeight[%d]", itemHeight);
 
             if (leftHeight <= rightHeight) {
-                leftHeight = leftHeight + itemHeight;
+                leftHeight = leftHeight + itemHeight + verticalMarginPx;
             } else {
-                rightHeight = rightHeight + itemHeight;
+                rightHeight = rightHeight + itemHeight + verticalMarginPx;
             }
         }
         int finalHeight = Math.max(leftHeight, rightHeight);
@@ -85,10 +94,10 @@ public class FloorContainer extends ViewGroup {
 
             if (leftHeight <= rightHeight) {
                 childView.layout(0, leftHeight, itemWidth, leftHeight + itemHeight);
-                leftHeight = leftHeight + itemHeight;
+                leftHeight = leftHeight + itemHeight + verticalMarginPx;
             } else {
-                childView.layout(itemWidth, rightHeight, 2 * itemWidth, rightHeight + itemHeight);
-                rightHeight = rightHeight + itemHeight;
+                childView.layout(itemWidth + horizontalMarginPx, rightHeight, 2 * itemWidth + horizontalMarginPx, rightHeight + itemHeight);
+                rightHeight = rightHeight + itemHeight + verticalMarginPx;
             }
         }
     }

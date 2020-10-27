@@ -450,8 +450,12 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     }
 
     private void loadData() {
-        String url = Api.PATH_TARIFF_BUY_INDEX;
-        // String url = "https://test.weshare.team/tmp/test4.json";
+        String apiUrl = Api.PATH_TARIFF_BUY_INDEX;
+        if (BuildConfig.DEBUG) {
+            apiUrl = "https://gogo.so/tmp/1.json";
+        }
+        String url = apiUrl;
+
 
         Api.getUI(url, null, new UICallback() {
             @Override
