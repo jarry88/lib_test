@@ -546,6 +546,13 @@ public class Util {
 
 
                     Util.startFragment(MemberInfoFragment.newInstance(memberName));
+                } else if (result.length()>=4) {//按照核销码处理
+                    // 添加好友
+                    String memberName = result.substring(10);
+                    SLog.info("memberName[%s]", memberName);
+//                    Hawk.put(SPField.EXCHANGE_CODE, result);
+                    EBMessage.postMessage(EBMessageType.MESSAGE_EXCHANGE_CODE, result);
+
                 } else {
                     ToastUtil.error(context, "無效的二維碼");
                 }

@@ -44,5 +44,16 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
         binding.btnGotoHome.setOnClickListener {
             this.popTo(MainFragment::class.java, false)
         }
+        if (success) {
+            viewModel.getCouponOrderDetail(id)
+        }
+    }
+
+    override fun initViewObservable() {
+        viewModel.currCouponOrder.observe(this){
+            it.itemList?.get(0)?.extractCode?.forEach {
+                //添加code码
+            }
+        }
     }
 }

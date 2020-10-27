@@ -141,7 +141,16 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     fun getCouponOrderDetail(orderId: Int){
         launch(stateLiveData,
                 { repository.run { simpleGet(finalApi.getCouponOrderDetail(orderId)).apply { SLog.info(orderId.toString()) } } },
-                { currCouponOrder.postValue(it) }
+                { currCouponOrder.postValue(it)}
+        )
+    }
+    /**
+     * 獲取優惠券訂單詳情
+     */
+    fun deleteCouponOrderDetail(orderId: Int){
+        launch(stateLiveData,
+                { repository.run { simpleGet(finalApi.deleteCouponOrderDetail(orderId)).apply { SLog.info(orderId.toString()) } } },
+                { stateLiveData.postIdle() }
         )
     }
     /**
@@ -217,6 +226,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         val params =buyStep2Vo.value?.orderId?.let {
             mapOf("clientType" to "android","orderId" to it)
         }
+        Hawk.put(SPField.FROM_COUPON_MPAY,true)
         launch(stateLiveData, {
             repository.run { simpleGet(finalApi.postPayMpay(params.apply { SLog.info(this.toString()) })) }
         },

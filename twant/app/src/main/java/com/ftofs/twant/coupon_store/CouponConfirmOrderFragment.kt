@@ -32,6 +32,7 @@ import com.lxj.xpopup.core.BasePopupView
 import com.macau.pay.sdk.MPaySdk
 import com.orhanobut.hawk.Hawk
 import com.wzq.mvvmsmart.event.StateLiveData
+import kotlinx.android.synthetic.main.coupon_list_item_wighet.view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -58,6 +59,7 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
             b.vo=d
             b.couponListItem.mBinding.apply {
                 tvEndPrice.setVisibleOrGone(true)
+                tvEndPrice.text =d.price.toString()
                 tvSubTitle.setVisibleOrGone(true)
             }
 //            b.fixed.setFixedText("留言：")
@@ -74,6 +76,10 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
                 }
                 if (value <= 0) {
                     value=1
+                }
+                d.num=value
+                if (d.num == 0) {
+                    viewModel.getTcBuyStep1(listOf(BuyGoodsDTO(d.id, 0)))
                 }
             }
 
@@ -122,7 +128,9 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS -> {
 
 //                viewModel.postMpayNotify()
-                Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID), true))
+                Util.startFragment(CouponPayResultFragment.newInstance(
+                        id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
+                 , true))
             }
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER -> Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID)))
             else ->SLog.info(this::class.java.name)

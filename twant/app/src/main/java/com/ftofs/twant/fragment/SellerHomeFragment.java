@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,8 +26,13 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsGalleryAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.appserver.AppServiceImpl;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.coupon_store.SellerCouponVerificationFragment;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
@@ -44,6 +50,9 @@ import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
 import com.rd.PageIndicatorView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -226,7 +235,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         Util.startFragment(SellerOrderListFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED));
     }
     void gotoSellerVerification() {
-        Util.startFragment(SellerCouponVerificationFragment.newInstance());
+        startCaptureActivity(AppServiceImpl.Companion.getCaptureIntent());
     }
 
 
@@ -283,6 +292,26 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     public void onSupportVisible() {
         super.onSupportVisible();
         loadSellerData();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);SLog.info("onActivityResult, requestCode[%d]", requestCode);
+
+        /*
+         * 处理二维码扫描结果
+         */
+        if (requestCode == RequestCode.SCAN_QR_CODE.ordinal()) {
+            Util.handleQRCodeResult(_mActivity, data);
+        }
+
+    }
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+
     }
 
     @Nullable
@@ -391,7 +420,44 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         });
         return view;
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+           if (message.messageType==EBMessageType.MESSAGE_EXCHANGE_CODE ) {
+               String url = "/exchange";
+               if (Config.PROD) {
+                   url = Config.getBaseApi().replace("/api", "/tc") + url;
+               }else{
+                   url = "http://192.168.5.32:8100/tc/" + url;
+               }
+               EasyJSONObject params = EasyJSONObject.generate("code", message.data.toString());
+               Api.postUI(url, params, new UICallback() {
+                   @Override
+                   public void onFailure(Call call, IOException e) {
+//                       LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
+//                       updateSwitchButton();
+                       ToastUtil.showNetworkError(_mActivity,e);
+                   }
 
+                   @Override
+                   public void onResponse(Call call, String responseStr) throws IOException {
+                       SLog.info("responseStr[%s]", responseStr);
+                       EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                       if (ToastUtil.checkError(_mActivity,responseObj)) {
+//                           LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
+//                           updateSwitchButton();
+                           return;
+                       }
+                       try {
+                           ToastUtil.success(_mActivity,responseObj.getSafeString("msg"));
+
+                       } catch (Exception e) {
+                           SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                       }
+                   }
+               });
+           }
+
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

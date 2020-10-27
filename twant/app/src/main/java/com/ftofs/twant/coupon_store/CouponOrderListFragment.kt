@@ -24,7 +24,7 @@ import com.ftofs.twant.util.Util
 import com.google.android.material.tabs.TabLayout
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
-
+import com.wzq.mvvmsmart.event.StateLiveData
 
 
 class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBinding, CouponStoreViewModel>(){
@@ -134,15 +134,15 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                 }
                 b.btnCancel.setVisibleOrGone(d.orderStatus?.let { it==10 }?:false)
                 b.btnGotoPay.setVisibleOrGone(d.orderStatus?.let { it==10 }?:false)
-                b.btnGotoPay.setOnClickListener { Util.startFragment(CouponConfirmOrderFragment.newInstance(d.id)) }
                 b.root.setOnClickListener {
-                    if (it.id == R.id.btn_goto_pay) {
-                        Util.startFragment(CouponConfirmOrderFragment.newInstance(d.id))
-                    } else {
-                        Util.startFragment(CouponOrderDetailFragment.newInstance(d.id)) }
-
+                    when (it.id) {
+                        R.id.btn_goto_pay ->  Util.startFragment(CouponConfirmOrderFragment.newInstance(d.id))
+                        R.id.btnCancel -> viewModel.deleteCouponOrderDetail(it.id)
+                        else ->Util.startFragment(CouponOrderDetailFragment.newInstance(d.id))
                     }
-                b.btnGotoRefund.setVisibleOrGone(d.orderStatus?.let { it==20 }?:false)
+                }
+//                b.btnGotoRefund.setVisibleOrGone(false) //現階段退款隱藏
+//                b.btnGotoRefund.setVisibleOrGone(d.orderStatus?.let { it==20 }?:false)
             }
             setRefreshListener {
                 viewModel.currPage=0
@@ -275,6 +275,9 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
     override fun initViewObservable() {
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
             binding.smartList.endLoadingUi()
+            if (it == StateLiveData.StateEnum.Idle) {
+                binding.smartList.autoRefresh()
+            }
         }
         viewModel.currOrderStatus.observe(this){binding.smartList.autoRefresh().apply { SLog.info("刷新") }}
     }

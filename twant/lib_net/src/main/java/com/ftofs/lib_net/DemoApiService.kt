@@ -149,7 +149,11 @@ interface DemoApiService {
     @POST("pay/mpay")
     @Headers("Content-Type:application/json; charset=UTF-8")
     suspend fun postPayMpay(@Body queryParams:@JvmSuppressWildcards Map<String, Any?>?): TwantResponse<MpayVo>
-    //mpay支付下單
+    //兌換
+    @POST("exchange")
+    @Headers("Content-Type:application/json; charset=UTF-8")
+    suspend fun postExchange(@Body body:String?): TwantResponse<MpayVo>
+    //mpay支付下單  app不用
     @POST("pay/mpayNotify")
     @Headers("Content-Type:application/json; charset=UTF-8")
     suspend fun postPayMpayNotify(params: Map<String, Any>?): TwantResponse<MpayVo>
