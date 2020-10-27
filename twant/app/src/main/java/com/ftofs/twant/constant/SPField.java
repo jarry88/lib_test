@@ -195,5 +195,6 @@ public class SPField {
     public static final String USER_RECEIVE_NEWS_DETAIL = "receive_news_details";
     public static final String MAINACTIVITY_RESUME ="activity_on_front" ;
     public static final String SELLER_ADD_GUIDE_HIDE = "seller_add_guide";
+    public static final String FROM_COUPON_MPAY = "from_coupon";
     public static String USE_DEVELOPER_TEST_DATA="USE_DEVELOPER_TEST_DATA";
 }

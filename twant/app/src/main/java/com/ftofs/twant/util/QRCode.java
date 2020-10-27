@@ -373,4 +373,56 @@ public class QRCode {
             return null;
         }
     }
+
+    /**
+     * 条形码编码
+     *
+     * @param contents
+     * @param width
+     * @param height
+     */
+    public static Bitmap encode(String contents, int width, int height) {
+        int codeWidth = 3 + // start guard
+                (7 * 6) + // left bars
+                5 + // middle guard
+                (7 * 6) + // right bars
+                3; // end guard
+        codeWidth = Math.max(codeWidth, width);
+        try {
+            BitMatrix bitMatrix = (new QRCodeWriter()).encode(contents, BarcodeFormat.EAN_13, codeWidth, height, null);
+            int[] pixels = new int[codeWidth * height];
+//             下面这里按照二维码的算法，逐个生成二维码的图片，
+            // 两个for循环是图片横列扫描的结果
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < codeWidth; x++) {
+                    if (bitMatrix.get(x, y)) {
+                        pixels[y * width + x] = 0xff000000; // 黑色
+                    } else {
+                        pixels[y * width + x] = 0xffffffff;// 白色
+                    }
+                }
+            }
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+            return
+            bitmap;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 条形码解码
+     *
+     * @param imgPath
+     * @return String
+     */
+    public static String decode(String imgPath) {
+
+        return null;
+    }
+
+
 }

@@ -9,6 +9,7 @@ import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CouponOrderDetailFragmentBinding
 import com.ftofs.twant.dsl.*
+import com.ftofs.twant.kotlin.extension.p
 import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.QRCode
 import com.ftofs.twant.util.ToastUtil
@@ -75,7 +76,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
             binding.llCodeContainer.apply { 
                 removeAllViews()
                 it.itemList?.forEach{ orderItem ->  
-                    orderItem.extractCode?: listOf(OrderCodeVo("223456",true,"2"),OrderCodeVo("123456",false,"2")).forEach{ orderCodeVo ->
+                    orderItem.extractCode?.forEach{ orderCodeVo ->
                         LinearLayout {
                             layout_height = wrap_content
                             layout_width = wrap_content
@@ -115,7 +116,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                             }
 
                         }.let { v -> (v.parent as ViewGroup).removeView(v)
-                            v
+                            addView(v).apply { SLog.info("添加二維碼${orderCodeVo.code}") }
                         }
                         orderCodeVo.used?.let {
                             if (it) {
@@ -131,19 +132,23 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                         layout_width = 160
                                         margin_end =16
                                         setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
+                                        margin_start=45
                                     }
                                     ImageView {
                                         layout_height = 160
                                         layout_width = 160
                                         margin_end =16
-                                        setImageBitmap( QRCode.createQR128Code(orderCodeVo.code,160,86))
+//                                        setImageBitmap( QRCode.encode(orderCodeVo.code,160,86))
+                                        setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
+
                                     }
 
                                 }.let { v -> (v.parent as ViewGroup).removeView(v)
-                                    v
-                                }
+                                    addView(v)
+                                }.p("aa")
                             }
                         }
+
                     }
                 }
             }

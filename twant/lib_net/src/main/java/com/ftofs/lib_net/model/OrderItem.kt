@@ -91,7 +91,7 @@ data class CouponOrderBase(
         when(orderStatus){
             10 -> "待支付"
             20 -> "可使用"
-            30 -> "已使用"
+            30 -> "已完成"
             40 -> "退款中"
             50 -> "已退款"
             60 -> "已取消"

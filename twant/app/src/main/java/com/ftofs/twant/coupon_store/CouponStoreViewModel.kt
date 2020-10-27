@@ -121,8 +121,9 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         launch(stateLiveData,
                 { repository.run { simpleGet(finalApi.getTcBuyStep2(params.apply { SLog.info(this.toString()) })) } },
                 {
-                    buyStep2Vo.postValue(it).apply { SLog.info("返回值") }
+                    buyStep2Vo.postValue(it).apply { SLog.info("buystep  返回值: ${it}") }
                 }
+
         )
     }
     /**
@@ -140,7 +141,16 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     fun getCouponOrderDetail(orderId: Int){
         launch(stateLiveData,
                 { repository.run { simpleGet(finalApi.getCouponOrderDetail(orderId)).apply { SLog.info(orderId.toString()) } } },
-                { currCouponOrder.postValue(it) }
+                { currCouponOrder.postValue(it)}
+        )
+    }
+    /**
+     * 獲取優惠券訂單詳情
+     */
+    fun deleteCouponOrderDetail(orderId: Int){
+        launch(stateLiveData,
+                { repository.run { simpleGet(finalApi.deleteCouponOrderDetail(orderId)).apply { SLog.info(orderId.toString()) } } },
+                { stateLiveData.postIdle() }
         )
     }
     /**
@@ -212,28 +222,29 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         )
     }
 
-    fun loadMpay() {
-        val params =buyStep2Vo.value?.orderId?.let {
-            mapOf("orderId" to it)
-        }.apply { SLog.info(this.toString()) }
+    fun loadMpay(p:Map<String,Any?>?=null) {
+        val params =p?:buyStep2Vo.value?.orderId?.let {
+            mapOf("clientType" to "android","orderId" to it)
+        }
+        Hawk.put(SPField.FROM_COUPON_MPAY,true)
         launch(stateLiveData, {
-            repository.run { simpleGet(finalApi.postPayMpay(params)) }
+            repository.run { simpleGet(finalApi.postPayMpay(params.apply { SLog.info(this.toString()) })) }
         },
-                {
-                    it.payId?.let { p ->
-                        Util.markPayId(SPField.FIELD_MPAY_PAY_ID, p)
-                    }
-                    mPayVo.postValue(it)
-                },
-                error = {
-                    LogUtil.uploadAppLog("pay/mpay", params.toString(), it.toString(), "")
+        {
+            it.payId?.let { p ->
+                Util.markPayId(SPField.FIELD_MPAY_PAY_ID, p)
+            }
+            mPayVo.postValue(it)
+        },
+        error = {
+            LogUtil.uploadAppLog("pay/mpay", params.toString(), it.toString(), "")
 
-                    error.postValue(it.payData.toString())
-                },
-                others = {
-                    LogUtil.uploadAppLog("pay/mpay", params.toString(), "", "")
+            error.postValue(it.payData.toString())
+        },
+        others = {
+            LogUtil.uploadAppLog("pay/mpay", params.toString(), "", "")
 
-                }
+        }
         )
     }
 

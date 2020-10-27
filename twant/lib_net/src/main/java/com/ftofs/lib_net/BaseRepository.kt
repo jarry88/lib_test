@@ -40,14 +40,21 @@ open class BaseRepository() {
                                           errorBlock: (suspend CoroutineScope.() -> Unit)? = null): Result<T> {
         return coroutineScope {
             SLog.info(response.toString())
-            if (response.code == -1) {
-                errorBlock?.let { it() }
-                Result.Error(IOException(response.message?:response.msg))
-            }else if((response.code==400 )or(response.code==401) ){
-                Result.DataError(response.run { datas?:data!! })
-            } else {
-                successBlock?.let { it() }
-                Result.Success(response.run { datas?:data!! })
+            when {
+                response.code == -1 -> {
+                    errorBlock?.let { it() }
+                    Result.Error(IOException(response.message?:response.msg))
+                }
+                (response.code==400 )or(response.code==401) -> {
+                    Result.DataError(response.run { datas?:data!! })
+                }
+                response.code==200 -> {
+                    successBlock?.let { it() }
+                    Result.Success(response.run { datas?:data!! })
+                }
+                else -> {
+                    Result.Msg(response.msg)
+                }
             }
         }
     }

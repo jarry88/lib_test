@@ -46,7 +46,7 @@ data class CouponDetailVo(
     val typeName: String,
     val updateTime: String,
     val usageTimeType: Int,
-    val useTimeText: String,
+    val useTimeText: String?,
     val validityDate: String,
     val validityDay: Int,
     val validityEndDate: String,

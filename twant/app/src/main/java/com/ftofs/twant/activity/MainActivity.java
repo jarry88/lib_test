@@ -73,6 +73,7 @@ import com.ftofs.twant.tangram.StoreItemView;
 import com.ftofs.twant.tangram.TangramClickSupport;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.ClipboardUtils;
+import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.RestartApp;
@@ -1169,9 +1170,14 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
         SLog.info("payResult[%s]", payResult);
         if ("9000".equals(payResult.getResultStatus())) {
             ToastUtil.success(this, payResult.getResult());
-            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
-            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
-            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS, null);
+            if (Hawk.get(SPField.FROM_COUPON_MPAY, false)) {
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS, null);
+                Hawk.put(SPField.FROM_COUPON_MPAY, false);
+                return;
+            } else {
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
+            }
 
 
 
@@ -1235,6 +1241,10 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         } else {
+            if (Hawk.get(SPField.FROM_COUPON_MPAY, false)) {
+                Hawk.put(SPField.FROM_COUPON_MPAY, false);
+            }
+
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER, null);
             ToastUtil.error(this, payResult.getResult());
         }

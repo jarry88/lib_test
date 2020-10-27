@@ -1,6 +1,7 @@
 package com.ftofs.twant.kotlin.extension
 
 import android.content.Context
+import com.gzp.lib_common.utils.SLog
 import java.text.DecimalFormat
 import kotlin.random.Random
 
@@ -18,4 +19,7 @@ fun Int.dp2IntPx(context: Context): Int {
 }
 inline operator fun Int.rem(blk: () -> Unit) {
     if (Random (System.currentTimeMillis()).nextInt(100) < this) blk()
+}
+fun Any?.p(s:String?) {
+    SLog.info(s)
 }
