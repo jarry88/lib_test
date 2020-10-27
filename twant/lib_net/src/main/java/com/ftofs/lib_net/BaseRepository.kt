@@ -39,10 +39,9 @@ open class BaseRepository() {
     suspend fun <T : Any> executeResponse(response: TwantResponse<T>, successBlock: (suspend CoroutineScope.() -> Unit)? = null,
                                           errorBlock: (suspend CoroutineScope.() -> Unit)? = null): Result<T> {
         return coroutineScope {
-            SLog.info(response.toString())
             when {
                 response.code == -1 -> {
-                    errorBlock?.let { it() }
+                    errorBlock?.let { it() }.apply { SLog.info("io 異常") }
                     Result.Error(IOException(response.message?:response.msg))
                 }
                 (response.code==400 )or(response.code==401) -> {
@@ -53,7 +52,7 @@ open class BaseRepository() {
                     Result.Success(response.run { datas?:data!! })
                 }
                 else -> {
-                    Result.Msg(response.msg)
+                    Result.Msg(response.msg).apply { SLog.info("網絡庫其他錯誤消息") }
                 }
             }
         }

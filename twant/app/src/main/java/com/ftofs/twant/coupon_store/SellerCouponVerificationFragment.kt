@@ -54,8 +54,8 @@ class SellerCouponVerificationFragment: BaseTwantFragmentMVVM<CouponActivityList
             }
             setRefreshListener {
                 viewModel.currPage=0
-                viewModel.getActivityList(type) }
-            setLoadMoreListener { viewModel.getActivityList(type) }
+                viewModel.getActivityList(type=type) }
+            setLoadMoreListener { viewModel.getActivityList(type=type) }
             mBinding.refreshLayout.autoRefresh()
         }
         binding.tabLayout.apply {

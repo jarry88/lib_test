@@ -33,6 +33,9 @@ public class FixedEditText extends androidx.appcompat.widget.AppCompatEditText {
         setPadding(left, getPaddingTop(), getPaddingBottom(), getPaddingRight());
         invalidate();
     }
+    public String  getFixedText(){
+        return fixedText;
+    }
     public void setFixedText(String text,int sp) {
         fixedTextSp = sp;
         setFixedText(text);

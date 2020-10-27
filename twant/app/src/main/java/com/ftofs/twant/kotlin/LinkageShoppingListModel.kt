@@ -36,18 +36,18 @@ class LinkageShoppingListModel(application:Application) : BaseViewModel(applicat
             withContext(Dispatchers.Main){
                 val result=viewModel.getZoneStoreList(zoneId,pageNum)
                 if (result is Result.Success) {
-                    result.datas.zoneStoreList?.let {
+                    result.datas?.zoneStoreList?.let {
                         if (it.size == 0) nullDeal()
 
 //                            goodsList.value
 //                            goodsList.value?.let {
 //                                it.addAll(result.datas.zoneGoodsList!!)
 //                            }?:let{
-                        storesList.value = result.datas.zoneStoreList
+                        storesList.value = result.datas?.zoneStoreList
 //                            }
                         stateLiveData.postSuccess()
                     }?:nullDeal()
-                    hasMore=result.datas.pageEntity.hasMore
+                    hasMore=result.datas?.pageEntity?.hasMore?:false
                 }else if (result is Result.DataError) {
                     SLog.info(result.datas.error)
                     ToastUtils.showShort(result.datas.error)

@@ -57,6 +57,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
                                 SLog.info("\n")
                                 SLog.info("----------Start----------------")
                                 SLog.info("| ${request.headers()}")
+                                SLog.info("| ${request.url()}")
                                 SLog.info("| ${request.body()}")
                                 val method = request.method()
                                 if ("POST" == method) {
@@ -150,7 +151,9 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     fun deleteCouponOrderDetail(orderId: Int){
         launch(stateLiveData,
                 { repository.run { simpleGet(finalApi.deleteCouponOrderDetail(orderId)).apply { SLog.info(orderId.toString()) } } },
-                { stateLiveData.postIdle() }
+                {
+                    stateLiveData.postIdle().apply { SLog.info("删除成功") }
+                },
         )
     }
     /**
@@ -184,14 +187,14 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
 
     /**
      * 獲取店鋪券倉列表
+     *  獲取專場券倉列表
      */
-    fun getShopCouponStoreList(storeId: Int) {
+    fun getShopCouponStoreList(storeId: Int?=null) {
         launch(stateLiveData,
                 {
                     val params = factoryParams(
                             "page" ,currPage + 1,
-                            "storeId" , storeId)
-                    SLog.info(params.toString())
+                            "platformStoreId" , storeId)
                     repository.run { simpleGet(finalApi.getCouponList(params)) }
                 },
                 {
@@ -206,10 +209,14 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     /**
      * 獲取專場券倉列表
      */
-    fun getActivityList(type: String) {
+    fun getActivityList(storeId: Int?=null,type:String?=null) {
         launch(stateLiveData,
                 {
-                    val params = mapOf("page" to currPage + 1)
+                    val params = factoryParams(
+                            "page" ,currPage + 1,
+                            "platformStoreId" , storeId,
+                            "type",type
+                    )
                     SLog.info(params.toString())
                     repository.run { simpleGet(finalApi.getCouponList(params)) }
                 },

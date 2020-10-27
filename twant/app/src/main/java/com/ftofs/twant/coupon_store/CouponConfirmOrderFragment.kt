@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import cn.snailpad.easyjson.EasyJSONObject
-import com.ftofs.lib_net.model.BuyGoodsDTO
-import com.ftofs.lib_net.model.BuyStep1Vo
-import com.ftofs.lib_net.model.CouponItemVo
+import com.ftofs.lib_net.model.*
 import com.ftofs.lib_net.smart.net_utils.GsonUtil
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
@@ -17,6 +15,7 @@ import com.ftofs.twant.constant.SPField
 import com.ftofs.twant.databinding.CouponOrderConfirmFragmentBinding
 import com.ftofs.twant.databinding.CouponOrderConfirmItemBinding
 import com.ftofs.twant.dsl.customer.factoryAdapter
+import com.ftofs.twant.dsl.invisible
 import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.interfaces.SimpleCallback
 import com.ftofs.twant.kotlin.setVisibleOrGone
@@ -51,6 +50,8 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
     override fun initVariableId(): Int {
         return BR.viewModel
     }
+    var showSuccess = false
+
     var mLoading :BasePopupView?=null
     var currAb: AdjustButton?=null
     var delayValue :Int?=null
@@ -63,7 +64,13 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
                 tvSubTitle.setVisibleOrGone(true)
             }
 //            b.fixed.setFixedText("留言：")
+
+            if("留言：" != b.fixed.fixedText){
+                b.fixed.fixedText = "留言："
+            }
             b.abQuantity.apply {
+                //            b.fixed.setFixedText("留言：")
+
                 setMinValue(1){}
                 mValueChangeListener= SimpleCallback { value ->
                     delayValue =value as Int
@@ -71,15 +78,16 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
                     mLoading= Util.createLoadingPopup(_mActivity).show()
                     viewModel.getTcBuyStep1(listOf(BuyGoodsDTO(d.id, delayValue)))
                 }
-                setMaxValue(d.stock ?: Int.MAX_VALUE){
+                setMaxValue(d.stock.apply { SLog.info("limit ${d.limitStock} stock: $this,limitBuy ${d.limitBuyNum}") } ?: Int.MAX_VALUE){
                     SLog.info("已經達到上限")
                 }
                 if (value <= 0) {
                     value=1
                 }
                 d.num=value
-                if (d.num == 0) {
-                    viewModel.getTcBuyStep1(listOf(BuyGoodsDTO(d.id, 0)))
+                if (value== 0) {
+                    binding.tvPrice.text="-"
+//                    viewModel.getTcBuyStep1(listOf(BuyGoodsDTO(d.id, 0)))
                 }
             }
 
@@ -127,17 +135,39 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
         }
     }
 
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        if (showSuccess) {
+
+            Util.startFragment(CouponPayResultFragment.newInstance(
+                    id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
+                    , true))
+        }
+    }
+
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+        showSuccess=false
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEBMessage(message: EBMessage) {
         when (message.messageType) {
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS -> {
 
 //                viewModel.postMpayNotify()
-                Util.startFragment(CouponPayResultFragment.newInstance(
-                        id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
-                 , true))
+                if (isVisible) {
+
+                    Util.startFragment(CouponPayResultFragment.newInstance(
+                            id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
+                            , true))
+                } else {
+                    showSuccess= true
+                }
             }
-            EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER -> Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID)))
+            EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER ->                 if (isSupportVisible) {
+                SLog.info("支付失败")
+//                    Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID)))
+            }
             else ->SLog.info(this::class.java.name)
         }
     }

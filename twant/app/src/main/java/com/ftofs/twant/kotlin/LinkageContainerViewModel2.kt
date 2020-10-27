@@ -48,8 +48,8 @@ class LinkageContainerViewModel2(application:Application) : BaseViewModel(applic
             withContext(Dispatchers.Main){
                 val result = viewModel.getZoneCategoryList(zoneId)
                 if (result is Result.Success) {
-                    val categoryList = result.datas.zoneGoodsCategoryList
-                    val checkedCategory =result.datas.checkedCategory
+                    val categoryList = result.datas?.zoneGoodsCategoryList
+                    val checkedCategory =result.datas?.checkedCategory
                     var a=0
                     var b=-1
                     if (categoryList == null) {
@@ -119,7 +119,7 @@ class LinkageContainerViewModel2(application:Application) : BaseViewModel(applic
 
                     val result = viewModel.getShoppingZoneGoods(it, pageNum)
                     if (result is Result.Success) {
-                        val list =result.datas.zoneGoodsList
+                        val list =result.datas?.zoneGoodsList
                         if (list == null || list.size == 0) {
                             if (isRefresh)stateLiveData.postNoData()
                             else{
@@ -130,11 +130,11 @@ class LinkageContainerViewModel2(application:Application) : BaseViewModel(applic
                             if (Config.USE_DEVELOPER_TEST_DATA) {
                                 list.forEach{ SLog.info("[%s]", it.goodsName+it.jingle)}
                             }
-                            goodsList.value = result.datas.zoneGoodsList
+                            goodsList.value = result.datas?.zoneGoodsList
                             stateLiveData.postSuccess()
 
                         }
-                        hasMore=result.datas.pageEntity.hasMore
+                        hasMore=result.datas?.pageEntity?.hasMore?:false
 
                     } else if (result is Result.DataError) {
                         SLog.info(result.datas.error)

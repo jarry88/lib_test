@@ -29,9 +29,7 @@ import com.ftofs.twant.fragment.H5GameFragment.ARTICLE_ID_TERMS_OF_SERVICE
 import com.ftofs.twant.login.ui.LoginActivity
 import com.ftofs.twant.login.ui.MessageFragment
 import com.ftofs.twant.login.utils.ExecutorManager
-import com.ftofs.twant.tangram.SloganView
 import com.ftofs.twant.util.User
-import com.ftofs.twant.util.Util
 import com.gzp.lib_common.constant.Result
 import com.gzp.lib_common.utils.SLog
 import com.gzp.lib_common.utils.ToastUtil
@@ -40,9 +38,7 @@ import com.gzp.lib_common.utils.Util.findActivity
 import com.lxj.xpopup.core.BasePopupView
 import com.mobile.auth.gatewayauth.*
 import com.mobile.auth.gatewayauth.model.TokenRet
-import com.mobile.auth.gatewayauth.ui.AbstractPnsViewDelegate
 import com.orhanobut.hawk.Hawk
-import kotlinx.android.synthetic.main.password_find_layout.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.Call
@@ -199,7 +195,7 @@ object OneStepLogin{
                     SLog.info("aliYunToken  $aliYunToken")
                     when (val re = repository.run { simpleGet(api.getLoginOne(aliYunToken, "android", Hawk.get(SPField.FIELD_REGISTER_REFEREE,""))) }) {
                         is Result.Success -> {
-                            SLog.info("数据加载成功${re.datas.nickName}")
+                            SLog.info("数据加载成功${re.datas?.nickName}")
                             getResultWithToken(aliYunToken)
                             findActivity(mContext)?.apply {
                                 if (this is LoginActivity)  finish()
@@ -212,7 +208,7 @@ object OneStepLogin{
 //                                Toast.makeText(mContext, "登入成功", Toast.LENGTH_SHORT).show()
 //                                Looper.loop()
 //                            }.start()
-                            User.onNewLoginSuccess(re.datas.memberId!!, LoginType.MOBILE, re.datas)
+                            User.onNewLoginSuccess(re.datas?.memberId!!, LoginType.MOBILE, re.datas)
 
                             SLog.info("登錄成功")
                         }

@@ -34,9 +34,7 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
         b.imageItem.imageUrl=d
         b.imageItem.setOnClickListener{
             viewModel.currCouponDetail.value?.picList?.let {list ->
-                Util.showLoginFragment(requireContext())
                 Util.startFragment(ViewPagerFragment.newInstance(list,false).also { it.start=list.indexOf(d) })}
-
         }
     } }
     val id by lazy { arguments?.getInt(COUPON_ID) }

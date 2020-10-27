@@ -58,12 +58,19 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS -> {
 
 //                viewModel.postMpayNotify()
-                Util.startFragment(CouponPayResultFragment.newInstance(
-                        id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
-                        , true))
+                if (isVisible) {
+                    Util.startFragment(CouponPayResultFragment.newInstance(
+                            id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
+                            , true))
+                }
             }
-            EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER -> Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID)))
-            else ->SLog.info(this::class.java.name)
+            EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER -> {
+                if (isSupportVisible) {
+                    SLog.info("支付失败")
+//                    Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID)))
+                }
+            }
+            else ->{}//SLog.info(this::class.java.name)
         }
     }
     override fun initData() {

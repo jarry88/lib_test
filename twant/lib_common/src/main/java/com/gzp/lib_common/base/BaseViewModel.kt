@@ -43,7 +43,7 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
             when (val re=result()) {
                 is Result.Success ->{//200
                     SLog.info("數據獲取成功 ")
-                    success(re.datas)}
+                    re.datas?.let { success(it) }}
                 is Result.DataError->{//400參數錯誤。401登陸錯誤
                     errorMessage="数据加载失败"
                     SLog.info("400、401 ${re.datas}")
@@ -52,8 +52,11 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                     stateLiveData.postError()
 
                 }
+                is Result.Msg ->{
+                    SLog.info("message: ${re.msg}")
+                }
                 else ->{
-                    SLog.info("拉取專場數據 異常 ，405")
+                    SLog.info("error: $re")
                     others()}
             }
         } catch (e: Throwable) {//檢查404
