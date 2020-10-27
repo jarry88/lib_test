@@ -107,10 +107,10 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
 
     companion object {
         @JvmStatic
-        fun newInstance(orderid: Int?)=CouponConfirmOrderFragment().apply{
+        fun newInstance(couponid: Int?)=CouponConfirmOrderFragment().apply{
             arguments = Bundle().apply {
-                orderid?.let {
-                    putInt(ORDER_ID, it).apply { SLog.info("ORDER_ID :$it") }
+                couponid?.let {
+                    putInt(ORDER_ID, it).apply { SLog.info("Coupon_ID :$it") }
                 }
             }
         }
@@ -150,9 +150,7 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
     override fun onSupportVisible() {
         super.onSupportVisible()
         if (showSuccess) {
-            Util.startFragment(CouponPayResultFragment.newInstance(
-                    id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
-                    , true)).apply { SLog.info("由 ${this.javaClass.name}拉起") }
+           showResultFragment()
         }
         currAb?.isFocusable =true
     }
@@ -167,22 +165,33 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS -> {
 
 //                viewModel.postMpayNotify()
-                if (isVisible) {
-
-                    Util.startFragment(CouponPayResultFragment.newInstance(
-                            id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
-                            , true)).apply { SLog.info("由 ${this.javaClass.name}拉起") }
+                if (isSupportVisible) {
+                    showResultFragment()
                 } else {
                     showSuccess= true
                 }
             }
+            EBMessageType.COUPON_CANCEL_SHOW_RESULT_SUCCESS -> showSuccess=false
+
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER ->if (isSupportVisible) {
                 SLog.info("支付失败")
 //                    Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID)))
             }
-            else ->SLog.info(this::class.java.name)
+            else ->{//SLog.info(this::class.java.name)
+            }
         }
     }
+
+    private fun showResultFragment() {
+        EBMessage.postMessage(EBMessageType.COUPON_CANCEL_SHOW_RESULT_SUCCESS,null)
+
+        viewModel.buyStep2Vo.value?.let {
+            Util.startFragment(CouponPayResultFragment.newInstance(
+                    it.orderId //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
+                    , true)).apply { SLog.info("由 ${this.javaClass.name}拉起") }
+        }
+    }
+
     override fun initViewObservable() {
         viewModel.buyStep1Vo.observe(this){
             binding.vo=it

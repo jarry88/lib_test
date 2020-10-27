@@ -34,7 +34,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
     val id by lazy { arguments?.getInt(ORDER_ID) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        id?.apply { SLog.info("receive couponId $this") }
+        id?.apply { SLog.info("receive orderid $this") }
     }
     override fun initData() {
         binding.title.apply {
@@ -101,18 +101,23 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                 colorId =R.color.tw_black
                                 margin_end =4
                             }
-                            TextView {
-                                layout_height = wrap_content
-                                layout_width = wrap_content
-                                textSize =18f
-                                text = orderCodeVo.useTime?.let { t ->
-                                    if(Jarbon.parse(t).timestamp< Jarbon().timestamp)
-                                        "已过期"
-                                    else "已使用"
-                                }?: "已使用"
-                                margin_start =8
-                                colorId =R.color.tw_black
-                                margin_end =4
+                            orderCodeVo.used?.let {
+                                if (it) {
+
+                                    TextView {
+                                        layout_height = wrap_content
+                                        layout_width = wrap_content
+                                        textSize =18f
+                                        text = orderCodeVo.useTime?.let { t ->
+                                            if(Jarbon.parse(t).timestamp< Jarbon().timestamp){
+                                                "已过期"}
+                                            else "已使用"
+                                        }?: "已使用"
+                                        margin_start =8
+                                        colorId =R.color.tw_black
+                                        margin_end =4
+                                    }
+                                }
                             }
 
                         }.let { v -> (v.parent as ViewGroup).removeView(v)
@@ -138,7 +143,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                         layout_height = 160
                                         layout_width = 80
                                         margin_end =16
-                                        setImageBitmap( QRCodeUtil.createBarCode(orderCodeVo.code,210.dp,86.dp,null,Color.BLACK))
+                                        setImageBitmap( QRCodeUtil.createBarCode(orderCodeVo.code,220.dp,86.dp,null,Color.BLACK))
 //                                        setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
 
                                     }

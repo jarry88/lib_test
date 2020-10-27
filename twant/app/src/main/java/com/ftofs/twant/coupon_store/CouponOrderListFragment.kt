@@ -32,6 +32,7 @@ import com.ftofs.twant.util.Util
 import com.google.android.material.tabs.TabLayout
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
+import com.hyphenate.chat.EMMessage
 import com.macau.pay.sdk.MPaySdk
 import com.wzq.mvvmsmart.event.StateLiveData
 import okhttp3.Call
@@ -45,10 +46,11 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
     override fun initContentView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): Int {
         return R.layout.coupon_order_list_fragment
     }
-
     override fun initVariableId(): Int {
         return BR.viewModel
     }
+
+    private var showResult: Boolean=false
     var tabFold=true
     var firstTabSelected=true
 
@@ -63,12 +65,14 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS -> {
 
 //                viewModel.postMpayNotify()
-                if (isVisible) {
-                    Util.startFragment(CouponPayResultFragment.newInstance(
-                            id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
-                            , true)).apply { SLog.info("由 ${this.javaClass.name}拉起") }
+                if (isSupportVisible) {
+                    showResultFragment()
+
+                } else {
+                    showResult =true
                 }
             }
+            EBMessageType.COUPON_CANCEL_SHOW_RESULT_SUCCESS -> showResult=false
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER -> {
                 if (isSupportVisible) {
                     SLog.info("支付失败")
@@ -77,6 +81,25 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             }
             else ->{}//SLog.info(this::class.java.name)
         }
+    }
+
+    private fun showResultFragment() {
+        EBMessage.postMessage(EBMessageType.COUPON_CANCEL_SHOW_RESULT_SUCCESS,null)
+        Util.startFragment(CouponPayResultFragment.newInstance(
+                viewModel.currOrderId //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
+                , true)).apply { SLog.info("由 ${this.javaClass.name}拉起") }
+    }
+
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        if (showResult) {
+           showResultFragment()
+        }
+    }
+
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+        showResult =false
     }
     override fun initData() {
         binding.title.apply {

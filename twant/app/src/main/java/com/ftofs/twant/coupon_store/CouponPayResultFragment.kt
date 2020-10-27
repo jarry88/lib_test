@@ -10,6 +10,7 @@ import com.ftofs.twant.databinding.CouponPayResultFragmentBinding
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.fragment.MainFragment
 import com.ftofs.twant.kotlin.extension.p
+import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.QRCodeUtil
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.base.Jarbon
@@ -27,15 +28,15 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
     override fun initVariableId(): Int {
         return BR.viewModel
     }
-    val payId by lazy { arguments?.getInt(PAY_ID) }
+    val orderId by lazy { arguments?.getInt(PAY_ID) }
     val success by lazy { arguments?.getBoolean(Success)?:false }
     companion object {
 
         @JvmStatic
-        fun newInstance(payId: Int?, success: Boolean = false)=CouponPayResultFragment().apply {
+        fun newInstance(orderId: Int?, success: Boolean = false)=CouponPayResultFragment().apply {
             arguments = Bundle().apply {
-                payId?.let {
-                    putInt(PAY_ID, it).apply { SLog.info("pay_id $it") }
+                orderId?.let {
+                    putInt(PAY_ID, it).apply { SLog.info("orderId $it") }
                 }
                 putBoolean(Success, success)
             }
@@ -51,66 +52,74 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
             this.popTo(MainFragment::class.java, false)
         }
         binding.btnGotoOrder.setOnClickListener {
-            com.ftofs.twant.util.Util.startFragment(CouponOrderDetailFragment.newInstance(id))
+            com.ftofs.twant.util.Util.startFragment(CouponOrderDetailFragment.newInstance(orderId))
         }
         if (success) {
-            viewModel.getCouponOrderDetail(id)
+            binding.listItem.apply {
+                mBinding.tvSubTitle.setVisibleOrGone(true)
+                mBinding.tvBottomPrice.setVisibleOrGone(true)
+            }
+            orderId?.let {
+                viewModel.getCouponOrderDetail(it)
+            }.apply { SLog.info("orderid 沒值") }
+
         }
     }
 
     override fun initViewObservable() {
         viewModel.currCouponOrder.observe(this){
-            SLog.info("獲取訂單詳情")
-            binding.listItem.mBinding.vo=it.itemList?.get(0)?.getCouponItemVo()
+            SLog.info("獲取訂單詳情:${it.itemList.toString()}")
+            binding.vo =it
             binding.llCodeContainer.apply {
-                it.itemList?.get(0)?.extractCode?.forEach {orderCodeVo ->
-                    LinearLayout {
-                        layout_height = wrap_content
-                        layout_width = wrap_content
-                        orientation = horizontal
-                        center_vertical =true
-                        margin_top = 17
-                        margin_bottom=18
-                        TextView {
+                it.itemList?.forEach { orderItem ->
+                    orderItem.extractCode?.forEach {orderCodeVo ->
+                        LinearLayout {
                             layout_height = wrap_content
                             layout_width = wrap_content
-                            textSize =14f
-                            text ="取貨碼："
-                            colorId =R.color.tw_black
-                            margin_end =4
-                        }
-                        TextView {
-                            layout_height = wrap_content
-                            layout_width = wrap_content
-                            textSize =18f
-                            text =orderCodeVo.code
-                            textStyle = bold
-                            colorId =R.color.tw_black
-                            margin_end =4
-                        }
-                        orderCodeVo.used?.let {
-                            if (it) {//已經用過了
-                                TextView {
-                                    layout_height = wrap_content
-                                    layout_width = wrap_content
-                                    textSize =18f
-                                    text = orderCodeVo.useTime?.let { t ->
-                                        if(Jarbon.parse(t).timestamp<Jarbon().timestamp)
-                                            "已过期"
+                            orientation = horizontal
+                            center_vertical =true
+                            margin_top = 17
+                            margin_bottom=18
+                            TextView {
+                                layout_height = wrap_content
+                                layout_width = wrap_content
+                                textSize =14f
+                                text ="取貨碼："
+                                colorId =R.color.tw_black
+                                margin_end =4
+                            }
+                            TextView {
+                                layout_height = wrap_content
+                                layout_width = wrap_content
+                                textSize =18f
+                                text =orderCodeVo.code
+                                textStyle = bold
+                                colorId =R.color.tw_black
+                                margin_end =4
+                            }
+                            orderCodeVo.used?.let {
+                                if (it) {//已經用過了
+                                    TextView {
+                                        layout_height = wrap_content
+                                        layout_width = wrap_content
+                                        textSize =18f
+                                        text = orderCodeVo.useTime?.let { t ->
+                                            if(Jarbon.parse(t).timestamp<Jarbon().timestamp)
+                                                "已过期"
                                             else "已使用"
-                                    }?: "已使用"
-                                    margin_start =8
-                                    colorId =R.color.tw_black
-                                    margin_end =4
+                                        }?: "已使用"
+                                        margin_start =8
+                                        colorId =R.color.tw_black
+                                        margin_end =4
+                                    }
                                 }
                             }
-                        }
 
-                    }.let { v -> (v.parent as ViewGroup).removeView(v)
-                        addView(v).apply { SLog.info("添加二維碼${orderCodeVo.code}") }
-                    }
-                    orderCodeVo.used?.takeIf {  success }?.let { it ->
-                        if (!it) {
+                        }.let { v -> (v.parent as ViewGroup).removeView(v)
+                            addView(v).apply { SLog.info("添加二維碼${orderCodeVo.code}") }
+                        }
+                        orderCodeVo.used?.takeIf {  success }?.let { it ->
+                            if (!it) {
                                 LinearLayout {
                                     layout_height = wrap_content
                                     layout_width = wrap_content
@@ -129,7 +138,7 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                                         layout_height = 160
                                         layout_width = 80
                                         margin_end =16
-                                        setImageBitmap( QRCodeUtil.createBarCode(orderCodeVo.code,210.dp,86.dp,null, Color.BLACK))
+                                        setImageBitmap( QRCodeUtil.createBarCode(orderCodeVo.code,220.dp,86.dp,null, Color.BLACK))
 //                                        setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
 
                                     }
@@ -140,9 +149,11 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                             }
                         }}
 
-                    //添加code码
                 }
+                    //添加code码
             }
+//            binding.llContainer.setBackgroundResource(R.drawable.code_bg)
         }
+    }
 
 }

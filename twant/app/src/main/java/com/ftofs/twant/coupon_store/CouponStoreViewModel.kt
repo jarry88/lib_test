@@ -41,6 +41,8 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     val repository by lazy { BaseRepository() }
     val currOrderStatus by lazy { MutableLiveData<Int>() }
     var remark :String?=null
+    var currOrderId :Int?=null
+
     val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -241,7 +243,8 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
 
     fun loadMpay(p:Map<String,Any?>?=null) {
         val params =p?:buyStep2Vo.value?.orderId?.let {
-            mapOf("clientType" to "android","orderId" to it)
+            currOrderId =it
+            mapOf("clientType" to "android","orderId" to currOrderId)
         }
         Hawk.put(SPField.FROM_COUPON_MPAY,true)
         launch(stateLiveData, {
