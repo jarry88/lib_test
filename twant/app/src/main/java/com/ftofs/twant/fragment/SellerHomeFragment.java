@@ -427,7 +427,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                if (Config.PROD) {
                    url = Config.getBaseApi().replace("/api", "/tc") + url;
                }else{
-                   url = "http://192.168.5.32:8100/tc/" + url;
+                   url = "http://192.168.5.32:8100/tc" + url;
                }
                EasyJSONObject params = EasyJSONObject.generate("code", message.data.toString());
                Api.postUI(url, params, new UICallback() {
@@ -442,13 +442,18 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                    public void onResponse(Call call, String responseStr) throws IOException {
                        SLog.info("responseStr[%s]", responseStr);
                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                       if (ToastUtil.checkError(_mActivity,responseObj)) {
+                       try {
+                           if (responseObj.exists("code")) {
 //                           LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
 //                           updateSwitchButton();
-                           return;
-                       }
-                       try {
-                           ToastUtil.success(_mActivity,responseObj.getSafeString("msg"));
+                               int code = responseObj.getInt("code");
+                               ToastUtil.success(_mActivity, responseObj.getSafeString("msg"));
+                               if (code == 200) {
+                                   SLog.info("核销成功");
+                                   return;
+                               }
+                           }
+
 
                        } catch (Exception e) {
                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

@@ -15,6 +15,7 @@ import com.ftofs.twant.constant.SPField
 import com.ftofs.twant.databinding.CouponOrderConfirmFragmentBinding
 import com.ftofs.twant.databinding.CouponOrderConfirmItemBinding
 import com.ftofs.twant.dsl.customer.factoryAdapter
+import com.ftofs.twant.dsl.invisible
 import com.ftofs.twant.entity.EBMessage
 import com.ftofs.twant.interfaces.SimpleCallback
 import com.ftofs.twant.kotlin.setVisibleOrGone
@@ -49,6 +50,8 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
     override fun initVariableId(): Int {
         return BR.viewModel
     }
+    var showSuccess = false
+
     var mLoading :BasePopupView?=null
     var currAb: AdjustButton?=null
     var delayValue :Int?=null
@@ -132,15 +135,34 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
         }
     }
 
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        if (showSuccess) {
+
+            Util.startFragment(CouponPayResultFragment.newInstance(
+                    id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
+                    , true))
+        }
+    }
+
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+        showSuccess=false
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEBMessage(message: EBMessage) {
         when (message.messageType) {
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_SUCCESS -> {
 
 //                viewModel.postMpayNotify()
-                Util.startFragment(CouponPayResultFragment.newInstance(
-                        id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
-                 , true))
+                if (isVisible) {
+
+                    Util.startFragment(CouponPayResultFragment.newInstance(
+                            id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
+                            , true))
+                } else {
+                    showSuccess= true
+                }
             }
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER ->                 if (isSupportVisible) {
                 SLog.info("支付失败")

@@ -56,7 +56,7 @@
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:background="@drawable/coupon_white_button_line_down_bg"
+                    android:background="@drawable/outline_button_down"
                     android:textSize="16sp"
                     android:textColor="@color/tw_white"
                     android:textStyle="bold"
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:visibility="@{success?View.VISIBLE:View.GONE}"
-                    android:background="@drawable/coupon_white_button_line_up_bg"
+                    android:background="@drawable/outline_button_up"
                     android:textSize="16sp"
                     android:textColor="@color/tw_white"
                     android:textStyle="bold"
@@ -78,7 +78,7 @@
                     android:layout_width="125dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:background="@drawable/coupon_white_button_line_up_bg"
+                    android:background="@drawable/outline_button_up"
                     android:textSize="16sp"
                     android:textColor="@color/tw_white"
                     android:textStyle="bold"
@@ -86,14 +86,18 @@
             </LinearLayout>
 
         </RelativeLayout>
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="vertical"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/title"
             android:layout_marginTop="@dimen/dp_150"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/code_bg.9"
             android:layout_margin="@dimen/dp_15">
             <LinearLayout
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <LinearLayout
@@ -140,6 +144,7 @@
                 </LinearLayout>
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_350"
                 android:layout_margin="@dimen/dp_15"
@@ -154,6 +159,6 @@
                 android:id="@+id/ll_code_container"
                 android:orientation="vertical"
                 android:layout_below="@id/list_item"/>
-        </RelativeLayout>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
