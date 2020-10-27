@@ -102,13 +102,13 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                 margin_end =4
                             }
                             orderCodeVo.used?.let {
-                                if (!it) {
+                                if (it) {//已經用過了
                                     TextView {
                                         layout_height = wrap_content
                                         layout_width = wrap_content
                                         textSize =18f
-                                        text =orderCodeVo.useTime
-                                        textStyle = bold
+                                        text ="已過期"
+                                        margin_start =8
                                         colorId =R.color.tw_black
                                         margin_end =4
                                     }
@@ -119,7 +119,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                             addView(v).apply { SLog.info("添加二維碼${orderCodeVo.code}") }
                         }
                         orderCodeVo.used?.let {
-                            if (it) {
+                            if (!it) {
                                 LinearLayout {
                                     layout_height = wrap_content
                                     layout_width = wrap_content
@@ -136,10 +136,10 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                     }
                                     ImageView {
                                         layout_height = 160
-                                        layout_width = 160
+                                        layout_width = 80
                                         margin_end =16
-//                                        setImageBitmap( QRCode.encode(orderCodeVo.code,160,86))
-                                        setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
+                                        setImageBitmap( QRCode.encode(orderCodeVo.code,80,160))
+//                                        setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
 
                                     }
 

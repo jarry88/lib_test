@@ -16,7 +16,14 @@ data class CouponItemVo(
     val validityEndDate: String?,
     val validityStartDate: String?,
     val validityType: Int?,//有效期類型：0->相對時間，1->指定時間
+//
+    val needAppointment: Boolean? ,//是否需要預約：0->不需要，1->需要
+    val supportRefund: Boolean?, //是否需要預約：0->不需要，1->需要
+    val limitStock: Boolean?,
+    val limitBuyNum: Int?=null,
+
     var num:Int?=1
+
 ):Serializable{
     fun getValidityString():String =validityType?.let {
         when(it){

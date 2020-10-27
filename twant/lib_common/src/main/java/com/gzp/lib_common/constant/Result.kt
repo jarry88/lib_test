@@ -6,7 +6,7 @@ package com.gzp.lib_common.constant
  */
 sealed class Result<out T : Any> {
 
-    data class Success<out T : Any>(val datas: T) : Result<T>()
+    data class Success<out T : Any>(val datas: T?) : Result<T>()
     data class DataError<out T : Any>(val datas: T) : Result<T>()
     data class Msg(val msg: String?) : Result<Nothing>()
     data class Error(val exception: Exception) : Result<Nothing>()

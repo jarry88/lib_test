@@ -136,8 +136,9 @@ interface DemoApiService {
     suspend fun getCouponOrdersList(@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>): TwantResponse<CouponOrdersListInfo>
     @GET("orders/{id}")
     suspend fun getCouponOrderDetail(@Path("id") id:Int): TwantResponse<CouponOrderDetailInfo>
-    @DELETE("orders/{id}")
-    suspend fun deleteCouponOrderDetail(@Path("id") id:Int): TwantResponse<CouponOrderDetailInfo>
+//    @DELETE("orders/{id}")
+    @HTTP(method = "DELETE",path = "orders/{id}", hasBody = false)
+    suspend fun deleteCouponOrderDetail(@Path("id") id:Int): TwantResponse<CommonInfo>
     //
     @POST("buy/step1")
     @Headers("Content-Type:application/json; charset=UTF-8")

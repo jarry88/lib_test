@@ -78,9 +78,9 @@ class ImGoodsPageModel(application: Application) : BaseViewModelMVVM(application
                 try {
                     when(val result=net.run { simpleGet(api.getImGoodsSearch(queryParams)) }){
                         is Result.Success -> {
-                            if(!isRefresh and !result.datas.goodsList.isNullOrEmpty() )pageNum++
-                            goodsList.value=result.datas.goodsList
-                            result.datas.storeLabelList?.run {storeLabelList.value=this}
+                            if(!isRefresh and !result.datas?.goodsList.isNullOrEmpty() )pageNum++
+                            goodsList.value=result.datas?.goodsList
+                            result.datas?.storeLabelList?.run {storeLabelList.value=this}
 //                            hasMore=result.datas.pageEntity.hasMore
                             stateLiveData.postSuccess()
 //                            stateLiveData.postValueAndSuccess(hasMore)

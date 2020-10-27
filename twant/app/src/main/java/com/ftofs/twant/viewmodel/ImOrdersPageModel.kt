@@ -71,8 +71,8 @@ class ImOrdersPageModel(application: Application) : BaseViewModelMVVM(applicatio
                 try {
                     when(val result=net.run { simpleGet(api.getImOrdersSearch(queryParams)) }){
                         is Result.Success -> {
-                            if(!isRefresh and !result.datas.ordersList.isNullOrEmpty() )pageNum++
-                            ordersList.value=result.datas.ordersList
+                            if(!isRefresh and !result.datas?.ordersList.isNullOrEmpty() )pageNum++
+                            ordersList.value=result.datas?.ordersList
 //                            hasMore=result.datas.pageEntity.hasMore
                             stateLiveData.postSuccess()
 

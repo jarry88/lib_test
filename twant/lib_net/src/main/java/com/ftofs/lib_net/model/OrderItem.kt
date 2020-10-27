@@ -70,7 +70,7 @@ data class OrderItem(
     fun getTypeString():String =consumptionType?.let {//	消費類型：0->抵用券，1->套餐券
         "团"
     }?:""
-    fun getCouponItemVo():CouponItemVo = CouponItemVo(consumptionType,cover,id,originalPrice,price,sale,stock,subTitle,title,validityDay,validityEndDate,validityStartDate,validityType)//,1
+    fun getCouponItemVo():CouponItemVo = CouponItemVo(consumptionType,cover,id,originalPrice,price,sale,stock,subTitle,title,validityDay,validityEndDate,validityStartDate,validityType,null , null , null    )//,1
 }
 
 /**
@@ -85,6 +85,7 @@ data class CouponOrderBase(
         val orderStatus: Int?,//10待支付，20可使用），30已使用，40退款中，50已退款，60已取消
         val payStatus: Int?,//付款狀態，10->未支付，20->已付款
         val userId: Int?,//標題
+//以上是订单列表分页
 
 ):Serializable{
     fun getOrderStatusString():String=orderStatus?.let {

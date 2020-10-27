@@ -51,6 +51,7 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
 
     override fun initViewObservable() {
         viewModel.currCouponOrder.observe(this){
+            SLog.info("獲取訂單詳情")
             it.itemList?.get(0)?.extractCode?.forEach {
                 //添加code码
             }

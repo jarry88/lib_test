@@ -851,4 +851,5 @@
     <string name="text_seller_verification">核銷</string>
     <string name="text_again_to_buy">再來一單</string>
     <string name="text_link_store">聯繫商戶</string>
+    <string name="text_shop_number">商家電話</string>
 </resources>

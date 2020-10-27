@@ -98,7 +98,7 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
         }
         binding.button4.setOnClickListener { start(Go853HouseListFragment()) }
         binding.rlList.adapter=mAdapter
-        mAdapter.addAll(listOf(CouponItemVo(null,null,null,null,null,null,null,null,"null",null,null,null,null)),true)
+//        mAdapter.addAll(listOf(CouponItemVo(null,null,null,null,null,null,null,null,"null",null,null,null,null)),true)
         suggestAdapter.addAll(SearchHistoryUtil.loadSearchHistory(GoSearchType.All.ordinal).map { it.keyword },true)
 
     }

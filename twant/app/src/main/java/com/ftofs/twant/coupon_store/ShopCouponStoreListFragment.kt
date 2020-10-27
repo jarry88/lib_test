@@ -46,15 +46,17 @@ class ShopCouponStoreListFragment:BaseTwantFragmentMVVM<ShopCouponStoreListFragm
 ////            hideCouponStoreView()
 //        }
         binding.listView.apply {
-            config<CouponDetailVo, CouponStoreItemBinding>(R.layout.coupon_store_item,viewModel.couponStoreList){ b, v->
-                b.root.setOnClickListener{Util.startFragment(CouponStoreDetailFragment.newInstance(v.id))}
+            config<CouponDetailVo, CouponStoreItemBinding>(R.layout.coupon_store_item,viewModel.couponStoreList){ b, d->
+                b.vo=d
+                b.root.setOnClickListener{Util.startFragment(CouponStoreDetailFragment.newInstance(d.id))}
             }
-            setLoadMoreListener { shopActivityFragment?.let { viewModel.getShopCouponStoreList(it.storeId)
+            setLoadMoreListener { shopActivityFragment?.let { viewModel.getActivityList(it.storeId)
 //                if(Config.USE_DEVELOPER_TEST_DATA) viewModel.couponStoreList.postValue(listOf(CouponItemVo(null,null,null,null,null,null,null,null,null,null,null,null,null)))
             } }
             setRefreshListener { viewModel.currPage=0
-                shopActivityFragment?.let { viewModel.getShopCouponStoreList(it.storeId) } }
+                shopActivityFragment?.let { viewModel.getActivityList(it.storeId) } }
         }
+        binding.listView.autoRefresh()
     }
 
     companion object {

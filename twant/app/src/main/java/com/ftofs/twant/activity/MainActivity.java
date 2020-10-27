@@ -1243,9 +1243,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces, Sim
         } else {
             if (Hawk.get(SPField.FROM_COUPON_MPAY, false)) {
                 Hawk.put(SPField.FROM_COUPON_MPAY, false);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER, null);
             }
-
-            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER, null);
             ToastUtil.error(this, payResult.getResult());
         }
     }

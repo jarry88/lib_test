@@ -55,7 +55,7 @@ class VerificationPopup(context: Context, val orderItem: OrdersGoodsVo,var count
                 SLog.info("token $token ordersId ${orderItem.ordersId},goodsId${orderItem.goodsId},count$count,verification$verification")
 
                 when (val result =getIfoodmacauVerify(orderItem.ordersId,orderItem.goodsId,count,verification)){
-                    is Result.Success ->ToastUtil.success(context,result.datas.message)
+                    is Result.Success ->ToastUtil.success(context,result.datas?.message)
 
                     is Result.DataError -> {//val error= EasyJSONObject.parse<String>()
 //                            SLog.info(error.toString())
