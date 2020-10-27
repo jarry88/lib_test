@@ -29,6 +29,7 @@ data class CouponOrderDetailInfo(
         val updateTime:String?,//更新時間
 ):Serializable
 
+
 /**
  * 訂單VO
  */
