@@ -175,6 +175,10 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         crossBorderHomeItemList.add(recommendTitle);
 
         rvList = view.findViewById(R.id.rv_list);
+        rvList.setItemViewCacheSize(20);
+        rvList.setDrawingCacheEnabled(true);
+        rvList.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+
         layoutManager = new LinearLayoutManager(_mActivity);
         rvList.setLayoutManager(layoutManager);
         adapter = new CrossBorderHomeAdapter(_mActivity, crossBorderHomeItemList, homeDefaultColorStr);

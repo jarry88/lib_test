@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
     android:orientation="vertical"
     android:background="@drawable/white_r4dp_bg">
     <RelativeLayout
