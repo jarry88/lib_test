@@ -175,6 +175,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         crossBorderHomeItemList.add(recommendTitle);
 
         rvList = view.findViewById(R.id.rv_list);
+        // recyclerView 列表类控件卡顿优化：https://www.cnblogs.com/ldq2016/p/9039979.html
         rvList.setItemViewCacheSize(20);
         rvList.setDrawingCacheEnabled(true);
         rvList.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
