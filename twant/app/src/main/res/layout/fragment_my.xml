@@ -310,28 +310,6 @@
                                 android:text="想要"
                                 />
                         </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/btn_order_coupon"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/icon_my_coupon"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_gravity="center_horizontal"
-                                android:textSize="16sp"
-                                android:textColor="@color/tw_black"
-                                android:text="@string/text_coupon"
-                                />
-                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/btn_want_job"
@@ -353,6 +331,29 @@
                                 android:textSize="16sp"
                                 android:textColor="@color/tw_black"
                                 android:text="@string/text_want_job"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btn_order_coupon"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/icon_my_coupon"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center_horizontal"
+                                android:textSize="16sp"
+                                android:textColor="@color/tw_black"
+                                android:text="@string/text_coupon"
                                 />
                         </LinearLayout>
                     </LinearLayout>

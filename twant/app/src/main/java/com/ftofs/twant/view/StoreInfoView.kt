@@ -29,12 +29,10 @@ class StoreInfoView @JvmOverloads constructor(
     val inflater =context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val mBinding =DataBindingUtil.inflate<StoreInfoWighetBinding>(inflater, R.layout.store_info_wighet, this, true)
     init {
-
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SmartList)
         mBinding.btnContact.setOnClickListener {
             mBinding.vo?.contact?.takeIf { it.isNotEmpty() }?.let {
                 Util.dialPhone(Util.findActivity(context), it)
-
             }
         }
         mBinding.btnPosition.setOnClickListener {
@@ -46,6 +44,12 @@ class StoreInfoView @JvmOverloads constructor(
                         )))
                         .show()
             }
+        }
+        mBinding.root.setOnClickListener {
+            mBinding.vo?.let {
+                Util.startFragment(ShopMainFragment.newInstance(it.id))
+            }
+
         }
         typedArray.recycle()
 
@@ -71,7 +75,6 @@ class StoreInfoView @JvmOverloads constructor(
         getLifecycleOwner()?.let {
             vo.observe(it){ t->
                 t?.let { mBinding.vo=t.store
-                    mBinding.root.setOnClickListener { Util.startFragment(ShopMainFragment.newInstance(t.storeId)) }
                 }
             }
         }

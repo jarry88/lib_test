@@ -7,11 +7,12 @@
             name="success"
             type="Boolean" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
         <com.ftofs.twant.login.Title
             app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
@@ -19,146 +20,107 @@
             android:id="@+id/title"
             app:tt ="@{`支付結果`}"
             app:left_type="back"
-           />
-        <RelativeLayout
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/coupon_pay_bg"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            android:id="@+id/rv_list"
-            tools:listitem="@layout/coupon_order_confirm_item">
-            <LinearLayout
-                android:layout_marginBottom="19dp"
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_28">
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@{success?@drawable/icon_coupon_pay_ok:@drawable/icon_coupon_pay_no}"/>
-                <TextView
+                android:background="@drawable/coupon_pay_bg"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/rv_list"
+                tools:listitem="@layout/coupon_order_confirm_item">
+                <LinearLayout
+                    android:layout_marginBottom="19dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:textColor="@color/tw_white"
-                    android:textStyle="bold"
-                    android:layout_marginStart="12dp"
-                    android:text="@{success?@string/success_pay_success:`支付失敗`}"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="78dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true">
-                <TextView
-                    android:id="@+id/btn_goto_home"
-                    android:layout_width="123dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:background="@drawable/outline_button_down"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_white"
-                    android:textStyle="bold"
-                    android:text="回到首頁"/>
-                <TextView
-                    android:id="@+id/btn_goto_order"
-                    android:layout_width="125dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:visibility="@{success?View.VISIBLE:View.GONE}"
-                    android:background="@drawable/outline_button_up"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_white"
-                    android:textStyle="bold"
-                    android:text="查看訂單"/>
-                <TextView
-                    android:visibility="@{success?View.GONE:View.VISIBLE}"
-                    android:id="@+id/btn_goto_customer"
-                    android:layout_width="125dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:background="@drawable/outline_button_up"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_white"
-                    android:textStyle="bold"
-                    android:text="聯繫客服"/>
-            </LinearLayout>
-
-        </RelativeLayout>
-        <LinearLayout
-            android:orientation="vertical"
-            android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            android:layout_marginTop="@dimen/dp_150"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/code_bg.9"
-            android:layout_margin="@dimen/dp_15">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_28">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@{success?@drawable/icon_coupon_pay_ok:@drawable/icon_coupon_pay_no}"/>
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/code_bag_up_l"/>
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/code_bag_up"/>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/code_bag_up_r"/>
+                        android:textSize="20sp"
+                        android:textColor="@color/tw_white"
+                        android:textStyle="bold"
+                        android:layout_marginStart="12dp"
+                        android:text="@{success?@string/success_pay_success:`支付失敗`}"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <View
-                        android:layout_width="20dp"
-                        android:layout_height="@dimen/dp_260"
-                        android:background="@drawable/code_bag_down_l"/>
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="@dimen/dp_260"/>
-                    <View
-                        android:layout_width="20dp"
-                        android:layout_height="@dimen/dp_260"
-                        android:background="@drawable/code_bag_down_r"/>
+                    android:layout_marginTop="78dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true">
+                    <TextView
+                        android:id="@+id/btn_goto_home"
+                        android:layout_width="123dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:background="@drawable/outline_button_down"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_white"
+                        android:textStyle="bold"
+                        android:text="回到首頁"/>
+                    <TextView
+                        android:id="@+id/btn_goto_order"
+                        android:layout_width="125dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:visibility="@{success?View.VISIBLE:View.GONE}"
+                        android:background="@drawable/outline_button_up"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_white"
+                        android:textStyle="bold"
+                        android:text="查看訂單"/>
+                    <TextView
+                        android:visibility="@{success?View.GONE:View.VISIBLE}"
+                        android:id="@+id/btn_goto_customer"
+                        android:layout_width="125dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:background="@drawable/outline_button_up"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_white"
+                        android:textStyle="bold"
+                        android:text="聯繫客服"/>
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:background="@drawable/code_bag_down"/>
-                </LinearLayout>
-            </LinearLayout>
-            <View
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_350"
-                android:layout_margin="@dimen/dp_15"
-                android:background="@color/white"/>
-            <com.ftofs.twant.view.CouponListItemView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/list_item"/>
+
+            </RelativeLayout>
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ll_code_container"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:layout_below="@id/list_item"/>
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:visibility="visible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_150"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/code_bg">
+                <com.ftofs.twant.view.CouponListItemView
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/list_item"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@drawable/dash_blue_line"/>
+                <LinearLayout
+                    android:padding="@dimen/dp_15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_code_container"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

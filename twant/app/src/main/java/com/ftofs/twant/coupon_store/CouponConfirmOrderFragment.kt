@@ -3,6 +3,7 @@ package com.ftofs.twant.coupon_store
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.lib_net.model.*
 import com.ftofs.lib_net.smart.net_utils.GsonUtil
@@ -68,18 +69,26 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
             if("留言：" != b.fixed.fixedText){
                 b.fixed.fixedText = "留言："
             }
+            b.fixed.doAfterTextChanged {
+                viewModel.remark=it.toString()
+            }
+            b.fixed.isFocusable=true
             b.abQuantity.apply {
                 //            b.fixed.setFixedText("留言：")
+                currAb=this
 
                 setMinValue(1){}
                 mValueChangeListener= SimpleCallback { value ->
                     delayValue =value as Int
-                    currAb=this
                     mLoading= Util.createLoadingPopup(_mActivity).show()
                     viewModel.getTcBuyStep1(listOf(BuyGoodsDTO(d.id, delayValue)))
                 }
-                setMaxValue(d.stock.apply { SLog.info("limit ${d.limitStock} stock: $this,limitBuy ${d.limitBuyNum}") } ?: Int.MAX_VALUE){
-                    SLog.info("已經達到上限")
+                d.limitStock?.let {
+                    if (it) {
+                        setMaxValue(d.stock.apply { SLog.info("limit ${d.limitStock} stock: $this,limitBuy ${d.limitBuyNum}") } ?: Int.MAX_VALUE){
+                            SLog.info("已經達到上限")
+                        }
+                    }
                 }
                 if (value <= 0) {
                     value=1
@@ -128,7 +137,10 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
             if (User.getUserId() > 0) {
                 mLoading =Util.createLoadingPopup(_mActivity).show()
                 mAdapter.getData()?.let { list ->
-                    viewModel.getTcBuyStep2(listOf(BuyGoodsDTO(id, currAb?.value?:1)))
+                    currAb?.isFocusable=true
+                    viewModel.getTcBuyStep2(listOf(BuyGoodsDTO(id, currAb?.value?:0).apply {
+                        SLog.info(viewModel.buyStep1Vo.value.toString())
+                    }))
                 }?:SLog.info("没有数据")}
                else {Util.showLoginFragment(requireContext())
             }
@@ -138,11 +150,11 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
     override fun onSupportVisible() {
         super.onSupportVisible()
         if (showSuccess) {
-
             Util.startFragment(CouponPayResultFragment.newInstance(
                     id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
-                    , true))
+                    , true)).apply { SLog.info("由 ${this.javaClass.name}拉起") }
         }
+        currAb?.isFocusable =true
     }
 
     override fun onSupportInvisible() {
@@ -159,12 +171,12 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
 
                     Util.startFragment(CouponPayResultFragment.newInstance(
                             id //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
-                            , true))
+                            , true)).apply { SLog.info("由 ${this.javaClass.name}拉起") }
                 } else {
                     showSuccess= true
                 }
             }
-            EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER ->                 if (isSupportVisible) {
+            EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER ->if (isSupportVisible) {
                 SLog.info("支付失败")
 //                    Util.startFragment(CouponPayResultFragment.newInstance(Hawk.get(SPField.FIELD_MPAY_PAY_ID)))
             }
