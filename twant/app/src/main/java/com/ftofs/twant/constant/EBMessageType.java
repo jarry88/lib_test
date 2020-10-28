@@ -135,6 +135,7 @@ public enum EBMessageType {
      * 【賣家】券商支付回调成功
      */
     MESSAGE_TYPE_COUPON_MPAY_SUCCESS,
+    COUPON_CANCEL_SHOW_RESULT_SUCCESS,
     /**
      * 【賣家】券商支付回调成功
      */

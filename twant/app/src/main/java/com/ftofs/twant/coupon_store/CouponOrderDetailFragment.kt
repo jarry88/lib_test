@@ -1,5 +1,6 @@
 package com.ftofs.twant.coupon_store
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,11 +11,12 @@ import com.ftofs.twant.databinding.CouponOrderDetailFragmentBinding
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.kotlin.extension.p
 import com.ftofs.twant.kotlin.setVisibleOrGone
-import com.ftofs.twant.util.QRCode
+import com.ftofs.twant.util.QRCodeUtil
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
+import com.gzp.lib_common.base.Jarbon
 import com.gzp.lib_common.utils.SLog
 import com.uuzuche.lib_zxing.activity.CodeUtils
 
@@ -32,7 +34,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
     val id by lazy { arguments?.getInt(ORDER_ID) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        id?.apply { SLog.info("receive couponId $this") }
+        id?.apply { SLog.info("receive orderid $this") }
     }
     override fun initData() {
         binding.title.apply {
@@ -100,12 +102,17 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                 margin_end =4
                             }
                             orderCodeVo.used?.let {
-                                if (it) {//已經用過了
+                                if (it) {
+
                                     TextView {
                                         layout_height = wrap_content
                                         layout_width = wrap_content
                                         textSize =18f
-                                        text ="已過期"
+                                        text = orderCodeVo.useTime?.let { t ->
+                                            if(Jarbon.parse(t).timestamp< Jarbon().timestamp){
+                                                "已过期"}
+                                            else "已使用"
+                                        }?: "已使用"
                                         margin_start =8
                                         colorId =R.color.tw_black
                                         margin_end =4
@@ -130,13 +137,13 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                         layout_width = 160
                                         margin_end =16
                                         setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
-                                        margin_start=45
+                                        margin_start=30
                                     }
                                     ImageView {
                                         layout_height = 160
                                         layout_width = 80
                                         margin_end =16
-                                        setImageBitmap( QRCode.encode(orderCodeVo.code,80,160))
+                                        setImageBitmap( QRCodeUtil.createBarCode(orderCodeVo.code,220.dp,86.dp,null,Color.BLACK))
 //                                        setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
 
                                     }

@@ -1,23 +1,32 @@
 package com.ftofs.twant.coupon_store
 
 import android.app.Application
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.lifecycle.MutableLiveData
 import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.DemoApiService
 import com.ftofs.lib_net.model.*
 import com.ftofs.twant.constant.SPField
+import com.ftofs.twant.dsl.*
 import com.ftofs.twant.dsl.customer.factoryParams
+import com.ftofs.twant.kotlin.extension.p
 import com.ftofs.twant.util.LogUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
 import com.gzp.lib_common.base.BaseViewModel
 import com.gzp.lib_common.utils.SLog
 import com.orhanobut.hawk.Hawk
+import com.uuzuche.lib_zxing.activity.CodeUtils
 import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+
+import com.ftofs.twant.util.QRCode
+
 
 class CouponStoreViewModel(application: Application):BaseViewModel(application) {
     val currCouponDetail by lazy { MutableLiveData<CouponDetailVo>() }
@@ -31,6 +40,9 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
 
     val repository by lazy { BaseRepository() }
     val currOrderStatus by lazy { MutableLiveData<Int>() }
+    var remark :String?=null
+    var currOrderId :Int?=null
+
     val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -87,7 +99,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     /**
      * 购买第一步  顯示票券信息
      */
-    fun getTcBuyStep1(goodsList: List<BuyGoodsDTO>, goodsType: Int = 0, remark: String? = null){ //顯示票券信息
+    fun getTcBuyStep1(goodsList: List<BuyGoodsDTO>, goodsType: Int = 0, remark: String? = this.remark){ //顯示票券信息
         //clientType 请求的客户端类型：android,ios,wap,wechat,web
         //goodsList  goodsId	商品ID  goodsNum	商品數量
         //goodsType  商品類型：0->商品券，1->自定義表單，2->個人比賽，3->個人比賽
@@ -231,7 +243,8 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
 
     fun loadMpay(p:Map<String,Any?>?=null) {
         val params =p?:buyStep2Vo.value?.orderId?.let {
-            mapOf("clientType" to "android","orderId" to it)
+            currOrderId =it
+            mapOf("clientType" to "android","orderId" to currOrderId)
         }
         Hawk.put(SPField.FROM_COUPON_MPAY,true)
         launch(stateLiveData, {
@@ -279,5 +292,6 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
             SLog.info("支付回调通知成功")
         })
     }
+
 
 }

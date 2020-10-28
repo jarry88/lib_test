@@ -10,6 +10,7 @@ import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.twant.R
 import com.ftofs.twant.BR
 import com.ftofs.twant.coupon_store.CouponOrderListFragment
+import com.ftofs.twant.coupon_store.CouponPayResultFragment
 import com.ftofs.twant.databinding.CouponListItemWighetBinding
 import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.databinding.SearchSuggestionItemBinding
@@ -64,9 +65,11 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
 
     override fun initData() {
         binding.button1.apply {
-            text="api_test"
+            text="result"
             setOnClickListener {
                 viewModel.getData()
+                com.ftofs.twant.util.Util.startFragment(CouponPayResultFragment.newInstance(3962,success = false))
+
             }
         }
         binding.button2.apply {
@@ -74,7 +77,10 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
             setOnClickListener {
                 ToastUtil.success(context,"打开")
                 KLog.init(true)
+                com.ftofs.twant.util.Util.startFragment(CouponPayResultFragment.newInstance(3962,success = true))
+
             }
+
         }
         binding.button3.apply{
             text="下拉彈窗"

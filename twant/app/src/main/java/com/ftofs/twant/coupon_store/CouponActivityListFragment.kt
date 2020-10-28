@@ -16,6 +16,7 @@ import com.ftofs.twant.R
 import com.ftofs.twant.BR
 import com.ftofs.twant.databinding.CouponActivityListFragmentBinding
 import com.ftofs.twant.databinding.CouponStoreItemBinding
+import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
 import com.google.android.material.tabs.TabLayout
@@ -50,6 +51,7 @@ class CouponActivityListFragment: BaseTwantFragmentMVVM<CouponActivityListFragme
             mBinding.refreshLayout.autoRefresh()
         }
         binding.tabLayout.apply {
+            setVisibleOrGone(false)
             setSelectedTabIndicatorColor(resources.getColor(R.color.tw_blue))
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
