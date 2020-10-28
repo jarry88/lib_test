@@ -1126,23 +1126,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             TextView textView = view.findViewById(R.id.tv_message);
             if (textView != null) {
                 ClipboardUtils.copyText(_mActivity, textView.getText());
-
-                new XPopup.Builder(_mActivity)
-//                         .dismissOnTouchOutside(false)
-                        // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                        .asCustom(new TwConfirmPopup(_mActivity, "内容已複製","", new OnConfirmCallback() {
-                            @Override
-                            public void onYes() {
-                                SLog.info("onYes");
-                            }
-
-                            @Override
-                            public void onNo() {
-                                SLog.info("onNo");
-                            }
-                        }))
-                        .show();
+                ToastUtil.success(_mContext,"内容已複製");
             }
             //暫時屏蔽刪除操作
 //            if (id == R.id.ll_container) {
