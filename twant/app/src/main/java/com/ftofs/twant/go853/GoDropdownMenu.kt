@@ -11,6 +11,7 @@ import com.ftofs.twant.R
 import com.ftofs.twant.dsl.*
 import com.gzp.lib_common.utils.SLog
 import com.lxj.xpopup.core.AttachPopupView
+import com.lxj.xpopup.impl.FullScreenPopupView
 import com.lxj.xpopup.util.XPopupUtils
 
 class GoDropdownMenu @JvmOverloads constructor(private val mContext: Context, val stringList:List<String> = listOf(), var selectText:String="",val fullWidth:Boolean=true,val selectCall:(String)->Unit={s -> SLog.info(s)}) : AttachPopupView(mContext) {
@@ -18,8 +19,12 @@ class GoDropdownMenu @JvmOverloads constructor(private val mContext: Context, va
         return R.layout.simple_popup_list
     }
 
+    override fun getMaxWidth()=XPopupUtils.getWindowWidth(mContext)
+
+    override fun getPopupWidth()=maxWidth
     override fun onCreate() {
         super.onCreate()
+        applyFull()
         stringList.takeIf { it.isEmpty() }?.let { dismiss() }
         val rvList =findViewById<RecyclerView>(R.id.rv_list)!!
         rvList.layoutManager=LinearLayoutManager(mContext)
@@ -44,11 +49,4 @@ class GoDropdownMenu @JvmOverloads constructor(private val mContext: Context, va
         }
     }
 
-    override fun getMaxWidth(): Int {
-        return XPopupUtils.getWindowWidth(context)
-    }
-
-//    override fun getPopupWidth(): Int {
-//        return maxWidth
-//    }
 }

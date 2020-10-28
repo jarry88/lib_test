@@ -186,7 +186,7 @@ class GoSearchResultFragment:BaseTwantFragmentMVVM<GoSearchResultListFragmentBin
         val iconView=view.findViewById<ImageView>(R.id.icon_exp)
         drawListView=XPopup.Builder(context).moveUpToKeyboard(false)
                 .hasShadowBg(false)
-                .atView(view)
+                .atView(binding.tabLayout)
                 .setPopupCallback(object : XPopupCallback {
                     override fun onCreated(p0: BasePopupView?) {
 //                                            TODO("Not yet implemented")

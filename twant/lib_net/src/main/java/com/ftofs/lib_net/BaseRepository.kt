@@ -32,7 +32,7 @@ open class BaseRepository() {
             call()
         } catch (e: Exception) {
             // An exception was thrown when calling the API so we're converting this to an IOException
-            Result.Error(IOException(errorMessage, e))
+            Result.Error(IOException("$errorMessage:$e", e))
         }
     }
 
@@ -49,7 +49,10 @@ open class BaseRepository() {
                 }
                 response.code==200 -> {
                     successBlock?.let { it() }
-                    Result.Success(response.run { datas?:data!! })
+                    response.run {
+                        (datas?:data)?.let { Result.Success(it) }
+                                ?:Result.Msg(message?:msg)
+                    }
                 }
                 else -> {
                     Result.Msg(response.msg).apply { SLog.info("網絡庫其他錯誤消息") }

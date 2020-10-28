@@ -136,7 +136,9 @@ interface DemoApiService {
     suspend fun getCouponOrdersList(@QueryMap queryParams: @JvmSuppressWildcards Map<String, Any?>): TwantResponse<CouponOrdersListInfo>
     @GET("orders/{id}")
     suspend fun getCouponOrderDetail(@Path("id") id:Int): TwantResponse<CouponOrderDetailInfo>
-//    @DELETE("orders/{id}")
+    @PUT("orders/cancel/{id}")//取消订单
+    suspend fun putCouponOrderDetail(@Path("id") id:Int): TwantResponse<CouponOrderDetailInfo>
+//    @DELETE("orders/{id}") //删除订单
     @HTTP(method = "DELETE",path = "orders/{id}", hasBody = false)
     suspend fun deleteCouponOrderDetail(@Path("id") id:Int): TwantResponse<CommonInfo>
     //
