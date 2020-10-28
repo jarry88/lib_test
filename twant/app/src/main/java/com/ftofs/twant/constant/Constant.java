@@ -123,6 +123,20 @@ public class Constant {
      */
     public static final int ITEM_TYPE_RECOMMEND_TITLE = 11;
 
+    /**
+     * 團購
+     */
+    public static final int ITEM_TYPE_GROUP = 12;
+
+    /**
+     * 砍價
+     */
+    public static final int ITEM_TYPE_BARGAIN = 13;
+
+    /**
+     * 秒殺
+     */
+    public static final int ITEM_TYPE_SEC_KILL = 14;
 
 
     /**

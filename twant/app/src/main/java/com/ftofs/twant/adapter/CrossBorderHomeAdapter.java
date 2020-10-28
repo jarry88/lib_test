@@ -76,6 +76,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
         addItemType(Constant.ITEM_TYPE_BANNER, R.layout.cross_border_home_banner);
         addItemType(Constant.ITEM_TYPE_HEADER, R.layout.cross_border_home_header);
+        addItemType(Constant.ITEM_TYPE_SEC_KILL, R.layout.cross_border_sec_kill);
+        addItemType(Constant.ITEM_TYPE_BARGAIN, R.layout.cross_border_bargain);
+        addItemType(Constant.ITEM_TYPE_GROUP, R.layout.cross_border_group);
         addItemType(Constant.ITEM_TYPE_FLOOR, R.layout.cross_border_floor_item);
         addItemType(Constant.ITEM_TYPE_BEST_STORE, R.layout.cross_border_best_store);
         addItemType(Constant.ITEM_TYPE_RECOMMEND_TITLE, R.layout.cross_border_recommend_title);
@@ -276,62 +279,62 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             }
             llShoppingZoneContainer.removeAllViews();
             llShoppingZoneContainer.addView(zoneContainer);
-
-
-            // 砍價
-            if (item.bargainGoodsList.size() >= 1) {
-                helper.setGone(R.id.ll_bargain_container, true);
-
-                RecyclerView rvBargainList = helper.getView(R.id.rv_bargain_list);
-                rvBargainList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                CrossBorderActivityGoodsAdapter bargainGoodsAdapter =
-                        new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_BARGAIN, R.layout.cross_border_activity_goods_item, item.bargainGoodsList);
-                bargainGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
-                        SLog.info("____bargainId[%d]", activityGoods.bargainId);
-                        Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId, activityGoods.bargainId));
-                        HashMap<String, Object> analyticsDataMap = new HashMap<>();
-                        UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_BARGAIN, analyticsDataMap);
-                    }
-                });
-                rvBargainList.setAdapter(bargainGoodsAdapter);
-            } else { // 沒數據，則隱藏
-                helper.setGone(R.id.ll_bargain_container, false);
-            }
-
-
-            // 團購
-            if (item.groupGoodsList.size() >= 1) {
-                helper.setGone(R.id.ll_group_container, true);
-
-                RecyclerView rvGroupList = helper.getView(R.id.rv_group_list);
-                rvGroupList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                CrossBorderActivityGoodsAdapter groupGoodsAdapter =
-                        new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_GROUP, R.layout.cross_border_activity_goods_item, item.groupGoodsList);
-                groupGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        CrossBorderActivityGoods activityGoods = item.groupGoodsList.get(position);
-                        Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
-                        HashMap<String, Object> analyticsDataMap = new HashMap<>();
-                        UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_GROUP, analyticsDataMap);
-                    }
-                });
-                rvGroupList.setAdapter(groupGoodsAdapter);
-            } else { // 沒數據，則隱藏
-                helper.setGone(R.id.ll_group_container, false);
-            }
+        } else if (itemType == Constant.ITEM_TYPE_SEC_KILL) { // 秒殺
+            RecyclerView rvSecKillList = helper.getView(R.id.rv_sec_kill_list);
+            rvSecKillList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            CrossBorderActivityGoodsAdapter secKillGoodsAdapter =
+                    new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_SEC_KILL, R.layout.cross_border_activity_goods_item, item.secKillGoodsList);
+            secKillGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    CrossBorderActivityGoods activityGoods = item.secKillGoodsList.get(position);
+                }
+            });
+            rvSecKillList.setAdapter(secKillGoodsAdapter);
+        } else if (itemType == Constant.ITEM_TYPE_BARGAIN) { // 砍價
+            RecyclerView rvBargainList = helper.getView(R.id.rv_bargain_list);
+            rvBargainList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            CrossBorderActivityGoodsAdapter bargainGoodsAdapter =
+                    new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_BARGAIN, R.layout.cross_border_activity_goods_item, item.bargainGoodsList);
+            bargainGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    CrossBorderActivityGoods activityGoods = item.bargainGoodsList.get(position);
+                    SLog.info("____bargainId[%d]", activityGoods.bargainId);
+                    Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId, activityGoods.bargainId));
+                    HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                    UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_BARGAIN, analyticsDataMap);
+                }
+            });
+            rvBargainList.setAdapter(bargainGoodsAdapter);
+        } else if (itemType == Constant.ITEM_TYPE_GROUP) { // 拼團
+            RecyclerView rvGroupList = helper.getView(R.id.rv_group_list);
+            rvGroupList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            CrossBorderActivityGoodsAdapter groupGoodsAdapter =
+                    new CrossBorderActivityGoodsAdapter(context, Constant.PROMOTION_TYPE_GROUP, R.layout.cross_border_activity_goods_item, item.groupGoodsList);
+            groupGoodsAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    CrossBorderActivityGoods activityGoods = item.groupGoodsList.get(position);
+                    Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                    HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                    UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_GROUP, analyticsDataMap);
+                }
+            });
+            rvGroupList.setAdapter(groupGoodsAdapter);
         } else if (itemType == Constant.ITEM_TYPE_FLOOR) { // 樓層
             FloorContainer floorContainer = helper.getView(R.id.floor_container);
             floorContainer.removeAllViews();
 
             ImageView imgFloorBanner = helper.getView(R.id.img_floor_banner);
             String floorType = item.floorType;
+            View btnMore = helper.getView(R.id.btn_more);
+
             if (CrossBorderHomeItem.FLOOR_TYPE_BANNER.equals(floorType)) { // Banner圖類型
                 imgFloorBanner.setVisibility(View.VISIBLE);
                 floorContainer.setVisibility(View.GONE);
+                btnMore.setVisibility(View.VISIBLE);
+
                 helper.setText(R.id.tv_title, item.floorHeadline)
                         .setText(R.id.tv_sub_title, item.floorSubhead);
                 if (item.floorItemList != null && item.floorItemList.size() > 0) {
@@ -343,10 +346,19 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                             Util.handleClickLink(floorItem.linkType, floorItem.linkValue, true);
                         }
                     });
+
+                    btnMore.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Util.handleClickLink(floorItem.linkType, floorItem.linkValue, true);
+                        }
+                    });
                 }
             } else { // 圖片類型
                 imgFloorBanner.setVisibility(View.GONE);
                 floorContainer.setVisibility(View.VISIBLE);
+                helper.setGone(R.id.btn_more, false);
+
 
                 for (int i = 0; i < item.floorItemList.size(); i++) {
                     FloorItem floorItem = item.floorItemList.get(i);

@@ -231,7 +231,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="原裝進口"
+            android:text="真實信息"
             android:textSize="12sp"
             android:textColor="@android:color/white">
         </TextView>
@@ -240,7 +240,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="假一罰十"
+            android:text="真實交易"
             android:textSize="12sp"
             android:textColor="@android:color/white">
         </TextView>
@@ -249,7 +249,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="包郵包稅"
+            android:text="真實社交"
             android:textSize="12sp"
             android:textColor="@android:color/white">
         </TextView>

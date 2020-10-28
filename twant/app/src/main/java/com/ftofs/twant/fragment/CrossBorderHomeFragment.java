@@ -68,6 +68,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
     int navItemCount;
     List<CrossBorderNavPane> navPaneList;
     List<CrossBorderShoppingZoneItem> shoppingZoneList;
+    long secKillCountDown; // 秒殺活動倒計時
+    List<CrossBorderActivityGoods> secKillGoodsList;
     List<CrossBorderActivityGoods> bargainGoodsList;
     List<CrossBorderActivityGoods> groupGoodsList;
     List<CrossBorderFloor> floorList;
@@ -84,6 +86,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                                                       int navItemCount,
                                                       List<CrossBorderNavPane> navPaneList,
                                                       List<CrossBorderShoppingZoneItem> shoppingZoneList,
+                                                      long secKillCountDown,
+                                                      List<CrossBorderActivityGoods> secKillGoodsList,
                                                       List<CrossBorderActivityGoods> bargainGoodsList,
                                                       List<CrossBorderActivityGoods> groupGoodsList,
                                                       List<CrossBorderFloor> floorList,
@@ -97,6 +101,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         fragment.navItemCount = navItemCount;
         fragment.navPaneList = navPaneList;
         fragment.shoppingZoneList = shoppingZoneList;
+        fragment.secKillCountDown = secKillCountDown;
+        fragment.secKillGoodsList = secKillGoodsList;
         fragment.bargainGoodsList = bargainGoodsList;
         fragment.groupGoodsList = groupGoodsList;
         fragment.floorList = floorList;
@@ -139,10 +145,37 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         header.navItemCount = navItemCount;
         header.navPaneList = navPaneList;
         header.shoppingZoneList = shoppingZoneList;
-        header.bargainGoodsList = bargainGoodsList;
         header.groupGoodsList = groupGoodsList;
         header.itemType = Constant.ITEM_TYPE_HEADER;
         crossBorderHomeItemList.add(header);
+
+        // 組裝秒殺數據
+        if (secKillGoodsList != null && secKillGoodsList.size() > 0) {
+            CrossBorderHomeItem secKill = new CrossBorderHomeItem();
+            secKill.secKillCountDown = secKillCountDown;
+            secKill.secKillGoodsList = secKillGoodsList;
+            secKill.itemType = Constant.ITEM_TYPE_SEC_KILL;
+
+            crossBorderHomeItemList.add(secKill);
+        }
+
+        // 組裝砍價數據
+        if (bargainGoodsList != null && bargainGoodsList.size() > 0) {
+            CrossBorderHomeItem bargain = new CrossBorderHomeItem();
+            bargain.bargainGoodsList = bargainGoodsList;
+            bargain.itemType = Constant.ITEM_TYPE_BARGAIN;
+
+            crossBorderHomeItemList.add(bargain);
+        }
+
+        // 組裝拼團數據
+        if (groupGoodsList != null && groupGoodsList.size() > 0) {
+            CrossBorderHomeItem group = new CrossBorderHomeItem();
+            group.groupGoodsList = groupGoodsList;
+            group.itemType = Constant.ITEM_TYPE_GROUP;
+
+            crossBorderHomeItemList.add(group);
+        }
 
         // 組裝樓層數據
         for (CrossBorderFloor crossBorderFloor : floorList) {
