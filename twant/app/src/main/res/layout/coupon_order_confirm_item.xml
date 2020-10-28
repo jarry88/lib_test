@@ -66,7 +66,7 @@
                 android:textSize="13sp"
                 android:minLines="2"
                 android:hint="給商家留言，100字以內（選填）"
-                android:background="@drawable/seller_edit_text_bg" />
+                android:background="#F7F7F7" />
 
             <View
                 android:layout_width="match_parent"

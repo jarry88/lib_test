@@ -30,6 +30,9 @@ class ShopCouponStoreListFragment:BaseTwantFragmentMVVM<ShopCouponStoreListFragm
         return BR.viewModel
     }
 
+    override fun onBackPressedSupport(): Boolean {
+        return shopActivityFragment?.onBackPressedSupport()?:super.onBackPressedSupport()
+    }
     val mAdapter by lazy { object :DataBoundAdapter<CouponItemVo, CouponStoreItemBinding> (){
         override val layoutId: Int
             get() = R.layout.coupon_store_item

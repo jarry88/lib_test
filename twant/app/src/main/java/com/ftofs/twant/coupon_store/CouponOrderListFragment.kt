@@ -20,19 +20,22 @@ import com.ftofs.twant.api.Api
 import com.ftofs.twant.api.UICallback
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.EBMessageType
+import com.ftofs.twant.constant.OrderOperation
 import com.ftofs.twant.databinding.CouponOrderListFragmentBinding
 import com.ftofs.twant.databinding.CouponOrderListItemBinding
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.dsl.customer.toMopString
 import com.ftofs.twant.entity.EBMessage
+import com.ftofs.twant.interfaces.OnConfirmCallback
 import com.ftofs.twant.kotlin.extension.dp2IntPx
 import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.Util
+import com.ftofs.twant.widget.TwConfirmPopup
 import com.google.android.material.tabs.TabLayout
 import com.gzp.lib_common.base.BaseTwantFragmentMVVM
 import com.gzp.lib_common.utils.SLog
-import com.hyphenate.chat.EMMessage
+import com.lxj.xpopup.XPopup
 import com.macau.pay.sdk.MPaySdk
 import com.wzq.mvvmsmart.event.StateLiveData
 import okhttp3.Call
@@ -69,10 +72,10 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                     showResultFragment()
 
                 } else {
-                    showResult =true
+                    showResult = true
                 }
             }
-            EBMessageType.COUPON_CANCEL_SHOW_RESULT_SUCCESS -> showResult=false
+            EBMessageType.COUPON_CANCEL_SHOW_RESULT_SUCCESS -> showResult = false
             EBMessageType.MESSAGE_TYPE_COUPON_MPAY_OTHER -> {
                 if (isSupportVisible) {
                     SLog.info("支付失败")
@@ -84,7 +87,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
     }
 
     private fun showResultFragment() {
-        EBMessage.postMessage(EBMessageType.COUPON_CANCEL_SHOW_RESULT_SUCCESS,null)
+        EBMessage.postMessage(EBMessageType.COUPON_CANCEL_SHOW_RESULT_SUCCESS, null)
         Util.startFragment(CouponPayResultFragment.newInstance(
                 viewModel.currOrderId //Hawk.get(SPField.FIELD_MPAY_PAY_ID)
                 , true)).apply { SLog.info("由 ${this.javaClass.name}拉起") }
@@ -196,35 +199,8 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                 b.btnCancel.setVisibleOrGone(d.orderStatus?.let { it == 10 } ?: false)
                 b.btnCancel.setOnClickListener {
 //                    viewModel.deleteCouponOrderDetail(it.id)
-                    var url="/orders/${d.id}"
-                    if (Config.PROD) {
-                        url = Config.getBaseApi().replace("/api", "/tc") + url
-                    } else {
-                        url = "http://192.168.5.32:8100/tc$url"
-                    }
-                    Api.deleteUI(url, null, object : UICallback() {
-                        override fun onFailure(call: Call, e: IOException) {
-                            ToastUtil.showNetworkError(_mActivity, e)
-                        }
-                        @Throws(IOException::class)
-                        override fun onResponse(call: Call, responseStr: String) {
-                            SLog.info("responseStr[%s]", responseStr)
-                            val responseObj = EasyJSONObject.parse<EasyJSONObject>(responseStr)
-                            try {
-                                if (responseObj.exists("code")) {
-                                    val code = responseObj.getInt("code")
-                                    ToastUtil.success(_mActivity, responseObj.getSafeString("msg"))
-                                    if (code == 200) {
-                                        binding.smartList.autoRefresh()
-                                        SLog.info("删除成功")
-                                        return
-                                    }
-                                }
-                            } catch (e: Exception) {
-                                SLog.info("Error!message[%s], trace[%s]", e.message, Log.getStackTraceString(e))
-                            }
-                        }
-                    })
+                    cancelOrder(d.id)
+
                 }
                 b.btnGotoPay.setOnClickListener {
                     viewModel.currOrderId=d.id
@@ -234,10 +210,12 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                 b.root.setOnClickListener {
                     when (it.id) {
                         R.id.btn_goto_pay -> Util.startFragment(CouponConfirmOrderFragment.newInstance(d.id))
-                        R.id.btnCancel -> viewModel.deleteCouponOrderDetail(it.id)
+                        R.id.btnCancel -> viewModel.putCouponOrderDetail(it.id)
                         else ->Util.startFragment(CouponOrderDetailFragment.newInstance(d.id))
                     }
                 }
+                b.root.setOnLongClickListener { cancelOrder(d.id,true)
+                true}
 //                b.btnGotoRefund.setVisibleOrGone(false) //現階段退款隱藏
 //                b.btnGotoRefund.setVisibleOrGone(d.orderStatus?.let { it==20 }?:false)
             }
@@ -362,6 +340,32 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
         binding.btnMoreCoupon.setOnClickListener { Util.startFragment(CouponActivityListFragment()) }
     }
 
+    private fun cancelOrder(id: Int?,deleteOrCancel:Boolean =false) {
+        var confirmText = "確定要取消訂單嗎?"
+                   if (deleteOrCancel ) {
+                        confirmText = "確定要刪除訂單嗎?"
+                    }
+        XPopup.Builder(_mActivity) //                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+                //                         .autoDismiss(false)
+                .asCustom(TwConfirmPopup(_mActivity, confirmText, null, object : OnConfirmCallback {
+                    override fun onYes() {
+                        SLog.info("onYes")
+                        id?.let {
+                            if (deleteOrCancel)
+                            viewModel.deleteCouponOrderDetail(it)
+                            else
+                            viewModel.putCouponOrderDetail(it)
+                        }
+                    }
+
+                    override fun onNo() {
+                        SLog.info("onNo")
+                    }
+                }))
+                .show()
+    }
+
     companion object{
         @JvmStatic
         fun newInstance()=CouponOrderListFragment().apply{
@@ -384,6 +388,12 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             }
         }
         viewModel.currOrderStatus.observe(this){binding.smartList.autoRefresh().apply { SLog.info("刷新") }}
+        viewModel.error.observe(this){
+            if (!it.isNullOrEmpty()) {
+                ToastUtil.error(context,it)
+                binding.smartList.autoRefresh()
+            }
+        }
     }
     private fun showDrawListView(v: View, selectedTabPosition: Int) {
         ToastUtil.success(context, "$selectedTabPosition")

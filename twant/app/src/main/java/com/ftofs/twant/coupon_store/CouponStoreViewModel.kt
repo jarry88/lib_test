@@ -77,7 +77,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
                             SLog.info("----------Start----------------")
                             SLog.info("| ${request.headers()}")
                             SLog.info("| ${request.url()}")
-                            SLog.info("| ${request.body()}")
+                            SLog.info("| ${request.body().toString()}")
                             val method = request.method()
                             if ("POST" == method) {
                                 val sb = StringBuilder()
@@ -166,7 +166,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         )
     }
     /**
-     * 獲取優惠券訂單詳情
+     * 删除優惠券訂單詳情
      */
     fun deleteCouponOrderDetail(orderId: Int){
         launch(stateLiveData,
@@ -174,6 +174,23 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
                 {
                     stateLiveData.postIdle().apply { SLog.info("删除成功") }
                 },
+        )
+    }
+    /**
+     * 取消優惠券訂單詳情
+     */
+    fun putCouponOrderDetail(orderId: Int){
+        launch(stateLiveData,
+                { repository.run { simpleGet(finalApi.putCouponOrderDetail(orderId)).apply { SLog.info(orderId.toString()) } } },
+                {
+                    stateLiveData.postIdle().apply { SLog.info("取消成功") }
+                },
+                others = {
+                    it?.let {
+                        if("SUCCESS"==it) error.postValue("取消成功")
+                        else error.postValue("取消失敗")
+                    }
+                }
         )
     }
     /**

@@ -33,7 +33,6 @@ class CouponActivityListFragment: BaseTwantFragmentMVVM<CouponActivityListFragme
     var firstTabSelected=true
 
     var type =""
-
     override fun initData() {
         binding.title.apply {
             setLeftImageResource(R.drawable.icon_back)
@@ -115,7 +114,7 @@ class CouponActivityListFragment: BaseTwantFragmentMVVM<CouponActivityListFragme
 
     override fun initViewObservable() {
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
-            binding
+            binding.smartList.endLoadingUi()
         }
     }
     private fun showDrawListView(v: View, selectedTabPosition: Int) {
