@@ -138,6 +138,16 @@ public class Constant {
      */
     public static final int ITEM_TYPE_SEC_KILL = 14;
 
+    /**
+     * 文本類型的跑馬燈
+     */
+    public static final int ITEM_TYPE_MARQUEE_TEXT = 15;
+
+    /**
+     * SLOGAN類型的跑馬燈
+     */
+    public static final int ITEM_TYPE_MARQUEE_SLOGAN = 16;
+
 
     /**
      * 數字定義

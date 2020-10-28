@@ -19,7 +19,7 @@ import com.gzp.lib_common.utils.SLog;
 public class FloorContainer extends ViewGroup {
     public static final int SPAN_COUNT = 2; // 每行2列
     public static final int HORIZONTAL_MARGIN_DP = 11; // 圖片間的水平間距(dp)
-    public static final int VERTICAL_MARGIN_DP = 8; // 圖片間的垂直間距(dp)
+    public static final int VERTICAL_MARGIN_DP = 10; // 圖片間的垂直間距(dp)
     int horizontalMarginPx = 0;
     int verticalMarginPx = 0;
     int itemWidth = 0; // 每一项的宽度
@@ -53,7 +53,6 @@ public class FloorContainer extends ViewGroup {
         SLog.info("childCount[%d]", childCount);
         for (int i = 0; i < childCount; i++) {
             ImageView childView = (ImageView) getChildAt(i);
-            childView.setBackgroundColor(Color.BLACK);
             FloorItem item = (FloorItem) childView.getTag(R.id.key_meta_data);
 
             // 计算图片显示的高度
@@ -61,9 +60,17 @@ public class FloorContainer extends ViewGroup {
             SLog.info("itemHeight[%d]", itemHeight);
 
             if (leftHeight <= rightHeight) {
-                leftHeight = leftHeight + itemHeight + verticalMarginPx;
+                if (leftHeight == 0) {
+                    leftHeight = itemHeight;
+                } else {
+                    leftHeight = leftHeight + verticalMarginPx + itemHeight;
+                }
             } else {
-                rightHeight = rightHeight + itemHeight + verticalMarginPx;
+                if (rightHeight == 0) {
+                    rightHeight = itemHeight;
+                } else {
+                    rightHeight = rightHeight + verticalMarginPx + itemHeight;
+                }
             }
         }
         int finalHeight = Math.max(leftHeight, rightHeight);
@@ -92,12 +99,19 @@ public class FloorContainer extends ViewGroup {
             int itemHeight = itemWidth * item.imageHeight / item.imageWidth;
             SLog.info("itemHeight[%d]", itemHeight);
 
+            int top = 0;
             if (leftHeight <= rightHeight) {
-                childView.layout(0, leftHeight, itemWidth, leftHeight + itemHeight);
-                leftHeight = leftHeight + itemHeight + verticalMarginPx;
+                if (leftHeight != 0) {
+                    top = leftHeight + verticalMarginPx;
+                }
+                childView.layout(0, top, itemWidth, top + itemHeight);
+                leftHeight = top + itemHeight;
             } else {
-                childView.layout(itemWidth + horizontalMarginPx, rightHeight, 2 * itemWidth + horizontalMarginPx, rightHeight + itemHeight);
-                rightHeight = rightHeight + itemHeight + verticalMarginPx;
+                if (rightHeight != 0) {
+                    top = rightHeight + verticalMarginPx;
+                }
+                childView.layout(itemWidth + horizontalMarginPx, top, 2 * itemWidth + horizontalMarginPx, top + itemHeight);
+                rightHeight = top + itemHeight;
             }
         }
     }
