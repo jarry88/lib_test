@@ -105,8 +105,9 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
         //此处已经按身份区分并返回头像
         String avatarUrl = chatConversation.friendInfo.getRoleAvatar();
-
-        helper.setGone(R.id.img_role_logo, chatConversation.friendInfo.role!=0);
+        if (helper.getView(R.id.img_role_logo) != null) {
+            helper.setGone(R.id.img_role_logo, chatConversation.friendInfo.role!=0);
+        }
         if (StringUtil.isEmpty(avatarUrl)) {
             if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
                 Glide.with(mContext).load(R.drawable.icon_twant_loge).centerCrop().into(imgAvatar);

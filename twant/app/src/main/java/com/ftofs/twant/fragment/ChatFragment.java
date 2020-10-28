@@ -1117,63 +1117,52 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
-                }else if (id == R.id.ll_text_container) {
-                    ChatMessage chatMessage = chatMessageList.get(position);
-
-                    try {
-                        String memberName = chatMessage.fromMemberName;
-                        start(ENameCardFragment.newInstance(memberName));
-                    } catch (Exception e) {
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                    }
                 }
             }
         });
         chatMessageAdapter.setOnItemChildLongClickListener((adapter, view, position) -> {
             SLog.info("onItemChildLongClick");
             int id = view.getId();
-            if (id == R.id.ll_txt_container) {
-                TextView textView = view.findViewById(R.id.tv_message);
-                if (textView != null) {
+            TextView textView = view.findViewById(R.id.tv_message);
+            if (textView != null) {
+                ClipboardUtils.copyText(_mActivity, textView.getText());
 
-                    ClipboardUtils.copyText(_mActivity, textView.getText());
-
-                    new XPopup.Builder(_mActivity)
+                new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
-                            // 设置弹窗显示和隐藏的回调监听
+                        // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                            .asCustom(new TwConfirmPopup(_mActivity, "内容已複製","", new OnConfirmCallback() {
-                                @Override
-                                public void onYes() {
-                                    SLog.info("onYes");
-                                }
+                        .asCustom(new TwConfirmPopup(_mActivity, "内容已複製","", new OnConfirmCallback() {
+                            @Override
+                            public void onYes() {
+                                SLog.info("onYes");
+                            }
 
-                                @Override
-                                public void onNo() {
-                                    SLog.info("onNo");
-                                }
-                            }))
-                            .show();
-                }
-
-            } else {
-
-                ChatMessage chatMessage = chatMessageList.get(position);
-                String messageId = chatMessage.messageId;
-                new XPopup.Builder(getContext())
-//                        .maxWidth(600)
-                        .asCenterList("請選擇操作", new String[]{"刪除"},
-                                new OnSelectListener() {
-                                    @Override
-                                    public void onSelect(int position, String text) {
-                                        SLog.info("position[%d], text[%s]", position, text);
-                                        if (position == 0) {
-                                            showDeleteMessageConfirm(position, messageId);
-                                        }
-                                    }
-                                })
+                            @Override
+                            public void onNo() {
+                                SLog.info("onNo");
+                            }
+                        }))
                         .show();
             }
+            //暫時屏蔽刪除操作
+//            if (id == R.id.ll_container) {
+//            } else {
+//                ChatMessage chatMessage = chatMessageList.get(position);
+//                String messageId = chatMessage.messageId;
+//                new XPopup.Builder(getContext())
+////                        .maxWidth(600)
+//                        .asCenterList("請選擇操作", new String[]{"刪除"},
+//                                new OnSelectListener() {
+//                                    @Override
+//                                    public void onSelect(int position, String text) {
+//                                        SLog.info("position[%d], text[%s]", position, text);
+//                                        if (position == 0) {
+//                                            showDeleteMessageConfirm(position, messageId);
+//                                        }
+//                                    }
+//                                })
+//                        .show();
+//            }
             return false;
         });
 

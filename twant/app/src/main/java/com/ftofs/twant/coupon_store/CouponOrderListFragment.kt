@@ -227,6 +227,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                     })
                 }
                 b.btnGotoPay.setOnClickListener {
+                    viewModel.currOrderId=d.id
                     viewModel.loadMpay(mapOf("clientType" to "android", "orderId" to d.id))
                 }
                 b.btnGotoPay.setVisibleOrGone(d.orderStatus?.let { it == 10 } ?: false)

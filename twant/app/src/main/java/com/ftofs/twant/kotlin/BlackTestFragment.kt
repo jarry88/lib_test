@@ -68,7 +68,7 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
             text="result"
             setOnClickListener {
                 viewModel.getData()
-                com.ftofs.twant.util.Util.startFragment(CouponPayResultFragment.newInstance(3962,success = false))
+                com.ftofs.twant.util.Util.startFragment(CouponPayResultFragment.newInstance(3976,success = false))
 
             }
         }
@@ -77,7 +77,7 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
             setOnClickListener {
                 ToastUtil.success(context,"打开")
                 KLog.init(true)
-                com.ftofs.twant.util.Util.startFragment(CouponPayResultFragment.newInstance(3962,success = true))
+                com.ftofs.twant.util.Util.startFragment(CouponPayResultFragment.newInstance(3976,success = true))
 
             }
 

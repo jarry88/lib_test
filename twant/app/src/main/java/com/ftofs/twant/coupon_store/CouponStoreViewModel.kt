@@ -138,6 +138,11 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
                 { repository.run { simpleGet(finalApi.getTcBuyStep2(params.apply { SLog.info(this.toString()) })) } },
                 {
                     buyStep2Vo.postValue(it).apply { SLog.info("buystep  返回值: ${it}") }
+                },
+                others = {
+                    it?.let {
+                        error.postValue(it)
+                    }
                 }
 
         )
@@ -245,9 +250,11 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     }
 
     fun loadMpay(p:Map<String,Any?>?=null) {
+
         val params =p?:buyStep2Vo.value?.orderId?.let {
             currOrderId =it
-            mapOf("clientType" to "android","orderId" to currOrderId)
+            factoryParams("clientType","android",
+                    "orderId",currOrderId)
         }
         Hawk.put(SPField.FROM_COUPON_MPAY,true)
         launch(stateLiveData, {

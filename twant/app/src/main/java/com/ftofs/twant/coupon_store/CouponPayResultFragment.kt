@@ -152,15 +152,9 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                     //添加code码
                 invalidate()
             }
-            binding.dashLine.apply {
-                layoutParams =layoutParams.apply {
-                    width=binding.llContainer.width.dp -36.dp }
-            }
-            binding.viewBg.apply {
+            binding.llContainer.apply {
                 setBackgroundResource(R.drawable.code_bg)
-
-                layoutParams =layoutParams.apply {
-                    height=binding.llContainer.height.dp.apply { SLog.info(this.toString()) } }
+                setPadding(0,0,0,0)
             }
 //            binding.llContainer.setBackgroundResource(R.drawable.code_bg)
         }
