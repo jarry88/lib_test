@@ -258,6 +258,25 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
                 shoppingZoneList.add(shoppingZoneItem);
             }
 
+            // 獲取秒殺數據
+            long secKillCountDown = responseObj.optLong("datas.secKillCountDown");
+            List<CrossBorderActivityGoods> secKillGoodsList = new ArrayList<>();
+            EasyJSONArray secKillGoodsArray = responseObj.getSafeArray("datas.secKillGoodsList");
+            for (Object object : secKillGoodsArray) {
+                EasyJSONObject secKillGoodsObject = (EasyJSONObject) object;
+
+                CrossBorderActivityGoods secKillGoods = new CrossBorderActivityGoods(
+                        Constant.PROMOTION_TYPE_SEC_KILL,
+                        secKillGoodsObject.optInt("goodsId"),
+                        secKillGoodsObject.optInt("commonId"),
+                        secKillGoodsObject.optString("imageSrc"),
+                        secKillGoodsObject.optString("goodsName"),
+                        secKillGoodsObject.optDouble("bottomPrice")
+                );
+
+                secKillGoodsList.add(secKillGoods);
+            }
+
             // 獲取砍價數據
             List<CrossBorderActivityGoods> bargainGoodsList = new ArrayList<>();
             EasyJSONArray bargainGoodsArray = responseObj.getSafeArray("datas.bargainGoodsList");
@@ -325,7 +344,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             }
 
             titleList.add("首頁");
-            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, homeDefaultColorStr, navItemCount, navPaneList, shoppingZoneList, bargainGoodsList,
+            fragmentList.add(CrossBorderHomeFragment.newInstance(bannerItemList, homeDefaultColorStr, navItemCount, navPaneList, shoppingZoneList, secKillCountDown, secKillGoodsList, bargainGoodsList,
                     groupGoodsList, floorList, storeList));
             categoryList.add(new CrossBorderCategoryItem(0, "首頁", homeDefaultColorStr));
 
@@ -452,7 +471,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     private void loadData() {
         String apiUrl = Api.PATH_TARIFF_BUY_INDEX;
         if (BuildConfig.DEBUG) {
-            apiUrl = "https://gogo.so/tmp/1.json";
+            apiUrl = "https://gogo.so/tmp/2.json";
         }
         String url = apiUrl;
 

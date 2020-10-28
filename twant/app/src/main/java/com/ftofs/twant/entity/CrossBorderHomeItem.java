@@ -19,7 +19,15 @@ public class CrossBorderHomeItem implements MultiItemEntity {
     public int navItemCount;
     public List<CrossBorderNavPane> navPaneList;
     public List<CrossBorderShoppingZoneItem> shoppingZoneList; // 購物專場
+
+    // 秒殺用到以下數據
+    public long secKillCountDown;
+    public List<CrossBorderActivityGoods> secKillGoodsList; // 秒殺
+
+    // 砍價用到以下數據
     public List<CrossBorderActivityGoods> bargainGoodsList; // 砍價
+
+    // 拼團用到以下數據
     public List<CrossBorderActivityGoods> groupGoodsList; // 拼團
 
     // 樓層用到以下數據
