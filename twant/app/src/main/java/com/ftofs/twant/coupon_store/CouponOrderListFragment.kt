@@ -2,7 +2,6 @@ package com.ftofs.twant.coupon_store
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +9,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.map
-import cn.snailpad.easyjson.EasyJSONObject
 import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.CouponOrderBase
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.activity.MainActivity
-import com.ftofs.twant.api.Api
-import com.ftofs.twant.api.UICallback
-import com.ftofs.twant.config.Config
+import com.ftofs.twant.appserver.AppServiceImpl.Companion.getCaptureIntent
 import com.ftofs.twant.constant.EBMessageType
-import com.ftofs.twant.constant.OrderOperation
 import com.ftofs.twant.databinding.CouponOrderListFragmentBinding
 import com.ftofs.twant.databinding.CouponOrderListItemBinding
 import com.ftofs.twant.dsl.*
@@ -38,11 +33,9 @@ import com.gzp.lib_common.utils.SLog
 import com.lxj.xpopup.XPopup
 import com.macau.pay.sdk.MPaySdk
 import com.wzq.mvvmsmart.event.StateLiveData
-import okhttp3.Call
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.io.IOException
 
 
 class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBinding, CouponStoreViewModel>(){
@@ -214,7 +207,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                         else ->Util.startFragment(CouponOrderDetailFragment.newInstance(d.id))
                     }
                 }
-                b.root.setOnLongClickListener { cancelOrder(d.id,true)
+                b.root.setOnLongClickListener { cancelOrder(d.id, true)
                 true}
 //                b.btnGotoRefund.setVisibleOrGone(false) //現階段退款隱藏
 //                b.btnGotoRefund.setVisibleOrGone(d.orderStatus?.let { it==20 }?:false)
@@ -340,7 +333,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
         binding.btnMoreCoupon.setOnClickListener { Util.startFragment(CouponActivityListFragment()) }
     }
 
-    private fun cancelOrder(id: Int?,deleteOrCancel:Boolean =false) {
+    private fun cancelOrder(id: Int?, deleteOrCancel: Boolean = false) {
         var confirmText = "確定要取消訂單嗎?"
                    if (deleteOrCancel ) {
                         confirmText = "確定要刪除訂單嗎?"
@@ -353,9 +346,9 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                         SLog.info("onYes")
                         id?.let {
                             if (deleteOrCancel)
-                            viewModel.deleteCouponOrderDetail(it)
+                                viewModel.deleteCouponOrderDetail(it)
                             else
-                            viewModel.putCouponOrderDetail(it)
+                                viewModel.putCouponOrderDetail(it)
                         }
                     }
 
@@ -390,7 +383,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
         viewModel.currOrderStatus.observe(this){binding.smartList.autoRefresh().apply { SLog.info("刷新") }}
         viewModel.error.observe(this){
             if (!it.isNullOrEmpty()) {
-                ToastUtil.error(context,it)
+                ToastUtil.error(context, it)
                 binding.smartList.autoRefresh()
             }
         }

@@ -86,6 +86,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     TextView tvOrderWaitSendCount;
 
     TextView tvOrderWaitSendInfoCount;
+    Boolean handleVertification = false;
 
 //    @OnClick(R.id.ll_add_goods)
 //    void goAddGoods() {
@@ -423,43 +424,59 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
            if (message.messageType==EBMessageType.MESSAGE_EXCHANGE_CODE ) {
-               String url = "/exchange";
+               String url = "exchange";
                if (Config.PROD) {
-                   url = Config.getBaseApi().replace("/api", "/tc") + url;
+                   url = Config.COUPON_URL + url;
                }else{
-                   url = "http://192.168.5.32:8100/tc" + url;
+                   url = "http://192.168.5.32:8100/tc/" + url;
+               }
+//               return;
+               if (handleVertification) {
+                   SLog.info("請求核銷中");
+                   return;
                }
                EasyJSONObject params = EasyJSONObject.generate("code", message.data.toString());
-               Api.postUI(url, params, new UICallback() {
-                   @Override
-                   public void onFailure(Call call, IOException e) {
+               SLog.info( "url: "+url +"\n" +"params " +params.toString());
+               handleVertification = true;
+               try {
+                   Api.postJsonUi(url, params.toString(), new UICallback() {
+                       @Override
+                       public void onFailure(Call call, IOException e) {
+                           handleVertification = false;
 //                       LogUtil.uploadAppLog(url, params.toString(), "", e.getMessage());
 //                       updateSwitchButton();
-                       ToastUtil.showNetworkError(_mActivity,e);
-                   }
+                           ToastUtil.showNetworkError(_mActivity,e);
+                       }
 
-                   @Override
-                   public void onResponse(Call call, String responseStr) throws IOException {
-                       SLog.info("responseStr[%s]", responseStr);
-                       EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                       try {
-                           if (responseObj.exists("code")) {
+                       @Override
+                       public void onResponse(Call call, String responseStr) throws IOException {
+                           handleVertification = false;
+
+                           SLog.info("responseStr[%s]", responseStr);
+                           EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                           try {
+                               if (responseObj.exists("code")) {
 //                           LogUtil.uploadAppLog(url, params.toString(), responseStr, "");
 //                           updateSwitchButton();
-                               int code = responseObj.getInt("code");
-                               ToastUtil.success(_mActivity, responseObj.getSafeString("msg"));
-                               if (code == 200) {
-                                   SLog.info("核销成功");
-                                   return;
+                                   int code = responseObj.getInt("code");
+                                   if (code == 200) {
+                                       ToastUtil.success(_mActivity, "核销成功");
+                                   } else {
+                                       ToastUtil.success(_mActivity, responseObj.getSafeString("msg"));
+
+                                   }
                                }
+
+
+                           } catch (Exception e) {
+                               SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                            }
-
-
-                       } catch (Exception e) {
-                           SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                        }
-                   }
-               });
+                   });
+               }catch (Exception e) {
+                   handleVertification = false;
+                   SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+               }
            }
 
     }

@@ -265,6 +265,26 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
                 }
         )
     }
+/**
+     * 獲取專場券倉列表
+     */
+    fun postExchange(code:String) {
+        launch(stateLiveData,
+                {
+                    val params = factoryParams(
+                            "code" ,code
+                    )
+                    SLog.info(params.toString())
+                    repository.run { simpleGet(finalApi.postExchange(params)) }
+                },
+                {
+                    SLog.info(it.toString())
+                },
+                others = {
+                    SLog.info(it?:"  -")
+                }
+        )
+    }
 
     fun loadMpay(p:Map<String,Any?>?=null) {
 
