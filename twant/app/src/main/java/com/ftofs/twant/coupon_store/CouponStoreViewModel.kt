@@ -9,6 +9,7 @@ import cn.snailpad.easyjson.EasyJSONObject
 import com.ftofs.lib_net.BaseRepository
 import com.ftofs.lib_net.DemoApiService
 import com.ftofs.lib_net.model.*
+import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.SPField
 import com.ftofs.twant.dsl.*
 import com.ftofs.twant.dsl.customer.factoryParams
@@ -43,59 +44,61 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     var remark :String?=null
     var currOrderId :Int?=null
 
-    val retrofit = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .baseUrl("http://192.168.5.32:8100/tc/")
-            .client(OkHttpClient.Builder()
-                            .addInterceptor() { chain ->
-                                chain.request().run {
-                                    newBuilder()
-                                            .header("Authorization", User.getToken()?:"")
-                                            .header("clientType", "android")
-                                            .method(method(), body())
-                                            .build()
-                                            .let { chain.proceed(it) }
+    private val testApi=factoryApi("http://192.168.5.32:8100/tc/")
+    private val prodApi=factoryApi(Config.getBaseApi().replace("api","tc/"))
+
+    private val finalApi =if(Util.inDev()) testApi else prodApi
+    var currPage =0
+    fun factoryApi(baseUrl: String) =
+        Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .baseUrl(baseUrl)
+                .client(OkHttpClient.Builder()
+                        .addInterceptor() { chain ->
+                            chain.request().run {
+                                newBuilder()
+                                        .header("Authorization", User.getToken()?:"")
+                                        .header("clientType", "android")
+                                        .method(method(), body())
+                                        .build()
+                                        .let { chain.proceed(it) }
+                            }
+                        }
+                        .addInterceptor { chain ->
+                            val request: Request = chain.request()
+                            val startTime = System.currentTimeMillis()
+                            val response: Response = chain.proceed(chain.request())
+                            val endTime = System.currentTimeMillis()
+                            val duration = endTime - startTime
+                            val mediaType = response.body()!!.contentType()
+                            val content = response.body()!!.string()
+                            SLog.info("\n")
+                            SLog.info("----------Start----------------")
+                            SLog.info("| ${request.headers()}")
+                            SLog.info("| ${request.url()}")
+                            SLog.info("| ${request.body()}")
+                            val method = request.method()
+                            if ("POST" == method) {
+                                val sb = StringBuilder()
+                                if (request.body() is FormBody) {
+                                    val body: FormBody? = request.body() as FormBody?
+                                    body?.let {
+                                        for (i in 0 until body.size()) {
+                                            sb.append(body.encodedName(i).toString() + "=" + body.encodedValue(i) + ",")
+                                        }
+                                    }
+                                    sb.delete(sb.length - 1, sb.length)
+                                    SLog.info("| RequestParams:{$sb}")
                                 }
                             }
-                            .addInterceptor { chain ->
-                                val request: Request = chain.request()
-                                val startTime = System.currentTimeMillis()
-                                val response: Response = chain.proceed(chain.request())
-                                val endTime = System.currentTimeMillis()
-                                val duration = endTime - startTime
-                                val mediaType = response.body()!!.contentType()
-                                val content = response.body()!!.string()
-                                SLog.info("\n")
-                                SLog.info("----------Start----------------")
-                                SLog.info("| ${request.headers()}")
-                                SLog.info("| ${request.url()}")
-                                SLog.info("| ${request.body()}")
-                                val method = request.method()
-                                if ("POST" == method) {
-                                    val sb = StringBuilder()
-                                    if (request.body() is FormBody) {
-                                        val body: FormBody? = request.body() as FormBody?
-                                        body?.let {
-                                            for (i in 0 until body.size()) {
-                                                sb.append(body.encodedName(i).toString() + "=" + body.encodedValue(i) + ",")
-                                            }
-                                        }
-                                        sb.delete(sb.length - 1, sb.length)
-                                        SLog.info("| RequestParams:{$sb}")
-                                    }
-                                }
-                                SLog.info("| Response:$content")
-                                SLog.info("----------End:" + duration + "毫秒----------")
-                                response.newBuilder()
-                                        .body(ResponseBody.create(mediaType, content))
-                                        .build()
-                            }.build())
-            .build()
-    private val testApi=retrofit.create(DemoApiService::class.java)
-    private val finalApi =if(Util.inDev()) testApi else repository.api
-    var currPage =0
-
+                            SLog.info("| Response:$content")
+                            SLog.info("----------End:" + duration + "毫秒----------")
+                            response.newBuilder()
+                                    .body(ResponseBody.create(mediaType, content))
+                                    .build()
+                        }.build())
+                .build().create(DemoApiService::class.java)
     /**
      * 购买第一步  顯示票券信息
      */

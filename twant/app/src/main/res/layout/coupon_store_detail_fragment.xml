@@ -151,6 +151,7 @@
                         android:text="@{vo.subTitle}"/>
                 </LinearLayout>
                 <com.ftofs.twant.view.CouponPartInfoView
+                    visibleOrGone="@{vo.consumptionType==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/coupon_information"/>

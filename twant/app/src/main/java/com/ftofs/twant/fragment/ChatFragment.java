@@ -39,6 +39,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
@@ -1116,13 +1117,47 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
+                }else if (id == R.id.ll_text_container) {
+                    ChatMessage chatMessage = chatMessageList.get(position);
+
+                    try {
+                        String memberName = chatMessage.fromMemberName;
+                        start(ENameCardFragment.newInstance(memberName));
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
                 }
             }
         });
-        chatMessageAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
-            @Override
-            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
-                SLog.info("onItemChildLongClick");
+        chatMessageAdapter.setOnItemChildLongClickListener((adapter, view, position) -> {
+            SLog.info("onItemChildLongClick");
+            int id = view.getId();
+            if (id == R.id.ll_txt_container) {
+                TextView textView = view.findViewById(R.id.tv_message);
+                if (textView != null) {
+
+                    ClipboardUtils.copyText(_mActivity, textView.getText());
+
+                    new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                            // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                            .asCustom(new TwConfirmPopup(_mActivity, "内容已複製","", new OnConfirmCallback() {
+                                @Override
+                                public void onYes() {
+                                    SLog.info("onYes");
+                                }
+
+                                @Override
+                                public void onNo() {
+                                    SLog.info("onNo");
+                                }
+                            }))
+                            .show();
+                }
+
+            } else {
+
                 ChatMessage chatMessage = chatMessageList.get(position);
                 String messageId = chatMessage.messageId;
                 new XPopup.Builder(getContext())
@@ -1138,8 +1173,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                                     }
                                 })
                         .show();
-                return false;
             }
+            return false;
         });
 
         rvMessageList.setAdapter(chatMessageAdapter);

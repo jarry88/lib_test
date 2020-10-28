@@ -62,6 +62,7 @@
                     android:id="@+id/store_information"
                     store_vo="@{vo.itemList[0].coupon.store}"/>
                 <com.ftofs.twant.view.CouponPartInfoView
+                    visibleOrGone="@{vo.itemList[0].consumptionType==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/coupon_information"/>
