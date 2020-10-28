@@ -10,7 +10,6 @@
     android:paddingBottom="15dp"
     android:paddingStart="10dp"
     android:paddingEnd="10dp"
-    android:background="@drawable/white_r4dp_bg"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -70,6 +69,7 @@
     </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/floor_banner_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
@@ -90,6 +90,7 @@
     <com.ftofs.twant.widget.FloorContainer
         android:id="@+id/floor_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
     </com.ftofs.twant.widget.FloorContainer>
 </LinearLayout>

@@ -27,14 +27,57 @@
                 android:textStyle="bold"
                 android:textSize="15sp">
             </TextView>
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:text="大家都在秒殺"
-                android:textSize="10sp"
-                android:textColor="@android:color/white">
-            </TextView>
+                android:layout_marginStart="4dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tv_count_down_hour"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:text="00"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_black"
+                    android:background="@drawable/white_r2dp_bg"
+                    android:gravity="center">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textSize="13sp"
+                    android:textColor="@android:color/white">
+                </TextView>
+                <TextView
+                    android:id="@+id/tv_count_down_minute"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:text="00"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_black"
+                    android:background="@drawable/white_r2dp_bg"
+                    android:gravity="center">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textSize="13sp"
+                    android:textColor="@android:color/white">
+                </TextView>
+                <TextView
+                    android:id="@+id/tv_count_down_second"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:text="00"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_black"
+                    android:background="@drawable/white_r2dp_bg"
+                    android:gravity="center">
+                </TextView>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

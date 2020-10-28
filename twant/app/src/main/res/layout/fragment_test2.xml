@@ -93,11 +93,15 @@
                     android:scaleType="fitXY">
                 </ImageView>
             </LinearLayout>
-            <TextView
+            <ImageView
+                android:id="@+id/img_svg"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:background="@drawable/code_bg">
-            </TextView>
+                android:layout_height="300dp"
+                android:scaleType="fitXY"
+                android:background="#ffa"
+                android:src="@drawable/cross_border_home_theme_bg_up"
+                app:tint="@color/cross_border_home_theme_tint">
+            </ImageView>
 
 
         </LinearLayout>
