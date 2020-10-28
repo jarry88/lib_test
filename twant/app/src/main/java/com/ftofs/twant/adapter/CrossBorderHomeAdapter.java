@@ -34,6 +34,7 @@ import com.ftofs.twant.entity.CrossBorderShoppingZoneItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.FloorItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
+import com.ftofs.twant.entity.MarqueeItem;
 import com.ftofs.twant.entity.Store;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -60,6 +61,7 @@ import com.youth.banner.indicator.CircleIndicator;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.listener.OnPageChangeListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -104,6 +106,21 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         if (itemType == Constant.ITEM_TYPE_HEADER) {
             // ImageView drawView = helper.getView(R.id.vw_bottom_bg);
             // drawView.setBackgroundColor(Color.parseColor(homeDefaultColorStr));
+            // 跑馬燈
+            List<MarqueeItem> marqueeItemList = new ArrayList<>();
+            MarqueeItem marqueeItem = new MarqueeItem(Constant.ITEM_TYPE_MARQUEE_TEXT);
+            marqueeItem.text = "1澳门元≈0.85人民币，相当于总价打85折";
+            marqueeItemList.add(marqueeItem);
+
+            marqueeItem = new MarqueeItem(Constant.ITEM_TYPE_MARQUEE_SLOGAN);
+            marqueeItemList.add(marqueeItem);
+
+            RecyclerView rvMarqueeList = helper.getView(R.id.rv_marquee_list);
+            rvMarqueeList.setLayoutManager(new ScrollSpeedLinearLayoutManger(context));
+            MarqueeAdapter adapter = new MarqueeAdapter(context, marqueeItemList);
+            rvMarqueeList.setAdapter(adapter);
+
+
             Banner<CrossBorderBannerItem, BannerImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
             banner.setAdapter(new BannerImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
                 @Override
@@ -134,6 +151,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
                         GradientDrawable gradientDrawable = (GradientDrawable) helper.getView(R.id.ll_cross_border_header_container).getBackground();
                         gradientDrawable.setColors(new int[] {Color.parseColor(currentThemeColor), Util.getColor(R.color.tw_slight_grey)});
+
+                        adapter.currPosition++;
+                        rvMarqueeList.smoothScrollToPosition(adapter.currPosition);
                     }
                 }
 
@@ -150,6 +170,8 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp, true);
                 }
             });
+
+
 
 
             LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -376,6 +398,11 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             helper.setText(R.id.tv_title, item.floorHeadline)
                     .setText(R.id.tv_sub_title, item.floorSubhead);
 
+            helper.setGone(R.id.rl_title_container, true);
+            if (StringUtil.isEmpty(item.floorHeadline) && StringUtil.isEmpty(item.floorSubhead)) {
+                helper.setGone(R.id.rl_title_container, false);
+            }
+
             FloorContainer floorContainer = helper.getView(R.id.floor_container);
             floorContainer.removeAllViews();
 
@@ -405,20 +432,23 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     });
                 }
             } else { // 圖片類型
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
                 helper.setGone(R.id.floor_banner_container, false);  // 隱藏Banner容器
                 floorContainer.setVisibility(View.VISIBLE);
                 btnMore.setVisibility(View.INVISIBLE);
 
                 for (int i = 0; i < item.floorItemList.size(); i++) {
                     FloorItem floorItem = item.floorItemList.get(i);
+
                     RoundedImageView imageView = new RoundedImageView(context);
+                    imageView.setCornerRadiusDimen(R.dimen.dp_4);
                     imageView.setTag(R.id.key_meta_data, floorItem);
-                    Glide.with(context).load(floorItem.imageName).into(imageView);
+                    Glide.with(context).load(floorItem.imageName).centerCrop().into(imageView);
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             FloorItem imageItem = (FloorItem) v.getTag(R.id.key_meta_data);
-                            SLog.info("imageName[%s]", imageItem.imageName);
+                            SLog.info("linkType[%s], linkValue[%s]", imageItem.linkType, imageItem.linkValue);
                             Util.handleClickLink(imageItem.linkType, imageItem.linkValue, true);
                         }
                     });

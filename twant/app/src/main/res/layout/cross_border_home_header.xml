@@ -30,7 +30,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintDimensionRatio="351:154">
+            app:layout_constraintDimensionRatio="351:154"
+            app:banner_radius="4dp">
         </com.youth.banner.Banner>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
@@ -84,8 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:background="@drawable/white_r4dp_bg">
+            android:orientation="vertical">
 
         </LinearLayout>
         <!-- END OF 轉到購物專場 -->
