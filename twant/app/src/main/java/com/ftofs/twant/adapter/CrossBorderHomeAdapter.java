@@ -2,6 +2,7 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -84,7 +85,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         this.countDownMap = new SparseArray<>();
         this.homeDefaultColorStr = homeDefaultColorStr;
 
-        addItemType(Constant.ITEM_TYPE_BANNER, R.layout.cross_border_home_banner);
+        // addItemType(Constant.ITEM_TYPE_BANNER, R.layout.cross_border_home_banner);
         addItemType(Constant.ITEM_TYPE_HEADER, R.layout.cross_border_home_header);
         addItemType(Constant.ITEM_TYPE_SEC_KILL, R.layout.cross_border_sec_kill);
         addItemType(Constant.ITEM_TYPE_BARGAIN, R.layout.cross_border_bargain);
@@ -100,9 +101,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
     protected void convert(@NonNull CountDownTimerViewHolder helper, CrossBorderHomeItem item) {
         int itemType = item.getItemType();
 
-        if (itemType == Constant.ITEM_TYPE_BANNER) {
-            ImageView drawView = helper.getView(R.id.vw_bottom_bg);
-            drawView.setBackgroundColor(Color.parseColor(homeDefaultColorStr));
+        if (itemType == Constant.ITEM_TYPE_HEADER) {
+            // ImageView drawView = helper.getView(R.id.vw_bottom_bg);
+            // drawView.setBackgroundColor(Color.parseColor(homeDefaultColorStr));
             Banner<CrossBorderBannerItem, BannerImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
             banner.setAdapter(new BannerImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
                 @Override
@@ -129,7 +130,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                         currentThemeColor = bannerItem.backgroundColorApp;
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, currentThemeColor);
                         SLog.info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-                        drawView.setBackgroundColor(Color.parseColor(currentThemeColor));
+                        // drawView.setBackgroundColor(Color.parseColor(currentThemeColor));
+
+                        GradientDrawable gradientDrawable = (GradientDrawable) helper.getView(R.id.ll_cross_border_header_container).getBackground();
+                        gradientDrawable.setColors(new int[] {Color.parseColor(currentThemeColor), Util.getColor(R.color.tw_slight_grey)});
                     }
                 }
 
@@ -146,7 +150,8 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     Util.handleClickLink(bannerItem.linkTypeApp, bannerItem.linkValueApp, true);
                 }
             });
-        } else if (itemType == Constant.ITEM_TYPE_HEADER) {
+
+
             LayoutInflater layoutInflater = LayoutInflater.from(context);
 
             // 導航區
@@ -374,8 +379,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             FloorContainer floorContainer = helper.getView(R.id.floor_container);
             floorContainer.removeAllViews();
 
-            RoundedImageView imgFloorBanner = helper.getView(R.id.img_floor_banner);
-            imgFloorBanner.setCornerRadiusDimen(R.dimen.dp_4);
+            ImageView imgFloorBanner = helper.getView(R.id.img_floor_banner);
             String floorType = item.floorType;
             View btnMore = helper.getView(R.id.btn_more);
 
@@ -407,7 +411,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
 
                 for (int i = 0; i < item.floorItemList.size(); i++) {
                     FloorItem floorItem = item.floorItemList.get(i);
-                    ImageView imageView = new ImageView(context);
+                    RoundedImageView imageView = new RoundedImageView(context);
                     imageView.setTag(R.id.key_meta_data, floorItem);
                     Glide.with(context).load(floorItem.imageName).into(imageView);
                     imageView.setOnClickListener(new View.OnClickListener() {

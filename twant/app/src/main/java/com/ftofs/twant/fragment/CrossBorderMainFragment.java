@@ -185,7 +185,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_search, this);
 
         // 先設置默認顏色
-        changeBackgroundColor(Util.getColor(R.color.tw_blue));
+        changeBackgroundColor(Util.getColor(R.color.cross_border_home_default_color));
 
         loadData();
     }
@@ -261,7 +261,10 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             }
 
             // 獲取秒殺數據
-            long secKillCountDown = responseObj.optInt("datas.seckillData.countdown"); // 結束時間
+            long secKillCountDown = responseObj.optLong("datas.seckillData.countdown"); // 結束時間
+            if (BuildConfig.DEBUG) {
+                // secKillCountDown = 1603900797000L;
+            }
             List<CrossBorderActivityGoods> secKillGoodsList = new ArrayList<>();
             EasyJSONArray secKillGoodsArray = responseObj.getSafeArray("datas.seckillData.seckillGoodsCommonVoList");
             for (Object object : secKillGoodsArray) {
@@ -269,8 +272,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
                 CrossBorderActivityGoods secKillGoods = new CrossBorderActivityGoods(
                         Constant.PROMOTION_TYPE_SEC_KILL,
-                        secKillGoodsObject.optInt("seckillGoodsId"),
-                        secKillGoodsObject.optInt("seckillCommonId"),
+                        secKillGoodsObject.optInt("goodsId"),
+                        secKillGoodsObject.optInt("commonId"),
                         secKillGoodsObject.optString("imageName"),
                         secKillGoodsObject.optString("goodsName"),
                         secKillGoodsObject.optDouble("seckillGoodsPrice")

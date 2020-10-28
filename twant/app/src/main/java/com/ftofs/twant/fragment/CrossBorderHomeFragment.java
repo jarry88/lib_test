@@ -135,13 +135,17 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
 
         crossBorderHomeItemList.clear();
         // 組裝banner數據
+        /*
         CrossBorderHomeItem banner = new CrossBorderHomeItem();
         banner.bannerItemList = bannerItemList;
         banner.itemType = Constant.ITEM_TYPE_BANNER;
         crossBorderHomeItemList.add(banner);
 
+         */
+
         // 組裝header數據
         CrossBorderHomeItem header = new CrossBorderHomeItem();
+        header.bannerItemList = bannerItemList;
         header.navItemCount = navItemCount;
         header.navPaneList = navPaneList;
         header.shoppingZoneList = shoppingZoneList;
@@ -266,7 +270,7 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                         completelyVisibleItemPosition, visibleItemPosition, verticalOffset);
                 if (verticalOffset > 0) {
                     Hawk.put(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR, false);
-                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, "#00B0FF");
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, "#FE3D58");
                 } else {
                     Hawk.put(SPField.FIELD_CAN_CHANGE_BACKGROUND_COLOR, true);
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, adapter.currentThemeColor);

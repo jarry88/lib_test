@@ -6,11 +6,8 @@
     android:layout_marginTop="10dp"
     android:layout_marginStart="12dp"
     android:layout_marginEnd="12dp"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/white_r4dp_bg">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -71,8 +68,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/floor_banner_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content">
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/img_floor_banner"
             android:layout_width="0dp"

@@ -229,7 +229,7 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
             if (isCrossBorder) {
                 params.set("tariffEnable", 1);
             }
-            Api.postUI(url, null, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     LogUtil.uploadAppLog(url, "", "", e.getMessage());
