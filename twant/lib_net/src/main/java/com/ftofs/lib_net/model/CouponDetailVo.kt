@@ -70,6 +70,10 @@ data class CouponDetailVo(
             else -> ""
         }
     }?:""
+    fun getLimitBuyString():String = limitBuy.let {
+        if (it) "每人最多可購買$limitBuyNum 張"
+        else "無限制"
+    }
     fun getTypeString():String =consumptionType?.let {//	消費類型：0->抵用券，1->套餐券
         "团"
     }?:""

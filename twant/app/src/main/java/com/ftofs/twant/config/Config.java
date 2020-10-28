@@ -58,6 +58,7 @@ public class Config {
     public static final String BASE_URL_API_F2 = "https://f2.twant.com/api";;
     public static final String BASE_URL_F3 ="https://f3.twant.com";
     public static final String BASE_URL_API_F3 ="https://f3.twant.com/api";
+    public static final String COUPON_URL ="https://coupon.twant.com/";
 
     public static final String BASE_URL_W3 ="https://www.twant.com";
     public static final String BASE_URL_API_W3 ="https://www.twant.com/api";

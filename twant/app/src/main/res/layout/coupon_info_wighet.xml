@@ -187,7 +187,7 @@
                         android:layout_marginTop="2dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{vo.limitBuy?String.valueOf(vo.limitBuyNum):`無限制`}"
+                        android:text="@{vo.limitBuyString}"
                         android:textSize="14sp"
                         android:layout_marginBottom="@dimen/dp_12"
                         android:textColor="@color/tw_black"/>

@@ -45,7 +45,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
     var currOrderId :Int?=null
 
     private val testApi=factoryApi("http://192.168.5.32:8100/tc/")
-    private val prodApi=factoryApi(Config.getBaseApi().replace("api","tc/"))
+    private val prodApi=factoryApi(Config.COUPON_URL)
 
     private val finalApi =if(Util.inDev()) testApi else prodApi
     var currPage =0
