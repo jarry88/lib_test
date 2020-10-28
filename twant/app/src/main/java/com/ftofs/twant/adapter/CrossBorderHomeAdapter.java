@@ -2,6 +2,8 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.CountDownTimer;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -33,18 +34,22 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.FloorItem;
 import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.Store;
+import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.CountDownTimerViewHolder;
 import com.ftofs.twant.widget.CrossBorderDrawView;
 import com.ftofs.twant.widget.FloorContainer;
 import com.ftofs.twant.widget.GridLayout;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.gzp.lib_common.utils.SLog;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.orhanobut.hawk.Hawk;
 import com.rd.PageIndicatorView;
 import com.youth.banner.Banner;
@@ -57,10 +62,14 @@ import com.youth.banner.listener.OnPageChangeListener;
 import java.util.HashMap;
 import java.util.List;
 
-public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorderHomeItem, BaseViewHolder> {
+public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorderHomeItem, CountDownTimerViewHolder> {
     Context context;
     public String currentThemeColor;
     String homeDefaultColorStr;
+
+    // 參考：
+    // Android 用 RecyclerView 实现倒计时列表功能  https://juejin.im/entry/58d36be044d9040069239acd
+    private SparseArray<CountDownTimer> countDownMap;  // 用于退出activity,避免countdown，造成资源浪费。
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -72,6 +81,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         super(data);
 
         this.context = context;
+        this.countDownMap = new SparseArray<>();
         this.homeDefaultColorStr = homeDefaultColorStr;
 
         addItemType(Constant.ITEM_TYPE_BANNER, R.layout.cross_border_home_banner);
@@ -87,12 +97,12 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, CrossBorderHomeItem item) {
+    protected void convert(@NonNull CountDownTimerViewHolder helper, CrossBorderHomeItem item) {
         int itemType = item.getItemType();
 
         if (itemType == Constant.ITEM_TYPE_BANNER) {
-            CrossBorderDrawView drawView = helper.getView(R.id.vw_bottom_bg);
-            drawView.setColor(Color.parseColor(homeDefaultColorStr));
+            ImageView drawView = helper.getView(R.id.vw_bottom_bg);
+            drawView.setBackgroundColor(Color.parseColor(homeDefaultColorStr));
             Banner<CrossBorderBannerItem, BannerImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
             banner.setAdapter(new BannerImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
                 @Override
@@ -119,7 +129,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                         currentThemeColor = bannerItem.backgroundColorApp;
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CROSS_BORDER_HOME_THEME_COLOR, currentThemeColor);
                         SLog.info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-                        drawView.setColor(Color.parseColor(currentThemeColor));
+                        drawView.setBackgroundColor(Color.parseColor(currentThemeColor));
                     }
                 }
 
@@ -138,8 +148,6 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             });
         } else if (itemType == Constant.ITEM_TYPE_HEADER) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
-
-            helper.addOnClickListener(R.id.btn_view_more_bargain, R.id.btn_view_more_group);
 
             // 導航區
             RecyclerView rvNavList = helper.getView(R.id.rv_nav_list);
@@ -280,6 +288,34 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             llShoppingZoneContainer.removeAllViews();
             llShoppingZoneContainer.addView(zoneContainer);
         } else if (itemType == Constant.ITEM_TYPE_SEC_KILL) { // 秒殺
+            TextView tvCountDownHour = helper.getView(R.id.tv_count_down_hour);
+            TextView tvCountDownMinute = helper.getView(R.id.tv_count_down_minute);
+            TextView tvCountDownSecond = helper.getView(R.id.tv_count_down_second);
+            long now = System.currentTimeMillis();
+            long remainTime = item.secKillCountDown - now;
+            SLog.info("secKillCountDown[%s], now[%s], remainTime[%s]", item.secKillCountDown, now, remainTime);
+            if (remainTime > 0) {
+                helper.countDownTimer = new CountDownTimer(remainTime, 100) {
+                    public void onTick(long millisUntilFinished) {
+                        TimeInfo timeInfo = Time.diff((int) (System.currentTimeMillis() / 1000), (int) (item.secKillCountDown / 1000));
+                        if (timeInfo != null) {
+                            tvCountDownHour.setText(String.format("%02d", timeInfo.hour));
+                            tvCountDownMinute.setText(String.format("%02d", timeInfo.minute));
+                            tvCountDownSecond.setText(String.format("%02d", timeInfo.second));
+                        }
+                    }
+                    public void onFinish() {
+                        // 倒計時結束
+                    }
+                }.start();
+
+                countDownMap.put(tvCountDownHour.hashCode(), helper.countDownTimer);
+            }
+
+            // 超過3個才顯示【更多】按鈕
+            helper.setVisible(R.id.btn_view_more_sec_kill, item.secKillGoodsList.size() > 3);
+            helper.addOnClickListener(R.id.btn_view_more_sec_kill);
+
             RecyclerView rvSecKillList = helper.getView(R.id.rv_sec_kill_list);
             rvSecKillList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             CrossBorderActivityGoodsAdapter secKillGoodsAdapter =
@@ -288,10 +324,15 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     CrossBorderActivityGoods activityGoods = item.secKillGoodsList.get(position);
+                    Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
                 }
             });
             rvSecKillList.setAdapter(secKillGoodsAdapter);
         } else if (itemType == Constant.ITEM_TYPE_BARGAIN) { // 砍價
+            // 超過3個才顯示【更多】按鈕
+            helper.setVisible(R.id.btn_view_more_bargain, item.bargainGoodsList.size() > 3);
+            helper.addOnClickListener(R.id.btn_view_more_bargain);
+
             RecyclerView rvBargainList = helper.getView(R.id.rv_bargain_list);
             rvBargainList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             CrossBorderActivityGoodsAdapter bargainGoodsAdapter =
@@ -308,6 +349,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             });
             rvBargainList.setAdapter(bargainGoodsAdapter);
         } else if (itemType == Constant.ITEM_TYPE_GROUP) { // 拼團
+            // 超過3個才顯示【更多】按鈕
+            helper.setVisible(R.id.btn_view_more_group, item.groupGoodsList.size() > 3);
+            helper.addOnClickListener(R.id.btn_view_more_group);
+
             RecyclerView rvGroupList = helper.getView(R.id.rv_group_list);
             rvGroupList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             CrossBorderActivityGoodsAdapter groupGoodsAdapter =
@@ -323,20 +368,21 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             });
             rvGroupList.setAdapter(groupGoodsAdapter);
         } else if (itemType == Constant.ITEM_TYPE_FLOOR) { // 樓層
+            helper.setText(R.id.tv_title, item.floorHeadline)
+                    .setText(R.id.tv_sub_title, item.floorSubhead);
+
             FloorContainer floorContainer = helper.getView(R.id.floor_container);
             floorContainer.removeAllViews();
 
-            ImageView imgFloorBanner = helper.getView(R.id.img_floor_banner);
+            RoundedImageView imgFloorBanner = helper.getView(R.id.img_floor_banner);
+            imgFloorBanner.setCornerRadiusDimen(R.dimen.dp_4);
             String floorType = item.floorType;
             View btnMore = helper.getView(R.id.btn_more);
 
             if (CrossBorderHomeItem.FLOOR_TYPE_BANNER.equals(floorType)) { // Banner圖類型
-                imgFloorBanner.setVisibility(View.VISIBLE);
+                helper.setGone(R.id.floor_banner_container, true); // 顯示Banner容器
                 floorContainer.setVisibility(View.GONE);
                 btnMore.setVisibility(View.VISIBLE);
-
-                helper.setText(R.id.tv_title, item.floorHeadline)
-                        .setText(R.id.tv_sub_title, item.floorSubhead);
                 if (item.floorItemList != null && item.floorItemList.size() > 0) {
                     FloorItem floorItem = item.floorItemList.get(0);
                     Glide.with(context).load(StringUtil.normalizeImageUrl(floorItem.imageName)).centerCrop().into(imgFloorBanner);
@@ -355,10 +401,9 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     });
                 }
             } else { // 圖片類型
-                imgFloorBanner.setVisibility(View.GONE);
+                helper.setGone(R.id.floor_banner_container, false);  // 隱藏Banner容器
                 floorContainer.setVisibility(View.VISIBLE);
-                helper.setGone(R.id.btn_more, false);
-
+                btnMore.setVisibility(View.INVISIBLE);
 
                 for (int i = 0; i < item.floorItemList.size(); i++) {
                     FloorItem floorItem = item.floorItemList.get(i);
@@ -375,7 +420,6 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     });
                     floorContainer.addView(imageView);
                 }
-
             }
         } else if (itemType == Constant.ITEM_TYPE_BEST_STORE) { // 優選好店
             LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -554,20 +598,20 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
     }
 
     @Override
-    public void onViewRecycled(@NonNull BaseViewHolder holder) {
+    public void onViewRecycled(@NonNull CountDownTimerViewHolder holder) {
         super.onViewRecycled(holder);
 
         SLog.info("onViewRecycled, position[%d]", holder.getAdapterPosition());
     }
 
     @Override
-    public void onViewAttachedToWindow(BaseViewHolder holder) {
+    public void onViewAttachedToWindow(CountDownTimerViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         SLog.info("onViewAttachedToWindow, position[%d]", holder.getAdapterPosition());
     }
 
     @Override
-    public void onViewDetachedFromWindow(@NonNull BaseViewHolder holder) {
+    public void onViewDetachedFromWindow(@NonNull CountDownTimerViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         SLog.info("onViewDetachedFromWindow, position[%d]", holder.getAdapterPosition());
     }
@@ -576,5 +620,23 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         HashMap<String, Object> analyticsDataMap = new HashMap<>();
         analyticsDataMap.put("zoneId", zoneId);
         UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_ZONE, analyticsDataMap);
+    }
+
+    /**
+     * 清空资源
+     */
+    public void cancelAllTimers() {
+        if (countDownMap == null) {
+            return;
+        }
+
+
+        SLog.info("size :  " + countDownMap.size());
+        for (int i = 0,length = countDownMap.size(); i < length; i++) {
+            CountDownTimer cdt = countDownMap.get(countDownMap.keyAt(i));
+            if (cdt != null) {
+                cdt.cancel();
+            }
+        }
     }
 }

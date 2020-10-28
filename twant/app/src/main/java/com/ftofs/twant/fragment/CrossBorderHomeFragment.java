@@ -225,7 +225,9 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                 int id = view.getId();
                 CrossBorderHomeItem item = crossBorderHomeItemList.get(position);
 
-                if (id == R.id.btn_view_more_bargain) {
+                if (id == R.id.btn_view_more_sec_kill) {
+                    Util.startFragment(SecKillFragment.newInstance(true));
+                } if (id == R.id.btn_view_more_bargain) {
                     Util.startFragment(BargainListFragment.newInstance(true));
                 } else if (id == R.id.btn_view_more_group) {
                     Util.startFragment(GroupInfoListFragment.newInstance(true));
@@ -286,6 +288,9 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         super.onDestroyView();
 
         UmengAnalytics.onPageEnd(UmengAnalyticsPageName.CROSS_BORDER_HOME_PAGE);
+        if (adapter != null) {
+            adapter.cancelAllTimers();
+        }
     }
 
     private void loadData(int page) {

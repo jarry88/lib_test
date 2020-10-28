@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
@@ -83,14 +85,14 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
-    LinearLayout llAppBar;
-
     View crossBorderCategoryListMask;
     View btnViewMoreCategory;
     String homeDefaultColorStr = "";
 
     int selCategoryMenuIndex = 0; // 當前選中的分類菜單的索引
     LinearLayout llTextRuler;
+
+    ImageView imgThemeBgTop;
 
     public static CrossBorderMainFragment newInstance() {
         CrossBorderMainFragment fragment = new CrossBorderMainFragment();
@@ -114,6 +116,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
         EventBus.getDefault().register(this);
 
+        imgThemeBgTop = view.findViewById(R.id.img_theme_bg_top);
+
         llMoreCategoryMenuContainer = view.findViewById(R.id.ll_more_category_menu_container);
         llLessCategoryMenuContainer = view.findViewById(R.id.ll_less_category_menu_container);
 
@@ -121,8 +125,6 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
         crossBorderCategoryListMask = view.findViewById(R.id.cross_border_category_list_mask);
         btnViewMoreCategory = view.findViewById(R.id.btn_view_more_category);
-
-        llAppBar = view.findViewById(R.id.ll_app_bar);
 
         rvCategoryList = view.findViewById(R.id.rv_category_list);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
@@ -259,19 +261,19 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
             }
 
             // 獲取秒殺數據
-            long secKillCountDown = responseObj.optLong("datas.secKillCountDown");
+            long secKillCountDown = responseObj.optInt("datas.seckillData.countdown"); // 結束時間
             List<CrossBorderActivityGoods> secKillGoodsList = new ArrayList<>();
-            EasyJSONArray secKillGoodsArray = responseObj.getSafeArray("datas.secKillGoodsList");
+            EasyJSONArray secKillGoodsArray = responseObj.getSafeArray("datas.seckillData.seckillGoodsCommonVoList");
             for (Object object : secKillGoodsArray) {
                 EasyJSONObject secKillGoodsObject = (EasyJSONObject) object;
 
                 CrossBorderActivityGoods secKillGoods = new CrossBorderActivityGoods(
                         Constant.PROMOTION_TYPE_SEC_KILL,
-                        secKillGoodsObject.optInt("goodsId"),
-                        secKillGoodsObject.optInt("commonId"),
-                        secKillGoodsObject.optString("imageSrc"),
+                        secKillGoodsObject.optInt("seckillGoodsId"),
+                        secKillGoodsObject.optInt("seckillCommonId"),
+                        secKillGoodsObject.optString("imageName"),
                         secKillGoodsObject.optString("goodsName"),
-                        secKillGoodsObject.optDouble("bottomPrice")
+                        secKillGoodsObject.optDouble("seckillGoodsPrice")
                 );
 
                 secKillGoodsList.add(secKillGoods);
@@ -360,7 +362,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
 
                 if (BuildConfig.DEBUG) {
                     if (categoryList.size() >= 3) {
-                        break;
+                        // break;
                     }
                 }
             }
@@ -471,7 +473,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     private void loadData() {
         String apiUrl = Api.PATH_TARIFF_BUY_INDEX;
         if (BuildConfig.DEBUG) {
-            apiUrl = "https://gogo.so/tmp/2.json";
+            // apiUrl = "https://gogo.so/tmp/2.json";
         }
         String url = apiUrl;
 
@@ -512,7 +514,7 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     }
 
     private void changeBackgroundColor(int color) {
-        llAppBar.setBackgroundColor(color);
+        imgThemeBgTop.setBackgroundColor(color);
         btnViewMoreCategory.setBackgroundColor(color);
     }
 

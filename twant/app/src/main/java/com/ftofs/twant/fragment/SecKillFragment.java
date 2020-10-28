@@ -47,6 +47,7 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
+
     boolean isDataLoaded = false;
     RecyclerView rvScheduleLabelList;
     SecKillZoneListAdapter secKillZoneListAdapter;
@@ -65,11 +66,18 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
     ViewPager viewPager;
     private TextView tvCountDownDay;
 
+    boolean isCrossBorder;
+
     public static SecKillFragment newInstance() {
+        return newInstance(false);
+    }
+
+    public static SecKillFragment newInstance(boolean isCrossBorder) {
         Bundle args = new Bundle();
 
         SecKillFragment fragment = new SecKillFragment();
         fragment.setArguments(args);
+        fragment.isCrossBorder = isCrossBorder;
 
         return fragment;
     }
@@ -216,103 +224,111 @@ public class SecKillFragment extends BaseFragment implements View.OnClickListene
     private void loadData() {
         String url = Api.PATH_SEC_KILL;
         // String url = "https://test.weshare.team/tmp/test.json";
-        Api.postUI(url, null, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogUtil.uploadAppLog(url, "", "", e.getMessage());
-                ToastUtil.showNetworkError(_mActivity, e);
+        try {
+            EasyJSONObject params = EasyJSONObject.generate();
+            if (isCrossBorder) {
+                params.set("tariffEnable", 1);
             }
-
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-
-                if (ToastUtil.checkError(_mActivity, responseObj)) {
-                    LogUtil.uploadAppLog(url, "", responseStr, "");
-                    return;
+            Api.postUI(url, null, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    LogUtil.uploadAppLog(url, "", "", e.getMessage());
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
-                try {
-                    View contentView = getView();
-                    if (contentView == null) {
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        LogUtil.uploadAppLog(url, "", responseStr, "");
                         return;
                     }
 
-                    viewPager = contentView.findViewById(R.id.vp_goods_list);
-
-
-                    int defaultScheduleId = responseObj.optInt("datas.seckillSchedule.scheduleId"); // 【搶購中】狀態的場次Id
-                    int defaultIndex = -1;  // 默認選中【搶購中】狀態的秒殺專場的位置索引
-                    int secKillCount = 0;
-                    EasyJSONArray scheduleList = responseObj.getSafeArray("datas.seckillScheduleList");
-                    for (Object object : scheduleList) {
-                        EasyJSONObject schedule = (EasyJSONObject) object;
-
-                        int scheduleId = schedule.optInt("scheduleId");
-                        int scheduleState = schedule.optInt("scheduleState");
-                        String scheduleStateText = schedule.optString("scheduleStateText");
-                        String startTime = schedule.optString("startTime");
-                        String endTime = schedule.optString("endTime");
-
-                        // 默認選中【搶購中】狀態的秒殺專場的位置索引
-                        if (scheduleId == defaultScheduleId) {
-                            defaultIndex = secKillCount;
+                    try {
+                        View contentView = getView();
+                        if (contentView == null) {
+                            return;
                         }
 
-                        Jarbon jarbon;
-                        if (scheduleState == 0) { // 如果是【即將開場】，用開始時間作倒計時
-                            jarbon = Jarbon.parse(startTime);
-                        } else {
-                            jarbon = Jarbon.parse(endTime);
+                        viewPager = contentView.findViewById(R.id.vp_goods_list);
+
+
+                        int defaultScheduleId = responseObj.optInt("datas.seckillSchedule.scheduleId"); // 【搶購中】狀態的場次Id
+                        int defaultIndex = -1;  // 默認選中【搶購中】狀態的秒殺專場的位置索引
+                        int secKillCount = 0;
+                        EasyJSONArray scheduleList = responseObj.getSafeArray("datas.seckillScheduleList");
+                        for (Object object : scheduleList) {
+                            EasyJSONObject schedule = (EasyJSONObject) object;
+
+                            int scheduleId = schedule.optInt("scheduleId");
+                            int scheduleState = schedule.optInt("scheduleState");
+                            String scheduleStateText = schedule.optString("scheduleStateText");
+                            String startTime = schedule.optString("startTime");
+                            String endTime = schedule.optString("endTime");
+
+                            // 默認選中【搶購中】狀態的秒殺專場的位置索引
+                            if (scheduleId == defaultScheduleId) {
+                                defaultIndex = secKillCount;
+                            }
+
+                            Jarbon jarbon;
+                            if (scheduleState == 0) { // 如果是【即將開場】，用開始時間作倒計時
+                                jarbon = Jarbon.parse(startTime);
+                            } else {
+                                jarbon = Jarbon.parse(endTime);
+                            }
+                            endTimeList.add(jarbon.getTimestampMillis());
+
+                            SecKillZoneItem item = new SecKillZoneItem();
+                            item.scheduleId = scheduleId;
+                            item.startTime = startTime.substring(11, 16);
+                            item.statusText = scheduleStateText;
+                            item.scheduleState = scheduleState;
+
+                            secKillZoneItemList.add(item);
+
+                            titleList.add(schedule.optString("scheduleName"));
+                            fragmentList.add(SecKillGoodsListFragment.newInstance(scheduleId, isCrossBorder));
+                            secKillCount++;
                         }
-                        endTimeList.add(jarbon.getTimestampMillis());
+                        SLog.info("defaultIndex[%d]", defaultIndex);
+                        if (defaultIndex >= 0) {
+                            secKillZoneListAdapter.setSelectedIndex(defaultIndex);
+                        }
+                        secKillZoneListAdapter.setNewData(secKillZoneItemList);
 
-                        SecKillZoneItem item = new SecKillZoneItem();
-                        item.scheduleId = scheduleId;
-                        item.startTime = startTime.substring(11, 16);
-                        item.statusText = scheduleStateText;
-                        item.scheduleState = scheduleState;
+                        // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
+                        // ViewPager中Fragment不回調onCreateView的問題
+                        CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
+                        viewPager.setAdapter(adapter);
 
-                        secKillZoneItemList.add(item);
+                        if (defaultIndex >= 0) {
+                            selectSecKill(defaultIndex);
 
-                        titleList.add(schedule.optString("scheduleName"));
-                        fragmentList.add(SecKillGoodsListFragment.newInstance(scheduleId));
-                        secKillCount++;
+                            // 滾動到指定位置，【搶購中】狀態的置於中間
+                            int targetPosition = defaultIndex - 2;
+                            if (targetPosition < 0) {
+                                targetPosition = 0;
+                            }
+                            while (secKillCount - targetPosition < 5 && targetPosition > 0) {
+                                targetPosition--;
+                            }
+                            if (targetPosition > 0) {
+                                rvScheduleLabelList.scrollToPosition(targetPosition);
+                            }
+                        }
+
+                        isDataLoaded = true;
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
-                    SLog.info("defaultIndex[%d]", defaultIndex);
-                    if (defaultIndex >= 0) {
-                        secKillZoneListAdapter.setSelectedIndex(defaultIndex);
-                    }
-                    secKillZoneListAdapter.setNewData(secKillZoneItemList);
-
-                    // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
-                    // ViewPager中Fragment不回調onCreateView的問題
-                    CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
-                    viewPager.setAdapter(adapter);
-
-                    if (defaultIndex >= 0) {
-                        selectSecKill(defaultIndex);
-
-                        // 滾動到指定位置，【搶購中】狀態的置於中間
-                        int targetPosition = defaultIndex - 2;
-                        if (targetPosition < 0) {
-                            targetPosition = 0;
-                        }
-                        while (secKillCount - targetPosition < 5 && targetPosition > 0) {
-                            targetPosition--;
-                        }
-                        if (targetPosition > 0) {
-                            rvScheduleLabelList.scrollToPosition(targetPosition);
-                        }
-                    }
-
-                    isDataLoaded = true;
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 
     @Override

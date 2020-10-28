@@ -13,6 +13,17 @@
     </LinearLayout>
     <!-- END OF 用於測量分類菜單是否超過屏幕寬度 -->
 
+    <ImageView
+        android:id="@+id/img_theme_bg_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignTop="@id/ll_app_bar"
+        android:layout_alignBottom="@id/ll_app_bar"
+        android:scaleType="fitXY"
+        android:src="@drawable/cross_border_home_theme_bg_up"
+        app:tint="@color/cross_border_home_theme_tint">
+    </ImageView>
+
     <LinearLayout
         android:id="@+id/ll_app_bar"
         android:layout_width="match_parent"
