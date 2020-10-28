@@ -30,7 +30,7 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                         result: suspend () -> Result<D>,
                         success:(d:D)->Unit,
                         error:(d:D)->Unit={},
-                        others:()->Unit ={liveData.postNoNet()},
+                        others:(s:String?)->Unit ={liveData.postNoNet()},
                         catchError: suspend (Throwable) -> Unit={ e:Throwable-> KLog.e("catch exception : $e")},
                         isShowLoading:Boolean = true,
                         final:()->Unit={liveData.postSuccess()}
@@ -54,10 +54,11 @@ open class BaseViewModel(application: Application) : BaseViewModelMVVM(applicati
                 }
                 is Result.Msg ->{
                     SLog.info("message: ${re.msg}")
+                    others(re.msg)
                 }
                 else ->{
                     SLog.info("error: $re")
-                    others()}
+                    others(null)}
             }
         } catch (e: Throwable) {//檢查404
             e.printStackTrace()

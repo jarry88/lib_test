@@ -62,7 +62,6 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
             orderId?.let {
                 viewModel.getCouponOrderDetail(it)
             }.apply { SLog.info("orderid 沒值") }
-
         }
     }
 
@@ -86,6 +85,7 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                                 textSize =14f
                                 text ="取貨碼："
                                 colorId =R.color.tw_black
+                                margin_start =10
                                 margin_end =4
                             }
                             TextView {
@@ -126,7 +126,6 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                                     orientation = horizontal
                                     center_vertical =true
                                     margin_top = 17
-                                    margin_bottom=18
                                     ImageView {
                                         layout_height = 160
                                         layout_width = 160
@@ -151,6 +150,11 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
 
                 }
                     //添加code码
+                invalidate()
+            }
+            binding.llContainer.apply {
+                setBackgroundResource(R.drawable.code_bg)
+                setPadding(0,0,0,0)
             }
 //            binding.llContainer.setBackgroundResource(R.drawable.code_bg)
         }

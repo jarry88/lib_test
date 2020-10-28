@@ -39,6 +39,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.gzp.lib_common.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
@@ -1119,27 +1120,34 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 }
             }
         });
-        chatMessageAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
-            @Override
-            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
-                SLog.info("onItemChildLongClick");
-                ChatMessage chatMessage = chatMessageList.get(position);
-                String messageId = chatMessage.messageId;
-                new XPopup.Builder(getContext())
-//                        .maxWidth(600)
-                        .asCenterList("請選擇操作", new String[]{"刪除"},
-                                new OnSelectListener() {
-                                    @Override
-                                    public void onSelect(int position, String text) {
-                                        SLog.info("position[%d], text[%s]", position, text);
-                                        if (position == 0) {
-                                            showDeleteMessageConfirm(position, messageId);
-                                        }
-                                    }
-                                })
-                        .show();
-                return false;
+        chatMessageAdapter.setOnItemChildLongClickListener((adapter, view, position) -> {
+            SLog.info("onItemChildLongClick");
+            int id = view.getId();
+            TextView textView = view.findViewById(R.id.tv_message);
+            if (textView != null) {
+                ClipboardUtils.copyText(_mActivity, textView.getText());
+                ToastUtil.success(_mContext,"内容已複製");
             }
+            //暫時屏蔽刪除操作
+//            if (id == R.id.ll_container) {
+//            } else {
+//                ChatMessage chatMessage = chatMessageList.get(position);
+//                String messageId = chatMessage.messageId;
+//                new XPopup.Builder(getContext())
+////                        .maxWidth(600)
+//                        .asCenterList("請選擇操作", new String[]{"刪除"},
+//                                new OnSelectListener() {
+//                                    @Override
+//                                    public void onSelect(int position, String text) {
+//                                        SLog.info("position[%d], text[%s]", position, text);
+//                                        if (position == 0) {
+//                                            showDeleteMessageConfirm(position, messageId);
+//                                        }
+//                                    }
+//                                })
+//                        .show();
+//            }
+            return false;
         });
 
         rvMessageList.setAdapter(chatMessageAdapter);

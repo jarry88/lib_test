@@ -55,7 +55,13 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
         binding.rvImage.adapter=imageAdapter
         binding.btnBuy.setOnClickListener {
             if (User.getUserId() > 0) {
-                Util.startFragment(CouponConfirmOrderFragment.newInstance(viewModel.currCouponDetail.value?.id))
+                viewModel.currCouponDetail.value?.apply {
+                    if (limitStock && stock <= 0) {
+                        ToastUtil.error(context, "商品售罄")
+                    } else {
+                        Util.startFragment(CouponConfirmOrderFragment.newInstance(id))
+                    }
+                }
             } else Util.showLoginFragment(requireContext())}
         binding.couponInformation.observable(viewModel.currCouponDetail)
     }

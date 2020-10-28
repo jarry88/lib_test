@@ -205,6 +205,11 @@ class CouponConfirmOrderFragment:BaseTwantFragmentMVVM<CouponOrderConfirmFragmen
             }
 
         }
+        viewModel.error.observe(this){
+            if (!it.isNullOrEmpty()) {
+                ToastUtil.error(context,it)
+            }
+        }
         viewModel.buyStep2Vo.observe(this){
             SLog.info("返回成功")
             it.orderId?.let {
