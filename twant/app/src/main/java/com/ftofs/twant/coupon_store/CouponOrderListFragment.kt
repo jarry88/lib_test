@@ -1,6 +1,7 @@
 package com.ftofs.twant.coupon_store
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.appserver.AppServiceImpl.Companion.getCaptureIntent
+import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.databinding.CouponOrderListFragmentBinding
 import com.ftofs.twant.databinding.CouponOrderListItemBinding
@@ -122,11 +124,12 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                                 layout_width = wrap_content
                                 layout_height = wrap_content
                                 setLines(1)
+                                margin_end=40
                                 ellipsize = TextUtils.TruncateAt.END
                                 textStyle = bold
                                 textSize = 14f
                                 colorId = R.color.black
-                                text = vo.title
+                                text =if(Config.USE_DEVELOPER_TEST_DATA) "++++++++++++++++++++++++++++++++++++++++++++++++++" else vo.title
                             }
                             View {
                                 layout_width = 0
@@ -230,20 +233,23 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                         firstTabSelected = false
                         return
                     }
-                    viewModel.currOrderStatus.postValue(when (selectedTabPosition) {
+                    SLog.info("loadingList $loadingList")
+                    val iconView = tab?.customView?.findViewById<ImageView>(R.id.icon_exp)
+                    val textView = tab?.customView?.findViewById<TextView>(R.id.tag_text)
+                    textView?.setTextColor(resources.getColor(R.color.tw_blue))
+                    iconView?.let {
+                        Glide.with(context).load(R.drawable.up_arrow_blue).centerCrop().into(it)
+                    }
+                    viewModel.currOrderStatus.value = (when (selectedTabPosition) {
                         0 -> null //全部
                         1 -> 10 //待付款
                         2 -> 20  // 可使用
                         3 -> 40 // 退款中
                         else -> null
-                    }).apply{loadingList =true}
-                    SLog.info("loadingList $loadingList")
-                    val iconView = tab?.customView?.findViewById<ImageView>(R.id.icon_exp)
-                    val textView = tab?.customView?.findViewById<TextView>(R.id.tag_text)
-                    textView?.setTextColor(resources.getColor(R.color.tw_blue))
-
-                    iconView?.let {
-                        Glide.with(context).load(R.drawable.up_arrow_blue).centerCrop().into(it)
+                    })
+                    if (binding.smartList.onLoading()) {
+                        viewModel.currPage=0
+                        viewModel.getOrdersList()
                     }
 
                 }

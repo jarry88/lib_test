@@ -3,6 +3,7 @@ package com.ftofs.twant.coupon_store
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CouponStoreDetailFragmentBinding
@@ -56,12 +57,12 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
         binding.rvImage.adapter=imageAdapter
         binding.btnLeftSelect.setOnClickListener {
             binding.rvImage.apply {
-                scrollX -= 50
+                scrollToPosition(0)
             }
         }
         binding.btnRightSelect.setOnClickListener {
             binding.rvImage.apply {
-                scrollX += 50
+                scrollToPosition((layoutManager as LinearLayoutManager).findLastVisibleItemPosition())
             }
         }
         binding.btnBuy.setOnClickListener {

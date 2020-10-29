@@ -333,7 +333,7 @@
                 android:layout_height="wrap_content"
 
                 android:textColor="@color/tw_black"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:text="@{vo.des}"/>
         </LinearLayout>
     </LinearLayout>

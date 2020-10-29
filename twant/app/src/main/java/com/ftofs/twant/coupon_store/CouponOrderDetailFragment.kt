@@ -125,8 +125,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                             }
                             if (showCode) {
                                 //isValidity
-                                orderItem.validityEndDate?.let {
-                                    if(Jarbon.parse(it).timestamp<Jarbon().timestamp){
+                                    if(!orderItem.isValidity){
                                         showCode =false
                                         TextView {
                                             layout_height = wrap_content
@@ -137,9 +136,8 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                             colorId =R.color.tw_black
                                             margin_end =4
                                         }
-
                                     }
-                                }
+
                             }
 
                         }.let { v -> (v.parent as ViewGroup).removeView(v)

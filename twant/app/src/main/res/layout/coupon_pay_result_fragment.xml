@@ -139,10 +139,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:minHeight="@dimen/dp_100"
                         android:layout_marginTop="@dimen/dp_2"
-                        android:paddingEnd="@dimen/dp_20"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="8dp">
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="18dp"
+                        android:orientation="vertical">
                         <com.ftofs.twant.view.coupon.CouponListItemView
                             android:layout_marginTop="@dimen/dp_20"
                             android:layout_width="match_parent"
@@ -150,6 +151,14 @@
                             app:coupon_item_vo="@{vo.itemList[0].couponItemVo}"
 
                             android:id="@+id/list_item"/>
+                        <TextView
+                            android:layout_marginStart="75dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_price"
+                            android:textColor="@color/tw_black"
+                            android:textSize="15sp"
+                            price="@{vo.itemList[0].couponItemVo.price}"/>
                     </LinearLayout>
 
                         <LinearLayout
