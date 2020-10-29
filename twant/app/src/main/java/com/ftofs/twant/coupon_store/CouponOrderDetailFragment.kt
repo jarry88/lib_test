@@ -122,6 +122,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                 }
                             }
                             if (showCode) {
+                                //isValidity
                                 orderItem.validityEndDate?.let {
                                     if(Jarbon.parse(it).timestamp<Jarbon().timestamp){
                                         showCode =false

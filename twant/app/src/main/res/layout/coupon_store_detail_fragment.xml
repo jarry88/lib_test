@@ -103,17 +103,21 @@
                             binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             android:id="@+id/rv_image"/>
                         <ImageView
+                            visibleOrGone="@{vo.showArrow()}"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:id="@+id/btn_left_select"
                             android:layout_centerVertical="true"
+                            android:src="@drawable/icon_arrow_start"
                             android:layout_marginStart="5dp"/>
                         <ImageView
+                            visibleOrGone="@{vo.showArrow()}"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:id="@+id/btn_right_select"
                             android:layout_centerVertical="true"
                             android:layout_alignParentEnd="true"
+                            android:src="@drawable/icon_arrow_right"
                             android:layout_marginEnd="5dp"/>
                         <LinearLayout
                             android:layout_alignParentBottom="true"

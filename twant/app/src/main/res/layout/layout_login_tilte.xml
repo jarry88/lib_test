@@ -83,6 +83,10 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/tw_black"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_15"
             android:text="登入後享受更多服務"
             android:textSize="18sp" />
 

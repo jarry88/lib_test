@@ -114,6 +114,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                             layout_width = match_parent
                             layout_height = wrap_content
                             margin_end = 16
+                            margin_bottom=16
                             orientation = horizontal
 
                             TextView {

@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.ftofs.twant.R
 import com.ftofs.twant.dsl.LinearLayout
@@ -13,7 +15,7 @@ import com.ftofs.twant.dsl.bg_color_id
 import com.ftofs.twant.dsl.layout_height
 import com.ftofs.twant.dsl.layout_width
 
-class CodeView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+class CodeView @JvmOverloads constructor( context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     :FrameLayout(context, attrs, defStyleAttr) {
     private val mPaint by lazy { Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color=Color.BLUE
@@ -32,7 +34,30 @@ class CodeView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     init {
-        La
+        addView(LinearLayout {
+            bg_color_id =R.color.tw_black
+        }.let{
+            val p =it.parent as ViewGroup
+            p.removeView(it)
+            it
+        })
+
+//        val layout = LinearLayout(context)
+//        layout.orientation = LinearLayout.HORIZONTAL
+//        layout.gravity = Gravity.CENTER_VERTICAL
+//        addView(layout, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
+//
+//        iconView = ImageView(context)
+//        layout.addView(iconView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+//
+//        labelView = TextView(context)
+//        labelView.leftPadding = dip(12)
+//        labelView.rightPadding = dip(12)
+//        labelView.maxLines = 1
+//        layout.addView(labelView, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+//
+//        arrowView = ImageView(context)
+//        layout.addView(arrowView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
     }
 //    override fun onDraw(canvas: Canvas?) {
 //        canvas?.drawRect(0f, 0f, width.toFloat(), height.toFloat(), mPaint)

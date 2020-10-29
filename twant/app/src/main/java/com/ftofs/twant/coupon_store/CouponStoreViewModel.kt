@@ -310,6 +310,7 @@ class CouponStoreViewModel(application: Application):BaseViewModel(application) 
         },
         others = {
             LogUtil.uploadAppLog("pay/mpay", params.toString(), "", "")
+            error.postValue(it?:"")
 
         }
         )

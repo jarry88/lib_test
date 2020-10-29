@@ -125,7 +125,7 @@ class HotView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     this>=x&&this<=x+width
 }
     init {
-        contentView
+        addView(contentView)
     }
 
 
