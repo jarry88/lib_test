@@ -145,6 +145,9 @@ interface DemoApiService {
     @POST("buy/step1")
     @Headers("Content-Type:application/json; charset=UTF-8")
     suspend fun getTcBuyStep1( @Body queryParams:@JvmSuppressWildcards Map<String, Any?>): TwantResponse<BuyStep1Vo>
+    @POST("exchange")
+    @Headers("Content-Type:application/json; charset=UTF-8")
+    suspend fun postExchange( @Body queryParams:@JvmSuppressWildcards Map<String, Any?>): TwantResponse<BuyStep1Vo>
     @POST("buy/step2")
     @Headers("Content-Type:application/json; charset=UTF-8")
     suspend fun getTcBuyStep2(@Body queryParams:@JvmSuppressWildcards Map<String, Any?>): TwantResponse<BuyStep2Vo>

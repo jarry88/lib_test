@@ -72,6 +72,7 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
             binding.llCodeContainer.apply {
                 it.itemList?.forEach { orderItem ->
                     orderItem.extractCode?.forEach {orderCodeVo ->
+                        var showCode =true
                         LinearLayout {
                             layout_height = wrap_content
                             layout_width = wrap_content
@@ -99,18 +100,32 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                             }
                             orderCodeVo.used?.let {
                                 if (it) {//已經用過了
+                                    showCode =false
                                     TextView {
                                         layout_height = wrap_content
                                         layout_width = wrap_content
                                         textSize =18f
-                                        text = orderCodeVo.useTime?.let { t ->
-                                            if(Jarbon.parse(t).timestamp<Jarbon().timestamp)
-                                                "已过期"
-                                            else "已使用"
-                                        }?: "已使用"
+                                        text = "已使用"
                                         margin_start =8
                                         colorId =R.color.tw_black
                                         margin_end =4
+                                    }
+                                }
+                            }
+                            if (showCode) {
+                                orderCodeVo.useTime?.let {
+                                    if(Jarbon.parse(it).timestamp<Jarbon().timestamp){
+                                        showCode =false
+                                        TextView {
+                                            layout_height = wrap_content
+                                            layout_width = wrap_content
+                                            textSize =18f
+                                            text = "已过期"
+                                            margin_start =8
+                                            colorId =R.color.tw_black
+                                            margin_end =4
+                                        }
+
                                     }
                                 }
                             }

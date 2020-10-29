@@ -111,6 +111,7 @@ data class CouponOrderBase(
 data class OrderCodeVo(//核銷碼列表
     val code: String?,//兌換
     val used: Boolean?,
-    val useTime: String?
+    val useTime: String?,
+    val clerkName: String?//核銷員
 
 ):Serializable

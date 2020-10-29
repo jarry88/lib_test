@@ -73,10 +73,16 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
     override fun initViewObservable() {
         viewModel.currCouponOrder.observe(this){
             binding.vo=it
+            binding.couponInformation.apply {
+                (it.itemList?.get(0)?.consumptionType==1).let {b ->
+                    mBinding.llMixContainer.setVisibleOrGone(b)
+                }
+            }
             binding.llCodeContainer.apply { 
                 removeAllViews()
                 it.itemList?.forEach{ orderItem ->  
                     orderItem.extractCode?.forEach{ orderCodeVo ->
+                        var showCode= true
                         LinearLayout {
                             layout_height = wrap_content
                             layout_width = wrap_content
@@ -102,20 +108,33 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                 margin_end =4
                             }
                             orderCodeVo.used?.let {
-                                if (it) {
-
+                                if (it) {//已經用過了
+                                    showCode =false
                                     TextView {
                                         layout_height = wrap_content
                                         layout_width = wrap_content
                                         textSize =18f
-                                        text = orderCodeVo.useTime?.let { t ->
-                                            if(Jarbon.parse(t).timestamp< Jarbon().timestamp){
-                                                "已过期"}
-                                            else "已使用"
-                                        }?: "已使用"
+                                        text = "已使用"
                                         margin_start =8
                                         colorId =R.color.tw_black
                                         margin_end =4
+                                    }
+                                }
+                            }
+                            if (showCode) {
+                                orderCodeVo.useTime?.let {
+                                    if(Jarbon.parse(it).timestamp<Jarbon().timestamp){
+                                        showCode =false
+                                        TextView {
+                                            layout_height = wrap_content
+                                            layout_width = wrap_content
+                                            textSize =18f
+                                            text = "已过期"
+                                            margin_start =8
+                                            colorId =R.color.tw_black
+                                            margin_end =4
+                                        }
+
                                     }
                                 }
                             }
@@ -123,8 +142,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                         }.let { v -> (v.parent as ViewGroup).removeView(v)
                             addView(v).apply { SLog.info("添加二維碼${orderCodeVo.code}") }
                         }
-                        orderCodeVo.used?.let {
-                            if (!it) {
+                        if (showCode) {
                                 LinearLayout {
                                     layout_height = wrap_content
                                     layout_width = wrap_content
@@ -152,7 +170,6 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                     addView(v)
                                 }.p("aa")
                             }
-                        }
 
                     }
                 }

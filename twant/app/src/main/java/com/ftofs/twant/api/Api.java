@@ -2259,7 +2259,12 @@ public class Api {
      * @return 如果以異步方式執行，固定返回null；如果以同步方式執行，返回結果字符串
      */
     public static String jsonRequest(int method, String path, String json, Callback ioCallback, final UICallback uiCallback) {
-        String url = API_BASE_URL + path;
+        String url;
+        if (path.startsWith("http")) {
+            url = path;
+        } else {
+            url = API_BASE_URL + path;
+        }
 
         String token = User.getToken();
         if (token == null) {
