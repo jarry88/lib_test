@@ -420,19 +420,22 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     imgFloorBanner.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            SLog.info("floorId[%d], linkType[%s], linkValue[%s]", item.floorId, floorItem.linkType, floorItem.linkValue);
                             Util.handleClickLink(floorItem.linkType, floorItem.linkValue, true);
+                            handleClickFloor(item.floorId);
                         }
                     });
 
                     btnMore.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            SLog.info("floorId[%d], linkType[%s], linkValue[%s]", item.floorId, floorItem.linkType, floorItem.linkValue);
                             Util.handleClickLink(floorItem.linkType, floorItem.linkValue, true);
+                            handleClickFloor(item.floorId);
                         }
                     });
                 }
             } else { // 圖片類型
-                LayoutInflater layoutInflater = LayoutInflater.from(context);
                 helper.setGone(R.id.floor_banner_container, false);  // 隱藏Banner容器
                 floorContainer.setVisibility(View.VISIBLE);
                 btnMore.setVisibility(View.INVISIBLE);
@@ -448,8 +451,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                         @Override
                         public void onClick(View v) {
                             FloorItem imageItem = (FloorItem) v.getTag(R.id.key_meta_data);
-                            SLog.info("linkType[%s], linkValue[%s]", imageItem.linkType, imageItem.linkValue);
+                            SLog.info("floorId[%d], linkType[%s], linkValue[%s]", item.floorId, imageItem.linkType, imageItem.linkValue);
                             Util.handleClickLink(imageItem.linkType, imageItem.linkValue, true);
+
+                            handleClickFloor(item.floorId);
                         }
                     });
                     floorContainer.addView(imageView);
@@ -654,6 +659,12 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         HashMap<String, Object> analyticsDataMap = new HashMap<>();
         analyticsDataMap.put("zoneId", zoneId);
         UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_ZONE, analyticsDataMap);
+    }
+
+    private void handleClickFloor(int floorId) {
+        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+        analyticsDataMap.put("floorId", floorId);
+        UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_FLOOR, analyticsDataMap);
     }
 
     /**
