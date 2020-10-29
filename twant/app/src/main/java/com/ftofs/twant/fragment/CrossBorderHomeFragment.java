@@ -230,6 +230,8 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
                 CrossBorderHomeItem item = crossBorderHomeItemList.get(position);
 
                 if (id == R.id.btn_view_more_sec_kill) {
+                    HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                    UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_SECKILL, analyticsDataMap);
                     Util.startFragment(SecKillFragment.newInstance(true));
                 } if (id == R.id.btn_view_more_bargain) {
                     Util.startFragment(BargainListFragment.newInstance(true));
