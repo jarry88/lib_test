@@ -109,7 +109,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             // 跑馬燈
             List<MarqueeItem> marqueeItemList = new ArrayList<>();
             MarqueeItem marqueeItem = new MarqueeItem(Constant.ITEM_TYPE_MARQUEE_TEXT);
-            marqueeItem.text = "1澳门元≈0.85人民币，相当于总价打85折";
+            marqueeItem.text = "1澳門元 ≈ 0.85人民幣，相當於總價打85折";
             marqueeItemList.add(marqueeItem);
 
             marqueeItem = new MarqueeItem(Constant.ITEM_TYPE_MARQUEE_SLOGAN);
@@ -121,10 +121,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             rvMarqueeList.setAdapter(adapter);
 
 
-            Banner<CrossBorderBannerItem, BannerImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
-            banner.setAdapter(new BannerImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
+            Banner<CrossBorderBannerItem, BannerRoundedImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
+            banner.setAdapter(new BannerRoundedImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
                 @Override
-                public void onBindView(BannerImageHolder holder, CrossBorderBannerItem data, int position, int size) {
+                public void onBindView(BannerRoundedImageHolder holder, CrossBorderBannerItem data, int position, int size) {
                     //图片加载自己实现
                     Glide.with(holder.itemView).load(StringUtil.normalizeImageUrl(data.image)).centerCrop().into(holder.imageView);
                 }
