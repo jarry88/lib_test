@@ -49,6 +49,7 @@
         </androidx.recyclerview.widget.RecyclerView>
         <!-- END OF 跑馬燈 -->
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_nav_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
@@ -63,20 +64,20 @@
                 app:layout_constraintTop_toTopOf="parent">
             </androidx.recyclerview.widget.RecyclerView>
             <com.rd.PageIndicatorView
-            android:id="@+id/pageIndicatorView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/rv_nav_list"
-            app:piv_animationType="thinWorm"
-            app:piv_interactiveAnimation="true"
-            app:piv_selectedColor="@color/tw_blue"
-            app:piv_unselectedColor="@color/tw_light_grey_EDED"
-            attrs:piv_padding="9dp"
-            attrs:piv_radius="3dp"
-            />
+                android:id="@+id/pageIndicatorView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/rv_nav_list"
+                app:piv_animationType="thinWorm"
+                app:piv_interactiveAnimation="true"
+                app:piv_selectedColor="@color/tw_blue"
+                app:piv_unselectedColor="@color/tw_light_grey_EDED"
+                attrs:piv_padding="9dp"
+                attrs:piv_radius="3dp"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- 轉到購物專場 -->
