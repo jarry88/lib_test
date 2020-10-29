@@ -1,22 +1,12 @@
-package com.ftofs.twant.view
+package com.ftofs.twant.view.shape
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
-import androidx.annotation.RequiresApi
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import com.ftofs.twant.R
-import com.ftofs.twant.databinding.SmartListViewBinding
-import com.ftofs.twant.dsl.customer.factoryAdapter
+
 const val DEFAULT_SIZE = 200
 
 const val  DEFAULT_RADIUS = 20

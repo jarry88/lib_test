@@ -1,6 +1,7 @@
 package com.ftofs.twant.coupon_store
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.activity.MainActivity
 import com.ftofs.twant.appserver.AppServiceImpl.Companion.getCaptureIntent
+import com.ftofs.twant.config.Config
 import com.ftofs.twant.constant.EBMessageType
 import com.ftofs.twant.databinding.CouponOrderListFragmentBinding
 import com.ftofs.twant.databinding.CouponOrderListItemBinding
@@ -49,6 +51,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
     private var showResult: Boolean=false
     var tabFold=true
     var firstTabSelected=true
+    var loadingList=false
 
     var type =""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +99,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
     override fun onSupportInvisible() {
         super.onSupportInvisible()
         showResult =false
+        loadingList=false
     }
     override fun initData() {
         binding.title.apply {
@@ -120,11 +124,12 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                                 layout_width = wrap_content
                                 layout_height = wrap_content
                                 setLines(1)
+                                margin_end=40
                                 ellipsize = TextUtils.TruncateAt.END
                                 textStyle = bold
                                 textSize = 14f
                                 colorId = R.color.black
-                                text = vo.title
+                                text =if(Config.USE_DEVELOPER_TEST_DATA) "++++++++++++++++++++++++++++++++++++++++++++++++++" else vo.title
                             }
                             View {
                                 layout_width = 0
@@ -141,6 +146,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                         addView(LinearLayout {//第二行
                             layout_width = match_parent
                             layout_height = wrap_content
+                            margin_top =16
                             margin_end = 16
                             orientation = horizontal
 
@@ -222,23 +228,28 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             setSelectedTabIndicatorColor(resources.getColor(R.color.tw_red, null))
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
+                    SLog.info("click $selectedTabPosition")
                     if (firstTabSelected) {
                         firstTabSelected = false
                         return
                     }
-                    viewModel.currOrderStatus.postValue(when (selectedTabPosition) {
+                    SLog.info("loadingList $loadingList")
+                    val iconView = tab?.customView?.findViewById<ImageView>(R.id.icon_exp)
+                    val textView = tab?.customView?.findViewById<TextView>(R.id.tag_text)
+                    textView?.setTextColor(resources.getColor(R.color.tw_blue))
+                    iconView?.let {
+                        Glide.with(context).load(R.drawable.up_arrow_blue).centerCrop().into(it)
+                    }
+                    viewModel.currOrderStatus.value = (when (selectedTabPosition) {
                         0 -> null //全部
                         1 -> 10 //待付款
                         2 -> 20  // 可使用
                         3 -> 40 // 退款中
                         else -> null
                     })
-                    val iconView = tab?.customView?.findViewById<ImageView>(R.id.icon_exp)
-                    val textView = tab?.customView?.findViewById<TextView>(R.id.tag_text)
-                    textView?.setTextColor(resources.getColor(R.color.tw_blue))
-
-                    iconView?.let {
-                        Glide.with(context).load(R.drawable.up_arrow_blue).centerCrop().into(it)
+                    if (binding.smartList.onLoading()) {
+                        viewModel.currPage=0
+                        viewModel.getOrdersList()
                     }
 
                 }
@@ -367,6 +378,9 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
         }
     }
     override fun initViewObservable() {
+        viewModel.currCouponOrder.observe(this){
+            loadingList =false
+        }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
             binding.smartList.endLoadingUi()
             if (it == StateLiveData.StateEnum.Idle) {
@@ -380,7 +394,8 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                 MPaySdk.mPayNew(_mActivity, it.payData.toString().apply { SLog.info(this) }, _mActivity as MainActivity)
             }
         }
-        viewModel.currOrderStatus.observe(this){binding.smartList.autoRefresh().apply { SLog.info("刷新") }}
+        viewModel.currOrderStatus.observe(this){
+            binding.smartList.autoRefresh().apply { SLog.info("刷新") }}
         viewModel.error.observe(this){
             if (!it.isNullOrEmpty()) {
                 ToastUtil.error(context, it)
@@ -388,6 +403,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             }
         }
     }
+
     private fun showDrawListView(v: View, selectedTabPosition: Int) {
         ToastUtil.success(context, "$selectedTabPosition")
     }

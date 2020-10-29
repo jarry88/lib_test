@@ -5,7 +5,7 @@ import java.io.Serializable
 data class CouponDetailVo(
     val appointmentNum: Int,//appointmentNum提前（多少）單位預約
     val appointmentNumType: Int,//提前多少（單位）預約，0->小時，1->天
-    val consumptionType: Int,//消費類型：0->抵用券，1->套餐券
+    val consumptionType: Int?,//消費類型：0->抵用券，1->套餐券
     val cover: String,
     val createTime: String,
     val des: String,
@@ -61,11 +61,12 @@ data class CouponDetailVo(
     }
     fun getFreeWifiString():String= if(freeWifi) "WIFI免費" else "WIFI需收費"
     fun getImgSize():String= picList?.size?.toString() ?:"0"
+    fun showArrow():Boolean=picList?.size?.let{it>2} ?:false
     fun getShowPicList():Boolean= picList?.isNotEmpty() ?:false
     fun getShowPicBtn():Boolean= picList?.let{it.size>3} ?:false
     fun getValidityString():String =validityType?.let {
         when(it){
-            0,// -> "$validityDay 天内有效"
+            0 -> "$validityDay 天内有效"
             1 -> validityStartDate+"至" +validityEndDate
             else -> ""
         }
@@ -74,8 +75,15 @@ data class CouponDetailVo(
         if (it) "每人最多可購買$limitBuyNum 張"
         else "無限制"
     }
+    fun getLimitUsePeopleString():String = limitUsePeople.let {
+        if (it) "每餐不可超過$limitUsePeopleNum 人"
+        else "無限制"
+    }
     fun getTypeString():String =consumptionType?.let {//	消費類型：0->抵用券，1->套餐券
-        "团"
+        when (it) {
+            0 -> "抵"
+            else ->"团"
+        }
     }?:""
     fun isOutStock():Boolean =if(limitStock) stock<=0 else false
 }

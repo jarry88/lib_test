@@ -70,7 +70,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{vo.typeString}"
+                            android:text="@{vo.typeString,default =`折`}"
+                            android:textSize="11sp"
                             visibleOrGone="@{!vo.typeString.empty}"
                             android:textColor="@color/tw_white"
                             android:background="@drawable/coupon_word_bg"

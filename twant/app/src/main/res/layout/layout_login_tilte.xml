@@ -83,7 +83,10 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/tw_black"
-            android:text="登入後享受更多服務"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="@dimen/dp_50"
             android:textSize="18sp" />
 
         <RelativeLayout

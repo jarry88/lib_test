@@ -10,15 +10,12 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.View
 import android.view.View.*
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.ftofs.lib_net.model.CouponItemVo
@@ -27,14 +24,13 @@ import com.ftofs.lib_net.model.PropertyVo
 import com.ftofs.lib_net.model.Store
 import com.ftofs.twant.R
 import com.ftofs.twant.constant.Constant
-import com.ftofs.twant.databinding.ItemHouseVoBinding
 import com.ftofs.twant.dsl.colorId
 import com.ftofs.twant.login.Title
 import com.ftofs.twant.util.StringUtil
 import com.ftofs.twant.util.Time
 import com.ftofs.twant.util.Util
-import com.ftofs.twant.view.CouponListItemView
-import com.ftofs.twant.view.StoreInfoView
+import com.ftofs.twant.view.coupon.CouponListItemView
+import com.ftofs.twant.view.coupon.StoreInfoView
 import com.gzp.lib_common.utils.BaseContext
 import com.gzp.lib_common.utils.SLog
 

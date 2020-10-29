@@ -38,6 +38,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
     }
     override fun initData() {
         binding.title.apply {
+            
             setLeftImageResource(R.drawable.icon_back)
 //            setRightImageResource(R.drawable.icon_coupon_share)
             setRightLayoutClickListener{ToastUtil.success(context, "分享")}
@@ -45,7 +46,9 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
         }
         binding.couponListItem.mBinding.apply {
             tvBottomPrice.setVisibleOrGone(true)
-            tvValidity.setVisibleOrGone(true)
+            tvValidity.setVisibleOrGone(true).apply {
+                SLog.info(tvValidity.text.toString())
+            }
         }
         id?.let {
             viewModel.getCouponOrderDetail(it)
@@ -122,8 +125,8 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                 }
                             }
                             if (showCode) {
-                                orderCodeVo.useTime?.let {
-                                    if(Jarbon.parse(it).timestamp<Jarbon().timestamp){
+                                //isValidity
+                                    if(!orderItem.isValidity){
                                         showCode =false
                                         TextView {
                                             layout_height = wrap_content
@@ -134,9 +137,8 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                             colorId =R.color.tw_black
                                             margin_end =4
                                         }
-
                                     }
-                                }
+
                             }
 
                         }.let { v -> (v.parent as ViewGroup).removeView(v)

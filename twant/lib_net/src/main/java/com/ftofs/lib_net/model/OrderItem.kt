@@ -47,6 +47,7 @@ data class OrderItem(
     val stock: Int?,//庫存
     val subTitle: String?,//副標題
     val title: String?,//標題
+    val isValidity:Boolean,// 是否有效期内
     val validityDay: Int?,
     val validityEndDate: String?,
     val validityStartDate: String?,
@@ -98,7 +99,7 @@ data class CouponOrderBase(
             50 -> "已退款"
             60 -> "已取消"
             else ->"-"
-        }.apply { SLog.info("OrderStatusString: $this") }
+        }//.apply { SLog.info("OrderStatusString: $this") }
     }?:"-"
     fun getOrderRed():Boolean=orderStatus?.let {
         when(orderStatus){

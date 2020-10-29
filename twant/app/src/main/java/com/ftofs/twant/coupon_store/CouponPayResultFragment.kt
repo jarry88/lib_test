@@ -69,6 +69,11 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
         viewModel.currCouponOrder.observe(this){
             SLog.info("獲取訂單詳情:${it.itemList.toString()}")
             binding.vo =it
+            binding.listItem.apply {
+                mBinding.tvSubTitle.setVisibleOrGone(true)
+                mBinding.tvBottomPrice.setVisibleOrGone(true).apply { SLog.info("底部價格可見") }
+                mBinding.tvBottomPrice.text="--"
+            }
             binding.llCodeContainer.apply {
                 it.itemList?.forEach { orderItem ->
                     orderItem.extractCode?.forEach {orderCodeVo ->
@@ -113,7 +118,7 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                                 }
                             }
                             if (showCode) {
-                                orderCodeVo.useTime?.let {
+                                orderItem.validityEndDate?.let {
                                     if(Jarbon.parse(it).timestamp<Jarbon().timestamp){
                                         showCode =false
                                         TextView {

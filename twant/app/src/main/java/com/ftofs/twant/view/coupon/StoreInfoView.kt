@@ -1,4 +1,4 @@
-package com.ftofs.twant.view
+package com.ftofs.twant.view.coupon
 
 import android.content.Context
 import android.util.AttributeSet
@@ -15,9 +15,9 @@ import com.ftofs.twant.R
 import com.ftofs.twant.databinding.StoreInfoWighetBinding
 import com.ftofs.twant.entity.StoreMapInfo
 import com.ftofs.twant.fragment.ShopMainFragment
-import com.ftofs.twant.fragment.StoreHomeFragment
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.widget.AmapPopup
+import com.gzp.lib_common.utils.SLog
 import com.lxj.xpopup.XPopup
 
 class StoreInfoView @JvmOverloads constructor(
@@ -47,7 +47,7 @@ class StoreInfoView @JvmOverloads constructor(
         }
         mBinding.root.setOnClickListener {
             mBinding.vo?.let {
-                Util.startFragment(ShopMainFragment.newInstance(it.id))
+                Util.startFragment(ShopMainFragment.newInstance(it.platformStoreId.apply { SLog.info("storeId $it") }))
             }
 
         }

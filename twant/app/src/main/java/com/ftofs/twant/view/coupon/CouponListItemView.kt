@@ -1,26 +1,15 @@
-package com.ftofs.twant.view
+package com.ftofs.twant.view.coupon
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import com.ftofs.lib_net.model.CouponDetailVo
 import com.ftofs.lib_net.model.CouponItemVo
-import com.ftofs.lib_net.model.Store
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CouponListItemWighetBinding
-import com.ftofs.twant.databinding.StoreInfoWighetBinding
-import com.ftofs.twant.entity.StoreMapInfo
 import com.ftofs.twant.kotlin.setVisibleOrGone
-import com.ftofs.twant.util.Util
-import com.ftofs.twant.widget.AmapPopup
-import com.lxj.xpopup.XPopup
 
 class CouponListItemView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

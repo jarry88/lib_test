@@ -3,6 +3,7 @@ package com.ftofs.twant.coupon_store
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ftofs.twant.BR
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CouponStoreDetailFragmentBinding
@@ -11,6 +12,7 @@ import com.ftofs.twant.dsl.customer.factoryAdapter
 import com.ftofs.twant.dsl.imageUrl
 import com.ftofs.twant.dsl.margin_end
 import com.ftofs.twant.fragment.ViewPagerFragment
+import com.ftofs.twant.kotlin.setVisibleOrGone
 import com.ftofs.twant.util.ToastUtil
 import com.ftofs.twant.util.User
 import com.ftofs.twant.util.Util
@@ -53,6 +55,16 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
             viewModel.getCouponDetail(it)
         }?:viewModel.getCouponDetail(42)
         binding.rvImage.adapter=imageAdapter
+        binding.btnLeftSelect.setOnClickListener {
+            binding.rvImage.apply {
+                scrollToPosition(0)
+            }
+        }
+        binding.btnRightSelect.setOnClickListener {
+            binding.rvImage.apply {
+                scrollToPosition((layoutManager as LinearLayoutManager).findLastVisibleItemPosition())
+            }
+        }
         binding.btnBuy.setOnClickListener {
             if (User.getUserId() > 0) {
                 viewModel.currCouponDetail.value?.apply {

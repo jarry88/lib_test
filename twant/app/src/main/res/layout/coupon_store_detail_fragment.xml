@@ -59,6 +59,7 @@
                     </LinearLayout>
                     <TextView
                         android:layout_marginStart="@dimen/length_15dp"
+                        android:layout_marginEnd="@dimen/dp_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="24sp"
@@ -103,17 +104,21 @@
                             binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             android:id="@+id/rv_image"/>
                         <ImageView
+                            visibleOrGone="@{vo.showArrow()}"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:id="@+id/btn_left_select"
                             android:layout_centerVertical="true"
+                            android:src="@drawable/icon_arrow_start"
                             android:layout_marginStart="5dp"/>
                         <ImageView
+                            visibleOrGone="@{vo.showArrow()}"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:id="@+id/btn_right_select"
                             android:layout_centerVertical="true"
                             android:layout_alignParentEnd="true"
+                            android:src="@drawable/icon_arrow_right"
                             android:layout_marginEnd="5dp"/>
                         <LinearLayout
                             android:layout_alignParentBottom="true"
@@ -150,12 +155,11 @@
                         android:textColor="@color/tw_grey_666"
                         android:text="@{vo.subTitle}"/>
                 </LinearLayout>
-                <com.ftofs.twant.view.CouponPartInfoView
-                    visibleOrGone="@{vo.consumptionType==1}"
+                <com.ftofs.twant.view.coupon.CouponPartInfoView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/coupon_information"/>
-                <com.ftofs.twant.view.StoreInfoView
+                <com.ftofs.twant.view.coupon.StoreInfoView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/store_information"
