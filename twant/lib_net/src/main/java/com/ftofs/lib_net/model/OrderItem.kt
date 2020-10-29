@@ -98,7 +98,7 @@ data class CouponOrderBase(
             50 -> "已退款"
             60 -> "已取消"
             else ->"-"
-        }.apply { SLog.info("OrderStatusString: $this") }
+        }//.apply { SLog.info("OrderStatusString: $this") }
     }?:"-"
     fun getOrderRed():Boolean=orderStatus?.let {
         when(orderStatus){

@@ -49,6 +49,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
     private var showResult: Boolean=false
     var tabFold=true
     var firstTabSelected=true
+    var loadingList=false
 
     var type =""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +97,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
     override fun onSupportInvisible() {
         super.onSupportInvisible()
         showResult =false
+        loadingList=false
     }
     override fun initData() {
         binding.title.apply {
@@ -114,7 +116,6 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                             layout_width = match_parent
                             layout_height = wrap_content
                             margin_end = 16
-                            margin_bottom=16
                             orientation = horizontal
 
                             TextView {
@@ -142,6 +143,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                         addView(LinearLayout {//第二行
                             layout_width = match_parent
                             layout_height = wrap_content
+                            margin_top =16
                             margin_end = 16
                             orientation = horizontal
 
@@ -223,6 +225,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             setSelectedTabIndicatorColor(resources.getColor(R.color.tw_red, null))
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
+                    SLog.info("click $selectedTabPosition")
                     if (firstTabSelected) {
                         firstTabSelected = false
                         return
@@ -233,7 +236,8 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                         2 -> 20  // 可使用
                         3 -> 40 // 退款中
                         else -> null
-                    })
+                    }).apply{loadingList =true}
+                    SLog.info("loadingList $loadingList")
                     val iconView = tab?.customView?.findViewById<ImageView>(R.id.icon_exp)
                     val textView = tab?.customView?.findViewById<TextView>(R.id.tag_text)
                     textView?.setTextColor(resources.getColor(R.color.tw_blue))
@@ -368,6 +372,9 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
         }
     }
     override fun initViewObservable() {
+        viewModel.currCouponOrder.observe(this){
+            loadingList =false
+        }
         viewModel.stateLiveData.stateEnumMutableLiveData.observe(this){
             binding.smartList.endLoadingUi()
             if (it == StateLiveData.StateEnum.Idle) {
@@ -381,7 +388,8 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
                 MPaySdk.mPayNew(_mActivity, it.payData.toString().apply { SLog.info(this) }, _mActivity as MainActivity)
             }
         }
-        viewModel.currOrderStatus.observe(this){binding.smartList.autoRefresh().apply { SLog.info("刷新") }}
+        viewModel.currOrderStatus.observe(this){
+            binding.smartList.autoRefresh().apply { SLog.info("刷新") }}
         viewModel.error.observe(this){
             if (!it.isNullOrEmpty()) {
                 ToastUtil.error(context, it)
@@ -389,6 +397,7 @@ class CouponOrderListFragment: BaseTwantFragmentMVVM<CouponOrderListFragmentBind
             }
         }
     }
+
     private fun showDrawListView(v: View, selectedTabPosition: Int) {
         ToastUtil.success(context, "$selectedTabPosition")
     }

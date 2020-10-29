@@ -94,11 +94,6 @@ class CouponStoreDetailFragment():BaseTwantFragmentMVVM<CouponStoreDetailFragmen
             it.picList?.let {list ->
                 imageAdapter.addAll(list,true)
             }
-            binding.couponInformation.apply {
-                (it.consumptionType==1).let {b ->
-                    mBinding.llMixContainer.setVisibleOrGone(b)
-                }
-            }
         }
     }
 }

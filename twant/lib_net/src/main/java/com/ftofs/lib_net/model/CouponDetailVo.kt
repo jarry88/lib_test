@@ -61,12 +61,12 @@ data class CouponDetailVo(
     }
     fun getFreeWifiString():String= if(freeWifi) "WIFI免費" else "WIFI需收費"
     fun getImgSize():String= picList?.size?.toString() ?:"0"
-    fun showArrow():Boolean=picList?.size?.let{it>3} ?:false
+    fun showArrow():Boolean=picList?.size?.let{it>2} ?:false
     fun getShowPicList():Boolean= picList?.isNotEmpty() ?:false
     fun getShowPicBtn():Boolean= picList?.let{it.size>3} ?:false
     fun getValidityString():String =validityType?.let {
         when(it){
-            0,// -> "$validityDay 天内有效"
+            0 -> "$validityDay 天内有效"
             1 -> validityStartDate+"至" +validityEndDate
             else -> ""
         }

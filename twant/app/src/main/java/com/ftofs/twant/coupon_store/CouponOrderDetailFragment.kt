@@ -45,7 +45,9 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
         }
         binding.couponListItem.mBinding.apply {
             tvBottomPrice.setVisibleOrGone(true)
-            tvValidity.setVisibleOrGone(true)
+            tvValidity.setVisibleOrGone(true).apply {
+                SLog.info(tvValidity.text.toString())
+            }
         }
         id?.let {
             viewModel.getCouponOrderDetail(it)

@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_marginBottom="@dimen/dp_15"
                 android:id="@+id/ll_container"/>
 <!--            android:text="@{vo.orderStatusString,default =` s`}"-->
 <!--            android:textColor="@{vo.orderRed?@color/tw_red:@color/tw_grey_666}"-->

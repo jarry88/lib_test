@@ -18,6 +18,7 @@ import com.ftofs.lib_net.model.CouponDetailVo
 import com.ftofs.twant.R
 import com.ftofs.twant.databinding.CouponInfoWighetBinding
 import com.ftofs.twant.dsl.*
+import com.ftofs.twant.kotlin.setVisibleOrGone
 
 class CouponPartInfoView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -62,6 +63,9 @@ class CouponPartInfoView @JvmOverloads constructor(
         getLifecycleOwner()?.let {
             vo.observe(it){t->
                 t?.let { mBinding.vo=t
+                (t.consumptionType==1).let {b ->
+                    mBinding.llMixContainer.setVisibleOrGone(b)
+                }
                     mBinding.llPkgContainer.apply {
                         removeAllViews()
                         it.pkgList.forEach {pkg ->
