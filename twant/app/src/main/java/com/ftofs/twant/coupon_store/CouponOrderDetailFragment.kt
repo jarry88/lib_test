@@ -38,6 +38,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
     }
     override fun initData() {
         binding.title.apply {
+            
             setLeftImageResource(R.drawable.icon_back)
 //            setRightImageResource(R.drawable.icon_coupon_share)
             setRightLayoutClickListener{ToastUtil.success(context, "分享")}
