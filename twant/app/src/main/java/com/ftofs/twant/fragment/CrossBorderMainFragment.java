@@ -50,6 +50,7 @@ import com.ftofs.twant.util.UmengAnalytics;
 import com.ftofs.twant.util.Util;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
+import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.EventBus;
@@ -519,6 +520,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
     private void changeBackgroundColor(int color) {
         imgThemeBgTop.setBackgroundColor(color);
         btnViewMoreCategory.setBackgroundColor(color);
+        StatusBarUtil.setColor(_mActivity, color, 0);  // 设置状态栏
+        StatusBarUtil.setDarkMode(_mActivity);
     }
 
     @Override
@@ -527,6 +530,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         if (id == R.id.btn_test) {
             // initViewPager();
             // changeBackgroundColor(Color.RED);
+            StatusBarUtil.setColor(_mActivity, Color.RED, 0);  // 设置状态栏为白色
+            StatusBarUtil.setLightMode(_mActivity);
         } else if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_search) {
@@ -547,5 +552,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         super.onDestroyView();
 
         EventBus.getDefault().unregister(this);
+
+        StatusBarUtil.setColor(_mActivity, Color.WHITE, 0);  // 恢復狀態欄為白色
+        StatusBarUtil.setLightMode(_mActivity);
     }
 }
