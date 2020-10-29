@@ -177,67 +177,74 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             LayoutInflater layoutInflater = LayoutInflater.from(context);
 
             // 導航區
-            RecyclerView rvNavList = helper.getView(R.id.rv_nav_list);
-            rvNavList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-            CrossBorderNavAdapter navAdapter = new CrossBorderNavAdapter(context, R.layout.cross_border_nav_pane, item.navItemCount, item.navPaneList);
-            navAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
-                @Override
-                public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                    int id = view.getId();
-                    CrossBorderNavPane navPane = item.navPaneList.get(position);
+            if (item.navItemCount > 0) {
+                helper.setGone(R.id.cl_nav_container, true);
 
-                    int[] itemIdArr = new int[] {R.id.nav_1, R.id.nav_2, R.id.nav_3, R.id.nav_4, R.id.nav_5,
-                            R.id.nav_6, R.id.nav_7, R.id.nav_8, R.id.nav_9, R.id.nav_10, };
-
-                    for (int i = 0; i < itemIdArr.length; i++) {
-                        int itemId = itemIdArr[i];
-                        if (id == itemId) {
-                            CrossBorderNavItem navItem = navPane.crossBorderNavItemList.get(i);
-                            SLog.info("navItem[%s]", navItem);
-                            Util.handleClickLink(navItem.linkTypeApp, navItem.linkValueApp, true);
-
-                            HashMap<String, Object> analyticsDataMap = new HashMap<>();
-                            analyticsDataMap.put("categoryId", navItem.navId);
-                            UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_NAV, analyticsDataMap);
-                            break;
-                        }
-                    }
-                }
-            });
-            rvNavList.setAdapter(navAdapter);
-            rvNavList.setOnFlingListener(null); // 參考：https://stackoverflow.com/questions/44043501/an-instance-of-onflinglistener-already-set-in-recyclerview
-            // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
-            // https://www.jianshu.com/p/e54db232df62
-            (new PagerSnapHelper()).attachToRecyclerView(rvNavList);
-
-            if (item.navPaneList == null) {
-                return;
-            }
-
-            int navPaneCount = item.navPaneList.size();
-            PageIndicatorView pageIndicatorView = helper.getView(R.id.pageIndicatorView);
-            if (navPaneCount < 1) {
-                pageIndicatorView.setVisibility(View.GONE);
-            } else {
-                pageIndicatorView.setRadius(3);
-                pageIndicatorView.setCount(navPaneCount);
-                rvNavList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                RecyclerView rvNavList = helper.getView(R.id.rv_nav_list);
+                rvNavList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                CrossBorderNavAdapter navAdapter = new CrossBorderNavAdapter(context, R.layout.cross_border_nav_pane, item.navItemCount, item.navPaneList);
+                navAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
                     @Override
-                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
+                    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                        int id = view.getId();
+                        CrossBorderNavPane navPane = item.navPaneList.get(position);
 
-                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                            int position = getCurrPosition(rvNavList);
-                            pageIndicatorView.setSelection(position);
+                        int[] itemIdArr = new int[] {R.id.nav_1, R.id.nav_2, R.id.nav_3, R.id.nav_4, R.id.nav_5,
+                                R.id.nav_6, R.id.nav_7, R.id.nav_8, R.id.nav_9, R.id.nav_10, };
+
+                        for (int i = 0; i < itemIdArr.length; i++) {
+                            int itemId = itemIdArr[i];
+                            if (id == itemId) {
+                                CrossBorderNavItem navItem = navPane.crossBorderNavItemList.get(i);
+                                SLog.info("navItem[%s]", navItem);
+                                Util.handleClickLink(navItem.linkTypeApp, navItem.linkValueApp, true);
+
+                                HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                                analyticsDataMap.put("categoryId", navItem.navId);
+                                UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_NAV, analyticsDataMap);
+                                break;
+                            }
                         }
-                    }
-
-                    @Override
-                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
                     }
                 });
+                rvNavList.setAdapter(navAdapter);
+                rvNavList.setOnFlingListener(null); // 參考：https://stackoverflow.com/questions/44043501/an-instance-of-onflinglistener-already-set-in-recyclerview
+                // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
+                // https://www.jianshu.com/p/e54db232df62
+                (new PagerSnapHelper()).attachToRecyclerView(rvNavList);
+
+                if (item.navPaneList == null) {
+                    return;
+                }
+
+                int navPaneCount = item.navPaneList.size();
+                PageIndicatorView pageIndicatorView = helper.getView(R.id.pageIndicatorView);
+                if (navPaneCount < 1) {
+                    pageIndicatorView.setVisibility(View.GONE);
+                } else {
+                    pageIndicatorView.setRadius(3);
+                    pageIndicatorView.setCount(navPaneCount);
+                    rvNavList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+
+                            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                int position = getCurrPosition(rvNavList);
+                                pageIndicatorView.setSelection(position);
+                            }
+                        }
+
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+                        }
+                    });
+                }
+            } else {
+                helper.setGone(R.id.cl_nav_container, false);
             }
+
 
             // 購物專場(最多顯示4個)
             int shoppingZoneCount = item.shoppingZoneList.size();

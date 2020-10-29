@@ -26,6 +26,7 @@ import com.ftofs.twant.entity.DistributionWithdrawRecord;
 import com.ftofs.twant.util.LogUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.widget.lmz.LmzNestedScrollingBaseFragment;
 import com.gzp.lib_common.utils.SLog;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,7 @@ import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class DistributionWithdrawRecordFragment extends NestedScrollingFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class DistributionWithdrawRecordFragment extends LmzNestedScrollingBaseFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
     int requestType;
 
     /*
@@ -79,7 +80,6 @@ public class DistributionWithdrawRecordFragment extends NestedScrollingFragment 
 
         rvList = view.findViewById(R.id.rv_list);
         SLog.info("rvList[%s]", rvList);
-        rvList.setNestedScrollingEnabled(NestedScrollingEnabled);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         adapter = new DistributionWithdrawRecordAdapter(_mActivity, distributionWithdrawRecordList);
         adapter.setEnableLoadMore(true);

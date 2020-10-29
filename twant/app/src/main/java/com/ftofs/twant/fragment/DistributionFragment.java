@@ -34,6 +34,12 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.WithdrawPopup;
+import com.ftofs.twant.widget.lmz.LmzNestedScrollView;
+import com.ftofs.twant.widget.lmz.LmzNestedScrollingBaseFragment;
+import com.ftofs.twant.widget.lmz.LmzNestedScrollingBaseFragmentAdapter;
+import com.ftofs.twant.widget.lmz.LmzNestedScrollingDemoFragment;
+import com.ftofs.twant.widget.lmz.LmzNestedScrollingFragmentAdapter;
+import com.ftofs.twant.widget.lmz.LmzNestedVerticalLinearLayout;
 import com.gzp.lib_common.base.BaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
@@ -93,12 +99,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     View withdrawRecordTabContainer;
     View promotionGoodsTabContainer;
 
-    NestedScrollView containerView;
-    int containerViewHeight = 0;
-    LinearLayout llMyTeamToolbarContainer;
-
-    private List<String> titleList = new ArrayList<>();
-    private List<Fragment> fragmentList = new ArrayList<>();
+    private List<LmzNestedScrollingBaseFragment> fragmentList = new ArrayList<>();
 
     TextView tvTotalCommissionAmount;
     double totalCommissionAmount;
@@ -116,6 +117,10 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     int accountOpenState;  // 账户開通狀態 0未開通 1已開通
     TextView tvAccountStatus;
 
+    LmzNestedVerticalLinearLayout nestedVerticalLinearLayout;
+    LmzNestedScrollView nestedScrollView;
+    LmzNestedScrollingBaseFragmentAdapter fragmentAdapter;
+
     public static DistributionFragment newInstance() {
         DistributionFragment fragment = new DistributionFragment();
         Bundle args = new Bundle();
@@ -126,7 +131,7 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     @Nullable
     @Override
     public View onCreateView(@NotNull @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_distribution, container, false);
+        View view = inflater.inflate(R.layout.fragment_distribution_new, container, false);
         return view;
     }
 
@@ -135,8 +140,9 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
         super.onViewCreated(view, savedInstanceState);
 
         viewPager = view.findViewById(R.id.view_pager);
-        containerView = view.findViewById(R.id.container_view);
-        llMyTeamToolbarContainer = view.findViewById(R.id.ll_my_team_toolbar_container);
+
+        nestedVerticalLinearLayout = view.findViewById(R.id.ll_scroll_container);
+        nestedScrollView = view.findViewById(R.id.lmz_nested_scroll_view);
 
         myTeamTabContainer = view.findViewById(R.id.my_team_tab_container);
         promotingOrderTabContainer = view.findViewById(R.id.promoting_order_tab_container);
@@ -152,34 +158,24 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
         btnShareMultiple.setOnClickListener(this);
 
 
-        titleList.add("");
+
         fragmentList.add(DistributionPromotionGoodsFragment.newInstance(this));
 
-        titleList.add("");
+
         fragmentList.add(DistributionMemberFragment.newInstance(DistributionMemberFragment.REQUEST_TYPE_ALL));
-        titleList.add("");
         fragmentList.add(DistributionMemberFragment.newInstance(DistributionMemberFragment.REQUEST_TYPE_FIRST_LEVEL));
-        titleList.add("");
         fragmentList.add(DistributionMemberFragment.newInstance(DistributionMemberFragment.REQUEST_TYPE_SECOND_LEVEL));
 
 
-        titleList.add("");
         fragmentList.add(DistributionOrderFragment.newInstance(DistributionOrderFragment.REQUEST_TYPE_ALL));
-        titleList.add("");
         fragmentList.add(DistributionOrderFragment.newInstance(DistributionOrderFragment.REQUEST_TYPE_ONGOING));
-        titleList.add("");
         fragmentList.add(DistributionOrderFragment.newInstance(DistributionOrderFragment.REQUEST_TYPE_FINISHED));
-        titleList.add("");
         fragmentList.add(DistributionOrderFragment.newInstance(DistributionOrderFragment.REQUEST_TYPE_CANCELED));
 
 
-        titleList.add("");
         fragmentList.add(DistributionWithdrawRecordFragment.newInstance(DistributionWithdrawRecordFragment.REQUEST_TYPE_ALL));
-        titleList.add("");
         fragmentList.add(DistributionWithdrawRecordFragment.newInstance(DistributionWithdrawRecordFragment.REQUEST_TYPE_UNPROCESSED));
-        titleList.add("");
         fragmentList.add(DistributionWithdrawRecordFragment.newInstance(DistributionWithdrawRecordFragment.REQUEST_TYPE_SUCCESS));
-        titleList.add("");
         fragmentList.add(DistributionWithdrawRecordFragment.newInstance(DistributionWithdrawRecordFragment.REQUEST_TYPE_FAIL));
 
 
@@ -291,22 +287,14 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
-        CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
-        viewPager.setAdapter(adapter);
-
-
-        containerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+        fragmentAdapter = new LmzNestedScrollingBaseFragmentAdapter(getChildFragmentManager(), fragmentList);
+        viewPager.setAdapter(fragmentAdapter);
+        nestedScrollView.setCurrentScrollableContainer(fragmentList.get(0));
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                int llMyTeamToolbarContainerY = Util.getYOnScreen(llMyTeamToolbarContainer);
-                int containerViewY = Util.getYOnScreen(containerView);
-
-//                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
-                if (llMyTeamToolbarContainerY - Util.dip2px(_mContext, 11) <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
-                    setNestedScrollingEnabled(true);
-                } else {
-                    setNestedScrollingEnabled(false);
-                }
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                nestedScrollView.setCurrentScrollableContainer(fragmentList.get(position));
             }
         });
 
@@ -468,15 +456,6 @@ public class DistributionFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
-        if (containerViewHeight == 0) {
-            containerViewHeight = containerView.getHeight();
-            SLog.info("containerViewHeight[%d]", containerViewHeight);
-
-            ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
-            layoutParams.height = containerViewHeight - llMyTeamToolbarContainer.getHeight() - Util.dip2px(_mActivity, 11 + 8); // 11 和 8 分别是上下margin
-            viewPager.setLayoutParams(layoutParams);
-        }
     }
 
     @Override
