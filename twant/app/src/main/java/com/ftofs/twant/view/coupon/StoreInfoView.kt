@@ -1,4 +1,4 @@
-package com.ftofs.twant.view
+package com.ftofs.twant.view.coupon
 
 import android.content.Context
 import android.util.AttributeSet
@@ -15,7 +15,6 @@ import com.ftofs.twant.R
 import com.ftofs.twant.databinding.StoreInfoWighetBinding
 import com.ftofs.twant.entity.StoreMapInfo
 import com.ftofs.twant.fragment.ShopMainFragment
-import com.ftofs.twant.fragment.StoreHomeFragment
 import com.ftofs.twant.util.Util
 import com.ftofs.twant.widget.AmapPopup
 import com.gzp.lib_common.utils.SLog

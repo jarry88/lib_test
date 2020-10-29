@@ -150,12 +150,12 @@
                         android:textColor="@color/tw_grey_666"
                         android:text="@{vo.subTitle}"/>
                 </LinearLayout>
-                <com.ftofs.twant.view.CouponPartInfoView
+                <com.ftofs.twant.view.coupon.CouponPartInfoView
                     visibleOrGone="@{vo.consumptionType==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/coupon_information"/>
-                <com.ftofs.twant.view.StoreInfoView
+                <com.ftofs.twant.view.coupon.StoreInfoView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/store_information"

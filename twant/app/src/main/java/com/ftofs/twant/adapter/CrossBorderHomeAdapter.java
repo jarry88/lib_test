@@ -109,7 +109,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             // 跑馬燈
             List<MarqueeItem> marqueeItemList = new ArrayList<>();
             MarqueeItem marqueeItem = new MarqueeItem(Constant.ITEM_TYPE_MARQUEE_TEXT);
-            marqueeItem.text = "1澳门元≈0.85人民币，相当于总价打85折";
+            marqueeItem.text = "1澳門元 ≈ 0.85人民幣，相當於總價打85折";
             marqueeItemList.add(marqueeItem);
 
             marqueeItem = new MarqueeItem(Constant.ITEM_TYPE_MARQUEE_SLOGAN);
@@ -121,10 +121,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             rvMarqueeList.setAdapter(adapter);
 
 
-            Banner<CrossBorderBannerItem, BannerImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
-            banner.setAdapter(new BannerImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
+            Banner<CrossBorderBannerItem, BannerRoundedImageAdapter<CrossBorderBannerItem>> banner = helper.getView(R.id.banner_view);
+            banner.setAdapter(new BannerRoundedImageAdapter<CrossBorderBannerItem>(item.bannerItemList) {
                 @Override
-                public void onBindView(BannerImageHolder holder, CrossBorderBannerItem data, int position, int size) {
+                public void onBindView(BannerRoundedImageHolder holder, CrossBorderBannerItem data, int position, int size) {
                     //图片加载自己实现
                     Glide.with(holder.itemView).load(StringUtil.normalizeImageUrl(data.image)).centerCrop().into(holder.imageView);
                 }
@@ -420,19 +420,22 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                     imgFloorBanner.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            SLog.info("floorId[%d], linkType[%s], linkValue[%s]", item.floorId, floorItem.linkType, floorItem.linkValue);
                             Util.handleClickLink(floorItem.linkType, floorItem.linkValue, true);
+                            handleClickFloor(item.floorId);
                         }
                     });
 
                     btnMore.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            SLog.info("floorId[%d], linkType[%s], linkValue[%s]", item.floorId, floorItem.linkType, floorItem.linkValue);
                             Util.handleClickLink(floorItem.linkType, floorItem.linkValue, true);
+                            handleClickFloor(item.floorId);
                         }
                     });
                 }
             } else { // 圖片類型
-                LayoutInflater layoutInflater = LayoutInflater.from(context);
                 helper.setGone(R.id.floor_banner_container, false);  // 隱藏Banner容器
                 floorContainer.setVisibility(View.VISIBLE);
                 btnMore.setVisibility(View.INVISIBLE);
@@ -448,8 +451,10 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                         @Override
                         public void onClick(View v) {
                             FloorItem imageItem = (FloorItem) v.getTag(R.id.key_meta_data);
-                            SLog.info("linkType[%s], linkValue[%s]", imageItem.linkType, imageItem.linkValue);
+                            SLog.info("floorId[%d], linkType[%s], linkValue[%s]", item.floorId, imageItem.linkType, imageItem.linkValue);
                             Util.handleClickLink(imageItem.linkType, imageItem.linkValue, true);
+
+                            handleClickFloor(item.floorId);
                         }
                     });
                     floorContainer.addView(imageView);
@@ -654,6 +659,12 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
         HashMap<String, Object> analyticsDataMap = new HashMap<>();
         analyticsDataMap.put("zoneId", zoneId);
         UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_ZONE, analyticsDataMap);
+    }
+
+    private void handleClickFloor(int floorId) {
+        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+        analyticsDataMap.put("floorId", floorId);
+        UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_FLOOR, analyticsDataMap);
     }
 
     /**

@@ -122,7 +122,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                 }
                             }
                             if (showCode) {
-                                orderCodeVo.useTime?.let {
+                                orderItem.validityEndDate?.let {
                                     if(Jarbon.parse(it).timestamp<Jarbon().timestamp){
                                         showCode =false
                                         TextView {

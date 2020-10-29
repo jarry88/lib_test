@@ -1,31 +1,17 @@
-package com.ftofs.twant.view
+package com.ftofs.twant.view.coupon
 
 import android.content.Context
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.ftofs.lib_net.model.CouponDetailVo
 import com.ftofs.lib_net.model.CouponOrderBase
 import com.ftofs.twant.R
-import com.ftofs.twant.databinding.CouponInfoWighetBinding
 import com.ftofs.twant.databinding.CouponOrderListItemBinding
-import com.ftofs.twant.databinding.SmartListViewBinding
-import com.ftofs.twant.dsl.*
-import com.ftofs.twant.dsl.customer.factoryAdapter
 
 class CouponOrderItemView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
