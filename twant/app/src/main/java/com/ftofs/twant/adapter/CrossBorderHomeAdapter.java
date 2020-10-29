@@ -352,6 +352,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     CrossBorderActivityGoods activityGoods = item.secKillGoodsList.get(position);
                     Util.startFragment(GoodsDetailFragment.newInstance(activityGoods.commonId, activityGoods.goodsId));
+                    handleClickSecKill();
                 }
             });
             rvSecKillList.setAdapter(secKillGoodsAdapter);
@@ -653,6 +654,11 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
     public void onViewDetachedFromWindow(@NonNull CountDownTimerViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         SLog.info("onViewDetachedFromWindow, position[%d]", holder.getAdapterPosition());
+    }
+
+    private void handleClickSecKill() {
+        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+        UmengAnalytics.onEventObject(UmengAnalyticsActionName.TARIFF_BUY_SECKILL, analyticsDataMap);
     }
 
     private void handleClickShoppingZone(int zoneId) {

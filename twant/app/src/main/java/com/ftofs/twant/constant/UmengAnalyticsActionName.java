@@ -55,4 +55,5 @@ public class UmengAnalyticsActionName {
     public static final String TARIFF_BUY_BARGAIN = "tariff_buy_Bargain";
     public static final String TARIFF_BUY_GROUP = "tariff_buy_Group";
     public static final String TARIFF_BUY_ADDCART = "tariff_buy_addcart";
+    public static final String TARIFF_BUY_SECKILL = "tariff_buy_Seckill";
 }
