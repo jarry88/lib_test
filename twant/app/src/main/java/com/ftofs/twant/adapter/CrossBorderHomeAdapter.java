@@ -340,7 +340,7 @@ public class CrossBorderHomeAdapter extends BaseMultiItemQuickAdapter<CrossBorde
             }
 
             // 超過3個才顯示【更多】按鈕
-            helper.setVisible(R.id.btn_view_more_sec_kill, item.secKillGoodsList.size() > 3);
+            // helper.setVisible(R.id.btn_view_more_sec_kill, item.secKillGoodsList.size() > 3);
             helper.addOnClickListener(R.id.btn_view_more_sec_kill);
 
             RecyclerView rvSecKillList = helper.getView(R.id.rv_sec_kill_list);
