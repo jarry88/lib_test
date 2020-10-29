@@ -58,6 +58,8 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
             binding.listItem.apply {
                 mBinding.tvSubTitle.setVisibleOrGone(true)
                 mBinding.tvBottomPrice.setVisibleOrGone(true)
+                mBinding.tvBottomPrice.text="--"
+                mBinding.tvTitle.maxLines=1
             }
             orderId?.let {
                 viewModel.getCouponOrderDetail(it)
@@ -83,7 +85,7 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                             layout_width = wrap_content
                             orientation = horizontal
                             center_vertical =true
-                            margin_top = 17
+                            margin_top = 12
                             margin_bottom=18
                             TextView {
                                 layout_height = wrap_content
@@ -109,7 +111,7 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                                     TextView {
                                         layout_height = wrap_content
                                         layout_width = wrap_content
-                                        textSize =18f
+                                        textSize =14f
                                         text = "已使用"
                                         margin_start =8
                                         colorId =R.color.tw_black
@@ -124,7 +126,7 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                                         TextView {
                                             layout_height = wrap_content
                                             layout_width = wrap_content
-                                            textSize =18f
+                                            textSize =14f
                                             text = "已过期"
                                             margin_start =8
                                             colorId =R.color.tw_black
@@ -145,18 +147,19 @@ class CouponPayResultFragment:BaseTwantFragmentMVVM<CouponPayResultFragmentBindi
                                     layout_width = wrap_content
                                     orientation = horizontal
                                     center_vertical =true
+                                    margin_start=6
                                     margin_top = 17
                                     ImageView {
                                         layout_height = 160
                                         layout_width = 160
                                         margin_end =16
                                         setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
-                                        margin_start=30
+                                        margin_start=16
                                     }
                                     ImageView {
                                         layout_height = 160
                                         layout_width = 80
-                                        margin_end =16
+                                        margin_end =30
                                         setImageBitmap( QRCodeUtil.createBarCode(orderCodeVo.code,220.dp,86.dp,null, Color.BLACK))
 //                                        setImageBitmap(CodeUtils.createImage(orderCodeVo.code, 160, 160, null))
 

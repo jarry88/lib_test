@@ -38,7 +38,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
     }
     override fun initData() {
         binding.title.apply {
-            
+
             setLeftImageResource(R.drawable.icon_back)
 //            setRightImageResource(R.drawable.icon_coupon_share)
             setRightLayoutClickListener{ToastUtil.success(context, "分享")}
@@ -104,7 +104,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                             TextView {
                                 layout_height = wrap_content
                                 layout_width = wrap_content
-                                textSize =18f
+                                textSize =14f
                                 text =orderCodeVo.code
                                 textStyle = bold
                                 colorId =R.color.tw_black
@@ -116,7 +116,7 @@ class CouponOrderDetailFragment():BaseTwantFragmentMVVM<CouponOrderDetailFragmen
                                     TextView {
                                         layout_height = wrap_content
                                         layout_width = wrap_content
-                                        textSize =18f
+                                        textSize =14f
                                         text = "已使用"
                                         margin_start =8
                                         colorId =R.color.tw_black

@@ -107,7 +107,8 @@ fun setTextPrice(v: TextView, price: Double,tv_red:Boolean=true ,first:Int=11) {
         v.text = SpannableStringBuilder(StringUtil.formatPrice(null, price, 0, 2)).also { s->
             s.setSpan(AbsoluteSizeSpan(size,true),0,1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         }
-        if(tv_red) v.colorId=R.color.red
+        if(tv_red) v.colorId=R.color.tw_red
+        SLog.info(" price $price")
 //        v.apply { textSize=firstSize.toFloat() }
     }
 }
