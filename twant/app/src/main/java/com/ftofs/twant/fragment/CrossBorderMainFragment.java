@@ -530,8 +530,8 @@ public class CrossBorderMainFragment extends BaseFragment implements View.OnClic
         if (id == R.id.btn_test) {
             // initViewPager();
             // changeBackgroundColor(Color.RED);
-            StatusBarUtil.setColor(_mActivity, Color.RED, 0);  // 设置状态栏为白色
-            StatusBarUtil.setLightMode(_mActivity);
+            // StatusBarUtil.setColor(_mActivity, Color.RED, 0);  // 设置状态栏为白色
+            // StatusBarUtil.setLightMode(_mActivity);
         } else if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_search) {

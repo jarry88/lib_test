@@ -182,20 +182,23 @@ public class CrossBorderHomeFragment extends BaseFragment implements View.OnClic
         }
 
         // 組裝樓層數據
-        for (CrossBorderFloor crossBorderFloor : floorList) {
-            CrossBorderHomeItem floor = new CrossBorderHomeItem();
-            floor.floorId = crossBorderFloor.floorId;
-            floor.floorHeadline = crossBorderFloor.floorHeadline;
-            floor.floorSubhead = crossBorderFloor.floorSubhead;
-            floor.floorType = crossBorderFloor.floorType;
-            floor.floorItemList = crossBorderFloor.floorItemList;
-            if (floor.floorItemList == null) {
-                floor.floorItemList = new ArrayList<>();
-            }
-            floor.itemType = Constant.ITEM_TYPE_FLOOR;
+        if (floorList != null) {
+            for (CrossBorderFloor crossBorderFloor : floorList) {
+                CrossBorderHomeItem floor = new CrossBorderHomeItem();
+                floor.floorId = crossBorderFloor.floorId;
+                floor.floorHeadline = crossBorderFloor.floorHeadline;
+                floor.floorSubhead = crossBorderFloor.floorSubhead;
+                floor.floorType = crossBorderFloor.floorType;
+                floor.floorItemList = crossBorderFloor.floorItemList;
+                if (floor.floorItemList == null) {
+                    floor.floorItemList = new ArrayList<>();
+                }
+                floor.itemType = Constant.ITEM_TYPE_FLOOR;
 
-            crossBorderHomeItemList.add(floor);
+                crossBorderHomeItemList.add(floor);
+            }
         }
+
 
         // 組裝優選好店數據
         if (storeList != null && storeList.size() > 0) {
