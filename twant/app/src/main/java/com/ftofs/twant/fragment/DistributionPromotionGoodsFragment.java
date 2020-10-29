@@ -32,6 +32,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SharePopup;
+import com.ftofs.twant.widget.lmz.LmzNestedScrollingBaseFragment;
 import com.gzp.lib_common.utils.SLog;
 import com.lxj.xpopup.XPopup;
 
@@ -47,7 +48,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 import retrofit2.http.POST;
 
-public class DistributionPromotionGoodsFragment extends NestedScrollingFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class DistributionPromotionGoodsFragment extends LmzNestedScrollingBaseFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
     DistributionPromotionGoodsAdapter adapter;
     List<DistributionPromotionGoods> distributionPromotionGoodsList = new ArrayList<>();
 
@@ -81,7 +82,6 @@ public class DistributionPromotionGoodsFragment extends NestedScrollingFragment 
 
         rvList = view.findViewById(R.id.rv_list);
         SLog.info("rvList[%s]", rvList);
-        rvList.setNestedScrollingEnabled(NestedScrollingEnabled);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         adapter = new DistributionPromotionGoodsAdapter(_mActivity, distributionPromotionGoodsList);
         adapter.setEnableLoadMore(true);
