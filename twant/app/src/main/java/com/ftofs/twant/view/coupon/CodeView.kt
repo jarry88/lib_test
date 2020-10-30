@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import com.ftofs.twant.R
 import com.ftofs.twant.dsl.LinearLayout
 import com.ftofs.twant.dsl.bg_color_id
@@ -25,22 +26,16 @@ class CodeView @JvmOverloads constructor( context: Context, attrs: AttributeSet?
 
     private var mCount = 0
 
-    val contentView by lazy {
-        LinearLayout {
-            layout_width =40
-            layout_height=40
-            bg_color_id = R.color.blue
-        }
-    }
+//    val contentView by lazy {
+//        LinearLayout {
+//            layout_width =40
+//            layout_height=40
+//            bg_color_id = R.color.blue
+//        }
+//    }
 
     init {
-        addView(LinearLayout {
-            bg_color_id =R.color.tw_black
-        }.let{
-            val p =it.parent as ViewGroup
-            p.removeView(it)
-            it
-        })
+        addView(TextView(context).apply { text ="sss" })
 
 //        val layout = LinearLayout(context)
 //        layout.orientation = LinearLayout.HORIZONTAL

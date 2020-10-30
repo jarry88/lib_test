@@ -65,7 +65,7 @@ class BlackTestFragment :BaseTwantFragmentMVVM<TestBlackFragmentBinding,TestView
 
     override fun initData() {
         binding.button1.apply {
-            text="result"
+            text="koin"
             setOnClickListener {
                 viewModel.getData()
                 com.ftofs.twant.util.Util.startFragment(CouponPayResultFragment.newInstance(4105,success = false))

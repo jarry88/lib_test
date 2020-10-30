@@ -60,6 +60,7 @@ import com.mobile.auth.gatewayauth.PreLoginResultListener
 import com.wzq.mvvmsmart.net.net_utils.Utils
 import me.yokeyword.fragmentation.Fragmentation
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidFileProperties
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.litepal.LitePal
@@ -150,6 +151,7 @@ class TwantApplication :BaseApplication(){
         startKoin {
             androidLogger()
             androidContext(this@TwantApplication)
+            androidFileProperties()//从assets中读取保存的数据
             koin.loadModules(koinModule)
             koin.createRootScope()
         }

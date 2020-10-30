@@ -4,7 +4,8 @@
     xmlns:binding="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -36,9 +37,8 @@
             app:layout_constraintTop_toTopOf="@+id/button1" />
         <com.ftofs.twant.view.coupon.CodeView
             android:id="@+id/code_view"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_50"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_40"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/button1" />
@@ -98,5 +98,5 @@
                 android:layout_height="match_parent"
                 android:background="@color/tw_grey" />
         </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
